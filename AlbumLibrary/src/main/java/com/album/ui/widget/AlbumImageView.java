@@ -1,4 +1,4 @@
-package com.album.widget;
+package com.album.ui.widget;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;

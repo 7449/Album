@@ -1,0 +1,17 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+    defaultConfig {
+        applicationId rootProject.sampleApplicationId
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.projectVersionCode
+        versionName rootProject.projectVersionName
+    }
+}
+
+dependencies {
+    compile project(':AlbumLibrary')
+}

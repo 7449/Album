@@ -7,9 +7,11 @@ import android.support.v4.util.ArrayMap;
 
 import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
+import com.album.model.FinderModel;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,16 +31,22 @@ public class ScanUtils {
                 MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ?",
                 new String[]{"image/jpeg", "image/png"},
                 MediaStore.Images.Media.DATE_MODIFIED);
+
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 initImage(arrayMap, cursor);
             }
             List<AlbumModel> galleryModels = new ArrayList<>();
+            List<FinderModel> finderModels = new ArrayList<>();
             for (Map.Entry<String, List<AlbumModel>> entry : arrayMap.entrySet()) {
                 galleryModels.addAll(entry.getValue());
+                finderModels.add(new FinderModel(entry.getKey(), entry.getValue().get(0).getPath(), false));
             }
+            Collections.reverse(galleryModels);
+            finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM, galleryModels.get(0).getPath(), true));
             arrayMap.put(AlbumConstant.ALL_ALBUM, galleryModels);
             scanCallBack.scanSuccess(arrayMap);
+            scanCallBack.finderModelSuccess(finderModels);
             cursor.close();
         }
     }
@@ -62,6 +70,8 @@ public class ScanUtils {
 
     public interface ScanCallBack {
         void scanSuccess(ArrayMap<String, List<AlbumModel>> galleryModels);
+
+        void finderModelSuccess(List<FinderModel> list);
     }
 }
 

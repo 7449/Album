@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,32 +17,57 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/album_bottom_view"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="@dimen/album_bottom_height"
+        android:background="@color/colorAlbumPrimaryDark">
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_finder_all"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:background="?android:selectableItemBackground"
+            android:drawableRight="@drawable/ic_action_album_finder"
+            android:gravity="center_vertical"
+            android:padding="@dimen/album_bottom_padding"
+            android:text="@string/album_all"
+            android:textColor="@color/colorAlbumWhite"
+            android:textSize="@dimen/album_bottom_text_size"
+            tools:ignore="RtlHardcoded" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_preview"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
+            android:layout_marginRight="@dimen/album_bottom_marginRight"
+            android:layout_toLeftOf="@+id/tv_select"
+            android:background="?android:selectableItemBackground"
             android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="预览"
-            android:textSize="18sp" />
+            android:padding="@dimen/album_bottom_padding"
+            android:text="@string/album_preview"
+            android:textColor="@color/colorAlbumWhite"
+            android:textSize="@dimen/album_bottom_text_size"
+            tools:ignore="RelativeOverlap,RtlHardcoded" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_select"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:layout_gravity="end"
+            android:background="?android:selectableItemBackground"
             android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="选择"
-            android:textSize="18sp" />
+            android:padding="@dimen/album_bottom_padding"
+            android:text="@string/album_select"
+            android:textColor="@color/colorAlbumWhite"
+            android:textSize="@dimen/album_bottom_text_size"
+            tools:ignore="RtlHardcoded" />
 
 
-    </FrameLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

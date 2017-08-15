@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.album.AlbumConstant;
 import com.album.R;
@@ -23,14 +22,16 @@ import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.presenter.impl.AlbumPresenterImpl;
 import com.album.ui.activity.AlbumActivity;
+import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
-import com.album.ui.view.AlbumMethodView;
+import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
 import com.album.util.CameraUtil;
 import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
 import com.album.util.SingleMediaScanner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ import java.util.List;
 
 public class AlbumFragment extends Fragment implements
         AlbumView,
-        AlbumMethodView,
+        AlbumMethodFragmentView,
         AlbumAdapter.OnItemClickListener,
         SingleMediaScanner.SingleScannerListener {
 
@@ -52,6 +53,9 @@ public class AlbumFragment extends Fragment implements
 
     private Uri imagePath;
     private SingleMediaScanner singleMediaScanner;
+    private ArrayList<String> tempPreview = null;
+    private List<FinderModel> finderModels = null;
+    private List<AlbumModel> albumModels = null;
 
     public static AlbumFragment newInstance() {
         return new AlbumFragment();
@@ -110,14 +114,11 @@ public class AlbumFragment extends Fragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_CANCELED) {
-            Toast.makeText(albumActivity, "cancel camera", Toast.LENGTH_SHORT).show();
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AlbumConstant.ITEM_CAMERA:
-                    //refresh album
                     disconnectMediaScanner();
                     singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
-                    Toast.makeText(albumActivity, "camera ok：" + imagePath.getPath(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -149,19 +150,43 @@ public class AlbumFragment extends Fragment implements
         // add camera item
         list.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA));
         albumAdapter.addAll(list);
+        albumModels = list;
     }
 
     @Override
     public void finderModel(List<FinderModel> list) {
-
+        if (finderModels == null) {
+            finderModels = new ArrayList<>();
+        } else {
+            finderModels.clear();
+        }
+        if (list != null) {
+            finderModels.addAll(list);
+        }
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(View view, int position, AlbumModel albumModel) {
         if (position == 0) {
             openCamera();
         } else {
-            Toast.makeText(albumActivity, String.valueOf(position), Toast.LENGTH_SHORT).show();
+            if (FileUtils.isFile(albumModel.getPath())) {
+                if (tempPreview == null) {
+                    tempPreview = new ArrayList<>();
+                } else {
+                    tempPreview.clear();
+                }
+                Bundle bundle = new Bundle();
+                tempPreview.add(albumModel.getPath());
+                bundle.putStringArrayList(AlbumConstant.PREVIEW_KEY, tempPreview);
+                Intent intent = new Intent(albumActivity, PreviewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else {
+                // 这里,有可能是使用者正在拍照的时候Home返回，删掉图片，然后再返回点击，可强制刷新图库
+                //onScanAlbum();
+            }
         }
     }
 
@@ -195,5 +220,10 @@ public class AlbumFragment extends Fragment implements
     public void openCamera() {
         imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity));
         CameraUtil.openCamera(this, imagePath);
+    }
+
+    @Override
+    public List<FinderModel> getFinderModel() {
+        return finderModels;
     }
 }

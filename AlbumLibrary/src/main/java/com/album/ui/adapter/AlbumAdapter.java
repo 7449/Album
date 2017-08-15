@@ -40,8 +40,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
+                if (onItemClickListener != null && albumList != null) {
+                    onItemClickListener.onItemClick(v, viewHolder.getAdapterPosition(), albumList.get(viewHolder.getAdapterPosition()));
                 }
             }
         });
@@ -87,6 +87,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position, AlbumModel albumModel);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         private AppCompatImageView imageView;
 
@@ -94,10 +98,5 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             super(itemView);
             imageView = (AppCompatImageView) itemView.findViewById(R.id.album_image);
         }
-    }
-
-
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
     }
 }

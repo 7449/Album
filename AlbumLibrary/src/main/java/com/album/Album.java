@@ -18,20 +18,22 @@ public class Album {
         return AlbumHolder.ALBUM;
     }
 
-    private static final class AlbumHolder {
-        private static final Album ALBUM = new Album();
+    public AlbumConfig getConfig() {
+        return config;
     }
-
 
     private Album setConfig(@NonNull AlbumConfig config) {
         this.config = config;
         return this;
     }
 
-
     public void start(@NonNull Context context) {
         Intent intent = new Intent(context, AlbumActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    private static final class AlbumHolder {
+        private static final Album ALBUM = new Album();
     }
 }

@@ -9,6 +9,9 @@
         <activity
             android:name="com.album.ui.activity.AlbumActivity"
             android:theme="@style/AppAlbumTheme" />
+        <activity
+            android:name="com.album.ui.activity.PreviewActivity"
+            android:theme="@style/AppAlbumTheme" />
     </application>
 
 </manifest>

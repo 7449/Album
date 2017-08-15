@@ -5,6 +5,7 @@ import android.support.v4.util.ArrayMap;
 
 import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
+import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
 import com.album.util.ScanUtils;
@@ -32,5 +33,10 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
     public void scanSuccess(ArrayMap<String, List<AlbumModel>> galleryModels) {
         albumView.scanSuccess(galleryModels.get(AlbumConstant.ALL_ALBUM));
         albumView.hideProgress();
+    }
+
+    @Override
+    public void finderModelSuccess(List<FinderModel> list) {
+        albumView.finderModel(list);
     }
 }

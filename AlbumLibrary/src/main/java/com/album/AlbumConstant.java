@@ -11,4 +11,5 @@ public class AlbumConstant {
     public static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0;
     public static final int CAMERA_REQUEST_CODE = 1;
     public static final int ITEM_CAMERA = 1111;
+    public static final String PREVIEW_KEY = "preview";
 }

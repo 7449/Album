@@ -8,6 +8,11 @@ import java.io.File;
 
 /**
  * by y on 14/08/2017.
+ * <p>
+ * <p>
+ * https://issuetracker.google.com/issues/37046656
+ * <p>
+ * https://github.com/square/leakcanary/issues/26
  */
 
 public class SingleMediaScanner implements MediaScannerConnection.MediaScannerConnectionClient {
@@ -29,7 +34,7 @@ public class SingleMediaScanner implements MediaScannerConnection.MediaScannerCo
     }
 
     public void disconnect() {
-        if (mediaScannerConnection != null && mediaScannerConnection.isConnected()) {
+        if (mediaScannerConnection != null) {
             mediaScannerConnection.disconnect();
             mediaScannerConnection = null;
         }

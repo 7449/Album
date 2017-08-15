@@ -10,13 +10,13 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp" />
+        android:paddingBottom="@dimen/album_padding_bottom"
+        android:paddingTop="@dimen/album_padding_top" />
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/album_progress_width"
+        android:layout_height="@dimen/album_progress_height"
         android:layout_gravity="center"
         android:visibility="gone" />
 

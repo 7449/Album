@@ -1,5 +1,8 @@
 package com.album.ui.adapter;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -7,10 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.album.Album;
+import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +27,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     private List<AlbumModel> albumList = null;
     private OnItemClickListener onItemClickListener = null;
+    private AlbumConfig albumConfig = null;
 
     public AlbumAdapter(List<AlbumModel> list) {
         this.albumList = list;
+        albumConfig = Album.getInstance().getConfig();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -57,17 +63,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         if (albumModel == null) {
             return;
         }
-        Object path = albumModel.getPath();
+        String path = albumModel.getPath();
         if (TextUtils.equals(String.valueOf(path), AlbumConstant.CAMERA)) {
-            path = R.drawable.ic_action_camera;
+            Drawable drawable = ContextCompat.getDrawable(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawable());
+            drawable.setColorFilter(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
+            holder.imageView.setBackgroundDrawable(drawable);
+        } else {
+            Album.getInstance().getAlbumImageLoader().displayAlbum(holder.imageView, path);
         }
-        Glide
-                .with(holder.imageView.getContext())
-                .load(path)
-                .placeholder(R.drawable.ic_launcher)
-                .error(R.drawable.ic_launcher)
-                .centerCrop()
-                .into(holder.imageView);
     }
 
     @Override

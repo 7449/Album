@@ -65,7 +65,7 @@ public class ScanUtils {
 
             // add all album thumbnailsPath
             if (!finderModels.isEmpty()) {
-                finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM_NAME, albumModel == null ? "" : albumModel.getPath(), galleryModels.size()));
+                finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM_NAME, albumModel == null ? "" : albumModel.getPath(), hideCamera ? galleryModels.size() : galleryModels.size() - 1));
             }
 
             scanCallBack.scanSuccess(arrayMap);

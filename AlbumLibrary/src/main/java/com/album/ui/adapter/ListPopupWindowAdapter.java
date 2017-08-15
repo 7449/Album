@@ -12,7 +12,6 @@ import com.album.Album;
 import com.album.AlbumConfig;
 import com.album.R;
 import com.album.model.FinderModel;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -55,13 +54,7 @@ public class ListPopupWindowAdapter extends BaseAdapter {
         if (list != null && list.get(position) != null) {
             FinderModel finderModel = list.get(position);
             appCompatTextView.setText(String.format("%s(%s)", finderModel.getDirName(), String.valueOf(finderModel.getCount())));
-            Glide
-                    .with(parent.getContext())
-                    .load(finderModel.getThumbnailsPath())
-                    .placeholder(R.drawable.ic_launcher)
-                    .error(R.drawable.ic_launcher)
-                    .centerCrop()
-                    .into(appCompatImageView);
+            Album.getInstance().getAlbumImageLoader().displayAlbumThumbnails(appCompatImageView, finderModel.getThumbnailsPath());
         }
 
         return convertView;

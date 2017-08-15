@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.album.Album;
@@ -26,6 +28,7 @@ import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.presenter.impl.AlbumPresenterImpl;
 import com.album.ui.activity.AlbumActivity;
+import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
 import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
@@ -36,6 +39,7 @@ import com.album.util.SingleMediaScanner;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +59,7 @@ public class AlbumFragment extends Fragment implements
     private ProgressBar progressBar;
     private AlbumAdapter albumAdapter;
     private AlbumPresenter albumPresenter;
+    private FrameLayout albumContentView;
 
     private Uri imagePath;
     private SingleMediaScanner singleMediaScanner;
@@ -75,6 +80,7 @@ public class AlbumFragment extends Fragment implements
         View inflate = inflater.inflate(R.layout.fragment_album, container, false);
         recyclerView = (RecyclerView) inflate.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) inflate.findViewById(R.id.progress);
+        albumContentView = (FrameLayout) inflate.findViewById(R.id.album_content_view);
         albumPresenter = new AlbumPresenterImpl(this);
         albumActivity = (AlbumActivity) getActivity();
         return inflate;
@@ -83,6 +89,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        albumContentView.setBackgroundColor(ContextCompat.getColor(albumActivity, albumConfig.getAlbumContentViewBackground()));
         initRecyclerView();
         onScanAlbum();
     }
@@ -90,7 +97,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), albumConfig.getSpanCount()));
         albumAdapter = new AlbumAdapter(null);
         albumAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(albumAdapter);
@@ -183,21 +190,24 @@ public class AlbumFragment extends Fragment implements
             openCamera();
         } else {
             if (FileUtils.isFile(albumModel.getPath())) {
-//                Bundle bundle = new Bundle();
-//                List<AlbumModel> albumModels = arrayMap.get(key);
-//                if (TextUtils.equals(key, AlbumConstant.ALL_ALBUM_NAME)) {
-//                    albumModels.remove(0);
-//                    position -= 1;
-//                }
-//                bundle.putSerializable(AlbumConstant.PREVIEW_KEY, (Serializable) albumModels);
-//                bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
-//                Intent intent = new Intent(albumActivity, PreviewActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-                UCrop.of(Uri.fromFile(new File(albumModel.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)))
-                        .withAspectRatio(16, 9)
-                        .start(albumActivity, this);
+                if (albumConfig.isRadio()) {
+                    UCrop.of(Uri.fromFile(new File(albumModel.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)))
+                            .withOptions(Album.getInstance().getOptions())
+                            .start(albumActivity, this);
+                } else {
+                    Bundle bundle = new Bundle();
+                    List<AlbumModel> albumModels = arrayMap.get(key);
+                    if (TextUtils.equals(key, AlbumConstant.ALL_ALBUM_NAME)) {
+                        albumModels.remove(0);
+                        position -= 1;
+                    }
+                    bundle.putSerializable(AlbumConstant.PREVIEW_KEY, (Serializable) albumModels);
+                    bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
+                    Intent intent = new Intent(albumActivity, PreviewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             } else {
                 //onScanAlbum();
             }

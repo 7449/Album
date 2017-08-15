@@ -1,7 +1,10 @@
 package com.album.ui.activity;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -36,6 +39,7 @@ public class PreviewActivity extends BaseActivity {
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
         setSupportActionBar(toolbar);
+        viewPager.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumPreviewBackground()));
     }
 
     @Override
@@ -46,11 +50,14 @@ public class PreviewActivity extends BaseActivity {
 
     @Override
     protected void initTitle() {
-        toolbar.setTitle(R.string.album_name);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_day);
-        toolbar.setBackgroundResource(R.color.colorAlbumBottomFinderTextColorDay);
+        toolbar.setTitle(albumConfig.getAlbumPreviewTitle());
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarTextColor()));
+        Drawable drawable = ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon());
+        drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
+        toolbar.setNavigationIcon(drawable);
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarBackground()));
         if (VersionUtil.hasL()) {
-            toolbar.setElevation(6f);
+            toolbar.setElevation(albumConfig.getAlbumToolbarElevation());
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +70,10 @@ public class PreviewActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.preview_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_preview_check);
+        Drawable drawable = ContextCompat.getDrawable(this, albumConfig.getAlbumPreviewTitleCheckDrawable());
+        drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumPreviewTitleCheckDrawableColor()), PorterDuff.Mode.SRC_ATOP);
+        item.setIcon(drawable);
         return true;
     }
 
@@ -72,7 +83,6 @@ public class PreviewActivity extends BaseActivity {
         if (i == R.id.action_preview_check) {
             String albumPath = adapter.getAlbumPath(viewPager.getCurrentItem());
             Toast.makeText(this, albumPath, Toast.LENGTH_SHORT).show();
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }

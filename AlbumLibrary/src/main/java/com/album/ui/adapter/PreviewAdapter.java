@@ -4,10 +4,9 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.album.R;
+import com.album.Album;
 import com.album.model.AlbumModel;
 import com.album.ui.widget.TouchImageView;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -41,13 +40,7 @@ public class PreviewAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         TouchImageView img = new TouchImageView(container.getContext());
-        Glide
-                .with(img.getContext())
-                .load(list.get(position).getPath())
-                .placeholder(R.drawable.ic_launcher)
-                .error(R.drawable.ic_launcher)
-                .centerCrop()
-                .into(img);
+        Album.getInstance().getAlbumImageLoader().displayPreview(img, list.get(position).getPath());
         container.addView(img);
         return img;
     }

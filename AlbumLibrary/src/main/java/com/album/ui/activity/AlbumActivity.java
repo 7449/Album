@@ -1,5 +1,7 @@
 package com.album.ui.activity;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -16,9 +18,7 @@ import com.album.model.FinderModel;
 import com.album.ui.adapter.ListPopupWindowAdapter;
 import com.album.ui.fragment.AlbumFragment;
 import com.album.ui.view.AlbumMethodActivityView;
-import com.album.util.AlbumLog;
 import com.album.util.DrawableUtil;
-import com.album.util.StatusBarUtil;
 import com.album.util.VersionUtil;
 
 import java.util.List;
@@ -44,7 +44,6 @@ public class AlbumActivity extends BaseActivity
         if (albumFragment != null) {
             albumFragment.disconnectMediaScanner();
             albumFragment = null;
-            AlbumLog.log("AlbumFragment = null");
         }
         if (listPopupWindow != null) {
             listPopupWindow = null;
@@ -53,7 +52,6 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     protected void initCreate(@Nullable Bundle savedInstanceState) {
-        StatusBarUtil.setStatusBarColor(ContextCompat.getColor(this, albumConfig.getAlbumStatusBarColor()), getWindow());
         if (albumFragment != null) {
             albumFragment = null;
         }
@@ -74,6 +72,7 @@ public class AlbumActivity extends BaseActivity
         preview.setOnClickListener(this);
         select.setOnClickListener(this);
         finderTv.setOnClickListener(this);
+        preview.setVisibility(albumConfig.isRadio() ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class AlbumActivity extends BaseActivity
         albumBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomViewBackground()));
         finderTv.setTextSize(albumConfig.getAlbumBottomFinderTextSize());
         finderTv.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomFinderTextColor()));
-        finderTv.setCompoundDrawables(null, null, DrawableUtil.getDrawable(this, albumConfig.getAlbumBottomFinderTextDrawable()), null);
+        finderTv.setCompoundDrawables(null, null, DrawableUtil.getDrawable(this, albumConfig.getAlbumBottomFinderTextDrawable(), albumConfig.getAlbumBottomFinderTextDrawableColor()), null);
         preview.setText(albumConfig.getAlbumBottomPreViewText());
         preview.setTextSize(albumConfig.getAlbumBottomPreViewTextSize());
         preview.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomPreViewTextColor()));
@@ -106,7 +105,6 @@ public class AlbumActivity extends BaseActivity
         listPopupWindow.setVerticalOffset(albumConfig.getAlbumListPopupVerticalOffset());
         listPopupWindow.setModal(true);
         listPopupWindow.setOnItemClickListener(this);
-
     }
 
 
@@ -114,7 +112,9 @@ public class AlbumActivity extends BaseActivity
     protected void initTitle() {
         toolbar.setTitle(albumConfig.getAlbumToolbarText());
         toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarTextColor()));
-        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon()));
+        Drawable drawable = ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon());
+        drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
+        toolbar.setNavigationIcon(drawable);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarBackground()));
         if (VersionUtil.hasL()) {
             toolbar.setElevation(albumConfig.getAlbumToolbarElevation());

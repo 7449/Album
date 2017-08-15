@@ -9,6 +9,12 @@ android album
     -dontwarn com.album.**
     -keep class  com.album.** { *;}
     
+#### ucrop
+
+    -dontwarn com.yalantis.ucrop**
+    -keep class com.yalantis.ucrop** { *; }
+    -keep interface com.yalantis.ucrop** { *; }
+    
  
 ## Thanks
 

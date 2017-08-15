@@ -24,7 +24,6 @@ import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.presenter.impl.AlbumPresenterImpl;
 import com.album.ui.activity.AlbumActivity;
-import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
 import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
@@ -32,8 +31,9 @@ import com.album.util.CameraUtil;
 import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
 import com.album.util.SingleMediaScanner;
+import com.yalantis.ucrop.UCrop;
 
-import java.io.Serializable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,9 +117,11 @@ public class AlbumFragment extends Fragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_CANCELED) {
+        } else if (resultCode == UCrop.RESULT_ERROR) {
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AlbumConstant.ITEM_CAMERA:
+                case UCrop.REQUEST_CROP:
                     disconnectMediaScanner();
                     singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
                     break;
@@ -174,18 +176,21 @@ public class AlbumFragment extends Fragment implements
             openCamera();
         } else {
             if (FileUtils.isFile(albumModel.getPath())) {
-                Bundle bundle = new Bundle();
-                List<AlbumModel> albumModels = arrayMap.get(key);
-                if (TextUtils.equals(key, AlbumConstant.ALL_ALBUM_NAME)) {
-                    albumModels.remove(0);
-                    position -= 1;
-                }
-                bundle.putSerializable(AlbumConstant.PREVIEW_KEY, (Serializable) albumModels);
-                bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
-                Intent intent = new Intent(albumActivity, PreviewActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtras(bundle);
-                startActivity(intent);
+//                Bundle bundle = new Bundle();
+//                List<AlbumModel> albumModels = arrayMap.get(key);
+//                if (TextUtils.equals(key, AlbumConstant.ALL_ALBUM_NAME)) {
+//                    albumModels.remove(0);
+//                    position -= 1;
+//                }
+//                bundle.putSerializable(AlbumConstant.PREVIEW_KEY, (Serializable) albumModels);
+//                bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
+//                Intent intent = new Intent(albumActivity, PreviewActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+                UCrop.of(Uri.fromFile(new File(albumModel.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)))
+                        .withAspectRatio(16, 9)
+                        .start(albumActivity, this);
             } else {
                 //onScanAlbum();
             }

@@ -15,6 +15,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -32,6 +33,7 @@ ext {
 
     supportLibraryVersion = '25.0.0'
     glideVersion = '3.7.0'
+    ucropVersion = '2.2.1'
 
     sampleApplicationId = 'com.album.sample'
 }

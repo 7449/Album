@@ -23,7 +23,7 @@ public class ScanUtils {
     private ScanUtils() {
     }
 
-    public static void start(ContentResolver contentResolver, ScanCallBack scanCallBack) {
+    public static void start(ContentResolver contentResolver, ScanCallBack scanCallBack, boolean hideCamera) {
         ArrayMap<String, List<AlbumModel>> arrayMap = new ArrayMap<>();
         List<AlbumModel> galleryModels = new ArrayList<>();
         List<FinderModel> finderModels = new ArrayList<>();
@@ -56,7 +56,9 @@ public class ScanUtils {
             arrayMap.put(AlbumConstant.ALL_ALBUM_NAME, galleryModels);
 
             // add all album camera item
-            galleryModels.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA));
+            if (!hideCamera) {
+                galleryModels.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA));
+            }
 
             // add all album thumbnailsPath
             finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM_NAME, albumModel == null ? "" : albumModel.getPath(), galleryModels.size()));

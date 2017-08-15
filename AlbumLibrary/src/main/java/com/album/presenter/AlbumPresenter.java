@@ -7,5 +7,5 @@ import android.content.ContentResolver;
  */
 
 public interface AlbumPresenter {
-    void scan(ContentResolver contentResolver);
+    void scan(ContentResolver contentResolver, boolean hideCamera);
 }

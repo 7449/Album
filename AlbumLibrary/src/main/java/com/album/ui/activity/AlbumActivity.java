@@ -2,13 +2,14 @@ package com.album.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.album.R;
 import com.album.model.FinderModel;
@@ -16,6 +17,7 @@ import com.album.ui.adapter.ListPopupWindowAdapter;
 import com.album.ui.fragment.AlbumFragment;
 import com.album.ui.view.AlbumMethodActivityView;
 import com.album.util.AlbumLog;
+import com.album.util.StatusBarUtil;
 import com.album.util.VersionUtil;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class AlbumActivity extends BaseActivity
     private AlbumFragment albumFragment;
     private AppCompatTextView finderTv;
     private ListPopupWindow listPopupWindow;
+    private RelativeLayout albumBottomView;
 
     @Override
     protected void onDestroy() {
@@ -49,10 +52,12 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     protected void initCreate(@Nullable Bundle savedInstanceState) {
+        StatusBarUtil.setStatusBarColor(ContextCompat.getColor(this, albumConfig.getAlbumStatusBarColor()), getWindow());
         if (albumFragment != null) {
             albumFragment = null;
         }
         initFragment();
+        initBottomView();
         initListPopupWindow();
     }
 
@@ -62,6 +67,7 @@ public class AlbumActivity extends BaseActivity
         preview = (AppCompatTextView) findViewById(R.id.tv_preview);
         select = (AppCompatTextView) findViewById(R.id.tv_select);
         finderTv = (AppCompatTextView) findViewById(R.id.tv_finder_all);
+        albumBottomView = (RelativeLayout) findViewById(R.id.album_bottom_view);
         listPopupWindow = new ListPopupWindow(this);
         preview.setOnClickListener(this);
         select.setOnClickListener(this);
@@ -77,11 +83,24 @@ public class AlbumActivity extends BaseActivity
     }
 
     @Override
+    public void initBottomView() {
+        albumBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomViewBackground()));
+        finderTv.setTextSize(albumConfig.getAlbumBottomFinderTextSize());
+        finderTv.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomFinderTextColor()));
+        preview.setText(albumConfig.getAlbumBottomPreViewText());
+        preview.setTextSize(albumConfig.getAlbumBottomPreViewTextSize());
+        preview.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomPreViewTextColor()));
+        select.setText(albumConfig.getAlbumBottomSelectText());
+        select.setTextSize(albumConfig.getAlbumBottomSelectTextSize());
+        select.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomSelectTextColor()));
+    }
+
+    @Override
     public void initListPopupWindow() {
         listPopupWindow.setAnchorView(finderTv);
-        listPopupWindow.setWidth(600);
-        listPopupWindow.setHorizontalOffset(20);
-        listPopupWindow.setVerticalOffset(80);
+        listPopupWindow.setWidth(albumConfig.getAlbumListPopupWidth());
+        listPopupWindow.setHorizontalOffset(albumConfig.getAlbumListPopupHorizontalOffset());
+        listPopupWindow.setVerticalOffset(albumConfig.getAlbumListPopupVerticalOffset());
         listPopupWindow.setModal(true);
         listPopupWindow.setOnItemClickListener(this);
     }
@@ -89,12 +108,12 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     protected void initTitle() {
-        toolbar.setTitle(R.string.app_name);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setBackgroundResource(R.color.colorAlbumPrimary);
+        toolbar.setTitle(albumConfig.getAlbumToolbarText());
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarTextColor()));
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon()));
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarBackground()));
         if (VersionUtil.hasL()) {
-            toolbar.setElevation(6f);
-            findViewById(R.id.album_bottom_view).setElevation(6f);
+            toolbar.setElevation(albumConfig.getAlbumToolbarElevation());
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,9 +135,7 @@ public class AlbumActivity extends BaseActivity
         } else if (i == R.id.tv_select) {
         } else if (i == R.id.tv_finder_all) {
             List<FinderModel> finderModel = albumFragment.getFinderModel();
-            if (finderModel == null || finderModel.isEmpty()) {
-                Toast.makeText(this, "...", Toast.LENGTH_SHORT).show();
-            } else {
+            if (finderModel != null && !finderModel.isEmpty()) {
                 listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderModel));
                 listPopupWindow.show();
             }

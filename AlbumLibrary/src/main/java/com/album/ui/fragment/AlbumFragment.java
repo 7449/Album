@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.album.Album;
+import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
@@ -60,6 +62,8 @@ public class AlbumFragment extends Fragment implements
     private ArrayMap<String, List<AlbumModel>> arrayMap = null;
     private String key = AlbumConstant.ALL_ALBUM_NAME;
 
+    private AlbumConfig albumConfig = null;
+
     public static AlbumFragment newInstance() {
         return new AlbumFragment();
     }
@@ -67,6 +71,7 @@ public class AlbumFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        albumConfig = Album.getInstance().getConfig();
         View inflate = inflater.inflate(R.layout.fragment_album, container, false);
         recyclerView = (RecyclerView) inflate.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) inflate.findViewById(R.id.progress);
@@ -209,7 +214,7 @@ public class AlbumFragment extends Fragment implements
             albumActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    albumPresenter.scan(albumActivity.getContentResolver());
+                    albumPresenter.scan(albumActivity.getContentResolver(), albumConfig.isHideCamera());
                 }
             });
         }

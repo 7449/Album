@@ -22,7 +22,7 @@ public class Album {
         return config;
     }
 
-    private Album setConfig(@NonNull AlbumConfig config) {
+    public Album setConfig(@NonNull AlbumConfig config) {
         this.config = config;
         return this;
     }

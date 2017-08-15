@@ -3,7 +3,6 @@ package com.album.presenter.impl;
 import android.content.ContentResolver;
 import android.support.v4.util.ArrayMap;
 
-import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
@@ -24,9 +23,9 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
     }
 
     @Override
-    public void scan(ContentResolver contentResolver) {
+    public void scan(ContentResolver contentResolver, boolean hideCamera) {
         albumView.showProgress();
-        ScanUtils.start(contentResolver, this);
+        ScanUtils.start(contentResolver, this, hideCamera);
     }
 
     @Override

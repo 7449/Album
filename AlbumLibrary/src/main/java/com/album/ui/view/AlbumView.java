@@ -1,5 +1,7 @@
 package com.album.ui.view;
 
+import android.support.v4.util.ArrayMap;
+
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 
@@ -15,7 +17,7 @@ public interface AlbumView {
 
     void hideProgress();
 
-    void scanSuccess(List<AlbumModel> list);
+    void scanSuccess(ArrayMap<String, List<AlbumModel>> maps);
 
     void finderModel(List<FinderModel> list);
 }

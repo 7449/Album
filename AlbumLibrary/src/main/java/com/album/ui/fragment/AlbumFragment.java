@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
 import com.album.util.SingleMediaScanner;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,9 +56,9 @@ public class AlbumFragment extends Fragment implements
 
     private Uri imagePath;
     private SingleMediaScanner singleMediaScanner;
-    private ArrayList<String> tempPreview = null;
     private List<FinderModel> finderModels = null;
-    private List<AlbumModel> albumModels = null;
+    private ArrayMap<String, List<AlbumModel>> arrayMap = null;
+    private String key = AlbumConstant.ALL_ALBUM_NAME;
 
     public static AlbumFragment newInstance() {
         return new AlbumFragment();
@@ -128,6 +131,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        arrayMap.clear();
         disconnectMediaScanner();
     }
 
@@ -146,12 +150,11 @@ public class AlbumFragment extends Fragment implements
     }
 
     @Override
-    public void scanSuccess(List<AlbumModel> list) {
-        // add camera item
-        list.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA));
-        albumAdapter.addAll(list);
-        albumModels = list;
+    public void scanSuccess(ArrayMap<String, List<AlbumModel>> maps) {
+        arrayMap = maps;
+        updateUI(AlbumConstant.ALL_ALBUM_NAME);
     }
+
 
     @Override
     public void finderModel(List<FinderModel> list) {
@@ -167,24 +170,23 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public void onItemClick(View view, int position, AlbumModel albumModel) {
-        if (position == 0) {
+        if (position == 0 && TextUtils.equals(albumModel.getPath(), AlbumConstant.CAMERA)) {
             openCamera();
         } else {
             if (FileUtils.isFile(albumModel.getPath())) {
-                if (tempPreview == null) {
-                    tempPreview = new ArrayList<>();
-                } else {
-                    tempPreview.clear();
-                }
                 Bundle bundle = new Bundle();
-                tempPreview.add(albumModel.getPath());
-                bundle.putStringArrayList(AlbumConstant.PREVIEW_KEY, tempPreview);
+                List<AlbumModel> albumModels = arrayMap.get(key);
+                if (TextUtils.equals(key, AlbumConstant.ALL_ALBUM_NAME)) {
+                    albumModels.remove(0);
+                    position -= 1;
+                }
+                bundle.putSerializable(AlbumConstant.PREVIEW_KEY, (Serializable) albumModels);
+                bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
                 Intent intent = new Intent(albumActivity, PreviewActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtras(bundle);
                 startActivity(intent);
             } else {
-                // 这里,有可能是使用者正在拍照的时候Home返回，删掉图片，然后再返回点击，可强制刷新图库
                 //onScanAlbum();
             }
         }
@@ -225,5 +227,19 @@ public class AlbumFragment extends Fragment implements
     @Override
     public List<FinderModel> getFinderModel() {
         return finderModels;
+    }
+
+    @Override
+    public void updateUI(String key) {
+        this.key = key;
+        if (arrayMap == null) {
+            return;
+        }
+        List<AlbumModel> albumModels = arrayMap.get(key);
+        // cache
+        if (albumModels == null) {
+            return;
+        }
+        albumAdapter.addAll(albumModels);
     }
 }

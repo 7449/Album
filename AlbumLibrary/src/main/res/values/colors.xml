@@ -3,4 +3,5 @@
     <color name="colorAlbumPrimary">#3F51B5</color>
     <color name="colorAlbumPrimaryDark">#303F9F</color>
     <color name="colorAlbumWhite">#fff</color>
+    <color name="colorAlbumBlack">#000</color>
 </resources>

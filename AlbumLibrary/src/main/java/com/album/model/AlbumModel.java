@@ -1,10 +1,12 @@
 package com.album.model;
 
+import java.io.Serializable;
+
 /**
  * by y on 14/08/2017.
  */
 
-public class AlbumModel {
+public class AlbumModel implements Serializable {
     private String dirPath;
     private String dirName;
     private String path;

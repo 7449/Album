@@ -9,6 +9,11 @@ android album
     -dontwarn com.album.**
     -keep class  com.album.** { *;}
     
+ 
+## Thanks
+
+[TouchImageView](https://github.com/MikeOrtiz/TouchImageView)
+    
     
 ## MediaScannerConnection Memory leak
 

@@ -31,7 +31,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
 
     @Override
     public void scanSuccess(ArrayMap<String, List<AlbumModel>> galleryModels) {
-        albumView.scanSuccess(galleryModels.get(AlbumConstant.ALL_ALBUM));
+        albumView.scanSuccess(galleryModels);
         albumView.hideProgress();
     }
 

@@ -25,6 +25,9 @@ public class ScanUtils {
 
     public static void start(ContentResolver contentResolver, ScanCallBack scanCallBack) {
         ArrayMap<String, List<AlbumModel>> arrayMap = new ArrayMap<>();
+        List<AlbumModel> galleryModels = new ArrayList<>();
+        List<FinderModel> finderModels = new ArrayList<>();
+
         Cursor cursor = contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 null,
@@ -36,17 +39,32 @@ public class ScanUtils {
             while (cursor.moveToNext()) {
                 initImage(arrayMap, cursor);
             }
-            List<AlbumModel> galleryModels = new ArrayList<>();
-            List<FinderModel> finderModels = new ArrayList<>();
             for (Map.Entry<String, List<AlbumModel>> entry : arrayMap.entrySet()) {
-                galleryModels.addAll(entry.getValue());
-                finderModels.add(new FinderModel(entry.getKey(), entry.getValue().get(0).getPath(), false));
+                String dirName = entry.getKey();
+                List<AlbumModel> value = entry.getValue();
+                AlbumModel albumModel = value.get(0);
+                galleryModels.addAll(value);
+                finderModels.add(new FinderModel(dirName, albumModel == null ? "" : albumModel.getPath(), value.size()));
             }
+            // finder all album first path
+            AlbumModel albumModel = galleryModels.get(0);
+
+            // reverse
             Collections.reverse(galleryModels);
-            finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM, galleryModels.get(0).getPath(), true));
-            arrayMap.put(AlbumConstant.ALL_ALBUM, galleryModels);
+
+            // put all album
+            arrayMap.put(AlbumConstant.ALL_ALBUM_NAME, galleryModels);
+
+            // add all album camera item
+            galleryModels.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA));
+
+            // add all album thumbnailsPath
+            finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM_NAME, albumModel == null ? "" : albumModel.getPath(), galleryModels.size()));
+
             scanCallBack.scanSuccess(arrayMap);
             scanCallBack.finderModelSuccess(finderModels);
+
+            //close cursor
             cursor.close();
         }
     }

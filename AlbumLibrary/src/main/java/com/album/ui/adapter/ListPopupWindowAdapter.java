@@ -44,13 +44,11 @@ public class ListPopupWindowAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_finder, parent, false);
         }
-
         AppCompatImageView appCompatImageView = (AppCompatImageView) convertView.findViewById(R.id.iv_album_finder_icon);
         AppCompatTextView appCompatTextView = (AppCompatTextView) convertView.findViewById(R.id.tv_album_finder_name);
-
         if (list != null && list.get(position) != null) {
             FinderModel finderModel = list.get(position);
-            appCompatTextView.setText(finderModel.getDirName());
+            appCompatTextView.setText(String.format("%s(%s)", finderModel.getDirName(), String.valueOf(finderModel.getCount())));
             Glide
                     .with(parent.getContext())
                     .load(finderModel.getThumbnailsPath())
@@ -61,5 +59,12 @@ public class ListPopupWindowAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public FinderModel getFinder(int position) {
+        if (list != null) {
+            return list.get(position);
+        }
+        return null;
     }
 }

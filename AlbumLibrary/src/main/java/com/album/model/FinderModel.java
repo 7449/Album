@@ -7,12 +7,13 @@ package com.album.model;
 public class FinderModel {
     private String dirName;
     private String thumbnailsPath;
-    private boolean isSelect;
+    private int count;
 
-    public FinderModel(String dirName, String thumbnailsPath, boolean isSelect) {
+
+    public FinderModel(String dirName, String thumbnailsPath, int count) {
         this.dirName = dirName;
         this.thumbnailsPath = thumbnailsPath;
-        this.isSelect = isSelect;
+        this.count = count;
     }
 
     public String getDirName() {
@@ -31,11 +32,11 @@ public class FinderModel {
         this.thumbnailsPath = thumbnailsPath;
     }
 
-    public boolean isSelect() {
-        return isSelect;
+    public int getCount() {
+        return count;
     }
 
-    public void setSelect(boolean select) {
-        isSelect = select;
+    public void setCount(int count) {
+        this.count = count;
     }
 }

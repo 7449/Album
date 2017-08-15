@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAlbumBlack"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -10,7 +11,7 @@
         android:layout_height="?actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <android.support.v4.view.ViewPager
+    <com.album.ui.widget.ExtendedViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

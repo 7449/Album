@@ -3,4 +3,5 @@
     <string name="album_preview">预览</string>
     <string name="album_select">选择</string>
     <string name="album_all">全部图片</string>
+    <string name="preview_title">选择</string>
 </resources>

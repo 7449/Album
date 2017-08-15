@@ -19,4 +19,6 @@ public interface AlbumMethodFragmentView {
     void openCamera();
 
     List<FinderModel> getFinderModel();
+
+    void updateUI(String key);
 }

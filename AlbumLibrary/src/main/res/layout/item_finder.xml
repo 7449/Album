@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground"
     android:orientation="horizontal"
-    android:padding="5dp">
+    android:padding="@dimen/item_list_popup_padding">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_album_finder_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/item_list_popup_iv_width"
+        android:layout_height="@dimen/item_list_popup_iv_height"
         android:background="@drawable/ic_launcher" />
 
     <android.support.v7.widget.AppCompatTextView
@@ -17,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="20dp"
-        android:text="@string/app_name" />
+        android:layout_marginLeft="@dimen/item_list_popup_margin_left"
+        tools:ignore="RtlHardcoded" />
 
 </LinearLayout>

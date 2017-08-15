@@ -7,6 +7,7 @@ import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.album.R;
@@ -30,7 +31,7 @@ public class AlbumActivity extends BaseActivity
     private AppCompatTextView preview;
     private AppCompatTextView select;
     private AlbumFragment albumFragment;
-    private AppCompatTextView finder;
+    private AppCompatTextView finderTv;
     private ListPopupWindow listPopupWindow;
 
     @Override
@@ -60,11 +61,11 @@ public class AlbumActivity extends BaseActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         preview = (AppCompatTextView) findViewById(R.id.tv_preview);
         select = (AppCompatTextView) findViewById(R.id.tv_select);
-        finder = (AppCompatTextView) findViewById(R.id.tv_finder_all);
+        finderTv = (AppCompatTextView) findViewById(R.id.tv_finder_all);
         listPopupWindow = new ListPopupWindow(this);
         preview.setOnClickListener(this);
         select.setOnClickListener(this);
-        finder.setOnClickListener(this);
+        finderTv.setOnClickListener(this);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     public void initListPopupWindow() {
-        listPopupWindow.setAnchorView(finder);
+        listPopupWindow.setAnchorView(finderTv);
         listPopupWindow.setWidth(600);
         listPopupWindow.setHorizontalOffset(20);
         listPopupWindow.setVerticalOffset(80);
@@ -126,6 +127,19 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        ListView listView = listPopupWindow.getListView();
+        if (listView == null) {
+            return;
+        }
+        ListPopupWindowAdapter adapter = (ListPopupWindowAdapter) listView.getAdapter();
+        FinderModel finder = adapter.getFinder(position);
+        if (finder == null) {
+            return;
+        }
+        finderTv.setText(finder.getDirName());
+        if (albumFragment != null) {
+            albumFragment.updateUI(finder.getDirName());
+        }
+        listPopupWindow.dismiss();
     }
 }

@@ -47,7 +47,10 @@ public class ScanUtils {
                 finderModels.add(new FinderModel(dirName, albumModel == null ? "" : albumModel.getPath(), value.size()));
             }
             // finder all album first path
-            AlbumModel albumModel = galleryModels.get(0);
+            AlbumModel albumModel = null;
+            if (!galleryModels.isEmpty()) {
+                albumModel = galleryModels.get(0);
+            }
 
             // reverse
             Collections.reverse(galleryModels);
@@ -61,7 +64,9 @@ public class ScanUtils {
             }
 
             // add all album thumbnailsPath
-            finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM_NAME, albumModel == null ? "" : albumModel.getPath(), galleryModels.size()));
+            if (!finderModels.isEmpty()) {
+                finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM_NAME, albumModel == null ? "" : albumModel.getPath(), galleryModels.size()));
+            }
 
             scanCallBack.scanSuccess(arrayMap);
             scanCallBack.finderModelSuccess(finderModels);

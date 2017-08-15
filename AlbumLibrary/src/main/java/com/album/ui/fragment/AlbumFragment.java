@@ -138,7 +138,9 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        arrayMap.clear();
+        if (arrayMap != null) {
+            arrayMap.clear();
+        }
         disconnectMediaScanner();
     }
 

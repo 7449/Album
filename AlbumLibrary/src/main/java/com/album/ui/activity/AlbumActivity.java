@@ -17,6 +17,7 @@ import com.album.ui.adapter.ListPopupWindowAdapter;
 import com.album.ui.fragment.AlbumFragment;
 import com.album.ui.view.AlbumMethodActivityView;
 import com.album.util.AlbumLog;
+import com.album.util.DrawableUtil;
 import com.album.util.StatusBarUtil;
 import com.album.util.VersionUtil;
 
@@ -59,6 +60,7 @@ public class AlbumActivity extends BaseActivity
         initFragment();
         initBottomView();
         initListPopupWindow();
+
     }
 
     @Override
@@ -87,6 +89,7 @@ public class AlbumActivity extends BaseActivity
         albumBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomViewBackground()));
         finderTv.setTextSize(albumConfig.getAlbumBottomFinderTextSize());
         finderTv.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomFinderTextColor()));
+        finderTv.setCompoundDrawables(null, null, DrawableUtil.getDrawable(this, albumConfig.getAlbumBottomFinderTextDrawable()), null);
         preview.setText(albumConfig.getAlbumBottomPreViewText());
         preview.setTextSize(albumConfig.getAlbumBottomPreViewTextSize());
         preview.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomPreViewTextColor()));
@@ -103,6 +106,7 @@ public class AlbumActivity extends BaseActivity
         listPopupWindow.setVerticalOffset(albumConfig.getAlbumListPopupVerticalOffset());
         listPopupWindow.setModal(true);
         listPopupWindow.setOnItemClickListener(this);
+
     }
 
 
@@ -138,6 +142,10 @@ public class AlbumActivity extends BaseActivity
             if (finderModel != null && !finderModel.isEmpty()) {
                 listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderModel));
                 listPopupWindow.show();
+                ListView listView = listPopupWindow.getListView();
+                if (listView != null) {
+                    listView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumListPopupItemBackground()));
+                }
             }
         }
     }

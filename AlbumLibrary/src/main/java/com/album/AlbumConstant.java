@@ -13,4 +13,5 @@ public class AlbumConstant {
     public static final int ITEM_CAMERA = 1111;
     public static final String PREVIEW_KEY = "preview";
     public static final String PREVIEW_POSITION_KEY = "preview_position";
+    public static final int TYPE_NIGHT = 0;
 }

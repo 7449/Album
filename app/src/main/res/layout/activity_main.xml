@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_radio_image"
+        android:id="@+id/btn_day_album"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="All Album" />
+        android:text="day" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_night_album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="night" />
 
 
 </LinearLayout>

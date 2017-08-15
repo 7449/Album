@@ -46,9 +46,9 @@ public class PreviewActivity extends BaseActivity {
 
     @Override
     protected void initTitle() {
-        toolbar.setTitle(R.string.app_name);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setBackgroundResource(R.color.colorAlbumPrimary);
+        toolbar.setTitle(R.string.album_name);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_day);
+        toolbar.setBackgroundResource(R.color.colorAlbumBottomFinderTextColorDay);
         if (VersionUtil.hasL()) {
             toolbar.setElevation(6f);
         }

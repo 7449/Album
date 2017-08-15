@@ -21,20 +21,21 @@
         android:id="@+id/album_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/album_bottom_height"
-        android:background="@color/colorAlbumPrimaryDark">
+        android:background="@color/colorAlbumBottomViewBackgroundDay">
 
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_finder_all"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/album_bottom_finder_margin_left"
             android:background="?android:selectableItemBackground"
-            android:drawableRight="@drawable/ic_action_album_finder"
+            android:drawablePadding="10dp"
+            android:drawableRight="@drawable/ic_action_album_finder_day"
             android:gravity="center_vertical"
             android:padding="@dimen/album_bottom_padding"
             android:text="@string/album_all"
-            android:textColor="@color/colorAlbumWhite"
+            android:textColor="@color/colorAlbumBottomFinderTextColorDay"
             android:textSize="@dimen/album_bottom_text_size"
             tools:ignore="RtlHardcoded" />
 
@@ -48,7 +49,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/album_bottom_padding"
             android:text="@string/album_preview"
-            android:textColor="@color/colorAlbumWhite"
+            android:textColor="@color/colorAlbumBottomPreViewTextColorDay"
             android:textSize="@dimen/album_bottom_text_size"
             tools:ignore="RelativeOverlap,RtlHardcoded" />
 
@@ -62,7 +63,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/album_bottom_padding"
             android:text="@string/album_select"
-            android:textColor="@color/colorAlbumWhite"
+            android:textColor="@color/colorAlbumBottomSelectTextColorDay"
             android:textSize="@dimen/album_bottom_text_size"
             tools:ignore="RtlHardcoded" />
 

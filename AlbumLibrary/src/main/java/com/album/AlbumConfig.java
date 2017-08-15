@@ -9,31 +9,64 @@ public class AlbumConfig {
 
     private boolean hideCamera = false;
     //////////////  album toolbar //////
-    private int albumStatusBarColor = R.color.colorAlbumPrimaryDark;
-    private int albumToolbarBackground = R.color.colorAlbumPrimary;
-    private int albumToolbarIcon = R.drawable.ic_arrow_back;
-    private int albumToolbarTextColor = R.color.colorAlbumWhite;
-    private int albumToolbarText = R.string.app_name;
+    private int albumStatusBarColor = R.color.colorAlbumStatusBarColorDay;
+    private int albumToolbarBackground = R.color.colorAlbumToolbarBackgroundDay;
+    private int albumToolbarIcon = R.drawable.ic_arrow_back_day;
+    private int albumToolbarTextColor = R.color.colorAlbumToolbarTextColorDay;
+    private int albumToolbarText = R.string.album_name;
     private float albumToolbarElevation = 6f;
     ////////////// album bottom view //////
-    private int albumBottomViewBackground = R.color.colorAlbumBlack;
+    private int albumBottomViewBackground = R.color.colorAlbumBottomViewBackgroundDay;
     private int albumBottomFinderTextSize = 16;
-    private int albumBottomFinderTextColor = R.color.colorAlbumWhite;
+    private int albumBottomFinderTextColor = R.color.colorAlbumBottomFinderTextColorDay;
+    private int albumBottomFinderTextDrawable = R.drawable.ic_action_album_finder_day;
     private int albumBottomPreViewText = R.string.album_preview;
     private int albumBottomPreViewTextSize = 16;
-    private int albumBottomPreViewTextColor = R.color.colorAlbumWhite;
+    private int albumBottomPreViewTextColor = R.color.colorAlbumBottomPreViewTextColorDay;
     private int albumBottomSelectText = R.string.album_select;
     private int albumBottomSelectTextSize = 16;
-    private int albumBottomSelectTextColor = R.color.colorAlbumWhite;
+    private int albumBottomSelectTextColor = R.color.colorAlbumBottomSelectTextColorDay;
     ///////////// album list popup window /////
     private int albumListPopupWidth = 600;
     private int albumListPopupHorizontalOffset = 20;
     private int albumListPopupVerticalOffset = 80;
-    private int albumListPopupItemBackground = R.color.colorAlbumWhite;
-    private int albumListPopupItemTextColor = R.color.colorAlbumBlack;
+    private int albumListPopupItemBackground = R.color.colorAlbumListPopupItemBackgroundDay;
+    private int albumListPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorDay;
 
 
     public AlbumConfig() {
+    }
+
+    public AlbumConfig(int type) {
+        switch (type) {
+            case AlbumConstant.TYPE_NIGHT:
+                albumStatusBarColor = R.color.colorAlbumStatusBarColorNight;
+                albumToolbarBackground = R.color.colorAlbumToolbarBackgroundNight;
+                albumToolbarIcon = R.drawable.ic_arrow_back_night;
+                albumToolbarTextColor = R.color.colorAlbumToolbarTextColorNight;
+                albumToolbarText = R.string.album_name;
+                albumToolbarElevation = 6f;
+
+                albumBottomViewBackground = R.color.colorAlbumBottomViewBackgroundNight;
+                albumBottomFinderTextSize = 16;
+                albumBottomFinderTextColor = R.color.colorAlbumBottomFinderTextColorNight;
+                albumBottomFinderTextDrawable = R.drawable.ic_action_album_finder_night;
+                albumBottomPreViewText = R.string.album_preview;
+                albumBottomPreViewTextSize = 16;
+                albumBottomPreViewTextColor = R.color.colorAlbumBottomPreViewTextColorNight;
+                albumBottomSelectText = R.string.album_select;
+                albumBottomSelectTextSize = 16;
+                albumBottomSelectTextColor = R.color.colorAlbumBottomSelectTextColorNight;
+
+                albumListPopupWidth = 600;
+                albumListPopupHorizontalOffset = 20;
+                albumListPopupVerticalOffset = 80;
+                albumListPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorNight;
+                albumListPopupItemBackground = R.color.colorAlbumListPopupItemBackgroundNight;
+                break;
+            default:
+                throw new RuntimeException("type");
+        }
     }
 
     public boolean isHideCamera() {
@@ -204,6 +237,15 @@ public class AlbumConfig {
 
     public AlbumConfig setAlbumListPopupVerticalOffset(int albumListPopupVerticalOffset) {
         this.albumListPopupVerticalOffset = albumListPopupVerticalOffset;
+        return this;
+    }
+
+    public int getAlbumBottomFinderTextDrawable() {
+        return albumBottomFinderTextDrawable;
+    }
+
+    public AlbumConfig setAlbumBottomFinderTextDrawable(int albumBottomFinderTextDrawable) {
+        this.albumBottomFinderTextDrawable = albumBottomFinderTextDrawable;
         return this;
     }
 

@@ -51,8 +51,6 @@ public class ListPopupWindowAdapter extends BaseAdapter {
         }
         AppCompatImageView appCompatImageView = (AppCompatImageView) convertView.findViewById(R.id.iv_album_finder_icon);
         AppCompatTextView appCompatTextView = (AppCompatTextView) convertView.findViewById(R.id.tv_album_finder_name);
-        View view = convertView.findViewById(R.id.item_finder_view);
-        view.setBackgroundColor(ContextCompat.getColor(parent.getContext(), albumConfig.getAlbumListPopupItemBackground()));
         appCompatTextView.setTextColor(ContextCompat.getColor(parent.getContext(), albumConfig.getAlbumListPopupItemTextColor()));
         if (list != null && list.get(position) != null) {
             FinderModel finderModel = list.get(position);

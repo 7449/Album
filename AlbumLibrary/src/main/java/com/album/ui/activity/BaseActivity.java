@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.album.Album;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
-import com.album.util.PermissionUtils;
 import com.album.util.StatusBarUtil;
 
 /**
@@ -30,9 +29,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutId());
         initView();
         initTitle();
-        if (PermissionUtils.storage(this)) {
-            permissionsGranted(AlbumConstant.TYPE_ALBUM);
-        }
         initCreate(savedInstanceState);
     }
 

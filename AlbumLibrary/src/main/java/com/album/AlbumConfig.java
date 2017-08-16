@@ -370,4 +370,5 @@ public class AlbumConfig {
         this.albumPreviewBackground = albumPreviewBackground;
         return this;
     }
+
 }

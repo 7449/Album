@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.album.Album;
 import com.album.model.AlbumModel;
 import com.album.ui.widget.TouchImageView;
+import com.album.util.AlbumLog;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class PreviewAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         TouchImageView img = new TouchImageView(container.getContext());
+        AlbumLog.log(list.get(position).getPath());
         Album.getInstance().getAlbumImageLoader().displayPreview(img, list.get(position).getPath());
         container.addView(img);
         return img;

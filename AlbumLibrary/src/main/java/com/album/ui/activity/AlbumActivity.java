@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.FinderModel;
 import com.album.ui.adapter.ListPopupWindowAdapter;
@@ -58,7 +59,6 @@ public class AlbumActivity extends BaseActivity
         initFragment();
         initBottomView();
         initListPopupWindow();
-
     }
 
     @Override
@@ -73,6 +73,7 @@ public class AlbumActivity extends BaseActivity
         select.setOnClickListener(this);
         finderTv.setOnClickListener(this);
         preview.setVisibility(albumConfig.isRadio() ? View.GONE : View.VISIBLE);
+        select.setVisibility(albumConfig.isRadio() ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -130,6 +131,26 @@ public class AlbumActivity extends BaseActivity
     @Override
     protected int getLayoutId() {
         return R.layout.activity_album;
+    }
+
+    @Override
+    protected void permissionsDenied(int type) {
+    }
+
+    @Override
+    protected void permissionsGranted(int type) {
+        switch (type) {
+            case AlbumConstant.TYPE_ALBUM:
+                if (albumFragment != null) {
+                    albumFragment.onScanAlbum();
+                }
+                break;
+            case AlbumConstant.TYPE_CAMERA:
+                if (albumFragment != null) {
+                    albumFragment.openCamera();
+                }
+                break;
+        }
     }
 
     @Override

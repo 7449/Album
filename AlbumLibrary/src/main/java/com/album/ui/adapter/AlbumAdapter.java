@@ -67,7 +67,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         if (TextUtils.equals(String.valueOf(path), AlbumConstant.CAMERA)) {
             Drawable drawable = ContextCompat.getDrawable(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawable());
             drawable.setColorFilter(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
-            holder.imageView.setBackgroundDrawable(drawable);
+            holder.imageView.setImageDrawable(drawable);
         } else {
             Album.getInstance().getAlbumImageLoader().displayAlbum(holder.imageView, path);
         }

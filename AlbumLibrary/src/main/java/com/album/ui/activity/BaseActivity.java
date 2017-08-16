@@ -37,6 +37,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case AlbumConstant.WRITE_EXTERNAL_STORAGE_REQUEST_CODE:
+                if (grantResults.length == 0) {
+                    return;
+                }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     permissionsDenied(AlbumConstant.TYPE_ALBUM);
                 } else {
@@ -44,6 +47,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
                 break;
             case AlbumConstant.CAMERA_REQUEST_CODE:
+                if (grantResults.length == 0) {
+                    return;
+                }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     permissionsDenied(AlbumConstant.TYPE_CAMERA);
                 } else {

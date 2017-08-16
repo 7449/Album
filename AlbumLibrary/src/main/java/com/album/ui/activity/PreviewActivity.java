@@ -17,6 +17,7 @@ import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
 import com.album.ui.adapter.PreviewAdapter;
+import com.album.util.AlbumLog;
 import com.album.util.VersionUtil;
 
 import java.util.List;
@@ -33,7 +34,23 @@ public class PreviewActivity extends BaseActivity {
 
     @Override
     protected void initCreate(@Nullable Bundle savedInstanceState) {
+        init();
+    }
 
+    @SuppressWarnings("unchecked")
+    private void init() {
+        List<AlbumModel> albumModels = (List<AlbumModel>) getIntent().getSerializableExtra(AlbumConstant.PREVIEW_KEY);
+        int position = getIntent().getExtras().getInt(AlbumConstant.PREVIEW_POSITION_KEY, 0);
+        String key = getIntent().getExtras().getString(AlbumConstant.PREVIEW_KEY_, AlbumConstant.ALL_ALBUM_NAME);
+        if (TextUtils.equals(key, AlbumConstant.ALL_ALBUM_NAME)) {
+            position -= 1;
+            albumModels.remove(0);
+        }
+        AlbumLog.log(albumModels.size());
+        adapter = new PreviewAdapter(albumModels);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(position);
+        viewPager.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumPreviewBackground()));
     }
 
     @Override
@@ -44,6 +61,7 @@ public class PreviewActivity extends BaseActivity {
 
     @Override
     protected void initTitle() {
+        setSupportActionBar(toolbar);
         toolbar.setTitle(albumConfig.getAlbumPreviewTitle());
         toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarTextColor()));
         Drawable drawable = ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon());
@@ -96,18 +114,7 @@ public class PreviewActivity extends BaseActivity {
     protected void permissionsGranted(int type) {
         switch (type) {
             case AlbumConstant.TYPE_ALBUM:
-                List<AlbumModel> albumModels = (List<AlbumModel>) getIntent().getSerializableExtra(AlbumConstant.PREVIEW_KEY);
-                int position = getIntent().getExtras().getInt(AlbumConstant.PREVIEW_POSITION_KEY, 0);
-                String key = getIntent().getExtras().getString(AlbumConstant.PREVIEW_KEY_, AlbumConstant.ALL_ALBUM_NAME);
-                if (TextUtils.equals(key, AlbumConstant.ALL_ALBUM_NAME)) {
-                    position -= 1;
-                    albumModels.remove(0);
-                }
-                adapter = new PreviewAdapter(albumModels);
-                viewPager.setAdapter(adapter);
-                viewPager.setCurrentItem(position);
-                setSupportActionBar(toolbar);
-                viewPager.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumPreviewBackground()));
+                init();
                 break;
         }
     }

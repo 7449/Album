@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.album.AlbumConstant;
 import com.album.R;
@@ -135,6 +136,7 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     protected void permissionsDenied(int type) {
+        Toast.makeText(this, "permissionsDenied:" + type, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -159,6 +161,9 @@ public class AlbumActivity extends BaseActivity
         if (i == R.id.tv_preview) {
         } else if (i == R.id.tv_select) {
         } else if (i == R.id.tv_finder_all) {
+            if (albumFragment == null) {
+                return;
+            }
             List<FinderModel> finderModel = albumFragment.getFinderModel();
             if (finderModel != null && !finderModel.isEmpty()) {
                 listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderModel));

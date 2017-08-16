@@ -175,7 +175,7 @@ public class AlbumFragment extends Fragment implements
                     List<AlbumModel> albumModels = arrayMap.get(key);
                     bundle.putSerializable(AlbumConstant.PREVIEW_KEY, (Serializable) albumModels);
                     bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
-                    bundle.putString(AlbumConstant.PREVIEW_KEY_, key);
+                    bundle.putString(AlbumConstant.PREVIEW_POSITION_KEY, key);
                     Intent intent = new Intent(albumActivity, PreviewActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtras(bundle);

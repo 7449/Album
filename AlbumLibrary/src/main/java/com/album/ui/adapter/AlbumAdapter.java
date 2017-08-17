@@ -125,13 +125,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         return albumList;
     }
 
+    public ArrayList<AlbumModel> getMultiplePreviewList() {
+        return multiplePreviewList;
+    }
+
     public void setMultiplePreviewList(ArrayList<AlbumModel> multiplePreviewList) {
         this.multiplePreviewList = multiplePreviewList;
         notifyDataSetChanged();
-    }
-
-    public ArrayList<AlbumModel> getMultiplePreviewList() {
-        return multiplePreviewList;
     }
 
     public interface OnItemClickListener {

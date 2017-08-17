@@ -8,6 +8,17 @@ import android.os.Parcelable;
  */
 
 public class AlbumModel implements Parcelable {
+    public static final Creator<AlbumModel> CREATOR = new Creator<AlbumModel>() {
+        @Override
+        public AlbumModel createFromParcel(Parcel in) {
+            return new AlbumModel(in);
+        }
+
+        @Override
+        public AlbumModel[] newArray(int size) {
+            return new AlbumModel[size];
+        }
+    };
     private String dirPath;
     private String dirName;
     private String path;
@@ -26,18 +37,6 @@ public class AlbumModel implements Parcelable {
         path = in.readString();
         isCheck = in.readByte() != 0;
     }
-
-    public static final Creator<AlbumModel> CREATOR = new Creator<AlbumModel>() {
-        @Override
-        public AlbumModel createFromParcel(Parcel in) {
-            return new AlbumModel(in);
-        }
-
-        @Override
-        public AlbumModel[] newArray(int size) {
-            return new AlbumModel[size];
-        }
-    };
 
     public String getDirPath() {
         return dirPath;

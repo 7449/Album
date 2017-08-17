@@ -20,8 +20,7 @@ import com.album.model.FinderModel;
 import com.album.ui.adapter.ListPopupWindowAdapter;
 import com.album.ui.fragment.AlbumFragment;
 import com.album.ui.view.AlbumMethodActivityView;
-import com.album.util.DrawableUtil;
-import com.album.util.VersionUtil;
+import com.album.util.AlbumTool;
 
 import java.util.List;
 
@@ -90,7 +89,7 @@ public class AlbumActivity extends BaseActivity
         albumBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomViewBackground()));
         finderTv.setTextSize(albumConfig.getAlbumBottomFinderTextSize());
         finderTv.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomFinderTextColor()));
-        finderTv.setCompoundDrawables(null, null, DrawableUtil.getDrawable(this, albumConfig.getAlbumBottomFinderTextDrawable(), albumConfig.getAlbumBottomFinderTextDrawableColor()), null);
+        finderTv.setCompoundDrawables(null, null, AlbumTool.getDrawable(this, albumConfig.getAlbumBottomFinderTextDrawable(), albumConfig.getAlbumBottomFinderTextDrawableColor()), null);
         preview.setText(albumConfig.getAlbumBottomPreViewText());
         preview.setTextSize(albumConfig.getAlbumBottomPreViewTextSize());
         preview.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomPreViewTextColor()));
@@ -118,7 +117,7 @@ public class AlbumActivity extends BaseActivity
         drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationIcon(drawable);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarBackground()));
-        if (VersionUtil.hasL()) {
+        if (AlbumTool.hasL()) {
             toolbar.setElevation(albumConfig.getAlbumToolbarElevation());
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

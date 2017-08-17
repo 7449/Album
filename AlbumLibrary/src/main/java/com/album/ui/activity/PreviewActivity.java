@@ -24,8 +24,8 @@ import com.album.presenter.impl.PreviewPresenterImpl;
 import com.album.ui.adapter.PreviewAdapter;
 import com.album.ui.view.PreviewMethodActivityView;
 import com.album.ui.view.PreviewView;
+import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
-import com.album.util.VersionUtil;
 
 import java.util.ArrayList;
 
@@ -106,7 +106,7 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
         drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationIcon(drawable);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarBackground()));
-        if (VersionUtil.hasL()) {
+        if (AlbumTool.hasL()) {
             toolbar.setElevation(albumConfig.getAlbumToolbarElevation());
         }
     }

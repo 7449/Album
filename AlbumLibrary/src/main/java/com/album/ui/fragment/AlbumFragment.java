@@ -30,7 +30,7 @@ import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
 import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
-import com.album.util.CameraUtil;
+import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
 import com.album.util.SingleMediaScanner;
@@ -231,7 +231,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void openCamera() {
         imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity));
-        CameraUtil.openCamera(this, imagePath);
+        AlbumTool.openCamera(this, imagePath);
     }
 
     @Override

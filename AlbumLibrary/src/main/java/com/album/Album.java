@@ -26,17 +26,17 @@ public class Album {
         return albumImageLoader;
     }
 
+    public Album setAlbumImageLoader(AlbumImageLoader albumImageLoader) {
+        this.albumImageLoader = albumImageLoader;
+        return this;
+    }
+
     public UCrop.Options getOptions() {
         return options;
     }
 
     public Album setOptions(UCrop.Options options) {
         this.options = options;
-        return this;
-    }
-
-    public Album setAlbumImageLoader(AlbumImageLoader albumImageLoader) {
-        this.albumImageLoader = albumImageLoader;
         return this;
     }
 

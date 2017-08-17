@@ -19,10 +19,9 @@ import java.util.Map;
  * by y on 11/08/2017.
  */
 public class ScanUtils implements ScanView {
-    private ContentResolver contentResolver = null;
-
     private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
     private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and " + ALL_ALBUM_SELECTION;
+    private ContentResolver contentResolver = null;
 
     private ScanUtils() {
     }
@@ -119,7 +118,7 @@ public class ScanUtils implements ScanView {
 
     @Override
     public void initCamera(ArrayList<AlbumModel> albumModelArrayList) {
-        albumModelArrayList.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA,false));
+        albumModelArrayList.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA, false));
     }
 
 

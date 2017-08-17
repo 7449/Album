@@ -8,6 +8,8 @@ public class AlbumConfig {
 
     private boolean hideCamera = false;
     private boolean isRadio = false;
+    private boolean isCrop = true;
+    private int multipleMaxCount = 9;
     //////////////  album toolbar //////
     private int albumStatusBarColor = R.color.colorAlbumStatusBarColorDay;
     private int albumToolbarBackground = R.color.colorAlbumToolbarBackgroundDay;
@@ -39,11 +41,14 @@ public class AlbumConfig {
     private int albumContentViewBackground = R.color.colorAlbumContentViewBackgroundDay;
     private int albumContentViewCameraDrawable = R.drawable.ic_action_camera_day;
     private int albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay;
+    private int albumContentItemCheckBoxDrawable = R.drawable.selector_album_item_check;
     /////////// album preview ////////
     private int albumPreviewTitle = R.string.preview_title;
-    private int albumPreviewTitleCheckDrawable = R.drawable.ic_action_preview_check;
-    private int albumPreviewTitleCheckDrawableColor = R.color.colorAlbumPreviewTitleCheckDrawableColorDay;
     private int albumPreviewBackground = R.color.colorAlbumPreviewBackgroundDay;
+    private int albumPreviewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundDay;
+    private int albumPreviewBottomOkText = R.string.preview_select;
+    private int albumPreviewBottomOkTextColor = R.color.colorAlbumPreviewBottomViewOkColorDay;
+    private int albumPreviewBottomOkTextSize = 16;
 
     public AlbumConfig() {
     }
@@ -68,8 +73,9 @@ public class AlbumConfig {
                 albumContentViewBackground = R.color.colorAlbumContentViewBackgroundNight;
                 albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight;
 
-                albumPreviewTitleCheckDrawableColor = R.color.colorAlbumPreviewTitleCheckDrawableColorNight;
                 albumPreviewBackground = R.color.colorAlbumPreviewBackgroundNight;
+                albumPreviewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundNight;
+                albumPreviewBottomOkTextColor = R.color.colorAlbumPreviewBottomViewOkColorNight;
                 break;
             default:
                 throw new RuntimeException("type");
@@ -346,22 +352,6 @@ public class AlbumConfig {
         return this;
     }
 
-    public int getAlbumPreviewTitleCheckDrawable() {
-        return albumPreviewTitleCheckDrawable;
-    }
-
-    public void setAlbumPreviewTitleCheckDrawable(int albumPreviewTitleCheckDrawable) {
-        this.albumPreviewTitleCheckDrawable = albumPreviewTitleCheckDrawable;
-    }
-
-    public int getAlbumPreviewTitleCheckDrawableColor() {
-        return albumPreviewTitleCheckDrawableColor;
-    }
-
-    public void setAlbumPreviewTitleCheckDrawableColor(int albumPreviewTitleCheckDrawableColor) {
-        this.albumPreviewTitleCheckDrawableColor = albumPreviewTitleCheckDrawableColor;
-    }
-
     public int getAlbumPreviewBackground() {
         return albumPreviewBackground;
     }
@@ -371,4 +361,66 @@ public class AlbumConfig {
         return this;
     }
 
+    public boolean isCrop() {
+        return isCrop;
+    }
+
+    public AlbumConfig setCrop(boolean crop) {
+        isCrop = crop;
+        return this;
+    }
+
+    public int getAlbumContentItemCheckBoxDrawable() {
+        return albumContentItemCheckBoxDrawable;
+    }
+
+    public AlbumConfig setAlbumContentItemCheckBoxDrawable(int albumContentItemCheckBoxDrawable) {
+        this.albumContentItemCheckBoxDrawable = albumContentItemCheckBoxDrawable;
+        return this;
+    }
+
+    public int getMultipleMaxCount() {
+        return multipleMaxCount;
+    }
+
+    public AlbumConfig setMultipleMaxCount(int multipleMaxCount) {
+        this.multipleMaxCount = multipleMaxCount;
+        return this;
+    }
+
+    public int getAlbumPreviewBottomViewBackground() {
+        return albumPreviewBottomViewBackground;
+    }
+
+    public AlbumConfig setAlbumPreviewBottomViewBackground(int albumPreviewBottomViewBackground) {
+        this.albumPreviewBottomViewBackground = albumPreviewBottomViewBackground;
+        return this;
+    }
+
+    public int getAlbumPreviewBottomOkText() {
+        return albumPreviewBottomOkText;
+    }
+
+    public AlbumConfig setAlbumPreviewBottomOkText(int albumPreviewBottomOkText) {
+        this.albumPreviewBottomOkText = albumPreviewBottomOkText;
+        return this;
+    }
+
+    public int getAlbumPreviewBottomOkTextColor() {
+        return albumPreviewBottomOkTextColor;
+    }
+
+    public AlbumConfig setAlbumPreviewBottomOkTextColor(int albumPreviewBottomOkTextColor) {
+        this.albumPreviewBottomOkTextColor = albumPreviewBottomOkTextColor;
+        return this;
+    }
+
+    public int getAlbumPreviewBottomOkTextSize() {
+        return albumPreviewBottomOkTextSize;
+    }
+
+    public AlbumConfig setAlbumPreviewBottomOkTextSize(int albumPreviewBottomOkTextSize) {
+        this.albumPreviewBottomOkTextSize = albumPreviewBottomOkTextSize;
+        return this;
+    }
 }

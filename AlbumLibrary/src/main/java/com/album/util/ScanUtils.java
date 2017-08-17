@@ -4,99 +4,129 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import android.support.v4.util.ArrayMap;
+import android.text.TextUtils;
 
 import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
+import com.album.ui.view.ScanView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
  * by y on 11/08/2017.
  */
+public class ScanUtils implements ScanView {
+    private ContentResolver contentResolver = null;
 
-public class ScanUtils {
+    private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
+    private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and " + ALL_ALBUM_SELECTION;
+
     private ScanUtils() {
     }
 
-    public static void start(ContentResolver contentResolver, ScanCallBack scanCallBack, boolean hideCamera) {
-        ArrayMap<String, List<AlbumModel>> arrayMap = new ArrayMap<>();
-        List<AlbumModel> galleryModels = new ArrayList<>();
-        List<FinderModel> finderModels = new ArrayList<>();
+    public static ScanUtils get() {
+        return new ScanUtils();
+    }
 
-        Cursor cursor = contentResolver.query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                null,
-                MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ?",
-                new String[]{"image/jpeg", "image/png"},
-                MediaStore.Images.Media.DATE_MODIFIED);
-
+    @Override
+    public void start(ContentResolver contentResolver, ScanCallBack scanCallBack, String bucketId, boolean finder, boolean hideCamera) {
+        this.contentResolver = contentResolver;
+        if (contentResolver == null) {
+            throw new NullPointerException("ContentResolver == null");
+        }
+        ArrayMap<String, FinderModel> finderModelMap = new ArrayMap<>();
+        ArrayList<AlbumModel> albumModels = new ArrayList<>();
+        ArrayList<FinderModel> finderModels = new ArrayList<>();
+        Cursor cursor = getAlbumCursor(bucketId);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                initImage(arrayMap, cursor);
+                cursorAlbum(albumModels, finderModelMap, cursor);
             }
-            for (Map.Entry<String, List<AlbumModel>> entry : arrayMap.entrySet()) {
-                String dirName = entry.getKey();
-                List<AlbumModel> value = entry.getValue();
-                AlbumModel albumModel = value.get(0);
-                galleryModels.addAll(value);
-                finderModels.add(new FinderModel(dirName, albumModel == null ? "" : albumModel.getPath(), value.size()));
-            }
-            // finder all album first path
-            AlbumModel albumModel = null;
-            if (!galleryModels.isEmpty()) {
-                albumModel = galleryModels.get(0);
-            }
-
-            // reverse
-            Collections.reverse(galleryModels);
-
-            // put all album
-            arrayMap.put(AlbumConstant.ALL_ALBUM_NAME, galleryModels);
-
-            // add all album camera item
-            if (!hideCamera) {
-                galleryModels.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA));
-            }
-
-            // add all album thumbnailsPath
-            if (!finderModels.isEmpty()) {
-                finderModels.add(new FinderModel(AlbumConstant.ALL_ALBUM_NAME, albumModel == null ? "" : albumModel.getPath(), hideCamera ? galleryModels.size() : galleryModels.size() - 1));
-            }
-
-            scanCallBack.scanSuccess(arrayMap);
-            scanCallBack.finderModelSuccess(finderModels);
-
-            //close cursor
             cursor.close();
+            if (finder) {
+                cursorFinder(finderModelMap, finderModels);
+                scanCallBack.finderModelSuccess(finderModels);
+            }
+            if (finder && !hideCamera) {
+                initCamera(albumModels);
+            }
+            scanCallBack.scanSuccess(albumModels);
         }
     }
 
-    private static void initImage(ArrayMap<String, List<AlbumModel>> arrayMap, Cursor cursor) {
+    @Override
+    public void cursorAlbum(ArrayList<AlbumModel> albumModels, ArrayMap<String, FinderModel> finderModelMap, Cursor cursor) {
         String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
         File pathFile = FileUtils.getPathFile(path);
         if (pathFile != null) {
-            String absolutePath = pathFile.getAbsolutePath();
+            String bucketId = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID));
             String finderName = pathFile.getName();
-            List<AlbumModel> galleryModels = arrayMap.get(finderName);
-            if (galleryModels == null) {
-                galleryModels = new ArrayList<>();
-                galleryModels.add(new AlbumModel(absolutePath, finderName, path));
-                arrayMap.put(finderName, galleryModels);
-            } else {
-                galleryModels.add(new AlbumModel(absolutePath, finderName, path));
+            FinderModel finderModel = finderModelMap.get(finderName);
+            if (finderModel == null) {
+                finderModelMap.put(finderName, new FinderModel(finderName, path, bucketId, cursorAlbumCount(bucketId)));
             }
+            albumModels.add(new AlbumModel(null, null, path, false));
         }
     }
 
-    public interface ScanCallBack {
-        void scanSuccess(ArrayMap<String, List<AlbumModel>> galleryModels);
+    @Override
+    public void cursorFinder(ArrayMap<String, FinderModel> finderModelMap, ArrayList<FinderModel> finderModels) {
+        FinderModel finderModel = new FinderModel(AlbumConstant.ALL_ALBUM_NAME, null, null, 0);
+        int count = 0;
+        for (Map.Entry<String, FinderModel> entry : finderModelMap.entrySet()) {
+            finderModels.add(entry.getValue());
+            count += entry.getValue().getCount();
+        }
+        finderModel.setCount(count);
+        if (finderModels.size() > 0 && finderModels.get(0) != null) {
+            finderModel.setThumbnailsPath(finderModels.get(0).getThumbnailsPath());
+        }
+        finderModels.add(0, finderModel);
+    }
 
-        void finderModelSuccess(List<FinderModel> list);
+    @Override
+    public int cursorAlbumCount(String bucketId) {
+        String[] args = TextUtils.isEmpty(bucketId) ? new String[]{"image/jpeg", "image/png"} : new String[]{bucketId, "image/jpeg", "image/png"};
+        Cursor query = contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null,
+                FINDER_ALBUM_SELECTION,
+                args,
+                MediaStore.Images.Media.DATE_MODIFIED + " desc");
+        if (query == null) {
+            return 0;
+        }
+        int count = query.getCount();
+        query.close();
+        return count;
+    }
+
+
+    @Override
+    public Cursor getAlbumCursor(String bucketId) {
+        String selection = TextUtils.isEmpty(bucketId) ? ALL_ALBUM_SELECTION : FINDER_ALBUM_SELECTION;
+        String[] args = TextUtils.isEmpty(bucketId) ? new String[]{"image/jpeg", "image/png"} : new String[]{bucketId, "image/jpeg", "image/png"};
+        return contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null,
+                selection,
+                args,
+                MediaStore.Images.Media.DATE_MODIFIED + " desc");
+    }
+
+    @Override
+    public void initCamera(ArrayList<AlbumModel> albumModelArrayList) {
+        albumModelArrayList.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA,false));
+    }
+
+
+    public interface ScanCallBack {
+        void scanSuccess(ArrayList<AlbumModel> albumModels);
+
+        void finderModelSuccess(ArrayList<FinderModel> list);
     }
 }
 

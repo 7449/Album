@@ -144,7 +144,7 @@ public class AlbumActivity extends BaseActivity
         switch (type) {
             case AlbumConstant.TYPE_ALBUM:
                 if (albumFragment != null) {
-                    albumFragment.onScanAlbum();
+                    albumFragment.onScanAlbum(null);
                 }
                 break;
             case AlbumConstant.TYPE_CAMERA:
@@ -157,13 +157,15 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
+        if (albumFragment == null) {
+            return;
+        }
         int i = v.getId();
         if (i == R.id.tv_preview) {
+            albumFragment.multiplePreview();
         } else if (i == R.id.tv_select) {
+            albumFragment.multipleSelect();
         } else if (i == R.id.tv_finder_all) {
-            if (albumFragment == null) {
-                return;
-            }
             List<FinderModel> finderModel = albumFragment.getFinderModel();
             if (finderModel != null && !finderModel.isEmpty()) {
                 listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderModel));
@@ -189,7 +191,7 @@ public class AlbumActivity extends BaseActivity
         }
         finderTv.setText(finder.getDirName());
         if (albumFragment != null) {
-            albumFragment.updateUI(finder.getDirName());
+            albumFragment.onScanAlbum(finder.getBucketId());
         }
         listPopupWindow.dismiss();
     }

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album.getInstance().setOptions(dayOptions).setConfig(new AlbumConfig()).start(this);
                 break;
             case R.id.btn_night_album:
-                Album.getInstance().setOptions(nightOptions).setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT).setRadio(true)).start(this);
+                Album.getInstance().setOptions(nightOptions).setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT).setRadio(true).setCrop(false)).start(this);
                 break;
         }
     }

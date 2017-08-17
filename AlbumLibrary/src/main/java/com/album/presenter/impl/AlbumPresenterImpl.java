@@ -1,7 +1,7 @@
 package com.album.presenter.impl;
 
 import android.content.ContentResolver;
-import android.support.v4.util.ArrayMap;
+import android.text.TextUtils;
 
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
@@ -9,7 +9,7 @@ import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
 import com.album.util.ScanUtils;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * by y on 14/08/2017.
@@ -23,19 +23,39 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
     }
 
     @Override
-    public void scan(ContentResolver contentResolver, boolean hideCamera) {
+    public void scan(ContentResolver contentResolver, boolean hideCamera, String bucketId) {
         albumView.showProgress();
-        ScanUtils.start(contentResolver, this, hideCamera);
+        ScanUtils.get().start(contentResolver, this, bucketId, TextUtils.isEmpty(bucketId), hideCamera);
     }
 
     @Override
-    public void scanSuccess(ArrayMap<String, List<AlbumModel>> galleryModels) {
-        albumView.scanSuccess(galleryModels);
+    public void mergeModel(ArrayList<AlbumModel> albumList, ArrayList<AlbumModel> multiplePreviewList) {
+        if (albumList == null || multiplePreviewList == null) {
+            return;
+        }
+        for (AlbumModel albumModel : albumList) {
+            albumModel.setCheck(false);
+        }
+        for (AlbumModel albumModel : multiplePreviewList) {
+            String path = albumModel.getPath();
+            for (AlbumModel allAlbumModel : albumList) {
+                String allModelPath = allAlbumModel.getPath();
+                if (TextUtils.equals(path, allModelPath)) {
+                    allAlbumModel.setCheck(albumModel.isCheck());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void scanSuccess(ArrayList<AlbumModel> albumModels) {
+        mergeModel(albumModels, albumView.getSelectModel());
+        albumView.scanSuccess(albumModels);
         albumView.hideProgress();
     }
 
     @Override
-    public void finderModelSuccess(List<FinderModel> list) {
+    public void finderModelSuccess(ArrayList<FinderModel> list) {
         albumView.finderModel(list);
     }
 }

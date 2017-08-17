@@ -1,5 +1,7 @@
 package com.album.ui.view;
 
+import android.os.Bundle;
+
 import com.album.model.FinderModel;
 
 import java.util.List;
@@ -14,11 +16,15 @@ public interface AlbumMethodFragmentView {
 
     void disconnectMediaScanner();
 
-    void onScanAlbum();
+    void onScanAlbum(String bucketId);
 
     void openCamera();
 
     List<FinderModel> getFinderModel();
 
-    void updateUI(String key);
+    void multiplePreview();
+
+    void multipleSelect();
+
+    void onResultPreview(Bundle bundle);
 }

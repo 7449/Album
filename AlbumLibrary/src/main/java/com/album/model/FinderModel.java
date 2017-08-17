@@ -7,12 +7,13 @@ package com.album.model;
 public class FinderModel {
     private String dirName;
     private String thumbnailsPath;
+    private String bucketId;
     private int count;
 
-
-    public FinderModel(String dirName, String thumbnailsPath, int count) {
+    public FinderModel(String dirName, String thumbnailsPath, String bucketId, int count) {
         this.dirName = dirName;
         this.thumbnailsPath = thumbnailsPath;
+        this.bucketId = bucketId;
         this.count = count;
     }
 
@@ -30,6 +31,14 @@ public class FinderModel {
 
     public void setThumbnailsPath(String thumbnailsPath) {
         this.thumbnailsPath = thumbnailsPath;
+    }
+
+    public String getBucketId() {
+        return bucketId;
+    }
+
+    public void setBucketId(String bucketId) {
+        this.bucketId = bucketId;
     }
 
     public int getCount() {

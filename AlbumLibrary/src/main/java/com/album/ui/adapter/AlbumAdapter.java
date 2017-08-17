@@ -3,12 +3,14 @@ package com.album.ui.adapter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.album.Album;
 import com.album.AlbumConfig;
@@ -25,13 +27,17 @@ import java.util.List;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> {
 
-    private List<AlbumModel> albumList = null;
+    private ArrayList<AlbumModel> albumList = null;
+    private ArrayList<AlbumModel> multiplePreviewList = null;
     private OnItemClickListener onItemClickListener = null;
     private AlbumConfig albumConfig = null;
 
-    public AlbumAdapter(List<AlbumModel> list) {
+    public AlbumAdapter(ArrayList<AlbumModel> list) {
         this.albumList = list;
         albumConfig = Album.getInstance().getConfig();
+        if (!albumConfig.isRadio()) {
+            multiplePreviewList = new ArrayList<>();
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -55,21 +61,46 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(AlbumAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final AlbumAdapter.ViewHolder holder, int position) {
         if (albumList == null) {
             return;
         }
-        AlbumModel albumModel = albumList.get(position);
+        final AlbumModel albumModel = albumList.get(position);
         if (albumModel == null) {
             return;
         }
         String path = albumModel.getPath();
         if (TextUtils.equals(String.valueOf(path), AlbumConstant.CAMERA)) {
+            if (!albumConfig.isRadio()) {
+                holder.checkBox.setVisibility(View.GONE);
+            }
             Drawable drawable = ContextCompat.getDrawable(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawable());
             drawable.setColorFilter(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
             holder.imageView.setImageDrawable(drawable);
         } else {
             Album.getInstance().getAlbumImageLoader().displayAlbum(holder.imageView, path);
+            if (!albumConfig.isRadio()) {
+                holder.checkBox.setVisibility(View.VISIBLE);
+                holder.checkBox.setChecked(albumModel.isCheck());
+                holder.checkBox.setBackgroundResource(albumConfig.getAlbumContentItemCheckBoxDrawable());
+                holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!multiplePreviewList.contains(albumModel) && multiplePreviewList.size() >= albumConfig.getMultipleMaxCount()) {
+                            holder.checkBox.setChecked(false);
+                            Toast.makeText(v.getContext(), "maxCount", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (!albumModel.isCheck()) {
+                            albumModel.setCheck(true);
+                            multiplePreviewList.add(albumModel);
+                        } else {
+                            multiplePreviewList.remove(albumModel);
+                            albumModel.setCheck(false);
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -90,16 +121,31 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         }
     }
 
+    public ArrayList<AlbumModel> getAlbumList() {
+        return albumList;
+    }
+
+    public void setMultiplePreviewList(ArrayList<AlbumModel> multiplePreviewList) {
+        this.multiplePreviewList = multiplePreviewList;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<AlbumModel> getMultiplePreviewList() {
+        return multiplePreviewList;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position, AlbumModel albumModel);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private AppCompatImageView imageView;
+        private AppCompatCheckBox checkBox;
 
         ViewHolder(View itemView) {
             super(itemView);
             imageView = (AppCompatImageView) itemView.findViewById(R.id.album_image);
+            checkBox = (AppCompatCheckBox) itemView.findViewById(R.id.album_check_box);
         }
     }
 }

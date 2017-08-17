@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.album.Album;
 import com.album.AlbumConfig;
@@ -37,7 +37,6 @@ import com.album.util.SingleMediaScanner;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,11 +60,10 @@ public class AlbumFragment extends Fragment implements
 
     private Uri imagePath;
     private SingleMediaScanner singleMediaScanner;
-    private List<FinderModel> finderModels = null;
-    private ArrayMap<String, List<AlbumModel>> arrayMap = null;
-    private String key = AlbumConstant.ALL_ALBUM_NAME;
+    private ArrayList<FinderModel> finderModels = null;
 
     private AlbumConfig albumConfig = null;
+    private String bucketId = null;
 
     public static AlbumFragment newInstance() {
         return new AlbumFragment();
@@ -89,7 +87,7 @@ public class AlbumFragment extends Fragment implements
         super.onActivityCreated(savedInstanceState);
         albumContentView.setBackgroundColor(ContextCompat.getColor(albumActivity, albumConfig.getAlbumContentViewBackground()));
         initRecyclerView();
-        onScanAlbum();
+        onScanAlbum(null);
     }
 
     @Override
@@ -105,6 +103,16 @@ public class AlbumFragment extends Fragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_CANCELED) {
+            switch (requestCode) {
+                case AlbumConstant.TYPE_PREVIEW_CODE:
+                    if (data == null) {
+                        return;
+                    }
+                    onResultPreview(data.getExtras());
+                    break;
+                case AlbumConstant.ITEM_CAMERA:
+                    break;
+            }
         } else if (resultCode == UCrop.RESULT_ERROR) {
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
@@ -112,6 +120,12 @@ public class AlbumFragment extends Fragment implements
                 case UCrop.REQUEST_CROP:
                     disconnectMediaScanner();
                     singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
+                    break;
+                case AlbumConstant.TYPE_PREVIEW_CODE:
+                    if (data == null) {
+                        return;
+                    }
+                    onResultPreview(data.getExtras());
                     break;
             }
         }
@@ -121,9 +135,6 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (arrayMap != null) {
-            arrayMap.clear();
-        }
         disconnectMediaScanner();
     }
 
@@ -142,64 +153,68 @@ public class AlbumFragment extends Fragment implements
     }
 
     @Override
-    public void scanSuccess(ArrayMap<String, List<AlbumModel>> maps) {
-        arrayMap = maps;
-        updateUI(AlbumConstant.ALL_ALBUM_NAME);
+    public void scanSuccess(ArrayList<AlbumModel> albumModels) {
+        albumAdapter.addAll(albumModels);
     }
 
-
     @Override
-    public void finderModel(List<FinderModel> list) {
+    public void finderModel(ArrayList<FinderModel> list) {
         if (finderModels == null) {
             finderModels = new ArrayList<>();
-        } else {
-            finderModels.clear();
         }
+        finderModels.clear();
         if (list != null) {
             finderModels.addAll(list);
         }
     }
 
     @Override
+    public ArrayList<AlbumModel> getSelectModel() {
+        return albumAdapter.getMultiplePreviewList();
+    }
+
+    @Override
     public void onItemClick(View view, int position, AlbumModel albumModel) {
         if (position == 0 && TextUtils.equals(albumModel.getPath(), AlbumConstant.CAMERA)) {
             openCamera();
-        } else {
-            if (FileUtils.isFile(albumModel.getPath())) {
-                if (albumConfig.isRadio()) {
-                    UCrop.of(Uri.fromFile(new File(albumModel.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)))
-                            .withOptions(Album.getInstance().getOptions())
-                            .start(albumActivity, this);
-                } else {
-                    Bundle bundle = new Bundle();
-                    List<AlbumModel> albumModels = arrayMap.get(key);
-                    bundle.putSerializable(AlbumConstant.PREVIEW_KEY, (Serializable) albumModels);
-                    bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
-                    bundle.putString(AlbumConstant.PREVIEW_POSITION_KEY, key);
-                    Intent intent = new Intent(albumActivity, PreviewActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            } else {
-                //onScanAlbum();
-            }
+            return;
         }
+        if (!FileUtils.isFile(albumModel.getPath())) {
+            Toast.makeText(albumActivity, " 路径图片已不存在, 估计已经被删除...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (albumConfig.isRadio()) {
+            if (albumConfig.isCrop()) {
+                UCrop.of(Uri.fromFile(new File(albumModel.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)))
+                        .withOptions(Album.getInstance().getOptions())
+                        .start(albumActivity, this);
+            } else {
+                Toast.makeText(albumActivity, albumModel.getPath(), Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+        Bundle bundle = new Bundle();
+        ArrayList<AlbumModel> multiplePreviewList = albumAdapter.getMultiplePreviewList();
+        bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, multiplePreviewList);
+        bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
+        bundle.putString(AlbumConstant.PREVIEW_BUCKET_ID, bucketId);
+        startActivityForResult(new Intent(albumActivity, PreviewActivity.class).putExtras(bundle), AlbumConstant.TYPE_PREVIEW_CODE);
     }
 
     @Override
     public void onScanCompleted() {
-        onScanAlbum();
+        onScanAlbum(null);
     }
 
 
     @Override
-    public void onScanAlbum() {
+    public void onScanAlbum(final String bucketId) {
+        this.bucketId = bucketId;
         if (PermissionUtils.storage(albumActivity)) {
             albumActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    albumPresenter.scan(albumActivity.getContentResolver(), albumConfig.isHideCamera());
+                    albumPresenter.scan(albumActivity.getContentResolver(), albumConfig.isHideCamera(), bucketId);
                 }
             });
         }
@@ -225,16 +240,37 @@ public class AlbumFragment extends Fragment implements
     }
 
     @Override
-    public void updateUI(String key) {
-        this.key = key;
-        if (arrayMap == null) {
+    public void multiplePreview() {
+        ArrayList<AlbumModel> albumModels = albumAdapter.getMultiplePreviewList();
+        if (albumModels == null || albumModels.isEmpty()) {
+            Toast.makeText(albumActivity, "没有选中的图片...", Toast.LENGTH_SHORT).show();
             return;
         }
-        List<AlbumModel> albumModels = arrayMap.get(key);
-        // cache
-        if (albumModels == null) {
-            return;
-        }
-        albumAdapter.addAll(albumModels);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, albumModels);
+        bundle.putString(AlbumConstant.PREVIEW_BUCKET_ID, AlbumConstant.PREVIEW_BUTTON_KEY);
+        startActivityForResult(new Intent(albumActivity, PreviewActivity.class).putExtras(bundle), AlbumConstant.TYPE_PREVIEW_CODE);
     }
+
+    @Override
+    public void multipleSelect() {
+        List<AlbumModel> albumModels = albumAdapter.getMultiplePreviewList();
+        if (albumModels == null || albumModels.isEmpty()) {
+            Toast.makeText(albumActivity, "没有选中的图片...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+    }
+
+    @Override
+    public void onResultPreview(Bundle bundle) {
+        ArrayList<AlbumModel> previewAlbumModel = bundle.getParcelableArrayList(AlbumConstant.PREVIEW_KEY);
+        if (previewAlbumModel == null) {
+            return;
+        }
+        albumPresenter.mergeModel(albumAdapter.getAlbumList(), previewAlbumModel);
+        albumAdapter.setMultiplePreviewList(previewAlbumModel);
+    }
+
+
 }

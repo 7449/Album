@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.album.Album;
 import com.album.AlbumConfig;
@@ -93,7 +92,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), albumConfig.getSpanCount()));
+        recyclerView.setLayoutManager(new GridLayoutManager(albumActivity, albumConfig.getSpanCount()));
         albumAdapter = new AlbumAdapter(null);
         albumAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(albumAdapter);
@@ -106,23 +105,35 @@ public class AlbumFragment extends Fragment implements
             switch (requestCode) {
                 case AlbumConstant.TYPE_PREVIEW_CODE:
                     if (data == null) {
+                        Album.getInstance().getAlbumListener().onAlbumFragmentResultNull();
                         return;
                     }
                     onResultPreview(data.getExtras());
                     break;
+                case UCrop.REQUEST_CROP:
+                    Album.getInstance().getAlbumListener().onAlbumFragmentCropCanceled();
+                    break;
                 case AlbumConstant.ITEM_CAMERA:
+                    Album.getInstance().getAlbumListener().onAlbumFragmentCameraCanceled();
                     break;
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
+            Album.getInstance().getAlbumListener().onAlbumFragmentUCropError(data);
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AlbumConstant.ITEM_CAMERA:
-                case UCrop.REQUEST_CROP:
                     disconnectMediaScanner();
                     singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
                     break;
+                case UCrop.REQUEST_CROP:
+                    Album.getInstance().getAlbumListener().onAlbumUCropResources(FileUtils.getScannerFile(imagePath.getPath()));
+                    disconnectMediaScanner();
+                    singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
+                    albumActivity.finish();
+                    break;
                 case AlbumConstant.TYPE_PREVIEW_CODE:
                     if (data == null) {
+                        Album.getInstance().getAlbumListener().onAlbumFragmentResultNull();
                         return;
                     }
                     onResultPreview(data.getExtras());
@@ -180,7 +191,7 @@ public class AlbumFragment extends Fragment implements
             return;
         }
         if (!FileUtils.isFile(albumModel.getPath())) {
-            Toast.makeText(albumActivity, " 路径图片已不存在, 估计已经被删除...", Toast.LENGTH_SHORT).show();
+            Album.getInstance().getAlbumListener().onAlbumFragmentFileNull();
             return;
         }
         if (albumConfig.isRadio()) {
@@ -189,7 +200,9 @@ public class AlbumFragment extends Fragment implements
                         .withOptions(Album.getInstance().getOptions())
                         .start(albumActivity, this);
             } else {
-                Toast.makeText(albumActivity, albumModel.getPath(), Toast.LENGTH_SHORT).show();
+                List<AlbumModel> list = new ArrayList<>();
+                list.add(albumModel);
+                Album.getInstance().getAlbumListener().onAlbumResources(list);
             }
             return;
         }
@@ -243,7 +256,7 @@ public class AlbumFragment extends Fragment implements
     public void multiplePreview() {
         ArrayList<AlbumModel> albumModels = albumAdapter.getMultiplePreviewList();
         if (albumModels == null || albumModels.isEmpty()) {
-            Toast.makeText(albumActivity, "没有选中的图片...", Toast.LENGTH_SHORT).show();
+            Album.getInstance().getAlbumListener().onAlbumBottomPreviewNull();
             return;
         }
         Bundle bundle = new Bundle();
@@ -256,16 +269,18 @@ public class AlbumFragment extends Fragment implements
     public void multipleSelect() {
         List<AlbumModel> albumModels = albumAdapter.getMultiplePreviewList();
         if (albumModels == null || albumModels.isEmpty()) {
-            Toast.makeText(albumActivity, "没有选中的图片...", Toast.LENGTH_SHORT).show();
+            Album.getInstance().getAlbumListener().onAlbumBottomSelectNull();
             return;
         }
-
+        Album.getInstance().getAlbumListener().onAlbumResources(albumModels);
+        albumActivity.finish();
     }
 
     @Override
     public void onResultPreview(Bundle bundle) {
         ArrayList<AlbumModel> previewAlbumModel = bundle.getParcelableArrayList(AlbumConstant.PREVIEW_KEY);
         if (previewAlbumModel == null) {
+            Album.getInstance().getAlbumListener().onAlbumFragmentResultNull();
             return;
         }
         albumPresenter.mergeModel(albumAdapter.getAlbumList(), previewAlbumModel);

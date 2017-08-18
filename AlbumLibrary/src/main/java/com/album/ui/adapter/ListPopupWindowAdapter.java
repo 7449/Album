@@ -56,7 +56,6 @@ public class ListPopupWindowAdapter extends BaseAdapter {
             appCompatTextView.setText(String.format("%s(%s)", finderModel.getDirName(), String.valueOf(finderModel.getCount())));
             Album.getInstance().getAlbumImageLoader().displayAlbumThumbnails(appCompatImageView, finderModel.getThumbnailsPath());
         }
-
         return convertView;
     }
 

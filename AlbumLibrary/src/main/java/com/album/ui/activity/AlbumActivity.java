@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.album.Album;
 import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.FinderModel;
@@ -123,6 +123,7 @@ public class AlbumActivity extends BaseActivity
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Album.getInstance().getAlbumListener().onAlbumActivityFinish();
                 finish();
             }
         });
@@ -135,21 +136,18 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     protected void permissionsDenied(int type) {
-        Toast.makeText(this, "permissionsDenied:" + type, Toast.LENGTH_SHORT).show();
+        Album.getInstance().getAlbumListener().onAlbumPermissionsDenied(type);
+        finish();
     }
 
     @Override
     protected void permissionsGranted(int type) {
         switch (type) {
             case AlbumConstant.TYPE_ALBUM:
-                if (albumFragment != null) {
-                    albumFragment.onScanAlbum(null);
-                }
+                albumFragment.onScanAlbum(null);
                 break;
             case AlbumConstant.TYPE_CAMERA:
-                if (albumFragment != null) {
-                    albumFragment.openCamera();
-                }
+                albumFragment.openCamera();
                 break;
         }
     }
@@ -157,6 +155,7 @@ public class AlbumActivity extends BaseActivity
     @Override
     public void onClick(View v) {
         if (albumFragment == null) {
+            Album.getInstance().getAlbumListener().onAlbumFragmentNull();
             return;
         }
         int i = v.getId();
@@ -173,7 +172,9 @@ public class AlbumActivity extends BaseActivity
                 if (listView != null) {
                     listView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumListPopupItemBackground()));
                 }
+                return;
             }
+            Album.getInstance().getAlbumListener().onAlbumFinderNull();
         }
     }
 
@@ -189,9 +190,7 @@ public class AlbumActivity extends BaseActivity
             return;
         }
         finderTv.setText(finder.getDirName());
-        if (albumFragment != null) {
-            albumFragment.onScanAlbum(finder.getBucketId());
-        }
+        albumFragment.onScanAlbum(finder.getBucketId());
         listPopupWindow.dismiss();
     }
 }

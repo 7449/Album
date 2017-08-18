@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.album.Album;
 import com.album.AlbumConfig;
@@ -88,7 +87,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                     public void onClick(View v) {
                         if (!multiplePreviewList.contains(albumModel) && multiplePreviewList.size() >= albumConfig.getMultipleMaxCount()) {
                             holder.checkBox.setChecked(false);
-                            Toast.makeText(v.getContext(), "maxCount", Toast.LENGTH_SHORT).show();
+                            Album.getInstance().getAlbumListener().onAlbumMaxCount();
                             return;
                         }
                         if (!albumModel.isCheck()) {

@@ -9,6 +9,8 @@ public class AlbumConfig {
     private boolean hideCamera = false;
     private boolean isRadio = false;
     private boolean isCrop = true;
+    private boolean previewFinishRefresh = true;
+    private boolean previewBackRefresh = true;
     private int multipleMaxCount = 9;
     //////////////  album toolbar //////
     private int albumStatusBarColor = R.color.colorAlbumStatusBarColorDay;
@@ -421,6 +423,25 @@ public class AlbumConfig {
 
     public AlbumConfig setAlbumPreviewBottomOkTextSize(int albumPreviewBottomOkTextSize) {
         this.albumPreviewBottomOkTextSize = albumPreviewBottomOkTextSize;
+        return this;
+    }
+
+
+    public boolean isPreviewBackRefresh() {
+        return previewBackRefresh;
+    }
+
+    public AlbumConfig setPreviewBackRefresh(boolean previewBackRefresh) {
+        this.previewBackRefresh = previewBackRefresh;
+        return this;
+    }
+
+    public boolean isPreviewFinishRefresh() {
+        return previewFinishRefresh;
+    }
+
+    public AlbumConfig setPreviewFinishRefresh(boolean previewFinishRefresh) {
+        this.previewFinishRefresh = previewFinishRefresh;
         return this;
     }
 }

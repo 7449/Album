@@ -14,8 +14,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.album.Album;
 import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
@@ -88,7 +88,7 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 if (!FileUtils.isFile(adapter.getAlbumPath(position))) {
-                    Toast.makeText(viewPager.getContext(), "file null", Toast.LENGTH_SHORT).show();
+                    Album.getInstance().getAlbumListener().onAlbumPreviewFileNull();
                 }
                 appCompatCheckBox.setChecked(albumModels.get(position).isCheck());
                 setTitles(position + 1, albumModels.size());
@@ -137,7 +137,8 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void permissionsDenied(int type) {
-
+        Album.getInstance().getAlbumListener().onAlbumPermissionsDenied(type);
+        finish();
     }
 
     @Override
@@ -157,13 +158,9 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void checkBoxClick() {
         AlbumModel albumModel = adapter.getAlbumModel(viewPager.getCurrentItem());
-        if (albumModel == null) {
-            Toast.makeText(viewPager.getContext(), "album == null", Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (!selectAlbumModels.contains(albumModel) && selectAlbumModels.size() >= albumConfig.getMultipleMaxCount()) {
             appCompatCheckBox.setChecked(false);
-            Toast.makeText(this, "maxCount", Toast.LENGTH_SHORT).show();
+            Album.getInstance().getAlbumListener().onAlbumMaxCount();
             return;
         }
         if (albumModel.isCheck()) {
@@ -183,6 +180,11 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
         } else if (i == R.id.preview_bottom_view_tv_select) {
             finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override

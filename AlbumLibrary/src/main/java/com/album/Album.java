@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.album.ui.activity.AlbumActivity;
 import com.album.ui.widget.SimpleAlbumImageLoader;
+import com.album.ui.widget.SimpleAlbumListener;
 import com.yalantis.ucrop.UCrop;
 
 /**
@@ -17,6 +18,7 @@ public class Album {
     private AlbumConfig config = new AlbumConfig();
     private AlbumImageLoader albumImageLoader = new SimpleAlbumImageLoader();
     private UCrop.Options options = new UCrop.Options();
+    private AlbumListener albumListener = new SimpleAlbumListener();
 
     public static Album getInstance() {
         return AlbumHolder.ALBUM;
@@ -49,14 +51,23 @@ public class Album {
         return this;
     }
 
-    public void start(@NonNull Context context) {
-        Intent intent = new Intent(context, AlbumActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+    public AlbumListener getAlbumListener() {
+        return albumListener;
+    }
+
+    public Album setAlbumListener(AlbumListener albumListener) {
+        this.albumListener = albumListener;
+        return this;
     }
 
 
     private static final class AlbumHolder {
         private static final Album ALBUM = new Album();
+    }
+
+    public void start(@NonNull Context context) {
+        Intent intent = new Intent(context, AlbumActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

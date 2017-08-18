@@ -24,8 +24,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         albumConfig = Album.getInstance().getConfig();
-        super.onCreate(savedInstanceState);
         AlbumTool.setStatusBarColor(ContextCompat.getColor(this, albumConfig.getAlbumStatusBarColor()), getWindow());
+        super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         initView();
         initTitle();

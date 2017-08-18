@@ -37,8 +37,8 @@ public class AlbumConfig {
     private int albumBottomSelectTextColor = R.color.colorAlbumBottomSelectTextColorDay;
     ///////////// album list popup window /////
     private int albumListPopupWidth = 600;
-    private int albumListPopupHorizontalOffset = 20;
-    private int albumListPopupVerticalOffset = 80;
+    private int albumListPopupHorizontalOffset = 0;
+    private int albumListPopupVerticalOffset = 0;
     private int albumListPopupItemBackground = R.color.colorAlbumListPopupItemBackgroundDay;
     private int albumListPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorDay;
     //////////// album content view ////////

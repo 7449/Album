@@ -26,6 +26,7 @@ public class SingleMediaScanner implements MediaScannerConnection.MediaScannerCo
         this.mediaScannerConnection = new MediaScannerConnection(context.getApplicationContext(), this);
         this.mediaScannerConnection.connect();
         this.singleScannerListener = singleScannerListener;
+        this.singleScannerListener.onScanStart();
     }
 
     @Override
@@ -49,6 +50,8 @@ public class SingleMediaScanner implements MediaScannerConnection.MediaScannerCo
     }
 
     public interface SingleScannerListener {
+        void onScanStart();
+
         void onScanCompleted();
     }
 }

@@ -58,7 +58,6 @@ public class AlbumFragment extends Fragment implements
     private FrameLayout albumContentView;
 
     private Uri imagePath;
-    private Uri uCropPath;
     private SingleMediaScanner singleMediaScanner;
     private ArrayList<FinderModel> finderModels = null;
 
@@ -111,10 +110,6 @@ public class AlbumFragment extends Fragment implements
         if (resultCode == Activity.RESULT_CANCELED) {
             switch (requestCode) {
                 case AlbumConstant.TYPE_PREVIEW_CODE:
-                    if (data == null) {
-                        Album.getInstance().getAlbumListener().onAlbumFragmentResultNull();
-                        return;
-                    }
                     onResultPreview(data.getExtras());
                     break;
                 case UCrop.REQUEST_CROP:
@@ -136,14 +131,9 @@ public class AlbumFragment extends Fragment implements
                     break;
                 case UCrop.REQUEST_CROP:
                     Album.getInstance().getAlbumListener().onAlbumUCropResources(FileUtils.getScannerFile(imagePath.getPath()));
-                    refreshMedia();
                     albumActivity.finish();
                     break;
                 case AlbumConstant.TYPE_PREVIEW_CODE:
-                    if (data == null) {
-                        Album.getInstance().getAlbumListener().onAlbumFragmentResultNull();
-                        return;
-                    }
                     onResultPreview(data.getExtras());
                     break;
             }
@@ -222,6 +212,10 @@ public class AlbumFragment extends Fragment implements
     }
 
     @Override
+    public void onScanStart() {
+    }
+
+    @Override
     public void onScanCompleted() {
         onScanAlbum(null);
     }
@@ -251,7 +245,10 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void openCamera() {
         imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath()));
-        AlbumTool.openCamera(this, imagePath);
+        int i = AlbumTool.openCamera(this, imagePath);
+        if (i == 1) {
+            Album.getInstance().getAlbumListener().onAlbumOpenCameraError();
+        }
     }
 
     @Override
@@ -264,7 +261,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void refreshMedia() {
         disconnectMediaScanner();
-        singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
+        singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), AlbumFragment.this);
     }
 
 
@@ -307,7 +304,6 @@ public class AlbumFragment extends Fragment implements
             return;
         }
         if (previewAlbumModel == null) {
-            Album.getInstance().getAlbumListener().onAlbumFragmentResultNull();
             return;
         }
         if (!isRefreshUI) {
@@ -317,5 +313,16 @@ public class AlbumFragment extends Fragment implements
         albumAdapter.setMultiplePreviewList(previewAlbumModel);
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+//        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
 
 }

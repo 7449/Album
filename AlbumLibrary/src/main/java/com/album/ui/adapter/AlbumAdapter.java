@@ -16,6 +16,7 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
+import com.album.util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!FileUtils.isFile(albumModel.getPath())) {
+                            holder.checkBox.setChecked(false);
+                            Album.getInstance().getAlbumListener().onAlbumCheckBoxFileNull();
+                            return;
+                        }
                         if (!multiplePreviewList.contains(albumModel) && multiplePreviewList.size() >= albumConfig.getMultipleMaxCount()) {
                             holder.checkBox.setChecked(false);
                             Album.getInstance().getAlbumListener().onAlbumMaxCount();

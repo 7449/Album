@@ -7,7 +7,6 @@ import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
-import com.album.util.FileUtils;
 import com.album.util.ScanUtils;
 
 import java.util.ArrayList;
@@ -54,11 +53,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
             albumModel.setCheck(false);
         }
         for (AlbumModel albumModel : selectModel) {
-            if (FileUtils.isFile(albumModel.getPath())) {
-                albumModel.setCheck(true);
-            } else {
-                selectModel.remove(albumModel);
-            }
+            albumModel.setCheck(true);
         }
         for (AlbumModel albumModel : selectModel) {
             String path = albumModel.getPath();

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -10,11 +11,30 @@ android {
         versionCode rootProject.projectVersionCode
         versionName rootProject.projectVersionName
     }
+    lintOptions {
+        abortOnError false
+    }
+    allprojects {
+        tasks.withType(Javadoc) {
+            options {
+                encoding "UTF-8"
+                charSet 'UTF-8'
+                links "http://docs.oracle.com/javase/7/docs/api"
+            }
+        }
+    }
 }
-
+publish {
+    userOrg = 'ydevelop'
+    groupId = 'com.ydevelop'
+    artifactId = 'album'
+    publishVersion = '0.0.1'
+    desc = 'this is android album'
+    website = 'https://github.com/7449/Album'
+}
 dependencies {
-    compile "com.github.yalantis:ucrop:$ucropVersion"
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    compile "com.github.bumptech.glide:glide:$glideVersion"
+    provided "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    provided "com.github.yalantis:ucrop:$ucropVersion"
+    provided "com.github.bumptech.glide:glide:$glideVersion"
 }

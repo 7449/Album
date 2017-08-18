@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
-
+        classpath 'com.novoda:bintray-release:0.3.4'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -31,7 +31,7 @@ ext {
     projectVersionCode = 1
     projectVersionName = '1.0'
 
-    supportLibraryVersion = '25.0.0'
+    supportLibraryVersion = '25.3.1'
     glideVersion = '3.7.0'
     ucropVersion = '2.2.1'
 

@@ -23,8 +23,6 @@ public interface AlbumListener {
 
     void onAlbumFinderNull();
 
-    void onAlbumFragmentResultNull();
-
     void onAlbumBottomPreviewNull();
 
     void onAlbumBottomSelectNull();
@@ -32,6 +30,8 @@ public interface AlbumListener {
     void onAlbumFragmentFileNull();
 
     void onAlbumPreviewSelectNull();
+
+    void onAlbumCheckBoxFileNull();
 
     void onAlbumFragmentCropCanceled();
 
@@ -46,4 +46,6 @@ public interface AlbumListener {
     void onAlbumMaxCount();
 
     void onAlbumActivityBackPressed();
+
+    void onAlbumOpenCameraError();
 }

@@ -40,11 +40,6 @@ public class SimpleAlbumListener implements AlbumListener {
     }
 
     @Override
-    public void onAlbumFragmentResultNull() {
-
-    }
-
-    @Override
     public void onAlbumBottomPreviewNull() {
 
     }
@@ -61,6 +56,11 @@ public class SimpleAlbumListener implements AlbumListener {
 
     @Override
     public void onAlbumPreviewSelectNull() {
+
+    }
+
+    @Override
+    public void onAlbumCheckBoxFileNull() {
 
     }
 
@@ -96,6 +96,11 @@ public class SimpleAlbumListener implements AlbumListener {
 
     @Override
     public void onAlbumActivityBackPressed() {
+
+    }
+
+    @Override
+    public void onAlbumOpenCameraError() {
 
     }
 }

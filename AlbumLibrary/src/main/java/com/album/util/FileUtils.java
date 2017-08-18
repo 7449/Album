@@ -10,6 +10,7 @@ import java.io.File;
  * by y on 11/08/2017.
  */
 
+@SuppressWarnings("ALL")
 public class FileUtils {
     private FileUtils() {
     }

@@ -64,7 +64,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setAlbumModels(list)
                         .setAlbumListener(new MainAlbumListener(this))
                         .setOptions(dayOptions)
-                        .setConfig(new AlbumConfig())
+                        .setConfig(new AlbumConfig()
+                                .setCameraCrop(false)
+                                .setPreviewFinishRefresh(true)
+                                .setPreviewBackRefresh(true))
                         .start(this);
                 break;
             case R.id.btn_night_album:
@@ -76,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 .setRadio(true)
                                 .setCrop(true).setCameraPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM/Album")
                                 .setuCropPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM" + "/" + "uCrop")
+                                .setPreviewFinishRefresh(true)
+                                .setPreviewBackRefresh(true)
                                 .setCameraCrop(true))
                         .start(this);
                 break;
@@ -84,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
 
     /**
-     * {@link com.album.ui.widget.SimpleAlbumListener}
+     * @see com.album.ui.widget.SimpleAlbumListener
      */
     private class MainAlbumListener implements AlbumListener {
 
@@ -124,11 +129,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         @Override
-        public void onAlbumFragmentResultNull() {
-            toast("预览没有返回数据");
-        }
-
-        @Override
         public void onAlbumBottomPreviewNull() {
             toast("选择预览时没有选中图片");
         }
@@ -146,6 +146,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         @Override
         public void onAlbumPreviewSelectNull() {
             toast("预览界面，没有多选照片");
+        }
+
+        @Override
+        public void onAlbumCheckBoxFileNull() {
+            toast("使用者在后台删除了图片之后再选择该图片时会触发");
         }
 
         @Override
@@ -184,6 +189,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         @Override
         public void onAlbumActivityBackPressed() {
             toast("图片页 back 返回");
+        }
+
+        @Override
+        public void onAlbumOpenCameraError() {
+            toast("没有检测到相机");
         }
     }
 

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class ScanUtils implements ScanView {
     private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
-    private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and " + ALL_ALBUM_SELECTION;
+    private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and  (" + ALL_ALBUM_SELECTION + " )";
     private ContentResolver contentResolver = null;
 
     private ScanUtils() {
@@ -73,6 +73,9 @@ public class ScanUtils implements ScanView {
 
     @Override
     public void cursorFinder(ArrayMap<String, FinderModel> finderModelMap, ArrayList<FinderModel> finderModels) {
+        if (finderModelMap.isEmpty()) {
+            return;
+        }
         FinderModel finderModel = new FinderModel(AlbumConstant.ALL_ALBUM_NAME, null, null, 0);
         int count = 0;
         for (Map.Entry<String, FinderModel> entry : finderModelMap.entrySet()) {

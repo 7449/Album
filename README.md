@@ -53,6 +53,7 @@ android album
 
     -dontwarn com.album.**
     -keep class  com.album.** { *;}
+    -keep interface  com.album.** { *;}
     
 #### ucrop
 

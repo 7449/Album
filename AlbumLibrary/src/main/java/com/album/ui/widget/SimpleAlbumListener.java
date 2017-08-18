@@ -1,6 +1,5 @@
 package com.album.ui.widget;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -76,7 +75,7 @@ public class SimpleAlbumListener implements AlbumListener {
     }
 
     @Override
-    public void onAlbumFragmentUCropError(@Nullable Intent data) {
+    public void onAlbumFragmentUCropError(@Nullable Throwable data) {
 
     }
 

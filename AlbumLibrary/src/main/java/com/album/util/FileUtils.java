@@ -38,14 +38,22 @@ public class FileUtils {
     }
 
 
-    public static File getCameraFile(Context context) {
+    public static File getCameraFile(Context context, String path) {
         String cachePath = null;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
-            cachePath = Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM";
+        if (TextUtils.isEmpty(path)) {
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
+                cachePath = Environment.getExternalStorageDirectory().getPath() + "/DCIM";
+            } else {
+                File externalCacheDir = context.getExternalCacheDir();
+                if (externalCacheDir != null) {
+                    cachePath = externalCacheDir.getPath();
+                }
+            }
         } else {
-            File externalCacheDir = context.getExternalCacheDir();
-            if (externalCacheDir != null) {
-                cachePath = externalCacheDir.getPath();
+            cachePath = path;
+            File pathFile = new File(path);
+            if (!pathFile.exists()) {
+                pathFile.mkdirs();
             }
         }
         return new File(cachePath, System.currentTimeMillis() + ".jpg");

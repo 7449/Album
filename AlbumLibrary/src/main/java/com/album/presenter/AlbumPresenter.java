@@ -14,4 +14,7 @@ public interface AlbumPresenter {
     void scan(ContentResolver contentResolver, boolean hideCamera, String bucketId);
 
     void mergeModel(ArrayList<AlbumModel> albumList, ArrayList<AlbumModel> multiplePreviewList);
+
+    void firstMergeModel(ArrayList<AlbumModel> albumModels, ArrayList<AlbumModel> selectModel);
+
 }

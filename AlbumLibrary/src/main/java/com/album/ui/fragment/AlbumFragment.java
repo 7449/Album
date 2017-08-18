@@ -58,6 +58,7 @@ public class AlbumFragment extends Fragment implements
     private FrameLayout albumContentView;
 
     private Uri imagePath;
+    private Uri uCropPath;
     private SingleMediaScanner singleMediaScanner;
     private ArrayList<FinderModel> finderModels = null;
 
@@ -87,6 +88,12 @@ public class AlbumFragment extends Fragment implements
         albumContentView.setBackgroundColor(ContextCompat.getColor(albumActivity, albumConfig.getAlbumContentViewBackground()));
         initRecyclerView();
         onScanAlbum(null);
+        ArrayList<AlbumModel> selectModel = Album.getInstance().getAlbumModels();
+        ArrayList<AlbumModel> allAlbumModel = albumAdapter.getAlbumList();
+        if (selectModel != null && !selectModel.isEmpty() && allAlbumModel != null && !allAlbumModel.isEmpty()) {
+            albumPresenter.firstMergeModel(allAlbumModel, selectModel);
+            albumAdapter.setMultiplePreviewList(selectModel);
+        }
     }
 
     @Override
@@ -118,13 +125,13 @@ public class AlbumFragment extends Fragment implements
                     break;
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
-            Album.getInstance().getAlbumListener().onAlbumFragmentUCropError(data);
+            Album.getInstance().getAlbumListener().onAlbumFragmentUCropError(UCrop.getError(data));
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AlbumConstant.ITEM_CAMERA:
                     refreshMedia();
                     if (albumConfig.isCameraCrop()) {
-                        openUCrop(imagePath.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)));
+                        openUCrop(imagePath.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath())));
                     }
                     break;
                 case UCrop.REQUEST_CROP:
@@ -197,7 +204,7 @@ public class AlbumFragment extends Fragment implements
         }
         if (albumConfig.isRadio()) {
             if (albumConfig.isCrop()) {
-                openUCrop(albumModel.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)));
+                openUCrop(albumModel.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
             } else {
                 List<AlbumModel> list = new ArrayList<>();
                 list.add(albumModel);
@@ -243,7 +250,7 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public void openCamera() {
-        imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity));
+        imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath()));
         AlbumTool.openCamera(this, imagePath);
     }
 

@@ -13,6 +13,8 @@ public class AlbumConfig {
     private boolean previewFinishRefresh = false;
     private boolean previewBackRefresh = false;
     private int multipleMaxCount = 9;
+    private String cameraPath = null;
+    private String uCropPath = null;
     //////////////  album toolbar //////
     private int albumStatusBarColor = R.color.colorAlbumStatusBarColorDay;
     private int albumToolbarBackground = R.color.colorAlbumToolbarBackgroundDay;
@@ -452,6 +454,25 @@ public class AlbumConfig {
 
     public AlbumConfig setCameraCrop(boolean cameraCrop) {
         this.cameraCrop = cameraCrop;
+        return this;
+    }
+
+
+    public String getCameraPath() {
+        return cameraPath;
+    }
+
+    public AlbumConfig setCameraPath(String cameraPath) {
+        this.cameraPath = cameraPath;
+        return this;
+    }
+
+    public String getuCropPath() {
+        return uCropPath;
+    }
+
+    public AlbumConfig setuCropPath(String uCropPath) {
+        this.uCropPath = uCropPath;
         return this;
     }
 }

@@ -1,8 +1,8 @@
 package com.album.sample;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -16,9 +16,11 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.AlbumListener;
 import com.album.model.AlbumModel;
+import com.album.util.AlbumTool;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
@@ -51,8 +53,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_day_album:
+                ArrayList<AlbumModel> list = new ArrayList<>();
+//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033537581.jpg", true));
+//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033535364.jpg", true));
+//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033364480.jpg", true));
+//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033367238.jpg", true));
+//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033511780.jpg", true));
                 Album
                         .getInstance()
+                        .setAlbumModels(list)
                         .setAlbumListener(new MainAlbumListener(this))
                         .setOptions(dayOptions)
                         .setConfig(new AlbumConfig())
@@ -65,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setOptions(nightOptions)
                         .setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT)
                                 .setRadio(true)
-                                .setCrop(false)
+                                .setCrop(true).setCameraPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM/Album")
+                                .setuCropPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM" + "/" + "uCrop")
                                 .setCameraCrop(true))
                         .start(this);
                 break;
@@ -73,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
 
 
+    /**
+     * {@link com.album.ui.widget.SimpleAlbumListener}
+     */
     private class MainAlbumListener implements AlbumListener {
 
         private Context context;
@@ -146,13 +159,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         @Override
-        public void onAlbumFragmentUCropError(@Nullable Intent data) {
-            toast("裁剪异常");
+        public void onAlbumFragmentUCropError(@Nullable Throwable data) {
+            toast("裁剪异常:" + data.toString());
         }
 
         @Override
         public void onAlbumResources(@NonNull List<AlbumModel> list) {
             toast("返回的图片数据" + list.size());
+            for (AlbumModel albumModel : list) {
+                AlbumTool.log(albumModel.getPath());
+            }
         }
 
         @Override

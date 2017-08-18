@@ -1,6 +1,5 @@
 package com.album;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -38,7 +37,7 @@ public interface AlbumListener {
 
     void onAlbumFragmentCameraCanceled();
 
-    void onAlbumFragmentUCropError(@Nullable Intent data);
+    void onAlbumFragmentUCropError(@Nullable Throwable data);
 
     void onAlbumResources(@NonNull List<AlbumModel> list);
 

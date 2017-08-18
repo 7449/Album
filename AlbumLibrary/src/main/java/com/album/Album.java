@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.album.model.AlbumModel;
 import com.album.ui.activity.AlbumActivity;
 import com.album.ui.widget.SimpleAlbumImageLoader;
 import com.album.ui.widget.SimpleAlbumListener;
 import com.yalantis.ucrop.UCrop;
+
+import java.util.ArrayList;
 
 /**
  * by y on 14/08/2017.
@@ -19,6 +22,7 @@ public class Album {
     private AlbumImageLoader albumImageLoader = new SimpleAlbumImageLoader();
     private UCrop.Options options = new UCrop.Options();
     private AlbumListener albumListener = new SimpleAlbumListener();
+    private ArrayList<AlbumModel> albumModels = null;
 
     public static Album getInstance() {
         return AlbumHolder.ALBUM;
@@ -57,6 +61,15 @@ public class Album {
 
     public Album setAlbumListener(AlbumListener albumListener) {
         this.albumListener = albumListener;
+        return this;
+    }
+
+    public ArrayList<AlbumModel> getAlbumModels() {
+        return albumModels;
+    }
+
+    public Album setAlbumModels(ArrayList<AlbumModel> albumModels) {
+        this.albumModels = albumModels;
         return this;
     }
 

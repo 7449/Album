@@ -7,6 +7,7 @@ import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
+import com.album.util.FileUtils;
 import com.album.util.ScanUtils;
 
 import java.util.ArrayList;
@@ -45,6 +46,30 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
                 }
             }
         }
+    }
+
+    @Override
+    public void firstMergeModel(ArrayList<AlbumModel> albumModels, ArrayList<AlbumModel> selectModel) {
+        for (AlbumModel albumModel : albumModels) {
+            albumModel.setCheck(false);
+        }
+        for (AlbumModel albumModel : selectModel) {
+            if (FileUtils.isFile(albumModel.getPath())) {
+                albumModel.setCheck(true);
+            } else {
+                selectModel.remove(albumModel);
+            }
+        }
+        for (AlbumModel albumModel : selectModel) {
+            String path = albumModel.getPath();
+            for (AlbumModel allAlbumModel : albumModels) {
+                String allModelPath = allAlbumModel.getPath();
+                if (TextUtils.equals(path, allModelPath)) {
+                    allAlbumModel.setCheck(albumModel.isCheck());
+                }
+            }
+        }
+
     }
 
     @Override

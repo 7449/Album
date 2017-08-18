@@ -193,4 +193,10 @@ public class AlbumActivity extends BaseActivity
         albumFragment.onScanAlbum(finder.getBucketId());
         listPopupWindow.dismiss();
     }
+
+    @Override
+    public void onBackPressed() {
+        Album.getInstance().getAlbumListener().onAlbumActivityBackPressed();
+        super.onBackPressed();
+    }
 }

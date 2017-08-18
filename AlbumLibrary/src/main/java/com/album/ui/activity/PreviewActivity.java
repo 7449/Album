@@ -73,7 +73,7 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                isRefreshAlbumUI(albumConfig.isPreviewFinishRefresh(), false);
             }
         });
     }
@@ -173,17 +173,35 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
+    public void isRefreshAlbumUI(boolean isRefresh, boolean isFinish) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, selectAlbumModels);
+        bundle.putBoolean(AlbumConstant.PREVIEW_REFRESH_UI, isRefresh);
+        bundle.putBoolean(AlbumConstant.PREVIEW_FINISH, isFinish);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.preview_check_box) {
             checkBoxClick();
         } else if (i == R.id.preview_bottom_view_tv_select) {
-            finish();
+            if (selectAlbumModels == null || selectAlbumModels.isEmpty()) {
+                Album.getInstance().getAlbumListener().onAlbumPreviewSelectNull();
+                return;
+            }
+            Album.getInstance().getAlbumListener().onAlbumResources(selectAlbumModels);
+            isRefreshAlbumUI(false, true);
         }
     }
 
     @Override
     public void onBackPressed() {
+        isRefreshAlbumUI(albumConfig.isPreviewBackRefresh(), false);
         super.onBackPressed();
     }
 
@@ -191,15 +209,5 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
     public void scanSuccess(ArrayList<AlbumModel> albumModels) {
         previewPresenter.mergeModel(albumModels, selectAlbumModels);
         initViewPager(albumModels);
-    }
-
-    @Override
-    public void finish() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, selectAlbumModels);
-        Intent intent = new Intent();
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
-        super.finish();
     }
 }

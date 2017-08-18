@@ -13,6 +13,8 @@ public class AlbumConstant {
     public static final int ITEM_CAMERA = 1111;
     public static final int TYPE_PREVIEW_CODE = 112;
     public static final String PREVIEW_KEY = "preview";
+    public static final String PREVIEW_REFRESH_UI = "preview_refresh_ui";
+    public static final String PREVIEW_FINISH = "preview_finish";
     public static final String PREVIEW_BUCKET_ID = "preview_bucket_id";
     public static final String PREVIEW_BUTTON_KEY = "preview_button";
     public static final String PREVIEW_POSITION_KEY = "preview_position";

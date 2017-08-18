@@ -1,5 +1,6 @@
 package com.album.ui.view;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.album.model.FinderModel;
@@ -20,6 +21,10 @@ public interface AlbumMethodFragmentView {
 
     void openCamera();
 
+    void openUCrop(String path, Uri uri);
+
+    void refreshMedia();
+
     List<FinderModel> getFinderModel();
 
     void multiplePreview();
@@ -27,4 +32,5 @@ public interface AlbumMethodFragmentView {
     void multipleSelect();
 
     void onResultPreview(Bundle bundle);
+
 }

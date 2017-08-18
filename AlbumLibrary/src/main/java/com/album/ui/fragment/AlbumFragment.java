@@ -122,13 +122,14 @@ public class AlbumFragment extends Fragment implements
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AlbumConstant.ITEM_CAMERA:
-                    disconnectMediaScanner();
-                    singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
+                    refreshMedia();
+                    if (albumConfig.isCameraCrop()) {
+                        openUCrop(imagePath.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)));
+                    }
                     break;
                 case UCrop.REQUEST_CROP:
                     Album.getInstance().getAlbumListener().onAlbumUCropResources(FileUtils.getScannerFile(imagePath.getPath()));
-                    disconnectMediaScanner();
-                    singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
+                    refreshMedia();
                     albumActivity.finish();
                     break;
                 case AlbumConstant.TYPE_PREVIEW_CODE:
@@ -196,13 +197,12 @@ public class AlbumFragment extends Fragment implements
         }
         if (albumConfig.isRadio()) {
             if (albumConfig.isCrop()) {
-                UCrop.of(Uri.fromFile(new File(albumModel.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)))
-                        .withOptions(Album.getInstance().getOptions())
-                        .start(albumActivity, this);
+                openUCrop(albumModel.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity)));
             } else {
                 List<AlbumModel> list = new ArrayList<>();
                 list.add(albumModel);
                 Album.getInstance().getAlbumListener().onAlbumResources(list);
+                albumActivity.finish();
             }
             return;
         }
@@ -248,6 +248,20 @@ public class AlbumFragment extends Fragment implements
     }
 
     @Override
+    public void openUCrop(String path, Uri uri) {
+        UCrop.of(Uri.fromFile(new File(path)), uri)
+                .withOptions(Album.getInstance().getOptions())
+                .start(albumActivity, this);
+    }
+
+    @Override
+    public void refreshMedia() {
+        disconnectMediaScanner();
+        singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), this);
+    }
+
+
+    @Override
     public List<FinderModel> getFinderModel() {
         return finderModels;
     }
@@ -279,8 +293,17 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onResultPreview(Bundle bundle) {
         ArrayList<AlbumModel> previewAlbumModel = bundle.getParcelableArrayList(AlbumConstant.PREVIEW_KEY);
+        boolean isRefreshUI = bundle.getBoolean(AlbumConstant.PREVIEW_REFRESH_UI, true);
+        boolean isFinish = bundle.getBoolean(AlbumConstant.PREVIEW_FINISH, false);
+        if (isFinish) {
+            albumActivity.finish();
+            return;
+        }
         if (previewAlbumModel == null) {
             Album.getInstance().getAlbumListener().onAlbumFragmentResultNull();
+            return;
+        }
+        if (!isRefreshUI) {
             return;
         }
         albumPresenter.mergeModel(albumAdapter.getAlbumList(), previewAlbumModel);

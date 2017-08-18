@@ -32,6 +32,8 @@ public interface AlbumListener {
 
     void onAlbumFragmentFileNull();
 
+    void onAlbumPreviewSelectNull();
+
     void onAlbumFragmentCropCanceled();
 
     void onAlbumFragmentCameraCanceled();
@@ -43,4 +45,6 @@ public interface AlbumListener {
     void onAlbumUCropResources(@Nullable File scannerFile);
 
     void onAlbumMaxCount();
+
+    void onAlbumActivityBackPressed();
 }

@@ -61,6 +61,11 @@ public class SimpleAlbumListener implements AlbumListener {
     }
 
     @Override
+    public void onAlbumPreviewSelectNull() {
+
+    }
+
+    @Override
     public void onAlbumFragmentCropCanceled() {
 
     }
@@ -87,6 +92,11 @@ public class SimpleAlbumListener implements AlbumListener {
 
     @Override
     public void onAlbumMaxCount() {
+
+    }
+
+    @Override
+    public void onAlbumActivityBackPressed() {
 
     }
 }

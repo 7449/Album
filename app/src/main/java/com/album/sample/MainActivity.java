@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setOptions(nightOptions)
                         .setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT)
                                 .setRadio(true)
-                                .setHideCamera(true)
-                                .setCrop(true))
+                                .setCrop(false)
+                                .setCameraCrop(true))
                         .start(this);
                 break;
         }
@@ -131,6 +131,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         @Override
+        public void onAlbumPreviewSelectNull() {
+            toast("预览界面，没有多选照片");
+        }
+
+        @Override
         public void onAlbumFragmentCropCanceled() {
             toast("取消裁剪");
         }
@@ -157,7 +162,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         @Override
         public void onAlbumMaxCount() {
-            toast("多选最大值了");
+            toast("多选最大值");
+        }
+
+        @Override
+        public void onAlbumActivityBackPressed() {
+            toast("图片页 back 返回");
         }
     }
 

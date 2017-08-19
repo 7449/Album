@@ -44,6 +44,10 @@ public class AlbumConfig {
     private int albumListPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorDay;
     //////////// album content view ////////
     private int spanCount = 3;
+    private int albumContentViewCameraTips = R.string.album_image_camera_tv_tips;
+    private int albumContentViewCameraTipsSize = 18;
+    private int albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorDay;
+    private int albumContentViewCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorDay;
     private int albumContentViewBackground = R.color.colorAlbumContentViewBackgroundDay;
     private int albumContentViewCameraDrawable = R.drawable.ic_camera_alt_black_24dp;
     private int albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay;
@@ -78,6 +82,8 @@ public class AlbumConfig {
 
                 albumContentViewBackground = R.color.colorAlbumContentViewBackgroundNight;
                 albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight;
+                albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorNight;
+                albumContentViewCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorNight;
 
                 albumPreviewBackground = R.color.colorAlbumPreviewBackgroundNight;
                 albumPreviewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundNight;
@@ -483,6 +489,42 @@ public class AlbumConfig {
 
     public AlbumConfig setPermissionsDeniedFinish(boolean permissionsDeniedFinish) {
         this.isPermissionsDeniedFinish = permissionsDeniedFinish;
+        return this;
+    }
+
+    public int getAlbumContentViewCameraTips() {
+        return albumContentViewCameraTips;
+    }
+
+    public AlbumConfig setAlbumContentViewCameraTips(int albumContentViewCameraTips) {
+        this.albumContentViewCameraTips = albumContentViewCameraTips;
+        return this;
+    }
+
+    public int getAlbumContentViewCameraTipsSize() {
+        return albumContentViewCameraTipsSize;
+    }
+
+    public AlbumConfig setAlbumContentViewCameraTipsSize(int albumContentViewCameraTipsSize) {
+        this.albumContentViewCameraTipsSize = albumContentViewCameraTipsSize;
+        return this;
+    }
+
+    public int getAlbumContentViewCameraTipsColor() {
+        return albumContentViewCameraTipsColor;
+    }
+
+    public AlbumConfig setAlbumContentViewCameraTipsColor(int albumContentViewCameraTipsColor) {
+        this.albumContentViewCameraTipsColor = albumContentViewCameraTipsColor;
+        return this;
+    }
+
+    public int getAlbumContentViewCameraBackgroundColor() {
+        return albumContentViewCameraBackgroundColor;
+    }
+
+    public AlbumConfig setAlbumContentViewCameraBackgroundColor(int albumContentViewCameraBackgroundColor) {
+        this.albumContentViewCameraBackgroundColor = albumContentViewCameraBackgroundColor;
         return this;
     }
 }

@@ -17,7 +17,9 @@ dependencies {
     //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
     compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
     compile "com.github.yalantis:ucrop:$ucropVersion"
-    compile "com.github.bumptech.glide:glide:$glideVersion"
+//    compile "com.github.bumptech.glide:glide:$glideVersion"
+    compile "com.github.bumptech.glide:glide:$glide4xVersion"
     compile "com.squareup.picasso:picasso:$picassoVersion"
+    compile "com.nostra13.universalimageloader:universal-image-loader:$imageloaderVersion"
     compile project(':AlbumLibrary')
 }

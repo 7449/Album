@@ -16,7 +16,6 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.AlbumListener;
 import com.album.model.AlbumModel;
-import com.album.ui.widget.SimpleGlideAlbumImageLoader;
 import com.album.util.AlbumTool;
 import com.yalantis.ucrop.UCrop;
 
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album
                         .getInstance()
                         .setAlbumModels(list)
-                        .setAlbumImageLoader(new SimplePicassoAlbumImageLoader())
+                        .setAlbumImageLoader(new SimpleImageLoaderAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this))
                         .setOptions(dayOptions)
                         .setConfig(new AlbumConfig()
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album
                         .getInstance()
                         .setAlbumListener(new MainAlbumListener(this))
-                        .setAlbumImageLoader(new SimpleGlideAlbumImageLoader())
+                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setOptions(nightOptions)
                         .setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT)
                                 .setRadio(true)

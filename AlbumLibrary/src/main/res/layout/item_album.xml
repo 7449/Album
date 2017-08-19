@@ -2,13 +2,36 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp">
+    android:layout_margin="2dp"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/album_camera_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/album_image_camera"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/album_image_camera_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:paddingBottom="10dp"
+            android:text="@string/album_image_camera_tv_tips" />
+
+    </LinearLayout>
 
     <com.album.ui.widget.AlbumImageView
         android:id="@+id/album_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/album_check_box"

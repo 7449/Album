@@ -33,8 +33,11 @@ ext {
 
     supportLibraryVersion = '25.3.1'
     glideVersion = '3.7.0'
+    glide4xVersion = '4.0.0'
     ucropVersion = '2.2.1'
     picassoVersion = '2.5.2'
+    imageloaderVersion = '1.9.5'
+
 
     sampleApplicationId = 'com.album.sample'
 }

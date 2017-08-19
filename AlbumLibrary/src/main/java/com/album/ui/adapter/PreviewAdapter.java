@@ -40,7 +40,7 @@ public class PreviewAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         TouchImageView touchImageView = new TouchImageView(container.getContext());
-        Album.getInstance().getAlbumImageLoader().displayPreview(touchImageView, list.get(position).getPath());
+        Album.getInstance().getAlbumImageLoader().displayPreview(touchImageView, list.get(position));
         container.addView(touchImageView);
         return touchImageView;
     }

@@ -1,5 +1,6 @@
 package com.album.util;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +12,9 @@ import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Window;
 
 import com.album.AlbumConstant;
@@ -72,5 +75,12 @@ public class AlbumTool {
                 window.setStatusBarColor(color);
             }
         }
+    }
+
+    public static int getImageViewWidth(Activity activity, int count) {
+        Display display = activity.getWindow().getWindowManager().getDefaultDisplay();
+        DisplayMetrics dm = new DisplayMetrics();
+        display.getMetrics(dm);
+        return dm.widthPixels / count;
     }
 }

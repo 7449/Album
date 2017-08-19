@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.album.model.AlbumModel;
 import com.album.ui.activity.AlbumActivity;
-import com.album.ui.widget.SimpleAlbumImageLoader;
+import com.album.ui.widget.SimpleGlideAlbumImageLoader;
 import com.album.ui.widget.SimpleAlbumListener;
 import com.yalantis.ucrop.UCrop;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Album {
 
     private AlbumConfig config = new AlbumConfig();
-    private AlbumImageLoader albumImageLoader = new SimpleAlbumImageLoader();
+    private AlbumImageLoader albumImageLoader = new SimpleGlideAlbumImageLoader();
     private UCrop.Options options = new UCrop.Options();
     private AlbumListener albumListener = new SimpleAlbumListener();
     private ArrayList<AlbumModel> albumModels = null;

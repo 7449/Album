@@ -14,6 +14,7 @@ import java.util.List;
  */
 
 public class SimpleAlbumListener implements AlbumListener {
+
     @Override
     public void onAlbumActivityFinish() {
 

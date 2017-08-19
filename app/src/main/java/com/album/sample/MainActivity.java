@@ -16,6 +16,7 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.AlbumListener;
 import com.album.model.AlbumModel;
+import com.album.ui.widget.SimpleGlideAlbumImageLoader;
 import com.album.util.AlbumTool;
 import com.yalantis.ucrop.UCrop;
 
@@ -62,10 +63,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album
                         .getInstance()
                         .setAlbumModels(list)
+                        .setAlbumImageLoader(new SimplePicassoAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this))
                         .setOptions(dayOptions)
                         .setConfig(new AlbumConfig()
                                 .setCameraCrop(false)
+                                .setPermissionsDeniedFinish(false)
                                 .setPreviewFinishRefresh(true)
                                 .setPreviewBackRefresh(true))
                         .start(this);
@@ -74,11 +77,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album
                         .getInstance()
                         .setAlbumListener(new MainAlbumListener(this))
+                        .setAlbumImageLoader(new SimpleGlideAlbumImageLoader())
                         .setOptions(nightOptions)
                         .setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT)
                                 .setRadio(true)
                                 .setCrop(true).setCameraPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM/Album")
                                 .setuCropPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM" + "/" + "uCrop")
+                                .setPermissionsDeniedFinish(true)
                                 .setPreviewFinishRefresh(true)
                                 .setPreviewBackRefresh(true)
                                 .setCameraCrop(true))

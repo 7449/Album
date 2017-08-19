@@ -137,7 +137,9 @@ public class AlbumActivity extends BaseActivity
     @Override
     protected void permissionsDenied(int type) {
         Album.getInstance().getAlbumListener().onAlbumPermissionsDenied(type);
-        finish();
+        if (albumConfig.isPermissionsDeniedFinish()) {
+            finish();
+        }
     }
 
     @Override

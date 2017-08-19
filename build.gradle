@@ -34,6 +34,7 @@ ext {
     supportLibraryVersion = '25.3.1'
     glideVersion = '3.7.0'
     ucropVersion = '2.2.1'
+    picassoVersion = '2.5.2'
 
     sampleApplicationId = 'com.album.sample'
 }

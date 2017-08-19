@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 
 public class AlbumModel implements Parcelable {
+
     public static final Creator<AlbumModel> CREATOR = new Creator<AlbumModel>() {
         @Override
         public AlbumModel createFromParcel(Parcel in) {
@@ -22,12 +23,14 @@ public class AlbumModel implements Parcelable {
     private String dirPath;
     private String dirName;
     private String path;
+    private long id;
     private boolean isCheck;
 
-    public AlbumModel(String dirPath, String dirName, String path, boolean isCheck) {
+    public AlbumModel(String dirPath, String dirName, String path, long id, boolean isCheck) {
         this.dirPath = dirPath;
         this.dirName = dirName;
         this.path = path;
+        this.id = id;
         this.isCheck = isCheck;
     }
 
@@ -35,6 +38,7 @@ public class AlbumModel implements Parcelable {
         dirPath = in.readString();
         dirName = in.readString();
         path = in.readString();
+        id = in.readLong();
         isCheck = in.readByte() != 0;
     }
 
@@ -62,6 +66,14 @@ public class AlbumModel implements Parcelable {
         this.path = path;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public boolean isCheck() {
         return isCheck;
     }
@@ -71,25 +83,13 @@ public class AlbumModel implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(dirPath);
-        dest.writeString(dirName);
-        dest.writeString(path);
-        dest.writeByte((byte) (isCheck ? 1 : 0));
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         AlbumModel that = (AlbumModel) o;
 
+        if (id != that.id) return false;
         if (isCheck != that.isCheck) return false;
         if (dirPath != null ? !dirPath.equals(that.dirPath) : that.dirPath != null) return false;
         if (dirName != null ? !dirName.equals(that.dirName) : that.dirName != null) return false;
@@ -102,7 +102,22 @@ public class AlbumModel implements Parcelable {
         int result = dirPath != null ? dirPath.hashCode() : 0;
         result = 31 * result + (dirName != null ? dirName.hashCode() : 0);
         result = 31 * result + (path != null ? path.hashCode() : 0);
+        result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (isCheck ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(dirPath);
+        dest.writeString(dirName);
+        dest.writeString(path);
+        dest.writeLong(id);
+        dest.writeByte((byte) (isCheck ? 1 : 0));
     }
 }

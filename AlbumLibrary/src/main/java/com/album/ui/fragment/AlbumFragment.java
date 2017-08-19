@@ -131,6 +131,7 @@ public class AlbumFragment extends Fragment implements
                     break;
                 case UCrop.REQUEST_CROP:
                     Album.getInstance().getAlbumListener().onAlbumUCropResources(FileUtils.getScannerFile(imagePath.getPath()));
+                    refreshMedia();
                     albumActivity.finish();
                     break;
                 case AlbumConstant.TYPE_PREVIEW_CODE:

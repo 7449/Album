@@ -19,7 +19,7 @@ import java.util.Map;
  * by y on 11/08/2017.
  */
 public class ScanUtils implements ScanView {
-    private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
+    private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
     private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and  (" + ALL_ALBUM_SELECTION + " )";
     private ContentResolver contentResolver = null;
 
@@ -62,12 +62,13 @@ public class ScanUtils implements ScanView {
         File pathFile = FileUtils.getPathFile(path);
         if (pathFile != null) {
             String bucketId = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID));
+            long id = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID));
             String finderName = pathFile.getName();
             FinderModel finderModel = finderModelMap.get(finderName);
             if (finderModel == null) {
-                finderModelMap.put(finderName, new FinderModel(finderName, path, bucketId, cursorAlbumCount(bucketId)));
+                finderModelMap.put(finderName, new FinderModel(finderName, path, id, bucketId, cursorAlbumCount(bucketId)));
             }
-            albumModels.add(new AlbumModel(null, null, path, false));
+            albumModels.add(new AlbumModel(null, null, path, id, false));
         }
     }
 
@@ -76,7 +77,7 @@ public class ScanUtils implements ScanView {
         if (finderModelMap.isEmpty()) {
             return;
         }
-        FinderModel finderModel = new FinderModel(AlbumConstant.ALL_ALBUM_NAME, null, null, 0);
+        FinderModel finderModel = new FinderModel(AlbumConstant.ALL_ALBUM_NAME, null, 0, null, 0);
         int count = 0;
         for (Map.Entry<String, FinderModel> entry : finderModelMap.entrySet()) {
             finderModels.add(entry.getValue());
@@ -85,13 +86,14 @@ public class ScanUtils implements ScanView {
         finderModel.setCount(count);
         if (finderModels.size() > 0 && finderModels.get(0) != null) {
             finderModel.setThumbnailsPath(finderModels.get(0).getThumbnailsPath());
+            finderModel.setThumbnailsId(finderModels.get(0).getThumbnailsId());
         }
         finderModels.add(0, finderModel);
     }
 
     @Override
     public int cursorAlbumCount(String bucketId) {
-        String[] args = TextUtils.isEmpty(bucketId) ? new String[]{"image/jpeg", "image/png"} : new String[]{bucketId, "image/jpeg", "image/png"};
+        String[] args = TextUtils.isEmpty(bucketId) ? new String[]{"image/jpeg", "image/png"} : new String[]{bucketId, "image/jpeg", "image/png", "image/jpg", "image/gif"};
         Cursor query = contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 null,
@@ -110,7 +112,7 @@ public class ScanUtils implements ScanView {
     @Override
     public Cursor getAlbumCursor(String bucketId) {
         String selection = TextUtils.isEmpty(bucketId) ? ALL_ALBUM_SELECTION : FINDER_ALBUM_SELECTION;
-        String[] args = TextUtils.isEmpty(bucketId) ? new String[]{"image/jpeg", "image/png"} : new String[]{bucketId, "image/jpeg", "image/png"};
+        String[] args = TextUtils.isEmpty(bucketId) ? new String[]{"image/jpeg", "image/png"} : new String[]{bucketId, "image/jpeg", "image/png", "image/jpg", "image/gif"};
         return contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 null,
@@ -121,7 +123,7 @@ public class ScanUtils implements ScanView {
 
     @Override
     public void initCamera(ArrayList<AlbumModel> albumModelArrayList) {
-        albumModelArrayList.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA, false));
+        albumModelArrayList.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA, 0, false));
     }
 
 

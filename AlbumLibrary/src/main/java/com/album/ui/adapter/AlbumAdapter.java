@@ -78,7 +78,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             drawable.setColorFilter(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
             holder.imageView.setImageDrawable(drawable);
         } else {
-            Album.getInstance().getAlbumImageLoader().displayAlbum(holder.imageView, path);
+
+            Album.getInstance().getAlbumImageLoader().displayAlbum(holder.imageView, albumModel);
             if (!albumConfig.isRadio()) {
                 holder.checkBox.setVisibility(View.VISIBLE);
                 holder.checkBox.setChecked(albumModel.isCheck());

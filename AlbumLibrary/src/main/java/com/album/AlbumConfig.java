@@ -12,6 +12,7 @@ public class AlbumConfig {
     private boolean cameraCrop = false;
     private boolean previewFinishRefresh = false;
     private boolean previewBackRefresh = false;
+    private boolean isPermissionsDeniedFinish = false;
     private int multipleMaxCount = 9;
     private String cameraPath = null;
     private String uCropPath = null;
@@ -44,7 +45,7 @@ public class AlbumConfig {
     //////////// album content view ////////
     private int spanCount = 3;
     private int albumContentViewBackground = R.color.colorAlbumContentViewBackgroundDay;
-    private int albumContentViewCameraDrawable = R.drawable.ic_action_camera_day;
+    private int albumContentViewCameraDrawable = R.drawable.ic_camera_alt_black_24dp;
     private int albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay;
     private int albumContentItemCheckBoxDrawable = R.drawable.selector_album_item_check;
     /////////// album preview ////////
@@ -473,6 +474,15 @@ public class AlbumConfig {
 
     public AlbumConfig setuCropPath(String uCropPath) {
         this.uCropPath = uCropPath;
+        return this;
+    }
+
+    public boolean isPermissionsDeniedFinish() {
+        return isPermissionsDeniedFinish;
+    }
+
+    public AlbumConfig setPermissionsDeniedFinish(boolean permissionsDeniedFinish) {
+        this.isPermissionsDeniedFinish = permissionsDeniedFinish;
         return this;
     }
 }

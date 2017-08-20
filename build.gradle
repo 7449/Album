@@ -37,6 +37,8 @@ ext {
     ucropVersion = '2.2.1'
     picassoVersion = '2.5.2'
     imageloaderVersion = '1.9.5'
+    frescoVersion = '1.5.0'
+    frescoGifVersion = '0.12.0'
 
 
     sampleApplicationId = 'com.album.sample'

@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:padding="@dimen/item_list_popup_padding">
 
-    <android.support.v7.widget.AppCompatImageView
+    <FrameLayout
         android:id="@+id/iv_album_finder_icon"
         android:layout_width="@dimen/item_list_popup_iv_width"
         android:layout_height="@dimen/item_list_popup_iv_height" />

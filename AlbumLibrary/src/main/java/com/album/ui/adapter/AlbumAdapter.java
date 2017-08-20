@@ -1,5 +1,6 @@
 package com.album.ui.adapter;
 
+import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.album.Album;
@@ -18,7 +21,10 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
+import com.album.ui.widget.AlbumImageView;
+import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +86,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             holder.cameraTips.setText(albumConfig.getAlbumContentViewCameraTips());
             holder.cameraTips.setTextSize(albumConfig.getAlbumContentViewCameraTipsSize());
             holder.cameraTips.setTextColor(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraTipsColor()));
-            holder.cameraRootView.setBackgroundColor(ContextCompat.getColor(holder.imageView.getContext(),albumConfig.getAlbumContentViewCameraBackgroundColor()));
+            holder.cameraRootView.setBackgroundColor(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraBackgroundColor()));
             holder.imageCamera.setImageDrawable(drawable);
             holder.cameraRootView.setVisibility(View.VISIBLE);
             holder.imageView.setVisibility(View.GONE);
@@ -88,7 +94,20 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         } else {
             holder.cameraRootView.setVisibility(View.GONE);
             holder.imageView.setVisibility(View.VISIBLE);
-            Album.getInstance().getAlbumImageLoader().displayAlbum(holder.imageView, albumModel);
+            ImageView imageView;
+            if (albumConfig.isFrescoImageLoader()) {
+                imageView = new SimpleDraweeView(holder.imageView.getContext());
+                imageView.setLayoutParams(
+                        new FrameLayout.LayoutParams(
+                                AlbumTool.getImageViewWidth((Activity) holder.imageView.getContext(), albumConfig.getSpanCount()),
+                                AlbumTool.getImageViewWidth((Activity) holder.imageView.getContext(), albumConfig.getSpanCount())
+                        )
+                );
+            } else {
+                imageView = new AlbumImageView(holder.imageView.getContext());
+            }
+            holder.imageView.addView(imageView);
+            Album.getInstance().getAlbumImageLoader().displayAlbum(imageView, albumModel);
             if (!albumConfig.isRadio()) {
                 holder.checkBox.setVisibility(View.VISIBLE);
                 holder.checkBox.setChecked(albumModel.isCheck());
@@ -154,7 +173,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private AppCompatImageView imageView;
+        private FrameLayout imageView;
         private AppCompatCheckBox checkBox;
         private AppCompatImageView imageCamera;
         private AppCompatTextView cameraTips;
@@ -162,7 +181,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
         ViewHolder(View itemView) {
             super(itemView);
-            imageView = (AppCompatImageView) itemView.findViewById(R.id.album_image);
+            imageView = (FrameLayout) itemView.findViewById(R.id.album_image);
             checkBox = (AppCompatCheckBox) itemView.findViewById(R.id.album_check_box);
             imageCamera = (AppCompatImageView) itemView.findViewById(R.id.album_image_camera);
             cameraTips = (AppCompatTextView) itemView.findViewById(R.id.album_image_camera_tv);

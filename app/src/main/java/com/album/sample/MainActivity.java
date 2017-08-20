@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private UCrop.Options dayOptions;
     private UCrop.Options nightOptions;
+    private ArrayList<AlbumModel> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,35 +48,33 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         nightOptions.setToolbarColor(ContextCompat.getColor(this, R.color.colorAlbumToolbarBackgroundNight));
         nightOptions.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorAlbumToolbarBackgroundNight));
         nightOptions.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAlbumStatusBarColorNight));
+        list = new ArrayList<>();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_day_album:
-                ArrayList<AlbumModel> list = new ArrayList<>();
-//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033537581.jpg", true));
-//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033535364.jpg", true));
-//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033364480.jpg", true));
-//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033367238.jpg", true));
-//                list.add(new AlbumModel(null, null, "/storage/emulated/0/DCIM/1503033511780.jpg", true));
+                AlbumTool.log(list.size());
                 Album
                         .getInstance()
                         .setAlbumModels(list)
-                        .setAlbumImageLoader(new SimpleImageLoaderAlbumImageLoader())
-                        .setAlbumListener(new MainAlbumListener(this))
+                        .setAlbumImageLoader(new SimpleFrescoAlbumImageLoader())
+                        .setAlbumListener(new MainAlbumListener(this, list))
                         .setOptions(dayOptions)
                         .setConfig(new AlbumConfig()
                                 .setCameraCrop(false)
                                 .setPermissionsDeniedFinish(false)
                                 .setPreviewFinishRefresh(true)
+                                .setAlbumContentItemCheckBoxDrawable(R.drawable.simple_selector_album_item_check)
+                                .setFrescoImageLoader(true)  // 通知 Album 图片加载框架使用的是 Fresco
                                 .setPreviewBackRefresh(true))
                         .start(this);
                 break;
             case R.id.btn_night_album:
                 Album
                         .getInstance()
-                        .setAlbumListener(new MainAlbumListener(this))
+                        .setAlbumListener(new MainAlbumListener(this, null))
                         .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setOptions(nightOptions)
                         .setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT)
@@ -98,13 +97,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private class MainAlbumListener implements AlbumListener {
 
         private Context context;
+        private List<AlbumModel> list = null;
 
         void toast(String s) {
             Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
         }
 
-        MainAlbumListener(Context context) {
+        MainAlbumListener(Context context, ArrayList<AlbumModel> list) {
             this.context = context;
+            this.list = list;
         }
 
         @Override
@@ -177,6 +178,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             toast("返回的图片数据" + list.size());
             for (AlbumModel albumModel : list) {
                 AlbumTool.log(albumModel.getPath());
+            }
+            if (this.list != null) {
+                this.list.clear();
+                this.list.addAll(list);
             }
         }
 

@@ -13,6 +13,7 @@ public class AlbumConfig {
     private boolean previewFinishRefresh = false;
     private boolean previewBackRefresh = false;
     private boolean isPermissionsDeniedFinish = false;
+    private boolean isFrescoImageLoader = false;
     private int multipleMaxCount = 9;
     private String cameraPath = null;
     private String uCropPath = null;
@@ -525,6 +526,15 @@ public class AlbumConfig {
 
     public AlbumConfig setAlbumContentViewCameraBackgroundColor(int albumContentViewCameraBackgroundColor) {
         this.albumContentViewCameraBackgroundColor = albumContentViewCameraBackgroundColor;
+        return this;
+    }
+
+    public boolean isFrescoImageLoader() {
+        return isFrescoImageLoader;
+    }
+
+    public AlbumConfig setFrescoImageLoader(boolean frescoImageLoader) {
+        isFrescoImageLoader = frescoImageLoader;
         return this;
     }
 }

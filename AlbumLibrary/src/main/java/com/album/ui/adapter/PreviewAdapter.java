@@ -3,10 +3,13 @@ package com.album.ui.adapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.album.Album;
 import com.album.model.AlbumModel;
 import com.album.ui.widget.TouchImageView;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -39,10 +42,20 @@ public class PreviewAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        TouchImageView touchImageView = new TouchImageView(container.getContext());
-        Album.getInstance().getAlbumImageLoader().displayPreview(touchImageView, list.get(position));
-        container.addView(touchImageView);
-        return touchImageView;
+        FrameLayout frameLayout = new FrameLayout(container.getContext());
+        ImageView imageView;
+        if (Album.getInstance().getConfig().isFrescoImageLoader()) {
+            imageView = new SimpleDraweeView(frameLayout.getContext());
+            new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            );
+        } else {
+            imageView = new TouchImageView(frameLayout.getContext());
+        }
+        frameLayout.addView(imageView);
+        Album.getInstance().getAlbumImageLoader().displayPreview(imageView, list.get(position));
+        container.addView(frameLayout);
+        return frameLayout;
     }
 
     public String getAlbumPath(int position) {

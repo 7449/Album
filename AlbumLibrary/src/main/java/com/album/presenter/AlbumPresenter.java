@@ -1,7 +1,5 @@
 package com.album.presenter;
 
-import android.content.ContentResolver;
-
 import com.album.model.AlbumModel;
 
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.ArrayList;
  */
 
 public interface AlbumPresenter {
-    void scan(ContentResolver contentResolver, boolean hideCamera, String bucketId);
+    void scan(boolean hideCamera, String bucketId);
 
     void mergeModel(ArrayList<AlbumModel> albumList, ArrayList<AlbumModel> multiplePreviewList);
 

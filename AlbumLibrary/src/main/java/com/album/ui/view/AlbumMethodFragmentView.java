@@ -2,6 +2,7 @@ package com.album.ui.view;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.album.model.FinderModel;
 
@@ -32,5 +33,4 @@ public interface AlbumMethodFragmentView {
     void multipleSelect();
 
     void onResultPreview(Bundle bundle);
-
 }

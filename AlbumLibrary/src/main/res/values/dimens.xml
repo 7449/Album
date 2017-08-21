@@ -14,4 +14,6 @@
     <dimen name="item_list_popup_iv_height">40dp</dimen>
     <dimen name="album_bottom_finder_margin_left">10dp</dimen>
     <dimen name="item_album_check_margin">5dp</dimen>
+    <dimen name="album_bottom_button_width">70dp</dimen>
+    <dimen name="album_button_margin">3dp</dimen>
 </resources>

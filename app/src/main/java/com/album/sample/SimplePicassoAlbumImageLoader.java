@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 public class SimplePicassoAlbumImageLoader implements AlbumImageLoader {
 
     @Override
-    public void displayAlbum(ImageView view, AlbumModel albumModel) {
+    public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
         Picasso.with(view.getContext())
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumModel.getId()))
                 .config(Bitmap.Config.RGB_565)
@@ -48,7 +48,7 @@ public class SimplePicassoAlbumImageLoader implements AlbumImageLoader {
                 .config(Bitmap.Config.RGB_565)
                 .placeholder(R.drawable.ic_launcher)
                 .error(R.drawable.ic_launcher)
-                .resize(450, 380)
+                .resize(400, 300)
                 .centerInside()
                 .tag(view.getContext())
                 .into(view);

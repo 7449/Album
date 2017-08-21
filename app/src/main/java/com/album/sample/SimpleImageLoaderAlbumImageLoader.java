@@ -33,7 +33,7 @@ public class SimpleImageLoaderAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayAlbum(ImageView view, AlbumModel albumModel) {
+    public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         ImageLoader.getInstance().displayImage("file:///" + albumModel.getPath(), view, displayImageOptions, null);
     }

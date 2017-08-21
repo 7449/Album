@@ -1,6 +1,9 @@
 package com.album.sample;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -17,6 +20,8 @@ import com.album.AlbumConstant;
 import com.album.AlbumListener;
 import com.album.model.AlbumModel;
 import com.album.util.AlbumTool;
+import com.album.util.FileUtils;
+import com.album.util.SingleMediaScanner;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private UCrop.Options dayOptions;
     private UCrop.Options nightOptions;
     private ArrayList<AlbumModel> list;
+    private Uri imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         setContentView(R.layout.activity_main);
         findViewById(R.id.btn_day_album).setOnClickListener(this);
         findViewById(R.id.btn_night_album).setOnClickListener(this);
+        findViewById(R.id.btn_open_camera).setOnClickListener(this);
 
         dayOptions = new UCrop.Options();
         dayOptions.setToolbarTitle("DayTheme");
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_day_album:
-                AlbumTool.log(list.size());
+                Toast.makeText(getApplicationContext(), "进来选中的图片个数：" + list.size(), Toast.LENGTH_SHORT).show();
                 Album
                         .getInstance()
                         .setAlbumModels(list)
@@ -66,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 .setCameraCrop(false)
                                 .setPermissionsDeniedFinish(false)
                                 .setPreviewFinishRefresh(true)
+                                .setAlbumBottomFinderTextBackground(R.drawable.selector_btn)
+//                                .setAlbumBottomPreviewTextBackground(R.drawable.selector_btn)
+                                .setAlbumBottomSelectTextBackground(R.drawable.selector_btn)
                                 .setAlbumContentItemCheckBoxDrawable(R.drawable.simple_selector_album_item_check)
                                 .setFrescoImageLoader(true)  // 通知 Album 图片加载框架使用的是 Fresco
                                 .setPreviewBackRefresh(true))
@@ -87,14 +97,65 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 .setCameraCrop(true))
                         .start(this);
                 break;
+            case R.id.btn_open_camera:
+                // fragment  activity 直接传递 this ， 内部会自己处理
+                int i = AlbumTool.openCamera(this, imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null)));
+
+                // -1 没有权限
+                // 0 打开成功
+                // 1 打开相机失败，估计设备没有安装相关软件
+
+                break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_CANCELED) {
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+        } else if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case AlbumConstant.ITEM_CAMERA:
+                    new SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.getPath()),
+                            new SingleMediaScanner.SingleScannerListener() {
+                                @Override
+                                public void onScanStart() {
+
+                                }
+
+                                @Override
+                                public void onScanCompleted() {
+
+                                }
+                            });
+                    UCrop.of(Uri.fromFile(new File(imagePath.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null)))
+                            .withOptions(new UCrop.Options())
+                            .start(this);
+                    break;
+                case UCrop.REQUEST_CROP:
+                    Toast.makeText(getApplicationContext(), "直接打开相机裁剪path:" + imagePath.getPath(), Toast.LENGTH_SHORT).show();
+                    new SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.getPath()),
+                            new SingleMediaScanner.SingleScannerListener() {
+                                @Override
+                                public void onScanStart() {
+
+                                }
+
+                                @Override
+                                public void onScanCompleted() {
+
+                                }
+                            });
+                    break;
+            }
+        }
+    }
 
     /**
      * @see com.album.ui.widget.SimpleAlbumListener
      */
-    private class MainAlbumListener implements AlbumListener {
+    private static class MainAlbumListener implements AlbumListener {
 
         private Context context;
         private List<AlbumModel> list = null;
@@ -104,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         MainAlbumListener(Context context, ArrayList<AlbumModel> list) {
-            this.context = context;
+            this.context = context.getApplicationContext();
             this.list = list;
         }
 

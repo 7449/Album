@@ -11,7 +11,7 @@ import com.album.model.FinderModel;
 
 public interface AlbumImageLoader {
 
-    void displayAlbum(ImageView view, AlbumModel albumModel);
+    void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel);
 
     void displayAlbumThumbnails(ImageView view, FinderModel finderModel);
 

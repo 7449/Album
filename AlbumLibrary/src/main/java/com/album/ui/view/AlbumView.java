@@ -1,5 +1,7 @@
 package com.album.ui.view;
 
+import android.app.Activity;
+
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 
@@ -20,4 +22,6 @@ public interface AlbumView {
     void finderModel(ArrayList<FinderModel> list);
 
     ArrayList<AlbumModel> getSelectModel();
+
+    Activity getAlbumActivity();
 }

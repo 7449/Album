@@ -45,20 +45,38 @@ public class AlbumTool {
         return drawable;
     }
 
-    public static int openCamera(Fragment activity, Uri cameraUri) {
-        if (PermissionUtils.camera(activity.getActivity())) {
+    public static int openCamera(Object activity, Uri cameraUri) {
+        if (activity == null) {
+            throw new NullPointerException("Object == null");
+        }
+        Activity cameraActivity = null;
+        if (activity instanceof Activity) {
+            cameraActivity = (Activity) activity;
+        }
+        if (activity instanceof Fragment) {
+            Fragment fragment = (Fragment) activity;
+            cameraActivity = fragment.getActivity();
+        }
+        if (PermissionUtils.camera(cameraActivity)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(activity.getActivity().getPackageManager()) != null) {
+            assert cameraActivity != null;
+            if (intent.resolveActivity(cameraActivity.getPackageManager()) != null) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
                 } else {
                     ContentValues contentValues = new ContentValues(1);
                     contentValues.put(MediaStore.Images.Media.DATA, cameraUri.getPath());
                     contentValues.put(MediaStore.Images.Media.MIME_TYPE, AlbumConstant.ITEM_CAMERA);
-                    Uri uri = activity.getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                    Uri uri = cameraActivity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 }
-                activity.startActivityForResult(intent, AlbumConstant.ITEM_CAMERA);
+                if (activity instanceof Activity) {
+                    cameraActivity.startActivityForResult(intent, AlbumConstant.ITEM_CAMERA);
+                }
+                if (activity instanceof Fragment) {
+                    Fragment fragment = (Fragment) activity;
+                    fragment.startActivityForResult(intent, AlbumConstant.ITEM_CAMERA);
+                }
                 return 0;
             } else {
                 return 1;
@@ -67,7 +85,6 @@ public class AlbumTool {
         }
         return -1;
     }
-
 
     public static void setStatusBarColor(@ColorInt int color, Window window) {
         if (window != null) {

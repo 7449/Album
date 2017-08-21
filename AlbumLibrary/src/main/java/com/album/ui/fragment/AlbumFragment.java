@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.album.Album;
@@ -29,10 +28,12 @@ import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
 import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
+import com.album.ui.widget.SimpleGridDivider;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
 import com.album.util.SingleMediaScanner;
+import com.album.util.task.AlbumTask;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -55,11 +56,11 @@ public class AlbumFragment extends Fragment implements
     private ProgressBar progressBar;
     private AlbumAdapter albumAdapter;
     private AlbumPresenter albumPresenter;
-    private FrameLayout albumContentView;
 
     private Uri imagePath;
     private SingleMediaScanner singleMediaScanner;
     private ArrayList<FinderModel> finderModels = null;
+    private ArrayList<AlbumModel> multipleAlbumModel = null;
 
     private AlbumConfig albumConfig = null;
     private String bucketId = null;
@@ -68,14 +69,25 @@ public class AlbumFragment extends Fragment implements
         return new AlbumFragment();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            return;
+        }
+        bucketId = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID);
+        multipleAlbumModel = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT);
+        imagePath = savedInstanceState.getParcelable(AlbumConstant.TYPE_ALBUM_STATE_URI_PATH);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         albumConfig = Album.getInstance().getConfig();
         View inflate = inflater.inflate(R.layout.fragment_album, container, false);
+        inflate.findViewById(R.id.album_content_view).setBackgroundColor(ContextCompat.getColor(inflate.getContext(), albumConfig.getAlbumContentViewBackground()));
         recyclerView = (RecyclerView) inflate.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) inflate.findViewById(R.id.progress);
-        albumContentView = (FrameLayout) inflate.findViewById(R.id.album_content_view);
         albumPresenter = new AlbumPresenterImpl(this);
         albumActivity = (AlbumActivity) getActivity();
         return inflate;
@@ -84,9 +96,8 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        albumContentView.setBackgroundColor(ContextCompat.getColor(albumActivity, albumConfig.getAlbumContentViewBackground()));
         initRecyclerView();
-        onScanAlbum(null);
+        onScanAlbum(bucketId);
         ArrayList<AlbumModel> selectModel = Album.getInstance().getAlbumModels();
         ArrayList<AlbumModel> allAlbumModel = albumAdapter.getAlbumList();
         if (selectModel != null && !selectModel.isEmpty() && allAlbumModel != null && !allAlbumModel.isEmpty()) {
@@ -99,7 +110,8 @@ public class AlbumFragment extends Fragment implements
     public void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(albumActivity, albumConfig.getSpanCount()));
-        albumAdapter = new AlbumAdapter(null);
+        recyclerView.addItemDecoration(new SimpleGridDivider(albumConfig.getDividerWidth()));
+        albumAdapter = new AlbumAdapter(null, AlbumTool.getImageViewWidth(albumActivity, albumConfig.getSpanCount()));
         albumAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(albumAdapter);
     }
@@ -145,6 +157,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        AlbumTask.get().quit();
         disconnectMediaScanner();
     }
 
@@ -180,7 +193,15 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public ArrayList<AlbumModel> getSelectModel() {
+        if (multipleAlbumModel != null) {
+            albumAdapter.setMultiplePreviewList(multipleAlbumModel);
+        }
         return albumAdapter.getMultiplePreviewList();
+    }
+
+    @Override
+    public Activity getAlbumActivity() {
+        return albumActivity;
     }
 
     @Override
@@ -218,7 +239,7 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public void onScanCompleted() {
-        onScanAlbum(null);
+        onScanAlbum(bucketId);
     }
 
 
@@ -226,12 +247,7 @@ public class AlbumFragment extends Fragment implements
     public void onScanAlbum(final String bucketId) {
         this.bucketId = bucketId;
         if (PermissionUtils.storage(albumActivity)) {
-            albumActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    albumPresenter.scan(albumActivity.getContentResolver(), albumConfig.isHideCamera(), bucketId);
-                }
-            });
+            albumPresenter.scan(albumConfig.isHideCamera(), bucketId);
         }
     }
 
@@ -314,16 +330,13 @@ public class AlbumFragment extends Fragment implements
         albumAdapter.setMultiplePreviewList(previewAlbumModel);
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
-//        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList());
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList());
+        outState.putString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID, bucketId);
+        outState.putParcelable(AlbumConstant.TYPE_ALBUM_STATE_URI_PATH, imagePath);
     }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-    }
 
 }

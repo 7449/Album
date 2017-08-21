@@ -58,4 +58,5 @@ public class FinderModel {
     public void setCount(int count) {
         this.count = count;
     }
+
 }

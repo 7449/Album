@@ -13,8 +13,8 @@ android {
 }
 
 dependencies {
-    //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
-    //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
     compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
     compile "com.github.yalantis:ucrop:$ucropVersion"
 //    compile "com.github.bumptech.glide:glide:$glideVersion"

@@ -4,10 +4,13 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -38,6 +41,16 @@ public class AlbumActivity extends BaseActivity
     private AppCompatTextView finderTv;
     private ListPopupWindow listPopupWindow;
     private RelativeLayout albumBottomView;
+
+    private String finderName = null;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            finderName = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME);
+        }
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected void onDestroy() {
@@ -78,24 +91,43 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     public void initFragment() {
-        getSupportFragmentManager()
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        Fragment fragment = supportFragmentManager.findFragmentByTag(AlbumFragment.class.getSimpleName());
+        if (fragment != null) {
+            albumFragment = (AlbumFragment) fragment;
+        } else {
+            albumFragment = AlbumFragment.newInstance();
+        }
+        supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.album_frame, albumFragment = AlbumFragment.newInstance(), AlbumFragment.class.getSimpleName())
+                .replace(R.id.album_frame, albumFragment, AlbumFragment.class.getSimpleName())
                 .commit();
     }
 
     @Override
     public void initBottomView() {
+        finderTv.setText(TextUtils.isEmpty(finderName) ? getString(R.string.album_all) : finderName);
         albumBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomViewBackground()));
         finderTv.setTextSize(albumConfig.getAlbumBottomFinderTextSize());
         finderTv.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomFinderTextColor()));
-        finderTv.setCompoundDrawables(null, null, AlbumTool.getDrawable(this, albumConfig.getAlbumBottomFinderTextDrawable(), albumConfig.getAlbumBottomFinderTextDrawableColor()), null);
+        finderTv.setCompoundDrawables(null, null, AlbumTool.getDrawable(this, albumConfig.getAlbumBottomFinderTextCompoundDrawable(), albumConfig.getAlbumBottomFinderTextDrawableColor()), null);
+        if (albumConfig.getAlbumBottomFinderTextBackground() != -1) {
+            finderTv.setBackgroundResource(albumConfig.getAlbumBottomFinderTextBackground());
+        }
+
         preview.setText(albumConfig.getAlbumBottomPreViewText());
         preview.setTextSize(albumConfig.getAlbumBottomPreViewTextSize());
         preview.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomPreViewTextColor()));
+        if (albumConfig.getAlbumBottomPreviewTextBackground() != -1) {
+            preview.setBackgroundResource(albumConfig.getAlbumBottomPreviewTextBackground());
+        }
+
         select.setText(albumConfig.getAlbumBottomSelectText());
         select.setTextSize(albumConfig.getAlbumBottomSelectTextSize());
         select.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumBottomSelectTextColor()));
+        if (albumConfig.getAlbumBottomSelectTextBackground() != -1) {
+            select.setBackgroundResource(albumConfig.getAlbumBottomSelectTextBackground());
+        }
     }
 
     @Override
@@ -191,9 +223,16 @@ public class AlbumActivity extends BaseActivity
         if (finder == null) {
             return;
         }
+        finderName = finder.getDirName();
         finderTv.setText(finder.getDirName());
         albumFragment.onScanAlbum(finder.getBucketId());
         listPopupWindow.dismiss();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME, finderName);
     }
 
     @Override

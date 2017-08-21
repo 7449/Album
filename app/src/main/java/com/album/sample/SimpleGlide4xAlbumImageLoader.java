@@ -24,10 +24,10 @@ public class SimpleGlide4xAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayAlbum(ImageView view, AlbumModel albumModel) {
+    public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
         Glide
                 .with(view.getContext())
-                .load(albumModel.getPath()).apply(requestOptions)
+                .load(albumModel.getPath()).apply(requestOptions.override(width, height))
                 .into(view);
     }
 

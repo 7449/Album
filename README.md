@@ -2,8 +2,6 @@
 android album
 
 
-
-
 ## sample
 
 #### Manifests.xml

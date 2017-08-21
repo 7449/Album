@@ -1,5 +1,7 @@
 package com.album.ui.view;
 
+import android.app.Activity;
+
 import com.album.model.AlbumModel;
 
 import java.util.ArrayList;
@@ -11,4 +13,11 @@ import java.util.ArrayList;
 public interface PreviewView {
 
     void scanSuccess(ArrayList<AlbumModel> albumModels);
+
+    Activity getPreviewActivity();
+
+    void hideProgress();
+
+    void showProgress();
+
 }

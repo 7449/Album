@@ -15,12 +15,13 @@ import com.bumptech.glide.Glide;
 public class SimpleGlideAlbumImageLoader implements AlbumImageLoader {
 
     @Override
-    public void displayAlbum(ImageView view, AlbumModel albumModel) {
+    public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
         Glide
                 .with(view.getContext())
                 .load(albumModel.getPath())
                 .placeholder(R.drawable.ic_launcher)
                 .error(R.drawable.ic_launcher)
+                .override(width, height)
                 .centerCrop()
                 .into(view);
     }

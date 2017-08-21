@@ -1,13 +1,11 @@
 package com.album.sample;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.widget.ImageView;
 
 import com.album.AlbumImageLoader;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
-import com.album.util.AlbumTool;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
@@ -26,14 +24,13 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
 
 
     @Override
-    public void displayAlbum(ImageView view, AlbumModel albumModel) {
+    public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) view;
         Uri uri = Uri.parse("file://" + albumModel.getPath());
         ImageRequest request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())
-                .setResizeOptions(new ResizeOptions(AlbumTool.getImageViewWidth((Activity) view.getContext(), 3),
-                        AlbumTool.getImageViewWidth((Activity) view.getContext(), 3)))
+                .setResizeOptions(new ResizeOptions(width, height))
                 .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -54,8 +51,7 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
         ImageRequest request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())
-                .setResizeOptions(new ResizeOptions(AlbumTool.getImageViewWidth((Activity) view.getContext(), 3),
-                        AlbumTool.getImageViewWidth((Activity) view.getContext(), 3)))
+                .setResizeOptions(new ResizeOptions(50, 50))
                 .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -75,8 +71,7 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
         ImageRequest request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())
-                .setResizeOptions(new ResizeOptions(AlbumTool.getImageViewWidth((Activity) view.getContext(), 3),
-                        AlbumTool.getImageViewWidth((Activity) view.getContext(), 3)))
+                .setResizeOptions(new ResizeOptions(400, 350))
                 .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()

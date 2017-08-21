@@ -28,15 +28,18 @@ public class AlbumConfig {
     ////////////// album bottom view //////
     private int albumBottomViewBackground = R.color.colorAlbumBottomViewBackgroundDay;
     private int albumBottomFinderTextSize = 16;
+    private int albumBottomFinderTextBackground = -1;
     private int albumBottomFinderTextColor = R.color.colorAlbumBottomFinderTextColorDay;
-    private int albumBottomFinderTextDrawable = R.drawable.ic_action_album_finder_day;
+    private int albumBottomFinderTextCompoundDrawable = R.drawable.ic_action_album_finder_day;
     private int albumBottomFinderTextDrawableColor = R.color.colorAlbumBottomFinderTextDrawableColorDay;
     private int albumBottomPreViewText = R.string.album_preview;
     private int albumBottomPreViewTextSize = 16;
     private int albumBottomPreViewTextColor = R.color.colorAlbumBottomPreViewTextColorDay;
+    private int albumBottomPreviewTextBackground = -1;
     private int albumBottomSelectText = R.string.album_select;
     private int albumBottomSelectTextSize = 16;
     private int albumBottomSelectTextColor = R.color.colorAlbumBottomSelectTextColorDay;
+    private int albumBottomSelectTextBackground = -1;
     ///////////// album list popup window /////
     private int albumListPopupWidth = 600;
     private int albumListPopupHorizontalOffset = 0;
@@ -45,6 +48,7 @@ public class AlbumConfig {
     private int albumListPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorDay;
     //////////// album content view ////////
     private int spanCount = 3;
+    private int dividerWidth = 10;
     private int albumContentViewCameraTips = R.string.album_image_camera_tv_tips;
     private int albumContentViewCameraTipsSize = 18;
     private int albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorDay;
@@ -266,12 +270,12 @@ public class AlbumConfig {
         return this;
     }
 
-    public int getAlbumBottomFinderTextDrawable() {
-        return albumBottomFinderTextDrawable;
+    public int getAlbumBottomFinderTextCompoundDrawable() {
+        return albumBottomFinderTextCompoundDrawable;
     }
 
-    public AlbumConfig setAlbumBottomFinderTextDrawable(int albumBottomFinderTextDrawable) {
-        this.albumBottomFinderTextDrawable = albumBottomFinderTextDrawable;
+    public AlbumConfig setAlbumBottomFinderTextCompoundDrawable(int albumBottomFinderTextCompoundDrawable) {
+        this.albumBottomFinderTextCompoundDrawable = albumBottomFinderTextCompoundDrawable;
         return this;
     }
 
@@ -535,6 +539,42 @@ public class AlbumConfig {
 
     public AlbumConfig setFrescoImageLoader(boolean frescoImageLoader) {
         isFrescoImageLoader = frescoImageLoader;
+        return this;
+    }
+
+    public int getAlbumBottomFinderTextBackground() {
+        return albumBottomFinderTextBackground;
+    }
+
+    public AlbumConfig setAlbumBottomFinderTextBackground(int albumBottomFinderTextBackground) {
+        this.albumBottomFinderTextBackground = albumBottomFinderTextBackground;
+        return this;
+    }
+
+    public int getAlbumBottomPreviewTextBackground() {
+        return albumBottomPreviewTextBackground;
+    }
+
+    public AlbumConfig setAlbumBottomPreviewTextBackground(int albumBottomPreviewTextBackground) {
+        this.albumBottomPreviewTextBackground = albumBottomPreviewTextBackground;
+        return this;
+    }
+
+    public int getAlbumBottomSelectTextBackground() {
+        return albumBottomSelectTextBackground;
+    }
+
+    public AlbumConfig setAlbumBottomSelectTextBackground(int albumBottomSelectTextBackground) {
+        this.albumBottomSelectTextBackground = albumBottomSelectTextBackground;
+        return this;
+    }
+
+    public int getDividerWidth() {
+        return dividerWidth;
+    }
+
+    public AlbumConfig setDividerWidth(int dividerWidth) {
+        this.dividerWidth = dividerWidth;
         return this;
     }
 }

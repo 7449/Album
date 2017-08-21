@@ -1,6 +1,5 @@
 package com.album.presenter.impl;
 
-import android.content.ContentResolver;
 import android.text.TextUtils;
 
 import com.album.model.AlbumModel;
@@ -8,6 +7,8 @@ import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
 import com.album.util.ScanUtils;
+import com.album.util.task.AlbumTask;
+import com.album.util.task.AlbumTaskCallBack;
 
 import java.util.ArrayList;
 
@@ -23,9 +24,19 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
     }
 
     @Override
-    public void scan(ContentResolver contentResolver, boolean hideCamera, String bucketId) {
-        albumView.showProgress();
-        ScanUtils.get().start(contentResolver, this, bucketId, TextUtils.isEmpty(bucketId), hideCamera);
+    public void scan(final boolean hideCamera, final String bucketId) {
+        albumView.getAlbumActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                albumView.showProgress();
+            }
+        });
+        AlbumTask.get().start(new AlbumTaskCallBack.Call() {
+            @Override
+            public void start() {
+                ScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, TextUtils.isEmpty(bucketId), hideCamera);
+            }
+        });
     }
 
     @Override
@@ -67,15 +78,19 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
 
     }
 
-    @Override
-    public void scanSuccess(ArrayList<AlbumModel> albumModels) {
-        mergeModel(albumModels, albumView.getSelectModel());
-        albumView.scanSuccess(albumModels);
-        albumView.hideProgress();
-    }
 
     @Override
-    public void finderModelSuccess(ArrayList<FinderModel> list) {
-        albumView.finderModel(list);
+    public void scanSuccess(final ArrayList<AlbumModel> albumModels, final ArrayList<FinderModel> list) {
+        albumView.getAlbumActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mergeModel(albumModels, albumView.getSelectModel());
+                albumView.scanSuccess(albumModels);
+                if (list != null && !list.isEmpty()) {
+                    albumView.finderModel(list);
+                }
+                albumView.hideProgress();
+            }
+        });
     }
 }

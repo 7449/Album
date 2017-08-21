@@ -1,6 +1,5 @@
 package com.album.ui.adapter;
 
-import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -22,12 +21,10 @@ import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
 import com.album.ui.widget.AlbumImageView;
-import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * by y on 14/08/2017.
@@ -40,10 +37,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     private ArrayList<AlbumModel> multiplePreviewList = null;
     private OnItemClickListener onItemClickListener = null;
     private AlbumConfig albumConfig = null;
+    private int display;
+    private final FrameLayout.LayoutParams layoutParams;
 
-    public AlbumAdapter(ArrayList<AlbumModel> list) {
+    public AlbumAdapter(ArrayList<AlbumModel> list, int display) {
         this.albumList = list;
+        this.display = display;
         albumConfig = Album.getInstance().getConfig();
+        layoutParams = new FrameLayout.LayoutParams(display, display);
         if (!albumConfig.isRadio()) {
             multiplePreviewList = new ArrayList<>();
         }
@@ -72,6 +73,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final AlbumAdapter.ViewHolder holder, int position) {
+
         if (albumList == null) {
             return;
         }
@@ -81,33 +83,19 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         }
         String path = albumModel.getPath();
         if (TextUtils.equals(String.valueOf(path), AlbumConstant.CAMERA)) {
-            Drawable drawable = ContextCompat.getDrawable(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawable());
-            drawable.setColorFilter(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
-            holder.cameraTips.setText(albumConfig.getAlbumContentViewCameraTips());
-            holder.cameraTips.setTextSize(albumConfig.getAlbumContentViewCameraTipsSize());
-            holder.cameraTips.setTextColor(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraTipsColor()));
-            holder.cameraRootView.setBackgroundColor(ContextCompat.getColor(holder.imageView.getContext(), albumConfig.getAlbumContentViewCameraBackgroundColor()));
-            holder.imageCamera.setImageDrawable(drawable);
-            holder.cameraRootView.setVisibility(View.VISIBLE);
-            holder.imageView.setVisibility(View.GONE);
-            holder.checkBox.setVisibility(View.GONE);
+            holder.camera();
         } else {
             holder.cameraRootView.setVisibility(View.GONE);
             holder.imageView.setVisibility(View.VISIBLE);
             ImageView imageView;
             if (albumConfig.isFrescoImageLoader()) {
                 imageView = new SimpleDraweeView(holder.imageView.getContext());
-                imageView.setLayoutParams(
-                        new FrameLayout.LayoutParams(
-                                AlbumTool.getImageViewWidth((Activity) holder.imageView.getContext(), albumConfig.getSpanCount()),
-                                AlbumTool.getImageViewWidth((Activity) holder.imageView.getContext(), albumConfig.getSpanCount())
-                        )
-                );
             } else {
                 imageView = new AlbumImageView(holder.imageView.getContext());
             }
+            imageView.setLayoutParams(layoutParams);
             holder.imageView.addView(imageView);
-            Album.getInstance().getAlbumImageLoader().displayAlbum(imageView, albumModel);
+            Album.getInstance().getAlbumImageLoader().displayAlbum(imageView, display, display, albumModel);
             if (!albumConfig.isRadio()) {
                 holder.checkBox.setVisibility(View.VISIBLE);
                 holder.checkBox.setChecked(albumModel.isCheck());
@@ -143,7 +131,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         return albumList == null ? 0 : albumList.size();
     }
 
-    public void addAll(List<AlbumModel> list) {
+    public void addAll(ArrayList<AlbumModel> list) {
         if (albumList == null) {
             albumList = new ArrayList<>();
         } else {
@@ -186,6 +174,19 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             imageCamera = (AppCompatImageView) itemView.findViewById(R.id.album_image_camera);
             cameraTips = (AppCompatTextView) itemView.findViewById(R.id.album_image_camera_tv);
             cameraRootView = (LinearLayout) itemView.findViewById(R.id.album_camera_root_view);
+        }
+
+        void camera() {
+            Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), albumConfig.getAlbumContentViewCameraDrawable());
+            drawable.setColorFilter(ContextCompat.getColor(itemView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
+            cameraTips.setText(albumConfig.getAlbumContentViewCameraTips());
+            cameraTips.setTextSize(albumConfig.getAlbumContentViewCameraTipsSize());
+            cameraTips.setTextColor(ContextCompat.getColor(itemView.getContext(), albumConfig.getAlbumContentViewCameraTipsColor()));
+            cameraRootView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), albumConfig.getAlbumContentViewCameraBackgroundColor()));
+            imageCamera.setImageDrawable(drawable);
+            cameraRootView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.GONE);
+            checkBox.setVisibility(View.GONE);
         }
     }
 }

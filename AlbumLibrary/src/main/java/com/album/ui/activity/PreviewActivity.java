@@ -1,5 +1,6 @@
 package com.album.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,7 @@ import com.album.ui.view.PreviewMethodActivityView;
 import com.album.ui.view.PreviewView;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
+import com.album.util.task.AlbumTask;
 
 import java.util.ArrayList;
 
@@ -68,7 +70,7 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
             albumModels.addAll(selectAlbumModels);
             initViewPager(albumModels);
         } else {
-            previewPresenter.scan(getContentResolver(), bucketId);
+            previewPresenter.scan(bucketId);
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,4 +212,26 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
         previewPresenter.mergeModel(albumModels, selectAlbumModels);
         initViewPager(albumModels);
     }
+
+    @Override
+    public Activity getPreviewActivity() {
+        return this;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AlbumTask.get().quit();
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
 }

@@ -46,9 +46,6 @@ public class PreviewAdapter extends PagerAdapter {
         ImageView imageView;
         if (Album.getInstance().getConfig().isFrescoImageLoader()) {
             imageView = new SimpleDraweeView(frameLayout.getContext());
-            new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-            );
         } else {
             imageView = new TouchImageView(frameLayout.getContext());
         }

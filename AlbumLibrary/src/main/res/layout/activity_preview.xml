@@ -45,13 +45,12 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/preview_bottom_view_tv_select"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_gravity="end"
-            android:layout_marginRight="10dp"
             android:background="?android:selectableItemBackground"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:padding="@dimen/album_bottom_padding"
             android:text="@string/preview_select"
             android:textColor="@color/colorAlbumBottomSelectTextColorDay"

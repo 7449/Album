@@ -19,6 +19,7 @@
     <color name="colorAlbumPreviewBackgroundDay">#FFFFFFFF</color>
     <color name="colorAlbumPreviewBottomViewBackgroundDay">#FFB0B7B7</color>
     <color name="colorAlbumPreviewBottomViewOkColorDay">#FF3D4040</color>
+    <color name="colorAlbumPreviewBottomViewCountColorDay">#FF3D4040</color>
 
     <!--                      NIGHT                     -->
     <color name="colorAlbumStatusBarColorNight">#FF013C4D</color>
@@ -39,5 +40,6 @@
     <color name="colorAlbumPreviewBackgroundNight">#000000</color>
     <color name="colorAlbumPreviewBottomViewBackgroundNight">#FF707576</color>
     <color name="colorAlbumPreviewBottomViewOkColorNight">#FFD9E5E7</color>
+    <color name="colorAlbumPreviewBottomViewCountColorNight">#FFD9E5E7</color>
 
 </resources>

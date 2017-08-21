@@ -11,7 +11,7 @@ import com.album.model.AlbumModel;
 import com.album.ui.widget.TouchImageView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * by y on 15/08/2017.
@@ -19,9 +19,9 @@ import java.util.List;
 
 public class PreviewAdapter extends PagerAdapter {
 
-    private List<AlbumModel> list = null;
+    private ArrayList<AlbumModel> list = null;
 
-    public PreviewAdapter(List<AlbumModel> list) {
+    public PreviewAdapter(ArrayList<AlbumModel> list) {
         this.list = list;
     }
 
@@ -58,6 +58,7 @@ public class PreviewAdapter extends PagerAdapter {
     public String getAlbumPath(int position) {
         return list.get(position).getPath();
     }
+
 
     public AlbumModel getAlbumModel(int position) {
         return list.get(position);

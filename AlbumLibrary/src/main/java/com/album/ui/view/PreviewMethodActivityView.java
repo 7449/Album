@@ -15,6 +15,8 @@ public interface PreviewMethodActivityView {
 
     void setTitles(int page, int imageSize);
 
+    void setCount(int count, int size);
+
     void checkBoxClick();
 
     void isRefreshAlbumUI(boolean isRefresh, boolean isFinish);

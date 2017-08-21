@@ -6,4 +6,5 @@
     <string name="preview_title">选择</string>
     <string name="preview_select">确定</string>
     <string name="album_image_camera_tv_tips">相机</string>
+    <string name="album_preview_count">0</string>
 </resources>

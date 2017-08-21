@@ -14,5 +14,4 @@ public interface AlbumPresenter {
     void mergeModel(ArrayList<AlbumModel> albumList, ArrayList<AlbumModel> multiplePreviewList);
 
     void firstMergeModel(ArrayList<AlbumModel> albumModels, ArrayList<AlbumModel> selectModel);
-
 }

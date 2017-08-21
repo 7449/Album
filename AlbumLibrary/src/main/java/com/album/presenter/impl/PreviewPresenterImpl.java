@@ -56,7 +56,6 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
         }
     }
 
-
     @Override
     public void scanSuccess(final ArrayList<AlbumModel> albumModels, ArrayList<FinderModel> list) {
         previewView.getPreviewActivity().runOnUiThread(new Runnable() {

@@ -63,7 +63,9 @@ public class AlbumConfig {
     private int albumPreviewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundDay;
     private int albumPreviewBottomOkText = R.string.preview_select;
     private int albumPreviewBottomOkTextColor = R.color.colorAlbumPreviewBottomViewOkColorDay;
+    private int albumPreviewBottomCountTextColor = R.color.colorAlbumPreviewBottomViewCountColorDay;
     private int albumPreviewBottomOkTextSize = 16;
+    private int albumPreviewBottomCountTextSize = 16;
 
     public AlbumConfig() {
     }
@@ -93,6 +95,7 @@ public class AlbumConfig {
                 albumPreviewBackground = R.color.colorAlbumPreviewBackgroundNight;
                 albumPreviewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundNight;
                 albumPreviewBottomOkTextColor = R.color.colorAlbumPreviewBottomViewOkColorNight;
+                albumPreviewBottomCountTextColor = R.color.colorAlbumPreviewBottomViewCountColorNight;
                 break;
             default:
                 throw new RuntimeException("type");
@@ -575,6 +578,24 @@ public class AlbumConfig {
 
     public AlbumConfig setDividerWidth(int dividerWidth) {
         this.dividerWidth = dividerWidth;
+        return this;
+    }
+
+    public int getAlbumPreviewBottomCountTextColor() {
+        return albumPreviewBottomCountTextColor;
+    }
+
+    public AlbumConfig setAlbumPreviewBottomCountTextColor(int albumPreviewBottomCountTextColor) {
+        this.albumPreviewBottomCountTextColor = albumPreviewBottomCountTextColor;
+        return this;
+    }
+
+    public int getAlbumPreviewBottomCountTextSize() {
+        return albumPreviewBottomCountTextSize;
+    }
+
+    public AlbumConfig setAlbumPreviewBottomCountTextSize(int albumPreviewBottomCountTextSize) {
+        this.albumPreviewBottomCountTextSize = albumPreviewBottomCountTextSize;
         return this;
     }
 }

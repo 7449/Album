@@ -13,6 +13,9 @@ public class AlbumConstant {
     public static final int ITEM_CAMERA = 1111;
     public static final int TYPE_PREVIEW_CODE = 112;
     public static final String TYPE_ALBUM_STATE_SELECT = "state_select";
+    public static final String TYPE_ALBUM_PREVIEW_STATE_SELECT = "state_preview_select";
+    public static final String TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL = "state_preview_all";
+    public static final String TYPE_ALBUM_PREVIEW_STATE_SELECT_POSITION = "state_preview_select_position";
     public static final String TYPE_ALBUM_STATE_BUCKET_ID = "state_bucket_id";
     public static final String TYPE_ALBUM_STATE_URI_PATH = "state_uri_path";
     public static final String TYPE_ALBUM_STATE_FINDER_NAME = "state_finder_name";

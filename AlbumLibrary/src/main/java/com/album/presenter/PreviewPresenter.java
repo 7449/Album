@@ -14,4 +14,5 @@ public interface PreviewPresenter {
     void scan(String bucketId);
 
     void mergeModel(List<AlbumModel> albumModels, ArrayList<AlbumModel> selectAlbumModels);
+
 }

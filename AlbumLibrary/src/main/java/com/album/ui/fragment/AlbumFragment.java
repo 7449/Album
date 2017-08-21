@@ -323,6 +323,7 @@ public class AlbumFragment extends Fragment implements
         if (previewAlbumModel == null) {
             return;
         }
+        multipleAlbumModel = previewAlbumModel;
         if (!isRefreshUI) {
             return;
         }

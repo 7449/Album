@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.album.Album;
@@ -41,19 +42,35 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
     private ViewPager viewPager;
     private PreviewAdapter adapter;
     private AppCompatCheckBox appCompatCheckBox;
+    private AppCompatTextView previewCount;
+    private ProgressBar progressBar;
+
 
     private PreviewPresenter previewPresenter;
     private ArrayList<AlbumModel> albumModels;
     private ArrayList<AlbumModel> selectAlbumModels;
     private int selectPosition;
     private String bucketId = null;
+    private boolean isPreview;
+
 
     @Override
     protected void initCreate(@Nullable Bundle savedInstanceState) {
         previewPresenter = new PreviewPresenterImpl(this);
         albumModels = new ArrayList<>();
         initBundle();
+        isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY);
+        if (savedInstanceState != null) {
+            ArrayList<AlbumModel> select = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT);
+            ArrayList<AlbumModel> allImageModel = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL);
+            selectAlbumModels = select;
+            selectPosition = savedInstanceState.getInt(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_POSITION);
+            if (isPreview) {
+                albumModels = allImageModel;
+            }
+        }
         init();
+        setCount(selectAlbumModels.size(), albumConfig.getMultipleMaxCount());
     }
 
     @Override
@@ -65,19 +82,21 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void init() {
-        boolean isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY);
-        if (isPreview) {
-            albumModels.addAll(selectAlbumModels);
-            initViewPager(albumModels);
-        } else {
-            previewPresenter.scan(bucketId);
-        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isRefreshAlbumUI(albumConfig.isPreviewFinishRefresh(), false);
             }
         });
+        if (!isPreview) {
+            previewPresenter.scan(bucketId);
+            return;
+
+        }
+        if (albumModels.isEmpty()) {
+            albumModels.addAll(selectAlbumModels);
+        }
+        initViewPager(albumModels);
     }
 
     @Override
@@ -93,6 +112,7 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
                     Album.getInstance().getAlbumListener().onAlbumPreviewFileNull();
                 }
                 appCompatCheckBox.setChecked(albumModels.get(position).isCheck());
+                selectPosition = TextUtils.isEmpty(bucketId) ? position + 1 : position;
                 setTitles(position + 1, albumModels.size());
             }
         });
@@ -118,6 +138,8 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         appCompatCheckBox = (AppCompatCheckBox) findViewById(R.id.preview_check_box);
+        previewCount = (AppCompatTextView) findViewById(R.id.tv_preview_count);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
         LinearLayout rootView = (LinearLayout) findViewById(R.id.preview_root_view);
         RelativeLayout previewBottomView = (RelativeLayout) findViewById(R.id.preview_bottom_view);
         AppCompatTextView previewOk = (AppCompatTextView) findViewById(R.id.preview_bottom_view_tv_select);
@@ -126,6 +148,8 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
         previewOk.setText(albumConfig.getAlbumPreviewBottomOkText());
         previewOk.setTextSize(albumConfig.getAlbumPreviewBottomOkTextSize());
         previewOk.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumPreviewBottomOkTextColor()));
+        previewCount.setTextSize(albumConfig.getAlbumPreviewBottomCountTextSize());
+        previewCount.setTextColor(ContextCompat.getColor(this, albumConfig.getAlbumPreviewBottomCountTextColor()));
         rootView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumPreviewBackground()));
         appCompatCheckBox.setOnClickListener(this);
         previewOk.setOnClickListener(this);
@@ -158,6 +182,11 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
+    public void setCount(int count, int size) {
+        previewCount.setText(String.format("%s / %s", String.valueOf(count), String.valueOf(size)));
+    }
+
+    @Override
     public void checkBoxClick() {
         AlbumModel albumModel = adapter.getAlbumModel(viewPager.getCurrentItem());
         if (!selectAlbumModels.contains(albumModel) && selectAlbumModels.size() >= albumConfig.getMultipleMaxCount()) {
@@ -172,6 +201,7 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
             albumModel.setCheck(true);
             selectAlbumModels.add(albumModel);
         }
+        setCount(selectAlbumModels.size(), albumConfig.getMultipleMaxCount());
     }
 
     @Override
@@ -218,6 +248,15 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
         return this;
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT, selectAlbumModels);
+        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL, isPreview ? albumModels : null);
+        outState.putInt(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_POSITION, selectPosition);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -226,12 +265,12 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void hideProgress() {
-
+        if (progressBar != null) progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showProgress() {
-
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
     }
 
 }

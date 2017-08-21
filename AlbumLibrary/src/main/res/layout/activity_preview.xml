@@ -34,6 +34,13 @@
             android:layout_margin="@dimen/item_album_check_margin"
             android:button="@null" />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/album_progress_width"
+            android:layout_height="@dimen/album_progress_height"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
     </FrameLayout>
 
     <RelativeLayout
@@ -42,13 +49,30 @@
         android:layout_height="@dimen/album_bottom_height"
         android:background="@color/colorAlbumPreviewBottomViewBackgroundDay">
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_preview_count"
+            android:layout_width="@dimen/album_bottom_button_width"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/album_button_margin"
+            android:layout_marginRight="@dimen/album_bottom_marginRight"
+            android:layout_toLeftOf="@+id/preview_bottom_view_tv_select"
+            android:background="?android:selectableItemBackground"
+            android:gravity="center"
+            android:padding="@dimen/album_bottom_padding"
+            android:text="@string/album_preview_count"
+            android:textColor="@color/colorAlbumBottomPreViewTextColorDay"
+            android:textSize="@dimen/album_bottom_text_size"
+            tools:ignore="RelativeOverlap,RtlHardcoded" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/preview_bottom_view_tv_select"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="end"
+            android:layout_margin="@dimen/album_button_margin"
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/album_bottom_padding"

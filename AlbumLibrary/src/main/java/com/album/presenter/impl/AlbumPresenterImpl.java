@@ -78,7 +78,6 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
 
     }
 
-
     @Override
     public void scanSuccess(final ArrayList<AlbumModel> albumModels, final ArrayList<FinderModel> list) {
         albumView.getAlbumActivity().runOnUiThread(new Runnable() {

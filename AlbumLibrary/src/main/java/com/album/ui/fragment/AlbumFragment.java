@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +20,13 @@ import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
-import com.album.presenter.AlbumPresenter;
 import com.album.presenter.impl.AlbumPresenterImpl;
 import com.album.ui.activity.AlbumActivity;
 import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
 import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
+import com.album.ui.widget.LoadMoreRecyclerView;
 import com.album.ui.widget.SimpleGridDivider;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
@@ -48,14 +47,14 @@ public class AlbumFragment extends Fragment implements
         AlbumView,
         AlbumMethodFragmentView,
         AlbumAdapter.OnItemClickListener,
-        SingleMediaScanner.SingleScannerListener {
+        SingleMediaScanner.SingleScannerListener, LoadMoreRecyclerView.LoadMoreListener {
 
     private AlbumActivity albumActivity;
 
-    private RecyclerView recyclerView;
+    private LoadMoreRecyclerView recyclerView;
     private ProgressBar progressBar;
     private AlbumAdapter albumAdapter;
-    private AlbumPresenter albumPresenter;
+    private AlbumPresenterImpl albumPresenter;
 
     private Uri imagePath;
     private SingleMediaScanner singleMediaScanner;
@@ -64,6 +63,7 @@ public class AlbumFragment extends Fragment implements
 
     private AlbumConfig albumConfig = null;
     private String bucketId = null;
+    private int page = 0;
 
     public static AlbumFragment newInstance() {
         return new AlbumFragment();
@@ -86,7 +86,7 @@ public class AlbumFragment extends Fragment implements
         albumConfig = Album.getInstance().getConfig();
         View inflate = inflater.inflate(R.layout.fragment_album, container, false);
         inflate.findViewById(R.id.album_content_view).setBackgroundColor(ContextCompat.getColor(inflate.getContext(), albumConfig.getAlbumContentViewBackground()));
-        recyclerView = (RecyclerView) inflate.findViewById(R.id.recyclerView);
+        recyclerView = (LoadMoreRecyclerView) inflate.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) inflate.findViewById(R.id.progress);
         albumPresenter = new AlbumPresenterImpl(this);
         albumActivity = (AlbumActivity) getActivity();
@@ -97,7 +97,7 @@ public class AlbumFragment extends Fragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initRecyclerView();
-        onScanAlbum(bucketId);
+        onScanAlbum(bucketId, false);
         ArrayList<AlbumModel> selectModel = Album.getInstance().getAlbumModels();
         ArrayList<AlbumModel> allAlbumModel = albumAdapter.getAlbumList();
         if (selectModel != null && !selectModel.isEmpty() && allAlbumModel != null && !allAlbumModel.isEmpty()) {
@@ -110,6 +110,7 @@ public class AlbumFragment extends Fragment implements
     public void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(albumActivity, albumConfig.getSpanCount()));
+        recyclerView.setLoadingListener(this);
         recyclerView.addItemDecoration(new SimpleGridDivider(albumConfig.getDividerWidth()));
         albumAdapter = new AlbumAdapter(null, AlbumTool.getImageViewWidth(albumActivity, albumConfig.getSpanCount()));
         albumAdapter.setOnItemClickListener(this);
@@ -163,14 +164,14 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public void showProgress() {
-        if (progressBar != null) {
+        if (progressBar != null && progressBar.getVisibility() == View.GONE) {
             progressBar.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void hideProgress() {
-        if (progressBar != null) {
+        if (progressBar != null && progressBar.getVisibility() == View.VISIBLE) {
             progressBar.setVisibility(View.GONE);
         }
     }
@@ -178,6 +179,7 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void scanSuccess(ArrayList<AlbumModel> albumModels) {
         albumAdapter.addAll(albumModels);
+        ++page;
     }
 
     @Override
@@ -239,15 +241,19 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public void onScanCompleted() {
-        onScanAlbum(bucketId);
+        onScanAlbum(bucketId, false);
     }
 
 
     @Override
-    public void onScanAlbum(final String bucketId) {
+    public void onScanAlbum(final String bucketId, boolean b) {
+        if (b && albumAdapter != null) {
+            page = 0;
+            albumAdapter.removeAll();
+        }
         this.bucketId = bucketId;
         if (PermissionUtils.storage(albumActivity)) {
-            albumPresenter.scan(albumConfig.isHideCamera(), bucketId);
+            albumPresenter.scan(albumConfig.isHideCamera(), bucketId, page, albumConfig.getCount());
         }
     }
 
@@ -340,4 +346,10 @@ public class AlbumFragment extends Fragment implements
     }
 
 
+    @Override
+    public void onLoadMore() {
+        if (PermissionUtils.storage(albumActivity) && !albumPresenter.isScan()) {
+            albumPresenter.scan(albumConfig.isHideCamera(), bucketId, page, albumConfig.getCount());
+        }
+    }
 }

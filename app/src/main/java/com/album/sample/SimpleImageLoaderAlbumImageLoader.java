@@ -1,5 +1,6 @@
 package com.album.sample;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
@@ -49,5 +50,10 @@ public class SimpleImageLoaderAlbumImageLoader implements AlbumImageLoader {
     public void displayPreview(ImageView view, AlbumModel albumModel) {
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         ImageLoader.getInstance().displayImage("file:///" + albumModel.getPath(), new ImageViewAware(view), displayImageOptions, null, null, null);
+    }
+
+    @Override
+    public ImageView frescoView(Context context) {
+        return null;
     }
 }

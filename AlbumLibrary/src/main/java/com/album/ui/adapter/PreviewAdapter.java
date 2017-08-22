@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import com.album.Album;
 import com.album.model.AlbumModel;
 import com.album.ui.widget.TouchImageView;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 
@@ -45,7 +44,7 @@ public class PreviewAdapter extends PagerAdapter {
         FrameLayout frameLayout = new FrameLayout(container.getContext());
         ImageView imageView;
         if (Album.getInstance().getConfig().isFrescoImageLoader()) {
-            imageView = new SimpleDraweeView(frameLayout.getContext());
+            imageView = Album.getInstance().getAlbumImageLoader().frescoView(frameLayout.getContext());
         } else {
             imageView = new TouchImageView(frameLayout.getContext());
         }

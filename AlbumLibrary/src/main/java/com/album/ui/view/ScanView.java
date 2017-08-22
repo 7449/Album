@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public interface ScanView {
 
-    void start(ContentResolver contentResolver, ScanUtils.ScanCallBack scanCallBack, String bucketId, boolean finder, boolean hideCamera);
+    void start(ContentResolver contentResolver, ScanUtils.ScanCallBack scanCallBack, String bucketId, boolean finder, boolean hideCamera, int page, int count);
 
     void cursorAlbum(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, Cursor cursor);
 
@@ -23,7 +23,7 @@ public interface ScanView {
 
     int cursorAlbumCount(String bucketId);
 
-    Cursor getAlbumCursor(String bucketId);
+    Cursor getAlbumCursor(String bucketId, int page, int count);
 
     String[] getSelectionArgs(String bucketId);
 

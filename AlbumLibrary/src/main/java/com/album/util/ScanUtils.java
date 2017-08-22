@@ -43,14 +43,18 @@ public class ScanUtils implements ScanView {
     }
 
     @Override
-    public void start(ContentResolver contentResolver, ScanCallBack scanCallBack, String bucketId, boolean finder, boolean hideCamera) {
+    public void start(ContentResolver contentResolver,
+                      ScanCallBack scanCallBack,
+                      String bucketId,
+                      boolean finder,
+                      boolean hideCamera, int page, int count) {
         this.contentResolver = contentResolver;
         if (contentResolver == null) {
             throw new NullPointerException("ContentResolver == null");
         }
         ArrayList<AlbumModel> albumModels = new ArrayList<>();
         ArrayList<FinderModel> finderModels = new ArrayList<>();
-        Cursor cursor = getAlbumCursor(bucketId);
+        Cursor cursor = getAlbumCursor(bucketId, page, count);
         if (cursor != null) {
 
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
@@ -61,7 +65,7 @@ public class ScanUtils implements ScanView {
             }
             cursor.close();
             cursorFinder(finderModels);
-            if (finder && !hideCamera) {
+            if (finder && !hideCamera && page == 0) {
                 albumModels.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA, 0, false));
             }
             scanCallBack.scanSuccess(albumModels, finderModels);
@@ -141,7 +145,8 @@ public class ScanUtils implements ScanView {
 
 
     @Override
-    public Cursor getAlbumCursor(String bucketId) {
+    public Cursor getAlbumCursor(String bucketId, int page, int count) {
+        String sortOrder = count == -1 ? MediaStore.Images.Media.DATE_MODIFIED + " desc" : MediaStore.Images.Media.DATE_MODIFIED + " desc limit " + page * count + "," + count;
         String selection = TextUtils.isEmpty(bucketId) ? ALL_ALBUM_SELECTION : FINDER_ALBUM_SELECTION;
         String[] args = TextUtils.isEmpty(bucketId) ? ALBUM_NO_BUCKET_ID_SELECTION_ARGS : getSelectionArgs(bucketId);
         return contentResolver.query(
@@ -149,7 +154,7 @@ public class ScanUtils implements ScanView {
                 ALBUM_PROJECTION,
                 selection,
                 args,
-                MediaStore.Images.Media.DATE_MODIFIED + " desc");
+                sortOrder);
     }
 
 

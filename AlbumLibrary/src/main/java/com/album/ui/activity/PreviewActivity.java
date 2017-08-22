@@ -89,7 +89,7 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
             }
         });
         if (!isPreview) {
-            previewPresenter.scan(bucketId);
+            previewPresenter.scan(bucketId, -1, -1);
             return;
 
         }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public interface PreviewPresenter {
-    void scan(String bucketId);
+    void scan(String bucketId, int page, int count);
 
     void mergeModel(List<AlbumModel> albumModels, ArrayList<AlbumModel> selectAlbumModels);
 

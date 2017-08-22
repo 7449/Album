@@ -17,6 +17,7 @@ public class AlbumConfig {
     private int multipleMaxCount = 9;
     private String cameraPath = null;
     private String uCropPath = null;
+    private int count = 500;
     //////////////  album toolbar //////
     private int albumStatusBarColor = R.color.colorAlbumStatusBarColorDay;
     private int albumToolbarBackground = R.color.colorAlbumToolbarBackgroundDay;
@@ -596,6 +597,15 @@ public class AlbumConfig {
 
     public AlbumConfig setAlbumPreviewBottomCountTextSize(int albumPreviewBottomCountTextSize) {
         this.albumPreviewBottomCountTextSize = albumPreviewBottomCountTextSize;
+        return this;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public AlbumConfig setCount(int count) {
+        this.count = count;
         return this;
     }
 }

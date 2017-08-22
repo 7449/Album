@@ -178,7 +178,7 @@ public class AlbumActivity extends BaseActivity
     protected void permissionsGranted(int type) {
         switch (type) {
             case AlbumConstant.TYPE_ALBUM:
-                albumFragment.onScanAlbum(null);
+                albumFragment.onScanAlbum(null, false);
                 break;
             case AlbumConstant.TYPE_CAMERA:
                 albumFragment.openCamera();
@@ -225,7 +225,7 @@ public class AlbumActivity extends BaseActivity
         }
         finderName = finder.getDirName();
         finderTv.setText(finder.getDirName());
-        albumFragment.onScanAlbum(finder.getBucketId());
+        albumFragment.onScanAlbum(finder.getBucketId(), true);
         listPopupWindow.dismiss();
     }
 

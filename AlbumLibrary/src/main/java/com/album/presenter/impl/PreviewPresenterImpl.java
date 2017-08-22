@@ -25,7 +25,7 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
     }
 
     @Override
-    public void scan(final String bucketId) {
+    public void scan(final String bucketId, final int page, final int count) {
         previewView.getPreviewActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -35,7 +35,7 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                ScanUtils.get().start(previewView.getPreviewActivity().getContentResolver(), PreviewPresenterImpl.this, bucketId, false, true);
+                ScanUtils.get().start(previewView.getPreviewActivity().getContentResolver(), PreviewPresenterImpl.this, bucketId, false, true, page, count);
             }
         });
     }
@@ -56,6 +56,7 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
         }
     }
 
+
     @Override
     public void scanSuccess(final ArrayList<AlbumModel> albumModels, ArrayList<FinderModel> list) {
         previewView.getPreviewActivity().runOnUiThread(new Runnable() {
@@ -66,4 +67,5 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
             }
         });
     }
+
 }

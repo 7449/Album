@@ -1,5 +1,6 @@
 package com.album.sample;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.album.AlbumImageLoader;
@@ -27,7 +28,8 @@ public class SimpleGlide4xAlbumImageLoader implements AlbumImageLoader {
     public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
         Glide
                 .with(view.getContext())
-                .load(albumModel.getPath()).apply(requestOptions.override(width, height))
+                .load(albumModel.getPath())
+                .apply(requestOptions.override(width, height))
                 .into(view);
     }
 
@@ -45,5 +47,10 @@ public class SimpleGlide4xAlbumImageLoader implements AlbumImageLoader {
                 .with(view.getContext())
                 .load(albumModel.getPath()).apply(requestOptions)
                 .into(view);
+    }
+
+    @Override
+    public ImageView frescoView(Context context) {
+        return null;
     }
 }

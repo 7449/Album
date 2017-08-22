@@ -1,6 +1,7 @@
 package com.album.sample;
 
 import android.content.ContentUris;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.widget.ImageView;
@@ -52,5 +53,10 @@ public class SimplePicassoAlbumImageLoader implements AlbumImageLoader {
                 .centerInside()
                 .tag(view.getContext())
                 .into(view);
+    }
+
+    @Override
+    public ImageView frescoView(Context context) {
+        return null;
     }
 }

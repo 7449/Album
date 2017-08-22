@@ -18,7 +18,7 @@ public interface AlbumMethodFragmentView {
 
     void disconnectMediaScanner();
 
-    void onScanAlbum(String bucketId);
+    void onScanAlbum(String bucketId, boolean b);
 
     void openCamera();
 

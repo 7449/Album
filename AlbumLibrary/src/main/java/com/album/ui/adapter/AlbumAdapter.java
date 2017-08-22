@@ -22,7 +22,6 @@ import com.album.R;
 import com.album.model.AlbumModel;
 import com.album.ui.widget.AlbumImageView;
 import com.album.util.FileUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 
@@ -89,7 +88,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             holder.imageView.setVisibility(View.VISIBLE);
             ImageView imageView;
             if (albumConfig.isFrescoImageLoader()) {
-                imageView = new SimpleDraweeView(holder.imageView.getContext());
+                imageView = Album.getInstance().getAlbumImageLoader().frescoView(holder.imageView.getContext());
             } else {
                 imageView = new AlbumImageView(holder.imageView.getContext());
             }
@@ -134,10 +133,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     public void addAll(ArrayList<AlbumModel> list) {
         if (albumList == null) {
             albumList = new ArrayList<>();
-        } else {
-            albumList.clear();
         }
-        if (list != null) {
+        if (list != null && !list.isEmpty()) {
             albumList.addAll(list);
             notifyDataSetChanged();
         }
@@ -153,6 +150,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     public void setMultiplePreviewList(ArrayList<AlbumModel> multiplePreviewList) {
         this.multiplePreviewList = multiplePreviewList;
+        notifyDataSetChanged();
+    }
+
+    public void removeAll() {
+        if (albumList != null) {
+            albumList.clear();
+        }
         notifyDataSetChanged();
     }
 

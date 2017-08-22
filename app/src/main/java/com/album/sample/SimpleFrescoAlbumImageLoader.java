@@ -1,5 +1,6 @@
 package com.album.sample;
 
+import android.content.Context;
 import android.net.Uri;
 import android.widget.ImageView;
 
@@ -36,6 +37,7 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setTapToRetryEnabled(true)
                 .setImageRequest(request)
+                .setAutoPlayAnimations(true)
                 .setOldController(simpleDraweeView.getController())
                 .build();
         GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
@@ -82,5 +84,10 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
         GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
         hierarchy.setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
         simpleDraweeView.setController(controller);
+    }
+
+    @Override
+    public ImageView frescoView(Context context) {
+        return new SimpleDraweeView(context);
     }
 }

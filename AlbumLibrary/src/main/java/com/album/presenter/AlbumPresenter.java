@@ -9,9 +9,11 @@ import java.util.ArrayList;
  */
 
 public interface AlbumPresenter {
-    void scan(boolean hideCamera, String bucketId);
+    void scan(boolean hideCamera, String bucketId, int page, int count);
 
     void mergeModel(ArrayList<AlbumModel> albumList, ArrayList<AlbumModel> multiplePreviewList);
 
     void firstMergeModel(ArrayList<AlbumModel> albumModels, ArrayList<AlbumModel> selectModel);
+
+    boolean isScan();
 }

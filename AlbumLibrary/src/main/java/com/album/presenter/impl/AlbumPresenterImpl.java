@@ -18,23 +18,27 @@ import java.util.ArrayList;
 
 public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBack {
     private final AlbumView albumView;
+    private boolean isScan = false;
 
     public AlbumPresenterImpl(AlbumView albumView) {
         this.albumView = albumView;
     }
 
     @Override
-    public void scan(final boolean hideCamera, final String bucketId) {
+    public void scan(final boolean hideCamera, final String bucketId, final int page, final int count) {
         albumView.getAlbumActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                albumView.showProgress();
+                isScan = true;
+                if (page == 0) {
+                    albumView.showProgress();
+                }
             }
         });
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                ScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, TextUtils.isEmpty(bucketId), hideCamera);
+                ScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, TextUtils.isEmpty(bucketId), hideCamera, page, count);
             }
         });
     }
@@ -79,16 +83,23 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
     }
 
     @Override
+    public boolean isScan() {
+        return isScan;
+    }
+
+
+    @Override
     public void scanSuccess(final ArrayList<AlbumModel> albumModels, final ArrayList<FinderModel> list) {
         albumView.getAlbumActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                isScan = false;
+                albumView.hideProgress();
                 mergeModel(albumModels, albumView.getSelectModel());
                 albumView.scanSuccess(albumModels);
                 if (list != null && !list.isEmpty()) {
                     albumView.finderModel(list);
                 }
-                albumView.hideProgress();
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.album.ui.widget;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.album.AlbumImageLoader;
@@ -46,5 +47,10 @@ public class SimpleGlideAlbumImageLoader implements AlbumImageLoader {
                 .error(R.drawable.ic_launcher)
                 .centerCrop()
                 .into(view);
+    }
+
+    @Override
+    public ImageView frescoView(Context context) {
+        return null;
     }
 }

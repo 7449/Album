@@ -1,5 +1,6 @@
 package com.album;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.album.model.AlbumModel;
@@ -16,4 +17,6 @@ public interface AlbumImageLoader {
     void displayAlbumThumbnails(ImageView view, FinderModel finderModel);
 
     void displayPreview(ImageView view, AlbumModel albumModel);
+
+    ImageView frescoView(Context context);
 }

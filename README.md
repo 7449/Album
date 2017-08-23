@@ -8,27 +8,13 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 ## Screenshot
 
 
-#### multiple
+#### multiple, radio, preview, crop, sample ui
 
-![](https://github.com/7449/Album/blob/master/screenshot/album_multiple.jpg)
-
-
-#### radio
-
-![](https://github.com/7449/Album/blob/master/screenshot/album_radio.jpg)
-
-#### preview
-
-![](https://github.com/7449/Album/blob/master/screenshot/album_preview.jpg)
-
-
-#### crop
-
-![](https://github.com/7449/Album/blob/master/screenshot/album_crop.jpg)
-
-#### sample ui
-
-![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.jpg)
+![](https://github.com/7449/Album/blob/master/screenshot/album_multiple.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_radio.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_preview.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_crop.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.png)
 
 
 ## sample

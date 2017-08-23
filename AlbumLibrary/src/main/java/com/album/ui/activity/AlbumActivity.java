@@ -21,6 +21,7 @@ import com.album.AlbumConstant;
 import com.album.R;
 import com.album.model.FinderModel;
 import com.album.ui.adapter.ListPopupWindowAdapter;
+import com.album.ui.annotation.PermissionsType;
 import com.album.ui.fragment.AlbumFragment;
 import com.album.ui.view.AlbumMethodActivityView;
 import com.album.util.AlbumTool;
@@ -31,7 +32,7 @@ import java.util.List;
  * by y on 14/08/2017.
  */
 
-public class AlbumActivity extends BaseActivity
+public class AlbumActivity extends AlbumBaseActivity
         implements View.OnClickListener, AlbumMethodActivityView, AdapterView.OnItemClickListener {
 
     private Toolbar toolbar;
@@ -41,16 +42,6 @@ public class AlbumActivity extends BaseActivity
     private AppCompatTextView finderTv;
     private ListPopupWindow listPopupWindow;
     private RelativeLayout albumBottomView;
-
-    private String finderName = null;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            finderName = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME);
-        }
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected void onDestroy() {
@@ -76,10 +67,10 @@ public class AlbumActivity extends BaseActivity
 
     @Override
     protected void initView() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        preview = (AppCompatTextView) findViewById(R.id.tv_preview);
-        select = (AppCompatTextView) findViewById(R.id.tv_select);
-        finderTv = (AppCompatTextView) findViewById(R.id.tv_finder_all);
+        toolbar = (Toolbar) findViewById(R.id.album_toolbar);
+        preview = (AppCompatTextView) findViewById(R.id.album_tv_preview);
+        select = (AppCompatTextView) findViewById(R.id.album_tv_select);
+        finderTv = (AppCompatTextView) findViewById(R.id.album_tv_finder_all);
         albumBottomView = (RelativeLayout) findViewById(R.id.album_bottom_view);
         listPopupWindow = new ListPopupWindow(this);
         preview.setOnClickListener(this);
@@ -167,7 +158,7 @@ public class AlbumActivity extends BaseActivity
     }
 
     @Override
-    protected void permissionsDenied(int type) {
+    protected void permissionsDenied(@PermissionsType int type) {
         Album.getInstance().getAlbumListener().onAlbumPermissionsDenied(type);
         if (albumConfig.isPermissionsDeniedFinish()) {
             finish();
@@ -177,10 +168,10 @@ public class AlbumActivity extends BaseActivity
     @Override
     protected void permissionsGranted(int type) {
         switch (type) {
-            case AlbumConstant.TYPE_ALBUM:
-                albumFragment.onScanAlbum(null, false);
+            case AlbumConstant.TYPE_PERMISSIONS_ALBUM:
+                albumFragment.onScanAlbum(null, false, false);
                 break;
-            case AlbumConstant.TYPE_CAMERA:
+            case AlbumConstant.TYPE_PERMISSIONS_CAMERA:
                 albumFragment.openCamera();
                 break;
         }
@@ -193,11 +184,11 @@ public class AlbumActivity extends BaseActivity
             return;
         }
         int i = v.getId();
-        if (i == R.id.tv_preview) {
+        if (i == R.id.album_tv_preview) {
             albumFragment.multiplePreview();
-        } else if (i == R.id.tv_select) {
+        } else if (i == R.id.album_tv_select) {
             albumFragment.multipleSelect();
-        } else if (i == R.id.tv_finder_all) {
+        } else if (i == R.id.album_tv_finder_all) {
             List<FinderModel> finderModel = albumFragment.getFinderModel();
             if (finderModel != null && !finderModel.isEmpty()) {
                 listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderModel));
@@ -225,14 +216,8 @@ public class AlbumActivity extends BaseActivity
         }
         finderName = finder.getDirName();
         finderTv.setText(finder.getDirName());
-        albumFragment.onScanAlbum(finder.getBucketId(), true);
+        albumFragment.onScanAlbum(finder.getBucketId(), true, false);
         listPopupWindow.dismiss();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME, finderName);
     }
 
     @Override

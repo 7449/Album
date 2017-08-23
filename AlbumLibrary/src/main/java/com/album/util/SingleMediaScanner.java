@@ -4,6 +4,8 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 
+import com.album.ui.annotation.AlbumResultType;
+
 import java.io.File;
 
 /**
@@ -20,9 +22,11 @@ public class SingleMediaScanner implements MediaScannerConnection.MediaScannerCo
     private MediaScannerConnection mediaScannerConnection;
     private File file;
     private SingleScannerListener singleScannerListener = null;
+    private int type;
 
-    public SingleMediaScanner(Context context, File file, SingleScannerListener singleScannerListener) {
+    public SingleMediaScanner(Context context, File file, SingleScannerListener singleScannerListener, @AlbumResultType int type) {
         this.file = file;
+        this.type = type;
         this.mediaScannerConnection = new MediaScannerConnection(context.getApplicationContext(), this);
         this.mediaScannerConnection.connect();
         this.singleScannerListener = singleScannerListener;
@@ -45,13 +49,13 @@ public class SingleMediaScanner implements MediaScannerConnection.MediaScannerCo
     public void onScanCompleted(String path, Uri uri) {
         disconnect();
         if (singleScannerListener != null) {
-            singleScannerListener.onScanCompleted();
+            singleScannerListener.onScanCompleted(type);
         }
     }
 
     public interface SingleScannerListener {
         void onScanStart();
 
-        void onScanCompleted();
+        void onScanCompleted(@AlbumResultType int type);
     }
 }

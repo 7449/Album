@@ -2,11 +2,14 @@ package com.album.sample;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
+import com.album.AlbumConstant;
 import com.album.AlbumImageLoader;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
+import com.album.ui.annotation.FrescoType;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
@@ -23,9 +26,8 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
 
-
     @Override
-    public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
+    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) view;
         Uri uri = Uri.parse("file://" + albumModel.getPath());
         ImageRequest request = ImageRequestBuilder
@@ -47,7 +49,7 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayAlbumThumbnails(ImageView view, FinderModel finderModel) {
+    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) view;
         Uri uri = Uri.parse("file://" + finderModel.getThumbnailsPath());
         ImageRequest request = ImageRequestBuilder
@@ -67,7 +69,7 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayPreview(ImageView view, AlbumModel albumModel) {
+    public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) view;
         Uri uri = Uri.parse("file://" + albumModel.getPath());
         ImageRequest request = ImageRequestBuilder
@@ -87,7 +89,13 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public ImageView frescoView(Context context) {
-        return new SimpleDraweeView(context);
+    public ImageView frescoView(@NonNull Context context, @FrescoType int type) {
+        switch (type) {
+            case AlbumConstant.TYPE_FRESCO_ALBUM:
+                return new SimpleDraweeView(context);
+            case AlbumConstant.TYPE_FRESCO_PREVIEW:
+                return new SimpleDraweeView(context);
+        }
+        return null;
     }
 }

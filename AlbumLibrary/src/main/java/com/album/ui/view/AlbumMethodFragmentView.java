@@ -2,9 +2,9 @@ package com.album.ui.view;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
 import com.album.model.FinderModel;
+import com.album.ui.annotation.AlbumResultType;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ public interface AlbumMethodFragmentView {
 
     void disconnectMediaScanner();
 
-    void onScanAlbum(String bucketId, boolean b);
+    void onScanAlbum(String bucketId, boolean isFinder, boolean result);
 
     void openCamera();
 
     void openUCrop(String path, Uri uri);
 
-    void refreshMedia();
+    void refreshMedia(@AlbumResultType int type);
 
     List<FinderModel> getFinderModel();
 

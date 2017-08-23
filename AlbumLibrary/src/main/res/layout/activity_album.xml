@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/album_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -26,7 +26,7 @@
 
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_finder_all"
+            android:id="@+id/album_tv_finder_all"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
@@ -41,13 +41,13 @@
             tools:ignore="RtlHardcoded" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_preview"
+            android:id="@+id/album_tv_preview"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/album_button_margin"
             android:layout_marginRight="@dimen/album_bottom_marginRight"
-            android:layout_toLeftOf="@+id/tv_select"
+            android:layout_toLeftOf="@+id/album_tv_select"
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/album_bottom_padding"
@@ -57,7 +57,7 @@
             tools:ignore="RelativeOverlap,RtlHardcoded" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_select"
+            android:id="@+id/album_tv_select"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

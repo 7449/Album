@@ -14,6 +14,7 @@
     <color name="colorAlbumListPopupItemBackgroundDay">#FFFFFFFF</color>
     <color name="colorAlbumContentViewBackgroundDay">#FFFFFFFF</color>
     <color name="colorAlbumContentViewCameraDrawableColorDay">#FF1B1D1D</color>
+    <color name="colorAlbumContentEmptyDrawableColorDay">#FF1B1D1D</color>
     <color name="colorAlbumContentViewTipsColorDay">#FF3D4040</color>
     <color name="colorAlbumContentViewBackgroundColorColorDay">#FFB0B7B7</color>
     <color name="colorAlbumPreviewBackgroundDay">#FFFFFFFF</color>
@@ -35,6 +36,7 @@
     <color name="colorAlbumListPopupItemBackgroundNight">#FF3D4040</color>
     <color name="colorAlbumContentViewBackgroundNight">#FF1B1D1D</color>
     <color name="colorAlbumContentViewCameraDrawableColorNight">#FFFFFFFF</color>
+    <color name="colorAlbumContentEmptyDrawableColorNight">#FFFFFFFF</color>
     <color name="colorAlbumContentViewBackgroundColorColorNight">#FF707576</color>
     <color name="colorAlbumContentViewTipsColorNight">#FFD9E5E7</color>
     <color name="colorAlbumPreviewBackgroundNight">#000000</color>

@@ -24,6 +24,7 @@ import com.album.model.AlbumModel;
 import com.album.presenter.PreviewPresenter;
 import com.album.presenter.impl.PreviewPresenterImpl;
 import com.album.ui.adapter.PreviewAdapter;
+import com.album.ui.annotation.PermissionsType;
 import com.album.ui.view.PreviewMethodActivityView;
 import com.album.ui.view.PreviewView;
 import com.album.util.AlbumTool;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
  * by y on 15/08/2017.
  */
 
-public class PreviewActivity extends BaseActivity implements View.OnClickListener, PreviewView, PreviewMethodActivityView {
+public class PreviewActivity extends AlbumBaseActivity implements View.OnClickListener, PreviewView, PreviewMethodActivityView {
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -135,11 +136,11 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initView() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        toolbar = (Toolbar) findViewById(R.id.preview_toolbar);
+        viewPager = (ViewPager) findViewById(R.id.preview_viewPager);
         appCompatCheckBox = (AppCompatCheckBox) findViewById(R.id.preview_check_box);
-        previewCount = (AppCompatTextView) findViewById(R.id.tv_preview_count);
-        progressBar = (ProgressBar) findViewById(R.id.progress);
+        previewCount = (AppCompatTextView) findViewById(R.id.preview_tv_preview_count);
+        progressBar = (ProgressBar) findViewById(R.id.preview_progress);
         LinearLayout rootView = (LinearLayout) findViewById(R.id.preview_root_view);
         RelativeLayout previewBottomView = (RelativeLayout) findViewById(R.id.preview_bottom_view);
         AppCompatTextView previewOk = (AppCompatTextView) findViewById(R.id.preview_bottom_view_tv_select);
@@ -162,16 +163,18 @@ public class PreviewActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    protected void permissionsDenied(int type) {
+    protected void permissionsDenied(@PermissionsType int type) {
         Album.getInstance().getAlbumListener().onAlbumPermissionsDenied(type);
         finish();
     }
 
     @Override
-    protected void permissionsGranted(int type) {
+    protected void permissionsGranted(@PermissionsType int type) {
         switch (type) {
-            case AlbumConstant.TYPE_ALBUM:
+            case AlbumConstant.TYPE_PERMISSIONS_ALBUM:
                 init();
+                break;
+            case AlbumConstant.TYPE_PERMISSIONS_CAMERA:
                 break;
         }
     }

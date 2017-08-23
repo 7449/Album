@@ -15,7 +15,9 @@ import java.util.ArrayList;
 
 public interface ScanView {
 
-    void start(ContentResolver contentResolver, ScanUtils.ScanCallBack scanCallBack, String bucketId, boolean finder, boolean hideCamera, int page, int count);
+    void start(ContentResolver contentResolver, ScanUtils.ScanCallBack scanCallBack, String bucketId, int page, int count);
+
+    void resultScan(ContentResolver contentResolver, ScanUtils.ScanCallBack scanCallBack, String path);
 
     void cursorAlbum(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, Cursor cursor);
 

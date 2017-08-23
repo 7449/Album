@@ -45,9 +45,7 @@ public class ScanUtils implements ScanView {
     @Override
     public void start(ContentResolver contentResolver,
                       ScanCallBack scanCallBack,
-                      String bucketId,
-                      boolean finder,
-                      boolean hideCamera, int page, int count) {
+                      String bucketId, int page, int count) {
         this.contentResolver = contentResolver;
         if (contentResolver == null) {
             throw new NullPointerException("ContentResolver == null");
@@ -56,7 +54,6 @@ public class ScanUtils implements ScanView {
         ArrayList<FinderModel> finderModels = new ArrayList<>();
         Cursor cursor = getAlbumCursor(bucketId, page, count);
         if (cursor != null) {
-
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             int idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
 
@@ -65,11 +62,35 @@ public class ScanUtils implements ScanView {
             }
             cursor.close();
             cursorFinder(finderModels);
-            if (finder && !hideCamera && page == 0) {
-                albumModels.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA, 0, false));
-            }
             scanCallBack.scanSuccess(albumModels, finderModels);
         }
+    }
+
+    @Override
+    public void resultScan(ContentResolver contentResolver, ScanCallBack scanCallBack, String path) {
+        this.contentResolver = contentResolver;
+        AlbumModel albumModel = null;
+        ArrayList<FinderModel> finderModels = new ArrayList<>();
+        Cursor query = contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                ALBUM_PROJECTION,
+                MediaStore.Images.Media.DATA + "= ? ",
+                new String[]{path},
+                MediaStore.Images.Media.DATE_MODIFIED);
+        if (query != null) {
+            int dataColumnIndex = query.getColumnIndex(MediaStore.Images.Media.DATA);
+            int idColumnIndex = query.getColumnIndex(MediaStore.Images.Media._ID);
+            while (query.moveToNext()) {
+                String resultPath = query.getString(dataColumnIndex);
+                long id = query.getLong(idColumnIndex);
+                if (FileUtils.getPathFile(resultPath) != null) {
+                    albumModel = new AlbumModel(null, null, resultPath, id, false);
+                }
+            }
+            cursorFinder(finderModels);
+            query.close();
+        }
+        scanCallBack.resultSuccess(albumModel, finderModels);
     }
 
     @Override
@@ -166,6 +187,8 @@ public class ScanUtils implements ScanView {
 
     public interface ScanCallBack {
         void scanSuccess(ArrayList<AlbumModel> albumModels, ArrayList<FinderModel> list);
+
+        void resultSuccess(AlbumModel albumModel, ArrayList<FinderModel> finderModels);
     }
 }
 

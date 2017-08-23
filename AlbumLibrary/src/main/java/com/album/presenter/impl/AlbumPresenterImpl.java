@@ -25,7 +25,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
     }
 
     @Override
-    public void scan(final boolean hideCamera, final String bucketId, final int page, final int count) {
+    public void scan(final String bucketId, final int page, final int count) {
         albumView.getAlbumActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -38,7 +38,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                ScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, TextUtils.isEmpty(bucketId), hideCamera, page, count);
+                ScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, page, count);
             }
         });
     }
@@ -87,6 +87,16 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
         return isScan;
     }
 
+    @Override
+    public void resultScan(final String path) {
+        AlbumTask.get().start(new AlbumTaskCallBack.Call() {
+            @Override
+            public void start() {
+                ScanUtils.get().resultScan(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, path);
+            }
+        });
+    }
+
 
     @Override
     public void scanSuccess(final ArrayList<AlbumModel> albumModels, final ArrayList<FinderModel> list) {
@@ -95,10 +105,27 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
             public void run() {
                 isScan = false;
                 albumView.hideProgress();
-                mergeModel(albumModels, albumView.getSelectModel());
-                albumView.scanSuccess(albumModels);
-                if (list != null && !list.isEmpty()) {
-                    albumView.finderModel(list);
+                if (albumModels != null && albumModels.isEmpty()) {
+                    albumView.onAlbumNoMore();
+                } else {
+                    mergeModel(albumModels, albumView.getSelectModel());
+                    albumView.scanSuccess(albumModels);
+                    if (list != null && !list.isEmpty()) {
+                        albumView.finderModel(list);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void resultSuccess(final AlbumModel albumModel, final ArrayList<FinderModel> finderModels) {
+        albumView.getAlbumActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                albumView.resultSuccess(albumModel);
+                if (finderModels != null && !finderModels.isEmpty()) {
+                    albumView.finderModel(finderModels);
                 }
             }
         });

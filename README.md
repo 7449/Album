@@ -2,6 +2,35 @@
 android album
 
 
+Chinese : [wiki](https://github.com/7449/Album/wiki)
+
+
+## Screenshot
+
+
+#### multiple
+
+![](https://github.com/7449/Album/blob/master/screenshot/album_multiple.jpg)
+
+
+#### radio
+
+![](https://github.com/7449/Album/blob/master/screenshot/album_radio.jpg)
+
+#### preview
+
+![](https://github.com/7449/Album/blob/master/screenshot/album_preview.jpg)
+
+
+#### crop
+
+![](https://github.com/7449/Album/blob/master/screenshot/album_crop.jpg)
+
+#### sample ui
+
+![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.jpg)
+
+
 ## sample
 
 #### Manifests.xml
@@ -19,10 +48,21 @@ android album
             
 #### gradle
 
-    compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    compile "com.github.yalantis:ucrop:$ucropVersion"
-    compile "com.github.bumptech.glide:glide:$glideVersion"
+     compile 'com.ydevelop:album:0.0.1'
+     compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
+     compile "com.github.bumptech.glide:glide:$glideVersion"
+     
   
+  If you use the built-in frame, please rely on glide
+  
+  
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    
+  or
+  
+  [SimpleGlide4xAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleGlide4xAlbumImageLoader.java)
+
+
   
 #### sampleDemo
 
@@ -34,6 +74,185 @@ android album
                 .setConfig(new AlbumConfig())
                 .setAlbumListener(new SimpleAlbumListener())
                 .start(this);
+                
+                
+## ImageLoader
+
+> Fresco
+
+    Album
+         .getInstance()
+         .setConfig(new AlbumConfig().setFrescoImageLoader(true)  // notification Album is using Fresco
+         .start(this);
+
+
+
+[SimpleFrescoAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleFrescoAlbumImageLoader.java)
+
+[SimpleGlide4xAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleGlide4xAlbumImageLoader.java)
+
+[SimpleImageLoaderAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleImageLoaderAlbumImageLoader.java)
+
+[SimplePicassoAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimplePicassoAlbumImageLoader.java)
+
+
+    public class SimpleImageLoader implements AlbumImageLoader {
+    
+        @Override
+        public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
+            
+        }
+    
+        @Override
+        public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
+    
+        }
+    
+        @Override
+        public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
+    
+        }
+    
+    
+        // fresco DraweeView
+        // other  null
+        @Nullable
+        @Override
+        public ImageView frescoView(@NonNull Context context, @FrescoType int type) {
+            return null;
+        }
+    
+    }
+
+
+## UI
+
+see: [SimpleAlbumUI](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleAlbumUI.java)
+
+
+## Listener
+
+see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrary/src/main/java/com/album/ui/widget/SimpleAlbumListener.java)
+
+     public class AlbumListener implements AlbumListener {
+    
+            private Context context;
+            private List<AlbumModel> list = null;
+    
+            void toast(String s) {
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+            }
+    
+            MainAlbumListener(Context context, ArrayList<AlbumModel> list) {
+                this.context = context.getApplicationContext();
+                this.list = list;
+            }
+    
+            @Override
+            public void onAlbumActivityFinish() {
+                toast("album activity finish");
+            }
+    
+            @Override
+            public void onAlbumPermissionsDenied(@PermissionsType int type) {
+                toast("permissions error");
+            }
+    
+            @Override
+            public void onAlbumFragmentNull() {
+                toast("album fragment null");
+            }
+    
+            @Override
+            public void onAlbumPreviewFileNull() {
+                toast("preview image has been deleted");
+            }
+    
+            @Override
+            public void onAlbumFinderNull() {
+                toast("folder directory is empty");
+            }
+    
+            @Override
+            public void onAlbumBottomPreviewNull() {
+                toast("preview no image");
+            }
+    
+            @Override
+            public void onAlbumBottomSelectNull() {
+                toast("select no image");
+            }
+    
+            @Override
+            public void onAlbumFragmentFileNull() {
+                toast("album image has been deleted");
+            }
+    
+            @Override
+            public void onAlbumPreviewSelectNull() {
+                toast("PreviewActivity,  preview no image");
+            }
+    
+            @Override
+            public void onAlbumCheckBoxFileNull() {
+                toast("check box  image has been deleted");
+            }
+    
+            @Override
+            public void onAlbumFragmentCropCanceled() {
+                toast("cancel crop");
+            }
+    
+            @Override
+            public void onAlbumFragmentCameraCanceled() {
+                toast("cancel camera");
+            }
+    
+            @Override
+            public void onAlbumFragmentUCropError(@Nullable Throwable data) {
+                toast("crop error:" + data.toString());
+            }
+    
+            @Override
+            public void onAlbumResources(@NonNull List<AlbumModel> list) {
+                
+            }
+    
+            @Override
+            public void onAlbumUCropResources(@Nullable File scannerFile) {
+                toast("crop file:" + scannerFile);
+            }
+    
+            @Override
+            public void onAlbumMaxCount() {
+                toast("select max count");
+            }
+    
+            @Override
+            public void onAlbumActivityBackPressed() {
+                toast("AlbumActivity Back");
+            }
+    
+            @Override
+            public void onAlbumOpenCameraError() {
+                toast("camera error");
+            }
+            
+            @Override
+            public void onAlbumEmpty() {
+                 toast("no image");
+            }
+            
+            @Override
+            public void onAlbumNoMore() {
+                 toast("image no more");
+            }
+            
+            @Override
+            public void onAlbumResultCameraError() {
+                 toast("result camera error");
+            }
+        }
 
 ## TestPhone
 

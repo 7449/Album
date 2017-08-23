@@ -58,6 +58,8 @@ public class AlbumConfig {
     private int albumContentViewCameraDrawable = R.drawable.ic_camera_alt_black_24dp;
     private int albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay;
     private int albumContentItemCheckBoxDrawable = R.drawable.selector_album_item_check;
+    private int albumContentEmptyDrawable = R.drawable.ic_camera_alt_black_24dp;
+    private int albumContentEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorDay;
     /////////// album preview ////////
     private int albumPreviewTitle = R.string.preview_title;
     private int albumPreviewBackground = R.color.colorAlbumPreviewBackgroundDay;
@@ -92,6 +94,7 @@ public class AlbumConfig {
                 albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight;
                 albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorNight;
                 albumContentViewCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorNight;
+                albumContentEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorNight;
 
                 albumPreviewBackground = R.color.colorAlbumPreviewBackgroundNight;
                 albumPreviewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundNight;
@@ -608,4 +611,23 @@ public class AlbumConfig {
         this.count = count;
         return this;
     }
+
+    public int getAlbumContentEmptyDrawable() {
+        return albumContentEmptyDrawable;
+    }
+
+    public AlbumConfig setAlbumContentEmptyDrawable(int albumContentEmptyDrawable) {
+        this.albumContentEmptyDrawable = albumContentEmptyDrawable;
+        return this;
+    }
+
+    public int getAlbumContentEmptyDrawableColor() {
+        return albumContentEmptyDrawableColor;
+    }
+
+    public AlbumConfig setAlbumContentEmptyDrawableColor(int albumContentEmptyDrawableColor) {
+        this.albumContentEmptyDrawableColor = albumContentEmptyDrawableColor;
+        return this;
+    }
+
 }

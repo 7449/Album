@@ -18,6 +18,7 @@ public class AlbumConstant {
     public static final String TYPE_ALBUM_PREVIEW_STATE_SELECT_POSITION = "state_preview_select_position";
     public static final String TYPE_ALBUM_STATE_BUCKET_ID = "state_bucket_id";
     public static final String TYPE_ALBUM_STATE_URI_PATH = "state_uri_path";
+    public static final String TYPE_ALBUM_STATE_CROP_URI_PATH = "state_crop_uri_path";
     public static final String TYPE_ALBUM_STATE_FINDER_NAME = "state_finder_name";
     public static final String PREVIEW_KEY = "preview";
     public static final String PREVIEW_REFRESH_UI = "preview_refresh_ui";
@@ -26,6 +27,13 @@ public class AlbumConstant {
     public static final String PREVIEW_BUTTON_KEY = "preview_button";
     public static final String PREVIEW_POSITION_KEY = "preview_position";
     public static final int TYPE_NIGHT = 0;
-    public static final int TYPE_ALBUM = 0;
-    public static final int TYPE_CAMERA = 1;
+
+    public static final int TYPE_PERMISSIONS_ALBUM = 0;
+    public static final int TYPE_PERMISSIONS_CAMERA = 1;
+
+    public static final int TYPE_FRESCO_ALBUM = 0;
+    public static final int TYPE_FRESCO_PREVIEW = 1;
+
+    public static final int TYPE_RESULT_CAMERA = 0;
+    public static final int TYPE_RESULT_CROP = 1;
 }

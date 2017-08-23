@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.album.Album;
+import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
 import com.album.ui.widget.TouchImageView;
 
@@ -44,7 +45,7 @@ public class PreviewAdapter extends PagerAdapter {
         FrameLayout frameLayout = new FrameLayout(container.getContext());
         ImageView imageView;
         if (Album.getInstance().getConfig().isFrescoImageLoader()) {
-            imageView = Album.getInstance().getAlbumImageLoader().frescoView(frameLayout.getContext());
+            imageView = Album.getInstance().getAlbumImageLoader().frescoView(frameLayout.getContext(), AlbumConstant.TYPE_FRESCO_ALBUM);
         } else {
             imageView = new TouchImageView(frameLayout.getContext());
         }

@@ -88,7 +88,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             holder.imageView.setVisibility(View.VISIBLE);
             ImageView imageView;
             if (albumConfig.isFrescoImageLoader()) {
-                imageView = Album.getInstance().getAlbumImageLoader().frescoView(holder.imageView.getContext());
+                imageView = Album.getInstance().getAlbumImageLoader().frescoView(holder.imageView.getContext(), AlbumConstant.TYPE_FRESCO_ALBUM);
             } else {
                 imageView = new AlbumImageView(holder.imageView.getContext());
             }

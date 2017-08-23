@@ -57,7 +57,7 @@ public class AlbumTool {
             Fragment fragment = (Fragment) activity;
             cameraActivity = fragment.getActivity();
         }
-        if (PermissionUtils.camera(cameraActivity)) {
+        if (PermissionUtils.camera(cameraActivity) && PermissionUtils.storage(cameraActivity)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             assert cameraActivity != null;
             if (intent.resolveActivity(cameraActivity.getPackageManager()) != null) {

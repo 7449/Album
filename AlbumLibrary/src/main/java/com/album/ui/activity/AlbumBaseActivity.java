@@ -11,20 +11,25 @@ import android.support.v7.app.AppCompatActivity;
 import com.album.Album;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
+import com.album.ui.annotation.PermissionsType;
 import com.album.util.AlbumTool;
 
 /**
  * by y on 14/08/2017.
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class AlbumBaseActivity extends AppCompatActivity {
 
     protected AlbumConfig albumConfig = null;
+    protected String finderName = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         albumConfig = Album.getInstance().getConfig();
         AlbumTool.setStatusBarColor(ContextCompat.getColor(this, albumConfig.getAlbumStatusBarColor()), getWindow());
+        if (savedInstanceState != null) {
+            finderName = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME);
+        }
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         initView();
@@ -41,9 +46,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                     return;
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(AlbumConstant.TYPE_ALBUM);
+                    permissionsDenied(AlbumConstant.TYPE_PERMISSIONS_ALBUM);
                 } else {
-                    permissionsGranted(AlbumConstant.TYPE_ALBUM);
+                    permissionsGranted(AlbumConstant.TYPE_PERMISSIONS_ALBUM);
                 }
                 break;
             case AlbumConstant.CAMERA_REQUEST_CODE:
@@ -51,12 +56,18 @@ public abstract class BaseActivity extends AppCompatActivity {
                     return;
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(AlbumConstant.TYPE_CAMERA);
+                    permissionsDenied(AlbumConstant.TYPE_PERMISSIONS_CAMERA);
                 } else {
-                    permissionsGranted(AlbumConstant.TYPE_CAMERA);
+                    permissionsGranted(AlbumConstant.TYPE_PERMISSIONS_CAMERA);
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME, finderName);
     }
 
     protected abstract void initCreate(@Nullable Bundle savedInstanceState);
@@ -70,7 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getLayoutId();
 
 
-    protected abstract void permissionsDenied(int type);
+    protected abstract void permissionsDenied(@PermissionsType int type);
 
-    protected abstract void permissionsGranted(int type);
+    protected abstract void permissionsGranted(@PermissionsType int type);
 }

@@ -19,6 +19,8 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.AlbumListener;
 import com.album.model.AlbumModel;
+import com.album.ui.annotation.PermissionsType;
+import com.album.ui.widget.OnEmptyClickListener;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 import com.album.util.SingleMediaScanner;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         findViewById(R.id.btn_day_album).setOnClickListener(this);
         findViewById(R.id.btn_night_album).setOnClickListener(this);
         findViewById(R.id.btn_open_camera).setOnClickListener(this);
+        findViewById(R.id.btn_sample_ui).setOnClickListener(this);
 
         dayOptions = new UCrop.Options();
         dayOptions.setToolbarTitle("DayTheme");
@@ -62,13 +65,20 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_day_album:
-                Toast.makeText(getApplicationContext(), "进来选中的图片个数：" + list.size(), Toast.LENGTH_SHORT).show();
                 Album
                         .getInstance()
-                        .setAlbumModels(list)
-                        .setAlbumImageLoader(new SimpleFrescoAlbumImageLoader())
+//                        .setAlbumImageLoader(new SimpleFrescoAlbumImageLoader())
+                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
+                        .setAlbumModels(list)
                         .setOptions(dayOptions)
+                        .setEmptyClickListener(new OnEmptyClickListener() {
+                            @Override
+                            public boolean click(View view) {
+                                return true;
+                            }
+                        })
+                        .setAlbumClass(null)
                         .setConfig(new AlbumConfig()
                                 .setCameraCrop(false)
                                 .setPermissionsDeniedFinish(false)
@@ -77,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 //                                .setAlbumBottomPreviewTextBackground(R.drawable.selector_btn)
                                 .setAlbumBottomSelectTextBackground(R.drawable.selector_btn)
                                 .setAlbumContentItemCheckBoxDrawable(R.drawable.simple_selector_album_item_check)
-                                .setFrescoImageLoader(true)  // 通知 Album 图片加载框架使用的是 Fresco
+//                                .setFrescoImageLoader(true)  // 通知 Album 图片加载框架使用的是 Fresco
                                 .setPreviewBackRefresh(true))
                         .start(this);
                 break;
@@ -87,8 +97,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setAlbumListener(new MainAlbumListener(this, null))
                         .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setOptions(nightOptions)
+                        .setAlbumClass(null)
+                        .setEmptyClickListener(new OnEmptyClickListener() {
+                            @Override
+                            public boolean click(View view) {
+                                return true;
+                            }
+                        })
                         .setConfig(new AlbumConfig(AlbumConstant.TYPE_NIGHT)
                                 .setRadio(true)
+                                .setHideCamera(true)
                                 .setCrop(true).setCameraPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM/Album")
                                 .setuCropPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM" + "/" + "uCrop")
                                 .setPermissionsDeniedFinish(true)
@@ -97,6 +115,25 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 .setCameraCrop(true))
                         .start(this);
                 break;
+
+            case R.id.btn_sample_ui:
+
+                Album
+                        .getInstance()
+                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
+                        .setAlbumListener(new MainAlbumListener(this, list))
+                        .setAlbumClass(SimpleAlbumUI.class)
+                        .setEmptyClickListener(null)
+                        .setConfig(new AlbumConfig()
+                                .setCameraCrop(false)
+                                .setAlbumPreviewBackground(R.color.colorAlbumPreviewBackgroundNight)
+                                .setAlbumToolbarBackground(R.color.colorPrimary)
+                                .setAlbumStatusBarColor(R.color.colorPrimary)
+                                .setPreviewBackRefresh(true))
+                        .start(this);
+
+                break;
+
             case R.id.btn_open_camera:
                 // fragment  activity 直接传递 this ， 内部会自己处理
                 int i = AlbumTool.openCamera(this, imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null)));
@@ -125,16 +162,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 }
 
                                 @Override
-                                public void onScanCompleted() {
+                                public void onScanCompleted(int type) {
 
                                 }
-                            });
+                            }, AlbumConstant.TYPE_RESULT_CAMERA);
                     UCrop.of(Uri.fromFile(new File(imagePath.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null)))
                             .withOptions(new UCrop.Options())
                             .start(this);
                     break;
                 case UCrop.REQUEST_CROP:
-                    Toast.makeText(getApplicationContext(), "直接打开相机裁剪path:" + imagePath.getPath(), Toast.LENGTH_SHORT).show();
                     new SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.getPath()),
                             new SingleMediaScanner.SingleScannerListener() {
                                 @Override
@@ -143,10 +179,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 }
 
                                 @Override
-                                public void onScanCompleted() {
+                                public void onScanCompleted(int type) {
 
                                 }
-                            });
+                            }, AlbumConstant.TYPE_RESULT_CROP);
+                    Toast.makeText(getApplicationContext(), imagePath.getPath(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -171,75 +208,72 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         @Override
         public void onAlbumActivityFinish() {
-            toast("图片页面 finish");
+            toast("album activity finish");
         }
 
         @Override
-        public void onAlbumPermissionsDenied(int type) {
-            toast("权限被拒");
+        public void onAlbumPermissionsDenied(@PermissionsType int type) {
+            toast("permissions error");
         }
 
         @Override
         public void onAlbumFragmentNull() {
-            toast("fragment null,应该不会触发");
+            toast("album fragment null");
         }
 
         @Override
         public void onAlbumPreviewFileNull() {
-            toast("预览ViewPager滑动时，使用者在后台删除了图片之后再回到预览界面滑动时会触发");
+            toast("preview image has been deleted");
         }
 
         @Override
         public void onAlbumFinderNull() {
-            toast("图片文件夹目录为空");
+            toast("folder directory is empty");
         }
 
         @Override
         public void onAlbumBottomPreviewNull() {
-            toast("选择预览时没有选中图片");
+            toast("preview no image");
         }
 
         @Override
         public void onAlbumBottomSelectNull() {
-            toast("多选选择时没有选中图片");
+            toast("select no image");
         }
 
         @Override
         public void onAlbumFragmentFileNull() {
-            toast("使用者在后台删除了图片之后再点击该图片时会触发");
+            toast("album image has been deleted");
         }
 
         @Override
         public void onAlbumPreviewSelectNull() {
-            toast("预览界面，没有多选照片");
+            toast("PreviewActivity,  preview no image");
         }
 
         @Override
         public void onAlbumCheckBoxFileNull() {
-            toast("使用者在后台删除了图片之后再选择该图片时会触发");
+            toast("check box  image has been deleted");
         }
 
         @Override
         public void onAlbumFragmentCropCanceled() {
-            toast("取消裁剪");
+            toast("cancel crop");
         }
 
         @Override
         public void onAlbumFragmentCameraCanceled() {
-            toast("取消拍照");
+            toast("cancel camera");
         }
 
         @Override
         public void onAlbumFragmentUCropError(@Nullable Throwable data) {
-            toast("裁剪异常:" + data.toString());
+            toast("crop error:" + data);
         }
 
         @Override
         public void onAlbumResources(@NonNull List<AlbumModel> list) {
-            toast("返回的图片数据" + list.size());
-            for (AlbumModel albumModel : list) {
-                AlbumTool.log(albumModel.getPath());
-            }
+            toast("select count :" + list.size());
             if (this.list != null) {
                 this.list.clear();
                 this.list.addAll(list);
@@ -248,22 +282,37 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         @Override
         public void onAlbumUCropResources(@Nullable File scannerFile) {
-            toast("返回的裁剪File" + scannerFile);
+            toast("crop file:" + scannerFile);
         }
 
         @Override
         public void onAlbumMaxCount() {
-            toast("多选最大值");
+            toast("select max count");
         }
 
         @Override
         public void onAlbumActivityBackPressed() {
-            toast("图片页 back 返回");
+            toast("AlbumActivity Back");
         }
 
         @Override
         public void onAlbumOpenCameraError() {
-            toast("没有检测到相机");
+            toast("camera error");
+        }
+
+        @Override
+        public void onAlbumEmpty() {
+            toast("no image");
+        }
+
+        @Override
+        public void onAlbumNoMore() {
+            toast("album no more");
+        }
+
+        @Override
+        public void onAlbumResultCameraError() {
+            toast("result error");
         }
     }
 

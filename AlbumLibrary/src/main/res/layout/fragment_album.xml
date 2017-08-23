@@ -6,7 +6,7 @@
 
 
     <com.album.ui.widget.LoadMoreRecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/album_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
@@ -14,10 +14,18 @@
         android:paddingTop="@dimen/album_padding_top" />
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/album_progress"
         android:layout_width="@dimen/album_progress_width"
         android:layout_height="@dimen/album_progress_height"
         android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/album_empty"
+        android:layout_width="@dimen/album_empty_width"
+        android:layout_height="@dimen/album_empty_height"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
         android:visibility="gone" />
 
 </FrameLayout>

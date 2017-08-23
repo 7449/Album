@@ -104,4 +104,19 @@ public class SimpleAlbumListener implements AlbumListener {
     public void onAlbumOpenCameraError() {
 
     }
+
+    @Override
+    public void onAlbumEmpty() {
+
+    }
+
+    @Override
+    public void onAlbumNoMore() {
+
+    }
+
+    @Override
+    public void onAlbumResultCameraError() {
+
+    }
 }

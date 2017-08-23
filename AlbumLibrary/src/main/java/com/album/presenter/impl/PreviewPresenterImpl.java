@@ -35,7 +35,7 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                ScanUtils.get().start(previewView.getPreviewActivity().getContentResolver(), PreviewPresenterImpl.this, bucketId, false, true, page, count);
+                ScanUtils.get().start(previewView.getPreviewActivity().getContentResolver(), PreviewPresenterImpl.this, bucketId, page, count);
             }
         });
     }
@@ -66,6 +66,11 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
                 previewView.scanSuccess(albumModels);
             }
         });
+    }
+
+    @Override
+    public void resultSuccess(AlbumModel albumModel, ArrayList<FinderModel> finderModels) {
+
     }
 
 }

@@ -1,12 +1,14 @@
 package com.album.ui.widget;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.album.AlbumImageLoader;
 import com.album.R;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
+import com.album.ui.annotation.FrescoType;
 import com.bumptech.glide.Glide;
 
 /**
@@ -16,7 +18,7 @@ import com.bumptech.glide.Glide;
 public class SimpleGlideAlbumImageLoader implements AlbumImageLoader {
 
     @Override
-    public void displayAlbum(ImageView view, int width, int height, AlbumModel albumModel) {
+    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
         Glide
                 .with(view.getContext())
                 .load(albumModel.getPath())
@@ -28,7 +30,7 @@ public class SimpleGlideAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayAlbumThumbnails(ImageView view, FinderModel finderModel) {
+    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
         Glide
                 .with(view.getContext())
                 .load(finderModel.getThumbnailsPath())
@@ -39,7 +41,7 @@ public class SimpleGlideAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayPreview(ImageView view, AlbumModel albumModel) {
+    public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
         Glide
                 .with(view.getContext())
                 .load(albumModel.getPath())
@@ -50,7 +52,8 @@ public class SimpleGlideAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public ImageView frescoView(Context context) {
+    public ImageView frescoView(@NonNull Context context, @FrescoType int type) {
         return null;
     }
+
 }

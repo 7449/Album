@@ -17,6 +17,12 @@
         android:text="night" />
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_sample_ui"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="sample ui" />
+
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_open_camera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

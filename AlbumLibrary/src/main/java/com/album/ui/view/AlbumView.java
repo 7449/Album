@@ -24,4 +24,8 @@ public interface AlbumView {
     ArrayList<AlbumModel> getSelectModel();
 
     Activity getAlbumActivity();
+
+    void onAlbumNoMore();
+
+    void resultSuccess(AlbumModel albumModel);
 }

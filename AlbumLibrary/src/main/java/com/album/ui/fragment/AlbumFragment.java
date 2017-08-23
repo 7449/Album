@@ -2,11 +2,14 @@ package com.album.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,9 +24,9 @@ import com.album.R;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.presenter.impl.AlbumPresenterImpl;
-import com.album.ui.activity.AlbumActivity;
 import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
+import com.album.ui.annotation.AlbumResultType;
 import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
 import com.album.ui.widget.LoadMoreRecyclerView;
@@ -49,18 +52,19 @@ public class AlbumFragment extends Fragment implements
         AlbumAdapter.OnItemClickListener,
         SingleMediaScanner.SingleScannerListener, LoadMoreRecyclerView.LoadMoreListener {
 
-    private AlbumActivity albumActivity;
+    private Activity albumActivity;
 
     private LoadMoreRecyclerView recyclerView;
     private ProgressBar progressBar;
     private AlbumAdapter albumAdapter;
+    private AppCompatImageView emptyView;
     private AlbumPresenterImpl albumPresenter;
 
-    private Uri imagePath;
-    private SingleMediaScanner singleMediaScanner;
+    private Uri uCropImagePath = null;
+    private Uri imagePath = null;
+    private SingleMediaScanner singleMediaScanner = null;
     private ArrayList<FinderModel> finderModels = null;
     private ArrayList<AlbumModel> multipleAlbumModel = null;
-
     private AlbumConfig albumConfig = null;
     private String bucketId = null;
     private int page = 0;
@@ -78,6 +82,7 @@ public class AlbumFragment extends Fragment implements
         bucketId = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID);
         multipleAlbumModel = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT);
         imagePath = savedInstanceState.getParcelable(AlbumConstant.TYPE_ALBUM_STATE_URI_PATH);
+        uCropImagePath = savedInstanceState.getParcelable(AlbumConstant.TYPE_ALBUM_STATE_CROP_URI_PATH);
     }
 
     @Nullable
@@ -86,24 +91,35 @@ public class AlbumFragment extends Fragment implements
         albumConfig = Album.getInstance().getConfig();
         View inflate = inflater.inflate(R.layout.fragment_album, container, false);
         inflate.findViewById(R.id.album_content_view).setBackgroundColor(ContextCompat.getColor(inflate.getContext(), albumConfig.getAlbumContentViewBackground()));
-        recyclerView = (LoadMoreRecyclerView) inflate.findViewById(R.id.recyclerView);
-        progressBar = (ProgressBar) inflate.findViewById(R.id.progress);
+        recyclerView = (LoadMoreRecyclerView) inflate.findViewById(R.id.album_recyclerView);
+        progressBar = (ProgressBar) inflate.findViewById(R.id.album_progress);
+        emptyView = (AppCompatImageView) inflate.findViewById(R.id.album_empty);
         albumPresenter = new AlbumPresenterImpl(this);
-        albumActivity = (AlbumActivity) getActivity();
+        albumActivity = getActivity();
+
+        Drawable drawable = ContextCompat.getDrawable(albumActivity, albumConfig.getAlbumContentEmptyDrawable());
+        drawable.setColorFilter(ContextCompat.getColor(albumActivity, albumConfig.getAlbumContentEmptyDrawableColor()), PorterDuff.Mode.SRC_ATOP);
+        emptyView.setImageDrawable(drawable);
+        emptyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Album.getInstance().getEmptyClickListener() != null) {
+                    if (Album.getInstance().getEmptyClickListener().click(v)) {
+                        openCamera();
+                    }
+                }
+            }
+        });
+
         return inflate;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        finderModels = new ArrayList<>();
         initRecyclerView();
-        onScanAlbum(bucketId, false);
-        ArrayList<AlbumModel> selectModel = Album.getInstance().getAlbumModels();
-        ArrayList<AlbumModel> allAlbumModel = albumAdapter.getAlbumList();
-        if (selectModel != null && !selectModel.isEmpty() && allAlbumModel != null && !allAlbumModel.isEmpty()) {
-            albumPresenter.firstMergeModel(allAlbumModel, selectModel);
-            albumAdapter.setMultiplePreviewList(selectModel);
-        }
+        onScanAlbum(bucketId, false, false);
     }
 
     @Override
@@ -112,10 +128,11 @@ public class AlbumFragment extends Fragment implements
         recyclerView.setLayoutManager(new GridLayoutManager(albumActivity, albumConfig.getSpanCount()));
         recyclerView.setLoadingListener(this);
         recyclerView.addItemDecoration(new SimpleGridDivider(albumConfig.getDividerWidth()));
-        albumAdapter = new AlbumAdapter(null, AlbumTool.getImageViewWidth(albumActivity, albumConfig.getSpanCount()));
+        albumAdapter = new AlbumAdapter(new ArrayList<AlbumModel>(), AlbumTool.getImageViewWidth(albumActivity, albumConfig.getSpanCount()));
         albumAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(albumAdapter);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -134,17 +151,18 @@ public class AlbumFragment extends Fragment implements
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Album.getInstance().getAlbumListener().onAlbumFragmentUCropError(UCrop.getError(data));
+            albumActivity.finish();
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AlbumConstant.ITEM_CAMERA:
-                    refreshMedia();
+                    refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA);
                     if (albumConfig.isCameraCrop()) {
-                        openUCrop(imagePath.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath())));
+                        openUCrop(imagePath.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
                     }
                     break;
                 case UCrop.REQUEST_CROP:
-                    Album.getInstance().getAlbumListener().onAlbumUCropResources(FileUtils.getScannerFile(imagePath.getPath()));
-                    refreshMedia();
+                    Album.getInstance().getAlbumListener().onAlbumUCropResources(FileUtils.getScannerFile(uCropImagePath.getPath()));
+                    refreshMedia(AlbumConstant.TYPE_RESULT_CROP);
                     albumActivity.finish();
                     break;
                 case AlbumConstant.TYPE_PREVIEW_CODE:
@@ -178,19 +196,27 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public void scanSuccess(ArrayList<AlbumModel> albumModels) {
+        if (emptyView.getVisibility() == View.VISIBLE) {
+            emptyView.setVisibility(View.GONE);
+        }
+        if (TextUtils.isEmpty(bucketId) && !albumConfig.isHideCamera() && page == 0 && albumModels != null && !albumModels.isEmpty()) {
+            albumModels.add(0, new AlbumModel(null, null, AlbumConstant.CAMERA, 0, false));
+        }
         albumAdapter.addAll(albumModels);
+        if (page == 0 && !albumConfig.isRadio()) {
+            ArrayList<AlbumModel> selectModel = Album.getInstance().getAlbumModels();
+            if (selectModel != null && !selectModel.isEmpty() && albumModels != null && !albumModels.isEmpty()) {
+                albumPresenter.firstMergeModel(albumModels, selectModel);
+                albumAdapter.setMultiplePreviewList(selectModel);
+            }
+        }
         ++page;
     }
 
     @Override
     public void finderModel(ArrayList<FinderModel> list) {
-        if (finderModels == null) {
-            finderModels = new ArrayList<>();
-        }
         finderModels.clear();
-        if (list != null) {
-            finderModels.addAll(list);
-        }
+        finderModels.addAll(list);
     }
 
     @Override
@@ -207,6 +233,25 @@ public class AlbumFragment extends Fragment implements
     }
 
     @Override
+    public void onAlbumNoMore() {
+        if (page == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            Album.getInstance().getAlbumListener().onAlbumEmpty();
+        }
+        Album.getInstance().getAlbumListener().onAlbumNoMore();
+    }
+
+    @Override
+    public void resultSuccess(AlbumModel albumModel) {
+        if (albumModel == null) {
+            Album.getInstance().getAlbumListener().onAlbumResultCameraError();
+        } else {
+            albumAdapter.getAlbumList().add(1, albumModel);
+            albumAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onItemClick(View view, int position, AlbumModel albumModel) {
         if (position == 0 && TextUtils.equals(albumModel.getPath(), AlbumConstant.CAMERA)) {
             openCamera();
@@ -218,7 +263,7 @@ public class AlbumFragment extends Fragment implements
         }
         if (albumConfig.isRadio()) {
             if (albumConfig.isCrop()) {
-                openUCrop(albumModel.getPath(), imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
+                openUCrop(albumModel.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
             } else {
                 List<AlbumModel> list = new ArrayList<>();
                 list.add(albumModel);
@@ -240,20 +285,27 @@ public class AlbumFragment extends Fragment implements
     }
 
     @Override
-    public void onScanCompleted() {
-        onScanAlbum(bucketId, false);
+    public void onScanCompleted(@AlbumResultType int type) {
+        if (type == AlbumConstant.TYPE_RESULT_CROP) {
+            return;
+        }
+        onScanAlbum(bucketId, false, true);
     }
 
 
     @Override
-    public void onScanAlbum(final String bucketId, boolean b) {
-        if (b && albumAdapter != null) {
+    public void onScanAlbum(final String bucketId, boolean isFinder, boolean result) {
+        if (isFinder && albumAdapter != null) {
             page = 0;
             albumAdapter.removeAll();
         }
         this.bucketId = bucketId;
         if (PermissionUtils.storage(albumActivity)) {
-            albumPresenter.scan(albumConfig.isHideCamera(), bucketId, page, albumConfig.getCount());
+            if (result && !albumAdapter.getAlbumList().isEmpty()) {
+                albumPresenter.resultScan(imagePath.getPath());
+                return;
+            }
+            albumPresenter.scan(bucketId, page, albumConfig.getCount());
         }
     }
 
@@ -281,12 +333,16 @@ public class AlbumFragment extends Fragment implements
                 .start(albumActivity, this);
     }
 
-    @Override
-    public void refreshMedia() {
-        disconnectMediaScanner();
-        singleMediaScanner = new SingleMediaScanner(albumActivity, FileUtils.getScannerFile(imagePath.getPath()), AlbumFragment.this);
-    }
 
+    @Override
+    public void refreshMedia(@AlbumResultType int type) {
+        disconnectMediaScanner();
+        singleMediaScanner = new SingleMediaScanner(albumActivity,
+                FileUtils.getScannerFile(type == AlbumConstant.TYPE_RESULT_CAMERA ?
+                        imagePath.getPath() :
+                        uCropImagePath.getPath()),
+                AlbumFragment.this, type);
+    }
 
     @Override
     public List<FinderModel> getFinderModel() {
@@ -343,13 +399,14 @@ public class AlbumFragment extends Fragment implements
         outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList());
         outState.putString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID, bucketId);
         outState.putParcelable(AlbumConstant.TYPE_ALBUM_STATE_URI_PATH, imagePath);
+        outState.putParcelable(AlbumConstant.TYPE_ALBUM_STATE_CROP_URI_PATH, uCropImagePath);
     }
 
 
     @Override
     public void onLoadMore() {
         if (PermissionUtils.storage(albumActivity) && !albumPresenter.isScan()) {
-            albumPresenter.scan(albumConfig.isHideCamera(), bucketId, page, albumConfig.getCount());
+            albumPresenter.scan(bucketId, page, albumConfig.getCount());
         }
     }
 }

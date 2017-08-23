@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.album.model.AlbumModel;
+import com.album.ui.annotation.PermissionsType;
 
 import java.io.File;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface AlbumListener {
     void onAlbumActivityFinish();
 
-    void onAlbumPermissionsDenied(int type);
+    void onAlbumPermissionsDenied(@PermissionsType int type);
 
     void onAlbumFragmentNull();
 
@@ -48,4 +49,10 @@ public interface AlbumListener {
     void onAlbumActivityBackPressed();
 
     void onAlbumOpenCameraError();
+
+    void onAlbumEmpty();
+
+    void onAlbumNoMore();
+
+    void onAlbumResultCameraError();
 }

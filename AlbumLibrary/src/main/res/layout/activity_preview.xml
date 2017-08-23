@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/preview_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -21,7 +21,7 @@
         android:layout_weight="1">
 
         <com.album.ui.widget.ExtendedViewPager
-            android:id="@+id/viewPager"
+            android:id="@+id/preview_viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -35,7 +35,7 @@
             android:button="@null" />
 
         <ProgressBar
-            android:id="@+id/progress"
+            android:id="@+id/preview_progress"
             android:layout_width="@dimen/album_progress_width"
             android:layout_height="@dimen/album_progress_height"
             android:layout_gravity="center"
@@ -50,7 +50,7 @@
         android:background="@color/colorAlbumPreviewBottomViewBackgroundDay">
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_preview_count"
+            android:id="@+id/preview_tv_preview_count"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"

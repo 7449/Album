@@ -29,6 +29,9 @@
         <activity
             android:name=".SimpleAlbumUI"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".camera.SimpleCameraActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

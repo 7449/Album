@@ -36,4 +36,8 @@ public class AlbumConstant {
 
     public static final int TYPE_RESULT_CAMERA = 0;
     public static final int TYPE_RESULT_CROP = 1;
+
+    public static final int CUSTOMIZE_CAMERA_RESULT_CODE = 113;
+    public static final String CUSTOMIZE_CAMERA_RESULT_PATH_KEY = "customize_camera_path";
+
 }

@@ -8,13 +8,14 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 ## Screenshot
 
 
-#### multiple, radio, preview, crop, sample ui
+#### multiple, radio, preview, crop, sample ui,customize camera
 
 ![](https://github.com/7449/Album/blob/master/screenshot/album_multiple.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_radio.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_preview.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_crop.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_customize_camera.png)
 
 
 ## sample
@@ -34,7 +35,7 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     compile 'com.ydevelop:album:0.0.1'
+     compile 'com.ydevelop:album:0.0.2'
      compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
      compile "com.github.bumptech.glide:glide:$glideVersion"
      
@@ -60,7 +61,40 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
                 .setConfig(new AlbumConfig())
                 .setAlbumListener(new SimpleAlbumListener())
                 .start(this);
-                
+              
+## customize camera
+
+> picture folder can not exist `.nomedia`, otherwise the picture is not scanned
+
+[CustomizeCamera](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/camera)
+
+         Album
+                .getInstance()
+                .setAlbumCameraListener(new AlbumCameraListener() {
+                      @Override
+                      public void startCamera(@NonNull Fragment fragment) {
+                      
+                           FragmentActivity activity = fragment.getActivity();
+                           Intent intent = new Intent(activity, SimpleCameraActivity.class);
+                           // AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE
+                           fragment.startActivityForResult(intent, AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE);
+                      }
+                })
+
+
+    FileUtils.finishCamera(SimpleCameraActivity.this, cameraFile.getPath());
+    
+    
+    public static void finishCamera(Activity activity, String path) {
+        Bundle bundle = new Bundle();
+        
+        //AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY, path
+        bundle.putString(AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY, path);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        activity.setResult(RESULT_OK, intent);
+        activity.finish();
+    }
                 
 ## ImageLoader
 

@@ -155,6 +155,19 @@ public class AlbumFragment extends Fragment implements
             albumActivity.finish();
         } else if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
+                case AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE:
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        String customizePath = extras.getString(AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY);
+                        if (!TextUtils.isEmpty(customizePath)) {
+                            imagePath = Uri.fromFile(new File(customizePath));
+                            refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA);
+                            if (albumConfig.isCameraCrop()) {
+                                openUCrop(imagePath.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
+                            }
+                        }
+                    }
+                    break;
                 case AlbumConstant.ITEM_CAMERA:
                     refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA);
                     if (albumConfig.isCameraCrop()) {
@@ -255,7 +268,9 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onItemClick(View view, int position, AlbumModel albumModel) {
         if (position == 0 && TextUtils.equals(albumModel.getPath(), AlbumConstant.CAMERA)) {
-            openCamera();
+            if (PermissionUtils.camera(albumActivity)) {
+                openCamera();
+            }
             return;
         }
         if (!FileUtils.isFile(albumModel.getPath())) {
@@ -322,7 +337,7 @@ public class AlbumFragment extends Fragment implements
     public void openCamera() {
         AlbumCameraListener albumCameraListener = Album.getInstance().getAlbumCameraListener();
         if (albumCameraListener != null) {
-            albumCameraListener.startCamera(albumActivity);
+            albumCameraListener.startCamera(this);
             return;
         }
         imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath()));

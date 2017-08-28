@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,10 +22,12 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.AlbumListener;
 import com.album.model.AlbumModel;
+import com.album.sample.camera.SimpleCameraActivity;
 import com.album.ui.annotation.PermissionsType;
 import com.album.ui.widget.OnEmptyClickListener;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
+import com.album.util.PermissionUtils;
 import com.album.util.SingleMediaScanner;
 import com.yalantis.ucrop.UCrop;
 
@@ -159,8 +163,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setOptions(dayOptions)
                         .setAlbumCameraListener(new AlbumCameraListener() {
                             @Override
-                            public void startCamera(@NonNull Context context) {
-                                Toast.makeText(context, "camera", Toast.LENGTH_SHORT).show();
+                            public void startCamera(@NonNull Fragment fragment) {
+                                if (PermissionUtils.storage(fragment.getActivity()) && PermissionUtils.camera(fragment.getActivity())) {
+                                    FragmentActivity activity = fragment.getActivity();
+                                    Toast.makeText(activity, "camera", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(activity, SimpleCameraActivity.class);
+                                    fragment.startActivityForResult(intent, AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE);
+                                }
                             }
                         })
                         .setEmptyClickListener(new OnEmptyClickListener() {

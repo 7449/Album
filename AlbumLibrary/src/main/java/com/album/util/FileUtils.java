@@ -1,10 +1,17 @@
 package com.album.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.album.AlbumConstant;
+
 import java.io.File;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * by y on 11/08/2017.
@@ -38,6 +45,14 @@ public class FileUtils {
         return new File(path);
     }
 
+    public static void finishCamera(Activity activity, String path) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY, path);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        activity.setResult(RESULT_OK, intent);
+        activity.finish();
+    }
 
     public static File getCameraFile(Context context, String path) {
         String cachePath = null;

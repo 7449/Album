@@ -268,6 +268,8 @@ see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrar
 ## Thanks
 
 [TouchImageView](https://github.com/MikeOrtiz/TouchImageView)
+
+[cameraview](https://github.com/google/cameraview)
     
     
 ## MediaScannerConnection Memory leak

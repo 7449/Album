@@ -23,4 +23,5 @@ dependencies {
     compile "com.facebook.fresco:fresco:$frescoVersion"
     compile "com.facebook.fresco:animated-gif:$frescoGifVersion"
     compile project(':AlbumLibrary')
+    compile project(':CameraViewLibrary')
 }

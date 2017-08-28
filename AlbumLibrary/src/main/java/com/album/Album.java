@@ -24,6 +24,7 @@ public class Album {
     private AlbumImageLoader albumImageLoader = new SimpleGlideAlbumImageLoader();
     private UCrop.Options options = new UCrop.Options();
     private AlbumListener albumListener = new SimpleAlbumListener();
+    private AlbumCameraListener albumCameraListener = null;
     private OnEmptyClickListener emptyClickListener = null;
     private ArrayList<AlbumModel> albumModels = null;
     private Class<?> albumClass = null;
@@ -92,6 +93,15 @@ public class Album {
 
     public Album setEmptyClickListener(OnEmptyClickListener emptyClickListener) {
         this.emptyClickListener = emptyClickListener;
+        return this;
+    }
+
+    public AlbumCameraListener getAlbumCameraListener() {
+        return albumCameraListener;
+    }
+
+    public Album setAlbumCameraListener(@Nullable AlbumCameraListener albumCameraListener) {
+        this.albumCameraListener = albumCameraListener;
         return this;
     }
 

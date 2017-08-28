@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.album.Album;
+import com.album.AlbumCameraListener;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.AlbumListener;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         findViewById(R.id.btn_night_album).setOnClickListener(this);
         findViewById(R.id.btn_open_camera).setOnClickListener(this);
         findViewById(R.id.btn_sample_ui).setOnClickListener(this);
+        findViewById(R.id.btn_customize_camera).setOnClickListener(this);
 
         dayOptions = new UCrop.Options();
         dayOptions.setToolbarTitle("DayTheme");
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 return true;
                             }
                         })
+                        .setAlbumCameraListener(null)
                         .setAlbumClass(null)
                         .setConfig(new AlbumConfig()
                                 .setCameraCrop(false)
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setAlbumListener(new MainAlbumListener(this, null))
                         .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setOptions(nightOptions)
+                        .setAlbumCameraListener(null)
                         .setAlbumClass(null)
                         .setEmptyClickListener(new OnEmptyClickListener() {
                             @Override
@@ -123,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
                         .setAlbumClass(SimpleAlbumUI.class)
+                        .setAlbumCameraListener(null)
                         .setEmptyClickListener(null)
                         .setConfig(new AlbumConfig()
                                 .setCameraCrop(false)
@@ -141,6 +146,41 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 // -1 没有权限
                 // 0 打开成功
                 // 1 打开相机失败，估计设备没有安装相关软件
+
+                break;
+
+            case R.id.btn_customize_camera:
+
+                Album
+                        .getInstance()
+                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
+                        .setAlbumListener(new MainAlbumListener(this, list))
+                        .setAlbumModels(list)
+                        .setOptions(dayOptions)
+                        .setAlbumCameraListener(new AlbumCameraListener() {
+                            @Override
+                            public void startCamera(@NonNull Context context) {
+                                Toast.makeText(context, "camera", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setEmptyClickListener(new OnEmptyClickListener() {
+                            @Override
+                            public boolean click(View view) {
+                                return true;
+                            }
+                        })
+                        .setAlbumClass(null)
+                        .setConfig(new AlbumConfig()
+                                .setCameraCrop(false)
+                                .setPermissionsDeniedFinish(false)
+                                .setPreviewFinishRefresh(true)
+                                .setAlbumBottomFinderTextBackground(R.drawable.selector_btn)
+//                                .setAlbumBottomPreviewTextBackground(R.drawable.selector_btn)
+                                .setAlbumBottomSelectTextBackground(R.drawable.selector_btn)
+                                .setAlbumContentItemCheckBoxDrawable(R.drawable.simple_selector_album_item_check)
+//                                .setFrescoImageLoader(true)  // 通知 Album 图片加载框架使用的是 Fresco
+                                .setPreviewBackRefresh(true))
+                        .start(this);
 
                 break;
         }

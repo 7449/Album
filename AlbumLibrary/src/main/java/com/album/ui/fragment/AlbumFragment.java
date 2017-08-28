@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.album.Album;
+import com.album.AlbumCameraListener;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.R;
@@ -319,6 +320,11 @@ public class AlbumFragment extends Fragment implements
 
     @Override
     public void openCamera() {
+        AlbumCameraListener albumCameraListener = Album.getInstance().getAlbumCameraListener();
+        if (albumCameraListener != null) {
+            albumCameraListener.startCamera(albumActivity);
+            return;
+        }
         imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath()));
         int i = AlbumTool.openCamera(this, imagePath);
         if (i == 1) {

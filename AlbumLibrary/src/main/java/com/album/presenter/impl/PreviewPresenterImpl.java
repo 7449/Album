@@ -6,7 +6,7 @@ import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.presenter.PreviewPresenter;
 import com.album.ui.view.PreviewView;
-import com.album.util.ScanUtils;
+import com.album.util.AlbumScanUtils;
 import com.album.util.task.AlbumTask;
 import com.album.util.task.AlbumTaskCallBack;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * by y on 17/08/2017.
  */
 
-public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCallBack {
+public class PreviewPresenterImpl implements PreviewPresenter, AlbumScanUtils.ScanCallBack {
     private final PreviewView previewView;
 
     public PreviewPresenterImpl(PreviewView previewView) {
@@ -35,7 +35,7 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanUtils.ScanCal
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                ScanUtils.get().start(previewView.getPreviewActivity().getContentResolver(), PreviewPresenterImpl.this, bucketId, page, count);
+                AlbumScanUtils.get().start(previewView.getPreviewActivity().getContentResolver(), PreviewPresenterImpl.this, bucketId, page, count);
             }
         });
     }

@@ -6,7 +6,7 @@ import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
-import com.album.util.ScanUtils;
+import com.album.util.AlbumScanUtils;
 import com.album.util.task.AlbumTask;
 import com.album.util.task.AlbumTaskCallBack;
 
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * by y on 14/08/2017.
  */
 
-public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBack {
+public class AlbumPresenterImpl implements AlbumPresenter, AlbumScanUtils.ScanCallBack {
     private final AlbumView albumView;
     private boolean isScan = false;
 
@@ -38,7 +38,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                ScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, page, count);
+                AlbumScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, page, count);
             }
         });
     }
@@ -92,7 +92,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanUtils.ScanCallBac
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                ScanUtils.get().resultScan(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, path);
+                AlbumScanUtils.get().resultScan(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, path);
             }
         });
     }

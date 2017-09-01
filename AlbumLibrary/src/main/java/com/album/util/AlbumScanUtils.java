@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
-import com.album.ui.view.ScanView;
+import com.album.ui.view.AlbumScanView;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * by y on 11/08/2017.
  */
-public class ScanUtils implements ScanView {
+public class AlbumScanUtils implements AlbumScanView {
     private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
     private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and  (" + ALL_ALBUM_SELECTION + " )";
     private static final String[] ALBUM_COUNT_PROJECTION = new String[]{MediaStore.Images.Media.BUCKET_ID};
@@ -35,11 +35,11 @@ public class ScanUtils implements ScanView {
 
     private ContentResolver contentResolver = null;
 
-    private ScanUtils() {
+    private AlbumScanUtils() {
     }
 
-    public static ScanUtils get() {
-        return new ScanUtils();
+    public static AlbumScanUtils get() {
+        return new AlbumScanUtils();
     }
 
     @Override

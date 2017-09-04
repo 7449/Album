@@ -29,7 +29,6 @@ import com.album.ui.view.PreviewMethodActivityView;
 import com.album.ui.view.PreviewView;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
-import com.album.util.task.AlbumTask;
 
 import java.util.ArrayList;
 
@@ -57,7 +56,7 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
 
     @Override
     protected void initCreate(@Nullable Bundle savedInstanceState) {
-        previewPresenter = new PreviewPresenterImpl(this);
+        previewPresenter = new PreviewPresenterImpl(this, albumConfig.isVideo());
         albumModels = new ArrayList<>();
         initBundle();
         isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY);
@@ -258,12 +257,6 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
         outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT, selectAlbumModels);
         outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL, isPreview ? albumModels : null);
         outState.putInt(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_POSITION, selectPosition);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AlbumTask.get().quit();
     }
 
     @Override

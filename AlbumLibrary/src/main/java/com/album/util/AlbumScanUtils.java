@@ -9,7 +9,8 @@ import android.text.TextUtils;
 import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
-import com.album.ui.view.AlbumScanView;
+import com.album.ui.view.ScanView;
+import com.album.ui.widget.ScanCallBack;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
 /**
  * by y on 11/08/2017.
  */
-public class AlbumScanUtils implements AlbumScanView {
+public class AlbumScanUtils implements ScanView {
     private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
     private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and  (" + ALL_ALBUM_SELECTION + " )";
     private static final String[] ALBUM_COUNT_PROJECTION = new String[]{MediaStore.Images.Media.BUCKET_ID};
@@ -52,13 +53,13 @@ public class AlbumScanUtils implements AlbumScanView {
         }
         ArrayList<AlbumModel> albumModels = new ArrayList<>();
         ArrayList<FinderModel> finderModels = new ArrayList<>();
-        Cursor cursor = getAlbumCursor(bucketId, page, count);
+        Cursor cursor = getCursor(bucketId, page, count);
         if (cursor != null) {
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             int idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
 
             while (cursor.moveToNext()) {
-                cursorAlbum(albumModels, dataColumnIndex, idColumnIndex, cursor);
+                scanCursor(albumModels, dataColumnIndex, idColumnIndex, cursor);
             }
             cursor.close();
             cursorFinder(finderModels);
@@ -94,10 +95,7 @@ public class AlbumScanUtils implements AlbumScanView {
     }
 
     @Override
-    public void cursorAlbum(ArrayList<AlbumModel> albumModels,
-                            int dataColumnIndex,
-                            int idColumnIndex,
-                            Cursor cursor) {
+    public void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, Cursor cursor) {
         String path = cursor.getString(dataColumnIndex);
         long id = cursor.getLong(idColumnIndex);
         if (FileUtils.getPathFile(path) != null) {
@@ -124,7 +122,7 @@ public class AlbumScanUtils implements AlbumScanView {
                 long id = finderCursor.getLong(idColumnIndex);
                 FinderModel finderModel = finderModelMap.get(finderName);
                 if (finderModel == null && FileUtils.getPathFile(finderPath) != null) {
-                    finderModelMap.put(finderName, new FinderModel(finderName, finderPath, id, bucketId, cursorAlbumCount(bucketId)));
+                    finderModelMap.put(finderName, new FinderModel(finderName, finderPath, id, bucketId, cursorCount(bucketId)));
                 }
             }
             finderCursor.close();
@@ -147,9 +145,8 @@ public class AlbumScanUtils implements AlbumScanView {
         finderModelMap.clear();
     }
 
-
     @Override
-    public int cursorAlbumCount(String bucketId) {
+    public int cursorCount(String bucketId) {
         Cursor query = contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 ALBUM_COUNT_PROJECTION,
@@ -164,9 +161,8 @@ public class AlbumScanUtils implements AlbumScanView {
         return count;
     }
 
-
     @Override
-    public Cursor getAlbumCursor(String bucketId, int page, int count) {
+    public Cursor getCursor(String bucketId, int page, int count) {
         String sortOrder = count == -1 ? MediaStore.Images.Media.DATE_MODIFIED + " desc" : MediaStore.Images.Media.DATE_MODIFIED + " desc limit " + page * count + "," + count;
         String selection = TextUtils.isEmpty(bucketId) ? ALL_ALBUM_SELECTION : FINDER_ALBUM_SELECTION;
         String[] args = TextUtils.isEmpty(bucketId) ? ALBUM_NO_BUCKET_ID_SELECTION_ARGS : getSelectionArgs(bucketId);
@@ -178,18 +174,12 @@ public class AlbumScanUtils implements AlbumScanView {
                 sortOrder);
     }
 
-
     @Override
     public String[] getSelectionArgs(String bucketId) {
         return new String[]{bucketId, "image/jpeg", "image/png", "image/jpg", "image/gif"};
     }
 
 
-    public interface ScanCallBack {
-        void scanSuccess(ArrayList<AlbumModel> albumModels, ArrayList<FinderModel> list);
-
-        void resultSuccess(AlbumModel albumModel, ArrayList<FinderModel> finderModels);
-    }
 }
 
 

@@ -36,7 +36,6 @@ import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
 import com.album.util.SingleMediaScanner;
-import com.album.util.task.AlbumTask;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -95,7 +94,7 @@ public class AlbumFragment extends Fragment implements
         recyclerView = (LoadMoreRecyclerView) inflate.findViewById(R.id.album_recyclerView);
         progressBar = (ProgressBar) inflate.findViewById(R.id.album_progress);
         emptyView = (AppCompatImageView) inflate.findViewById(R.id.album_empty);
-        albumPresenter = new AlbumPresenterImpl(this);
+        albumPresenter = new AlbumPresenterImpl(this, albumConfig.isVideo());
         albumActivity = getActivity();
 
         Drawable drawable = ContextCompat.getDrawable(albumActivity, albumConfig.getAlbumContentEmptyDrawable());
@@ -190,7 +189,6 @@ public class AlbumFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        AlbumTask.get().quit();
         disconnectMediaScanner();
     }
 

@@ -14,6 +14,7 @@ public class AlbumConfig {
     private boolean previewBackRefresh = false;
     private boolean isPermissionsDeniedFinish = false;
     private boolean isFrescoImageLoader = false;
+    private boolean isVideo = false;
     private int multipleMaxCount = 9;
     private String cameraPath = null;
     private String uCropPath = null;
@@ -630,4 +631,12 @@ public class AlbumConfig {
         return this;
     }
 
+    public boolean isVideo() {
+        return isVideo;
+    }
+
+    public AlbumConfig setVideo(boolean video) {
+        isVideo = video;
+        return this;
+    }
 }

@@ -1,6 +1,7 @@
 package com.album.sample;
 
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         findViewById(R.id.btn_open_camera).setOnClickListener(this);
         findViewById(R.id.btn_sample_ui).setOnClickListener(this);
         findViewById(R.id.btn_customize_camera).setOnClickListener(this);
+        findViewById(R.id.btn_video).setOnClickListener(this);
 
         dayOptions = new UCrop.Options();
         dayOptions.setToolbarTitle("DayTheme");
@@ -191,6 +193,20 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 .setPreviewBackRefresh(true))
                         .start(this);
 
+                break;
+
+            case R.id.btn_video:
+                Album
+                        .getInstance()
+                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
+                        .setAlbumListener(new MainAlbumListener(this, list))
+                        .setAlbumCameraListener(null)
+                        .setEmptyClickListener(null)
+                        .setConfig(
+                                new AlbumConfig()
+                                        .setVideo(true)
+                                        .setPreviewBackRefresh(true))
+                        .start(this);
                 break;
         }
     }

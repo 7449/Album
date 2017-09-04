@@ -6,7 +6,10 @@ import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
+import com.album.ui.view.ScanView;
+import com.album.ui.widget.ScanCallBack;
 import com.album.util.AlbumScanUtils;
+import com.album.util.VideoScanUtils;
 import com.album.util.task.AlbumTask;
 import com.album.util.task.AlbumTaskCallBack;
 
@@ -16,12 +19,14 @@ import java.util.ArrayList;
  * by y on 14/08/2017.
  */
 
-public class AlbumPresenterImpl implements AlbumPresenter, AlbumScanUtils.ScanCallBack {
+public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
     private final AlbumView albumView;
     private boolean isScan = false;
+    private final ScanView scanView;
 
-    public AlbumPresenterImpl(AlbumView albumView) {
+    public AlbumPresenterImpl(AlbumView albumView, boolean isVideo) {
         this.albumView = albumView;
+        scanView = isVideo ? VideoScanUtils.get() : AlbumScanUtils.get();
     }
 
     @Override
@@ -38,7 +43,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, AlbumScanUtils.ScanCa
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                AlbumScanUtils.get().start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, page, count);
+                scanView.start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, page, count);
             }
         });
     }
@@ -92,11 +97,10 @@ public class AlbumPresenterImpl implements AlbumPresenter, AlbumScanUtils.ScanCa
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                AlbumScanUtils.get().resultScan(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, path);
+                scanView.resultScan(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, path);
             }
         });
     }
-
 
     @Override
     public void scanSuccess(final ArrayList<AlbumModel> albumModels, final ArrayList<FinderModel> list) {

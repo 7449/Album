@@ -13,6 +13,7 @@ import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.ui.annotation.PermissionsType;
 import com.album.util.AlbumTool;
+import com.album.util.task.AlbumTask;
 
 /**
  * by y on 14/08/2017.
@@ -84,4 +85,10 @@ public abstract class AlbumBaseActivity extends AppCompatActivity {
     protected abstract void permissionsDenied(@PermissionsType int type);
 
     protected abstract void permissionsGranted(@PermissionsType int type);
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AlbumTask.get().quit();
+    }
 }

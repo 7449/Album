@@ -156,7 +156,7 @@ public class SimpleCameraActivity extends AppCompatActivity implements
                 cameraView.post(new Runnable() {
                     @Override
                     public void run() {
-                        File cameraFile = FileUtils.getCameraFile(cameraView.getContext(), null);
+                        File cameraFile = FileUtils.getCameraFile(cameraView.getContext(), null, false);
                         OutputStream os;
                         try {
                             os = new FileOutputStream(cameraFile);

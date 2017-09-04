@@ -45,7 +45,7 @@ public class AlbumTool {
         return drawable;
     }
 
-    public static int openCamera(Object activity, Uri cameraUri) {
+    public static int openCamera(Object activity, Uri cameraUri, boolean video) {
         if (activity == null) {
             throw new NullPointerException("Object == null");
         }
@@ -58,7 +58,7 @@ public class AlbumTool {
             cameraActivity = fragment.getActivity();
         }
         if (PermissionUtils.camera(cameraActivity) && PermissionUtils.storage(cameraActivity)) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Intent intent = video ? new Intent(MediaStore.ACTION_VIDEO_CAPTURE) : new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             assert cameraActivity != null;
             if (intent.resolveActivity(cameraActivity.getPackageManager()) != null) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {

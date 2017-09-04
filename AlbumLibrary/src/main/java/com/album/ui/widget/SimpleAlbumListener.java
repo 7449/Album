@@ -119,4 +119,9 @@ public class SimpleAlbumListener implements AlbumListener {
     public void onAlbumResultCameraError() {
 
     }
+
+    @Override
+    public void onVideoPlayError() {
+
+    }
 }

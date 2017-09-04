@@ -54,7 +54,7 @@ public class FileUtils {
         activity.finish();
     }
 
-    public static File getCameraFile(Context context, String path) {
+    public static File getCameraFile(Context context, String path, boolean video) {
         String cachePath = null;
         if (TextUtils.isEmpty(path)) {
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
@@ -72,6 +72,6 @@ public class FileUtils {
                 pathFile.mkdirs();
             }
         }
-        return new File(cachePath, System.currentTimeMillis() + ".jpg");
+        return new File(cachePath, System.currentTimeMillis() + (video ? ".mp4" : ".jpg"));
     }
 }

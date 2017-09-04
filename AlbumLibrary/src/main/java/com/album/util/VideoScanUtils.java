@@ -21,9 +21,7 @@ import java.util.Map;
 
 public class VideoScanUtils implements ScanView {
 
-
-    private static final String ALL_VIDEO_SELECTION = MediaStore.Video.Media.MIME_TYPE + "= ? or " + MediaStore.Video.Media.MIME_TYPE + "= ? or " + MediaStore.Video.Media.MIME_TYPE + "= ? or " + MediaStore.Video.Media.MIME_TYPE + "= ? ";
-    private static final String FINDER_ALBUM_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? and  (" + ALL_VIDEO_SELECTION + " )";
+    private static final String FINDER_VIDEO_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? ";
     private static final String[] VIDEO_COUNT_PROJECTION = new String[]{MediaStore.Video.Media.BUCKET_ID};
     private static final String[] VIDEO_PROJECTION = new String[]{
             MediaStore.Video.Media.DATA,
@@ -107,7 +105,7 @@ public class VideoScanUtils implements ScanView {
         ArrayMap<String, FinderModel> finderModelMap = new ArrayMap<>();
         Cursor finderCursor = contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                VIDEO_FINDER_PROJECTION, ALL_VIDEO_SELECTION, null,
+                VIDEO_FINDER_PROJECTION, null, null,
                 MediaStore.Video.Media.DATE_MODIFIED + " desc");
         if (finderCursor != null) {
             int bucketIdColumnIndex = finderCursor.getColumnIndex(MediaStore.Video.Media.BUCKET_ID);
@@ -149,8 +147,8 @@ public class VideoScanUtils implements ScanView {
         Cursor query = contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 VIDEO_COUNT_PROJECTION,
-                FINDER_ALBUM_SELECTION,
-                null,
+                FINDER_VIDEO_SELECTION,
+                new String[]{bucketId},
                 MediaStore.Video.Media.DATE_MODIFIED + " desc");
         if (query == null) {
             return 0;
@@ -163,12 +161,13 @@ public class VideoScanUtils implements ScanView {
     @Override
     public Cursor getCursor(String bucketId, int page, int count) {
         String sortOrder = count == -1 ? MediaStore.Video.Media.DATE_MODIFIED + " desc" : MediaStore.Video.Media.DATE_MODIFIED + " desc limit " + page * count + "," + count;
-        String selection = TextUtils.isEmpty(bucketId) ? ALL_VIDEO_SELECTION : FINDER_ALBUM_SELECTION;
+        String selection = TextUtils.isEmpty(bucketId) ? null : FINDER_VIDEO_SELECTION;
+        String[] args = TextUtils.isEmpty(bucketId) ? null : new String[]{bucketId};
         return contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 VIDEO_PROJECTION,
                 selection,
-                null,
+                args,
                 sortOrder);
     }
 

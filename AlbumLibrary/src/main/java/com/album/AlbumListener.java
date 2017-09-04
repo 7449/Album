@@ -55,4 +55,6 @@ public interface AlbumListener {
     void onAlbumNoMore();
 
     void onAlbumResultCameraError();
+
+    void onVideoPlayError();
 }

@@ -162,7 +162,7 @@ public class AlbumFragment extends Fragment implements
                             imagePath = Uri.fromFile(new File(customizePath));
                             refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA);
                             if (albumConfig.isCameraCrop()) {
-                                openUCrop(imagePath.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
+                                openUCrop(imagePath.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath(), albumConfig.isVideo())));
                             }
                         }
                     }
@@ -170,7 +170,7 @@ public class AlbumFragment extends Fragment implements
                 case AlbumConstant.ITEM_CAMERA:
                     refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA);
                     if (albumConfig.isCameraCrop()) {
-                        openUCrop(imagePath.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
+                        openUCrop(imagePath.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath(), albumConfig.isVideo())));
                     }
                     break;
                 case UCrop.REQUEST_CROP:
@@ -275,9 +275,19 @@ public class AlbumFragment extends Fragment implements
             Album.getInstance().getAlbumListener().onAlbumFragmentFileNull();
             return;
         }
+        if (albumConfig.isVideo()) {
+            try {
+                Intent openVideo = new Intent(Intent.ACTION_VIEW);
+                openVideo.setDataAndType(Uri.parse(albumModel.getPath()), AlbumConstant.VIDEO_PLAY_TYPE);
+                startActivity(openVideo);
+            } catch (Exception e) {
+                Album.getInstance().getAlbumListener().onVideoPlayError();
+            }
+            return;
+        }
         if (albumConfig.isRadio()) {
             if (albumConfig.isCrop()) {
-                openUCrop(albumModel.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath())));
+                openUCrop(albumModel.getPath(), uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getuCropPath(), albumConfig.isVideo())));
             } else {
                 List<AlbumModel> list = new ArrayList<>();
                 list.add(albumModel);
@@ -338,8 +348,8 @@ public class AlbumFragment extends Fragment implements
             albumCameraListener.startCamera(this);
             return;
         }
-        imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath()));
-        int i = AlbumTool.openCamera(this, imagePath);
+        imagePath = Uri.fromFile(FileUtils.getCameraFile(albumActivity, albumConfig.getCameraPath(), albumConfig.isVideo()));
+        int i = AlbumTool.openCamera(this, imagePath, albumConfig.isVideo());
         if (i == 1) {
             Album.getInstance().getAlbumListener().onAlbumOpenCameraError();
         }

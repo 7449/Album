@@ -1,7 +1,6 @@
 package com.album.sample;
 
 import android.app.Activity;
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             case R.id.btn_open_camera:
                 // fragment  activity 直接传递 this ， 内部会自己处理
-                int i = AlbumTool.openCamera(this, imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null)));
+                int i = AlbumTool.openCamera(this, imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null, false)), false);
 
                 // -1 没有权限
                 // 0 打开成功
@@ -201,10 +200,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
                         .setAlbumCameraListener(null)
-                        .setEmptyClickListener(null)
+                        .setEmptyClickListener(new OnEmptyClickListener() {
+                            @Override
+                            public boolean click(View view) {
+                                return true;
+                            }
+                        })
                         .setConfig(
                                 new AlbumConfig()
                                         .setVideo(true)
+                                        .setAlbumContentViewCameraTips(R.string.video_tips)
                                         .setPreviewBackRefresh(true))
                         .start(this);
                 break;
@@ -231,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
                                 }
                             }, AlbumConstant.TYPE_RESULT_CAMERA);
-                    UCrop.of(Uri.fromFile(new File(imagePath.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null)))
+                    UCrop.of(Uri.fromFile(new File(imagePath.getPath())), imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null, false)))
                             .withOptions(new UCrop.Options())
                             .start(this);
                     break;
@@ -378,6 +383,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         @Override
         public void onAlbumResultCameraError() {
             toast("result error");
+        }
+
+        @Override
+        public void onVideoPlayError() {
+            toast("play video error : checked video app");
         }
     }
 

@@ -28,7 +28,7 @@ publish {
     userOrg = 'ydevelop'
     groupId = 'com.ydevelop'
     artifactId = 'album'
-    publishVersion = '0.0.1'
+    publishVersion = '0.0.2'
     desc = 'this is android album'
     website = 'https://github.com/7449/Album'
 }

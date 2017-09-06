@@ -21,6 +21,7 @@ import com.album.Album;
 import com.album.AlbumCameraListener;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
+import com.album.AlbumVideoListener;
 import com.album.R;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
@@ -276,9 +277,9 @@ public class AlbumFragment extends Fragment implements
             return;
         }
         if (albumConfig.isVideo()) {
-            AlbumCameraListener albumCameraListener = Album.getInstance().getAlbumCameraListener();
-            if (albumCameraListener != null) {
-                albumCameraListener.startCamera(this);
+            AlbumVideoListener albumVideoListener = Album.getInstance().getAlbumVideoListener();
+            if (albumVideoListener != null) {
+                albumVideoListener.startCamera(this);
                 return;
             }
             try {

@@ -25,6 +25,7 @@ public class Album {
     private UCrop.Options options = new UCrop.Options();
     private AlbumListener albumListener = new SimpleAlbumListener();
     private AlbumCameraListener albumCameraListener = null;
+    private AlbumVideoListener albumVideoListener = null;
     private OnEmptyClickListener emptyClickListener = null;
     private ArrayList<AlbumModel> albumModels = null;
     private Class<?> albumClass = null;
@@ -103,6 +104,14 @@ public class Album {
     public Album setAlbumCameraListener(@Nullable AlbumCameraListener albumCameraListener) {
         this.albumCameraListener = albumCameraListener;
         return this;
+    }
+
+    public AlbumVideoListener getAlbumVideoListener() {
+        return albumVideoListener;
+    }
+
+    public void setAlbumVideoListener(@Nullable AlbumVideoListener albumVideoListener) {
+        this.albumVideoListener = albumVideoListener;
     }
 
     private static final class AlbumHolder {

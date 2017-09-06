@@ -276,6 +276,11 @@ public class AlbumFragment extends Fragment implements
             return;
         }
         if (albumConfig.isVideo()) {
+            AlbumCameraListener albumCameraListener = Album.getInstance().getAlbumCameraListener();
+            if (albumCameraListener != null) {
+                albumCameraListener.startCamera(this);
+                return;
+            }
             try {
                 Intent openVideo = new Intent(Intent.ACTION_VIEW);
                 openVideo.setDataAndType(Uri.parse(albumModel.getPath()), AlbumConstant.VIDEO_PLAY_TYPE);

@@ -279,7 +279,7 @@ public class AlbumFragment extends Fragment implements
         if (albumConfig.isVideo()) {
             AlbumVideoListener albumVideoListener = Album.getInstance().getAlbumVideoListener();
             if (albumVideoListener != null) {
-                albumVideoListener.startCamera(this);
+                albumVideoListener.startVideo(this);
                 return;
             }
             try {

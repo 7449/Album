@@ -8,5 +8,5 @@ import android.support.v4.app.Fragment;
  */
 
 public interface AlbumVideoListener {
-    void startCamera(@NonNull Fragment fragment);
+    void startVideo(@NonNull Fragment fragment);
 }

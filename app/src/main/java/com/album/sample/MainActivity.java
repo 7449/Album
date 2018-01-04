@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setConfig(
                                 new AlbumConfig()
                                         .setVideo(true)
+                                        .setAlbumToolbarText(R.string.album_video_title)
                                         .setAlbumContentViewCameraTips(R.string.video_tips)
                                         .setPreviewBackRefresh(true))
                         .start(this);

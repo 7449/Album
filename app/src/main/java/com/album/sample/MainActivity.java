@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -339,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         @Override
         public void onAlbumFragmentUCropError(@Nullable Throwable data) {
+            Log.i("ALBUM", data.getMessage());
             toast("crop error:" + data);
         }
 

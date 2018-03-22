@@ -2,6 +2,13 @@
 android album
 
 
+
+
+update :
+
+    以后有时间解决扫描到损坏图片的问题
+
+
 Chinese : [wiki](https://github.com/7449/Album/wiki)
 
 

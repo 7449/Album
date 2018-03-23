@@ -19,6 +19,9 @@ public class AlbumConfig {
     private String cameraPath = null;
     private String uCropPath = null;
     private int count = 500;
+    private String sdName = "根目录";
+    private boolean filterImg = false;
+
     //////////////  album toolbar //////
     private int albumStatusBarColor = R.color.colorAlbumStatusBarColorDay;
     private int albumToolbarBackground = R.color.colorAlbumToolbarBackgroundDay;
@@ -637,6 +640,24 @@ public class AlbumConfig {
 
     public AlbumConfig setVideo(boolean video) {
         isVideo = video;
+        return this;
+    }
+
+    public String getSdName() {
+        return sdName;
+    }
+
+    public AlbumConfig setSdName(String sdName) {
+        this.sdName = sdName;
+        return this;
+    }
+
+    public boolean isFilterImg() {
+        return filterImg;
+    }
+
+    public AlbumConfig setFilterImg(boolean filterImg) {
+        this.filterImg = filterImg;
         return this;
     }
 }

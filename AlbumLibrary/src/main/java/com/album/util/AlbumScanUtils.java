@@ -6,6 +6,7 @@ import android.provider.MediaStore;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
+import com.album.Album;
 import com.album.AlbumConstant;
 import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
@@ -20,18 +21,23 @@ import java.util.Map;
  */
 public class AlbumScanUtils implements ScanView {
     private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
-    private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and  (" + ALL_ALBUM_SELECTION + " )";
-    private static final String[] ALBUM_COUNT_PROJECTION = new String[]{MediaStore.Images.Media.BUCKET_ID};
+    private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? %s and  (" + ALL_ALBUM_SELECTION + " ) ";
     private static final String[] ALBUM_NO_BUCKET_ID_SELECTION_ARGS = new String[]{"image/jpeg", "image/png", "image/jpg", "image/gif"};
+    private static final String[] ALBUM_COUNT_PROJECTION = new String[]{
+            MediaStore.Images.Media.BUCKET_ID,
+            MediaStore.Images.Media.SIZE,
+    };
     private static final String[] ALBUM_PROJECTION = new String[]{
             MediaStore.Images.Media.DATA,
             MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.SIZE,
     };
     private static final String[] ALBUM_FINDER_PROJECTION = new String[]{
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.BUCKET_ID,
             MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-            MediaStore.Images.Media.DATA
+            MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.SIZE,
     };
 
     private ContentResolver contentResolver = null;
@@ -57,9 +63,9 @@ public class AlbumScanUtils implements ScanView {
         if (cursor != null) {
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             int idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
-
+            int sizeColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.SIZE);
             while (cursor.moveToNext()) {
-                scanCursor(albumModels, dataColumnIndex, idColumnIndex, cursor);
+                scanCursor(albumModels, dataColumnIndex, idColumnIndex, sizeColumnIndex, cursor);
             }
             cursor.close();
             cursorFinder(finderModels);
@@ -95,10 +101,14 @@ public class AlbumScanUtils implements ScanView {
     }
 
     @Override
-    public void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, Cursor cursor) {
+    public void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor) {
         String path = cursor.getString(dataColumnIndex);
         long id = cursor.getLong(idColumnIndex);
+        long size = cursor.getLong(sizeColumnIndex);
         if (FileUtils.getPathFile(path) != null) {
+            if (Album.getInstance().getConfig().isFilterImg() && size <= 0) {
+                return;
+            }
             albumModels.add(new AlbumModel(null, null, path, id, false));
         }
     }
@@ -115,13 +125,18 @@ public class AlbumScanUtils implements ScanView {
             int finderNameColumnIndex = finderCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
             int finderPathColumnIndex = finderCursor.getColumnIndex(MediaStore.Images.Media.DATA);
             int idColumnIndex = finderCursor.getColumnIndex(MediaStore.Images.Media._ID);
+            int sizeColumnIndex = finderCursor.getColumnIndex(MediaStore.Images.Media.SIZE);
             while (finderCursor.moveToNext()) {
                 String bucketId = finderCursor.getString(bucketIdColumnIndex);
-                String finderName = finderCursor.getString(finderNameColumnIndex);
+                String finderName = TextUtils.equals(finderCursor.getString(finderNameColumnIndex), "0") ? Album.getInstance().getConfig().getSdName() : finderCursor.getString(finderNameColumnIndex);
                 String finderPath = finderCursor.getString(finderPathColumnIndex);
+                long size = finderCursor.getLong(sizeColumnIndex);
                 long id = finderCursor.getLong(idColumnIndex);
                 FinderModel finderModel = finderModelMap.get(finderName);
                 if (finderModel == null && FileUtils.getPathFile(finderPath) != null) {
+                    if (Album.getInstance().getConfig().isFilterImg() && size <= 0) {
+                        continue;
+                    }
                     finderModelMap.put(finderName, new FinderModel(finderName, finderPath, id, bucketId, cursorCount(bucketId)));
                 }
             }
@@ -147,10 +162,11 @@ public class AlbumScanUtils implements ScanView {
 
     @Override
     public int cursorCount(String bucketId) {
+        String selection = Album.getInstance().getConfig().isFilterImg() ? String.format(FINDER_ALBUM_SELECTION, " and _size > 0") : String.format(FINDER_ALBUM_SELECTION, "");
         Cursor query = contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 ALBUM_COUNT_PROJECTION,
-                FINDER_ALBUM_SELECTION,
+                selection,
                 getSelectionArgs(bucketId),
                 MediaStore.Images.Media.DATE_MODIFIED + " desc");
         if (query == null) {
@@ -164,7 +180,7 @@ public class AlbumScanUtils implements ScanView {
     @Override
     public Cursor getCursor(String bucketId, int page, int count) {
         String sortOrder = count == -1 ? MediaStore.Images.Media.DATE_MODIFIED + " desc" : MediaStore.Images.Media.DATE_MODIFIED + " desc limit " + page * count + "," + count;
-        String selection = TextUtils.isEmpty(bucketId) ? ALL_ALBUM_SELECTION : FINDER_ALBUM_SELECTION;
+        String selection = TextUtils.isEmpty(bucketId) ? ALL_ALBUM_SELECTION : Album.getInstance().getConfig().isFilterImg() ? String.format(FINDER_ALBUM_SELECTION, " and _size > 0") : String.format(FINDER_ALBUM_SELECTION, "");
         String[] args = TextUtils.isEmpty(bucketId) ? ALBUM_NO_BUCKET_ID_SELECTION_ARGS : getSelectionArgs(bucketId);
         return contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,

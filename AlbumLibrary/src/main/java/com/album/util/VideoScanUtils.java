@@ -55,8 +55,9 @@ public class VideoScanUtils implements ScanView {
         if (cursor != null) {
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media.DATA);
             int idColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media._ID);
+            int sizeColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.SIZE);
             while (cursor.moveToNext()) {
-                scanCursor(albumModels, dataColumnIndex, idColumnIndex, cursor);
+                scanCursor(albumModels, dataColumnIndex, idColumnIndex, sizeColumnIndex, cursor);
             }
             cursor.close();
             cursorFinder(finderModels);
@@ -92,7 +93,7 @@ public class VideoScanUtils implements ScanView {
     }
 
     @Override
-    public void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, Cursor cursor) {
+    public void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor) {
         String path = cursor.getString(dataColumnIndex);
         long id = cursor.getLong(idColumnIndex);
         if (FileUtils.getPathFile(path) != null) {

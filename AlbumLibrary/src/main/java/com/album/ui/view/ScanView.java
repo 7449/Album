@@ -48,7 +48,7 @@ public interface ScanView {
 
     void resultScan(ContentResolver contentResolver, ScanCallBack scanCallBack, String path);
 
-    void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, Cursor cursor);
+    void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor);
 
     void cursorFinder(ArrayList<FinderModel> finderModels);
 

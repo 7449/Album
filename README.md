@@ -40,7 +40,7 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     compile 'com.ydevelop:album:0.0.2'
+     compile 'com.ydevelop:album:0.0.3'
      compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
      compile "com.github.bumptech.glide:glide:$glideVersion"
      

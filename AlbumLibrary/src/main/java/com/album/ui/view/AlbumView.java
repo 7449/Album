@@ -19,7 +19,7 @@ public interface AlbumView {
 
     void scanSuccess(ArrayList<AlbumModel> albumModels);
 
-    void finderModel(ArrayList<FinderModel> list);
+    void scanFinder(ArrayList<FinderModel> list);
 
     ArrayList<AlbumModel> getSelectModel();
 

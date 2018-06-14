@@ -2,6 +2,7 @@ package com.album.ui.adapter;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageView;
@@ -24,6 +25,7 @@ import com.album.ui.widget.AlbumImageView;
 import com.album.util.FileUtils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * by y on 14/08/2017.
@@ -32,11 +34,11 @@ import java.util.ArrayList;
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> {
 
 
-    private ArrayList<AlbumModel> albumList = null;
+    private ArrayList<AlbumModel> albumList;
     private ArrayList<AlbumModel> multiplePreviewList = null;
     private OnItemClickListener onItemClickListener = null;
-    private AlbumConfig albumConfig = null;
-    private int display;
+    private final AlbumConfig albumConfig;
+    private final int display;
     private final FrameLayout.LayoutParams layoutParams;
 
     public AlbumAdapter(ArrayList<AlbumModel> list, int display) {
@@ -54,8 +56,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         this.onItemClickListener = onItemClickListener;
     }
 
+    @NonNull
     @Override
-    public AlbumAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AlbumAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_album, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
@@ -71,7 +74,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final AlbumAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final AlbumAdapter.ViewHolder holder, int position) {
 
         if (albumList == null) {
             return;
@@ -165,24 +168,24 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private FrameLayout imageView;
-        private AppCompatCheckBox checkBox;
-        private AppCompatImageView imageCamera;
-        private AppCompatTextView cameraTips;
-        private LinearLayout cameraRootView;
+        private final FrameLayout imageView;
+        private final AppCompatCheckBox checkBox;
+        private final AppCompatImageView imageCamera;
+        private final AppCompatTextView cameraTips;
+        private final LinearLayout cameraRootView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            imageView = (FrameLayout) itemView.findViewById(R.id.album_image);
-            checkBox = (AppCompatCheckBox) itemView.findViewById(R.id.album_check_box);
-            imageCamera = (AppCompatImageView) itemView.findViewById(R.id.album_image_camera);
-            cameraTips = (AppCompatTextView) itemView.findViewById(R.id.album_image_camera_tv);
-            cameraRootView = (LinearLayout) itemView.findViewById(R.id.album_camera_root_view);
+            imageView = itemView.findViewById(R.id.album_image);
+            checkBox = itemView.findViewById(R.id.album_check_box);
+            imageCamera = itemView.findViewById(R.id.album_image_camera);
+            cameraTips = itemView.findViewById(R.id.album_image_camera_tv);
+            cameraRootView = itemView.findViewById(R.id.album_camera_root_view);
         }
 
         void camera() {
             Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), albumConfig.getAlbumContentViewCameraDrawable());
-            drawable.setColorFilter(ContextCompat.getColor(itemView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
+            Objects.requireNonNull(drawable).setColorFilter(ContextCompat.getColor(itemView.getContext(), albumConfig.getAlbumContentViewCameraDrawableColor()), PorterDuff.Mode.SRC_ATOP);
             cameraTips.setText(albumConfig.getAlbumContentViewCameraTips());
             cameraTips.setTextSize(albumConfig.getAlbumContentViewCameraTipsSize());
             cameraTips.setTextColor(ContextCompat.getColor(itemView.getContext(), albumConfig.getAlbumContentViewCameraTipsColor()));

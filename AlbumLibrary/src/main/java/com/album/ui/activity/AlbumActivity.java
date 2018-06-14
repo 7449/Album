@@ -27,6 +27,7 @@ import com.album.ui.view.AlbumMethodActivityView;
 import com.album.util.AlbumTool;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * by y on 14/08/2017.
@@ -67,11 +68,11 @@ public class AlbumActivity extends AlbumBaseActivity
 
     @Override
     protected void initView() {
-        toolbar = (Toolbar) findViewById(R.id.album_toolbar);
-        preview = (AppCompatTextView) findViewById(R.id.album_tv_preview);
-        select = (AppCompatTextView) findViewById(R.id.album_tv_select);
-        finderTv = (AppCompatTextView) findViewById(R.id.album_tv_finder_all);
-        albumBottomView = (RelativeLayout) findViewById(R.id.album_bottom_view);
+        toolbar = findViewById(R.id.album_toolbar);
+        preview = findViewById(R.id.album_tv_preview);
+        select = findViewById(R.id.album_tv_select);
+        finderTv = findViewById(R.id.album_tv_finder_all);
+        albumBottomView = findViewById(R.id.album_bottom_view);
         listPopupWindow = new ListPopupWindow(this);
         preview.setOnClickListener(this);
         select.setOnClickListener(this);
@@ -137,7 +138,7 @@ public class AlbumActivity extends AlbumBaseActivity
         toolbar.setTitle(albumConfig.getAlbumToolbarText());
         toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarTextColor()));
         Drawable drawable = ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon());
-        drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(drawable).setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationIcon(drawable);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarBackground()));
         if (AlbumTool.hasL()) {

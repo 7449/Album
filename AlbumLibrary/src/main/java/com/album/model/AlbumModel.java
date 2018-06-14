@@ -34,7 +34,7 @@ public class AlbumModel implements Parcelable {
         this.isCheck = isCheck;
     }
 
-    protected AlbumModel(Parcel in) {
+    private AlbumModel(Parcel in) {
         dirPath = in.readString();
         dirName = in.readString();
         path = in.readString();
@@ -90,10 +90,11 @@ public class AlbumModel implements Parcelable {
         AlbumModel that = (AlbumModel) o;
 
         if (id != that.id) return false;
-        if (isCheck != that.isCheck) return false;
-        if (dirPath != null ? !dirPath.equals(that.dirPath) : that.dirPath != null) return false;
-        if (dirName != null ? !dirName.equals(that.dirName) : that.dirName != null) return false;
-        return path != null ? path.equals(that.path) : that.path == null;
+        if (isCheck == that.isCheck)
+            if (dirPath != null ? dirPath.equals(that.dirPath) : that.dirPath == null)
+                if (dirName != null ? dirName.equals(that.dirName) : that.dirName == null)
+                    return path != null ? path.equals(that.path) : that.path == null;
+        return false;
 
     }
 

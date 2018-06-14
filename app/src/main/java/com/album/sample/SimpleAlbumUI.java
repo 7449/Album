@@ -24,6 +24,7 @@ import com.album.ui.annotation.PermissionsType;
 import com.album.ui.fragment.AlbumFragment;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * by y on 22/08/2017.
@@ -83,8 +84,8 @@ public class SimpleAlbumUI extends AlbumBaseActivity implements AdapterView.OnIt
 
     @Override
     protected void initView() {
-        toolbar = (Toolbar) findViewById(R.id.sample_toolbar);
-        finerName = (AppCompatTextView) findViewById(R.id.sample_finder_name);
+        toolbar = findViewById(R.id.sample_toolbar);
+        finerName = findViewById(R.id.sample_finder_name);
         finerName.setText(TextUtils.isEmpty(finderName) ? getString(R.string.album_all) : finderName);
         finerName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +103,7 @@ public class SimpleAlbumUI extends AlbumBaseActivity implements AdapterView.OnIt
     protected void initTitle() {
         toolbar.setTitle("sample UI");
         Drawable drawable = ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon());
-        drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(drawable).setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarTextColor()));
         toolbar.setNavigationIcon(drawable);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));

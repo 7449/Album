@@ -1,5 +1,6 @@
 package com.album.presenter.impl;
 
+import android.content.ContentResolver;
 import android.text.TextUtils;
 
 import com.album.model.AlbumModel;
@@ -8,8 +9,8 @@ import com.album.presenter.PreviewPresenter;
 import com.album.ui.view.PreviewView;
 import com.album.ui.view.ScanView;
 import com.album.ui.widget.ScanCallBack;
-import com.album.util.AlbumScanUtils;
-import com.album.util.VideoScanUtils;
+import com.album.util.scan.AlbumScanUtils;
+import com.album.util.scan.VideoScanUtils;
 import com.album.util.task.AlbumTask;
 import com.album.util.task.AlbumTaskCallBack;
 
@@ -26,7 +27,8 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanCallBack {
 
     public PreviewPresenterImpl(PreviewView previewView, boolean isVideo) {
         this.previewView = previewView;
-        scanView = isVideo ? VideoScanUtils.get() : AlbumScanUtils.get();
+        ContentResolver contentResolver = previewView.getPreviewActivity().getContentResolver();
+        scanView = isVideo ? VideoScanUtils.get(contentResolver) : AlbumScanUtils.get(contentResolver);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanCallBack {
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                scanView.start(previewView.getPreviewActivity().getContentResolver(), PreviewPresenterImpl.this, bucketId, page, count);
+                scanView.start(PreviewPresenterImpl.this, bucketId, page, count);
             }
         });
     }

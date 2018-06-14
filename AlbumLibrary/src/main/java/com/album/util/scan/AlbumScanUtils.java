@@ -1,4 +1,4 @@
-package com.album.util;
+package com.album.util.scan;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -12,6 +12,7 @@ import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.ui.view.ScanView;
 import com.album.ui.widget.ScanCallBack;
+import com.album.util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -20,6 +21,8 @@ import java.util.Map;
  * by y on 11/08/2017.
  */
 public class AlbumScanUtils implements ScanView {
+
+    private final ContentResolver contentResolver;
     private static final String ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? ";
     private static final String FINDER_ALBUM_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? %s and  (" + ALL_ALBUM_SELECTION + " ) ";
     private static final String[] ALBUM_NO_BUCKET_ID_SELECTION_ARGS = new String[]{"image/jpeg", "image/png", "image/jpg", "image/gif"};
@@ -40,23 +43,19 @@ public class AlbumScanUtils implements ScanView {
             MediaStore.Images.Media.SIZE,
     };
 
-    private ContentResolver contentResolver = null;
-
-    private AlbumScanUtils() {
+    private AlbumScanUtils(ContentResolver contentResolver) {
+        this.contentResolver = contentResolver;
     }
 
-    public static AlbumScanUtils get() {
-        return new AlbumScanUtils();
+    public static AlbumScanUtils get(ContentResolver contentResolver) {
+        if (contentResolver == null) {
+            throw new NullPointerException("contentResolver == null");
+        }
+        return new AlbumScanUtils(contentResolver);
     }
 
     @Override
-    public void start(ContentResolver contentResolver,
-                      ScanCallBack scanCallBack,
-                      String bucketId, int page, int count) {
-        this.contentResolver = contentResolver;
-        if (contentResolver == null) {
-            throw new NullPointerException("ContentResolver == null");
-        }
+    public void start(ScanCallBack scanCallBack, String bucketId, int page, int count) {
         ArrayList<AlbumModel> albumModels = new ArrayList<>();
         ArrayList<FinderModel> finderModels = new ArrayList<>();
         Cursor cursor = getCursor(bucketId, page, count);
@@ -74,8 +73,7 @@ public class AlbumScanUtils implements ScanView {
     }
 
     @Override
-    public void resultScan(ContentResolver contentResolver, ScanCallBack scanCallBack, String path) {
-        this.contentResolver = contentResolver;
+    public void resultScan(ScanCallBack scanCallBack, String path) {
         AlbumModel albumModel = null;
         ArrayList<FinderModel> finderModels = new ArrayList<>();
         Cursor query = contentResolver.query(

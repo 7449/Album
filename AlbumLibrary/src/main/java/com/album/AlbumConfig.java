@@ -490,11 +490,11 @@ public class AlbumConfig {
         return this;
     }
 
-    public String getuCropPath() {
+    public String getUCropPath() {
         return uCropPath;
     }
 
-    public AlbumConfig setuCropPath(String uCropPath) {
+    public AlbumConfig setUCropPath(String uCropPath) {
         this.uCropPath = uCropPath;
         return this;
     }

@@ -1,5 +1,6 @@
 package com.album.ui.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 public class PreviewAdapter extends PagerAdapter {
 
-    private ArrayList<AlbumModel> list = null;
+    private final ArrayList<AlbumModel> list;
 
     public PreviewAdapter(ArrayList<AlbumModel> list) {
         this.list = list;
@@ -31,17 +32,18 @@ public class PreviewAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
 
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, final int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
         FrameLayout frameLayout = new FrameLayout(container.getContext());
         ImageView imageView;
         if (Album.getInstance().getConfig().isFrescoImageLoader()) {

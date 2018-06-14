@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 
 import com.album.AlbumConstant;
@@ -28,14 +27,6 @@ public class PermissionUtils {
     private static boolean permission(Activity activity, String permissions, int code) {
         if (ContextCompat.checkSelfPermission(activity, permissions) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{permissions}, code);
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean permission(Fragment fragment, String permissions, int code) {
-        if (ContextCompat.checkSelfPermission(fragment.getActivity(), permissions) != PackageManager.PERMISSION_GRANTED) {
-            fragment.requestPermissions(new String[]{permissions}, code);
             return false;
         }
         return true;

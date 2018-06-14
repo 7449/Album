@@ -23,8 +23,8 @@ import java.util.List;
  */
 
 public class ListPopupWindowAdapter extends BaseAdapter {
-    private List<FinderModel> list = null;
-    private AlbumConfig albumConfig = null;
+    private final List<FinderModel> list;
+    private final AlbumConfig albumConfig;
 
     public ListPopupWindowAdapter(List<FinderModel> finderModel) {
         this.list = finderModel;
@@ -51,8 +51,8 @@ public class ListPopupWindowAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_finder, parent, false);
         }
-        FrameLayout frameLayout = (FrameLayout) convertView.findViewById(R.id.iv_album_finder_icon);
-        AppCompatTextView appCompatTextView = (AppCompatTextView) convertView.findViewById(R.id.tv_album_finder_name);
+        FrameLayout frameLayout = convertView.findViewById(R.id.iv_album_finder_icon);
+        AppCompatTextView appCompatTextView = convertView.findViewById(R.id.tv_album_finder_name);
         appCompatTextView.setTextColor(ContextCompat.getColor(parent.getContext(), albumConfig.getAlbumListPopupItemTextColor()));
         ImageView imageView;
         if (albumConfig.isFrescoImageLoader()) {

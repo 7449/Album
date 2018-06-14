@@ -31,6 +31,7 @@ import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * by y on 15/08/2017.
@@ -76,7 +77,7 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
     @Override
     public void initBundle() {
         Bundle extras = getIntent().getExtras();
-        selectAlbumModels = extras.getParcelableArrayList(AlbumConstant.PREVIEW_KEY);
+        selectAlbumModels = Objects.requireNonNull(extras).getParcelableArrayList(AlbumConstant.PREVIEW_KEY);
         selectPosition = extras.getInt(AlbumConstant.PREVIEW_POSITION_KEY, 0);
         bucketId = extras.getString(AlbumConstant.PREVIEW_BUCKET_ID);
     }
@@ -125,7 +126,7 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
     protected void initTitle() {
         toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarTextColor()));
         Drawable drawable = ContextCompat.getDrawable(this, albumConfig.getAlbumToolbarIcon());
-        drawable.setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(drawable).setColorFilter(ContextCompat.getColor(this, albumConfig.getAlbumToolbarIconColor()), PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationIcon(drawable);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumToolbarBackground()));
         if (AlbumTool.hasL()) {
@@ -135,14 +136,14 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
 
     @Override
     protected void initView() {
-        toolbar = (Toolbar) findViewById(R.id.preview_toolbar);
-        viewPager = (ViewPager) findViewById(R.id.preview_viewPager);
-        appCompatCheckBox = (AppCompatCheckBox) findViewById(R.id.preview_check_box);
-        previewCount = (AppCompatTextView) findViewById(R.id.preview_tv_preview_count);
-        progressBar = (ProgressBar) findViewById(R.id.preview_progress);
-        LinearLayout rootView = (LinearLayout) findViewById(R.id.preview_root_view);
-        RelativeLayout previewBottomView = (RelativeLayout) findViewById(R.id.preview_bottom_view);
-        AppCompatTextView previewOk = (AppCompatTextView) findViewById(R.id.preview_bottom_view_tv_select);
+        toolbar = findViewById(R.id.preview_toolbar);
+        viewPager = findViewById(R.id.preview_viewPager);
+        appCompatCheckBox = findViewById(R.id.preview_check_box);
+        previewCount = findViewById(R.id.preview_tv_preview_count);
+        progressBar = findViewById(R.id.preview_progress);
+        LinearLayout rootView = findViewById(R.id.preview_root_view);
+        RelativeLayout previewBottomView = findViewById(R.id.preview_bottom_view);
+        AppCompatTextView previewOk = findViewById(R.id.preview_bottom_view_tv_select);
         appCompatCheckBox.setBackgroundResource(albumConfig.getAlbumContentItemCheckBoxDrawable());
         previewBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.getAlbumPreviewBottomViewBackground()));
         previewOk.setText(albumConfig.getAlbumPreviewBottomOkText());

@@ -5,7 +5,6 @@ package com.album;
  */
 
 public class AlbumConstant {
-    public static final String TAG = AlbumConstant.class.getSimpleName();
     public static final String ALL_ALBUM_NAME = "全部";
     public static final String CAMERA = "Album:Camera";
     public static final String VIDEO_PLAY_TYPE = "video/*";

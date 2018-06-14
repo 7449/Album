@@ -18,7 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.album.Album;
-import com.album.AlbumCameraListener;
+import com.album.customize.AlbumCameraListener;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
 import com.album.AlbumListener;
@@ -29,7 +29,8 @@ import com.album.ui.widget.OnEmptyClickListener;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
-import com.album.util.SingleMediaScanner;
+import com.album.util.scanner.SingleMediaScanner;
+import com.album.util.scanner.SingleScannerListener;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -76,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album
                         .getInstance()
 //                        .setAlbumImageLoader(new SimpleFrescoAlbumImageLoader())
-                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
                         .setAlbumModels(list)
                         .setOptions(dayOptions)
@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album
                         .getInstance()
                         .setAlbumListener(new MainAlbumListener(this, null))
-                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setOptions(nightOptions)
                         .setAlbumCameraListener(null)
                         .setAlbumClass(null)
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                 .setFilterImg(false)
                                 .setHideCamera(true)
                                 .setCrop(true).setCameraPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM/Album")
-                                .setuCropPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM" + "/" + "uCrop")
+                                .setUCropPath(Environment.getExternalStorageDirectory().getPath() + "/" + "DCIM" + "/" + "uCrop")
                                 .setPermissionsDeniedFinish(true)
                                 .setPreviewFinishRefresh(true)
                                 .setPreviewBackRefresh(true)
@@ -132,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
                 Album
                         .getInstance()
-                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
                         .setAlbumClass(SimpleAlbumUI.class)
                         .setAlbumCameraListener(null)
@@ -161,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
                 Album
                         .getInstance()
-                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
                         .setAlbumModels(list)
                         .setOptions(dayOptions)
@@ -200,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.btn_video:
                 Album
                         .getInstance()
-                        .setAlbumImageLoader(new SimpleGlide4xAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
                         .setAlbumCameraListener(null)
                         .setEmptyClickListener(new OnEmptyClickListener() {
@@ -229,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             switch (requestCode) {
                 case AlbumConstant.ITEM_CAMERA:
                     new SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.getPath()),
-                            new SingleMediaScanner.SingleScannerListener() {
+                            new SingleScannerListener() {
                                 @Override
                                 public void onScanStart() {
 
@@ -246,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                     break;
                 case UCrop.REQUEST_CROP:
                     new SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.getPath()),
-                            new SingleMediaScanner.SingleScannerListener() {
+                            new SingleScannerListener() {
                                 @Override
                                 public void onScanStart() {
 

@@ -13,7 +13,6 @@ import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.Window;
 
@@ -30,14 +29,6 @@ public class AlbumTool {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
-    public static void log(Object o) {
-        if (o != null) {
-            Log.d(AlbumConstant.TAG, o.toString());
-        } else {
-            Log.d(AlbumConstant.TAG, "o ==== null");
-        }
-    }
-
     public static Drawable getDrawable(Context context, int id, int color) {
         Drawable drawable = context.getResources().getDrawable(id);
         drawable.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_ATOP);
@@ -47,7 +38,7 @@ public class AlbumTool {
 
     public static int openCamera(Object activity, Uri cameraUri, boolean video) {
         if (activity == null) {
-            throw new NullPointerException("Object == null");
+            throw new NullPointerException("activity == null");
         }
         Activity cameraActivity = null;
         if (activity instanceof Activity) {

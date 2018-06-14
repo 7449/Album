@@ -11,7 +11,7 @@ import android.view.View;
 
 public class SimpleGridDivider extends RecyclerView.ItemDecoration {
 
-    private int divider = 10;
+    private final int divider;
 
     public SimpleGridDivider(int divider) {
         this.divider = divider;

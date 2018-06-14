@@ -26,7 +26,7 @@ public class FileUtils {
         return getPathFile(path) != null;
     }
 
-    static File getPathFile(String path) {
+    public static File getPathFile(String path) {
         if (TextUtils.isEmpty(path)) {
             return null;
         }
@@ -58,7 +58,7 @@ public class FileUtils {
         String cachePath = null;
         if (TextUtils.isEmpty(path)) {
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
-                cachePath = Environment.getExternalStorageDirectory().getPath() + "/DCIM";
+                cachePath = Environment.getExternalStorageDirectory().getPath() + "/" + Environment.DIRECTORY_DCIM;
             } else {
                 File externalCacheDir = context.getExternalCacheDir();
                 if (externalCacheDir != null) {

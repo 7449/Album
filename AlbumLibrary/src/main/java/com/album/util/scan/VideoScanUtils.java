@@ -1,4 +1,4 @@
-package com.album.util;
+package com.album.util.scan;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -11,6 +11,7 @@ import com.album.model.AlbumModel;
 import com.album.model.FinderModel;
 import com.album.ui.view.ScanView;
 import com.album.ui.widget.ScanCallBack;
+import com.album.util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 
 public class VideoScanUtils implements ScanView {
-
+    private final ContentResolver contentResolver;
     private static final String FINDER_VIDEO_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? ";
     private static final String[] VIDEO_COUNT_PROJECTION = new String[]{MediaStore.Video.Media.BUCKET_ID};
     private static final String[] VIDEO_PROJECTION = new String[]{
@@ -34,21 +35,20 @@ public class VideoScanUtils implements ScanView {
             MediaStore.Video.Media.DATA
     };
 
-    private ContentResolver contentResolver = null;
 
-    private VideoScanUtils() {
+    private VideoScanUtils(ContentResolver contentResolver) {
+        this.contentResolver = contentResolver;
     }
 
-    public static VideoScanUtils get() {
-        return new VideoScanUtils();
+    public static VideoScanUtils get(ContentResolver contentResolver) {
+        if (contentResolver == null) {
+            throw new NullPointerException("contentResolver == null");
+        }
+        return new VideoScanUtils(contentResolver);
     }
 
     @Override
-    public void start(ContentResolver contentResolver, ScanCallBack scanCallBack, String bucketId, int page, int count) {
-        this.contentResolver = contentResolver;
-        if (contentResolver == null) {
-            throw new NullPointerException("ContentResolver == null");
-        }
+    public void start(ScanCallBack scanCallBack, String bucketId, int page, int count) {
         ArrayList<AlbumModel> albumModels = new ArrayList<>();
         ArrayList<FinderModel> finderModels = new ArrayList<>();
         Cursor cursor = getCursor(bucketId, page, count);
@@ -66,8 +66,7 @@ public class VideoScanUtils implements ScanView {
     }
 
     @Override
-    public void resultScan(ContentResolver contentResolver, ScanCallBack scanCallBack, String path) {
-        this.contentResolver = contentResolver;
+    public void resultScan(ScanCallBack scanCallBack, String path) {
         AlbumModel albumModel = null;
         ArrayList<FinderModel> finderModels = new ArrayList<>();
         Cursor query = contentResolver.query(

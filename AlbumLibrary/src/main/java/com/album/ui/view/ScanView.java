@@ -1,6 +1,5 @@
 package com.album.ui.view;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
 
 import com.album.model.AlbumModel;
@@ -44,9 +43,10 @@ import java.util.ArrayList;
 
 
 public interface ScanView {
-    void start(ContentResolver contentResolver, ScanCallBack scanCallBack, String bucketId, int page, int count);
 
-    void resultScan(ContentResolver contentResolver, ScanCallBack scanCallBack, String path);
+    void start(ScanCallBack scanCallBack, String bucketId, int page, int count);
+
+    void resultScan(ScanCallBack scanCallBack, String path);
 
     void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor);
 

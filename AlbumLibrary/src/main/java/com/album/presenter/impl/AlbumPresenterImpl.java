@@ -1,5 +1,6 @@
 package com.album.presenter.impl;
 
+import android.content.ContentResolver;
 import android.text.TextUtils;
 
 import com.album.model.AlbumModel;
@@ -8,8 +9,8 @@ import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
 import com.album.ui.view.ScanView;
 import com.album.ui.widget.ScanCallBack;
-import com.album.util.AlbumScanUtils;
-import com.album.util.VideoScanUtils;
+import com.album.util.scan.AlbumScanUtils;
+import com.album.util.scan.VideoScanUtils;
 import com.album.util.task.AlbumTask;
 import com.album.util.task.AlbumTaskCallBack;
 
@@ -26,7 +27,8 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
 
     public AlbumPresenterImpl(AlbumView albumView, boolean isVideo) {
         this.albumView = albumView;
-        scanView = isVideo ? VideoScanUtils.get() : AlbumScanUtils.get();
+        ContentResolver contentResolver = albumView.getAlbumActivity().getContentResolver();
+        scanView = isVideo ? VideoScanUtils.get(contentResolver) : AlbumScanUtils.get(contentResolver);
     }
 
     @Override
@@ -43,7 +45,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                scanView.start(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, bucketId, page, count);
+                scanView.start(AlbumPresenterImpl.this, bucketId, page, count);
             }
         });
     }
@@ -97,7 +99,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
         AlbumTask.get().start(new AlbumTaskCallBack.Call() {
             @Override
             public void start() {
-                scanView.resultScan(albumView.getAlbumActivity().getContentResolver(), AlbumPresenterImpl.this, path);
+                scanView.resultScan(AlbumPresenterImpl.this, path);
             }
         });
     }
@@ -115,7 +117,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
                     mergeModel(albumModels, albumView.getSelectModel());
                     albumView.scanSuccess(albumModels);
                     if (list != null && !list.isEmpty()) {
-                        albumView.finderModel(list);
+                        albumView.scanFinder(list);
                     }
                 }
             }
@@ -129,7 +131,7 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
             public void run() {
                 albumView.resultSuccess(albumModel);
                 if (finderModels != null && !finderModels.isEmpty()) {
-                    albumView.finderModel(finderModels);
+                    albumView.scanFinder(finderModels);
                 }
             }
         });

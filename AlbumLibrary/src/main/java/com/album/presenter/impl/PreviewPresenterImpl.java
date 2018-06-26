@@ -3,8 +3,8 @@ package com.album.presenter.impl;
 import android.content.ContentResolver;
 import android.text.TextUtils;
 
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
 import com.album.presenter.PreviewPresenter;
 import com.album.ui.view.PreviewView;
 import com.album.ui.view.ScanView;
@@ -48,16 +48,16 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanCallBack {
     }
 
     @Override
-    public void mergeModel(List<AlbumModel> albumModels, ArrayList<AlbumModel> selectAlbumModels) {
-        if (albumModels == null || selectAlbumModels == null) {
+    public void mergeEntity(List<AlbumEntity> albumEntityList, ArrayList<AlbumEntity> selectAlbumEntityList) {
+        if (albumEntityList == null || selectAlbumEntityList == null) {
             return;
         }
-        for (AlbumModel albumModel : selectAlbumModels) {
-            String path = albumModel.getPath();
-            for (AlbumModel allAlbumModel : albumModels) {
-                String allModelPath = allAlbumModel.getPath();
-                if (TextUtils.equals(path, allModelPath)) {
-                    allAlbumModel.setCheck(albumModel.isCheck());
+        for (AlbumEntity albumEntity : selectAlbumEntityList) {
+            String path = albumEntity.getPath();
+            for (AlbumEntity allAlbumEntity : albumEntityList) {
+                String allEntityPath = allAlbumEntity.getPath();
+                if (TextUtils.equals(path, allEntityPath)) {
+                    allAlbumEntity.setCheck(albumEntity.isCheck());
                 }
             }
         }
@@ -65,18 +65,18 @@ public class PreviewPresenterImpl implements PreviewPresenter, ScanCallBack {
 
 
     @Override
-    public void scanSuccess(final ArrayList<AlbumModel> albumModels, ArrayList<FinderModel> list) {
+    public void scanSuccess(final ArrayList<AlbumEntity> albumEntityList, ArrayList<FinderEntity> list) {
         previewView.getPreviewActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 previewView.hideProgress();
-                previewView.scanSuccess(albumModels);
+                previewView.scanSuccess(albumEntityList);
             }
         });
     }
 
     @Override
-    public void resultSuccess(AlbumModel albumModel, ArrayList<FinderModel> finderModels) {
+    public void resultSuccess(AlbumEntity albumEntity, ArrayList<FinderEntity> finderEntityList) {
 
     }
 

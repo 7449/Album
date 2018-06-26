@@ -1,7 +1,7 @@
 package com.album.presenter;
 
 
-import com.album.model.AlbumModel;
+import com.album.entity.AlbumEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,6 @@ import java.util.List;
 public interface PreviewPresenter {
     void scan(String bucketId, int page, int count);
 
-    void mergeModel(List<AlbumModel> albumModels, ArrayList<AlbumModel> selectAlbumModels);
+    void mergeEntity(List<AlbumEntity> albumEntityList, ArrayList<AlbumEntity> selectAlbumEntityList);
 
 }

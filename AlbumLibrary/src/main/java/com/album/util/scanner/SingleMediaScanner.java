@@ -4,7 +4,7 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 
-import com.album.ui.annotation.AlbumResultType;
+import com.album.annotation.AlbumResultType;
 
 import java.io.File;
 

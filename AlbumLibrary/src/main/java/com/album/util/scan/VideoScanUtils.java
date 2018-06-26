@@ -7,8 +7,8 @@ import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import com.album.AlbumConstant;
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
 import com.album.ui.view.ScanView;
 import com.album.ui.widget.ScanCallBack;
 import com.album.util.FileUtils;
@@ -49,26 +49,26 @@ public class VideoScanUtils implements ScanView {
 
     @Override
     public void start(ScanCallBack scanCallBack, String bucketId, int page, int count) {
-        ArrayList<AlbumModel> albumModels = new ArrayList<>();
-        ArrayList<FinderModel> finderModels = new ArrayList<>();
+        ArrayList<AlbumEntity> albumEntityList = new ArrayList<>();
+        ArrayList<FinderEntity> finderEntityList = new ArrayList<>();
         Cursor cursor = getCursor(bucketId, page, count);
         if (cursor != null) {
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media.DATA);
             int idColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media._ID);
             int sizeColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.SIZE);
             while (cursor.moveToNext()) {
-                scanCursor(albumModels, dataColumnIndex, idColumnIndex, sizeColumnIndex, cursor);
+                scanCursor(albumEntityList, dataColumnIndex, idColumnIndex, sizeColumnIndex, cursor);
             }
             cursor.close();
-            cursorFinder(finderModels);
-            scanCallBack.scanSuccess(albumModels, finderModels);
+            cursorFinder(finderEntityList);
+            scanCallBack.scanSuccess(albumEntityList, finderEntityList);
         }
     }
 
     @Override
     public void resultScan(ScanCallBack scanCallBack, String path) {
-        AlbumModel albumModel = null;
-        ArrayList<FinderModel> finderModels = new ArrayList<>();
+        AlbumEntity albumEntity = null;
+        ArrayList<FinderEntity> finderEntityList = new ArrayList<>();
         Cursor query = contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 VIDEO_PROJECTION,
@@ -82,27 +82,27 @@ public class VideoScanUtils implements ScanView {
                 String resultPath = query.getString(dataColumnIndex);
                 long id = query.getLong(idColumnIndex);
                 if (FileUtils.getPathFile(resultPath) != null) {
-                    albumModel = new AlbumModel(null, null, resultPath, id, false);
+                    albumEntity = new AlbumEntity(null, null, resultPath, id, false);
                 }
             }
-            cursorFinder(finderModels);
+            cursorFinder(finderEntityList);
             query.close();
         }
-        scanCallBack.resultSuccess(albumModel, finderModels);
+        scanCallBack.resultSuccess(albumEntity, finderEntityList);
     }
 
     @Override
-    public void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor) {
+    public void scanCursor(ArrayList<AlbumEntity> albumEntityList, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor) {
         String path = cursor.getString(dataColumnIndex);
         long id = cursor.getLong(idColumnIndex);
         if (FileUtils.getPathFile(path) != null) {
-            albumModels.add(new AlbumModel(null, null, path, id, false));
+            albumEntityList.add(new AlbumEntity(null, null, path, id, false));
         }
     }
 
     @Override
-    public void cursorFinder(ArrayList<FinderModel> finderModels) {
-        ArrayMap<String, FinderModel> finderModelMap = new ArrayMap<>();
+    public void cursorFinder(ArrayList<FinderEntity> finderEntityList) {
+        ArrayMap<String, FinderEntity> finderEntityMap = new ArrayMap<>();
         Cursor finderCursor = contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 VIDEO_FINDER_PROJECTION, null, null,
@@ -117,29 +117,29 @@ public class VideoScanUtils implements ScanView {
                 String finderName = finderCursor.getString(finderNameColumnIndex);
                 String finderPath = finderCursor.getString(finderPathColumnIndex);
                 long id = finderCursor.getLong(idColumnIndex);
-                FinderModel finderModel = finderModelMap.get(finderName);
-                if (finderModel == null && FileUtils.getPathFile(finderPath) != null) {
-                    finderModelMap.put(finderName, new FinderModel(finderName, finderPath, id, bucketId, cursorCount(bucketId)));
+                FinderEntity finderEntity = finderEntityMap.get(finderName);
+                if (finderEntity == null && FileUtils.getPathFile(finderPath) != null) {
+                    finderEntityMap.put(finderName, new FinderEntity(finderName, finderPath, id, bucketId, cursorCount(bucketId)));
                 }
             }
             finderCursor.close();
         }
-        if (finderModelMap.isEmpty()) {
+        if (finderEntityMap.isEmpty()) {
             return;
         }
-        FinderModel finderModel = new FinderModel(AlbumConstant.ALL_ALBUM_NAME, null, 0, null, 0);
+        FinderEntity finderEntity = new FinderEntity(AlbumConstant.ALL_ALBUM_NAME, null, 0, null, 0);
         int count = 0;
-        for (Map.Entry<String, FinderModel> entry : finderModelMap.entrySet()) {
-            finderModels.add(entry.getValue());
+        for (Map.Entry<String, FinderEntity> entry : finderEntityMap.entrySet()) {
+            finderEntityList.add(entry.getValue());
             count += entry.getValue().getCount();
         }
-        finderModel.setCount(count);
-        if (finderModels.size() > 0 && finderModels.get(0) != null) {
-            finderModel.setThumbnailsPath(finderModels.get(0).getThumbnailsPath());
-            finderModel.setThumbnailsId(finderModels.get(0).getThumbnailsId());
+        finderEntity.setCount(count);
+        if (finderEntityList.size() > 0 && finderEntityList.get(0) != null) {
+            finderEntity.setThumbnailsPath(finderEntityList.get(0).getThumbnailsPath());
+            finderEntity.setThumbnailsId(finderEntityList.get(0).getThumbnailsId());
         }
-        finderModels.add(0, finderModel);
-        finderModelMap.clear();
+        finderEntityList.add(0, finderEntity);
+        finderEntityMap.clear();
     }
 
     @Override

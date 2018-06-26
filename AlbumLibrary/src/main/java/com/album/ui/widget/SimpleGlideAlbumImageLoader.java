@@ -4,11 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
-import com.album.AlbumImageLoader;
+import com.album.listener.AlbumImageLoader;
 import com.album.R;
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
-import com.album.ui.annotation.FrescoType;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
+import com.album.annotation.FrescoType;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -28,27 +28,27 @@ public class SimpleGlideAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
+    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumEntity albumEntity) {
         Glide
                 .with(view.getContext())
-                .load(albumModel.getPath())
+                .load(albumEntity.getPath())
                 .apply(requestOptions.override(width, height))
                 .into(view);
     }
 
     @Override
-    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
+    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderEntity finderEntity) {
         Glide
                 .with(view.getContext())
-                .load(finderModel.getThumbnailsPath()).apply(requestOptions)
+                .load(finderEntity.getThumbnailsPath()).apply(requestOptions)
                 .into(view);
     }
 
     @Override
-    public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
+    public void displayPreview(@NonNull ImageView view, @NonNull AlbumEntity albumEntity) {
         Glide
                 .with(view.getContext())
-                .load(albumModel.getPath()).apply(requestOptions)
+                .load(albumEntity.getPath()).apply(requestOptions)
                 .into(view);
     }
 

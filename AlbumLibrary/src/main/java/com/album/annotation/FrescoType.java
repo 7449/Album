@@ -1,4 +1,4 @@
-package com.album.ui.annotation;
+package com.album.annotation;
 
 import android.support.annotation.IntDef;
 

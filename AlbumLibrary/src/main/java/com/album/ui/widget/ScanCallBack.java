@@ -1,7 +1,7 @@
 package com.album.ui.widget;
 
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 
 public interface ScanCallBack {
-    void scanSuccess(ArrayList<AlbumModel> albumModels, ArrayList<FinderModel> list);
+    void scanSuccess(ArrayList<AlbumEntity> albumEntityList, ArrayList<FinderEntity> list);
 
-    void resultSuccess(AlbumModel albumModel, ArrayList<FinderModel> finderModels);
+    void resultSuccess(AlbumEntity albumEntity, ArrayList<FinderEntity> finderEntityList);
 }

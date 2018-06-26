@@ -1,17 +1,17 @@
-package com.album.model;
+package com.album.entity;
 
 /**
  * by y on 14/08/2017.
  */
 
-public class FinderModel {
+public class FinderEntity {
     private String dirName;
     private String thumbnailsPath;
     private long thumbnailsId;
     private String bucketId;
     private int count;
 
-    public FinderModel(String dirName, String thumbnailsPath, long thumbnailsId, String bucketId, int count) {
+    public FinderEntity(String dirName, String thumbnailsPath, long thumbnailsId, String bucketId, int count) {
         this.dirName = dirName;
         this.thumbnailsPath = thumbnailsPath;
         this.thumbnailsId = thumbnailsId;

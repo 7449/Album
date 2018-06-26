@@ -3,8 +3,8 @@ package com.album.presenter.impl;
 import android.content.ContentResolver;
 import android.text.TextUtils;
 
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
 import com.album.presenter.AlbumPresenter;
 import com.album.ui.view.AlbumView;
 import com.album.ui.view.ScanView;
@@ -51,38 +51,38 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
     }
 
     @Override
-    public void mergeModel(ArrayList<AlbumModel> albumList, ArrayList<AlbumModel> multiplePreviewList) {
+    public void mergeEntity(ArrayList<AlbumEntity> albumList, ArrayList<AlbumEntity> multiplePreviewList) {
         if (albumList == null || multiplePreviewList == null) {
             return;
         }
-        for (AlbumModel albumModel : albumList) {
-            albumModel.setCheck(false);
+        for (AlbumEntity albumEntity : albumList) {
+            albumEntity.setCheck(false);
         }
-        for (AlbumModel albumModel : multiplePreviewList) {
-            String path = albumModel.getPath();
-            for (AlbumModel allAlbumModel : albumList) {
-                String allModelPath = allAlbumModel.getPath();
-                if (TextUtils.equals(path, allModelPath)) {
-                    allAlbumModel.setCheck(albumModel.isCheck());
+        for (AlbumEntity albumEntity : multiplePreviewList) {
+            String path = albumEntity.getPath();
+            for (AlbumEntity allAlbumEntity : albumList) {
+                String allEntityPath = allAlbumEntity.getPath();
+                if (TextUtils.equals(path, allEntityPath)) {
+                    allAlbumEntity.setCheck(albumEntity.isCheck());
                 }
             }
         }
     }
 
     @Override
-    public void firstMergeModel(ArrayList<AlbumModel> albumModels, ArrayList<AlbumModel> selectModel) {
-        for (AlbumModel albumModel : albumModels) {
-            albumModel.setCheck(false);
+    public void firstMergeEntity(ArrayList<AlbumEntity> albumEntityList, ArrayList<AlbumEntity> selectEntity) {
+        for (AlbumEntity albumEntity : albumEntityList) {
+            albumEntity.setCheck(false);
         }
-        for (AlbumModel albumModel : selectModel) {
-            albumModel.setCheck(true);
+        for (AlbumEntity albumEntity : selectEntity) {
+            albumEntity.setCheck(true);
         }
-        for (AlbumModel albumModel : selectModel) {
-            String path = albumModel.getPath();
-            for (AlbumModel allAlbumModel : albumModels) {
-                String allModelPath = allAlbumModel.getPath();
-                if (TextUtils.equals(path, allModelPath)) {
-                    allAlbumModel.setCheck(albumModel.isCheck());
+        for (AlbumEntity albumEntity : selectEntity) {
+            String path = albumEntity.getPath();
+            for (AlbumEntity allAlbumEntity : albumEntityList) {
+                String allEntityPath = allAlbumEntity.getPath();
+                if (TextUtils.equals(path, allEntityPath)) {
+                    allAlbumEntity.setCheck(albumEntity.isCheck());
                 }
             }
         }
@@ -105,17 +105,17 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
     }
 
     @Override
-    public void scanSuccess(final ArrayList<AlbumModel> albumModels, final ArrayList<FinderModel> list) {
+    public void scanSuccess(final ArrayList<AlbumEntity> albumEntityList, final ArrayList<FinderEntity> list) {
         albumView.getAlbumActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 isScan = false;
                 albumView.hideProgress();
-                if (albumModels != null && albumModels.isEmpty()) {
+                if (albumEntityList != null && albumEntityList.isEmpty()) {
                     albumView.onAlbumNoMore();
                 } else {
-                    mergeModel(albumModels, albumView.getSelectModel());
-                    albumView.scanSuccess(albumModels);
+                    mergeEntity(albumEntityList, albumView.getSelectEntity());
+                    albumView.scanSuccess(albumEntityList);
                     if (list != null && !list.isEmpty()) {
                         albumView.scanFinder(list);
                     }
@@ -125,13 +125,13 @@ public class AlbumPresenterImpl implements AlbumPresenter, ScanCallBack {
     }
 
     @Override
-    public void resultSuccess(final AlbumModel albumModel, final ArrayList<FinderModel> finderModels) {
+    public void resultSuccess(final AlbumEntity albumEntity, final ArrayList<FinderEntity> finderEntityList) {
         albumView.getAlbumActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                albumView.resultSuccess(albumModel);
-                if (finderModels != null && !finderModels.isEmpty()) {
-                    albumView.scanFinder(finderModels);
+                albumView.resultSuccess(albumEntity);
+                if (finderEntityList != null && !finderEntityList.isEmpty()) {
+                    albumView.scanFinder(finderEntityList);
                 }
             }
         });

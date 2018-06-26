@@ -1,4 +1,4 @@
-package com.album.customize;
+package com.album.listener;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,5 +10,11 @@ import android.support.v4.app.Fragment;
  */
 
 public interface AlbumCameraListener {
+
+    /**
+     * 自定义相机
+     *
+     * @param fragment {@link com.album.ui.fragment.AlbumFragment}
+     */
     void startCamera(@NonNull Fragment fragment);
 }

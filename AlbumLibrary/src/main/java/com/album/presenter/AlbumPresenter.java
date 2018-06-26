@@ -1,6 +1,6 @@
 package com.album.presenter;
 
-import com.album.model.AlbumModel;
+import com.album.entity.AlbumEntity;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public interface AlbumPresenter {
     void scan(String bucketId, int page, int count);
 
-    void mergeModel(ArrayList<AlbumModel> albumList, ArrayList<AlbumModel> multiplePreviewList);
+    void mergeEntity(ArrayList<AlbumEntity> albumList, ArrayList<AlbumEntity> multiplePreviewList);
 
-    void firstMergeModel(ArrayList<AlbumModel> albumModels, ArrayList<AlbumModel> selectModel);
+    void firstMergeEntity(ArrayList<AlbumEntity> albumEntityList, ArrayList<AlbumEntity> selectEntity);
 
     boolean isScan();
 

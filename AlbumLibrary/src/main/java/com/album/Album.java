@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.album.customize.AlbumCameraListener;
-import com.album.customize.AlbumVideoListener;
-import com.album.model.AlbumModel;
+import com.album.listener.AlbumCameraListener;
+import com.album.listener.AlbumImageLoader;
+import com.album.listener.AlbumListener;
+import com.album.listener.AlbumVideoListener;
+import com.album.entity.AlbumEntity;
 import com.album.ui.activity.AlbumActivity;
-import com.album.ui.widget.OnEmptyClickListener;
+import com.album.listener.OnEmptyClickListener;
 import com.album.ui.widget.SimpleAlbumListener;
 import com.album.ui.widget.SimpleGlideAlbumImageLoader;
 import com.yalantis.ucrop.UCrop;
@@ -29,7 +31,7 @@ public class Album {
     private AlbumCameraListener albumCameraListener = null;
     private AlbumVideoListener albumVideoListener = null;
     private OnEmptyClickListener emptyClickListener = null;
-    private ArrayList<AlbumModel> albumModels = null;
+    private ArrayList<AlbumEntity> albumEntityList = null;
     private Class<?> albumClass = null;
 
     public static Album getInstance() {
@@ -72,12 +74,12 @@ public class Album {
         return this;
     }
 
-    public ArrayList<AlbumModel> getAlbumModels() {
-        return albumModels;
+    public ArrayList<AlbumEntity> getAlbumEntityList() {
+        return albumEntityList;
     }
 
-    public Album setAlbumModels(@Nullable ArrayList<AlbumModel> albumModels) {
-        this.albumModels = albumModels;
+    public Album setAlbumEntityList(@Nullable ArrayList<AlbumEntity> albumEntityList) {
+        this.albumEntityList = albumEntityList;
         return this;
     }
 

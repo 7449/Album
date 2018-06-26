@@ -3,8 +3,8 @@ package com.album.ui.view;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.album.model.FinderModel;
-import com.album.ui.annotation.AlbumResultType;
+import com.album.entity.FinderEntity;
+import com.album.annotation.AlbumResultType;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface AlbumMethodFragmentView {
 
     void refreshMedia(@AlbumResultType int type);
 
-    List<FinderModel> getFinderModel();
+    List<FinderEntity> getFinderEntity();
 
     void multiplePreview();
 

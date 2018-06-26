@@ -18,14 +18,14 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.album.Album;
-import com.album.customize.AlbumCameraListener;
+import com.album.listener.AlbumCameraListener;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
-import com.album.AlbumListener;
-import com.album.model.AlbumModel;
+import com.album.listener.AlbumListener;
+import com.album.entity.AlbumEntity;
 import com.album.sample.camera.SimpleCameraActivity;
-import com.album.ui.annotation.PermissionsType;
-import com.album.ui.widget.OnEmptyClickListener;
+import com.album.annotation.PermissionsType;
+import com.album.listener.OnEmptyClickListener;
 import com.album.util.AlbumTool;
 import com.album.util.FileUtils;
 import com.album.util.PermissionUtils;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private UCrop.Options dayOptions;
     private UCrop.Options nightOptions;
-    private ArrayList<AlbumModel> list;
+    private ArrayList<AlbumEntity> list;
     private Uri imagePath;
 
     @Override
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .getInstance()
 //                        .setAlbumImageLoader(new SimpleFrescoAlbumImageLoader())
                         .setAlbumListener(new MainAlbumListener(this, list))
-                        .setAlbumModels(list)
+                        .setAlbumEntityList(list)
                         .setOptions(dayOptions)
                         .setEmptyClickListener(new OnEmptyClickListener() {
                             @Override
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Album
                         .getInstance()
                         .setAlbumListener(new MainAlbumListener(this, list))
-                        .setAlbumModels(list)
+                        .setAlbumEntityList(list)
                         .setOptions(dayOptions)
                         .setAlbumCameraListener(new AlbumCameraListener() {
                             @Override
@@ -265,13 +265,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private static class MainAlbumListener implements AlbumListener {
 
         private Context context;
-        private List<AlbumModel> list = null;
+        private List<AlbumEntity> list = null;
 
         void toast(String s) {
             Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
         }
 
-        MainAlbumListener(Context context, ArrayList<AlbumModel> list) {
+        MainAlbumListener(Context context, ArrayList<AlbumEntity> list) {
             this.context = context.getApplicationContext();
             this.list = list;
         }
@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         @Override
-        public void onAlbumResources(@NonNull List<AlbumModel> list) {
+        public void onAlbumResources(@NonNull List<AlbumEntity> list) {
             toast("select count :" + list.size());
             if (this.list != null) {
                 this.list.clear();

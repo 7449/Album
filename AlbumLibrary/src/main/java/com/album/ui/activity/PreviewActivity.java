@@ -20,11 +20,11 @@ import android.widget.RelativeLayout;
 import com.album.Album;
 import com.album.AlbumConstant;
 import com.album.R;
-import com.album.model.AlbumModel;
+import com.album.entity.AlbumEntity;
 import com.album.presenter.PreviewPresenter;
 import com.album.presenter.impl.PreviewPresenterImpl;
 import com.album.ui.adapter.PreviewAdapter;
-import com.album.ui.annotation.PermissionsType;
+import com.album.annotation.PermissionsType;
 import com.album.ui.view.PreviewMethodActivityView;
 import com.album.ui.view.PreviewView;
 import com.album.util.AlbumTool;
@@ -48,8 +48,8 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
 
 
     private PreviewPresenter previewPresenter;
-    private ArrayList<AlbumModel> albumModels;
-    private ArrayList<AlbumModel> selectAlbumModels;
+    private ArrayList<AlbumEntity> albumEntityList;
+    private ArrayList<AlbumEntity> selectAlbumEntityList;
     private int selectPosition;
     private String bucketId = null;
     private boolean isPreview;
@@ -58,26 +58,26 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
     @Override
     protected void initCreate(@Nullable Bundle savedInstanceState) {
         previewPresenter = new PreviewPresenterImpl(this, albumConfig.isVideo());
-        albumModels = new ArrayList<>();
+        albumEntityList = new ArrayList<>();
         initBundle();
         isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY);
         if (savedInstanceState != null) {
-            ArrayList<AlbumModel> select = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT);
-            ArrayList<AlbumModel> allImageModel = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL);
-            selectAlbumModels = select;
+            ArrayList<AlbumEntity> select = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT);
+            ArrayList<AlbumEntity> allImageEntity = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL);
+            selectAlbumEntityList = select;
             selectPosition = savedInstanceState.getInt(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_POSITION);
             if (isPreview) {
-                albumModels = allImageModel;
+                albumEntityList = allImageEntity;
             }
         }
         init();
-        setCount(selectAlbumModels.size(), albumConfig.getMultipleMaxCount());
+        setCount(selectAlbumEntityList.size(), albumConfig.getMultipleMaxCount());
     }
 
     @Override
     public void initBundle() {
         Bundle extras = getIntent().getExtras();
-        selectAlbumModels = Objects.requireNonNull(extras).getParcelableArrayList(AlbumConstant.PREVIEW_KEY);
+        selectAlbumEntityList = Objects.requireNonNull(extras).getParcelableArrayList(AlbumConstant.PREVIEW_KEY);
         selectPosition = extras.getInt(AlbumConstant.PREVIEW_POSITION_KEY, 0);
         bucketId = extras.getString(AlbumConstant.PREVIEW_BUCKET_ID);
     }
@@ -94,15 +94,15 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
             return;
 
         }
-        if (albumModels.isEmpty()) {
-            albumModels.addAll(selectAlbumModels);
+        if (albumEntityList.isEmpty()) {
+            albumEntityList.addAll(selectAlbumEntityList);
         }
-        initViewPager(albumModels);
+        initViewPager(albumEntityList);
     }
 
     @Override
-    public void initViewPager(final ArrayList<AlbumModel> albumModels) {
-        adapter = new PreviewAdapter(albumModels);
+    public void initViewPager(final ArrayList<AlbumEntity> albumEntityList) {
+        adapter = new PreviewAdapter(albumEntityList);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(TextUtils.isEmpty(bucketId) ? selectPosition - 1 : selectPosition);
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -112,13 +112,13 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
                 if (!FileUtils.isFile(adapter.getAlbumPath(position))) {
                     Album.getInstance().getAlbumListener().onAlbumPreviewFileNull();
                 }
-                appCompatCheckBox.setChecked(albumModels.get(position).isCheck());
+                appCompatCheckBox.setChecked(albumEntityList.get(position).isCheck());
                 selectPosition = TextUtils.isEmpty(bucketId) ? position + 1 : position;
-                setTitles(position + 1, albumModels.size());
+                setTitles(position + 1, albumEntityList.size());
             }
         });
-        setTitles(viewPager.getCurrentItem() + 1, albumModels.size());
-        appCompatCheckBox.setChecked(albumModels.get(viewPager.getCurrentItem()).isCheck());
+        setTitles(viewPager.getCurrentItem() + 1, albumEntityList.size());
+        appCompatCheckBox.setChecked(albumEntityList.get(viewPager.getCurrentItem()).isCheck());
     }
 
 
@@ -191,26 +191,26 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
 
     @Override
     public void checkBoxClick() {
-        AlbumModel albumModel = adapter.getAlbumModel(viewPager.getCurrentItem());
-        if (!selectAlbumModels.contains(albumModel) && selectAlbumModels.size() >= albumConfig.getMultipleMaxCount()) {
+        AlbumEntity albumEntity = adapter.getAlbumEntity(viewPager.getCurrentItem());
+        if (!selectAlbumEntityList.contains(albumEntity) && selectAlbumEntityList.size() >= albumConfig.getMultipleMaxCount()) {
             appCompatCheckBox.setChecked(false);
             Album.getInstance().getAlbumListener().onAlbumMaxCount();
             return;
         }
-        if (albumModel.isCheck()) {
-            selectAlbumModels.remove(albumModel);
-            albumModel.setCheck(false);
+        if (albumEntity.isCheck()) {
+            selectAlbumEntityList.remove(albumEntity);
+            albumEntity.setCheck(false);
         } else {
-            albumModel.setCheck(true);
-            selectAlbumModels.add(albumModel);
+            albumEntity.setCheck(true);
+            selectAlbumEntityList.add(albumEntity);
         }
-        setCount(selectAlbumModels.size(), albumConfig.getMultipleMaxCount());
+        setCount(selectAlbumEntityList.size(), albumConfig.getMultipleMaxCount());
     }
 
     @Override
     public void isRefreshAlbumUI(boolean isRefresh, boolean isFinish) {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, selectAlbumModels);
+        bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, selectAlbumEntityList);
         bundle.putBoolean(AlbumConstant.PREVIEW_REFRESH_UI, isRefresh);
         bundle.putBoolean(AlbumConstant.PREVIEW_FINISH, isFinish);
         Intent intent = new Intent();
@@ -225,11 +225,11 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
         if (i == R.id.preview_check_box) {
             checkBoxClick();
         } else if (i == R.id.preview_bottom_view_tv_select) {
-            if (selectAlbumModels == null || selectAlbumModels.isEmpty()) {
+            if (selectAlbumEntityList == null || selectAlbumEntityList.isEmpty()) {
                 Album.getInstance().getAlbumListener().onAlbumPreviewSelectNull();
                 return;
             }
-            Album.getInstance().getAlbumListener().onAlbumResources(selectAlbumModels);
+            Album.getInstance().getAlbumListener().onAlbumResources(selectAlbumEntityList);
             isRefreshAlbumUI(false, true);
         }
     }
@@ -241,9 +241,9 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
     }
 
     @Override
-    public void scanSuccess(ArrayList<AlbumModel> albumModels) {
-        previewPresenter.mergeModel(albumModels, selectAlbumModels);
-        initViewPager(albumModels);
+    public void scanSuccess(ArrayList<AlbumEntity> albumEntityList) {
+        previewPresenter.mergeEntity(albumEntityList, selectAlbumEntityList);
+        initViewPager(albumEntityList);
     }
 
     @Override
@@ -255,8 +255,8 @@ public class PreviewActivity extends AlbumBaseActivity implements View.OnClickLi
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT, selectAlbumModels);
-        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL, isPreview ? albumModels : null);
+        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT, selectAlbumEntityList);
+        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL, isPreview ? albumEntityList : null);
         outState.putInt(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_POSITION, selectPosition);
     }
 

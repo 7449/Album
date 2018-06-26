@@ -17,10 +17,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.album.AlbumConstant;
-import com.album.model.FinderModel;
+import com.album.entity.FinderEntity;
 import com.album.ui.activity.AlbumBaseActivity;
 import com.album.ui.adapter.ListPopupWindowAdapter;
-import com.album.ui.annotation.PermissionsType;
+import com.album.annotation.PermissionsType;
 import com.album.ui.fragment.AlbumFragment;
 
 import java.util.List;
@@ -90,9 +90,9 @@ public class SimpleAlbumUI extends AlbumBaseActivity implements AdapterView.OnIt
         finerName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<FinderModel> finderModel = albumFragment.getFinderModel();
-                if (finderModel != null && !finderModel.isEmpty()) {
-                    listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderModel));
+                List<FinderEntity> finderEntity = albumFragment.getFinderEntity();
+                if (finderEntity != null && !finderEntity.isEmpty()) {
+                    listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderEntity));
                     listPopupWindow.show();
                 }
             }
@@ -144,7 +144,7 @@ public class SimpleAlbumUI extends AlbumBaseActivity implements AdapterView.OnIt
             return;
         }
         ListPopupWindowAdapter adapter = (ListPopupWindowAdapter) listView.getAdapter();
-        FinderModel finder = adapter.getFinder(position);
+        FinderEntity finder = adapter.getFinder(position);
         if (finder == null) {
             return;
         }

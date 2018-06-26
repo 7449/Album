@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.album.Album;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
-import com.album.ui.annotation.PermissionsType;
+import com.album.annotation.PermissionsType;
 import com.album.util.AlbumTool;
 import com.album.util.task.AlbumTask;
 

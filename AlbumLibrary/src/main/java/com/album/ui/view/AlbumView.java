@@ -2,8 +2,8 @@ package com.album.ui.view;
 
 import android.app.Activity;
 
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
 
 import java.util.ArrayList;
 
@@ -17,15 +17,15 @@ public interface AlbumView {
 
     void hideProgress();
 
-    void scanSuccess(ArrayList<AlbumModel> albumModels);
+    void scanSuccess(ArrayList<AlbumEntity> albumEntityList);
 
-    void scanFinder(ArrayList<FinderModel> list);
+    void scanFinder(ArrayList<FinderEntity> list);
 
-    ArrayList<AlbumModel> getSelectModel();
+    ArrayList<AlbumEntity> getSelectEntity();
 
     Activity getAlbumActivity();
 
     void onAlbumNoMore();
 
-    void resultSuccess(AlbumModel albumModel);
+    void resultSuccess(AlbumEntity albumEntity);
 }

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.album.Album;
 import com.album.AlbumConstant;
-import com.album.model.AlbumModel;
+import com.album.entity.AlbumEntity;
 import com.album.ui.widget.TouchImageView;
 
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ import java.util.ArrayList;
 
 public class PreviewAdapter extends PagerAdapter {
 
-    private final ArrayList<AlbumModel> list;
+    private final ArrayList<AlbumEntity> list;
 
-    public PreviewAdapter(ArrayList<AlbumModel> list) {
+    public PreviewAdapter(ArrayList<AlbumEntity> list) {
         this.list = list;
     }
 
@@ -62,7 +62,7 @@ public class PreviewAdapter extends PagerAdapter {
     }
 
 
-    public AlbumModel getAlbumModel(int position) {
+    public AlbumEntity getAlbumEntity(int position) {
         return list.get(position);
     }
 }

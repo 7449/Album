@@ -6,10 +6,10 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
-import com.album.AlbumImageLoader;
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
-import com.album.ui.annotation.FrescoType;
+import com.album.listener.AlbumImageLoader;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
+import com.album.annotation.FrescoType;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -19,26 +19,26 @@ import com.squareup.picasso.Picasso;
 public class SimplePicassoAlbumImageLoader implements AlbumImageLoader {
 
     @Override
-    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
+    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumEntity albumEntity) {
         Picasso.get()
-                .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumModel.getId()))
+                .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.getId()))
                 .centerCrop()
                 .into(view);
     }
 
     @Override
-    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
+    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderEntity finderEntity) {
         Picasso.get()
-                .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, finderModel.getThumbnailsId()))
+                .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, finderEntity.getThumbnailsId()))
                 .resize(50, 50)
                 .centerCrop()
                 .into(view);
     }
 
     @Override
-    public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
+    public void displayPreview(@NonNull ImageView view, @NonNull AlbumEntity albumEntity) {
         Picasso.get()
-                .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumModel.getId()))
+                .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.getId()))
                 .resize(50, 50)
                 .centerCrop()
                 .into(view);

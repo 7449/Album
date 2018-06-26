@@ -1,4 +1,4 @@
-package com.album.ui.widget;
+package com.album.listener;
 
 import android.view.View;
 
@@ -7,7 +7,5 @@ import android.view.View;
  */
 
 public interface OnEmptyClickListener {
-
     boolean click(View view);
-
 }

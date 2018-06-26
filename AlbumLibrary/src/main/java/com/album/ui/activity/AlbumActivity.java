@@ -19,9 +19,9 @@ import android.widget.RelativeLayout;
 import com.album.Album;
 import com.album.AlbumConstant;
 import com.album.R;
-import com.album.model.FinderModel;
+import com.album.entity.FinderEntity;
 import com.album.ui.adapter.ListPopupWindowAdapter;
-import com.album.ui.annotation.PermissionsType;
+import com.album.annotation.PermissionsType;
 import com.album.ui.fragment.AlbumFragment;
 import com.album.ui.view.AlbumMethodActivityView;
 import com.album.util.AlbumTool;
@@ -190,9 +190,9 @@ public class AlbumActivity extends AlbumBaseActivity
         } else if (i == R.id.album_tv_select) {
             albumFragment.multipleSelect();
         } else if (i == R.id.album_tv_finder_all) {
-            List<FinderModel> finderModel = albumFragment.getFinderModel();
-            if (finderModel != null && !finderModel.isEmpty()) {
-                listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderModel));
+            List<FinderEntity> finderEntity = albumFragment.getFinderEntity();
+            if (finderEntity != null && !finderEntity.isEmpty()) {
+                listPopupWindow.setAdapter(new ListPopupWindowAdapter(finderEntity));
                 listPopupWindow.show();
                 ListView listView = listPopupWindow.getListView();
                 if (listView != null) {
@@ -211,7 +211,7 @@ public class AlbumActivity extends AlbumBaseActivity
             return;
         }
         ListPopupWindowAdapter adapter = (ListPopupWindowAdapter) listView.getAdapter();
-        FinderModel finder = adapter.getFinder(position);
+        FinderEntity finder = adapter.getFinder(position);
         if (finder == null) {
             return;
         }

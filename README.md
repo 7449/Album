@@ -60,7 +60,7 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 
         Album
                 .getInstance()
-                .setAlbumModels(new ArrayList<AlbumModel>())
+                .setAlbumEntitys(new ArrayList<AlbumEntity>())
                 .setOptions(new UCrop.Options())
                 .setAlbumImageLoader(new SimpleAlbumImageLoader())
                 .setConfig(new AlbumConfig())
@@ -124,17 +124,17 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
     public class SimpleImageLoader implements AlbumImageLoader {
     
         @Override
-        public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
+        public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumEntity albumEntity) {
             
         }
     
         @Override
-        public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
+        public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderEntity finderEntity) {
     
         }
     
         @Override
-        public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
+        public void displayPreview(@NonNull ImageView view, @NonNull AlbumEntity albumEntity) {
     
         }
     
@@ -162,13 +162,13 @@ see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrar
      public class AlbumListener implements AlbumListener {
     
             private Context context;
-            private List<AlbumModel> list = null;
+            private List<AlbumEntity> list = null;
     
             void toast(String s) {
                 Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
             }
     
-            MainAlbumListener(Context context, ArrayList<AlbumModel> list) {
+            MainAlbumListener(Context context, ArrayList<AlbumEntity> list) {
                 this.context = context.getApplicationContext();
                 this.list = list;
             }
@@ -239,7 +239,7 @@ see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrar
             }
     
             @Override
-            public void onAlbumResources(@NonNull List<AlbumModel> list) {
+            public void onAlbumResources(@NonNull List<AlbumEntity> list) {
                 
             }
     

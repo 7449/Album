@@ -1,6 +1,6 @@
 package com.album.ui.view;
 
-import com.album.model.AlbumModel;
+import com.album.entity.AlbumEntity;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public interface PreviewMethodActivityView {
     void initBundle();
 
-    void initViewPager(ArrayList<AlbumModel> albumModels);
+    void initViewPager(ArrayList<AlbumEntity> albumEntityList);
 
     void setTitles(int page, int imageSize);
 

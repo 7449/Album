@@ -5,10 +5,10 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
-import com.album.AlbumImageLoader;
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
-import com.album.ui.annotation.FrescoType;
+import com.album.listener.AlbumImageLoader;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
+import com.album.annotation.FrescoType;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
@@ -36,22 +36,22 @@ public class SimpleImageLoaderAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
+    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumEntity albumEntity) {
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ImageLoader.getInstance().displayImage("file:///" + albumModel.getPath(), view, displayImageOptions, null);
+        ImageLoader.getInstance().displayImage("file:///" + albumEntity.getPath(), view, displayImageOptions, null);
     }
 
 
     @Override
-    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
+    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderEntity finderEntity) {
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ImageLoader.getInstance().displayImage("file:///" + finderModel.getThumbnailsPath(), new ImageViewAware(view), displayImageOptions, null, null, null);
+        ImageLoader.getInstance().displayImage("file:///" + finderEntity.getThumbnailsPath(), new ImageViewAware(view), displayImageOptions, null, null, null);
     }
 
     @Override
-    public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
+    public void displayPreview(@NonNull ImageView view, @NonNull AlbumEntity albumEntity) {
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ImageLoader.getInstance().displayImage("file:///" + albumModel.getPath(), new ImageViewAware(view), displayImageOptions, null, null, null);
+        ImageLoader.getInstance().displayImage("file:///" + albumEntity.getPath(), new ImageViewAware(view), displayImageOptions, null, null, null);
     }
 
     @Override

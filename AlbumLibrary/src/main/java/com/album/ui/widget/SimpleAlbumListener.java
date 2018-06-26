@@ -3,8 +3,8 @@ package com.album.ui.widget;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.album.AlbumListener;
-import com.album.model.AlbumModel;
+import com.album.listener.AlbumListener;
+import com.album.entity.AlbumEntity;
 
 import java.io.File;
 import java.util.List;
@@ -81,7 +81,7 @@ public class SimpleAlbumListener implements AlbumListener {
     }
 
     @Override
-    public void onAlbumResources(@NonNull List<AlbumModel> list) {
+    public void onAlbumResources(@NonNull List<AlbumEntity> list) {
 
     }
 

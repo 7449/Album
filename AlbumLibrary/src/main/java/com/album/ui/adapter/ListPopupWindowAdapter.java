@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.album.Album;
 import com.album.AlbumConfig;
 import com.album.R;
-import com.album.model.FinderModel;
+import com.album.entity.FinderEntity;
 import com.album.ui.widget.AlbumImageView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -23,11 +23,11 @@ import java.util.List;
  */
 
 public class ListPopupWindowAdapter extends BaseAdapter {
-    private final List<FinderModel> list;
+    private final List<FinderEntity> list;
     private final AlbumConfig albumConfig;
 
-    public ListPopupWindowAdapter(List<FinderModel> finderModel) {
-        this.list = finderModel;
+    public ListPopupWindowAdapter(List<FinderEntity> finderEntity) {
+        this.list = finderEntity;
         albumConfig = Album.getInstance().getConfig();
     }
 
@@ -62,14 +62,14 @@ public class ListPopupWindowAdapter extends BaseAdapter {
         }
         frameLayout.addView(imageView);
         if (list != null && list.get(position) != null) {
-            FinderModel finderModel = list.get(position);
-            appCompatTextView.setText(String.format("%s(%s)", finderModel.getDirName(), String.valueOf(finderModel.getCount())));
-            Album.getInstance().getAlbumImageLoader().displayAlbumThumbnails(imageView, finderModel);
+            FinderEntity finderEntity = list.get(position);
+            appCompatTextView.setText(String.format("%s(%s)", finderEntity.getDirName(), String.valueOf(finderEntity.getCount())));
+            Album.getInstance().getAlbumImageLoader().displayAlbumThumbnails(imageView, finderEntity);
         }
         return convertView;
     }
 
-    public FinderModel getFinder(int position) {
+    public FinderEntity getFinder(int position) {
         if (list != null) {
             return list.get(position);
         }

@@ -1,6 +1,6 @@
 package com.album.util.scanner;
 
-import com.album.ui.annotation.AlbumResultType;
+import com.album.annotation.AlbumResultType;
 
 public interface SingleScannerListener {
     @SuppressWarnings("EmptyMethod")

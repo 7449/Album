@@ -6,10 +6,10 @@ import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.album.AlbumConstant;
-import com.album.AlbumImageLoader;
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
-import com.album.ui.annotation.FrescoType;
+import com.album.listener.AlbumImageLoader;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
+import com.album.annotation.FrescoType;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
@@ -27,9 +27,9 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
 
     @Override
-    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumModel albumModel) {
+    public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumEntity albumEntity) {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) view;
-        Uri uri = Uri.parse("file://" + albumModel.getPath());
+        Uri uri = Uri.parse("file://" + albumEntity.getPath());
         ImageRequest request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())
@@ -49,9 +49,9 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderModel finderModel) {
+    public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderEntity finderEntity) {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) view;
-        Uri uri = Uri.parse("file://" + finderModel.getThumbnailsPath());
+        Uri uri = Uri.parse("file://" + finderEntity.getThumbnailsPath());
         ImageRequest request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())
@@ -69,9 +69,9 @@ public class SimpleFrescoAlbumImageLoader implements AlbumImageLoader {
     }
 
     @Override
-    public void displayPreview(@NonNull ImageView view, @NonNull AlbumModel albumModel) {
+    public void displayPreview(@NonNull ImageView view, @NonNull AlbumEntity albumEntity) {
         SimpleDraweeView simpleDraweeView = (SimpleDraweeView) view;
-        Uri uri = Uri.parse("file://" + albumModel.getPath());
+        Uri uri = Uri.parse("file://" + albumEntity.getPath());
         ImageRequest request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())

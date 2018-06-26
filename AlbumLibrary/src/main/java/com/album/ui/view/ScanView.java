@@ -2,8 +2,8 @@ package com.album.ui.view;
 
 import android.database.Cursor;
 
-import com.album.model.AlbumModel;
-import com.album.model.FinderModel;
+import com.album.entity.AlbumEntity;
+import com.album.entity.FinderEntity;
 import com.album.ui.widget.ScanCallBack;
 
 import java.util.ArrayList;
@@ -48,9 +48,9 @@ public interface ScanView {
 
     void resultScan(ScanCallBack scanCallBack, String path);
 
-    void scanCursor(ArrayList<AlbumModel> albumModels, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor);
+    void scanCursor(ArrayList<AlbumEntity> albumEntityList, int dataColumnIndex, int idColumnIndex, int sizeColumnIndex, Cursor cursor);
 
-    void cursorFinder(ArrayList<FinderModel> finderModels);
+    void cursorFinder(ArrayList<FinderEntity> finderEntityList);
 
     int cursorCount(String bucketId);
 

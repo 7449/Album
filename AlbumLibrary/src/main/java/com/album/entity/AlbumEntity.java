@@ -1,4 +1,4 @@
-package com.album.model;
+package com.album.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,17 +7,17 @@ import android.os.Parcelable;
  * by y on 14/08/2017.
  */
 
-public class AlbumModel implements Parcelable {
+public class AlbumEntity implements Parcelable {
 
-    public static final Creator<AlbumModel> CREATOR = new Creator<AlbumModel>() {
+    public static final Creator<AlbumEntity> CREATOR = new Creator<AlbumEntity>() {
         @Override
-        public AlbumModel createFromParcel(Parcel in) {
-            return new AlbumModel(in);
+        public AlbumEntity createFromParcel(Parcel in) {
+            return new AlbumEntity(in);
         }
 
         @Override
-        public AlbumModel[] newArray(int size) {
-            return new AlbumModel[size];
+        public AlbumEntity[] newArray(int size) {
+            return new AlbumEntity[size];
         }
     };
     private String dirPath;
@@ -26,7 +26,7 @@ public class AlbumModel implements Parcelable {
     private long id;
     private boolean isCheck;
 
-    public AlbumModel(String dirPath, String dirName, String path, long id, boolean isCheck) {
+    public AlbumEntity(String dirPath, String dirName, String path, long id, boolean isCheck) {
         this.dirPath = dirPath;
         this.dirName = dirName;
         this.path = path;
@@ -34,7 +34,7 @@ public class AlbumModel implements Parcelable {
         this.isCheck = isCheck;
     }
 
-    private AlbumModel(Parcel in) {
+    private AlbumEntity(Parcel in) {
         dirPath = in.readString();
         dirName = in.readString();
         path = in.readString();
@@ -87,7 +87,7 @@ public class AlbumModel implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AlbumModel that = (AlbumModel) o;
+        AlbumEntity that = (AlbumEntity) o;
 
         if (id != that.id) return false;
         if (isCheck == that.isCheck)

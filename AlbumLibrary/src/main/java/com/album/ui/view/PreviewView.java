@@ -2,7 +2,7 @@ package com.album.ui.view;
 
 import android.app.Activity;
 
-import com.album.model.AlbumModel;
+import com.album.entity.AlbumEntity;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public interface PreviewView {
 
-    void scanSuccess(ArrayList<AlbumModel> albumModels);
+    void scanSuccess(ArrayList<AlbumEntity> albumEntityList);
 
     Activity getPreviewActivity();
 

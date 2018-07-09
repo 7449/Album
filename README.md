@@ -40,22 +40,16 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     compile 'com.ydevelop:album:0.0.3'
-     compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
-     compile "com.github.bumptech.glide:glide:$glideVersion"
+     api 'com.ydevelop:album:0.0.4'
+     api "com.android.support:recyclerview-v7:$supportLibraryVersion"
+     api "com.github.bumptech.glide:glide:$glideVersion"
      
   
   If you use the built-in frame, please rely on glide
   
   
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    glide
     
-  or
-  
-  [SimpleGlide4xAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleGlide4xAlbumImageLoader.java)
-
-
-  
 #### sampleDemo
 
         Album

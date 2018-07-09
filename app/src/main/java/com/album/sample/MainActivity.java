@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setAlbumClass(null)
                         .setConfig(new AlbumConfig()
                                 .setCameraCrop(false)
+                                .setHideCamera(true)
                                 .setFilterImg(true)
                                 .setPermissionsDeniedFinish(false)
                                 .setPreviewFinishRefresh(true)

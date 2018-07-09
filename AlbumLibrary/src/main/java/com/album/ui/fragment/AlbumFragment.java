@@ -19,17 +19,17 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.album.Album;
-import com.album.listener.AlbumCameraListener;
 import com.album.AlbumConfig;
 import com.album.AlbumConstant;
-import com.album.listener.AlbumVideoListener;
 import com.album.R;
+import com.album.annotation.AlbumResultType;
 import com.album.entity.AlbumEntity;
 import com.album.entity.FinderEntity;
+import com.album.listener.AlbumCameraListener;
+import com.album.listener.AlbumVideoListener;
 import com.album.presenter.impl.AlbumPresenterImpl;
 import com.album.ui.activity.PreviewActivity;
 import com.album.ui.adapter.AlbumAdapter;
-import com.album.annotation.AlbumResultType;
 import com.album.ui.view.AlbumMethodFragmentView;
 import com.album.ui.view.AlbumView;
 import com.album.ui.widget.LoadMoreRecyclerView;
@@ -312,7 +312,7 @@ public class AlbumFragment extends Fragment implements
         Bundle bundle = new Bundle();
         ArrayList<AlbumEntity> multiplePreviewList = albumAdapter.getMultiplePreviewList();
         bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, multiplePreviewList);
-        bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, position);
+        bundle.putInt(AlbumConstant.PREVIEW_POSITION_KEY, albumConfig.isHideCamera() ? position + 1 : position);
         bundle.putString(AlbumConstant.PREVIEW_BUCKET_ID, bucketId);
         startActivityForResult(new Intent(albumActivity, PreviewActivity.class).putExtras(bundle), AlbumConstant.TYPE_PREVIEW_CODE);
     }

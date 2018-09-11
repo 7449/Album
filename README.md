@@ -3,9 +3,7 @@ android album
 
 Chinese : [wiki](https://github.com/7449/Album/wiki)
 
-
 ## Screenshot
-
 
 #### multiple, radio, preview, crop, sample ui,customize camera
 
@@ -16,14 +14,13 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_customize_camera.png)
 
-
 ## sample
-
-
 
 #### filter damaged pictures
 
-        new AlbumConfig().setFilterImg(false)
+    AlbumConfig().apply {
+        filterImg = true
+    }
 
 #### Manifests.xml
 
@@ -40,26 +37,35 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     api 'com.ydevelop:album:0.0.4'
+     api 'com.ydevelop:album:album:0.0.6'
      api "com.android.support:recyclerview-v7:$supportLibraryVersion"
      api "com.github.bumptech.glide:glide:$glideVersion"
-     
   
   If you use the built-in frame, please rely on glide
   
-  
     glide
     
-#### sampleDemo
+#### demo-kotlin
 
-        Album
-                .getInstance()
-                .setAlbumEntitys(new ArrayList<AlbumEntity>())
-                .setOptions(new UCrop.Options())
-                .setAlbumImageLoader(new SimpleAlbumImageLoader())
-                .setConfig(new AlbumConfig())
-                .setAlbumListener(new SimpleAlbumListener())
-                .start(this);
+    Album
+            .instance
+            .apply {
+            // album config
+            }.start(this)
+            
+#### demo-java
+
+    Album
+            .instance
+            .setImageLoader()
+            .setAlbumListener()
+            .setAlbumEntityList(list)
+            .setOptions()
+            .setOnEmptyClickListener()
+            .setConfig()
+            .setAlbumCameraListener()
+            .setAlbumClass()
+            .start(this)
               
 ## customize camera
 
@@ -100,178 +106,139 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 > Fresco
 
     Album
-         .getInstance()
-         .setConfig(new AlbumConfig().setFrescoImageLoader(true)  // notification Album is using Fresco
-         .start(this);
+            .instance
+            .apply {
+                config = AlbumConfig().apply {
+                    isFrescoImageLoader = true
+                }
+            }.start(this)
+
+[SimpleFrescoAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleFrescoAlbumImageLoader.kt)
+
+[SimpleImageLoaderAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleImageLoaderAlbumImageLoader.kt)
+
+[SimplePicassoAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimplePicassoAlbumImageLoader.kt)
 
 
-
-[SimpleFrescoAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleFrescoAlbumImageLoader.java)
-
-[SimpleGlide4xAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleGlide4xAlbumImageLoader.java)
-
-[SimpleImageLoaderAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleImageLoaderAlbumImageLoader.java)
-
-[SimplePicassoAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimplePicassoAlbumImageLoader.java)
-
-
-    public class SimpleImageLoader implements AlbumImageLoader {
+    class SimpleImageLoader : AlbumImageLoader {
     
-        @Override
-        public void displayAlbum(@NonNull ImageView view, int width, int height, @NonNull AlbumEntity albumEntity) {
-            
-        }
-    
-        @Override
-        public void displayAlbumThumbnails(@NonNull ImageView view, @NonNull FinderEntity finderEntity) {
+        override fun displayAlbum(view: ImageView, width: Int, height: Int, albumEntity: AlbumEntity) {
     
         }
     
-        @Override
-        public void displayPreview(@NonNull ImageView view, @NonNull AlbumEntity albumEntity) {
+        override fun displayAlbumThumbnails(view: ImageView, finderEntity: FinderEntity) {
     
         }
     
+        override fun displayPreview(view: ImageView, albumEntity: AlbumEntity) {
     
-        // fresco DraweeView
-        // other  null
-        @Nullable
-        @Override
-        public ImageView frescoView(@NonNull Context context, @FrescoType int type) {
-            return null;
         }
     
+        override fun frescoView(context: Context, type: Int): ImageView? {
+            return null
+        }
     }
 
 
 ## UI
 
-see: [SimpleAlbumUI](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleAlbumUI.java)
+#### album
 
+see: [SimpleAlbumUI](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/ui/SimpleAlbumUI.kt)
+
+#### preview
+
+see: [SimpleAlbumUI](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/ui/SimplePreviewUI.kt)
 
 ## Listener
 
-see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrary/src/main/java/com/album/ui/widget/SimpleAlbumListener.java)
+see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrary/src/main/java/com/album/ui/widget/SimpleAlbumListener.kt)
 
-     public class AlbumListener implements AlbumListener {
+    class SimpleAlbumListener : AlbumListener {
     
-            private Context context;
-            private List<AlbumEntity> list = null;
+        override fun onAlbumActivityFinish() {
     
-            void toast(String s) {
-                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-            }
-    
-            MainAlbumListener(Context context, ArrayList<AlbumEntity> list) {
-                this.context = context.getApplicationContext();
-                this.list = list;
-            }
-    
-            @Override
-            public void onAlbumActivityFinish() {
-                toast("album activity finish");
-            }
-    
-            @Override
-            public void onAlbumPermissionsDenied(@PermissionsType int type) {
-                toast("permissions error");
-            }
-    
-            @Override
-            public void onAlbumFragmentNull() {
-                toast("album fragment null");
-            }
-    
-            @Override
-            public void onAlbumPreviewFileNull() {
-                toast("preview image has been deleted");
-            }
-    
-            @Override
-            public void onAlbumFinderNull() {
-                toast("folder directory is empty");
-            }
-    
-            @Override
-            public void onAlbumBottomPreviewNull() {
-                toast("preview no image");
-            }
-    
-            @Override
-            public void onAlbumBottomSelectNull() {
-                toast("select no image");
-            }
-    
-            @Override
-            public void onAlbumFragmentFileNull() {
-                toast("album image has been deleted");
-            }
-    
-            @Override
-            public void onAlbumPreviewSelectNull() {
-                toast("PreviewActivity,  preview no image");
-            }
-    
-            @Override
-            public void onAlbumCheckBoxFileNull() {
-                toast("check box  image has been deleted");
-            }
-    
-            @Override
-            public void onAlbumFragmentCropCanceled() {
-                toast("cancel crop");
-            }
-    
-            @Override
-            public void onAlbumFragmentCameraCanceled() {
-                toast("cancel camera");
-            }
-    
-            @Override
-            public void onAlbumFragmentUCropError(@Nullable Throwable data) {
-                toast("crop error:" + data.toString());
-            }
-    
-            @Override
-            public void onAlbumResources(@NonNull List<AlbumEntity> list) {
-                
-            }
-    
-            @Override
-            public void onAlbumUCropResources(@Nullable File scannerFile) {
-                toast("crop file:" + scannerFile);
-            }
-    
-            @Override
-            public void onAlbumMaxCount() {
-                toast("select max count");
-            }
-    
-            @Override
-            public void onAlbumActivityBackPressed() {
-                toast("AlbumActivity Back");
-            }
-    
-            @Override
-            public void onAlbumOpenCameraError() {
-                toast("camera error");
-            }
-            
-            @Override
-            public void onAlbumEmpty() {
-                 toast("no image");
-            }
-            
-            @Override
-            public void onAlbumNoMore() {
-                 toast("image no more");
-            }
-            
-            @Override
-            public void onAlbumResultCameraError() {
-                 toast("result camera error");
-            }
         }
+    
+        override fun onAlbumPermissionsDenied(type: Int) {
+    
+        }
+    
+        override fun onAlbumFragmentNull() {
+    
+        }
+    
+        override fun onAlbumPreviewFileNull() {
+    
+        }
+    
+        override fun onAlbumFinderNull() {
+    
+        }
+    
+        override fun onAlbumBottomPreviewNull() {
+    
+        }
+    
+        override fun onAlbumBottomSelectNull() {
+    
+        }
+    
+        override fun onAlbumFragmentFileNull() {
+    
+        }
+    
+        override fun onAlbumPreviewSelectNull() {
+    
+        }
+    
+        override fun onAlbumCheckBoxFileNull() {
+    
+        }
+    
+        override fun onAlbumFragmentCropCanceled() {
+    
+        }
+    
+        override fun onAlbumFragmentCameraCanceled() {
+    
+        }
+    
+        override fun onAlbumFragmentUCropError(data: Throwable?) {
+    
+        }
+    
+        override fun onAlbumResources(list: List<AlbumEntity>) {
+    
+        }
+    
+        override fun onAlbumUCropResources(scannerFile: File) {
+    
+        }
+    
+        override fun onAlbumMaxCount() {
+    
+        }
+    
+        override fun onAlbumActivityBackPressed() {
+    
+        }
+    
+        override fun onAlbumOpenCameraError() {
+    
+        }
+    
+        override fun onAlbumEmpty() {
+    
+        }
+    
+        override fun onAlbumNoMore() {
+    
+        }
+    
+        override fun onVideoPlayError() {
+        }
+    }
 
 ## TestPhone
 

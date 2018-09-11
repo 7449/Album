@@ -27,7 +27,10 @@
             android:name="com.album.ui.activity.PreviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".SimpleAlbumUI"
+            android:name=".ui.SimpleAlbumUI"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".ui.SimplePreviewUI"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".camera.SimpleCameraActivity"

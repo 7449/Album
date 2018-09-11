@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -11,6 +12,11 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
@@ -26,5 +32,10 @@ dependencies {
     implementation "com.facebook.fresco:fresco:$frescoVersion"
     implementation "com.facebook.fresco:animated-gif:$frescoVersion"
     implementation project(':AlbumLibrary')
-    implementation project(':CameraViewLibrary')
+    implementation(name: 'CameraViewLibrary', ext: 'aar')
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+repositories {
+    mavenCentral()
+}
+tasks.getByPath(":AlbumLibrary:releaseAndroidJavadocs").enabled = false

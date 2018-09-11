@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -8,6 +10,9 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode rootProject.projectVersionCode
         versionName rootProject.projectVersionName
+    }
+    androidExtensions {
+        experimental = true
     }
     lintOptions {
         abortOnError false
@@ -26,7 +31,7 @@ publish {
     userOrg = 'ydevelop'
     groupId = 'com.ydevelop'
     artifactId = 'album'
-    publishVersion = '0.0.4'
+    publishVersion = '0.0.5'
     desc = 'this is android album'
     website = 'https://github.com/7449/Album'
 }
@@ -36,4 +41,8 @@ dependencies {
     compileOnly "com.android.support:recyclerview-v7:$supportLibraryVersion"
     compileOnly "com.github.bumptech.glide:glide:$glideVersion"
     compileOnly "com.facebook.fresco:fresco:$frescoVersion"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

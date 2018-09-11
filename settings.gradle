@@ -1,1 +1,1 @@
-include ':app', ':AlbumLibrary', ':CameraViewLibrary'
+include ':app', ':AlbumLibrary'

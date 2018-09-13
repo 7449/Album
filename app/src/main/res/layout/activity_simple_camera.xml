@@ -26,7 +26,7 @@
         android:background="@android:color/black" />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/album_camer_atoolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize" />
 

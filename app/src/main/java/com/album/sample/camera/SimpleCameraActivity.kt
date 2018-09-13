@@ -25,13 +25,14 @@ class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermis
 
     private var mCurrentFlash: Int = 0
     private lateinit var mCameraView: CameraView
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_camera)
         mCameraView = findViewById(R.id.camera)
         findViewById<View>(R.id.take_picture).setOnClickListener { mCameraView.takePicture() }
-        val toolbar = findViewById<View>(R.id.album_camer_atoolbar) as Toolbar
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayShowTitleEnabled(false)

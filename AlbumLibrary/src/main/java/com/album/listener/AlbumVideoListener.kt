@@ -1,6 +1,6 @@
 package com.album.listener
 
-import android.support.v4.app.Fragment
+import com.album.ui.fragment.AlbumBaseFragment
 
 /**
  * by y on 28/08/2017.
@@ -15,5 +15,5 @@ interface AlbumVideoListener {
      *
      * @param fragment [com.album.ui.fragment.AlbumFragment]
      */
-    fun startVideo(fragment: Fragment)
+    fun startVideo(fragment: AlbumBaseFragment)
 }

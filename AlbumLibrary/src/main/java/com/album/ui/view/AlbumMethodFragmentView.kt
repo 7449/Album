@@ -1,10 +1,9 @@
 package com.album.ui.view
 
-import android.net.Uri
 import android.os.Bundle
-
 import com.album.annotation.AlbumResultType
 import com.album.entity.FinderEntity
+import java.io.File
 
 /**
  * by y on 15/08/2017.
@@ -22,9 +21,9 @@ interface AlbumMethodFragmentView {
 
     fun openCamera()
 
-    fun openUCrop(path: String, uri: Uri)
+    fun openUCrop(path: String)
 
-    fun refreshMedia(@AlbumResultType type: Int)
+    fun refreshMedia(@AlbumResultType type: Int, file: File)
 
     fun multiplePreview()
 

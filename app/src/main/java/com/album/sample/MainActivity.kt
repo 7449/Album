@@ -21,6 +21,7 @@ import com.album.listener.OnEmptyClickListener
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.ui.SimpleAlbumUI
 import com.album.sample.ui.SimplePreviewUI
+import com.album.ui.fragment.AlbumBaseFragment
 import com.album.ui.widget.SimpleGlideAlbumImageLoader
 import com.album.util.AlbumTool
 import com.album.util.FileUtils
@@ -117,7 +118,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                             config = AlbumConfig(AlbumConstant.TYPE_NIGHT).apply {
                                 isRadio = true
                                 filterImg = false
-                                hideCamera = true
                                 isCrop = true
                                 cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Album"
                                 uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop"
@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                             albumClass = null
                             previewClass = null
                             albumCameraListener = object : AlbumCameraListener {
-                                override fun startCamera(fragment: Fragment) {
+                                override fun startCamera(fragment: AlbumBaseFragment) {
                                     if (PermissionUtils.storage(this@MainActivity) && PermissionUtils.camera(this@MainActivity)) {
                                         val activity = fragment.activity
                                         Toast.makeText(activity, "camera", Toast.LENGTH_SHORT).show()

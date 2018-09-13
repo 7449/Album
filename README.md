@@ -37,7 +37,7 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     api 'com.ydevelop:album:album:0.0.6'
+     api 'com.ydevelop:album:album:0.0.5'
      api "com.android.support:recyclerview-v7:$supportLibraryVersion"
      api "com.github.bumptech.glide:glide:$glideVersion"
   
@@ -52,20 +52,6 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             .apply {
             // album config
             }.start(this)
-            
-#### demo-java
-
-    Album
-            .instance
-            .setImageLoader()
-            .setAlbumListener()
-            .setAlbumEntityList(list)
-            .setOptions()
-            .setOnEmptyClickListener()
-            .setConfig()
-            .setAlbumCameraListener()
-            .setAlbumClass()
-            .start(this)
               
 ## customize camera
 
@@ -73,32 +59,25 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 
 [CustomizeCamera](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/camera)
 
-         Album
-                .getInstance()
-                .setAlbumCameraListener(new AlbumCameraListener() {
-                      @Override
-                      public void startCamera(@NonNull Fragment fragment) {
-                      
-                           FragmentActivity activity = fragment.getActivity();
-                           Intent intent = new Intent(activity, SimpleCameraActivity.class);
-                           // AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE
-                           fragment.startActivityForResult(intent, AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE);
-                      }
-                })
+     Album
+        .instance
+        .apply {
+            albumCameraListener = object : AlbumCameraListener {
+                override fun startCamera(fragment: AlbumBaseFragment) {
+                }
+            }
+        }.start(this)
 
 
-    FileUtils.finishCamera(SimpleCameraActivity.this, cameraFile.getPath());
+    FileUtils.finishCamera(SimpleCameraActivity.this, cameraFile.path);
     
-    
-    public static void finishCamera(Activity activity, String path) {
-        Bundle bundle = new Bundle();
-        
-        //AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY, path
-        bundle.putString(AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY, path);
-        Intent intent = new Intent();
-        intent.putExtras(bundle);
-        activity.setResult(RESULT_OK, intent);
-        activity.finish();
+    fun finishCamera(activity: Activity, path: String) {
+        val bundle = Bundle()
+        bundle.putString(AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY, path)
+        val intent = Intent()
+        intent.putExtras(bundle)
+        activity.setResult(RESULT_OK, intent)
+        activity.finish()
     }
                 
 ## ImageLoader

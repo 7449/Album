@@ -16,6 +16,7 @@ object AlbumConstant {
     const val TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL = "state_preview_all"
     const val TYPE_ALBUM_STATE_BUCKET_ID = "state_bucket_id"
     const val TYPE_ALBUM_STATE_FINDER_NAME = "state_finder_name"
+    const val TYPE_ALBUM_STATE_IMAGE_PATH = "state_image_path"
     const val PREVIEW_KEY = "preview"
     const val PREVIEW_REFRESH_UI = "preview_refresh_ui"
     const val PREVIEW_FINISH = "preview_finish"

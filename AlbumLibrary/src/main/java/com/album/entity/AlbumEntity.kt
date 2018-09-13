@@ -34,5 +34,8 @@ class AlbumEntity(private var dirPath: String, private var dirName: String, var 
         return result
     }
 
+    override fun toString(): String {
+        return "AlbumEntity(dirPath='$dirPath', dirName='$dirName', path='$path', id=$id, isCheck=$isCheck)"
+    }
 
 }

@@ -56,7 +56,6 @@ class AlbumFragment : AlbumBaseFragment(),
     private lateinit var albumPresenter: AlbumPresenterImpl
 
     private lateinit var finderEntityList: ArrayList<FinderEntity>
-    private lateinit var uCropImagePath: Uri
     private lateinit var imagePath: Uri
 
     private lateinit var multipleAlbumEntity: ArrayList<AlbumEntity>
@@ -71,17 +70,16 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
+            imagePath = Uri.fromFile(FileUtils.getCameraFile(mActivity, albumConfig.cameraPath, albumConfig.isVideo))
             return
         }
         bucketId = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID)
         multipleAlbumEntity = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT)
         finderName = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME)
+        imagePath = savedInstanceState.getParcelable(AlbumConstant.TYPE_ALBUM_STATE_IMAGE_PATH)
     }
 
-    override fun initCreate(savedInstanceState: Bundle?) {
-        uCropImagePath = Uri.fromFile(FileUtils.getCameraFile(mActivity, albumConfig.uCropPath, albumConfig.isVideo))
-        imagePath = Uri.fromFile(FileUtils.getCameraFile(mActivity, albumConfig.cameraPath, albumConfig.isVideo))
-    }
+    override fun initCreate(savedInstanceState: Bundle?) {}
 
     override fun initView(view: View) {
         view.findViewById<View>(R.id.album_content_view).setBackgroundColor(ContextCompat.getColor(view.context, albumConfig.albumContentViewBackground))
@@ -138,22 +136,27 @@ class AlbumFragment : AlbumBaseFragment(),
                         val customizePath = extras.getString(AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY)
                         if (!TextUtils.isEmpty(customizePath)) {
                             imagePath = Uri.fromFile(File(customizePath))
-                            refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA)
+                            refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA, FileUtils.getScannerFile(imagePath.path))
                             if (albumConfig.cameraCrop) {
-                                openUCrop(imagePath.path, uCropImagePath)
+                                openUCrop(imagePath.path)
                             }
                         }
                     }
                 }
                 AlbumConstant.ITEM_CAMERA -> {
-                    refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA)
+                    refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA, FileUtils.getScannerFile(imagePath.path))
                     if (albumConfig.cameraCrop) {
-                        openUCrop(imagePath.path, uCropImagePath)
+                        openUCrop(imagePath.path)
                     }
                 }
                 UCrop.REQUEST_CROP -> {
-                    Album.instance.albumListener.onAlbumUCropResources(FileUtils.getScannerFile(uCropImagePath.path))
-                    refreshMedia(AlbumConstant.TYPE_RESULT_CROP)
+                    if (data == null) {
+                        Album.instance.albumListener.onAlbumFragmentUCropError(null)
+                    } else {
+                        val path = data.extras.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI).path
+                        Album.instance.albumListener.onAlbumUCropResources(FileUtils.getScannerFile(path))
+                        refreshMedia(AlbumConstant.TYPE_RESULT_CROP, FileUtils.getScannerFile(path))
+                    }
                     mActivity.finish()
                 }
                 AlbumConstant.TYPE_PREVIEW_CODE -> onResultPreview(data!!.extras)
@@ -236,7 +239,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
         if (albumConfig.isRadio) {
             if (albumConfig.isCrop) {
-                openUCrop(albumEntity.path, uCropImagePath)
+                openUCrop(albumEntity.path)
             } else {
                 val list = ArrayList<AlbumEntity>()
                 list.add(albumEntity)
@@ -266,7 +269,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
         this.bucketId = bucketId
         if (PermissionUtils.storage(this)) {
-            if (result && !albumAdapter.getAlbumList().isEmpty()) {
+            if (result) {
                 albumPresenter.resultScan(imagePath.path)
                 return
             }
@@ -294,8 +297,9 @@ class AlbumFragment : AlbumBaseFragment(),
      * 打开相机,在这里可拦截然后自定义相机进行拍照或者摄像
      */
     override fun openCamera() {
-        if (albumConfig.isVideo && Album.instance.albumVideoListener != null) {
-            Album.instance.albumVideoListener?.startVideo(this)
+        val albumVideoListener = Album.instance.albumVideoListener
+        if (albumConfig.isVideo && albumVideoListener != null) {
+            albumVideoListener.startVideo(this)
             return
         }
         val albumCameraListener = Album.instance.albumCameraListener
@@ -313,8 +317,8 @@ class AlbumFragment : AlbumBaseFragment(),
     /**
      * 进入裁剪
      */
-    override fun openUCrop(path: String, uri: Uri) {
-        UCrop.of(Uri.fromFile(File(path)), uri)
+    override fun openUCrop(path: String) {
+        UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(FileUtils.getCameraFile(mActivity, albumConfig.uCropPath, albumConfig.isVideo)))
                 .withOptions(Album.instance.options)
                 .start(mActivity, this)
     }
@@ -323,14 +327,9 @@ class AlbumFragment : AlbumBaseFragment(),
     /**
      * 在裁剪或者拍照之后刷新图库信息
      */
-    override fun refreshMedia(@AlbumResultType type: Int) {
+    override fun refreshMedia(@AlbumResultType type: Int, file: File) {
         disconnectMediaScanner()
-        singleMediaScanner = SingleMediaScanner(mActivity,
-                FileUtils.getScannerFile(if (type == AlbumConstant.TYPE_RESULT_CAMERA)
-                    imagePath.path
-                else
-                    uCropImagePath.path),
-                this@AlbumFragment, type)
+        singleMediaScanner = SingleMediaScanner(mActivity, file, this@AlbumFragment, type)
     }
 
     /**
@@ -380,6 +379,9 @@ class AlbumFragment : AlbumBaseFragment(),
         if (previewAlbumEntity == null) {
             return
         }
+        if (multipleAlbumEntity == previewAlbumEntity) {
+            return
+        }
         multipleAlbumEntity = previewAlbumEntity
         albumPresenter.mergeSelectEntity(albumAdapter.getAlbumList(), previewAlbumEntity)
         albumAdapter.setMultiplePreviewList(previewAlbumEntity)
@@ -393,6 +395,7 @@ class AlbumFragment : AlbumBaseFragment(),
         outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList())
         outState.putString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID, bucketId)
         outState.putString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME, finderName)
+        outState.putParcelable(AlbumConstant.TYPE_ALBUM_STATE_IMAGE_PATH, imagePath)
     }
 
 

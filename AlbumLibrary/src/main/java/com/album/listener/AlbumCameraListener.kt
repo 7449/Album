@@ -1,6 +1,6 @@
 package com.album.listener
 
-import android.support.v4.app.Fragment
+import com.album.ui.fragment.AlbumBaseFragment
 
 /**
  * by y on 28/08/2017.
@@ -16,5 +16,5 @@ interface AlbumCameraListener {
      *
      * @param fragment [com.album.ui.fragment.AlbumFragment]
      */
-    fun startCamera(fragment: Fragment)
+    fun startCamera(fragment: AlbumBaseFragment)
 }

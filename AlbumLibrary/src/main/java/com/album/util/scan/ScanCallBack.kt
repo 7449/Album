@@ -1,4 +1,4 @@
-package com.album.ui.widget
+package com.album.util.scan
 
 import com.album.entity.AlbumEntity
 import com.album.entity.FinderEntity

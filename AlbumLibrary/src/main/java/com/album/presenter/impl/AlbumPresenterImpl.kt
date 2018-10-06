@@ -5,8 +5,8 @@ import com.album.entity.AlbumEntity
 import com.album.entity.FinderEntity
 import com.album.presenter.AlbumPresenter
 import com.album.ui.view.AlbumView
-import com.album.ui.view.ScanView
-import com.album.ui.widget.ScanCallBack
+import com.album.util.scan.ScanView
+import com.album.util.scan.ScanCallBack
 import com.album.util.scan.AlbumScanUtils
 import com.album.util.scan.VideoScanUtils
 import com.album.util.task.AlbumTask

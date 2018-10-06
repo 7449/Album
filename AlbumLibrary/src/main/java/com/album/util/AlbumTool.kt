@@ -26,7 +26,7 @@ object AlbumTool {
     }
 
     fun getDrawable(context: Context, id: Int, color: Int): Drawable {
-        val drawable = context.resources.getDrawable(id)
+        val drawable = context.resources.getDrawable(id, null)
         drawable.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_ATOP)
         drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
         return drawable

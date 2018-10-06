@@ -13,15 +13,15 @@ class LoadMoreRecyclerView : RecyclerView {
 
 
     private var lastVisibleItemPosition: Int = 0
-    private var loadingListener: LoadMoreListener? = null
+    private lateinit var loadingListener: LoadMoreListener
 
-    constructor(context: Context) : super(context) 
-
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) 
+    constructor(context: Context) : super(context)
 
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) 
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     fun setLoadingListener(loadingListener: LoadMoreListener) {
         this.loadingListener = loadingListener
@@ -35,12 +35,11 @@ class LoadMoreRecyclerView : RecyclerView {
 
     override fun onScrollStateChanged(state: Int) {
         super.onScrollStateChanged(state)
-        val layoutManager = layoutManager
+        val layoutManager = layoutManager!!
         val visibleItemCount = layoutManager.childCount
         val totalItemCount = layoutManager.itemCount
-        if (loadingListener != null && visibleItemCount > 0 &&
-                state == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition == totalItemCount - 1) {
-            loadingListener!!.onLoadMore()
+        if (visibleItemCount > 0 && state == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition == totalItemCount - 1) {
+            loadingListener.onLoadMore()
         }
     }
 

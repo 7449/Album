@@ -9,8 +9,6 @@ import com.album.Album
 import com.album.AlbumConstant
 import com.album.entity.AlbumEntity
 import com.album.entity.FinderEntity
-import com.album.ui.view.ScanView
-import com.album.ui.widget.ScanCallBack
 import com.album.util.FileUtils
 import java.util.*
 

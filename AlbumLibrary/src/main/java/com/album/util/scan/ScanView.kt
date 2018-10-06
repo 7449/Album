@@ -1,9 +1,9 @@
-package com.album.ui.view
+package com.album.util.scan
 
 import android.database.Cursor
 import com.album.entity.AlbumEntity
 import com.album.entity.FinderEntity
-import com.album.ui.widget.ScanCallBack
+import com.album.util.scan.ScanCallBack
 import java.util.*
 
 /**

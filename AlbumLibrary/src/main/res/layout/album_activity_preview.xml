@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/preview_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
@@ -27,7 +27,7 @@
         android:layout_height="@dimen/album_bottom_height"
         android:background="@color/colorAlbumPreviewBottomViewBackgroundDay">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/preview_tv_preview_count"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
@@ -43,7 +43,7 @@
             android:textSize="@dimen/album_bottom_text_size"
             tools:ignore="RelativeOverlap,RtlHardcoded" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/preview_bottom_view_tv_select"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"

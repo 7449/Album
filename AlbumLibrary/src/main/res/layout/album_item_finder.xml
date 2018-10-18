@@ -13,7 +13,7 @@
         android:layout_width="@dimen/item_list_popup_iv_width"
         android:layout_height="@dimen/item_list_popup_iv_height" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_album_finder_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

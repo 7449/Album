@@ -1,6 +1,6 @@
 package com.album.annotation
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 import com.album.AlbumConstant
 
 /**

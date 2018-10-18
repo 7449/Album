@@ -2,11 +2,11 @@ package com.album.sample.ui
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatTextView
-import android.support.v7.widget.Toolbar
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.sample.R
 import com.album.ui.activity.AlbumBaseActivity

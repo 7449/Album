@@ -23,7 +23,7 @@ android {
 dependencies {
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
 //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
-    implementation "com.android.support:design:$supportLibraryVersion"
+    implementation 'com.google.android.material:material:1.0.0'
 //    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
 //    implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
@@ -38,4 +38,4 @@ dependencies {
 repositories {
     mavenCentral()
 }
-tasks.getByPath(":AlbumLibrary:releaseAndroidJavadocs").enabled = false
+//tasks.getByPath(":AlbumLibrary:releaseAndroidJavadocs").enabled = false

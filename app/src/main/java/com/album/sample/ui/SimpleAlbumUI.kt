@@ -2,13 +2,13 @@ package com.album.sample.ui
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatTextView
-import android.support.v7.widget.ListPopupWindow
-import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.ListPopupWindow
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.album.sample.R
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.adapter.FinderAdapter

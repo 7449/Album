@@ -5,12 +5,12 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.GridLayoutManager
 import android.text.TextUtils
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.album.Album
 import com.album.AlbumConstant
 import com.album.R

@@ -1,13 +1,13 @@
 package com.album.ui.adapter
 
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumConfig
 import com.album.R

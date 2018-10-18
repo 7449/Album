@@ -3,8 +3,8 @@ package com.album.util.scan
 import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.MediaStore
-import android.support.v4.util.ArrayMap
 import android.text.TextUtils
+import androidx.collection.ArrayMap
 import com.album.Album
 import com.album.AlbumConstant
 import com.album.entity.AlbumEntity

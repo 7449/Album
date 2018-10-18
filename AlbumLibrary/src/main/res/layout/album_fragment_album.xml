@@ -20,7 +20,7 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/album_empty"
         android:layout_width="@dimen/album_empty_width"
         android:layout_height="@dimen/album_empty_height"

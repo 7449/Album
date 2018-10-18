@@ -1,8 +1,8 @@
 package com.album.ui.activity
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumConfig
 import com.album.util.AlbumTool

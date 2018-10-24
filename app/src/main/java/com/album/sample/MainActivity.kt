@@ -18,6 +18,7 @@ import com.album.entity.AlbumEntity
 import com.album.listener.AlbumCameraListener
 import com.album.listener.OnEmptyClickListener
 import com.album.sample.camera.SimpleCameraActivity
+import com.album.sample.ui.SimpleAlbumFragment
 import com.album.sample.ui.SimpleAlbumUI
 import com.album.sample.ui.SimplePreviewUI
 import com.album.ui.fragment.AlbumBaseFragment
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         findViewById<View>(R.id.btn_open_camera).setOnClickListener(this)
         findViewById<View>(R.id.btn_sample_ui).setOnClickListener(this)
         findViewById<View>(R.id.btn_customize_camera).setOnClickListener(this)
+        findViewById<View>(R.id.btn_dialog).setOnClickListener(this)
         findViewById<View>(R.id.btn_video).setOnClickListener(this)
 
         dayOptions = UCrop.Options()
@@ -146,7 +148,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             R.id.btn_open_camera -> {
                 imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null, false))
                 val i = AlbumTool.openCamera(this, imagePath, false)
-                Log.d(javaClass.simpleName,i.toString())
+                Log.d(javaClass.simpleName, i.toString())
+            }
+
+            R.id.btn_dialog -> {
+                SimpleAlbumFragment().show(supportFragmentManager, "Dialog")
             }
 
             R.id.btn_customize_camera -> {

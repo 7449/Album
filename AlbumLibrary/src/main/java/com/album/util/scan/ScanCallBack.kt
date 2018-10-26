@@ -12,5 +12,5 @@ import java.util.ArrayList
 interface ScanCallBack {
     fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>, list: ArrayList<FinderEntity>)
 
-    fun resultSuccess(albumEntity: AlbumEntity, finderEntityList: ArrayList<FinderEntity>)
+    fun resultSuccess(albumEntity: AlbumEntity?, finderEntityList: ArrayList<FinderEntity>)
 }

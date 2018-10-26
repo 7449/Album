@@ -1,5 +1,7 @@
 package com.album
 
+import androidx.recyclerview.widget.LinearLayoutManager
+
 /**
  * by y on 14/08/2017.
  */
@@ -21,6 +23,12 @@ class AlbumConfig {
     var count = 500
     var sdName = "根目录"
     var filterImg: Boolean = false
+    var cropErrorFinish: Boolean = true
+    var selectImageFinish: Boolean = true
+    var cropFinish: Boolean = true
+    var noPreview: Boolean = false
+    var orientation: Int = LinearLayoutManager.VERTICAL
+        private set
 
     //////////////  album toolbar //////
     var albumStatusBarColor = R.color.colorAlbumStatusBarColorDay
@@ -106,71 +114,5 @@ class AlbumConfig {
             }
             else -> throw RuntimeException("type")
         }
-    }
-
-    override fun toString(): String {
-        return "AlbumConfig{" +
-                "hideCamera=" + hideCamera +
-                ", isRadio=" + isRadio +
-                ", isCrop=" + isCrop +
-                ", cameraCrop=" + cameraCrop +
-                ", previewFinishRefresh=" + previewFinishRefresh +
-                ", previewBackRefresh=" + previewBackRefresh +
-                ", isPermissionsDeniedFinish=" + isPermissionsDeniedFinish +
-                ", isFrescoImageLoader=" + isFrescoImageLoader +
-                ", isVideo=" + isVideo +
-                ", multipleMaxCount=" + multipleMaxCount +
-                ", cameraPath='" + cameraPath + '\''.toString() +
-                ", uCropPath='" + uCropPath + '\''.toString() +
-                ", count=" + count +
-                ", sdName='" + sdName + '\''.toString() +
-                ", filterImg=" + filterImg +
-                ", albumStatusBarColor=" + albumStatusBarColor +
-                ", albumToolbarBackground=" + albumToolbarBackground +
-                ", albumToolbarIcon=" + albumToolbarIcon +
-                ", albumToolbarIconColor=" + albumToolbarIconColor +
-                ", albumToolbarTextColor=" + albumToolbarTextColor +
-                ", albumToolbarText=" + albumToolbarText +
-                ", albumToolbarElevation=" + albumToolbarElevation +
-                ", albumBottomViewBackground=" + albumBottomViewBackground +
-                ", albumBottomFinderTextSize=" + albumBottomFinderTextSize +
-                ", albumBottomFinderTextBackground=" + albumBottomFinderTextBackground +
-                ", albumBottomFinderTextColor=" + albumBottomFinderTextColor +
-                ", albumBottomFinderTextCompoundDrawable=" + albumBottomFinderTextCompoundDrawable +
-                ", albumBottomFinderTextDrawableColor=" + albumBottomFinderTextDrawableColor +
-                ", albumBottomPreViewText=" + albumBottomPreViewText +
-                ", albumBottomPreViewTextSize=" + albumBottomPreViewTextSize +
-                ", albumBottomPreViewTextColor=" + albumBottomPreViewTextColor +
-                ", albumBottomPreviewTextBackground=" + albumBottomPreviewTextBackground +
-                ", albumBottomSelectText=" + albumBottomSelectText +
-                ", albumBottomSelectTextSize=" + albumBottomSelectTextSize +
-                ", albumBottomSelectTextColor=" + albumBottomSelectTextColor +
-                ", albumBottomSelectTextBackground=" + albumBottomSelectTextBackground +
-                ", albumListPopupWidth=" + albumListPopupWidth +
-                ", albumListPopupHorizontalOffset=" + albumListPopupHorizontalOffset +
-                ", albumListPopupVerticalOffset=" + albumListPopupVerticalOffset +
-                ", albumListPopupItemBackground=" + albumListPopupItemBackground +
-                ", albumListPopupItemTextColor=" + albumListPopupItemTextColor +
-                ", spanCount=" + spanCount +
-                ", dividerWidth=" + dividerWidth +
-                ", albumContentViewCameraTips=" + albumContentViewCameraTips +
-                ", albumContentViewCameraTipsSize=" + albumContentViewCameraTipsSize +
-                ", albumContentViewCameraTipsColor=" + albumContentViewCameraTipsColor +
-                ", albumContentViewCameraBackgroundColor=" + albumContentViewCameraBackgroundColor +
-                ", albumContentViewBackground=" + albumContentViewBackground +
-                ", albumContentViewCameraDrawable=" + albumContentViewCameraDrawable +
-                ", albumContentViewCameraDrawableColor=" + albumContentViewCameraDrawableColor +
-                ", albumContentItemCheckBoxDrawable=" + albumContentItemCheckBoxDrawable +
-                ", albumContentEmptyDrawable=" + albumContentEmptyDrawable +
-                ", albumContentEmptyDrawableColor=" + albumContentEmptyDrawableColor +
-                ", albumPreviewTitle=" + albumPreviewTitle +
-                ", albumPreviewBackground=" + albumPreviewBackground +
-                ", albumPreviewBottomViewBackground=" + albumPreviewBottomViewBackground +
-                ", albumPreviewBottomOkText=" + albumPreviewBottomOkText +
-                ", albumPreviewBottomOkTextColor=" + albumPreviewBottomOkTextColor +
-                ", albumPreviewBottomCountTextColor=" + albumPreviewBottomCountTextColor +
-                ", albumPreviewBottomOkTextSize=" + albumPreviewBottomOkTextSize +
-                ", albumPreviewBottomCountTextSize=" + albumPreviewBottomCountTextSize +
-                '}'.toString()
     }
 }

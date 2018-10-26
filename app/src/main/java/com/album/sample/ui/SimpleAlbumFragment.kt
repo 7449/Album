@@ -4,15 +4,22 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.os.Environment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.album.Album
+import com.album.entity.AlbumEntity
 import com.album.sample.R
 import com.album.ui.fragment.AlbumFragment
+import com.album.ui.widget.SimpleAlbumListener
+import java.io.File
 
 class SimpleAlbumFragment : DialogFragment() {
 
@@ -40,14 +47,12 @@ class SimpleAlbumFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(mActivity, R.style.BottomDialog)
         rootView = View.inflate(activity, R.layout.album_fragment_dialog, null)
-        // 这里可以获取到数据，以后有空添加对dialog的支持,现在选择直接finish掉了activity
         rootView.findViewById<View>(R.id.dialog_ok).setOnClickListener { albumFragment.multipleSelect() }
         builder.setView(rootView)
         return builder.create()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        return View.inflate(activity, R.layout.album_fragment_dialog, null)
         return rootView
     }
 
@@ -60,6 +65,31 @@ class SimpleAlbumFragment : DialogFragment() {
                     add(R.id.dialog_fragment, albumFragment, AlbumFragment::class.java.simpleName)
                 }
                 .commit()
-    }
+        Album
+                .instance
+                .apply {
+                    albumListener = object : SimpleAlbumListener() {
+                        override fun onAlbumResources(list: List<AlbumEntity>) {
+                            super.onAlbumResources(list)
+                            Toast.makeText(mActivity, list.toString(), Toast.LENGTH_SHORT).show()
+                            dismiss()
+                        }
 
+                        override fun onAlbumUCropResources(scannerFile: File) {
+                            super.onAlbumUCropResources(scannerFile)
+                            Toast.makeText(mActivity, scannerFile.toString(), Toast.LENGTH_SHORT).show()
+                            dismiss()
+                        }
+                    }
+                    config.apply {
+                        selectImageFinish = false
+                        spanCount = 4
+                        noPreview = true
+                        cropFinish = false
+//                        isRadio = true
+//                        isCrop = true
+//                        cameraCrop = true
+                    }
+                }
+    }
 }

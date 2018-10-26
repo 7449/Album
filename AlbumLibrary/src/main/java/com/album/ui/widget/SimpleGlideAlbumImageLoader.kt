@@ -43,8 +43,6 @@ class SimpleGlideAlbumImageLoader : AlbumImageLoader {
                 .into(view)
     }
 
-    override fun frescoView(context: Context, @FrescoType type: Int): ImageView? {
-        return null
-    }
+    override fun frescoView(context: Context, @FrescoType type: Int): ImageView? = null
 
 }

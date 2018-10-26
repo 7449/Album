@@ -69,7 +69,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
             cursorFinder(finderEntityList)
             query.close()
         }
-        scanCallBack.resultSuccess(albumEntity!!, finderEntityList)
+        scanCallBack.resultSuccess(albumEntity, finderEntityList)
     }
 
     override fun scanCursor(albumEntityList: ArrayList<AlbumEntity>, dataColumnIndex: Int, idColumnIndex: Int, sizeColumnIndex: Int, cursor: Cursor) {

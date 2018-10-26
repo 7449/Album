@@ -103,7 +103,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView, isVideo: Boolean) : A
         }
     }
 
-    override fun resultSuccess(albumEntity: AlbumEntity, finderEntityList: ArrayList<FinderEntity>) {
+    override fun resultSuccess(albumEntity: AlbumEntity?, finderEntityList: ArrayList<FinderEntity>) {
         albumView.getAlbumActivity().runOnUiThread {
             albumView.resultSuccess(albumEntity)
             if (!finderEntityList.isEmpty()) {

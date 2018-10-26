@@ -94,10 +94,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                                 isPermissionsDeniedFinish = false
                                 previewBackRefresh = true
                                 previewFinishRefresh = true
+                                albumContentItemCheckBoxDrawable = R.drawable.simple_selector_album_item_check
                             }
                             albumCameraListener = null
-                            albumClass = null
-                            previewClass = null
                         }
                         .start(this)
             }
@@ -109,8 +108,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                             options = nightOptions
                             albumImageLoader = SimpleGlideAlbumImageLoader()
                             albumCameraListener = null
-                            albumClass = null
-                            previewClass = null
                             emptyClickListener = object : OnEmptyClickListener {
                                 override fun click(view: View): Boolean {
                                     return true
@@ -163,8 +160,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                             albumListener = MainAlbumListener(applicationContext, list)
                             albumEntityList = list
                             options = dayOptions
-                            albumClass = null
-                            previewClass = null
                             albumCameraListener = object : AlbumCameraListener {
                                 override fun startCamera(fragment: AlbumBaseFragment) {
                                     if (PermissionUtils.storage(this@MainActivity) && PermissionUtils.camera(this@MainActivity)) {
@@ -197,8 +192,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                             albumImageLoader = SimpleGlideAlbumImageLoader()
                             albumListener = MainAlbumListener(applicationContext, null)
                             albumCameraListener = null
-                            albumClass = null
-                            previewClass = null
                             emptyClickListener = object : OnEmptyClickListener {
                                 override fun click(view: View): Boolean {
                                     return true
@@ -228,14 +221,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             }
             Activity.RESULT_OK -> when (requestCode) {
                 AlbumConstant.ITEM_CAMERA -> {
-                    SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.path),
+                    SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.path ?: ""),
                             this, AlbumConstant.TYPE_RESULT_CAMERA)
                     UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
                             .withOptions(UCrop.Options())
                             .start(this)
                 }
                 UCrop.REQUEST_CROP -> {
-                    SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.path),
+                    SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.path ?: ""),
                             this, AlbumConstant.TYPE_RESULT_CROP)
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }

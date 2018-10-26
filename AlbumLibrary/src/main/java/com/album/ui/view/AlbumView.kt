@@ -25,5 +25,5 @@ interface AlbumView {
 
     fun onAlbumNoMore()
 
-    fun resultSuccess(albumEntity: AlbumEntity)
+    fun resultSuccess(albumEntity: AlbumEntity?)
 }

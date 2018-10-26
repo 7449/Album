@@ -33,6 +33,7 @@ import java.util.*
 /**
  * A simple dialog that allows user to pick an aspect ratio.
  */
+@Suppress("UNCHECKED_CAST", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class SimpleAspectRatioFragment : DialogFragment() {
 
     private var mListener: Listener? = null

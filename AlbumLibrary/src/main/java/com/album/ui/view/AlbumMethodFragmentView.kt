@@ -13,8 +13,6 @@ interface AlbumMethodFragmentView {
 
     fun getFinderEntity(): List<FinderEntity>
 
-    fun initRecyclerView()
-
     fun disconnectMediaScanner()
 
     fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean)

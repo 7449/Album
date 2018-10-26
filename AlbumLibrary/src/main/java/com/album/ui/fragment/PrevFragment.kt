@@ -27,7 +27,7 @@ import com.album.util.PermissionUtils
 class PrevFragment : AlbumBaseFragment(), PrevView {
 
     companion object {
-        fun newInstance(bundle: Bundle): PrevFragment {
+        fun newInstance(bundle: Bundle?): PrevFragment {
             return PrevFragment().apply { arguments = bundle }
         }
     }
@@ -57,7 +57,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         listener = mActivity as PrevFragmentToAtyListener
-        bucketId = bundle.getString(AlbumConstant.PREVIEW_BUCKET_ID)
+        bucketId = bundle.getString(AlbumConstant.PREVIEW_BUCKET_ID, "")
         isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY)
     }
 
@@ -82,10 +82,10 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     override fun initActivityCreated(savedInstanceState: Bundle?) {
         albumEntityList = ArrayList()
         val previewBundle = savedInstanceState ?: bundle
-        selectAlbumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.PREVIEW_KEY)
+        selectAlbumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.PREVIEW_KEY) ?: ArrayList()
         selectPosition = previewBundle.getInt(AlbumConstant.PREVIEW_POSITION_KEY)
         if (savedInstanceState != null && isPreview) {
-            albumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL)
+            albumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
         }
         previewPresenter = PreviewPresenterImpl(this)
         listener.onChangedCount(selectAlbumEntityList.size)

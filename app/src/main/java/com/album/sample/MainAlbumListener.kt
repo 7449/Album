@@ -12,6 +12,9 @@ import java.io.File
  * @author y
  */
 class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : AlbumListener {
+    override fun onAlbumResultCameraError() {
+        toast("onAlbumResultCameraError")
+    }
 
     private val context: Context = context.applicationContext
 

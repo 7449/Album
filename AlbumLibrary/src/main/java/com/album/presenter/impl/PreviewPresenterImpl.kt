@@ -48,6 +48,6 @@ class PreviewPresenterImpl(private val prevView: PrevView) : PreviewPresenter, S
         }
     }
 
-    override fun resultSuccess(albumEntity: AlbumEntity, finderEntityList: ArrayList<FinderEntity>) {}
+    override fun resultSuccess(albumEntity: AlbumEntity?, finderEntityList: ArrayList<FinderEntity>) {}
 
 }

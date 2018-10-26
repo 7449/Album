@@ -49,5 +49,7 @@ interface AlbumListener {
 
     fun onAlbumNoMore()
 
+    fun onAlbumResultCameraError()
+
     fun onVideoPlayError()
 }

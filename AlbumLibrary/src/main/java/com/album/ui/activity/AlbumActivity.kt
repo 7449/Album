@@ -14,8 +14,8 @@ import com.album.Album
 import com.album.R
 import com.album.ui.adapter.FinderAdapter
 import com.album.ui.fragment.AlbumFragment
-import com.album.ui.view.AlbumFragmentToAtyListener
-import com.album.util.AlbumTool
+import com.album.util.getDrawable
+import com.album.util.hasL
 
 /**
  * by y on 14/08/2017.
@@ -23,7 +23,6 @@ import com.album.util.AlbumTool
 
 class AlbumActivity : AlbumBaseActivity(),
         View.OnClickListener,
-        AlbumFragmentToAtyListener,
         AdapterView.OnItemClickListener {
 
     private lateinit var toolbar: Toolbar
@@ -78,7 +77,7 @@ class AlbumActivity : AlbumBaseActivity(),
         albumBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumBottomViewBackground))
         finderTv.textSize = albumConfig.albumBottomFinderTextSize.toFloat()
         finderTv.setTextColor(ContextCompat.getColor(this, albumConfig.albumBottomFinderTextColor))
-        finderTv.setCompoundDrawables(null, null, AlbumTool.getDrawable(this, albumConfig.albumBottomFinderTextCompoundDrawable, albumConfig.albumBottomFinderTextDrawableColor), null)
+        finderTv.setCompoundDrawables(null, null, getDrawable(this, albumConfig.albumBottomFinderTextCompoundDrawable, albumConfig.albumBottomFinderTextDrawableColor), null)
         if (albumConfig.albumBottomFinderTextBackground != -1) {
             finderTv.setBackgroundResource(albumConfig.albumBottomFinderTextBackground)
         }
@@ -113,7 +112,7 @@ class AlbumActivity : AlbumBaseActivity(),
         drawable?.setColorFilter(ContextCompat.getColor(this, albumConfig.albumToolbarIconColor), PorterDuff.Mode.SRC_ATOP)
         toolbar.navigationIcon = drawable
         toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumToolbarBackground))
-        if (AlbumTool.hasL()) {
+        if (hasL()) {
             toolbar.elevation = albumConfig.albumToolbarElevation
         }
         toolbar.setNavigationOnClickListener {
@@ -137,7 +136,7 @@ class AlbumActivity : AlbumBaseActivity(),
                     listView?.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumListPopupItemBackground))
                     return
                 }
-                Album.instance.albumListener.onAlbumFinderNull()
+                Album.instance.albumListener.onAlbumFinderEmpty()
             }
         }
     }
@@ -150,10 +149,6 @@ class AlbumActivity : AlbumBaseActivity(),
         finderTv.text = finder.dirName
         albumFragment.onScanAlbum(finder.bucketId, true, false)
         listPopupWindow.dismiss()
-    }
-
-    override fun onChangedFinderName(name: String) {
-        finderTv.text = name
     }
 
     override fun onBackPressed() {

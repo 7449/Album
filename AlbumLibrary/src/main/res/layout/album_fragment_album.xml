@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
 
-    <com.album.ui.widget.LoadMoreRecyclerView
+    <com.album.ui.LoadMoreRecyclerView
         android:id="@+id/album_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

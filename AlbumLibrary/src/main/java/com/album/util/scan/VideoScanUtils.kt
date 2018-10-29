@@ -1,21 +1,24 @@
 package com.album.util.scan
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.MediaStore
 import android.text.TextUtils
 import androidx.collection.ArrayMap
 import com.album.AlbumConstant
-import com.album.entity.AlbumEntity
-import com.album.entity.FinderEntity
+import com.album.AlbumEntity
+import com.album.FinderEntity
 import com.album.util.FileUtils
+import com.album.util.ScanBase
+import com.album.util.ScanCallBack
 import java.util.*
 
 /**
  * by y on 01/09/2017.
  */
 
-class VideoScanUtils private constructor(private val contentResolver: ContentResolver) : ScanView {
+class VideoScanUtils private constructor(private val contentResolver: ContentResolver) : ScanBase(contentResolver) {
 
     companion object {
         private const val FINDER_VIDEO_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? "
@@ -23,26 +26,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
         private val VIDEO_PROJECTION = arrayOf(MediaStore.Video.Media.DATA, MediaStore.Video.Media._ID)
         private val VIDEO_FINDER_PROJECTION = arrayOf(MediaStore.Video.Media._ID, MediaStore.Video.Media.BUCKET_ID, MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media.DATA)
 
-        operator fun get(contentResolver: ContentResolver): VideoScanUtils {
-            return VideoScanUtils(contentResolver)
-        }
-    }
-
-    override fun start(scanCallBack: ScanCallBack, bucketId: String, page: Int, count: Int) {
-        val albumEntityList = ArrayList<AlbumEntity>()
-        val finderEntityList = ArrayList<FinderEntity>()
-        val cursor = getCursor(bucketId, page, count)
-        if (cursor != null) {
-            val dataColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media.DATA)
-            val idColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media._ID)
-            val sizeColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
-            while (cursor.moveToNext()) {
-                scanCursor(albumEntityList, dataColumnIndex, idColumnIndex, sizeColumnIndex, cursor)
-            }
-            cursor.close()
-            cursorFinder(finderEntityList)
-            scanCallBack.scanSuccess(albumEntityList, finderEntityList)
-        }
+        operator fun get(contentResolver: ContentResolver): VideoScanUtils = VideoScanUtils(contentResolver)
     }
 
     override fun resultScan(scanCallBack: ScanCallBack, path: String) {
@@ -67,7 +51,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
             cursorFinder(finderEntityList)
             query.close()
         }
-        scanCallBack.resultSuccess(albumEntity!!, finderEntityList)
+        scanCallBack.resultCallBack(albumEntity!!, finderEntityList)
     }
 
     override fun scanCursor(albumEntityList: ArrayList<AlbumEntity>, dataColumnIndex: Int, idColumnIndex: Int, sizeColumnIndex: Int, cursor: Cursor) {
@@ -119,6 +103,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
         finderEntityMap.clear()
     }
 
+    @SuppressLint("Recycle")
     override fun cursorCount(bucketId: String): Int {
         val query = contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,

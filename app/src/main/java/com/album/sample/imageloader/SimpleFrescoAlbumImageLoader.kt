@@ -1,18 +1,11 @@
-package com.album.sample
+package com.album.sample.imageloader
 
 import android.content.Context
 import android.net.Uri
 import android.widget.ImageView
-
-import com.album.AlbumConstant
-import com.album.listener.AlbumImageLoader
-import com.album.entity.AlbumEntity
-import com.album.entity.FinderEntity
-import com.album.annotation.FrescoType
+import com.album.*
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.drawable.ScalingUtils
-import com.facebook.drawee.generic.GenericDraweeHierarchy
-import com.facebook.drawee.interfaces.DraweeController
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.common.RotationOptions

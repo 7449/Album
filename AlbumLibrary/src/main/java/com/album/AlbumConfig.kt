@@ -1,6 +1,7 @@
 package com.album
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.album.util.ScanType
 
 /**
  * by y on 14/08/2017.
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 class AlbumConfig {
 
+    var scanType: ScanType = ScanType.IMAGE
     var hideCamera: Boolean = false
     var isRadio: Boolean = false
     var isCrop: Boolean = true
@@ -16,7 +18,6 @@ class AlbumConfig {
     var previewBackRefresh: Boolean = false
     var isPermissionsDeniedFinish: Boolean = false
     var isFrescoImageLoader: Boolean = false
-    var isVideo: Boolean = false
     var multipleMaxCount = 9
     var cameraPath: String? = null
     var uCropPath: String? = null

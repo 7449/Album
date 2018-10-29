@@ -1,15 +1,15 @@
 package com.album.presenter.impl
 
 import android.text.TextUtils
-import com.album.entity.AlbumEntity
-import com.album.entity.FinderEntity
+import com.album.AlbumEntity
+import com.album.FinderEntity
 import com.album.presenter.PreviewPresenter
 import com.album.ui.view.PrevView
-import com.album.util.scan.ScanView
-import com.album.util.scan.ScanCallBack
+import com.album.util.AlbumTask
+import com.album.util.AlbumTaskCallBack
+import com.album.util.ScanCallBack
+import com.album.util.ScanView
 import com.album.util.scan.AlbumScanUtils
-import com.album.util.task.AlbumTask
-import com.album.util.task.AlbumTaskCallBack
 import java.util.*
 
 /**
@@ -24,7 +24,7 @@ class PreviewPresenterImpl(private val prevView: PrevView) : PreviewPresenter, S
         prevView.getPreViewActivity().runOnUiThread { prevView.showProgress() }
         AlbumTask.instance.start(object : AlbumTaskCallBack.Call {
             override fun start() {
-                scanView.start(this@PreviewPresenterImpl, bucketId, page, count)
+                scanView.scan(this@PreviewPresenterImpl, bucketId, page, count)
             }
         })
     }
@@ -41,13 +41,13 @@ class PreviewPresenterImpl(private val prevView: PrevView) : PreviewPresenter, S
         }
     }
 
-    override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>, list: ArrayList<FinderEntity>) {
+    override fun scanCallBack(albumEntityList: ArrayList<AlbumEntity>, list: ArrayList<FinderEntity>) {
         prevView.getPreViewActivity().runOnUiThread {
             prevView.hideProgress()
             prevView.scanSuccess(albumEntityList)
         }
     }
 
-    override fun resultSuccess(albumEntity: AlbumEntity?, finderEntityList: ArrayList<FinderEntity>) {}
+    override fun resultCallBack(albumEntity: AlbumEntity?, finderEntityList: ArrayList<FinderEntity>) {}
 
 }

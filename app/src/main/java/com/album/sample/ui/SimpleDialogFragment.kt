@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.os.Environment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,15 +12,14 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.album.Album
-import com.album.entity.AlbumEntity
+import com.album.AlbumEntity
+import com.album.SimpleAlbumListener
 import com.album.sample.R
 import com.album.ui.fragment.AlbumFragment
-import com.album.ui.widget.SimpleAlbumListener
 import java.io.File
 
-class SimpleAlbumFragment : DialogFragment() {
+class SimpleDialogFragment : DialogFragment() {
 
     private lateinit var mActivity: Activity
     private lateinit var albumFragment: AlbumFragment
@@ -37,7 +35,6 @@ class SimpleAlbumFragment : DialogFragment() {
         attributes.gravity = Gravity.BOTTOM
         window.attributes = attributes
     }
-
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)

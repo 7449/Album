@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.album.Album
 import com.album.AlbumConstant
-import com.album.annotation.PermissionsType
-import com.album.util.task.AlbumTask
+import com.album.PermissionsType
+import com.album.util.AlbumTask
 
 /**
  * @author y

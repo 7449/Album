@@ -10,9 +10,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumConfig
+import com.album.FinderEntity
 import com.album.R
-import com.album.entity.FinderEntity
-import com.album.ui.widget.AlbumImageView
+import com.album.ui.AlbumImageView
 import com.facebook.drawee.view.SimpleDraweeView
 
 /**

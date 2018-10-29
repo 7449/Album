@@ -7,7 +7,7 @@ import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.album.Album
 import com.album.AlbumConstant
-import com.album.entity.AlbumEntity
+import com.album.AlbumEntity
 import com.album.ui.widget.TouchImageView
 
 /**

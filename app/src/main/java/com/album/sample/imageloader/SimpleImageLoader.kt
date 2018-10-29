@@ -1,11 +1,11 @@
-package com.album.sample
+package com.album.sample.imageloader
 
 import android.content.Context
 import android.widget.ImageView
+import com.album.AlbumEntity
+import com.album.AlbumImageLoader
+import com.album.FinderEntity
 
-import com.album.entity.AlbumEntity
-import com.album.entity.FinderEntity
-import com.album.listener.AlbumImageLoader
 
 /**
  * @author y

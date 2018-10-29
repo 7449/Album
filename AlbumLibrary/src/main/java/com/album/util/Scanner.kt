@@ -1,11 +1,9 @@
-package com.album.util.scanner
+package com.album.util
 
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
-
-import com.album.annotation.AlbumResultType
-
+import com.album.AlbumResultType
 import java.io.File
 
 /**
@@ -41,4 +39,11 @@ class SingleMediaScanner(context: Context, private val file: File, private val l
         disconnect()
         listener.onScanCompleted(type)
     }
+}
+
+
+interface SingleScannerListener {
+    fun onScanStart()
+
+    fun onScanCompleted(@AlbumResultType type: Int)
 }

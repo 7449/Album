@@ -2,12 +2,8 @@ package com.album
 
 import android.content.Context
 import android.content.Intent
-import com.album.entity.AlbumEntity
-import com.album.listener.*
 import com.album.ui.activity.AlbumActivity
 import com.album.ui.activity.PreviewActivity
-import com.album.ui.widget.SimpleAlbumListener
-import com.album.ui.widget.SimpleGlideAlbumImageLoader
 import com.yalantis.ucrop.UCrop
 
 /**
@@ -15,8 +11,23 @@ import com.yalantis.ucrop.UCrop
  */
 
 class Album {
+
     companion object {
         val instance by lazy { Album() }
+        fun reset() {
+            instance.apply {
+                config = AlbumConfig()
+                albumImageLoader = SimpleGlideAlbumImageLoader()
+                options = UCrop.Options()
+                albumListener = SimpleAlbumListener()
+                albumCameraListener = null
+                albumVideoListener = null
+                emptyClickListener = null
+                albumEntityList = null
+                albumClass = AlbumActivity::class.java
+                previewClass = PreviewActivity::class.java
+            }
+        }
     }
 
     var config = AlbumConfig()

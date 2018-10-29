@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumConfig
-import com.album.util.AlbumTool
+import com.album.util.setStatusBarColor
 
 /**
  * by y on 14/08/2017.
@@ -16,7 +16,7 @@ abstract class AlbumBaseActivity : AppCompatActivity() {
     protected var albumConfig: AlbumConfig = Album.instance.config
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AlbumTool.setStatusBarColor(ContextCompat.getColor(this, albumConfig.albumStatusBarColor), window)
+        setStatusBarColor(ContextCompat.getColor(this, albumConfig.albumStatusBarColor), window)
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
         initView()

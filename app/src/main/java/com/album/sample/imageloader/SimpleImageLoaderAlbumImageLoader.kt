@@ -1,12 +1,13 @@
-package com.album.sample
+package com.album.sample.imageloader
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.widget.ImageView
-import com.album.annotation.FrescoType
-import com.album.entity.AlbumEntity
-import com.album.entity.FinderEntity
-import com.album.listener.AlbumImageLoader
+import com.album.AlbumEntity
+import com.album.AlbumImageLoader
+import com.album.FinderEntity
+import com.album.FrescoType
+import com.album.sample.R
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware

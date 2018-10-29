@@ -10,14 +10,14 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.viewpager.widget.ViewPager
 import com.album.Album
 import com.album.AlbumConstant
+import com.album.AlbumEntity
 import com.album.R
-import com.album.entity.AlbumEntity
 import com.album.presenter.PreviewPresenter
 import com.album.presenter.impl.PreviewPresenterImpl
+import com.album.ui.ExtendedViewPager
 import com.album.ui.adapter.PreviewAdapter
 import com.album.ui.view.PrevFragmentToAtyListener
 import com.album.ui.view.PrevView
-import com.album.ui.widget.ExtendedViewPager
 import com.album.util.FileUtils
 import com.album.util.PermissionUtils
 
@@ -193,7 +193,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (!FileUtils.isFile(adapter.getAlbumPath(position))) {
-                    Album.instance.albumListener.onAlbumPreviewFileNull()
+                    Album.instance.albumListener.onAlbumPreviewFileNotExist()
                 }
                 appCompatCheckBox.isChecked = albumEntityList[position].isCheck
                 selectPosition = position

@@ -1,11 +1,7 @@
 package com.album.presenter
 
-import com.album.entity.AlbumEntity
+import com.album.AlbumEntity
 import java.util.*
-
-/**
- * by y on 14/08/2017.
- */
 
 interface AlbumPresenter {
 
@@ -18,4 +14,11 @@ interface AlbumPresenter {
     fun firstMergeEntity(albumEntityList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>?)
 
     fun resultScan(path: String)
+}
+
+
+interface PreviewPresenter {
+    fun scan(bucketId: String, page: Int, count: Int)
+
+    fun mergeSelectEntity(albumEntityList: List<AlbumEntity>, selectAlbumEntityList: ArrayList<AlbumEntity>)
 }

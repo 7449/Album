@@ -3,15 +3,20 @@ package com.album.sample
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.album.annotation.PermissionsType
-import com.album.entity.AlbumEntity
-import com.album.listener.AlbumListener
+import com.album.AlbumEntity
+import com.album.AlbumListener
+import com.album.PermissionsType
 import java.io.File
 
 /**
  * @author y
  */
 class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : AlbumListener {
+
+    override fun onAlbumActivityFinish() {
+        toast("onAlbumActivityFinish")
+    }
+
     override fun onAlbumResultCameraError() {
         toast("onAlbumResultCameraError")
     }
@@ -22,55 +27,47 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onAlbumActivityFinish() {
-        toast("album activity finish")
-    }
-
     override fun onAlbumPermissionsDenied(@PermissionsType type: Int) {
         toast("permissions error")
     }
 
-    override fun onAlbumFragmentNull() {
-        toast("album fragment null")
-    }
-
-    override fun onAlbumPreviewFileNull() {
+    override fun onAlbumPreviewFileNotExist() {
         toast("preview image has been deleted")
     }
 
-    override fun onAlbumFinderNull() {
+    override fun onAlbumFinderEmpty() {
         toast("folder directory is empty")
     }
 
-    override fun onAlbumBottomPreviewNull() {
+    override fun onAlbumPreviewEmpty() {
         toast("preview no image")
     }
 
-    override fun onAlbumBottomSelectNull() {
+    override fun onAlbumSelectEmpty() {
         toast("select no image")
     }
 
-    override fun onAlbumFragmentFileNull() {
+    override fun onAlbumFileNotExist() {
         toast("album image has been deleted")
     }
 
-    override fun onAlbumPreviewSelectNull() {
+    override fun onAlbumPreviewSelectEmpty() {
         toast("PreviewActivity,  preview no image")
     }
 
-    override fun onAlbumCheckBoxFileNull() {
+    override fun onAlbumCheckFileNotExist() {
         toast("check box  image has been deleted")
     }
 
-    override fun onAlbumFragmentCropCanceled() {
+    override fun onAlbumCropCanceled() {
         toast("cancel crop")
     }
 
-    override fun onAlbumFragmentCameraCanceled() {
+    override fun onAlbumCameraCanceled() {
         toast("cancel camera")
     }
 
-    override fun onAlbumFragmentUCropError(data: Throwable?) {
+    override fun onAlbumUCropError(data: Throwable?) {
         Log.i("ALBUM", data!!.message)
         toast("crop error:$data")
     }

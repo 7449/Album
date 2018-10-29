@@ -12,7 +12,7 @@ import com.album.sample.R
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.fragment.PrevFragment
 import com.album.ui.view.PrevFragmentToAtyListener
-import com.album.util.AlbumTool
+import com.album.util.hasL
 
 /**
  * by y on 22/08/2017.
@@ -50,7 +50,7 @@ class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
         previewOk.setOnClickListener {
             val entity = prevFragment.getSelectEntity()
             if (entity.isEmpty()) {
-                Album.instance.albumListener.onAlbumPreviewSelectNull()
+                Album.instance.albumListener.onAlbumPreviewSelectEmpty()
                 return@setOnClickListener
             }
             Album.instance.albumListener.onAlbumResources(entity)
@@ -64,7 +64,7 @@ class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
         drawable?.setColorFilter(ContextCompat.getColor(this, albumConfig.albumToolbarIconColor), PorterDuff.Mode.SRC_ATOP)
         toolbar.navigationIcon = drawable
         toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumToolbarBackground))
-        if (AlbumTool.hasL()) {
+        if (hasL()) {
             toolbar.elevation = albumConfig.albumToolbarElevation
         }
     }

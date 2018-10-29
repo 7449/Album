@@ -1,6 +1,7 @@
-package com.album.util.task
+package com.album.util
 
 import android.os.HandlerThread
+
 
 /**
  * by y on 21/08/2017.
@@ -26,6 +27,14 @@ class AlbumTask : AlbumTaskCallBack {
     override fun quit() {
         handlerThread?.quit()
     }
+}
 
+interface AlbumTaskCallBack {
+    fun start(call: Call)
 
+    fun quit()
+
+    interface Call {
+        fun start()
+    }
 }

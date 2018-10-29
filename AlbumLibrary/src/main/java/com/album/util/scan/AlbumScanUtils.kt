@@ -1,5 +1,6 @@
 package com.album.util.scan
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.MediaStore
@@ -7,15 +8,17 @@ import android.text.TextUtils
 import androidx.collection.ArrayMap
 import com.album.Album
 import com.album.AlbumConstant
-import com.album.entity.AlbumEntity
-import com.album.entity.FinderEntity
+import com.album.AlbumEntity
+import com.album.FinderEntity
 import com.album.util.FileUtils
+import com.album.util.ScanBase
+import com.album.util.ScanCallBack
 import java.util.*
 
 /**
  * by y on 11/08/2017.
  */
-class AlbumScanUtils private constructor(private val contentResolver: ContentResolver) : ScanView {
+class AlbumScanUtils private constructor(private val contentResolver: ContentResolver) : ScanBase(contentResolver) {
 
     companion object {
         private const val ALL_ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? or " + MediaStore.Images.Media.MIME_TYPE + "= ? "
@@ -25,26 +28,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
         private val ALBUM_PROJECTION = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.SIZE)
         private val ALBUM_FINDER_PROJECTION = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.BUCKET_ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA, MediaStore.Images.Media.SIZE)
 
-        operator fun get(contentResolver: ContentResolver): AlbumScanUtils {
-            return AlbumScanUtils(contentResolver)
-        }
-    }
-
-    override fun start(scanCallBack: ScanCallBack, bucketId: String, page: Int, count: Int) {
-        val albumEntityList = ArrayList<AlbumEntity>()
-        val finderEntityList = ArrayList<FinderEntity>()
-        val cursor = getCursor(bucketId, page, count)
-        if (cursor != null) {
-            val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-            val idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val sizeColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
-            while (cursor.moveToNext()) {
-                scanCursor(albumEntityList, dataColumnIndex, idColumnIndex, sizeColumnIndex, cursor)
-            }
-            cursor.close()
-            cursorFinder(finderEntityList)
-            scanCallBack.scanSuccess(albumEntityList, finderEntityList)
-        }
+        operator fun get(contentResolver: ContentResolver): AlbumScanUtils = AlbumScanUtils(contentResolver)
     }
 
     override fun resultScan(scanCallBack: ScanCallBack, path: String) {
@@ -69,7 +53,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
             cursorFinder(finderEntityList)
             query.close()
         }
-        scanCallBack.resultSuccess(albumEntity, finderEntityList)
+        scanCallBack.resultCallBack(albumEntity, finderEntityList)
     }
 
     override fun scanCursor(albumEntityList: ArrayList<AlbumEntity>, dataColumnIndex: Int, idColumnIndex: Int, sizeColumnIndex: Int, cursor: Cursor) {
@@ -130,6 +114,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
         finderEntityMap.clear()
     }
 
+    @SuppressLint("Recycle")
     override fun cursorCount(bucketId: String): Int {
         val selection = if (Album.instance.config.filterImg) String.format(FINDER_ALBUM_SELECTION, " and _size > 0") else String.format(FINDER_ALBUM_SELECTION, "")
         val query = contentResolver.query(

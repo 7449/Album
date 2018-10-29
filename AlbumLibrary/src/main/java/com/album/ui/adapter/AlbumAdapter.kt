@@ -12,14 +12,9 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.album.Album
-import com.album.AlbumConfig
-import com.album.AlbumConstant
-import com.album.R
-import com.album.entity.AlbumEntity
-import com.album.ui.widget.AlbumImageView
+import com.album.*
+import com.album.ui.AlbumImageView
 import com.album.util.FileUtils
 
 /**
@@ -68,7 +63,7 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
                 holder.checkBox.setOnClickListener(View.OnClickListener {
                     if (!FileUtils.isFile(albumEntity.path)) {
                         holder.checkBox.isChecked = false
-                        Album.instance.albumListener.onAlbumCheckBoxFileNull()
+                        Album.instance.albumListener.onAlbumCheckFileNotExist()
                         return@OnClickListener
                     }
                     if (!multiplePreviewList.contains(albumEntity) && multiplePreviewList.size >= albumConfig.multipleMaxCount) {

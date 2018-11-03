@@ -38,4 +38,3 @@ dependencies {
 repositories {
     mavenCentral()
 }
-//tasks.getByPath(":AlbumLibrary:releaseAndroidJavadocs").enabled = false

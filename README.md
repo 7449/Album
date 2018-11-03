@@ -37,7 +37,7 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     api 'com.ydevelop:album:album:0.0.5'
+     api 'com.ydevelop:album:album:0.0.6'
      api "com.android.support:recyclerview-v7:$supportLibraryVersion"
      api "com.github.bumptech.glide:glide:$glideVersion"
   

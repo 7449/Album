@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.album.*
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
+import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
 import com.album.sample.ui.SimpleAlbumUI
 import com.album.sample.ui.SimpleDialogFragment
 import com.album.sample.ui.SimplePreviewUI
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         findViewById<View>(R.id.btn_customize_camera).setOnClickListener(this)
         findViewById<View>(R.id.btn_dialog).setOnClickListener(this)
         findViewById<View>(R.id.btn_video).setOnClickListener(this)
+        findViewById<View>(R.id.btn_subsampling).setOnClickListener(this)
 
         dayOptions = UCrop.Options()
         dayOptions.apply {
@@ -178,6 +180,29 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         }
     }
 
+
+    private fun onSubsampling(): Album {
+        return Album.instance.apply {
+            albumImageLoader = SimpleSubsamplingScaleImageLoader()
+            albumListener = MainAlbumListener(this@MainActivity, list)
+            albumEntityList = list
+            options = dayOptions
+            emptyClickListener = object : OnEmptyClickListener {
+                override fun click(view: View): Boolean = true
+            }
+            config = AlbumConfig().apply {
+                cameraCrop = false
+                isFrescoImageLoader = true
+                filterImg = true
+                isPermissionsDeniedFinish = false
+                previewBackRefresh = true
+                previewFinishRefresh = true
+                albumContentItemCheckBoxDrawable = R.drawable.simple_selector_album_item_check
+            }
+            albumCameraListener = null
+        }
+    }
+
     override fun onClick(v: View) {
         Album.reset()
         when (v.id) {
@@ -188,6 +213,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             R.id.btn_dialog -> dialog()
             R.id.btn_customize_camera -> customizeCamera().start(this)
             R.id.btn_video -> openVideo().start(this)
+            R.id.btn_subsampling -> onSubsampling().start(this)
         }
     }
 

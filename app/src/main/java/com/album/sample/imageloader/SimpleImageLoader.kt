@@ -1,6 +1,7 @@
 package com.album.sample.imageloader
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import com.album.AlbumEntity
 import com.album.AlbumImageLoader
@@ -12,15 +13,15 @@ import com.album.FinderEntity
  */
 class SimpleImageLoader : AlbumImageLoader {
 
-    override fun displayAlbum(view: ImageView, width: Int, height: Int, albumEntity: AlbumEntity) {
+    override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
 
     }
 
-    override fun displayAlbumThumbnails(view: ImageView, finderEntity: FinderEntity) {
+    override fun displayAlbumThumbnails(view: View, finderEntity: FinderEntity) {
 
     }
 
-    override fun displayPreview(view: ImageView, albumEntity: AlbumEntity) {
+    override fun displayPreview(view: View, albumEntity: AlbumEntity) {
 
     }
 

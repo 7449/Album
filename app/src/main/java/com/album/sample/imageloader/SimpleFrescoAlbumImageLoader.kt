@@ -2,6 +2,7 @@ package com.album.sample.imageloader
 
 import android.content.Context
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
 import com.album.*
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -18,7 +19,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 
 class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
 
-    override fun displayAlbum(view: ImageView, width: Int, height: Int, albumEntity: AlbumEntity) {
+    override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
         val simpleDraweeView = view as SimpleDraweeView
         val uri = Uri.parse("file://" + albumEntity.path)
         val request = ImageRequestBuilder
@@ -39,7 +40,7 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         simpleDraweeView.controller = controller
     }
 
-    override fun displayAlbumThumbnails(view: ImageView, finderEntity: FinderEntity) {
+    override fun displayAlbumThumbnails(view: View, finderEntity: FinderEntity) {
         val simpleDraweeView = view as SimpleDraweeView
         val uri = Uri.parse("file://" + finderEntity.thumbnailsPath)
         val request = ImageRequestBuilder
@@ -58,7 +59,7 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         simpleDraweeView.controller = controller
     }
 
-    override fun displayPreview(view: ImageView, albumEntity: AlbumEntity) {
+    override fun displayPreview(view: View, albumEntity: AlbumEntity) {
         val simpleDraweeView = view as SimpleDraweeView
         val uri = Uri.parse("file://" + albumEntity.path)
         val request = ImageRequestBuilder

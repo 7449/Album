@@ -3,7 +3,6 @@ package com.album.ui.adapter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.album.Album
 import com.album.AlbumConstant
@@ -17,7 +16,7 @@ class PreviewAdapter(private val list: ArrayList<AlbumEntity>) : PagerAdapter() 
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val frameLayout = FrameLayout(container.context)
-        val imageView: ImageView
+        val imageView: View
         imageView = if (!Album.instance.config.isFrescoImageLoader) {
             TouchImageView(frameLayout.context)
         } else {

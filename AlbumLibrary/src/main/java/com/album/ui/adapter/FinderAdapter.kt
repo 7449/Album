@@ -5,15 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import com.album.Album
-import com.album.AlbumConfig
-import com.album.FinderEntity
-import com.album.R
+import com.album.*
 import com.album.ui.AlbumImageView
-import com.facebook.drawee.view.SimpleDraweeView
 
 /**
  *   @author y
@@ -28,8 +23,8 @@ class FinderAdapter(private val list: List<FinderEntity>) : BaseAdapter() {
             viewHolder.convertView = LayoutInflater.from(parent.context).inflate(R.layout.album_item_finder, parent, false)
             viewHolder.frameLayout = viewHolder.convertView.findViewById(R.id.iv_album_finder_icon)
             viewHolder.appCompatTextView = viewHolder.convertView.findViewById(R.id.tv_album_finder_name)
-            val imageView: ImageView = if (albumConfig.isFrescoImageLoader) {
-                SimpleDraweeView(parent.context)
+            val imageView: View = if (albumConfig.isFrescoImageLoader) {
+                Album.instance.albumImageLoader.frescoView(parent.context, AlbumConstant.TYPE_FRESCO_ALBUM)!!
             } else {
                 AlbumImageView(parent.context)
             }
@@ -41,16 +36,14 @@ class FinderAdapter(private val list: List<FinderEntity>) : BaseAdapter() {
         val finderEntity = getFinder(position)
         viewHolder.appCompatTextView.setTextColor(ContextCompat.getColor(parent.context, albumConfig.albumListPopupItemTextColor))
         viewHolder.appCompatTextView.text = String.format("%s(%s)", finderEntity.dirName, finderEntity.count.toString())
-        Album.instance.albumImageLoader.displayAlbumThumbnails(viewHolder.frameLayout.getChildAt(0) as ImageView, finderEntity)
+        Album.instance.albumImageLoader.displayAlbumThumbnails(viewHolder.frameLayout.getChildAt(0), finderEntity)
         return viewHolder.convertView
     }
 
     override fun getItem(position: Int): Any = list[position]
     override fun getItemId(position: Int): Long = position.toLong()
     override fun getCount(): Int = list.size
-    fun getFinder(position: Int): FinderEntity {
-        return list[position]
-    }
+    fun getFinder(position: Int): FinderEntity = list[position]
 
     private class ViewHolder {
         internal lateinit var convertView: View

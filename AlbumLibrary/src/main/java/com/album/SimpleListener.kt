@@ -1,6 +1,7 @@
 package com.album
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -8,18 +9,23 @@ import java.io.File
 
 class SimpleGlideAlbumImageLoader : AlbumImageLoader {
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_launcher).error(R.drawable.ic_launcher).centerCrop()
-    override fun displayAlbum(view: ImageView, width: Int, height: Int, albumEntity: AlbumEntity) {
-        Glide.with(view.context).load(albumEntity.path).apply(requestOptions.override(width, height)).into(view)
+    override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
+        if (view is ImageView) {
+            Glide.with(view.context).load(albumEntity.path).apply(requestOptions.override(width, height)).into(view)
+        }
     }
 
-    override fun displayAlbumThumbnails(view: ImageView, finderEntity: FinderEntity) {
-        Glide.with(view.context).load(finderEntity.thumbnailsPath).apply(requestOptions).into(view)
+    override fun displayAlbumThumbnails(view: View, finderEntity: FinderEntity) {
+        if (view is ImageView) {
+            Glide.with(view.context).load(finderEntity.thumbnailsPath).apply(requestOptions).into(view)
+        }
     }
 
-    override fun displayPreview(view: ImageView, albumEntity: AlbumEntity) {
-        Glide.with(view.context).load(albumEntity.path).apply(requestOptions).into(view)
+    override fun displayPreview(view: View, albumEntity: AlbumEntity) {
+        if (view is ImageView) {
+            Glide.with(view.context).load(albumEntity.path).apply(requestOptions).into(view)
+        }
     }
-
     override fun frescoView(context: Context, @FrescoType type: Int): ImageView? = null
 }
 

@@ -41,6 +41,12 @@
         android:text="dialog" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_subsampling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Subsampling Scale Image View" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

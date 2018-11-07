@@ -2,7 +2,6 @@ package com.album
 
 import android.content.Context
 import android.view.View
-import android.widget.ImageView
 import com.album.ui.fragment.AlbumBaseFragment
 import org.jetbrains.annotations.NotNull
 import java.io.File
@@ -11,22 +10,24 @@ interface AlbumImageLoader {
     /**
      * 首页图片加载
      */
-    fun displayAlbum(view: ImageView, width: Int, height: Int, albumEntity: AlbumEntity)
+    fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity)
 
     /**
      * 目录图片加载
      */
-    fun displayAlbumThumbnails(view: ImageView, finderEntity: FinderEntity)
+    fun displayAlbumThumbnails(view: View, finderEntity: FinderEntity)
 
     /**
      * 预览页图片加载
      */
-    fun displayPreview(view: ImageView, albumEntity: AlbumEntity)
+    fun displayPreview(view: View, albumEntity: AlbumEntity)
 
     /**
      * 图片框架是否是Fresco,如果是,请返回对应的View,如果不是Null即可
+     *
+     * 如果加载长图也可以使用这个,返回对应的View即可,例如SubsamplingScaleImageView
      */
-    fun frescoView(context: Context, @FrescoType type: Int): ImageView?
+    fun frescoView(context: Context, @FrescoType type: Int): View?
 }
 
 interface AlbumCameraListener {

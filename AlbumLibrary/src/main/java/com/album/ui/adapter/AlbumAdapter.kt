@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatImageView
@@ -55,7 +54,7 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
                 childAt.layoutParams = layoutParams
                 holder.imageView.addView(childAt)
             }
-            Album.instance.albumImageLoader.displayAlbum(childAt as ImageView, display, display, albumEntity)
+            Album.instance.albumImageLoader.displayAlbum(childAt, display, display, albumEntity)
             if (!albumConfig.isRadio) {
                 holder.checkBox.visibility = View.VISIBLE
                 holder.checkBox.isChecked = albumEntity.isCheck

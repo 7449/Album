@@ -20,9 +20,9 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware
 class SimpleImageLoaderAlbumImageLoader : AlbumImageLoader {
 
     private var displayImageOptions: DisplayImageOptions = DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.ic_launcher)
-            .showImageForEmptyUri(R.drawable.ic_launcher)
-            .showImageOnFail(R.drawable.ic_launcher)
+            .showImageOnLoading(R.drawable.ic_album_default_loading)
+            .showImageForEmptyUri(R.drawable.ic_album_default_loading)
+            .showImageOnFail(R.drawable.ic_album_default_loading)
             .cacheInMemory(true)
             .cacheOnDisk(true)
             .considerExifParams(true)

@@ -16,7 +16,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 
 class SimpleSubsamplingScaleImageLoader : AlbumImageLoader {
-    private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_launcher).error(R.drawable.ic_launcher).centerCrop()
+    private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_album_default_loading).error(R.drawable.ic_album_default_loading).centerCrop()
     override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
         if (view is SubsamplingScaleImageView) {
             Glide.with(view).asBitmap().load(albumEntity.path).apply(requestOptions.override(width, height)).into(object : SimpleTarget<Bitmap>() {

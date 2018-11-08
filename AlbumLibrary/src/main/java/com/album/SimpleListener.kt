@@ -8,7 +8,7 @@ import com.bumptech.glide.request.RequestOptions
 import java.io.File
 
 class SimpleGlideAlbumImageLoader : AlbumImageLoader {
-    private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_launcher).error(R.drawable.ic_launcher).centerCrop()
+    private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_album_default_loading).error(R.drawable.ic_album_default_loading).centerCrop()
     override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
         if (view is ImageView) {
             Glide.with(view.context).load(albumEntity.path).apply(requestOptions.override(width, height)).into(view)

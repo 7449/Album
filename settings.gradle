@@ -1,1 +1,1 @@
-include ':app', ':AlbumLibrary'
+include ':app', ':AlbumLibrary', ':AlbumUILibrary'

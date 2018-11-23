@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         dayOptions = UCrop.Options()
         dayOptions.apply {
             setToolbarTitle("DayTheme")
-            setToolbarTitle("DayTheme")
             setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackgroundDay))
             setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumStatusBarColorDay))
             setActiveWidgetColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackgroundDay))

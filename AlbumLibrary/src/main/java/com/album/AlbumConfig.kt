@@ -14,8 +14,6 @@ class AlbumConfig {
     var isRadio: Boolean = false
     var isCrop: Boolean = true
     var cameraCrop: Boolean = false
-    var previewFinishRefresh: Boolean = false
-    var previewBackRefresh: Boolean = false
     var isPermissionsDeniedFinish: Boolean = false
     var isFrescoImageLoader: Boolean = false
     var multipleMaxCount = 9
@@ -28,9 +26,25 @@ class AlbumConfig {
     var selectImageFinish: Boolean = true
     var cropFinish: Boolean = true
     var noPreview: Boolean = false
+    var spanCount = 3
+    var dividerWidth = 10
     var orientation: Int = LinearLayoutManager.VERTICAL
         private set
 
+    var albumContentViewCameraTips = R.string.album_image_camera_tv_tips
+    var albumContentViewCameraTipsSize = 18
+    var albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorDay
+    var albumContentViewCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorDay
+    var albumContentViewBackground = R.color.colorAlbumContentViewBackgroundDay
+    var albumContentViewCameraDrawable = R.drawable.ic_camera_alt_black_24dp
+    var albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay
+    var albumContentItemCheckBoxDrawable = R.drawable.selector_album_item_check
+    var albumContentEmptyDrawable = R.drawable.ic_camera_alt_black_24dp
+    var albumContentEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorDay
+
+
+    var previewFinishRefresh: Boolean = false
+    var previewBackRefresh: Boolean = false
     //////////////  album toolbar //////
     var albumStatusBarColor = R.color.colorAlbumStatusBarColorDay
     var albumToolbarBackground = R.color.colorAlbumToolbarBackgroundDay
@@ -61,18 +75,7 @@ class AlbumConfig {
     var albumListPopupItemBackground = R.color.colorAlbumListPopupItemBackgroundDay
     var albumListPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorDay
     //////////// album content view ////////
-    var spanCount = 3
-    var dividerWidth = 10
-    var albumContentViewCameraTips = R.string.album_image_camera_tv_tips
-    var albumContentViewCameraTipsSize = 18
-    var albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorDay
-    var albumContentViewCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorDay
-    var albumContentViewBackground = R.color.colorAlbumContentViewBackgroundDay
-    var albumContentViewCameraDrawable = R.drawable.ic_camera_alt_black_24dp
-    var albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay
-    var albumContentItemCheckBoxDrawable = R.drawable.selector_album_item_check
-    var albumContentEmptyDrawable = R.drawable.ic_camera_alt_black_24dp
-    var albumContentEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorDay
+
     /////////// album preview ////////
     var albumPreviewTitle = R.string.preview_title
     var albumPreviewBackground = R.color.colorAlbumPreviewBackgroundDay

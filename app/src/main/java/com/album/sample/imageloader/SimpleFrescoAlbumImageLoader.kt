@@ -1,10 +1,11 @@
 package com.album.sample.imageloader
 
-import android.content.Context
 import android.net.Uri
 import android.view.View
-import android.widget.ImageView
-import com.album.*
+import android.widget.FrameLayout
+import com.album.AlbumEntity
+import com.album.AlbumImageLoader
+import com.album.FinderEntity
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.view.SimpleDraweeView
@@ -19,8 +20,8 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 
 class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
 
-    override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
-        val simpleDraweeView = view as SimpleDraweeView
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
+        val simpleDraweeView = SimpleDraweeView(container.context)
         val uri = Uri.parse("file://" + albumEntity.path)
         val request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
@@ -38,10 +39,11 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         //        hierarchy.setPlaceholderImage(R.drawable.ic_launcher);
         hierarchy.actualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP
         simpleDraweeView.controller = controller
+        return simpleDraweeView
     }
 
-    override fun displayAlbumThumbnails(view: View, finderEntity: FinderEntity) {
-        val simpleDraweeView = view as SimpleDraweeView
+    override fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View {
+        val simpleDraweeView = SimpleDraweeView(container.context)
         val uri = Uri.parse("file://" + finderEntity.thumbnailsPath)
         val request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
@@ -57,10 +59,11 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         val hierarchy = simpleDraweeView.hierarchy
         hierarchy.actualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP
         simpleDraweeView.controller = controller
+        return simpleDraweeView
     }
 
-    override fun displayPreview(view: View, albumEntity: AlbumEntity) {
-        val simpleDraweeView = view as SimpleDraweeView
+    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
+        val simpleDraweeView = SimpleDraweeView(container.context)
         val uri = Uri.parse("file://" + albumEntity.path)
         val request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
@@ -76,13 +79,6 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         val hierarchy = simpleDraweeView.hierarchy
         hierarchy.actualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP
         simpleDraweeView.controller = controller
-    }
-
-    override fun frescoView(context: Context, @FrescoType type: Int): ImageView? {
-        when (type) {
-            AlbumConstant.TYPE_FRESCO_ALBUM -> return SimpleDraweeView(context)
-            AlbumConstant.TYPE_FRESCO_PREVIEW -> return SimpleDraweeView(context)
-        }
-        return null
+        return simpleDraweeView
     }
 }

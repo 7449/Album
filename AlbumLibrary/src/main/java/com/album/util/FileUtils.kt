@@ -19,9 +19,7 @@ import android.app.Activity.RESULT_OK
 
 object FileUtils {
 
-    fun isFile(path: String): Boolean {
-        return getPathFile(path) != null
-    }
+    fun isFile(path: String): Boolean = getPathFile(path) != null
 
     fun getPathFile(path: String): File? {
         if (TextUtils.isEmpty(path)) {
@@ -33,9 +31,7 @@ object FileUtils {
         } else file.parentFile ?: return null
     }
 
-    fun getScannerFile(path: String): File {
-        return File(path)
-    }
+    fun getScannerFile(path: String): File = File(path)
 
     fun finishCamera(activity: Activity, path: String) {
         val bundle = Bundle()

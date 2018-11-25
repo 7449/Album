@@ -17,26 +17,20 @@ class FinderAdapter(private val list: List<FinderEntity>) : BaseAdapter() {
 
     private val albumConfig: AlbumConfig = Album.instance.config
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val finderEntity = getFinder(position)
         val viewHolder: ViewHolder
         if (convertView == null) {
             viewHolder = ViewHolder()
             viewHolder.convertView = LayoutInflater.from(parent.context).inflate(R.layout.album_item_finder, parent, false)
             viewHolder.frameLayout = viewHolder.convertView.findViewById(R.id.iv_album_finder_icon)
             viewHolder.appCompatTextView = viewHolder.convertView.findViewById(R.id.tv_album_finder_name)
-            val imageView: View = if (albumConfig.isFrescoImageLoader) {
-                Album.instance.albumImageLoader.frescoView(parent.context, AlbumConstant.TYPE_FRESCO_ALBUM)!!
-            } else {
-                AlbumImageView(parent.context)
-            }
-            viewHolder.frameLayout.addView(imageView)
+            viewHolder.frameLayout.addView(Album.instance.albumImageLoader.displayAlbumThumbnails(finderEntity, viewHolder.frameLayout))
             viewHolder.convertView.tag = viewHolder
         } else {
             viewHolder = convertView.tag as ViewHolder
         }
-        val finderEntity = getFinder(position)
         viewHolder.appCompatTextView.setTextColor(ContextCompat.getColor(parent.context, albumConfig.albumListPopupItemTextColor))
         viewHolder.appCompatTextView.text = String.format("%s(%s)", finderEntity.dirName, finderEntity.count.toString())
-        Album.instance.albumImageLoader.displayAlbumThumbnails(viewHolder.frameLayout.getChildAt(0), finderEntity)
         return viewHolder.convertView
     }
 

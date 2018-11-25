@@ -77,12 +77,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             }
             config = AlbumConfig().apply {
                 cameraCrop = false
-                isFrescoImageLoader = true
                 filterImg = true
                 isPermissionsDeniedFinish = false
                 previewBackRefresh = true
                 previewFinishRefresh = true
-                albumContentItemCheckBoxDrawable = R.drawable.simple_selector_album_item_check
+                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
             }
             albumCameraListener = null
         }
@@ -174,7 +173,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             config = AlbumConfig().apply {
                 scanType = ScanType.VIDEO
                 albumToolbarText = R.string.album_video_title
-                albumContentViewCameraTips = R.string.video_tips
+                albumCameraText = R.string.video_tips
             }
         }
     }
@@ -191,12 +190,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             }
             config = AlbumConfig().apply {
                 cameraCrop = false
-                isFrescoImageLoader = true
                 filterImg = true
                 isPermissionsDeniedFinish = false
                 previewBackRefresh = true
                 previewFinishRefresh = true
-                albumContentItemCheckBoxDrawable = R.drawable.simple_selector_album_item_check
+                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
             }
             albumCameraListener = null
         }

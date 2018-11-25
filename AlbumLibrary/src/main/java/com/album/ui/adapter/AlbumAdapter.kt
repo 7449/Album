@@ -13,7 +13,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.album.*
-import com.album.ui.AlbumImageView
 import com.album.util.FileUtils
 
 /**
@@ -23,8 +22,8 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
 
     private var albumConfig: AlbumConfig = Album.instance.config
     private lateinit var onItemClickListener: OnItemClickListener
-    private val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(display, display)
     private var multiplePreviewList: ArrayList<AlbumEntity> = ArrayList()
+    private val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(display, display)
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
@@ -41,44 +40,34 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
         val albumEntity = list[position]
         if (TextUtils.equals(albumEntity.path, AlbumConstant.CAMERA)) {
             holder.camera()
-        } else {
-            holder.cameraRootView.visibility = View.GONE
-            holder.imageView.visibility = View.VISIBLE
-            var childAt = holder.imageView.getChildAt(0)
-            if (childAt == null) {
-                childAt = if (albumConfig.isFrescoImageLoader) {
-                    Album.instance.albumImageLoader.frescoView(holder.imageView.context, AlbumConstant.TYPE_FRESCO_ALBUM)!!
-                } else {
-                    AlbumImageView(holder.imageView.context)
+            return
+        }
+        holder.cameraRootView.visibility = View.GONE
+        holder.imageView.visibility = View.VISIBLE
+        holder.imageView.addView(Album.instance.albumImageLoader.displayAlbum(display, display, albumEntity, holder.imageView), layoutParams)
+        if (!albumConfig.isRadio) {
+            holder.checkBox.visibility = View.VISIBLE
+            holder.checkBox.isChecked = albumEntity.isCheck
+            holder.checkBox.setBackgroundResource(albumConfig.albumCheckBoxDrawable)
+            holder.checkBox.setOnClickListener(View.OnClickListener {
+                if (!FileUtils.isFile(albumEntity.path)) {
+                    holder.checkBox.isChecked = false
+                    Album.instance.albumListener.onAlbumCheckFileNotExist()
+                    return@OnClickListener
                 }
-                childAt.layoutParams = layoutParams
-                holder.imageView.addView(childAt)
-            }
-            Album.instance.albumImageLoader.displayAlbum(childAt, display, display, albumEntity)
-            if (!albumConfig.isRadio) {
-                holder.checkBox.visibility = View.VISIBLE
-                holder.checkBox.isChecked = albumEntity.isCheck
-                holder.checkBox.setBackgroundResource(albumConfig.albumContentItemCheckBoxDrawable)
-                holder.checkBox.setOnClickListener(View.OnClickListener {
-                    if (!FileUtils.isFile(albumEntity.path)) {
-                        holder.checkBox.isChecked = false
-                        Album.instance.albumListener.onAlbumCheckFileNotExist()
-                        return@OnClickListener
-                    }
-                    if (!multiplePreviewList.contains(albumEntity) && multiplePreviewList.size >= albumConfig.multipleMaxCount) {
-                        holder.checkBox.isChecked = false
-                        Album.instance.albumListener.onAlbumMaxCount()
-                        return@OnClickListener
-                    }
-                    if (!albumEntity.isCheck) {
-                        albumEntity.isCheck = true
-                        multiplePreviewList.add(albumEntity)
-                    } else {
-                        multiplePreviewList.remove(albumEntity)
-                        albumEntity.isCheck = false
-                    }
-                })
-            }
+                if (!multiplePreviewList.contains(albumEntity) && multiplePreviewList.size >= albumConfig.multipleMaxCount) {
+                    holder.checkBox.isChecked = false
+                    Album.instance.albumListener.onAlbumMaxCount()
+                    return@OnClickListener
+                }
+                if (!albumEntity.isCheck) {
+                    albumEntity.isCheck = true
+                    multiplePreviewList.add(albumEntity)
+                } else {
+                    multiplePreviewList.remove(albumEntity)
+                    albumEntity.isCheck = false
+                }
+            })
         }
     }
 
@@ -91,13 +80,9 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
         }
     }
 
-    fun getAlbumList(): ArrayList<AlbumEntity> {
-        return list
-    }
+    fun getAlbumList(): ArrayList<AlbumEntity> = list
 
-    fun getMultiplePreviewList(): ArrayList<AlbumEntity> {
-        return multiplePreviewList
-    }
+    fun getMultiplePreviewList(): ArrayList<AlbumEntity> = multiplePreviewList
 
     fun setMultiplePreviewList(multiplePreviewList: ArrayList<AlbumEntity>) {
         this.multiplePreviewList = multiplePreviewList
@@ -121,13 +106,12 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
         val cameraRootView: LinearLayout = itemView.findViewById(R.id.album_camera_root_view)
 
         fun camera() {
-            val drawable = ContextCompat.getDrawable(itemView.context, albumConfig.albumContentViewCameraDrawable)
-            drawable?.setColorFilter(ContextCompat.getColor(itemView.context, albumConfig.albumContentViewCameraDrawableColor),
-                    PorterDuff.Mode.SRC_ATOP)
-            cameraTips.setText(albumConfig.albumContentViewCameraTips)
-            cameraTips.textSize = albumConfig.albumContentViewCameraTipsSize.toFloat()
-            cameraTips.setTextColor(ContextCompat.getColor(itemView.context, albumConfig.albumContentViewCameraTipsColor))
-            cameraRootView.setBackgroundColor(ContextCompat.getColor(itemView.context, albumConfig.albumContentViewCameraBackgroundColor))
+            val drawable = ContextCompat.getDrawable(itemView.context, albumConfig.albumCameraDrawable)
+            drawable?.setColorFilter(ContextCompat.getColor(itemView.context, albumConfig.albumCameraDrawableColor), PorterDuff.Mode.SRC_ATOP)
+            cameraTips.setText(albumConfig.albumCameraText)
+            cameraTips.textSize = albumConfig.albumCameraTextSize.toFloat()
+            cameraTips.setTextColor(ContextCompat.getColor(itemView.context, albumConfig.albumCameraTextColor))
+            cameraRootView.setBackgroundColor(ContextCompat.getColor(itemView.context, albumConfig.albumCameraBackgroundColor))
             imageCamera.setImageDrawable(drawable)
             cameraRootView.visibility = View.VISIBLE
             imageView.visibility = View.GONE

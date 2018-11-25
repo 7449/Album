@@ -28,7 +28,6 @@ import java.io.File
 
 class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, AlbumAdapter.OnItemClickListener, SingleScannerListener, LoadMoreRecyclerView.LoadMoreListener {
 
-
     companion object {
         fun newInstance(): AlbumFragment {
             return AlbumFragment()
@@ -73,12 +72,12 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     override fun initCreate(savedInstanceState: Bundle?) {}
 
     override fun initView(view: View) {
-        view.findViewById<View>(R.id.album_content_view).setBackgroundColor(ContextCompat.getColor(view.context, albumConfig.albumContentViewBackground))
+        view.findViewById<View>(R.id.album_content_view).setBackgroundColor(ContextCompat.getColor(view.context, albumConfig.albumRootViewBackground))
         recyclerView = view.findViewById(R.id.album_recyclerView)
         progressBar = view.findViewById(R.id.album_progress)
         emptyView = view.findViewById(R.id.album_empty)
-        val drawable = ContextCompat.getDrawable(mActivity, albumConfig.albumContentEmptyDrawable)
-        drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumConfig.albumContentEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
+        val drawable = ContextCompat.getDrawable(mActivity, albumConfig.albumPhotoEmptyDrawable)
+        drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumConfig.albumPhotoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
         emptyView.setImageDrawable(drawable)
         emptyView.setOnClickListener { v ->
             val emptyClickListener = Album.instance.emptyClickListener

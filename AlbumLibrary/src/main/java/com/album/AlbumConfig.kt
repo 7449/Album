@@ -15,7 +15,6 @@ class AlbumConfig {
     var isCrop: Boolean = true
     var cameraCrop: Boolean = false
     var isPermissionsDeniedFinish: Boolean = false
-    var isFrescoImageLoader: Boolean = false
     var multipleMaxCount = 9
     var cameraPath: String? = null
     var uCropPath: String? = null
@@ -31,16 +30,16 @@ class AlbumConfig {
     var orientation: Int = LinearLayoutManager.VERTICAL
         private set
 
-    var albumContentViewCameraTips = R.string.album_image_camera_tv_tips
-    var albumContentViewCameraTipsSize = 18
-    var albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorDay
-    var albumContentViewCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorDay
-    var albumContentViewBackground = R.color.colorAlbumContentViewBackgroundDay
-    var albumContentViewCameraDrawable = R.drawable.ic_camera_alt_black_24dp
-    var albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay
-    var albumContentItemCheckBoxDrawable = R.drawable.selector_album_item_check
-    var albumContentEmptyDrawable = R.drawable.ic_camera_alt_black_24dp
-    var albumContentEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorDay
+    var albumCameraText = R.string.album_camera_text
+    var albumCameraTextSize = 18
+    var albumCameraTextColor = R.color.colorAlbumContentViewTipsColorDay
+    var albumCameraDrawable = R.drawable.ic_camera_drawable
+    var albumCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorDay
+    var albumCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorDay
+    var albumRootViewBackground = R.color.colorAlbumContentViewBackgroundDay
+    var albumCheckBoxDrawable = R.drawable.selector_album_item_check
+    var albumPhotoEmptyDrawable = R.drawable.ic_camera_drawable
+    var albumPhotoEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorDay
 
 
     var previewFinishRefresh: Boolean = false
@@ -105,11 +104,11 @@ class AlbumConfig {
                 albumListPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorNight
                 albumListPopupItemBackground = R.color.colorAlbumListPopupItemBackgroundNight
 
-                albumContentViewBackground = R.color.colorAlbumContentViewBackgroundNight
-                albumContentViewCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight
-                albumContentViewCameraTipsColor = R.color.colorAlbumContentViewTipsColorNight
-                albumContentViewCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorNight
-                albumContentEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorNight
+                albumRootViewBackground = R.color.colorAlbumContentViewBackgroundNight
+                albumCameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight
+                albumCameraTextColor = R.color.colorAlbumContentViewTipsColorNight
+                albumCameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorColorNight
+                albumPhotoEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorNight
 
                 albumPreviewBackground = R.color.colorAlbumPreviewBackgroundNight
                 albumPreviewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundNight

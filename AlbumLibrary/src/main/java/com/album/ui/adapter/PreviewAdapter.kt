@@ -16,14 +16,7 @@ class PreviewAdapter(private val list: ArrayList<AlbumEntity>) : PagerAdapter() 
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val frameLayout = FrameLayout(container.context)
-        val imageView: View
-        imageView = if (!Album.instance.config.isFrescoImageLoader) {
-            TouchImageView(frameLayout.context)
-        } else {
-            Album.instance.albumImageLoader.frescoView(frameLayout.context, AlbumConstant.TYPE_FRESCO_ALBUM)!!
-        }
-        frameLayout.addView(imageView)
-        Album.instance.albumImageLoader.displayPreview(imageView, list[position])
+        frameLayout.addView(Album.instance.albumImageLoader.displayPreview(list[position], frameLayout))
         container.addView(frameLayout)
         return frameLayout
     }

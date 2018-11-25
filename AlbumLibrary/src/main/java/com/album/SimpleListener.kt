@@ -1,32 +1,34 @@
 package com.album
 
-import android.content.Context
 import android.view.View
-import android.widget.ImageView
+import android.widget.FrameLayout
+import com.album.ui.AlbumImageView
+import com.album.ui.widget.TouchImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import java.io.File
 
 class SimpleGlideAlbumImageLoader : AlbumImageLoader {
+
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_album_default_loading).error(R.drawable.ic_album_default_loading).centerCrop()
-    override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
-        if (view is ImageView) {
-            Glide.with(view.context).load(albumEntity.path).apply(requestOptions.override(width, height)).into(view)
-        }
+
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
+        val albumImageView = AlbumImageView(container.context)
+        Glide.with(container.context).load(albumEntity.path).apply(requestOptions.override(width, height)).into(albumImageView)
+        return albumImageView
     }
 
-    override fun displayAlbumThumbnails(view: View, finderEntity: FinderEntity) {
-        if (view is ImageView) {
-            Glide.with(view.context).load(finderEntity.thumbnailsPath).apply(requestOptions).into(view)
-        }
+    override fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View {
+        val albumImageView = AlbumImageView(container.context)
+        Glide.with(container.context).load(finderEntity.thumbnailsPath).apply(requestOptions).into(albumImageView)
+        return albumImageView
     }
 
-    override fun displayPreview(view: View, albumEntity: AlbumEntity) {
-        if (view is ImageView) {
-            Glide.with(view.context).load(albumEntity.path).apply(requestOptions).into(view)
-        }
+    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
+        val albumImageView = TouchImageView(container.context)
+        Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(albumImageView)
+        return albumImageView
     }
-    override fun frescoView(context: Context, @FrescoType type: Int): ImageView? = null
 }
 
 open class SimpleAlbumListener : AlbumListener {

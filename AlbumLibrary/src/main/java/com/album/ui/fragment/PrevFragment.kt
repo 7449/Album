@@ -68,7 +68,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         viewPager = view.findViewById(R.id.preview_viewPager)
         appCompatCheckBox = view.findViewById(R.id.preview_check_box)
         progressBar = view.findViewById(R.id.preview_progress)
-        appCompatCheckBox.setBackgroundResource(albumConfig.albumContentItemCheckBoxDrawable)
+        appCompatCheckBox.setBackgroundResource(albumConfig.albumCheckBoxDrawable)
         appCompatCheckBox.setOnClickListener { checkBoxClick() }
     }
 

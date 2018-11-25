@@ -1,14 +1,15 @@
 package com.album.sample.imageloader
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import com.album.AlbumEntity
 import com.album.AlbumImageLoader
 import com.album.FinderEntity
-import com.album.FrescoType
 import com.album.sample.R
+import com.album.ui.AlbumImageView
+import com.album.ui.widget.TouchImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware
@@ -29,29 +30,25 @@ class SimpleImageLoaderAlbumImageLoader : AlbumImageLoader {
             .bitmapConfig(Bitmap.Config.RGB_565)
             .build()
 
-    override fun displayAlbum(view: View, width: Int, height: Int, albumEntity: AlbumEntity) {
-        if (view is ImageView) {
-            view.scaleType = ImageView.ScaleType.CENTER_CROP
-            ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, view, displayImageOptions, null)
-        }
+
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
+        val albumImageView = AlbumImageView(container.context)
+        albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, albumImageView, displayImageOptions, null)
+        return albumImageView
     }
 
-
-    override fun displayAlbumThumbnails(view: View, finderEntity: FinderEntity) {
-        if (view is ImageView) {
-            view.scaleType = ImageView.ScaleType.CENTER_CROP
-            ImageLoader.getInstance().displayImage("file:///" + finderEntity.thumbnailsPath, ImageViewAware(view), displayImageOptions, null, null, null)
-        }
+    override fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View {
+        val albumImageView = AlbumImageView(container.context)
+        albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        ImageLoader.getInstance().displayImage("file:///" + finderEntity.thumbnailsPath, ImageViewAware(albumImageView), displayImageOptions, null, null, null)
+        return albumImageView
     }
 
-    override fun displayPreview(view: View, albumEntity: AlbumEntity) {
-        if (view is ImageView) {
-            view.scaleType = ImageView.ScaleType.CENTER_CROP
-            ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, ImageViewAware(view), displayImageOptions, null, null, null)
-        }
-    }
-
-    override fun frescoView(context: Context, @FrescoType type: Int): ImageView? {
-        return null
+    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
+        val albumImageView = TouchImageView(container.context)
+        albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, ImageViewAware(albumImageView), displayImageOptions, null, null, null)
+        return albumImageView
     }
 }

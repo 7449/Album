@@ -23,8 +23,8 @@ class SingleMediaScanner(context: Context, private val file: File, private val l
     private var connection: MediaScannerConnection = MediaScannerConnection(context.applicationContext, this)
 
     init {
-        this.connection.connect()
-        this.listener.onScanStart()
+        connection.connect()
+        listener.onScanStart()
     }
 
     override fun onMediaScannerConnected() {

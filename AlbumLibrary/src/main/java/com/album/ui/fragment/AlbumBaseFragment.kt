@@ -12,6 +12,7 @@ import com.album.Album
 import com.album.AlbumConstant
 import com.album.PermissionsType
 import com.album.util.AlbumTask
+import com.album.util.PermissionUtils
 
 /**
  * @author y
@@ -47,7 +48,7 @@ abstract class AlbumBaseFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            AlbumConstant.WRITE_EXTERNAL_STORAGE_REQUEST_CODE -> {
+            PermissionUtils.WRITE_EXTERNAL_STORAGE_REQUEST_CODE -> {
                 if (grantResults.isEmpty()) {
                     return
                 }
@@ -57,7 +58,7 @@ abstract class AlbumBaseFragment : Fragment() {
                     permissionsGranted(AlbumConstant.TYPE_PERMISSIONS_ALBUM)
                 }
             }
-            AlbumConstant.CAMERA_REQUEST_CODE -> {
+            PermissionUtils.CAMERA_REQUEST_CODE -> {
                 if (grantResults.isEmpty()) {
                     return
                 }

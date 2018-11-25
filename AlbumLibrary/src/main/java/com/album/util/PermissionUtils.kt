@@ -14,35 +14,20 @@ import com.album.AlbumConstant
 
 object PermissionUtils {
 
-    fun storage(any: Any): Boolean {
-        if (any is Activity) {
-            return storage(any)
-        }
-        return storage(any as Fragment)
-    }
+    const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0
+    const val CAMERA_REQUEST_CODE = 1
 
-    fun camera(any: Any): Boolean {
-        if (any is Activity) {
-            return camera(any)
-        }
-        return camera(any as Fragment)
-    }
+    fun storage(any: Any): Boolean = if (any is Activity) storage(any) else storage(any as Fragment)
 
-    fun storage(activity: Activity): Boolean {
-        return permission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumConstant.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
-    }
+    fun camera(any: Any): Boolean = if (any is Activity) camera(any) else camera(any as Fragment)
 
-    fun camera(activity: Activity): Boolean {
-        return permission(activity, Manifest.permission.CAMERA, AlbumConstant.CAMERA_REQUEST_CODE)
-    }
+    fun storage(activity: Activity): Boolean = permission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
 
-    fun storage(fragment: Fragment): Boolean {
-        return permission(fragment, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumConstant.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
-    }
+    fun camera(activity: Activity): Boolean = permission(activity, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
 
-    fun camera(fragment: Fragment): Boolean {
-        return permission(fragment, Manifest.permission.CAMERA, AlbumConstant.CAMERA_REQUEST_CODE)
-    }
+    fun storage(fragment: Fragment): Boolean = permission(fragment, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+
+    fun camera(fragment: Fragment): Boolean = permission(fragment, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
 
     private fun permission(activity: Activity, permissions: String, code: Int): Boolean {
         if (ContextCompat.checkSelfPermission(activity, permissions) != PackageManager.PERMISSION_GRANTED) {

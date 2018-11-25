@@ -8,8 +8,6 @@ object AlbumConstant {
     const val ALL_ALBUM_NAME = "全部"
     const val CAMERA = "Album:Camera"
     const val VIDEO_PLAY_TYPE = "video/*"
-    const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0
-    const val CAMERA_REQUEST_CODE = 1
     const val ITEM_CAMERA = 1111
     const val TYPE_PREVIEW_CODE = 112
     const val TYPE_ALBUM_STATE_SELECT = "state_select"
@@ -27,9 +25,6 @@ object AlbumConstant {
 
     const val TYPE_PERMISSIONS_ALBUM = 0
     const val TYPE_PERMISSIONS_CAMERA = 1
-
-    const val TYPE_FRESCO_ALBUM = 0
-    const val TYPE_FRESCO_PREVIEW = 1
 
     const val TYPE_RESULT_CAMERA = 0
     const val TYPE_RESULT_CROP = 1

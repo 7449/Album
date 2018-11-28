@@ -5,13 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.viewpager.widget.ViewPager
-import com.album.Album
-import com.album.AlbumConstant
-import com.album.AlbumEntity
-import com.album.R
+import com.album.*
 import com.album.presenter.PreviewPresenter
 import com.album.presenter.impl.PreviewPresenterImpl
 import com.album.ui.ExtendedViewPager
@@ -27,7 +25,7 @@ import com.album.util.PermissionUtils
 class PrevFragment : AlbumBaseFragment(), PrevView {
 
     companion object {
-        fun newInstance(bundle: Bundle?): PrevFragment {
+        fun newInstance(bundle: Bundle): PrevFragment {
             return PrevFragment().apply { arguments = bundle }
         }
     }
@@ -37,8 +35,10 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     private lateinit var appCompatCheckBox: AppCompatCheckBox
     private lateinit var progressBar: ProgressBar
     private lateinit var viewPager: ExtendedViewPager
+    private lateinit var rootView: FrameLayout
     private lateinit var previewPresenter: PreviewPresenter
 
+    private lateinit var albumBundle: AlbumBundle
     /** 全部数据 **/
     private lateinit var albumEntityList: ArrayList<AlbumEntity>
     /** 选中的数据 **/
@@ -56,6 +56,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
         listener = mActivity as PrevFragmentToAtyListener
         bucketId = bundle.getString(AlbumConstant.PREVIEW_BUCKET_ID, "")
         isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY)
@@ -65,10 +66,10 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      * 初始化view
      */
     override fun initView(view: View) {
+        rootView = view.findViewById(R.id.preview_root_view)
         viewPager = view.findViewById(R.id.preview_viewPager)
         appCompatCheckBox = view.findViewById(R.id.preview_check_box)
         progressBar = view.findViewById(R.id.preview_progress)
-        appCompatCheckBox.setBackgroundResource(albumConfig.albumCheckBoxDrawable)
         appCompatCheckBox.setOnClickListener { checkBoxClick() }
     }
 
@@ -80,6 +81,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      * [selectPosition]
      */
     override fun initActivityCreated(savedInstanceState: Bundle?) {
+        appCompatCheckBox.setBackgroundResource(albumBundle.checkBoxDrawable)
         albumEntityList = ArrayList()
         val previewBundle = savedInstanceState ?: bundle
         selectAlbumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.PREVIEW_KEY) ?: ArrayList()
@@ -87,7 +89,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         if (savedInstanceState != null && isPreview) {
             albumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
         }
-        previewPresenter = PreviewPresenterImpl(this)
+        previewPresenter = PreviewPresenterImpl(this, albumBundle)
         listener.onChangedCount(selectAlbumEntityList.size)
         if (PermissionUtils.storage(this)) {
             initPreview()
@@ -108,7 +110,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      */
     override fun permissionsDenied(type: Int) {
         Album.instance.albumListener.onAlbumPermissionsDenied(type)
-        if (albumConfig.isPermissionsDeniedFinish) {
+        if (albumBundle.permissionsDeniedFinish) {
             mActivity.finish()
         }
     }
@@ -170,7 +172,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
 
     private fun checkBoxClick() {
         val albumEntity = adapter.getAlbumEntity(viewPager.currentItem)
-        if (!selectAlbumEntityList.contains(albumEntity) && selectAlbumEntityList.size >= albumConfig.multipleMaxCount) {
+        if (!selectAlbumEntityList.contains(albumEntity) && selectAlbumEntityList.size >= albumBundle.multipleMaxCount) {
             appCompatCheckBox.isChecked = false
             Album.instance.albumListener.onAlbumMaxCount()
             return
@@ -188,7 +190,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     private fun initViewPager(albumEntityList: ArrayList<AlbumEntity>) {
         adapter = PreviewAdapter(albumEntityList)
         viewPager.adapter = adapter
-        viewPager.currentItem = if (TextUtils.isEmpty(bucketId) && !albumConfig.hideCamera) selectPosition - 1 else selectPosition
+        viewPager.currentItem = if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera) selectPosition - 1 else selectPosition
         viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

@@ -1,6 +1,7 @@
 package com.album.presenter.impl
 
 import android.text.TextUtils
+import com.album.AlbumBundle
 import com.album.AlbumEntity
 import com.album.FinderEntity
 import com.album.presenter.PreviewPresenter
@@ -16,7 +17,7 @@ import java.util.*
  * by y on 17/08/2017.
  */
 
-class PreviewPresenterImpl(private val prevView: PrevView) : PreviewPresenter, ScanCallBack {
+class PreviewPresenterImpl(private val prevView: PrevView, private val albumBundle: AlbumBundle) : PreviewPresenter, ScanCallBack {
 
     private val scanView: ScanView = AlbumScanUtils[prevView.getPreViewActivity().contentResolver]
 
@@ -24,7 +25,7 @@ class PreviewPresenterImpl(private val prevView: PrevView) : PreviewPresenter, S
         prevView.getPreViewActivity().runOnUiThread { prevView.showProgress() }
         AlbumTask.instance.start(object : AlbumTaskCallBack.Call {
             override fun start() {
-                scanView.scan(this@PreviewPresenterImpl, bucketId, page, count)
+                scanView.scan(this@PreviewPresenterImpl, bucketId, page, count, albumBundle.filterImg, albumBundle.sdName)
             }
         })
     }

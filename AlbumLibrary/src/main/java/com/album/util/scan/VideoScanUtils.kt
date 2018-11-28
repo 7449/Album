@@ -29,7 +29,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
         operator fun get(contentResolver: ContentResolver): VideoScanUtils = VideoScanUtils(contentResolver)
     }
 
-    override fun resultScan(scanCallBack: ScanCallBack, path: String) {
+    override fun resultScan(scanCallBack: ScanCallBack, path: String, filterImage: Boolean, sdName: String) {
         var albumEntity: AlbumEntity? = null
         val finderEntityList = ArrayList<FinderEntity>()
         val query = contentResolver.query(
@@ -48,13 +48,13 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
                     albumEntity = AlbumEntity("", "", resultPath, id, false)
                 }
             }
-            cursorFinder(finderEntityList)
+            cursorFinder(finderEntityList, filterImage, sdName)
             query.close()
         }
         scanCallBack.resultCallBack(albumEntity!!, finderEntityList)
     }
 
-    override fun scanCursor(albumEntityList: ArrayList<AlbumEntity>, dataColumnIndex: Int, idColumnIndex: Int, sizeColumnIndex: Int, cursor: Cursor) {
+    override fun scanCursor(albumEntityList: ArrayList<AlbumEntity>, dataColumnIndex: Int, idColumnIndex: Int, sizeColumnIndex: Int, filterImage: Boolean, cursor: Cursor) {
         val path = cursor.getString(dataColumnIndex)
         val id = cursor.getLong(idColumnIndex)
         if (FileUtils.getPathFile(path) != null) {
@@ -62,7 +62,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
         }
     }
 
-    override fun cursorFinder(finderEntityList: ArrayList<FinderEntity>) {
+    override fun cursorFinder(finderEntityList: ArrayList<FinderEntity>, filterImage: Boolean, sdName: String) {
         val finderEntityMap = ArrayMap<String, FinderEntity>()
         val finderCursor = contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
@@ -80,7 +80,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
                 val id = finderCursor.getLong(idColumnIndex)
                 val finderEntity = finderEntityMap[finderName]
                 if (finderEntity == null && FileUtils.getPathFile(finderPath) != null) {
-                    finderEntityMap[finderName] = FinderEntity(finderName, finderPath, id, bucketId, cursorCount(bucketId))
+                    finderEntityMap[finderName] = FinderEntity(finderName, finderPath, id, bucketId, cursorCount(bucketId, filterImage))
                 }
             }
             finderCursor.close()
@@ -104,7 +104,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
     }
 
     @SuppressLint("Recycle")
-    override fun cursorCount(bucketId: String): Int {
+    override fun cursorCount(bucketId: String, filterImage: Boolean): Int {
         val query = contentResolver.query(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 VIDEO_COUNT_PROJECTION,
@@ -116,7 +116,7 @@ class VideoScanUtils private constructor(private val contentResolver: ContentRes
         return count
     }
 
-    override fun getCursor(bucketId: String, page: Int, count: Int): Cursor? {
+    override fun getCursor(bucketId: String, page: Int, count: Int, filterImage: Boolean): Cursor? {
         val sortOrder = if (count == -1) MediaStore.Video.Media.DATE_MODIFIED + " desc" else MediaStore.Video.Media.DATE_MODIFIED + " desc limit " + page * count + "," + count
         val selection = if (TextUtils.isEmpty(bucketId)) null else FINDER_VIDEO_SELECTION
         val args = if (TextUtils.isEmpty(bucketId)) null else arrayOf(bucketId)

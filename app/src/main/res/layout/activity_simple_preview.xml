@@ -25,7 +25,7 @@
         android:id="@+id/preview_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/album_bottom_height"
-        android:background="@color/colorAlbumPreviewBottomViewBackgroundDay">
+        android:background="@color/colorAlbumPreviewBottomViewBackground">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/preview_bottom_view_tv_select"
@@ -39,7 +39,7 @@
             android:gravity="center"
             android:padding="@dimen/album_bottom_padding"
             android:text="@string/preview_select"
-            android:textColor="@color/colorAlbumBottomSelectTextColorDay"
+            android:textColor="@color/colorAlbumBottomSelectTextColor"
             android:textSize="@dimen/album_bottom_text_size"
             tools:ignore="RtlHardcoded" />
 

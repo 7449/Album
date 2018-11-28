@@ -1,12 +1,16 @@
 package com.album.presenter.impl
 
 import android.text.TextUtils
-import com.album.Album
+import com.album.AlbumBundle
 import com.album.AlbumEntity
 import com.album.FinderEntity
+import com.album.VIDEO
 import com.album.presenter.AlbumPresenter
 import com.album.ui.view.AlbumView
-import com.album.util.*
+import com.album.util.AlbumTask
+import com.album.util.AlbumTaskCallBack
+import com.album.util.ScanCallBack
+import com.album.util.ScanView
 import com.album.util.scan.AlbumScanUtils
 import com.album.util.scan.VideoScanUtils
 import java.util.*
@@ -15,13 +19,13 @@ import java.util.*
  * by y on 14/08/2017.
  */
 
-class AlbumPresenterImpl(private val albumView: AlbumView) : AlbumPresenter, ScanCallBack {
+class AlbumPresenterImpl(private val albumView: AlbumView, private val albumBundle: AlbumBundle) : AlbumPresenter, ScanCallBack {
     private var scanLoading = false
     private val scanView: ScanView
 
     init {
         val contentResolver = albumView.getAlbumActivity().contentResolver
-        scanView = if (Album.instance.config.scanType == ScanType.VIDEO) VideoScanUtils[contentResolver] else AlbumScanUtils[contentResolver]
+        scanView = if (albumBundle.scanType == VIDEO) VideoScanUtils[contentResolver] else AlbumScanUtils[contentResolver]
     }
 
     override fun scan(bucketId: String, page: Int, count: Int) {
@@ -33,7 +37,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView) : AlbumPresenter, Sca
         }
         AlbumTask.instance.start(object : AlbumTaskCallBack.Call {
             override fun start() {
-                scanView.scan(this@AlbumPresenterImpl, bucketId, page, count)
+                scanView.scan(this@AlbumPresenterImpl, bucketId, page, count, albumBundle.filterImg, albumBundle.sdName)
             }
         })
     }
@@ -79,7 +83,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView) : AlbumPresenter, Sca
     override fun resultScan(path: String) {
         AlbumTask.instance.start(object : AlbumTaskCallBack.Call {
             override fun start() {
-                scanView.resultScan(this@AlbumPresenterImpl, path)
+                scanView.resultScan(this@AlbumPresenterImpl, path, albumBundle.filterImg, albumBundle.sdName)
             }
         })
     }

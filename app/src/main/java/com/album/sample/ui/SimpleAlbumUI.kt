@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import com.album.AlbumBundle
 import com.album.sample.R
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.adapter.FinderAdapter
@@ -31,15 +32,16 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener {
     }
 
     override fun initCreate(savedInstanceState: Bundle?) {
+        initTitle()
         initListPopupWindow()
     }
 
     private fun initListPopupWindow() {
         listPopupWindow = ListPopupWindow(this)
         listPopupWindow.anchorView = finerName
-        listPopupWindow.width = albumConfig.albumListPopupWidth
-        listPopupWindow.horizontalOffset = albumConfig.albumListPopupHorizontalOffset
-        listPopupWindow.verticalOffset = albumConfig.albumListPopupVerticalOffset
+//        listPopupWindow.width = albumConfig.albumListPopupWidth
+//        listPopupWindow.horizontalOffset = albumConfig.albumListPopupHorizontalOffset
+//        listPopupWindow.verticalOffset = albumConfig.albumListPopupVerticalOffset
         listPopupWindow.isModal = true
         listPopupWindow.setOnItemClickListener(this)
     }
@@ -51,7 +53,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener {
             albumFragment = fragment as AlbumFragment
             return
         }
-        albumFragment = AlbumFragment.newInstance()
+        albumFragment = AlbumFragment.newInstance(AlbumBundle())
         supportFragmentManager
                 .beginTransaction()
                 .apply {
@@ -68,18 +70,18 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener {
         finerName.setOnClickListener {
             val finderEntity = albumFragment.getFinderEntity()
             if (!finderEntity.isEmpty()) {
-                listPopupWindow.setAdapter(FinderAdapter(finderEntity))
+//                listPopupWindow.setAdapter(FinderAdapter(finderEntity))
                 listPopupWindow.show()
             }
         }
     }
 
-    override fun initTitle() {
+    private fun initTitle() {
         toolbar.title = "sample UI"
-        val drawable = ContextCompat.getDrawable(this, albumConfig.albumToolbarIcon)
-        drawable?.setColorFilter(ContextCompat.getColor(this, albumConfig.albumToolbarIconColor), PorterDuff.Mode.SRC_ATOP)
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.albumToolbarTextColor))
-        toolbar.navigationIcon = drawable
+//        val drawable = ContextCompat.getDrawable(this, albumConfig.albumToolbarIcon)
+//        drawable?.setColorFilter(ContextCompat.getColor(this, albumConfig.albumToolbarIconColor), PorterDuff.Mode.SRC_ATOP)
+//        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.albumToolbarTextColor))
+//        toolbar.navigationIcon = drawable
         toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
         toolbar.setNavigationOnClickListener { finish() }
     }

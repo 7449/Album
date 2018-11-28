@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
@@ -15,9 +14,8 @@ import com.album.*
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
-import com.album.sample.ui.SimpleAlbumUI
 import com.album.sample.ui.SimpleDialogFragment
-import com.album.sample.ui.SimplePreviewUI
+import com.album.ui.activity.AlbumActivity
 import com.album.ui.fragment.AlbumBaseFragment
 import com.album.util.*
 import com.yalantis.ucrop.UCrop
@@ -51,9 +49,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         dayOptions = UCrop.Options()
         dayOptions.apply {
             setToolbarTitle("DayTheme")
-            setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackgroundDay))
-            setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumStatusBarColorDay))
-            setActiveWidgetColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackgroundDay))
+            setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackground))
+            setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumStatusBarColor))
+            setActiveWidgetColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackground))
         }
 
         nightOptions = UCrop.Options()
@@ -75,15 +73,15 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
             }
-            config = AlbumConfig().apply {
-                cameraCrop = false
-                filterImg = true
-                isPermissionsDeniedFinish = false
-                previewBackRefresh = true
-                previewFinishRefresh = true
-                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
-            }
-            albumCameraListener = null
+//            config = AlbumConfig().apply {
+//                //                cameraCrop = false
+////                filterImg = true
+////                isPermissionsDeniedFinish = false
+//                previewBackRefresh = true
+//                previewFinishRefresh = true
+////                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
+//            }
+            albumCustomListener = null
         }
     }
 
@@ -92,19 +90,19 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             albumListener = MainAlbumListener(applicationContext, null)
             options = nightOptions
             albumImageLoader = SimpleGlideAlbumImageLoader()
-            albumCameraListener = null
+            albumCustomListener = null
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
             }
-            config = AlbumConfig(AlbumConstant.TYPE_NIGHT).apply {
-                isRadio = true
-                filterImg = false
-                isCrop = true
-                cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Album"
-                uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop"
-                isPermissionsDeniedFinish = true
-                cameraCrop = true
-            }
+//            config = AlbumConfig(AlbumConstant.TYPE_NIGHT).apply {
+//                //                isRadio = true
+////                filterImg = false
+////                isCrop = true
+////                cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Album"
+////                uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop"
+////                isPermissionsDeniedFinish = true
+////                cameraCrop = true
+//            }
         }
     }
 
@@ -112,14 +110,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleGlideAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, list)
-            albumClass = SimpleAlbumUI::class.java
-            previewClass = SimplePreviewUI::class.java
-            albumCameraListener = null
+//            albumClass = SimpleAlbumUI::class.java
+//            previewClass = SimplePreviewUI::class.java
+            albumCustomListener = null
             emptyClickListener = null
-            config = AlbumConfig().apply {
-                cameraCrop = false
-                previewBackRefresh = true
-            }
+//            config = AlbumConfig().apply {
+//                //                cameraCrop = false
+//                previewBackRefresh = true
+//            }
         }
     }
 
@@ -139,7 +137,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             albumListener = MainAlbumListener(applicationContext, list)
             albumEntityList = list
             options = dayOptions
-            albumCameraListener = object : AlbumCameraListener {
+            albumCustomListener = object : AlbumCustomListener {
                 override fun startCamera(fragment: AlbumBaseFragment) {
                     if (PermissionUtils.storage(this@MainActivity) && PermissionUtils.camera(this@MainActivity)) {
                         val activity = fragment.activity
@@ -152,13 +150,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
             }
-            config = AlbumConfig().apply {
-                cameraCrop = false
-                isPermissionsDeniedFinish = false
-                previewFinishRefresh = true
-                albumBottomFinderTextBackground = R.drawable.selector_btn
-                previewBackRefresh = true
-            }
+//            config = AlbumConfig().apply {
+//                //                cameraCrop = false
+////                isPermissionsDeniedFinish = false
+//                previewFinishRefresh = true
+//                albumBottomFinderTextBackground = R.drawable.selector_btn
+//                previewBackRefresh = true
+//            }
         }
     }
 
@@ -166,15 +164,15 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleGlideAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, null)
-            albumCameraListener = null
+            albumCustomListener = null
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
             }
-            config = AlbumConfig().apply {
-                scanType = ScanType.VIDEO
-                albumToolbarText = R.string.album_video_title
-                albumCameraText = R.string.video_tips
-            }
+//            config = AlbumConfig().apply {
+//                //                scanType = ScanType.VIDEO
+//                albumToolbarText = R.string.album_video_title
+////                albumCameraText = R.string.video_tips
+//            }
         }
     }
 
@@ -188,29 +186,29 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
             }
-            config = AlbumConfig().apply {
-                cameraCrop = false
-                filterImg = true
-                isPermissionsDeniedFinish = false
-                previewBackRefresh = true
-                previewFinishRefresh = true
-                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
-            }
-            albumCameraListener = null
+//            config = AlbumConfig().apply {
+//                //                cameraCrop = false
+////                filterImg = true
+////                isPermissionsDeniedFinish = false
+//                previewBackRefresh = true
+//                previewFinishRefresh = true
+////                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
+//            }
+            albumCustomListener = null
         }
     }
 
     override fun onClick(v: View) {
         Album.reset()
         when (v.id) {
-            R.id.btn_day_album -> onDayAlbumClick().start(this)
-            R.id.btn_night_album -> onNightClick().start(this)
-            R.id.btn_sample_ui -> onSimpleUi().start(this)
+            R.id.btn_day_album -> onDayAlbumClick().start(this, AlbumActivity::class.java)
+            R.id.btn_night_album -> onNightClick().start(this, AlbumActivity::class.java)
+            R.id.btn_sample_ui -> onSimpleUi().start(this, AlbumActivity::class.java)
             R.id.btn_open_camera -> openCamera()
             R.id.btn_dialog -> dialog()
-            R.id.btn_customize_camera -> customizeCamera().start(this)
-            R.id.btn_video -> openVideo().start(this)
-            R.id.btn_subsampling -> onSubsampling().start(this)
+            R.id.btn_customize_camera -> customizeCamera().start(this, AlbumActivity::class.java)
+            R.id.btn_video -> openVideo().start(this, AlbumActivity::class.java)
+            R.id.btn_subsampling -> onSubsampling().start(this, AlbumActivity::class.java)
         }
     }
 

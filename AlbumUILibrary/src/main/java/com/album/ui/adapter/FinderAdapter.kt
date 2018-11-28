@@ -7,15 +7,16 @@ import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import com.album.*
-import com.album.ui.AlbumImageView
+import com.album.Album
+import com.album.FinderEntity
+import com.album.ui.AlbumUiBundle
+import com.album.ui.R
 
 /**
  *   @author y
  */
-class FinderAdapter(private val list: List<FinderEntity>) : BaseAdapter() {
+class FinderAdapter(private val list: ArrayList<FinderEntity>, private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
 
-    private val albumConfig: AlbumConfig = Album.instance.config
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val finderEntity = getFinder(position)
         val viewHolder: ViewHolder
@@ -29,7 +30,7 @@ class FinderAdapter(private val list: List<FinderEntity>) : BaseAdapter() {
         } else {
             viewHolder = convertView.tag as ViewHolder
         }
-        viewHolder.appCompatTextView.setTextColor(ContextCompat.getColor(parent.context, albumConfig.albumListPopupItemTextColor))
+        viewHolder.appCompatTextView.setTextColor(ContextCompat.getColor(parent.context, albumUiBundle.listPopupItemTextColor))
         viewHolder.appCompatTextView.text = String.format("%s(%s)", finderEntity.dirName, finderEntity.count.toString())
         return viewHolder.convertView
     }
@@ -38,6 +39,11 @@ class FinderAdapter(private val list: List<FinderEntity>) : BaseAdapter() {
     override fun getItemId(position: Int): Long = position.toLong()
     override fun getCount(): Int = list.size
     fun getFinder(position: Int): FinderEntity = list[position]
+    fun refreshData(finderEntity: List<FinderEntity>) {
+        list.clear()
+        list.addAll(finderEntity)
+        notifyDataSetChanged()
+    }
 
     private class ViewHolder {
         internal lateinit var convertView: View

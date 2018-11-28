@@ -6,6 +6,17 @@ import com.album.ui.fragment.AlbumBaseFragment
 import org.jetbrains.annotations.NotNull
 import java.io.File
 
+interface AlbumParentListener {
+    /**
+     * 点击进入预览页,依赖的DialogFragment或者Activity继承即可
+     */
+    fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String)
+}
+
+interface AlbumPreviewParentListener {
+
+}
+
 interface AlbumImageLoader {
     /**
      * 首页图片加载
@@ -23,22 +34,13 @@ interface AlbumImageLoader {
     fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View
 }
 
-interface AlbumCameraListener {
+interface AlbumCustomListener {
     /**
      * 自定义相机
      *
-     * @param fragment [com.album.ui.fragment.AlbumFragment]
+     * @param fragment [com.album.ui.fragment.AlbumFragment.openCamera]
      */
     fun startCamera(fragment: AlbumBaseFragment)
-}
-
-interface AlbumVideoListener {
-    /**
-     * 自定义相机
-     *
-     * @param fragment [com.album.ui.fragment.AlbumFragment]
-     */
-    fun startVideo(fragment: AlbumBaseFragment)
 }
 
 interface OnEmptyClickListener {

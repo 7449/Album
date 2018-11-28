@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.album.Album
+import com.album.AlbumBundle
 import com.album.AlbumEntity
 import com.album.SimpleAlbumListener
 import com.album.sample.R
@@ -55,7 +56,7 @@ class SimpleDialogFragment : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        albumFragment = AlbumFragment.newInstance()
+        albumFragment = AlbumFragment.newInstance(AlbumBundle())
         childFragmentManager
                 .beginTransaction()
                 .apply {
@@ -78,15 +79,15 @@ class SimpleDialogFragment : DialogFragment() {
                             dismiss()
                         }
                     }
-                    config.apply {
-                        selectImageFinish = false
-                        spanCount = 4
-                        noPreview = true
-                        cropFinish = false
+//                    config.apply {
+//                        selectImageFinish = false
+//                        spanCount = 4
+//                        noPreview = true
+//                        cropFinish = false
 //                        isRadio = true
 //                        isCrop = true
 //                        cameraCrop = true
-                    }
+//                    }
                 }
     }
 }

@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.album.Album
 import com.album.AlbumConstant
 import com.album.PermissionsType
 import com.album.util.AlbumTask
@@ -20,7 +19,6 @@ import com.album.util.PermissionUtils
 abstract class AlbumBaseFragment : Fragment() {
 
     lateinit var bundle: Bundle
-    var albumConfig = Album.instance.config
     lateinit var mActivity: Activity
 
     override fun onCreate(savedInstanceState: Bundle?) {

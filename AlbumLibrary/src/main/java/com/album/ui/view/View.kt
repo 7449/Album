@@ -25,7 +25,9 @@ interface AlbumView {
     fun scanFinder(list: ArrayList<FinderEntity>)
 
     fun onAlbumNoMore()
+
     fun onAlbumEmpty()
+
     fun resultSuccess(albumEntity: AlbumEntity?)
 }
 
@@ -43,7 +45,7 @@ interface AlbumMethodFragmentView {
 
     fun refreshMedia(@AlbumResultType type: Int, file: File)
 
-    fun multiplePreview()
+    fun multiplePreview(): ArrayList<AlbumEntity>?
 
     fun multipleSelect()
 

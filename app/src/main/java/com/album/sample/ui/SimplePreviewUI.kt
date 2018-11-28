@@ -12,6 +12,7 @@ import com.album.sample.R
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.fragment.PrevFragment
 import com.album.ui.view.PrevFragmentToAtyListener
+import com.album.util.checkNotBundleNull
 import com.album.util.hasL
 
 /**
@@ -23,14 +24,15 @@ class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
     private lateinit var prevFragment: PrevFragment
 
     override fun initCreate(savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener { prevFragment.isRefreshAlbumUI(albumConfig.previewFinishRefresh, false) }
+        initTitle()
+//        toolbar.setNavigationOnClickListener { prevFragment.isRefreshAlbumUI(albumConfig.previewFinishRefresh, false) }
         val supportFragmentManager = supportFragmentManager
         val fragment = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)
         if (fragment != null) {
             prevFragment = fragment as PrevFragment
             return
         }
-        prevFragment = PrevFragment.newInstance(intent.extras)
+        prevFragment = PrevFragment.newInstance(checkNotBundleNull(intent.extras))
         supportFragmentManager
                 .beginTransaction()
                 .apply { add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName) }
@@ -42,11 +44,11 @@ class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
         val rootView = findViewById<LinearLayout>(R.id.preview_root_view)
         val previewBottomView = findViewById<RelativeLayout>(R.id.preview_bottom_view)
         val previewOk = findViewById<AppCompatTextView>(R.id.preview_bottom_view_tv_select)
-        previewBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumPreviewBottomViewBackground))
-        previewOk.setText(albumConfig.albumPreviewBottomOkText)
-        previewOk.textSize = albumConfig.albumPreviewBottomOkTextSize.toFloat()
-        previewOk.setTextColor(ContextCompat.getColor(this, albumConfig.albumPreviewBottomOkTextColor))
-        rootView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumPreviewBackground))
+//        previewBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumPreviewBottomViewBackground))
+//        previewOk.setText(albumConfig.albumPreviewBottomOkText)
+//        previewOk.textSize = albumConfig.albumPreviewBottomOkTextSize.toFloat()
+//        previewOk.setTextColor(ContextCompat.getColor(this, albumConfig.albumPreviewBottomOkTextColor))
+//        rootView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumPreviewBackground))
         previewOk.setOnClickListener {
             val entity = prevFragment.getSelectEntity()
             if (entity.isEmpty()) {
@@ -58,15 +60,15 @@ class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
         }
     }
 
-    override fun initTitle() {
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.albumToolbarTextColor))
-        val drawable = ContextCompat.getDrawable(this, albumConfig.albumToolbarIcon)
-        drawable?.setColorFilter(ContextCompat.getColor(this, albumConfig.albumToolbarIconColor), PorterDuff.Mode.SRC_ATOP)
-        toolbar.navigationIcon = drawable
-        toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumToolbarBackground))
-        if (hasL()) {
-            toolbar.elevation = albumConfig.albumToolbarElevation
-        }
+    private fun initTitle() {
+//        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.albumToolbarTextColor))
+//        val drawable = ContextCompat.getDrawable(this, albumConfig.albumToolbarIcon)
+//        drawable?.setColorFilter(ContextCompat.getColor(this, albumConfig.albumToolbarIconColor), PorterDuff.Mode.SRC_ATOP)
+//        toolbar.navigationIcon = drawable
+//        toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumToolbarBackground))
+//        if (hasL()) {
+//            toolbar.elevation = albumConfig.albumToolbarElevation
+//        }
     }
 
     override fun getLayoutId(): Int = R.layout.activity_simple_preview
@@ -75,11 +77,11 @@ class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
     }
 
     override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {
-        toolbar.title = getString(albumConfig.albumPreviewTitle) + "(" + currentPos + "/" + maxPos + ")"
+//        toolbar.title = getString(albumConfig.albumPreviewTitle) + "(" + currentPos + "/" + maxPos + ")"
     }
 
     override fun onBackPressed() {
-        prevFragment.isRefreshAlbumUI(albumConfig.previewBackRefresh, false)
+//        prevFragment.isRefreshAlbumUI(albumConfig.previewBackRefresh, false)
         super.onBackPressed()
     }
 }

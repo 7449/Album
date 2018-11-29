@@ -4,17 +4,23 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.album.*
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
+import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader
+import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
+import com.album.sample.ui.SimpleAlbumUI
 import com.album.sample.ui.SimpleDialogFragment
+import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
 import com.album.ui.fragment.AlbumBaseFragment
 import com.album.util.*
@@ -22,7 +28,10 @@ import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.util.*
 
-class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener {
+class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener, OnEmptyClickListener {
+
+    override fun click(view: View): Boolean = true
+
     override fun onScanCompleted(type: Int) {
     }
 
@@ -44,6 +53,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         findViewById<View>(R.id.btn_customize_camera).setOnClickListener(this)
         findViewById<View>(R.id.btn_dialog).setOnClickListener(this)
         findViewById<View>(R.id.btn_video).setOnClickListener(this)
+        findViewById<View>(R.id.btn_imageloader).setOnClickListener(this)
         findViewById<View>(R.id.btn_subsampling).setOnClickListener(this)
 
         dayOptions = UCrop.Options()
@@ -70,18 +80,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             albumListener = MainAlbumListener(this@MainActivity, list)
             initList = list
             options = dayOptions
-            emptyClickListener = object : OnEmptyClickListener {
-                override fun click(view: View): Boolean = true
-            }
-//            config = AlbumConfig().apply {
-//                //                cameraCrop = false
-////                filterImg = true
-////                isPermissionsDeniedFinish = false
-//                previewBackRefresh = true
-//                previewFinishRefresh = true
-////                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
-//            }
-            customCameraListener = null
+            emptyClickListener = this@MainActivity
         }
     }
 
@@ -90,19 +89,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             albumListener = MainAlbumListener(applicationContext, null)
             options = nightOptions
             albumImageLoader = SimpleGlideAlbumImageLoader()
-            customCameraListener = null
-            emptyClickListener = object : OnEmptyClickListener {
-                override fun click(view: View): Boolean = true
-            }
-//            config = AlbumConfig(AlbumConstant.TYPE_NIGHT).apply {
-//                //                isRadio = true
-////                filterImg = false
-////                isCrop = true
-////                cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Album"
-////                uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop"
-////                isPermissionsDeniedFinish = true
-////                cameraCrop = true
-//            }
+            emptyClickListener = this@MainActivity
         }
     }
 
@@ -110,14 +97,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleGlideAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, list)
-//            albumClass = SimpleAlbumUI::class.java
-//            previewClass = SimplePreviewUI::class.java
-            customCameraListener = null
-            emptyClickListener = null
-//            config = AlbumConfig().apply {
-//                //                cameraCrop = false
-//                previewBackRefresh = true
-//            }
         }
     }
 
@@ -147,16 +126,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                     }
                 }
             }
-            emptyClickListener = object : OnEmptyClickListener {
-                override fun click(view: View): Boolean = true
-            }
-//            config = AlbumConfig().apply {
-//                //                cameraCrop = false
-////                isPermissionsDeniedFinish = false
-//                previewFinishRefresh = true
-//                albumBottomFinderTextBackground = R.drawable.selector_btn
-//                previewBackRefresh = true
-//            }
+            emptyClickListener = this@MainActivity
         }
     }
 
@@ -164,15 +134,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleGlideAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, null)
-            customCameraListener = null
-            emptyClickListener = object : OnEmptyClickListener {
-                override fun click(view: View): Boolean = true
-            }
-//            config = AlbumConfig().apply {
-//                //                scanType = ScanType.VIDEO
-//                albumToolbarText = R.string.album_video_title
-////                albumCameraText = R.string.video_tips
-//            }
+            emptyClickListener = this@MainActivity
         }
     }
 
@@ -183,32 +145,93 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             albumListener = MainAlbumListener(this@MainActivity, list)
             initList = list
             options = dayOptions
-            emptyClickListener = object : OnEmptyClickListener {
-                override fun click(view: View): Boolean = true
-            }
-//            config = AlbumConfig().apply {
-//                //                cameraCrop = false
-////                filterImg = true
-////                isPermissionsDeniedFinish = false
-//                previewBackRefresh = true
-//                previewFinishRefresh = true
-////                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
-//            }
-            customCameraListener = null
+            emptyClickListener = this@MainActivity
         }
+    }
+
+    private fun onImageLoader(albumImageLoaders: AlbumImageLoader) {
+        Album.instance.apply {
+            albumImageLoader = albumImageLoaders
+            albumListener = MainAlbumListener(this@MainActivity, list)
+            initList = list
+            options = dayOptions
+            emptyClickListener = this@MainActivity
+        }.start(this, AlbumActivity::class.java)
     }
 
     override fun onClick(v: View) {
         Album.destroy()
         when (v.id) {
-            R.id.btn_day_album -> onDayAlbumClick().start(this, AlbumActivity::class.java)
-            R.id.btn_night_album -> onNightClick().start(this, AlbumActivity::class.java)
-            R.id.btn_sample_ui -> onSimpleUi().start(this, AlbumActivity::class.java)
-            R.id.btn_open_camera -> openCamera()
-            R.id.btn_dialog -> dialog()
-            R.id.btn_customize_camera -> customizeCamera().start(this, AlbumActivity::class.java)
-            R.id.btn_video -> openVideo().start(this, AlbumActivity::class.java)
-            R.id.btn_subsampling -> onSubsampling().start(this, AlbumActivity::class.java)
+            R.id.btn_day_album -> {
+                onDayAlbumClick().start(this,
+                        AlbumBundle(filterImg = true, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
+                        AlbumActivity::class.java)
+            }
+            R.id.btn_night_album -> {
+                onNightClick().start(this,
+                        AlbumBundle(
+                                checkBoxDrawable = R.drawable.simple_selector_album_item_check, radio = true,
+                                cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Album",
+                                uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop",
+                                cameraTextColor = R.color.colorAlbumContentViewTipsColorNight,
+                                cameraDrawable = R.drawable.ic_camera_drawable,
+                                cameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight,
+                                cameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorNight,
+                                rootViewBackground = R.color.colorAlbumContentViewBackgroundNight,
+                                photoEmptyDrawable = R.drawable.ic_camera_drawable,
+                                photoEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorNight,
+                                cameraCrop = true),
+                        AlbumUiBundle(
+                                statusBarColor = R.color.colorAlbumStatusBarColorNight,
+                                toolbarBackground = R.color.colorAlbumToolbarBackgroundNight,
+                                toolbarIconColor = R.color.colorAlbumToolbarIconColorNight,
+                                toolbarTextColor = R.color.colorAlbumToolbarTextColorNight,
+                                bottomFinderTextBackground = R.color.colorAlbumBottomViewBackgroundNight,
+                                bottomFinderTextColor = R.color.colorAlbumBottomFinderTextColorNight,
+                                bottomFinderTextDrawableColor = R.color.colorAlbumBottomFinderTextDrawableColorNight,
+                                bottomPreViewTextColor = R.color.colorAlbumBottomPreViewTextColorNight,
+                                bottomSelectTextColor = R.color.colorAlbumBottomSelectTextColorNight,
+                                listPopupBackground = R.color.colorAlbumListPopupBackgroundNight,
+                                listPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorNight,
+                                previewBackground = R.color.colorAlbumPreviewBackgroundNight,
+                                previewBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundNight,
+                                previewBottomOkTextColor = R.color.colorAlbumPreviewBottomViewOkColorNight,
+                                previewBottomCountTextColor = R.color.colorAlbumPreviewBottomViewCountColorNight),
+                        AlbumActivity::class.java)
+            }
+            R.id.btn_sample_ui -> {
+                onSimpleUi().start(this, SimpleAlbumUI::class.java)
+            }
+            R.id.btn_open_camera -> {
+                openCamera()
+            }
+            R.id.btn_dialog -> {
+                dialog()
+            }
+            R.id.btn_customize_camera -> {
+                customizeCamera().start(this, AlbumActivity::class.java)
+            }
+            R.id.btn_video -> {
+                openVideo().start(this, AlbumBundle(
+                        scanType = VIDEO, cameraText = R.string.video_tips),
+                        AlbumUiBundle(toolbarText = R.string.album_video_title), AlbumActivity::class.java)
+            }
+            R.id.btn_subsampling -> {
+                onSubsampling().start(this, AlbumActivity::class.java)
+            }
+            R.id.btn_imageloader -> {
+                AlertDialog.Builder(this@MainActivity)
+                        .setSingleChoiceItems(arrayOf("Glide", "ImageLoader", "Fresco", "Picasso"), 0
+                        ) { dialog, which ->
+                            when (which) {
+                                0 -> onImageLoader(SimpleGlideAlbumImageLoader())
+                                1 -> onImageLoader(SimpleImageLoaderAlbumImageLoader())
+                                2 -> onImageLoader(SimpleFrescoAlbumImageLoader())
+                                3 -> onImageLoader(SimplePicassoAlbumImageLoader())
+                            }
+                            dialog.dismiss()
+                        }.show()
+            }
         }
     }
 

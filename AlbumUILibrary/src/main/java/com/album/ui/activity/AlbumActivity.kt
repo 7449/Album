@@ -124,7 +124,6 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         listPopupWindow.setOnItemClickListener(this)
         finderAdapter = FinderAdapter(ArrayList(), albumUiBundle)
         listPopupWindow.setAdapter(finderAdapter)
-        listPopupWindow.listView?.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.listPopupItemBackground))
     }
 
     override fun getLayoutId(): Int = R.layout.album_activity_album
@@ -146,6 +145,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                 if (!finderEntity.isEmpty()) {
                     finderAdapter.refreshData(finderEntity)
                     listPopupWindow.show()
+                    listPopupWindow.listView?.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.listPopupBackground))
                     return
                 }
                 Album.instance.albumListener?.onAlbumFinderEmpty()

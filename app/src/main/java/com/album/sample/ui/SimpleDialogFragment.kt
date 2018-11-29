@@ -16,7 +16,9 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumEntity
 import com.album.SimpleAlbumListener
+import com.album.sample.MainAlbumListener
 import com.album.sample.R
+import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
 import com.album.ui.fragment.AlbumFragment
 import java.io.File
 
@@ -56,16 +58,11 @@ class SimpleDialogFragment : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        albumFragment = AlbumFragment.newInstance(AlbumBundle())
-        childFragmentManager
-                .beginTransaction()
-                .apply {
-                    add(R.id.dialog_fragment, albumFragment, AlbumFragment::class.java.simpleName)
-                }
-                .commit()
-        Album
+        context?.let {
+            Album
                 .instance
                 .apply {
+                    albumImageLoader = SimpleFrescoAlbumImageLoader()
                     albumListener = object : SimpleAlbumListener() {
                         override fun onAlbumResources(list: List<AlbumEntity>) {
                             super.onAlbumResources(list)
@@ -79,15 +76,21 @@ class SimpleDialogFragment : DialogFragment() {
                             dismiss()
                         }
                     }
-//                    config.apply {
-//                        selectImageFinish = false
-//                        spanCount = 4
-//                        noPreview = true
-//                        cropFinish = false
-//                        isRadio = true
-//                        isCrop = true
-//                        cameraCrop = true
-//                    }
                 }
+
+            albumFragment = AlbumFragment.newInstance(AlbumBundle(
+                    selectImageFinish = false,
+                    spanCount = 4,
+                    noPreview = true,
+                    cropFinish = false,
+                    cameraCrop = true
+            ))
+            childFragmentManager
+                    .beginTransaction()
+                    .apply {
+                        add(R.id.dialog_fragment, albumFragment, AlbumFragment::class.java.simpleName)
+                    }
+                    .commit()
+        }
     }
 }

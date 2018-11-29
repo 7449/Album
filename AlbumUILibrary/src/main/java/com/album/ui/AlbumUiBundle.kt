@@ -112,7 +112,7 @@ class AlbumUiBundle(
         /**
          * 目录View背景色
          */
-        var listPopupItemBackground: Int = R.color.colorAlbumListPopupItemBackground,
+        var listPopupBackground: Int = R.color.colorAlbumListPopupBackground,
         /**
          * 目录View字体颜色
          */

@@ -24,6 +24,5 @@ class App : Application() {
         config.diskCacheSize(50 * 1024 * 1024)
         config.tasksProcessingOrder(QueueProcessingType.LIFO)
         ImageLoader.getInstance().init(config.build())
-
     }
 }

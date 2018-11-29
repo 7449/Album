@@ -36,14 +36,14 @@ fun Album.start(context: Context, cls: Class<*>) {
     start(context, AlbumBundle(), cls)
 }
 
-fun Album.start(context: Context, albumBundle: Parcelable, cls: Class<*>) {
+fun Album.start(context: Context, albumBundle: AlbumBundle, cls: Class<*>) {
     context.startActivity(Intent(context, cls).apply {
         putExtras(Bundle().apply { putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle) })
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     })
 }
 
-fun Album.start(context: Context, albumBundle: Parcelable, uiBundle: Parcelable, cls: Class<*>) {
+fun Album.start(context: Context, albumBundle: AlbumBundle, uiBundle: Parcelable, cls: Class<*>) {
     context.startActivity(Intent(context, cls).apply {
         putExtras(Bundle().apply {
             putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)

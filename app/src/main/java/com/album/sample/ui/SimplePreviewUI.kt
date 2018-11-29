@@ -1,51 +1,54 @@
 package com.album.sample.ui
 
+import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
-import com.album.Album
-import com.album.AlbumPreviewParentListener
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.album.*
 import com.album.sample.R
+import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.fragment.PrevFragment
 import com.album.util.checkNotBundleNull
+import com.album.util.hasL
 
 /**
  * by y on 22/08/2017.
  */
 class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
 
+    companion object {
+        fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String, fragment: Fragment) {
+            val bundle = Bundle().apply {
+                putParcelableArrayList(AlbumConstant.PREVIEW_KEY, multiplePreviewList)
+                putInt(AlbumConstant.PREVIEW_POSITION_KEY, position)
+                putString(AlbumConstant.PREVIEW_BUCKET_ID, bucketId)
+                putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
+                putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
+            }
+            fragment.startActivityForResult(Intent(fragment.activity, SimplePreviewUI::class.java).putExtras(bundle), AlbumConstant.TYPE_PREVIEW_CODE)
+        }
+    }
+
     private lateinit var toolbar: Toolbar
     private lateinit var prevFragment: PrevFragment
+    private lateinit var rootView: LinearLayout
+    private lateinit var previewBottomView: RelativeLayout
+    private lateinit var previewOk: AppCompatTextView
 
-    override fun initCreate(savedInstanceState: Bundle?) {
-        initTitle()
-//        toolbar.setNavigationOnClickListener { prevFragment.isRefreshAlbumUI(albumConfig.previewFinishRefresh, false) }
-        val supportFragmentManager = supportFragmentManager
-        val fragment = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)
-        if (fragment != null) {
-            prevFragment = fragment as PrevFragment
-            return
-        }
-        prevFragment = PrevFragment.newInstance(checkNotBundleNull(intent.extras))
-        supportFragmentManager
-                .beginTransaction()
-                .apply { add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName) }
-                .commit()
-    }
+    private lateinit var albumBundle: AlbumBundle
+    private lateinit var uiBundle: AlbumUiBundle
 
     override fun initView() {
         toolbar = findViewById(R.id.preview_toolbar)
-        val rootView = findViewById<LinearLayout>(R.id.preview_root_view)
-        val previewBottomView = findViewById<RelativeLayout>(R.id.preview_bottom_view)
-        val previewOk = findViewById<AppCompatTextView>(R.id.preview_bottom_view_tv_select)
-//        previewBottomView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumPreviewBottomViewBackground))
-//        previewOk.setText(albumConfig.albumPreviewBottomOkText)
-//        previewOk.textSize = albumConfig.albumPreviewBottomOkTextSize.toFloat()
-//        previewOk.setTextColor(ContextCompat.getColor(this, albumConfig.albumPreviewBottomOkTextColor))
-//        rootView.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumPreviewBackground))
+        rootView = findViewById(R.id.preview_root_view)
+        previewBottomView = findViewById(R.id.preview_bottom_view)
+        previewOk = findViewById(R.id.preview_bottom_view_tv_select)
         previewOk.setOnClickListener {
             val entity = prevFragment.getSelectEntity()
             if (entity.isEmpty()) {
@@ -57,15 +60,44 @@ class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
         }
     }
 
+    override fun initCreate(savedInstanceState: Bundle?) {
+        albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
+
+        previewBottomView.setBackgroundColor(ContextCompat.getColor(this, uiBundle.previewBottomViewBackground))
+        previewOk.setText(uiBundle.previewBottomOkText)
+        previewOk.textSize = uiBundle.previewBottomOkTextSize
+        previewOk.setTextColor(ContextCompat.getColor(this, uiBundle.previewBottomOkTextColor))
+        rootView.setBackgroundColor(ContextCompat.getColor(this, uiBundle.previewBackground))
+
+        initTitle()
+        toolbar.setNavigationOnClickListener { prevFragment.isRefreshAlbumUI(uiBundle.previewFinishRefresh, false) }
+
+
+        val supportFragmentManager = supportFragmentManager
+        val fragment = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)
+        if (fragment != null) {
+            prevFragment = fragment as PrevFragment
+            supportFragmentManager.beginTransaction().show(fragment).commit()
+        } else {
+            prevFragment = PrevFragment.newInstance(checkNotBundleNull(intent.extras))
+            supportFragmentManager
+                    .beginTransaction()
+                    .apply { add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName) }
+                    .commit()
+        }
+        prevFragment.albumParentListener = this
+    }
+
     private fun initTitle() {
-//        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumConfig.albumToolbarTextColor))
-//        val drawable = ContextCompat.getDrawable(this, albumConfig.albumToolbarIcon)
-//        drawable?.setColorFilter(ContextCompat.getColor(this, albumConfig.albumToolbarIconColor), PorterDuff.Mode.SRC_ATOP)
-//        toolbar.navigationIcon = drawable
-//        toolbar.setBackgroundColor(ContextCompat.getColor(this, albumConfig.albumToolbarBackground))
-//        if (hasL()) {
-//            toolbar.elevation = albumConfig.albumToolbarElevation
-//        }
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, uiBundle.toolbarTextColor))
+        val drawable = ContextCompat.getDrawable(this, uiBundle.toolbarIcon)
+        drawable?.setColorFilter(ContextCompat.getColor(this, uiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
+        toolbar.navigationIcon = drawable
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, uiBundle.toolbarBackground))
+        if (hasL()) {
+            toolbar.elevation = uiBundle.toolbarElevation
+        }
     }
 
     override fun getLayoutId(): Int = R.layout.activity_simple_preview
@@ -74,11 +106,11 @@ class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
     }
 
     override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {
-//        toolbar.title = getString(albumConfig.albumPreviewTitle) + "(" + currentPos + "/" + maxPos + ")"
+        toolbar.title = getString(uiBundle.previewTitle) + "(" + currentPos + "/" + maxPos + ")"
     }
 
     override fun onBackPressed() {
-//        prevFragment.isRefreshAlbumUI(albumConfig.previewBackRefresh, false)
+        prevFragment.isRefreshAlbumUI(uiBundle.previewBackRefresh, false)
         super.onBackPressed()
     }
 }

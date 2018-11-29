@@ -12,6 +12,7 @@ import java.io.File
  * @author y
  */
 class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : AlbumListener {
+
     override fun onCheckBoxAlbum(count: Int, maxCount: Int) {
         toast("onCheckBoxAlbum:$count")
     }

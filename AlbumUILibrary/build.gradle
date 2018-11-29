@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+//apply plugin: "guru.stefma.bintrayrelease"
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -26,10 +27,20 @@ android {
         }
     }
 }
-
+//version = "0.0.1"
+//group = "com.ydevelop"
+//androidArtifact {
+//    artifactId = "album.ui"
+//    javadoc = false
+//}
+//publish {
+//    userOrg = 'ydevelop'
+//    desc = 'this is android album ui'
+//    website = 'https://github.com/7449/Album'
+//}
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly project(':AlbumLibrary')
 }
 repositories {

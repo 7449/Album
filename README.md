@@ -20,7 +20,6 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.album.ui.activity.AlbumActivity"
@@ -31,9 +30,10 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     api 'com.ydevelop:album:album:0.0.6'
-     api "com.android.support:recyclerview-v7:$supportLibraryVersion"
-     api "com.github.bumptech.glide:glide:$glideVersion"
+     implementation 'com.ydevelop:album:album:0.0.6'
+     implementation 'com.ydevelop:album.ui:0.0.1'
+     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+     implementation "com.github.bumptech.glide:glide:$glideVersion"
   
   If you use the built-in frame, please rely on glide
   

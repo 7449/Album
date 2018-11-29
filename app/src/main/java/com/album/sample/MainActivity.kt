@@ -88,20 +88,20 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumListener = MainAlbumListener(applicationContext, null)
             options = nightOptions
-            albumImageLoader = SimpleGlideAlbumImageLoader()
+            albumImageLoader = SimpleAlbumImageLoader()
             emptyClickListener = this@MainActivity
         }
     }
 
     private fun onSimpleUi(): Album {
         return Album.instance.apply {
-            albumImageLoader = SimpleGlideAlbumImageLoader()
+            albumImageLoader = SimpleAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, list)
         }
     }
 
     private fun openCamera() {
-        imagePath = Uri.fromFile(FileUtils.getCameraFile(this, null, false))
+        imagePath = Uri.fromFile(getCameraFile(this, null, false))
         val i = openCamera(this, imagePath, false)
         Log.d(javaClass.simpleName, i.toString())
     }
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
 
     private fun customizeCamera(): Album {
         return Album.instance.apply {
-            albumImageLoader = SimpleGlideAlbumImageLoader()
+            albumImageLoader = SimpleAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, list)
             initList = list
             options = dayOptions
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                         val activity = fragment.activity
                         Toast.makeText(activity, "camera", Toast.LENGTH_SHORT).show()
                         val intent = Intent(activity, SimpleCameraActivity::class.java)
-                        fragment.startActivityForResult(intent, AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE)
+                        fragment.startActivityForResult(intent, CUSTOMIZE_CAMERA_RESULT_CODE)
                     }
                 }
             }
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
 
     private fun openVideo(): Album {
         return Album.instance.apply {
-            albumImageLoader = SimpleGlideAlbumImageLoader()
+            albumImageLoader = SimpleAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, null)
             emptyClickListener = this@MainActivity
         }
@@ -224,7 +224,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                         .setSingleChoiceItems(arrayOf("Glide", "ImageLoader", "Fresco", "Picasso"), 0
                         ) { dialog, which ->
                             when (which) {
-                                0 -> onImageLoader(SimpleGlideAlbumImageLoader())
+                                0 -> onImageLoader(SimpleAlbumImageLoader())
                                 1 -> onImageLoader(SimpleImageLoaderAlbumImageLoader())
                                 2 -> onImageLoader(SimpleFrescoAlbumImageLoader())
                                 3 -> onImageLoader(SimplePicassoAlbumImageLoader())
@@ -243,16 +243,16 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             UCrop.RESULT_ERROR -> {
             }
             Activity.RESULT_OK -> when (requestCode) {
-                AlbumConstant.ITEM_CAMERA -> {
-                    SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.path ?: ""),
-                            this, AlbumConstant.TYPE_RESULT_CAMERA)
+                ITEM_CAMERA -> {
+                    SingleMediaScanner(this, pathToFile(imagePath.path ?: ""),
+                            this, TYPE_RESULT_CAMERA)
                     UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
                             .withOptions(UCrop.Options())
                             .start(this)
                 }
                 UCrop.REQUEST_CROP -> {
-                    SingleMediaScanner(this, FileUtils.getScannerFile(imagePath.path ?: ""),
-                            this, AlbumConstant.TYPE_RESULT_CROP)
+                    SingleMediaScanner(this, pathToFile(imagePath.path ?: ""),
+                            this, TYPE_RESULT_CROP)
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

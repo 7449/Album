@@ -16,12 +16,6 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 
 ## sample
 
-#### filter damaged pictures
-
-    AlbumConfig().apply {
-        filterImg = true
-    }
-
 #### Manifests.xml
 
         <activity
@@ -62,14 +56,14 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
      Album
         .instance
         .apply {
-            albumCameraListener = object : AlbumCameraListener {
+            customCameraListener = object : AlbumCameraListener {
                 override fun startCamera(fragment: AlbumBaseFragment) {
                 }
             }
         }.start(this)
 
 
-    FileUtils.finishCamera(SimpleCameraActivity.this, cameraFile.path);
+    finishCamera(SimpleCameraActivity.this, cameraFile.path);
     
     fun finishCamera(activity: Activity, path: String) {
         val bundle = Bundle()
@@ -82,16 +76,6 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
                 
 ## ImageLoader
 
-> Fresco
-
-    Album
-            .instance
-            .apply {
-                config = AlbumConfig().apply {
-                    isFrescoImageLoader = true
-                }
-            }.start(this)
-
 [SimpleFrescoAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleFrescoAlbumImageLoader.kt)
 
 [SimpleImageLoaderAlbumImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/SimpleImageLoaderAlbumImageLoader.kt)
@@ -101,20 +85,16 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
 
     class SimpleImageLoader : AlbumImageLoader {
     
-        override fun displayAlbum(view: ImageView, width: Int, height: Int, albumEntity: AlbumEntity) {
+        override fun displayAlbum(view: ImageView, width: Int, height: Int, albumEntity: AlbumEntity) : View{
     
         }
     
-        override fun displayAlbumThumbnails(view: ImageView, finderEntity: FinderEntity) {
+        override fun displayAlbumThumbnails(view: ImageView, finderEntity: FinderEntity) : View{
     
         }
     
-        override fun displayPreview(view: ImageView, albumEntity: AlbumEntity) {
+        override fun displayPreview(view: ImageView, albumEntity: AlbumEntity) : View{
     
-        }
-    
-        override fun frescoView(context: Context, type: Int): ImageView? {
-            return null
         }
     }
 
@@ -131,92 +111,31 @@ see: [SimpleAlbumUI](https://github.com/7449/Album/blob/master/app/src/main/java
 
 ## Listener
 
-see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrary/src/main/java/com/album/ui/widget/SimpleAlbumListener.kt)
+see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrary/src/main/java/com/album/Listener.kt)
 
-    class SimpleAlbumListener : AlbumListener {
-    
-        override fun onAlbumActivityFinish() {
-    
-        }
-    
-        override fun onAlbumPermissionsDenied(type: Int) {
-    
-        }
-    
-        override fun onAlbumFragmentNull() {
-    
-        }
-    
-        override fun onAlbumPreviewFileNull() {
-    
-        }
-    
-        override fun onAlbumFinderNull() {
-    
-        }
-    
-        override fun onAlbumBottomPreviewNull() {
-    
-        }
-    
-        override fun onAlbumBottomSelectNull() {
-    
-        }
-    
-        override fun onAlbumFragmentFileNull() {
-    
-        }
-    
-        override fun onAlbumPreviewSelectNull() {
-    
-        }
-    
-        override fun onAlbumCheckBoxFileNull() {
-    
-        }
-    
-        override fun onAlbumFragmentCropCanceled() {
-    
-        }
-    
-        override fun onAlbumFragmentCameraCanceled() {
-    
-        }
-    
-        override fun onAlbumFragmentUCropError(data: Throwable?) {
-    
-        }
-    
-        override fun onAlbumResources(list: List<AlbumEntity>) {
-    
-        }
-    
-        override fun onAlbumUCropResources(scannerFile: File) {
-    
-        }
-    
-        override fun onAlbumMaxCount() {
-    
-        }
-    
-        override fun onAlbumActivityBackPressed() {
-    
-        }
-    
-        override fun onAlbumOpenCameraError() {
-    
-        }
-    
-        override fun onAlbumEmpty() {
-    
-        }
-    
-        override fun onAlbumNoMore() {
-    
-        }
-    
-        override fun onVideoPlayError() {
-        }
+    open class SimpleAlbumListener : AlbumListener {
+        override fun onAlbumActivityFinish() {}
+        override fun onAlbumResultCameraError() {}
+        override fun onAlbumPermissionsDenied(type: Int) {}
+        override fun onAlbumPreviewFileNotExist() {}
+        override fun onAlbumFinderEmpty() {}
+        override fun onAlbumPreviewEmpty() {}
+        override fun onAlbumSelectEmpty() {}
+        override fun onAlbumFileNotExist() {}
+        override fun onAlbumPreviewSelectEmpty() {}
+        override fun onAlbumCheckFileNotExist() {}
+        override fun onAlbumCropCanceled() {}
+        override fun onAlbumCameraCanceled() {}
+        override fun onAlbumUCropError(data: Throwable?) {}
+        override fun onAlbumResources(list: List<AlbumEntity>) {}
+        override fun onAlbumUCropResources(scannerFile: File) {}
+        override fun onAlbumMaxCount() {}
+        override fun onAlbumActivityBackPressed() {}
+        override fun onAlbumOpenCameraError() {}
+        override fun onAlbumEmpty() {}
+        override fun onAlbumNoMore() {}
+        override fun onVideoPlayError() {}
+        override fun onCheckBoxAlbum(count: Int, maxCount: Int) {}
     }
 
 ## TestPhone
@@ -243,24 +162,17 @@ see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrar
     -keep class com.yalantis.ucrop** { *; }
     -keep interface com.yalantis.ucrop** { *; }
     
- 
 ## Thanks
 
 [TouchImageView](https://github.com/MikeOrtiz/TouchImageView)
 
 [cameraview](https://github.com/google/cameraview)
     
-    
 ## MediaScannerConnection Memory leak
 
  * https://issuetracker.google.com/issues/37046656
  * https://github.com/square/leakcanary/issues/26
 
-
 ## LICENSE
 
     Mozilla Public License 2.0
-
-
-
-

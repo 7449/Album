@@ -8,17 +8,17 @@ interface AlbumPresenter {
     /**
      * 是否在扫描图片
      */
-    fun getScanLoading(): Boolean
+    fun hasScanLoading(): Boolean
 
     /**
      * 开始扫描
      */
-    fun scan(bucketId: String, page: Int, count: Int)
+    fun startScan(bucketId: String, page: Int, count: Int)
 
     /**
      * 扫描成功之后合并选择的数据
      */
-    fun mergeSelectEntity(albumList: ArrayList<AlbumEntity>, multiplePreviewList: ArrayList<AlbumEntity>)
+    fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>)
 
     /**
      * 第一次进来合并扫描之后的数据
@@ -37,10 +37,10 @@ interface PreviewPresenter {
     /**
      * 预览页扫描
      */
-    fun scan(bucketId: String, page: Int, count: Int)
+    fun startScan(bucketId: String, page: Int, count: Int)
 
     /**
      * 扫描成功之后合并选择的数据
      */
-    fun mergeSelectEntity(albumEntityList: List<AlbumEntity>, selectAlbumEntityList: ArrayList<AlbumEntity>)
+    fun mergeEntity(albumEntityList: List<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>)
 }

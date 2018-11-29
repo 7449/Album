@@ -13,7 +13,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.album.*
-import com.album.util.FileUtils
+import com.album.util.fileExists
 
 /**
  *   @author y
@@ -37,7 +37,7 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val albumEntity = list[position]
-        if (TextUtils.equals(albumEntity.path, AlbumConstant.CAMERA)) {
+        if (TextUtils.equals(albumEntity.path, CAMERA)) {
             holder.camera()
             return
         }
@@ -49,7 +49,7 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
             holder.checkBox.isChecked = albumEntity.isCheck
             holder.checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
             holder.checkBox.setOnClickListener(View.OnClickListener {
-                if (!FileUtils.isFile(albumEntity.path)) {
+                if (!fileExists(albumEntity.path)) {
                     holder.checkBox.isChecked = false
                     Album.instance.albumListener?.onAlbumCheckFileNotExist()
                     return@OnClickListener

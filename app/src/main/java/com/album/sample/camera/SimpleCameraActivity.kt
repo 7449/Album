@@ -10,7 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.album.sample.R
-import com.album.util.FileUtils
+import com.album.util.finishCamera
+import com.album.util.getCameraFile
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
 import java.io.FileOutputStream
@@ -104,13 +105,13 @@ class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermis
                 super.onPictureTaken(cameraView, data)
                 Toast.makeText(cameraView.context, R.string.picture_taken, Toast.LENGTH_SHORT).show()
                 cameraView.post {
-                    val cameraFile = FileUtils.getCameraFile(cameraView.context, null, false)
+                    val cameraFile = getCameraFile(cameraView.context, null, false)
                     val os: OutputStream
                     try {
                         os = FileOutputStream(cameraFile)
                         os.write(data)
                         os.close()
-                        FileUtils.finishCamera(this@SimpleCameraActivity, cameraFile.path)
+                        finishCamera(this@SimpleCameraActivity, cameraFile.path)
                     } catch (e: IOException) {
                         Log.w(TAG, "Cannot write to " + cameraFile.path, e)
                     }

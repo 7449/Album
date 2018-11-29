@@ -3,7 +3,6 @@ package com.album.ui.view
 import android.app.Activity
 import android.os.Bundle
 import com.album.AlbumEntity
-import com.album.AlbumResultType
 import com.album.FinderEntity
 import java.io.File
 import java.util.*
@@ -22,7 +21,7 @@ interface AlbumView {
 
     fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>)
 
-    fun scanFinder(list: ArrayList<FinderEntity>)
+    fun scanFinderSuccess(list: ArrayList<FinderEntity>)
 
     fun onAlbumNoMore()
 
@@ -43,9 +42,9 @@ interface AlbumMethodFragmentView {
 
     fun openUCrop(path: String)
 
-    fun refreshMedia(@AlbumResultType type: Int, file: File)
+    fun refreshMedia(type: Int, file: File)
 
-    fun multiplePreview(): ArrayList<AlbumEntity>?
+    fun selectPreview(): ArrayList<AlbumEntity>?
 
     fun multipleSelect()
 

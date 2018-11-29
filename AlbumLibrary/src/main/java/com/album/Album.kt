@@ -6,9 +6,41 @@ import android.os.Bundle
 import android.os.Parcelable
 import com.yalantis.ucrop.UCrop
 
-/**
- * by y on 14/08/2017.
- */
+const val IMAGE = 0
+const val VIDEO = 1
+const val MIXING = 2
+
+const val EXTRA_ALBUM_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Options"
+const val EXTRA_ALBUM_UI_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Ui.Options"
+
+const val FINDER_ALL_DIR_NAME = "全部"
+const val CAMERA = "Album:Camera"
+
+const val ITEM_CAMERA = 1111
+const val TYPE_PREVIEW_CODE = 112
+
+const val TYPE_ALBUM_STATE_SELECT = "state_select"
+const val TYPE_ALBUM_STATE_BUCKET_ID = "state_bucket_id"
+const val TYPE_ALBUM_STATE_FINDER_NAME = "state_finder_name"
+const val TYPE_ALBUM_STATE_IMAGE_PATH = "state_image_path"
+
+const val TYPE_PREVIEW_STATE_SELECT_ALL = "state_preview_all"
+const val TYPE_PREVIEW_KEY = "preview_list"
+const val TYPE_PREVIEW_REFRESH_UI = "preview_refresh_ui"
+const val TYPE_PREVIEW_FINISH = "preview_finish"
+const val TYPE_PREVIEW_BUCKET_ID = "preview_bucket_id"
+const val TYPE_PREVIEW_BUTTON_KEY = "preview_button"
+const val TYPE_PREVIEW_POSITION_KEY = "preview_position"
+
+const val TYPE_PERMISSIONS_ALBUM = 0
+const val TYPE_PERMISSIONS_CAMERA = 1
+
+const val TYPE_RESULT_CAMERA = 0
+const val TYPE_RESULT_CROP = 1
+
+const val CUSTOMIZE_CAMERA_RESULT_CODE = 113
+const val CUSTOMIZE_CAMERA_RESULT_PATH_KEY = "customize_camera_path"
+
 class Album {
     companion object {
         val instance by lazy { Album() }

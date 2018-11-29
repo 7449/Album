@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.album.AlbumConstant
-import com.album.PermissionsType
+import com.album.TYPE_PERMISSIONS_ALBUM
+import com.album.TYPE_PERMISSIONS_CAMERA
 import com.album.util.AlbumTask
 import com.album.util.PermissionUtils
 
@@ -51,9 +51,9 @@ abstract class AlbumBaseFragment : Fragment() {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(AlbumConstant.TYPE_PERMISSIONS_ALBUM)
+                    permissionsDenied(TYPE_PERMISSIONS_ALBUM)
                 } else {
-                    permissionsGranted(AlbumConstant.TYPE_PERMISSIONS_ALBUM)
+                    permissionsGranted(TYPE_PERMISSIONS_ALBUM)
                 }
             }
             PermissionUtils.CAMERA_REQUEST_CODE -> {
@@ -61,9 +61,9 @@ abstract class AlbumBaseFragment : Fragment() {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(AlbumConstant.TYPE_PERMISSIONS_CAMERA)
+                    permissionsDenied(TYPE_PERMISSIONS_CAMERA)
                 } else {
-                    permissionsGranted(AlbumConstant.TYPE_PERMISSIONS_CAMERA)
+                    permissionsGranted(TYPE_PERMISSIONS_CAMERA)
                 }
             }
         }
@@ -75,9 +75,9 @@ abstract class AlbumBaseFragment : Fragment() {
 
     protected abstract fun initActivityCreated(savedInstanceState: Bundle?)
 
-    protected abstract fun permissionsGranted(@PermissionsType type: Int)
+    protected abstract fun permissionsGranted(type: Int)
 
-    protected abstract fun permissionsDenied(@PermissionsType type: Int)
+    protected abstract fun permissionsDenied(type: Int)
 
     protected abstract fun getLayoutId(): Int
 

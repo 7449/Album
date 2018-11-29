@@ -9,9 +9,9 @@ import com.album.presenter.AlbumPresenter
 import com.album.ui.view.AlbumView
 import com.album.util.AlbumTask
 import com.album.util.AlbumTaskCallBack
-import com.album.util.ScanCallBack
-import com.album.util.ScanView
 import com.album.util.scan.AlbumScanUtils
+import com.album.util.scan.ScanCallBack
+import com.album.util.scan.ScanView
 import com.album.util.scan.VideoScanUtils
 import java.util.*
 
@@ -20,15 +20,11 @@ import java.util.*
  */
 
 class AlbumPresenterImpl(private val albumView: AlbumView, private val albumBundle: AlbumBundle) : AlbumPresenter, ScanCallBack {
+
     private var scanLoading = false
-    private val scanView: ScanView
+    private val scanView: ScanView = if (albumBundle.scanType == VIDEO) VideoScanUtils[albumView.getAlbumActivity().contentResolver] else AlbumScanUtils[albumView.getAlbumActivity().contentResolver]
 
-    init {
-        val contentResolver = albumView.getAlbumActivity().contentResolver
-        scanView = if (albumBundle.scanType == VIDEO) VideoScanUtils[contentResolver] else AlbumScanUtils[contentResolver]
-    }
-
-    override fun scan(bucketId: String, page: Int, count: Int) {
+    override fun startScan(bucketId: String, page: Int, count: Int) {
         albumView.getAlbumActivity().runOnUiThread {
             scanLoading = true
             if (page == 0) {
@@ -37,16 +33,16 @@ class AlbumPresenterImpl(private val albumView: AlbumView, private val albumBund
         }
         AlbumTask.instance.start(object : AlbumTaskCallBack.Call {
             override fun start() {
-                scanView.scan(this@AlbumPresenterImpl, bucketId, page, count, albumBundle.filterImg, albumBundle.sdName)
+                scanView.startScan(this@AlbumPresenterImpl, bucketId, page, count, albumBundle.filterImg, albumBundle.sdName)
             }
         })
     }
 
-    override fun mergeSelectEntity(albumList: ArrayList<AlbumEntity>, multiplePreviewList: ArrayList<AlbumEntity>) {
+    override fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
         for (albumEntity in albumList) {
             albumEntity.isCheck = false
         }
-        for (albumEntity in multiplePreviewList) {
+        for (albumEntity in selectEntity) {
             val path = albumEntity.path
             for (allAlbumEntity in albumList) {
                 val allEntityPath = allAlbumEntity.path
@@ -75,10 +71,9 @@ class AlbumPresenterImpl(private val albumView: AlbumView, private val albumBund
                 }
             }
         }
-
     }
 
-    override fun getScanLoading(): Boolean = scanLoading
+    override fun hasScanLoading(): Boolean = scanLoading
 
     override fun resultScan(path: String) {
         AlbumTask.instance.start(object : AlbumTaskCallBack.Call {
@@ -88,28 +83,28 @@ class AlbumPresenterImpl(private val albumView: AlbumView, private val albumBund
         })
     }
 
-    override fun scanCallBack(albumEntityList: ArrayList<AlbumEntity>, list: ArrayList<FinderEntity>) {
+    override fun scanCallBack(imageList: ArrayList<AlbumEntity>, finderList: ArrayList<FinderEntity>) {
         albumView.getAlbumActivity().runOnUiThread {
             scanLoading = false
             albumView.hideProgress()
-            if (albumEntityList.isEmpty()) {
+            if (imageList.isEmpty()) {
                 if (albumView.getPage() == 0) {
                     albumView.onAlbumEmpty()
                 } else {
                     albumView.onAlbumNoMore()
                 }
             } else {
-                mergeSelectEntity(albumEntityList, albumView.getSelectEntity())
-                albumView.scanSuccess(albumEntityList)
-                albumView.scanFinder(list)
+                mergeEntity(imageList, albumView.getSelectEntity())
+                albumView.scanSuccess(imageList)
+                albumView.scanFinderSuccess(finderList)
             }
         }
     }
 
-    override fun resultCallBack(albumEntity: AlbumEntity?, finderEntityList: ArrayList<FinderEntity>) {
+    override fun resultCallBack(image: AlbumEntity?, finderList: ArrayList<FinderEntity>) {
         albumView.getAlbumActivity().runOnUiThread {
-            albumView.resultSuccess(albumEntity)
-            albumView.scanFinder(finderEntityList)
+            albumView.resultSuccess(image)
+            albumView.scanFinderSuccess(finderList)
         }
     }
 }

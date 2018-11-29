@@ -15,8 +15,8 @@ import com.album.presenter.impl.PreviewPresenterImpl
 import com.album.ui.ExtendedViewPager
 import com.album.ui.adapter.PreviewAdapter
 import com.album.ui.view.PrevView
-import com.album.util.FileUtils
 import com.album.util.PermissionUtils
+import com.album.util.fileExists
 
 /**
  *  @author y
@@ -41,13 +41,13 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     /** 全部数据 **/
     private lateinit var albumEntityList: ArrayList<AlbumEntity>
     /** 选中的数据 **/
-    private lateinit var selectAlbumEntityList: ArrayList<AlbumEntity>
+    private lateinit var selectList: ArrayList<AlbumEntity>
 
     /** 是否是点击预览按钮进入预览界面 **/
     private var isPreview: Boolean = false
     /** 如果是点击item进入,则为当前的选中页position **/
     private var selectPosition: Int = 0
-    /** bucketId,如果是点击全部页进入则为Null,如果是点击按钮进入则为[AlbumConstant.PREVIEW_BUTTON_KEY] **/
+    /** bucketId,如果是点击全部页进入则为Null,如果是点击按钮进入则为[TYPE_PREVIEW_BUTTON_KEY] **/
     private var bucketId: String = ""
 
     /**
@@ -56,8 +56,8 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        bucketId = bundle.getString(AlbumConstant.PREVIEW_BUCKET_ID, "")
-        isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY)
+        bucketId = bundle.getString(TYPE_PREVIEW_BUCKET_ID, "")
+        isPreview = TextUtils.equals(bucketId, TYPE_PREVIEW_BUTTON_KEY)
     }
 
     /**
@@ -75,20 +75,20 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      *初始化
      * [albumEntityList]:只有在横竖屏切换并且是预览按钮进入的情况下才会初始化,否则[albumEntityList]会在扫描数据库之后获得，所以
      * 在横竖屏保存数据的时候，非预览按钮的情况下可以存Null
-     * [selectAlbumEntityList]
+     * [selectList]
      * [selectPosition]
      */
     override fun initActivityCreated(savedInstanceState: Bundle?) {
         appCompatCheckBox.setBackgroundResource(albumBundle.checkBoxDrawable)
         albumEntityList = ArrayList()
         val previewBundle = savedInstanceState ?: bundle
-        selectAlbumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.PREVIEW_KEY) ?: ArrayList()
-        selectPosition = previewBundle.getInt(AlbumConstant.PREVIEW_POSITION_KEY)
+        selectList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY) ?: ArrayList()
+        selectPosition = previewBundle.getInt(TYPE_PREVIEW_POSITION_KEY)
         if (savedInstanceState != null && isPreview) {
-            albumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
+            albumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
         }
         previewPresenter = PreviewPresenterImpl(this, albumBundle)
-        albumParentListener.onChangedCount(selectAlbumEntityList.size)
+        albumParentListener.onChangedCount(selectList.size)
         if (PermissionUtils.storage(this)) {
             initPreview()
         }
@@ -99,7 +99,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      */
     override fun permissionsGranted(type: Int) {
         when (type) {
-            AlbumConstant.TYPE_PERMISSIONS_ALBUM -> initPreview()
+            TYPE_PERMISSIONS_ALBUM -> initPreview()
         }
     }
 
@@ -115,15 +115,15 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
 
     /**
      * 如果不是预览按钮进入则直接扫描全部数据
-     * 如果是,获取的[selectAlbumEntityList]就相当于扫描之后的[albumEntityList]
+     * 如果是,获取的[selectList]就相当于扫描之后的[albumEntityList]
      */
     private fun initPreview() {
         if (!isPreview) {
-            previewPresenter.scan(bucketId, -1, -1)
+            previewPresenter.startScan(bucketId, -1, -1)
             return
         }
         if (albumEntityList.isEmpty()) {
-            albumEntityList.addAll(selectAlbumEntityList)
+            albumEntityList.addAll(selectList)
         }
         initViewPager(albumEntityList)
     }
@@ -132,23 +132,23 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      * 扫描成功,合并一下扫描到的数据和已选中的数据,然后初始化[ViewPager]
      */
     override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
-        previewPresenter.mergeSelectEntity(albumEntityList, selectAlbumEntityList)
+        previewPresenter.mergeEntity(albumEntityList, selectList)
         initViewPager(albumEntityList)
     }
 
 
     /**
      * 横竖屏切换保存
-     * [selectAlbumEntityList]
+     * [selectList]
      * [albumEntityList]
      * [selectPosition]
      * 这里需要注意的是,如果是预览界面进入的话，[albumEntityList]不需要保存
      */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, selectAlbumEntityList)
-        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL, if (isPreview) albumEntityList else null)
-        outState.putInt(AlbumConstant.PREVIEW_POSITION_KEY, selectPosition)
+        outState.putParcelableArrayList(TYPE_PREVIEW_KEY, selectList)
+        outState.putParcelableArrayList(TYPE_PREVIEW_STATE_SELECT_ALL, if (isPreview) albumEntityList else null)
+        outState.putInt(TYPE_PREVIEW_POSITION_KEY, selectPosition)
     }
 
 
@@ -159,9 +159,9 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      */
     fun isRefreshAlbumUI(isRefresh: Boolean, isFinish: Boolean) {
         val bundle = Bundle()
-        bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, selectAlbumEntityList)
-        bundle.putBoolean(AlbumConstant.PREVIEW_REFRESH_UI, isRefresh)
-        bundle.putBoolean(AlbumConstant.PREVIEW_FINISH, isFinish)
+        bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, selectList)
+        bundle.putBoolean(TYPE_PREVIEW_REFRESH_UI, isRefresh)
+        bundle.putBoolean(TYPE_PREVIEW_FINISH, isFinish)
         val intent = Intent()
         intent.putExtras(bundle)
         mActivity.setResult(Activity.RESULT_OK, intent)
@@ -170,20 +170,20 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
 
     private fun checkBoxClick() {
         val albumEntity = adapter.getAlbumEntity(viewPager.currentItem)
-        if (!selectAlbumEntityList.contains(albumEntity) && selectAlbumEntityList.size >= albumBundle.multipleMaxCount) {
+        if (!selectList.contains(albumEntity) && selectList.size >= albumBundle.multipleMaxCount) {
             appCompatCheckBox.isChecked = false
             Album.instance.albumListener?.onAlbumMaxCount()
             return
         }
         if (albumEntity.isCheck) {
-            selectAlbumEntityList.remove(albumEntity)
+            selectList.remove(albumEntity)
             albumEntity.isCheck = false
         } else {
             albumEntity.isCheck = true
-            selectAlbumEntityList.add(albumEntity)
+            selectList.add(albumEntity)
         }
-        Album.instance.albumListener?.onCheckBoxAlbum(selectAlbumEntityList.size, albumBundle.multipleMaxCount)
-        albumParentListener.onChangedCount(selectAlbumEntityList.size)
+        Album.instance.albumListener?.onCheckBoxAlbum(selectList.size, albumBundle.multipleMaxCount)
+        albumParentListener.onChangedCount(selectList.size)
     }
 
     private fun initViewPager(albumEntityList: ArrayList<AlbumEntity>) {
@@ -193,7 +193,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (!FileUtils.isFile(adapter.getAlbumPath(position))) {
+                if (!fileExists(adapter.getAlbumPath(position))) {
                     Album.instance.albumListener?.onAlbumPreviewFileNotExist()
                 }
                 appCompatCheckBox.isChecked = albumEntityList[position].isCheck
@@ -205,7 +205,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         appCompatCheckBox.isChecked = albumEntityList[viewPager.currentItem].isCheck
     }
 
-    fun getSelectEntity(): ArrayList<AlbumEntity> = selectAlbumEntityList
+    fun getSelectEntity(): ArrayList<AlbumEntity> = selectList
 
     override fun initCreate(savedInstanceState: Bundle?) {}
 

@@ -2,11 +2,6 @@ package com.album.util
 
 import android.os.HandlerThread
 
-
-/**
- * by y on 21/08/2017.
- */
-
 class AlbumTask : AlbumTaskCallBack {
     companion object {
         val instance by lazy { AlbumTask() }

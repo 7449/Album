@@ -25,13 +25,13 @@ class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
     companion object {
         fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String, fragment: Fragment) {
             val bundle = Bundle().apply {
-                putParcelableArrayList(AlbumConstant.PREVIEW_KEY, multiplePreviewList)
-                putInt(AlbumConstant.PREVIEW_POSITION_KEY, position)
-                putString(AlbumConstant.PREVIEW_BUCKET_ID, bucketId)
+                putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
+                putInt(TYPE_PREVIEW_POSITION_KEY, position)
+                putString(TYPE_PREVIEW_BUCKET_ID, bucketId)
                 putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
                 putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
-            fragment.startActivityForResult(Intent(fragment.activity, SimplePreviewUI::class.java).putExtras(bundle), AlbumConstant.TYPE_PREVIEW_CODE)
+            fragment.startActivityForResult(Intent(fragment.activity, SimplePreviewUI::class.java).putExtras(bundle), TYPE_PREVIEW_CODE)
         }
     }
 

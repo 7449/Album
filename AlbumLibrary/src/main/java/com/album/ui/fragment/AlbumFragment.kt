@@ -45,7 +45,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     private lateinit var imagePath: Uri
 
     private lateinit var albumBundle: AlbumBundle
-    private lateinit var multipleAlbumEntity: ArrayList<AlbumEntity>
+    private lateinit var selectAlbumEntity: ArrayList<AlbumEntity>
 
     private var singleMediaScanner: SingleMediaScanner? = null
     private var bucketId: String = ""
@@ -56,22 +56,22 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        multipleAlbumEntity = savedInstanceState?.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT) ?: ArrayList()
+        selectAlbumEntity = savedInstanceState?.getParcelableArrayList(TYPE_ALBUM_STATE_SELECT) ?: ArrayList()
         if (savedInstanceState == null) {
-            imagePath = Uri.fromFile(FileUtils.getCameraFile(mActivity, albumBundle.cameraPath, albumBundle.scanType == VIDEO))
+            imagePath = Uri.fromFile(getCameraFile(mActivity, albumBundle.cameraPath, albumBundle.scanType == VIDEO))
             return
         }
-        bucketId = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID, "")
-        finderName = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME, "")
-        imagePath = savedInstanceState.getParcelable(AlbumConstant.TYPE_ALBUM_STATE_IMAGE_PATH) ?: Uri.EMPTY
+        bucketId = savedInstanceState.getString(TYPE_ALBUM_STATE_BUCKET_ID, "")
+        finderName = savedInstanceState.getString(TYPE_ALBUM_STATE_FINDER_NAME, "")
+        imagePath = savedInstanceState.getParcelable(TYPE_ALBUM_STATE_IMAGE_PATH) ?: Uri.EMPTY
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList())
-        outState.putString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID, bucketId)
-        outState.putString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME, finderName)
-        outState.putParcelable(AlbumConstant.TYPE_ALBUM_STATE_IMAGE_PATH, imagePath)
+        outState.putParcelableArrayList(TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList())
+        outState.putString(TYPE_ALBUM_STATE_BUCKET_ID, bucketId)
+        outState.putString(TYPE_ALBUM_STATE_FINDER_NAME, finderName)
+        outState.putParcelable(TYPE_ALBUM_STATE_IMAGE_PATH, imagePath)
     }
 
     override fun initCreate(savedInstanceState: Bundle?) {}
@@ -112,9 +112,9 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
             Activity.RESULT_CANCELED -> when (requestCode) {
-                AlbumConstant.TYPE_PREVIEW_CODE -> onResultPreview(checkNotBundleNull(data?.extras))
+                TYPE_PREVIEW_CODE -> onResultPreview(checkNotBundleNull(data?.extras))
                 UCrop.REQUEST_CROP -> Album.instance.albumListener?.onAlbumCropCanceled()
-                AlbumConstant.ITEM_CAMERA -> Album.instance.albumListener?.onAlbumCameraCanceled()
+                ITEM_CAMERA -> Album.instance.albumListener?.onAlbumCameraCanceled()
             }
             UCrop.RESULT_ERROR -> {
                 Album.instance.albumListener?.onAlbumUCropError(UCrop.getError(checkNotIntentNull(data)))
@@ -123,21 +123,21 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
                 }
             }
             Activity.RESULT_OK -> when (requestCode) {
-                AlbumConstant.CUSTOMIZE_CAMERA_RESULT_CODE -> {
+                CUSTOMIZE_CAMERA_RESULT_CODE -> {
                     val extras = data?.extras
                     if (extras != null) {
-                        val customizePath = extras.getString(AlbumConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY)
+                        val customizePath = extras.getString(CUSTOMIZE_CAMERA_RESULT_PATH_KEY)
                         if (!TextUtils.isEmpty(customizePath)) {
                             imagePath = Uri.fromFile(File(customizePath))
-                            refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA, FileUtils.getScannerFile(checkNotStringNull(imagePath.path)))
+                            refreshMedia(TYPE_RESULT_CAMERA, pathToFile(checkNotStringNull(imagePath.path)))
                             if (albumBundle.cameraCrop) {
                                 openUCrop(checkNotStringNull(imagePath.path))
                             }
                         }
                     }
                 }
-                AlbumConstant.ITEM_CAMERA -> {
-                    refreshMedia(AlbumConstant.TYPE_RESULT_CAMERA, FileUtils.getScannerFile(checkNotStringNull(imagePath.path)))
+                ITEM_CAMERA -> {
+                    refreshMedia(TYPE_RESULT_CAMERA, pathToFile(checkNotStringNull(imagePath.path)))
                     if (albumBundle.cameraCrop) {
                         openUCrop(checkNotStringNull(imagePath.path))
                     }
@@ -147,14 +147,14 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
                         Album.instance.albumListener?.onAlbumUCropError(null)
                     } else {
                         val path = checkNotStringNull(data.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path)
-                        Album.instance.albumListener?.onAlbumUCropResources(FileUtils.getScannerFile(path))
-                        refreshMedia(AlbumConstant.TYPE_RESULT_CROP, FileUtils.getScannerFile(path))
+                        Album.instance.albumListener?.onAlbumUCropResources(pathToFile(path))
+                        refreshMedia(TYPE_RESULT_CROP, pathToFile(path))
                     }
                     if (albumBundle.cropFinish) {
                         mActivity.finish()
                     }
                 }
-                AlbumConstant.TYPE_PREVIEW_CODE -> onResultPreview(checkNotBundleNull(data?.extras))
+                TYPE_PREVIEW_CODE -> onResultPreview(checkNotBundleNull(data?.extras))
             }
         }
     }
@@ -165,7 +165,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             emptyView.visibility = View.GONE
         }
         if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera && page == 0 && !albumEntityList.isEmpty()) {
-            albumEntityList.add(0, AlbumEntity("", "", AlbumConstant.CAMERA, 0, false))
+            albumEntityList.add(0, AlbumEntity("", "", CAMERA, 0, false))
         }
         albumAdapter.addAll(albumEntityList)
         if (page == 0 && !albumBundle.radio) {
@@ -173,19 +173,20 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             if (selectEntity != null && !selectEntity.isEmpty() && !albumEntityList.isEmpty()) {
                 albumPresenter.firstMergeEntity(albumEntityList, selectEntity)
                 albumAdapter.setMultiplePreviewList(selectEntity)
+                selectAlbumEntity = selectEntity
             }
         }
         ++page
     }
 
-    override fun scanFinder(list: ArrayList<FinderEntity>) {
+    override fun scanFinderSuccess(list: ArrayList<FinderEntity>) {
         finderEntityList.clear()
         finderEntityList.addAll(list)
     }
 
     override fun getSelectEntity(): ArrayList<AlbumEntity> {
-        if (!multipleAlbumEntity.isEmpty()) {
-            albumAdapter.setMultiplePreviewList(multipleAlbumEntity)
+        if (!selectAlbumEntity.isEmpty()) {
+            albumAdapter.setMultiplePreviewList(selectAlbumEntity)
         }
         return albumAdapter.getMultiplePreviewList()
     }
@@ -209,20 +210,20 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
-        if (position == 0 && TextUtils.equals(albumEntity.path, AlbumConstant.CAMERA)) {
+        if (position == 0 && TextUtils.equals(albumEntity.path, CAMERA)) {
             if (PermissionUtils.camera(this)) {
                 openCamera()
             }
             return
         }
-        if (!FileUtils.isFile(albumEntity.path)) {
+        if (!fileExists(albumEntity.path)) {
             Album.instance.albumListener?.onAlbumFileNotExist()
             return
         }
         if (albumBundle.scanType == VIDEO) {
             try {
                 val openVideo = Intent(Intent.ACTION_VIEW)
-                openVideo.setDataAndType(Uri.parse(albumEntity.path), AlbumConstant.VIDEO_PLAY_TYPE)
+                openVideo.setDataAndType(Uri.parse(albumEntity.path), "video/*")
                 startActivity(openVideo)
             } catch (e: Exception) {
                 Album.instance.albumListener?.onVideoPlayError()
@@ -259,14 +260,14 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
                 albumPresenter.resultScan(checkNotStringNull(imagePath.path))
                 return
             }
-            albumPresenter.scan(bucketId, page, albumBundle.scanCount)
+            albumPresenter.startScan(bucketId, page, albumBundle.scanCount)
         }
     }
 
     override fun onScanStart() {}
 
-    override fun onScanCompleted(@AlbumResultType type: Int) {
-        if (type == AlbumConstant.TYPE_RESULT_CROP) {
+    override fun onScanCompleted(type: Int) {
+        if (type == TYPE_RESULT_CROP) {
             return
         }
         onScanAlbum(bucketId, false, true)
@@ -285,23 +286,23 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             albumCameraListener.startCamera(this)
             return
         }
-        imagePath = Uri.fromFile(FileUtils.getCameraFile(mActivity, albumBundle.cameraPath, albumBundle.scanType == VIDEO))
+        imagePath = Uri.fromFile(getCameraFile(mActivity, albumBundle.cameraPath, albumBundle.scanType == VIDEO))
         val i = openCamera(this, imagePath, albumBundle.scanType == VIDEO)
         if (i == 1) {
             Album.instance.albumListener?.onAlbumOpenCameraError()
         }
     }
 
-    override fun refreshMedia(@AlbumResultType type: Int, file: File) {
+    override fun refreshMedia(type: Int, file: File) {
         disconnectMediaScanner()
         singleMediaScanner = SingleMediaScanner(mActivity, file, this@AlbumFragment, type)
     }
 
-    override fun multiplePreview(): ArrayList<AlbumEntity>? {
+    override fun selectPreview(): ArrayList<AlbumEntity> {
         val albumEntityList = albumAdapter.getMultiplePreviewList()
         if (albumEntityList.isEmpty()) {
             Album.instance.albumListener?.onAlbumPreviewEmpty()
-            return null
+            return ArrayList()
         }
         return albumEntityList
     }
@@ -319,37 +320,37 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun openUCrop(path: String) {
-        UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(FileUtils.getCameraFile(mActivity, albumBundle.uCropPath, albumBundle.scanType == VIDEO)))
+        UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(getCameraFile(mActivity, albumBundle.uCropPath, albumBundle.scanType == VIDEO)))
                 .withOptions(Album.instance.options ?: UCrop.Options())
                 .start(mActivity, this)
     }
 
     override fun onResultPreview(bundle: Bundle) {
-        val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.PREVIEW_KEY)
-        val isRefreshUI = bundle.getBoolean(AlbumConstant.PREVIEW_REFRESH_UI, true)
-        val isFinish = bundle.getBoolean(AlbumConstant.PREVIEW_FINISH, false)
+        val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
+        val isRefreshUI = bundle.getBoolean(TYPE_PREVIEW_REFRESH_UI, true)
+        val isFinish = bundle.getBoolean(TYPE_PREVIEW_FINISH, false)
         if (isFinish) {
             mActivity.finish()
             return
         }
-        if (!isRefreshUI || previewAlbumEntity == null || multipleAlbumEntity == previewAlbumEntity) {
+        if (!isRefreshUI || previewAlbumEntity == null || selectAlbumEntity == previewAlbumEntity) {
             return
         }
-        multipleAlbumEntity = previewAlbumEntity
-        albumPresenter.mergeSelectEntity(albumAdapter.getAlbumList(), previewAlbumEntity)
+        selectAlbumEntity = previewAlbumEntity
+        albumPresenter.mergeEntity(albumAdapter.getAlbumList(), previewAlbumEntity)
         albumAdapter.setMultiplePreviewList(previewAlbumEntity)
     }
 
     override fun onLoadMore() {
-        if (PermissionUtils.storage(this) && !albumPresenter.getScanLoading()) {
-            albumPresenter.scan(bucketId, page, albumBundle.scanCount)
+        if (PermissionUtils.storage(this) && !albumPresenter.hasScanLoading()) {
+            albumPresenter.startScan(bucketId, page, albumBundle.scanCount)
         }
     }
 
     override fun permissionsGranted(type: Int) {
         when (type) {
-            AlbumConstant.TYPE_PERMISSIONS_ALBUM -> onScanAlbum(bucketId, false, false)
-            AlbumConstant.TYPE_PERMISSIONS_CAMERA -> openCamera()
+            TYPE_PERMISSIONS_ALBUM -> onScanAlbum(bucketId, false, false)
+            TYPE_PERMISSIONS_CAMERA -> openCamera()
         }
     }
 

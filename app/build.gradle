@@ -35,6 +35,8 @@ dependencies {
     implementation project(':AlbumLibrary')
     implementation project(':AlbumUILibrary')
     implementation(name: 'CameraViewLibrary', ext: 'aar')
+//    implementation(name: 'AlbumLibrary', ext: 'aar')
+//    implementation(name: 'AlbumUILibrary', ext: 'aar')
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {

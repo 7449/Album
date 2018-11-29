@@ -3,7 +3,6 @@ package com.album.util
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
-import com.album.AlbumResultType
 import java.io.File
 
 /**
@@ -18,7 +17,7 @@ import java.io.File
  * https://github.com/square/leakcanary/issues/26
  */
 
-class SingleMediaScanner(context: Context, private val file: File, private val listener: SingleScannerListener, @param:AlbumResultType private val type: Int) : MediaScannerConnection.MediaScannerConnectionClient {
+class SingleMediaScanner(context: Context, private val file: File, private val listener: SingleScannerListener, private val type: Int) : MediaScannerConnection.MediaScannerConnectionClient {
 
     private var connection: MediaScannerConnection = MediaScannerConnection(context.applicationContext, this)
 
@@ -45,5 +44,5 @@ class SingleMediaScanner(context: Context, private val file: File, private val l
 interface SingleScannerListener {
     fun onScanStart()
 
-    fun onScanCompleted(@AlbumResultType type: Int)
+    fun onScanCompleted(type: Int)
 }

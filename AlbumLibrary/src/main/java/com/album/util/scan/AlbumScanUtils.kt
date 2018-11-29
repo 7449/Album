@@ -6,12 +6,10 @@ import android.database.Cursor
 import android.provider.MediaStore
 import android.text.TextUtils
 import androidx.collection.ArrayMap
-import com.album.AlbumConstant
 import com.album.AlbumEntity
+import com.album.FINDER_ALL_DIR_NAME
 import com.album.FinderEntity
-import com.album.util.FileUtils
-import com.album.util.ScanBase
-import com.album.util.ScanCallBack
+import com.album.util.getParentFile
 import java.util.*
 
 /**
@@ -45,7 +43,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
             while (query.moveToNext()) {
                 val resultPath = query.getString(dataColumnIndex)
                 val id = query.getLong(idColumnIndex)
-                if (FileUtils.getPathFile(resultPath) != null) {
+                if (getParentFile(resultPath) != null) {
                     albumEntity = AlbumEntity("", "", resultPath, id, false)
                 }
             }
@@ -59,7 +57,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
         val path = cursor.getString(dataColumnIndex)
         val id = cursor.getLong(idColumnIndex)
         val size = cursor.getLong(sizeColumnIndex)
-        if (FileUtils.getPathFile(path) != null) {
+        if (getParentFile(path) != null) {
             if (filterImage && size <= 0) {
                 return
             }
@@ -86,7 +84,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
                 val size = finderCursor.getLong(sizeColumnIndex)
                 val id = finderCursor.getLong(idColumnIndex)
                 val finderEntity = finderEntityMap[finderName]
-                if (finderEntity == null && FileUtils.getPathFile(finderPath) != null) {
+                if (finderEntity == null && getParentFile(finderPath) != null) {
                     if (filterImage && size <= 0) {
                         continue
                     }
@@ -98,7 +96,7 @@ class AlbumScanUtils private constructor(private val contentResolver: ContentRes
         if (finderEntityMap.isEmpty) {
             return
         }
-        val finderEntity = FinderEntity(AlbumConstant.ALL_ALBUM_NAME, "", 0, "", 0)
+        val finderEntity = FinderEntity(FINDER_ALL_DIR_NAME, "", 0, "", 0)
         var count = 0
         for ((_, value) in finderEntityMap) {
             finderEntityList.add(value)

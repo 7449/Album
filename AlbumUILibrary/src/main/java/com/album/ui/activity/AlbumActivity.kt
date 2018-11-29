@@ -131,12 +131,14 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     override fun onClick(v: View) {
         when (v.id) {
             R.id.album_tv_preview -> {
-                val multiplePreview = albumFragment.multiplePreview()
-                if (multiplePreview != null) {
+                val multiplePreview = albumFragment.selectPreview()
+                if (!multiplePreview.isEmpty()) {
                     val bundle = Bundle()
-                    bundle.putParcelableArrayList(AlbumConstant.PREVIEW_KEY, multiplePreview)
-                    bundle.putString(AlbumConstant.PREVIEW_BUCKET_ID, AlbumConstant.PREVIEW_BUTTON_KEY)
-                    albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), AlbumConstant.TYPE_PREVIEW_CODE)
+                    bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreview)
+                    bundle.putString(TYPE_PREVIEW_BUCKET_ID, TYPE_PREVIEW_BUTTON_KEY)
+                    bundle.putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
+                    bundle.putParcelable(EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
+                    albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_CODE)
                 }
             }
             R.id.album_tv_select -> albumFragment.multipleSelect()

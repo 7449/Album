@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import com.album.AlbumEntity
 import com.album.AlbumListener
-import com.album.PermissionsType
 import java.io.File
 
 /**
@@ -31,7 +30,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onAlbumPermissionsDenied(@PermissionsType type: Int) {
+    override fun onAlbumPermissionsDenied(type: Int) {
         toast("permissions error")
     }
 

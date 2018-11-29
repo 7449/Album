@@ -1,4 +1,4 @@
-package com.album.util
+package com.album.util.scan
 
 import android.content.ContentResolver
 import android.database.Cursor
@@ -8,8 +8,7 @@ import com.album.FinderEntity
 import java.util.*
 
 interface ScanView {
-
-    fun scan(scanCallBack: ScanCallBack, bucketId: String, page: Int, count: Int, filterImage: Boolean, sdName: String)
+    fun startScan(scanCallBack: ScanCallBack, bucketId: String, page: Int, count: Int, filterImage: Boolean, sdName: String)
 
     fun resultScan(scanCallBack: ScanCallBack, path: String, filterImage: Boolean, sdName: String)
 
@@ -22,20 +21,16 @@ interface ScanView {
     fun getCursor(bucketId: String, page: Int, count: Int, filterImage: Boolean): Cursor?
 
     fun getSelectionArgs(bucketId: String): Array<String>
-
 }
 
 interface ScanCallBack {
+    fun scanCallBack(imageList: ArrayList<AlbumEntity>, finderList: ArrayList<FinderEntity>)
 
-    fun scanCallBack(albumEntityList: ArrayList<AlbumEntity>, list: ArrayList<FinderEntity>)
-
-    fun resultCallBack(albumEntity: AlbumEntity?, finderEntityList: ArrayList<FinderEntity>)
-
+    fun resultCallBack(image: AlbumEntity?, finderList: ArrayList<FinderEntity>)
 }
 
 abstract class ScanBase(private val contentResolver: ContentResolver) : ScanView {
-
-    override fun scan(scanCallBack: ScanCallBack, bucketId: String, page: Int, count: Int, filterImage: Boolean, sdName: String) {
+    override fun startScan(scanCallBack: ScanCallBack, bucketId: String, page: Int, count: Int, filterImage: Boolean, sdName: String) {
         val albumEntityList = ArrayList<AlbumEntity>()
         val finderEntityList = ArrayList<FinderEntity>()
         val cursor = getCursor(bucketId, page, count, filterImage)
@@ -51,5 +46,4 @@ abstract class ScanBase(private val contentResolver: ContentResolver) : ScanView
             scanCallBack.scanCallBack(albumEntityList, finderEntityList)
         }
     }
-
 }

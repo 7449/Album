@@ -12,23 +12,24 @@ import com.yalantis.ucrop.UCrop
 class Album {
     companion object {
         val instance by lazy { Album() }
-        fun reset() {
+        fun destroy() {
             instance.apply {
-                albumImageLoader = SimpleGlideAlbumImageLoader()
-                options = UCrop.Options()
-                albumListener = SimpleAlbumListener()
-                albumCustomListener = null
+                options = null
+                albumListener = null
+                customCameraListener = null
                 emptyClickListener = null
-                albumEntityList = null
+                albumImageLoader = null
+                initList = null
             }
         }
     }
-    var albumImageLoader: AlbumImageLoader = SimpleGlideAlbumImageLoader()
-    var options = UCrop.Options()
-    var albumListener: AlbumListener = SimpleAlbumListener()
-    var albumCustomListener: AlbumCustomListener? = null
+
+    var options: UCrop.Options? = null
+    var albumImageLoader: AlbumImageLoader? = null
+    var albumListener: AlbumListener? = null
+    var customCameraListener: AlbumCustomCameraListener? = null
     var emptyClickListener: OnEmptyClickListener? = null
-    var albumEntityList: ArrayList<AlbumEntity>? = null
+    var initList: ArrayList<AlbumEntity>? = null
 }
 
 fun Album.start(context: Context, cls: Class<*>) {
@@ -42,10 +43,6 @@ fun Album.start(context: Context, albumBundle: Parcelable, cls: Class<*>) {
     })
 }
 
-
-/**
- * 如果使用默认的UILibrary,则可以调用这个方法修改颜色
- */
 fun Album.start(context: Context, albumBundle: Parcelable, uiBundle: Parcelable, cls: Class<*>) {
     context.startActivity(Intent(context, cls).apply {
         putExtras(Bundle().apply {

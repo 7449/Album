@@ -43,7 +43,7 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
         }
         holder.cameraRootView.visibility = View.GONE
         holder.imageView.visibility = View.VISIBLE
-        holder.imageView.addView(Album.instance.albumImageLoader.displayAlbum(display, display, albumEntity, holder.imageView), layoutParams)
+        holder.imageView.addView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, holder.imageView), layoutParams)
         if (!albumBundle.radio) {
             holder.checkBox.visibility = View.VISIBLE
             holder.checkBox.isChecked = albumEntity.isCheck
@@ -51,12 +51,12 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
             holder.checkBox.setOnClickListener(View.OnClickListener {
                 if (!FileUtils.isFile(albumEntity.path)) {
                     holder.checkBox.isChecked = false
-                    Album.instance.albumListener.onAlbumCheckFileNotExist()
+                    Album.instance.albumListener?.onAlbumCheckFileNotExist()
                     return@OnClickListener
                 }
                 if (!multiplePreviewList.contains(albumEntity) && multiplePreviewList.size >= albumBundle.multipleMaxCount) {
                     holder.checkBox.isChecked = false
-                    Album.instance.albumListener.onAlbumMaxCount()
+                    Album.instance.albumListener?.onAlbumMaxCount()
                     return@OnClickListener
                 }
                 if (!albumEntity.isCheck) {
@@ -66,6 +66,7 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
                     multiplePreviewList.remove(albumEntity)
                     albumEntity.isCheck = false
                 }
+                Album.instance.albumListener?.onCheckBoxAlbum(multiplePreviewList.size, albumBundle.multipleMaxCount)
             })
         }
     }

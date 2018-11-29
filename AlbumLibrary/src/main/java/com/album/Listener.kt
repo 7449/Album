@@ -42,7 +42,7 @@ interface AlbumImageLoader {
     fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View
 }
 
-interface AlbumCustomListener {
+interface AlbumCustomCameraListener {
     /**
      * 自定义相机
      *
@@ -75,7 +75,19 @@ interface AlbumListener {
     fun onAlbumFinderEmpty()
 
     /**
-     * 点击预览但是未选择图片
+     * 预览页点击确定但是没有选中图片
+     */
+    fun onAlbumPreviewSelectEmpty()
+
+    /**
+     * 选择图片
+     */
+    fun onAlbumResources(list: List<AlbumEntity>)
+
+    /////////////////////////////////////////////////////
+
+    /**
+     * 获取预览但是未选择图片
      */
     fun onAlbumPreviewEmpty()
 
@@ -100,11 +112,6 @@ interface AlbumListener {
     fun onAlbumFileNotExist()
 
     /**
-     * 预览页点击确定但是没有选中图片
-     */
-    fun onAlbumPreviewSelectEmpty()
-
-    /**
      * 多选图片已经被删
      */
     fun onAlbumCheckFileNotExist()
@@ -123,11 +130,6 @@ interface AlbumListener {
      * 裁剪错误
      */
     fun onAlbumUCropError(data: Throwable?)
-
-    /**
-     * 选择图片
-     */
-    fun onAlbumResources(list: List<AlbumEntity>)
 
     /**
      * 裁剪成功
@@ -163,4 +165,9 @@ interface AlbumListener {
      * 视频播放错误
      */
     fun onVideoPlayError()
+
+    /**
+     * 每次checkbox
+     */
+    fun onCheckBoxAlbum(count: Int, maxCount: Int)
 }

@@ -67,7 +67,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             toolbar.elevation = albumUiBundle.toolbarElevation
         }
         toolbar.setNavigationOnClickListener {
-            Album.instance.albumListener.onAlbumActivityFinish()
+            Album.instance.albumListener?.onAlbumActivityFinish()
             finish()
         }
 
@@ -148,7 +148,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                     listPopupWindow.show()
                     return
                 }
-                Album.instance.albumListener.onAlbumFinderEmpty()
+                Album.instance.albumListener?.onAlbumFinderEmpty()
             }
         }
     }
@@ -166,7 +166,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     }
 
     override fun onBackPressed() {
-        Album.instance.albumListener.onAlbumActivityBackPressed()
+        Album.instance.albumListener?.onAlbumActivityBackPressed()
         super.onBackPressed()
     }
 

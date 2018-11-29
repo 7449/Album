@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleFrescoAlbumImageLoader()
             albumListener = MainAlbumListener(this@MainActivity, list)
-            albumEntityList = list
+            initList = list
             options = dayOptions
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
 //                previewFinishRefresh = true
 ////                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
 //            }
-            albumCustomListener = null
+            customCameraListener = null
         }
     }
 
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             albumListener = MainAlbumListener(applicationContext, null)
             options = nightOptions
             albumImageLoader = SimpleGlideAlbumImageLoader()
-            albumCustomListener = null
+            customCameraListener = null
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
             }
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             albumListener = MainAlbumListener(applicationContext, list)
 //            albumClass = SimpleAlbumUI::class.java
 //            previewClass = SimplePreviewUI::class.java
-            albumCustomListener = null
+            customCameraListener = null
             emptyClickListener = null
 //            config = AlbumConfig().apply {
 //                //                cameraCrop = false
@@ -135,9 +135,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleGlideAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, list)
-            albumEntityList = list
+            initList = list
             options = dayOptions
-            albumCustomListener = object : AlbumCustomListener {
+            customCameraListener = object : AlbumCustomCameraListener {
                 override fun startCamera(fragment: AlbumBaseFragment) {
                     if (PermissionUtils.storage(this@MainActivity) && PermissionUtils.camera(this@MainActivity)) {
                         val activity = fragment.activity
@@ -164,7 +164,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleGlideAlbumImageLoader()
             albumListener = MainAlbumListener(applicationContext, null)
-            albumCustomListener = null
+            customCameraListener = null
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
             }
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         return Album.instance.apply {
             albumImageLoader = SimpleSubsamplingScaleImageLoader()
             albumListener = MainAlbumListener(this@MainActivity, list)
-            albumEntityList = list
+            initList = list
             options = dayOptions
             emptyClickListener = object : OnEmptyClickListener {
                 override fun click(view: View): Boolean = true
@@ -194,12 +194,12 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
 //                previewFinishRefresh = true
 ////                albumCheckBoxDrawable = R.drawable.simple_selector_album_item_check
 //            }
-            albumCustomListener = null
+            customCameraListener = null
         }
     }
 
     override fun onClick(v: View) {
-        Album.reset()
+        Album.destroy()
         when (v.id) {
             R.id.btn_day_album -> onDayAlbumClick().start(this, AlbumActivity::class.java)
             R.id.btn_night_album -> onNightClick().start(this, AlbumActivity::class.java)

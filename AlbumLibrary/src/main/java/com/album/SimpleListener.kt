@@ -53,4 +53,5 @@ open class SimpleAlbumListener : AlbumListener {
     override fun onAlbumEmpty() {}
     override fun onAlbumNoMore() {}
     override fun onVideoPlayError() {}
+    override fun onCheckBoxAlbum(count: Int, maxCount: Int) {}
 }

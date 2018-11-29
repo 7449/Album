@@ -54,10 +54,10 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
         previewOk.setOnClickListener {
             val entity = prevFragment.getSelectEntity()
             if (entity.isEmpty()) {
-                Album.instance.albumListener.onAlbumPreviewSelectEmpty()
+                Album.instance.albumListener?.onAlbumPreviewSelectEmpty()
                 return@setOnClickListener
             }
-            Album.instance.albumListener.onAlbumResources(entity)
+            Album.instance.albumListener?.onAlbumResources(entity)
             prevFragment.isRefreshAlbumUI(false, true)
         }
     }

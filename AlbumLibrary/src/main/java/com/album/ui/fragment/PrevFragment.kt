@@ -107,7 +107,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      * 权限被拒
      */
     override fun permissionsDenied(type: Int) {
-        Album.instance.albumListener.onAlbumPermissionsDenied(type)
+        Album.instance.albumListener?.onAlbumPermissionsDenied(type)
         if (albumBundle.permissionsDeniedFinish) {
             mActivity.finish()
         }
@@ -172,7 +172,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         val albumEntity = adapter.getAlbumEntity(viewPager.currentItem)
         if (!selectAlbumEntityList.contains(albumEntity) && selectAlbumEntityList.size >= albumBundle.multipleMaxCount) {
             appCompatCheckBox.isChecked = false
-            Album.instance.albumListener.onAlbumMaxCount()
+            Album.instance.albumListener?.onAlbumMaxCount()
             return
         }
         if (albumEntity.isCheck) {
@@ -182,6 +182,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             albumEntity.isCheck = true
             selectAlbumEntityList.add(albumEntity)
         }
+        Album.instance.albumListener?.onCheckBoxAlbum(selectAlbumEntityList.size, albumBundle.multipleMaxCount)
         albumParentListener.onChangedCount(selectAlbumEntityList.size)
     }
 
@@ -193,7 +194,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (!FileUtils.isFile(adapter.getAlbumPath(position))) {
-                    Album.instance.albumListener.onAlbumPreviewFileNotExist()
+                    Album.instance.albumListener?.onAlbumPreviewFileNotExist()
                 }
                 appCompatCheckBox.isChecked = albumEntityList[position].isCheck
                 selectPosition = position

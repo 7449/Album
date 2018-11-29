@@ -99,6 +99,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView, private val albumBund
                     albumView.onAlbumNoMore()
                 }
             } else {
+                mergeSelectEntity(albumEntityList, albumView.getSelectEntity())
                 albumView.scanSuccess(albumEntityList)
                 albumView.scanFinder(list)
             }

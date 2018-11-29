@@ -13,7 +13,6 @@ import com.album.*
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.fragment.PrevFragment
-import com.album.ui.view.PrevFragmentToAtyListener
 import com.album.util.checkNotBundleNull
 import com.album.util.hasL
 import com.album.util.setStatusBarColor
@@ -21,7 +20,7 @@ import com.album.util.setStatusBarColor
 /**
  * @author y
  */
-class PreviewActivity : AlbumBaseActivity(), PrevFragmentToAtyListener {
+class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
 
     companion object {
         fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String, fragment: Fragment) {
@@ -89,19 +88,21 @@ class PreviewActivity : AlbumBaseActivity(), PrevFragmentToAtyListener {
         val fragment = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)
         if (fragment != null) {
             prevFragment = fragment as PrevFragment
-            return
+            supportFragmentManager.beginTransaction().show(fragment).commit()
+        } else {
+            prevFragment = PrevFragment.newInstance(checkNotBundleNull(intent.extras))
+            supportFragmentManager
+                    .beginTransaction()
+                    .apply { add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName) }
+                    .commit()
         }
-        prevFragment = PrevFragment.newInstance(checkNotBundleNull(intent.extras))
-        supportFragmentManager
-                .beginTransaction()
-                .apply { add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName) }
-                .commit()
+        prevFragment.albumParentListener = this
     }
 
     override fun getLayoutId(): Int = R.layout.album_activity_preview
 
-    override fun onChangedCount(currentPos: Int) {
-        previewCount.text = String.format("%s / %s", currentPos.toString(), albumBundle.multipleMaxCount)
+    override fun onChangedCount(currentCount: Int) {
+        previewCount.text = String.format("%s / %s", currentCount.toString(), albumBundle.multipleMaxCount)
     }
 
     override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {

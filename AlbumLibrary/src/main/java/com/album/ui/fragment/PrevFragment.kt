@@ -14,7 +14,6 @@ import com.album.presenter.PreviewPresenter
 import com.album.presenter.impl.PreviewPresenterImpl
 import com.album.ui.ExtendedViewPager
 import com.album.ui.adapter.PreviewAdapter
-import com.album.ui.view.PrevFragmentToAtyListener
 import com.album.ui.view.PrevView
 import com.album.util.FileUtils
 import com.album.util.PermissionUtils
@@ -30,7 +29,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         }
     }
 
-    private lateinit var listener: PrevFragmentToAtyListener
+    lateinit var albumParentListener: AlbumPreviewParentListener
     private lateinit var adapter: PreviewAdapter
     private lateinit var appCompatCheckBox: AppCompatCheckBox
     private lateinit var progressBar: ProgressBar
@@ -57,7 +56,6 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        listener = mActivity as PrevFragmentToAtyListener
         bucketId = bundle.getString(AlbumConstant.PREVIEW_BUCKET_ID, "")
         isPreview = TextUtils.equals(bucketId, AlbumConstant.PREVIEW_BUTTON_KEY)
     }
@@ -90,7 +88,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             albumEntityList = previewBundle.getParcelableArrayList<AlbumEntity>(AlbumConstant.TYPE_ALBUM_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
         }
         previewPresenter = PreviewPresenterImpl(this, albumBundle)
-        listener.onChangedCount(selectAlbumEntityList.size)
+        albumParentListener.onChangedCount(selectAlbumEntityList.size)
         if (PermissionUtils.storage(this)) {
             initPreview()
         }
@@ -184,13 +182,13 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             albumEntity.isCheck = true
             selectAlbumEntityList.add(albumEntity)
         }
-        listener.onChangedCount(selectAlbumEntityList.size)
+        albumParentListener.onChangedCount(selectAlbumEntityList.size)
     }
 
     private fun initViewPager(albumEntityList: ArrayList<AlbumEntity>) {
         adapter = PreviewAdapter(albumEntityList)
         viewPager.adapter = adapter
-        viewPager.currentItem = if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera) selectPosition - 1 else selectPosition
+        viewPager.currentItem = selectPosition
         viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -199,10 +197,10 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
                 }
                 appCompatCheckBox.isChecked = albumEntityList[position].isCheck
                 selectPosition = position
-                listener.onChangedToolbarCount(position + 1, albumEntityList.size)
+                albumParentListener.onChangedToolbarCount(position + 1, albumEntityList.size)
             }
         })
-        listener.onChangedToolbarCount(viewPager.currentItem + 1, albumEntityList.size)
+        albumParentListener.onChangedToolbarCount(viewPager.currentItem + 1, albumEntityList.size)
         appCompatCheckBox.isChecked = albumEntityList[viewPager.currentItem].isCheck
     }
 

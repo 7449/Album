@@ -62,8 +62,3 @@ interface PrevView {
 
     fun showProgress()
 }
-
-interface PrevFragmentToAtyListener {
-    fun onChangedCount(currentPos: Int)
-    fun onChangedToolbarCount(currentPos: Int, maxPos: Int)
-}

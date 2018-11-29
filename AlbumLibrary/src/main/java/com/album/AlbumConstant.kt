@@ -21,7 +21,6 @@ object AlbumConstant {
     const val PREVIEW_BUCKET_ID = "preview_bucket_id"
     const val PREVIEW_BUTTON_KEY = "preview_button"
     const val PREVIEW_POSITION_KEY = "preview_position"
-    const val TYPE_NIGHT = 0
 
     const val TYPE_PERMISSIONS_ALBUM = 0
     const val TYPE_PERMISSIONS_CAMERA = 1

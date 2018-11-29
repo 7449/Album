@@ -69,9 +69,9 @@ abstract class AlbumBaseFragment : Fragment() {
         }
     }
 
-    protected abstract fun initCreate(savedInstanceState: Bundle?)
-
     protected abstract fun initView(view: View)
+
+    protected abstract fun initCreate(savedInstanceState: Bundle?)
 
     protected abstract fun initActivityCreated(savedInstanceState: Bundle?)
 

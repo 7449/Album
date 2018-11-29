@@ -46,20 +46,22 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
 
     private lateinit var albumBundle: AlbumBundle
     private lateinit var multipleAlbumEntity: ArrayList<AlbumEntity>
+
     private var singleMediaScanner: SingleMediaScanner? = null
     private var bucketId: String = ""
-    var finderName: String = ""
     private var page = 0
+
+    var finderName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        multipleAlbumEntity = savedInstanceState?.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT) ?: ArrayList()
         if (savedInstanceState == null) {
             imagePath = Uri.fromFile(FileUtils.getCameraFile(mActivity, albumBundle.cameraPath, albumBundle.scanType == VIDEO))
             return
         }
         bucketId = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_BUCKET_ID, "")
-        multipleAlbumEntity = savedInstanceState.getParcelableArrayList(AlbumConstant.TYPE_ALBUM_STATE_SELECT) ?: ArrayList()
         finderName = savedInstanceState.getString(AlbumConstant.TYPE_ALBUM_STATE_FINDER_NAME, "")
         imagePath = savedInstanceState.getParcelable(AlbumConstant.TYPE_ALBUM_STATE_IMAGE_PATH) ?: Uri.EMPTY
     }
@@ -95,7 +97,6 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     override fun initActivityCreated(savedInstanceState: Bundle?) {
         albumPresenter = AlbumPresenterImpl(this, albumBundle)
         finderEntityList = ArrayList()
-        multipleAlbumEntity = ArrayList()
         recyclerView.setHasFixedSize(true)
         val gridLayoutManager = GridLayoutManager(mActivity, albumBundle.spanCount)
         recyclerView.layoutManager = gridLayoutManager

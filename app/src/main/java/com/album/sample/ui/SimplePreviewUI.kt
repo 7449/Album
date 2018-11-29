@@ -1,24 +1,21 @@
 package com.album.sample.ui
 
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import com.album.Album
+import com.album.AlbumPreviewParentListener
 import com.album.sample.R
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.fragment.PrevFragment
-import com.album.ui.view.PrevFragmentToAtyListener
 import com.album.util.checkNotBundleNull
-import com.album.util.hasL
 
 /**
  * by y on 22/08/2017.
  */
-class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
+class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
 
     private lateinit var toolbar: Toolbar
     private lateinit var prevFragment: PrevFragment
@@ -73,7 +70,7 @@ class SimplePreviewUI : AlbumBaseActivity(), PrevFragmentToAtyListener {
 
     override fun getLayoutId(): Int = R.layout.activity_simple_preview
 
-    override fun onChangedCount(currentPos: Int) {
+    override fun onChangedCount(currentCount: Int) {
     }
 
     override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {

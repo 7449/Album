@@ -81,13 +81,15 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         val fragment = supportFragmentManager.findFragmentByTag(AlbumFragment::class.java.simpleName)
         if (fragment != null) {
             albumFragment = fragment as AlbumFragment
-            return
+            supportFragmentManager.beginTransaction().show(fragment).commit()
+        } else {
+            albumFragment = AlbumFragment.newInstance(albumBundle)
+            supportFragmentManager
+                    .beginTransaction()
+                    .apply { add(R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName) }
+                    .commit()
         }
-        albumFragment = AlbumFragment.newInstance(albumBundle).apply { albumParentListener = this@AlbumActivity }
-        supportFragmentManager
-                .beginTransaction()
-                .apply { add(R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName) }
-                .commit()
+        albumFragment.albumParentListener = this
     }
 
     private fun initBottomView() {
@@ -160,7 +162,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     }
 
     override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String) {
-        PreviewActivity.start(albumBundle, albumUiBundle, multiplePreviewList, position, bucketId, albumFragment)
+        PreviewActivity.start(albumBundle, albumUiBundle, multiplePreviewList, if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera) position - 1 else position, bucketId, albumFragment)
     }
 
     override fun onBackPressed() {

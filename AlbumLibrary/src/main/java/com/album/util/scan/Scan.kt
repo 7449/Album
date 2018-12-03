@@ -39,9 +39,9 @@ const val ALBUM_RESULT_SELECTION = MediaStore.Images.Media.DATA + "= ? "
 
 const val VIDEO_RESULT_SELECTION = MediaStore.Video.Media.DATA + "= ? "
 
-const val ALBUM_BUCKET_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and " + ALBUM_SELECTION
+const val ALBUM_BUCKET_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and (" + ALBUM_SELECTION + ")"
 
-const val VIDEO_BUCKET_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? and " + VIDEO_SELECTION
+const val VIDEO_BUCKET_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? and (" + VIDEO_SELECTION + ")"
 
 val ALBUM_URL: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 

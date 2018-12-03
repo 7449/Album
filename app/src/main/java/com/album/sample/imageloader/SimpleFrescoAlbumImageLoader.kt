@@ -13,6 +13,7 @@ import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.common.RotationOptions
 import com.facebook.imagepipeline.request.ImageRequest
 import com.facebook.imagepipeline.request.ImageRequestBuilder
+import java.io.File
 
 /**
  * by y on 20/08/2017.
@@ -22,7 +23,7 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
 
     override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
         val simpleDraweeView = SimpleDraweeView(container.context)
-        val uri = Uri.parse("file://" + albumEntity.path)
+        val uri = Uri.fromFile(File(albumEntity.path))
         val request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())
@@ -44,7 +45,7 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
 
     override fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View {
         val simpleDraweeView = SimpleDraweeView(container.context)
-        val uri = Uri.parse("file://" + finderEntity.thumbnailsPath)
+        val uri = Uri.fromFile(File(finderEntity.thumbnailsPath))
         val request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())
@@ -64,7 +65,7 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
 
     override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
         val simpleDraweeView = SimpleDraweeView(container.context)
-        val uri = Uri.parse("file://" + albumEntity.path)
+        val uri = Uri.fromFile(File(albumEntity.path))
         val request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())

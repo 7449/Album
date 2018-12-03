@@ -30,7 +30,7 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             
 #### gradle
 
-     implementation 'com.ydevelop:album:album:0.0.6'
+     implementation 'com.ydevelop:album:album:0.0.5'
      implementation 'com.ydevelop:album.ui:0.0.1'
      implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
      implementation "com.github.bumptech.glide:glide:$glideVersion"

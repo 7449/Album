@@ -17,6 +17,7 @@ import com.album.ui.adapter.PreviewAdapter
 import com.album.ui.view.PrevView
 import com.album.util.PermissionUtils
 import com.album.util.fileExists
+import com.album.util.scan.SCAN_ALL
 
 /**
  *  @author y
@@ -119,7 +120,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
      */
     private fun initPreview() {
         if (!isPreview) {
-            previewPresenter.startScan(bucketId, -1, -1)
+            previewPresenter.startScan(bucketId, -1, SCAN_ALL)
             return
         }
         if (albumEntityList.isEmpty()) {

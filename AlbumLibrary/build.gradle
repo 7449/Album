@@ -27,7 +27,7 @@ android {
         }
     }
 }
-version = "0.0.6"
+version = "0.0.5"
 group = "com.ydevelop"
 androidArtifact {
     artifactId = "album"

@@ -34,6 +34,7 @@ dependencies {
     implementation "com.facebook.fresco:animated-gif:$frescoVersion"
     implementation project(':AlbumLibrary')
     implementation project(':AlbumUILibrary')
+    implementation project(':AlbumWeChatUILibrary')
     implementation(name: 'CameraViewLibrary', ext: 'aar')
 //    implementation(name: 'AlbumLibrary', ext: 'aar')
 //    implementation(name: 'AlbumUILibrary', ext: 'aar')

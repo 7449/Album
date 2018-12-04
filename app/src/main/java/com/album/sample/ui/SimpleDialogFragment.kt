@@ -4,28 +4,33 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.text.TextUtils
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.album.Album
-import com.album.AlbumBundle
-import com.album.AlbumEntity
-import com.album.SimpleAlbumListener
-import com.album.sample.MainAlbumListener
+import com.album.*
 import com.album.sample.R
 import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
+import com.album.ui.AlbumUiBundle
 import com.album.ui.fragment.AlbumFragment
+import com.album.ui.fragment.PrevFragment
 import java.io.File
 
-class SimpleDialogFragment : DialogFragment() {
+/**
+ * 只是简单的示例,如果digloa显示需要判断更多的逻辑,例如预览返回需要更新选中数据
+ */
+class SimpleDialogFragment : DialogFragment(), AlbumPreviewParentListener {
+    override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {
+    }
+
+    override fun onChangedCount(currentCount: Int) {
+    }
 
     private lateinit var mActivity: Activity
     private lateinit var albumFragment: AlbumFragment
+    private var prevFragment: PrevFragment? = null
     private lateinit var rootView: View
 
     override fun onStart() {
@@ -37,6 +42,20 @@ class SimpleDialogFragment : DialogFragment() {
         attributes.height = LinearLayout.LayoutParams.WRAP_CONTENT
         attributes.gravity = Gravity.BOTTOM
         window.attributes = attributes
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val view = view ?: return
+        view.isFocusableInTouchMode = true
+        view.requestFocus()
+        view.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && prevFragment != null && prevFragment?.isVisible == true) {
+                childFragmentManager.beginTransaction().show(albumFragment).hide(prevFragment!!).commit()
+                return@setOnKeyListener true
+            }
+            false
+        }
     }
 
     override fun onAttach(context: Context?) {
@@ -58,8 +77,7 @@ class SimpleDialogFragment : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        context?.let {
-            Album
+        Album
                 .instance
                 .apply {
                     albumImageLoader = SimpleFrescoAlbumImageLoader()
@@ -78,19 +96,31 @@ class SimpleDialogFragment : DialogFragment() {
                     }
                 }
 
-            albumFragment = AlbumFragment.newInstance(AlbumBundle(
-                    selectImageFinish = false,
-                    spanCount = 4,
-                    noPreview = true,
-                    cropFinish = false,
-                    cameraCrop = true
-            ))
-            childFragmentManager
-                    .beginTransaction()
-                    .apply {
-                        add(R.id.dialog_fragment, albumFragment, AlbumFragment::class.java.simpleName)
-                    }
-                    .commit()
+        val albumBundle = AlbumBundle(
+                selectImageFinish = false,
+                spanCount = 4,
+                cropFinish = false,
+                cameraCrop = true
+        )
+
+        albumFragment = AlbumFragment.newInstance(albumBundle)
+        albumFragment.albumParentListener = object : AlbumParentListener {
+            override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String) {
+                prevFragment = PrevFragment.newInstance(start(albumBundle, AlbumUiBundle(), multiplePreviewList, if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera) position - 1 else position, bucketId))
+                prevFragment?.albumParentListener = this@SimpleDialogFragment
+                childFragmentManager.beginTransaction().hide(albumFragment).add(R.id.dialog_fragment, prevFragment!!, PrevFragment::class.java.simpleName).commit()
+            }
+        }
+        childFragmentManager.beginTransaction().add(R.id.dialog_fragment, albumFragment, AlbumFragment::class.java.simpleName).commit()
+    }
+
+    fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String): Bundle {
+        return Bundle().apply {
+            putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
+            putInt(TYPE_PREVIEW_POSITION_KEY, position)
+            putString(TYPE_PREVIEW_BUCKET_ID, bucketId)
+            putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
+            putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
         }
     }
 }

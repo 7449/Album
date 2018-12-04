@@ -23,6 +23,7 @@ import com.album.sample.ui.SimpleDialogFragment
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
 import com.album.ui.fragment.AlbumBaseFragment
+import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.album.util.*
 import com.yalantis.ucrop.UCrop
 import java.io.File
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         findViewById<View>(R.id.btn_video).setOnClickListener(this)
         findViewById<View>(R.id.btn_imageloader).setOnClickListener(this)
         findViewById<View>(R.id.btn_subsampling).setOnClickListener(this)
+        findViewById<View>(R.id.btn_wechat_ui).setOnClickListener(this)
 
         dayOptions = UCrop.Options()
         dayOptions.apply {
@@ -149,6 +151,16 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         }
     }
 
+    private fun onWeChatUI(): Album {
+        return Album.instance.apply {
+            albumImageLoader = SimpleSubsamplingScaleImageLoader()
+            albumListener = MainAlbumListener(this@MainActivity, list)
+            initList = list
+            options = dayOptions
+            emptyClickListener = this@MainActivity
+        }
+    }
+
     private fun onImageLoader(albumImageLoaders: AlbumImageLoader) {
         Album.instance.apply {
             albumImageLoader = albumImageLoaders
@@ -218,6 +230,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             }
             R.id.btn_subsampling -> {
                 onSubsampling().start(this, AlbumActivity::class.java)
+            }
+            R.id.btn_wechat_ui -> {
+                onWeChatUI().start(this, AlbumWeChatUiActivity::class.java)
             }
             R.id.btn_imageloader -> {
                 AlertDialog.Builder(this@MainActivity)

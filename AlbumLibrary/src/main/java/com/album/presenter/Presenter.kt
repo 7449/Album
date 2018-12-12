@@ -1,19 +1,18 @@
 package com.album.presenter
 
 import com.album.AlbumEntity
-import java.util.*
+
+
+const val PREVIEW_LOADER_ID = -111
+const val ALBUM_LOADER_ID = -112
+const val RESULT_LOADER_ID = -113
+const val FINDER_LOADER_ID = -114
 
 interface AlbumPresenter {
-
-    /**
-     * 是否在扫描图片
-     */
-    fun hasScanLoading(): Boolean
-
     /**
      * 开始扫描
      */
-    fun startScan(bucketId: String, page: Int, count: Int)
+    fun startScan(bucketId: String, page: Int)
 
     /**
      * 扫描成功之后合并选择的数据
@@ -21,26 +20,15 @@ interface AlbumPresenter {
     fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>)
 
     /**
-     * 第一次进来合并扫描之后的数据
-     */
-    fun firstMergeEntity(albumEntityList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>?)
-
-    /**
      * 拍照之后扫描
      */
     fun resultScan(path: String)
+
+    /**
+     * 销毁相关任务
+     */
+    fun destroyLoaderManager()
 }
 
 
-interface PreviewPresenter {
-
-    /**
-     * 预览页扫描
-     */
-    fun startScan(bucketId: String, page: Int, count: Int)
-
-    /**
-     * 扫描成功之后合并选择的数据
-     */
-    fun mergeEntity(albumEntityList: List<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>)
-}
+interface PreviewPresenter

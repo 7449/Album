@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.album.*
 import com.album.presenter.impl.AlbumPresenterImpl
@@ -95,8 +96,8 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun initActivityCreated(savedInstanceState: Bundle?) {
-        albumPresenter = AlbumPresenterImpl(this, albumBundle)
         finderEntityList = ArrayList()
+        albumPresenter = AlbumPresenterImpl(this, albumBundle)
         recyclerView.setHasFixedSize(true)
         val gridLayoutManager = GridLayoutManager(mActivity, albumBundle.spanCount)
         recyclerView.layoutManager = gridLayoutManager
@@ -165,13 +166,13 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             emptyView.visibility = View.GONE
         }
         if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera && page == 0 && !albumEntityList.isEmpty()) {
-            albumEntityList.add(0, AlbumEntity("", "", CAMERA, 0, false))
+            albumEntityList.add(0, AlbumEntity(path = CAMERA))
         }
         albumAdapter.addAll(albumEntityList)
         if (page == 0 && !albumBundle.radio) {
             val selectEntity = Album.instance.initList
             if (selectEntity != null && !selectEntity.isEmpty() && !albumEntityList.isEmpty()) {
-                albumPresenter.firstMergeEntity(albumEntityList, selectEntity)
+                albumPresenter.mergeEntity(albumEntityList, selectEntity)
                 albumAdapter.setMultiplePreviewList(selectEntity)
                 selectAlbumEntity = selectEntity
             }
@@ -260,7 +261,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
                 albumPresenter.resultScan(checkNotStringNull(imagePath.path))
                 return
             }
-            albumPresenter.startScan(bucketId, page, albumBundle.scanCount)
+            albumPresenter.startScan(bucketId, page)
         }
     }
 
@@ -270,7 +271,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         if (type == TYPE_RESULT_CROP) {
             return
         }
-        onScanAlbum(bucketId, false, true)
+        mActivity.runOnUiThread { onScanAlbum(bucketId, false, true) }
     }
 
     override fun disconnectMediaScanner() {
@@ -287,6 +288,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             return
         }
         imagePath = Uri.fromFile(getCameraFile(mActivity, albumBundle.cameraPath, albumBundle.scanType == VIDEO))
+        albumPresenter.destroyLoaderManager()
         val i = openCamera(this, imagePath, albumBundle.scanType == VIDEO)
         if (i == 1) {
             Album.instance.albumListener?.onAlbumOpenCameraError()
@@ -342,8 +344,8 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun onLoadMore() {
-        if (PermissionUtils.storage(this) && !albumPresenter.hasScanLoading()) {
-            albumPresenter.startScan(bucketId, page, albumBundle.scanCount)
+        if (PermissionUtils.storage(this)) {
+            albumPresenter.startScan(bucketId, page)
         }
     }
 
@@ -379,7 +381,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun getFinderEntity(): List<FinderEntity> = finderEntityList
-    override fun getAlbumActivity(): Activity = mActivity
+    override fun getAlbumActivity(): FragmentActivity = mActivity
     override fun getPage(): Int = page
-    override fun getLayoutId(): Int = R.layout.album_fragment_album
+    override val layoutId: Int = R.layout.album_fragment_album
 }

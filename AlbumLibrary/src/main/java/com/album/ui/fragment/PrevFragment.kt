@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
 import com.album.*
 import com.album.presenter.PreviewPresenter
@@ -17,7 +18,6 @@ import com.album.ui.adapter.PreviewAdapter
 import com.album.ui.view.PrevView
 import com.album.util.PermissionUtils
 import com.album.util.fileExists
-import com.album.util.scan.SCAN_ALL
 
 /**
  *  @author y
@@ -31,6 +31,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     }
 
     lateinit var albumParentListener: AlbumPreviewParentListener
+
     private lateinit var adapter: PreviewAdapter
     private lateinit var appCompatCheckBox: AppCompatCheckBox
     private lateinit var progressBar: ProgressBar
@@ -74,23 +75,11 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             albumList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
         }
 
-        previewPresenter = PreviewPresenterImpl(this, albumBundle)
         albumParentListener.onChangedCount(selectList.size)
 
         if (PermissionUtils.storage(this)) {
             initPreview()
         }
-    }
-
-    private fun initPreview() {
-        if (!preview) {
-            previewPresenter.startScan(bucketId, -1, SCAN_ALL)
-            return
-        }
-        if (albumList.isEmpty()) {
-            albumList.addAll(selectList)
-        }
-        initViewPager(albumList)
     }
 
     override fun permissionsGranted(type: Int) {
@@ -106,8 +95,18 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         }
     }
 
+    private fun initPreview() {
+        if (!preview) {
+            previewPresenter = PreviewPresenterImpl(this, albumBundle, selectList, bucketId)
+            return
+        }
+        if (albumList.isEmpty()) {
+            albumList.addAll(selectList)
+        }
+        initViewPager(albumList)
+    }
+
     override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
-        previewPresenter.mergeEntity(albumEntityList, selectList)
         initViewPager(albumEntityList)
     }
 
@@ -170,7 +169,9 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
 
     override fun initCreate(savedInstanceState: Bundle?) {}
 
-    override fun getPreViewActivity(): Activity = mActivity
+    override fun getPrevContext(): FragmentActivity = mActivity
+
+    override val layoutId: Int = R.layout.album_fragment_preview
 
     override fun hideProgress() {
         progressBar.visibility = View.GONE
@@ -179,6 +180,4 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     override fun showProgress() {
         progressBar.visibility = View.VISIBLE
     }
-
-    override fun getLayoutId(): Int = R.layout.album_fragment_preview
 }

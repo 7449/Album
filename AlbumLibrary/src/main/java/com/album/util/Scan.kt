@@ -1,16 +1,16 @@
-package com.album.util.scan
+@file:Suppress("FunctionName")
+
+package com.album.util
 
 import android.annotation.SuppressLint
-import android.content.ContentResolver
+import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import android.text.TextUtils
-import com.album.AlbumEntity
-import com.album.FinderEntity
+import androidx.loader.content.CursorLoader
 import com.album.IMAGE
 import com.album.VIDEO
-import java.util.*
 
 const val SCAN_ALL = -1
 
@@ -50,11 +50,13 @@ val VIDEO_URL: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 val ALBUM_PROJECTION = arrayOf(
         MediaStore.Images.Media.DATA,
         MediaStore.Images.Media._ID,
+        MediaStore.Images.Media.BUCKET_ID,
         MediaStore.Images.Media.SIZE)
 
 val VIDEO_PROJECTION = arrayOf(
         MediaStore.Video.Media.DATA,
         MediaStore.Video.Media._ID,
+        MediaStore.Images.Media.BUCKET_ID,
         MediaStore.Video.Media.SIZE)
 
 val ALBUM_FINDER_PROJECTION = arrayOf(
@@ -71,7 +73,8 @@ val VIDEO_FINDER_PROJECTION = arrayOf(
         MediaStore.Video.Media.DATA,
         MediaStore.Video.Media.SIZE)
 
-fun ScanBase.albumScanCursor(bucketId: String, page: Int, count: Int, filterImage: Boolean): Cursor? {
+
+fun ImageCursorLoader(context: Context, count: Int, page: Int, bucketId: String, filterImage: Boolean): CursorLoader {
     val sortOrder = when (count) {
         SCAN_ALL -> ALBUM_SORT_ORDER
         else -> ALBUM_SORT_ORDER + " limit " + page * count + "," + count
@@ -81,11 +84,25 @@ fun ScanBase.albumScanCursor(bucketId: String, page: Int, count: Int, filterImag
     } else {
         String.format(ALBUM_BUCKET_SELECTION, if (filterImage) FILTER_SUFFIX else "")
     }
-    return contentResolver.query(ALBUM_URL, ALBUM_PROJECTION, selection, selectionArgs(IMAGE, bucketId), sortOrder)
+    return CursorLoader(context, ALBUM_URL, ALBUM_PROJECTION, selection, selectionArgs(IMAGE, bucketId), sortOrder)
 }
 
-fun ScanBase.albumResultScanCursor(path: String): Cursor? {
-    return contentResolver.query(
+fun VideoCursorLoader(context: Context, count: Int, page: Int, bucketId: String, filterImage: Boolean): CursorLoader {
+    val sortOrder = when (count) {
+        SCAN_ALL -> VIDEO_SORT_ORDER
+        else -> VIDEO_SORT_ORDER + " limit " + page * count + "," + count
+    }
+    val selection = if (TextUtils.isEmpty(bucketId)) {
+        String.format(VIDEO_SELECTION, if (filterImage) FILTER_SUFFIX else "")
+    } else {
+        String.format(VIDEO_BUCKET_SELECTION, if (filterImage) FILTER_SUFFIX else "")
+    }
+    return CursorLoader(context, VIDEO_URL, VIDEO_PROJECTION, selection, selectionArgs(VIDEO, bucketId), sortOrder)
+}
+
+
+fun ImageResultCursorLoader(context: Context, path: String): CursorLoader {
+    return CursorLoader(context,
             ALBUM_URL,
             ALBUM_PROJECTION,
             ALBUM_RESULT_SELECTION,
@@ -93,8 +110,16 @@ fun ScanBase.albumResultScanCursor(path: String): Cursor? {
             ALBUM_SORT_ORDER)
 }
 
-fun ScanBase.albumFinderScanCursor(filterImage: Boolean): Cursor? {
-    return contentResolver.query(
+fun VideoResultCursorLoader(context: Context, path: String): CursorLoader {
+    return CursorLoader(context, VIDEO_URL,
+            VIDEO_PROJECTION,
+            VIDEO_RESULT_SELECTION,
+            arrayOf(path),
+            VIDEO_SORT_ORDER)
+}
+
+fun ImageFinderScanCursor(context: Context, filterImage: Boolean): Cursor? {
+    return context.contentResolver.query(
             ALBUM_URL,
             ALBUM_FINDER_PROJECTION,
             String.format(ALBUM_SELECTION, if (filterImage) FILTER_SUFFIX else ""),
@@ -103,8 +128,8 @@ fun ScanBase.albumFinderScanCursor(filterImage: Boolean): Cursor? {
 }
 
 @SuppressLint("Recycle")
-fun ScanBase.albumFinderCursorCount(bucketId: String, filterImage: Boolean): Int {
-    val query = contentResolver.query(
+fun ImageFinderCursorCount(context: Context, bucketId: String, filterImage: Boolean): Int {
+    val query = context.contentResolver.query(
             ALBUM_URL,
             ALBUM_FINDER_PROJECTION,
             String.format(ALBUM_BUCKET_SELECTION, if (filterImage) FILTER_SUFFIX else ""),
@@ -116,31 +141,8 @@ fun ScanBase.albumFinderCursorCount(bucketId: String, filterImage: Boolean): Int
     return count
 }
 
-
-fun ScanBase.videoScanCursor(bucketId: String, page: Int, count: Int, filterImage: Boolean): Cursor? {
-    val sortOrder = when (count) {
-        SCAN_ALL -> VIDEO_SORT_ORDER
-        else -> VIDEO_SORT_ORDER + " limit " + page * count + "," + count
-    }
-    val selection = if (TextUtils.isEmpty(bucketId)) {
-        String.format(VIDEO_SELECTION, if (filterImage) FILTER_SUFFIX else "")
-    } else {
-        String.format(VIDEO_BUCKET_SELECTION, if (filterImage) FILTER_SUFFIX else "")
-    }
-    return contentResolver.query(VIDEO_URL, VIDEO_PROJECTION, selection, selectionArgs(VIDEO, bucketId), sortOrder)
-}
-
-fun ScanBase.videoResultScanCursor(path: String): Cursor? {
-    return contentResolver.query(
-            VIDEO_URL,
-            VIDEO_PROJECTION,
-            VIDEO_RESULT_SELECTION,
-            arrayOf(path),
-            VIDEO_SORT_ORDER)
-}
-
-fun ScanBase.videoFinderScanCursor(filterImage: Boolean): Cursor? {
-    return contentResolver.query(
+fun VideoFinderScanCursor(context: Context, filterImage: Boolean): Cursor? {
+    return context.contentResolver.query(
             VIDEO_URL,
             VIDEO_FINDER_PROJECTION,
             String.format(VIDEO_SELECTION, if (filterImage) FILTER_SUFFIX else ""),
@@ -149,8 +151,8 @@ fun ScanBase.videoFinderScanCursor(filterImage: Boolean): Cursor? {
 }
 
 @SuppressLint("Recycle")
-fun ScanBase.videoFinderCursorCount(bucketId: String, filterImage: Boolean): Int {
-    val query = contentResolver.query(
+fun VideoFinderCursorCount(context: Context, bucketId: String, filterImage: Boolean): Int {
+    val query = context.contentResolver.query(
             VIDEO_URL,
             VIDEO_FINDER_PROJECTION,
             String.format(VIDEO_BUCKET_SELECTION, if (filterImage) FILTER_SUFFIX else ""),
@@ -162,27 +164,10 @@ fun ScanBase.videoFinderCursorCount(bucketId: String, filterImage: Boolean): Int
     return count
 }
 
-fun ScanBase.selectionArgs(type: Int, bucketId: String?): Array<String> {
+fun selectionArgs(type: Int, bucketId: String?): Array<String> {
     return when (type) {
         IMAGE -> if (!TextUtils.isEmpty(bucketId)) arrayOf(bucketId!!, "image/jpeg", "image/png", "image/jpg", "image/gif") else arrayOf("image/jpeg", "image/png", "image/jpg", "image/gif")
         else -> if (!TextUtils.isEmpty(bucketId)) arrayOf(bucketId!!, "video/mp4", "video/3gp", "video/aiv", "video/rmvb", "video/vob", "video/flv", "video/mkv", "video/mov", "video/mpg") else arrayOf("video/mp4", "video/3gp", "video/aiv", "video/rmvb", "video/vob", "video/flv", "video/mkv", "video/mov", "video/mpg")
     }
 }
 
-interface ScanView {
-
-    fun startScan(scanCallBack: ScanCallBack, bucketId: String, page: Int, count: Int, filterImage: Boolean, sdName: String)
-
-    fun resultScan(scanCallBack: ScanCallBack, path: String, filterImage: Boolean, sdName: String)
-
-    fun cursorFinder(finderList: ArrayList<FinderEntity>, filterImage: Boolean, sdName: String)
-
-}
-
-interface ScanCallBack {
-    fun scanCallBack(imageList: ArrayList<AlbumEntity>, finderList: ArrayList<FinderEntity>)
-
-    fun resultCallBack(image: AlbumEntity?, finderList: ArrayList<FinderEntity>)
-}
-
-abstract class ScanBase(val contentResolver: ContentResolver) : ScanView

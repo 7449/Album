@@ -1,7 +1,7 @@
 package com.album.ui.view
 
-import android.app.Activity
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import com.album.AlbumEntity
 import com.album.FinderEntity
 import java.io.File
@@ -11,7 +11,7 @@ interface AlbumView {
 
     fun getSelectEntity(): ArrayList<AlbumEntity>
 
-    fun getAlbumActivity(): Activity
+    fun getAlbumActivity(): FragmentActivity
 
     fun getPage(): Int
 
@@ -53,7 +53,8 @@ interface AlbumMethodFragmentView {
 
 
 interface PrevView {
-    fun getPreViewActivity(): Activity
+
+    fun getPrevContext(): FragmentActivity
 
     fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>)
 

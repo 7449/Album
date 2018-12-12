@@ -1,36 +1,70 @@
 package com.album.presenter.impl
 
+import android.database.Cursor
+import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
 import com.album.AlbumBundle
 import com.album.AlbumEntity
-import com.album.FinderEntity
+import com.album.IMAGE
+import com.album.presenter.PREVIEW_LOADER_ID
 import com.album.presenter.PreviewPresenter
 import com.album.ui.view.PrevView
-import com.album.util.AlbumTask
-import com.album.util.AlbumTaskCallBack
-import com.album.util.scan.AlbumScanUtils
-import com.album.util.scan.ScanCallBack
-import com.album.util.scan.ScanView
-import java.util.*
+import com.album.util.*
+
 
 /**
  * by y on 17/08/2017.
  */
 
-class PreviewPresenterImpl(private val prevView: PrevView, private val albumBundle: AlbumBundle) : PreviewPresenter, ScanCallBack {
+class PreviewPresenterImpl(private val prevView: PrevView,
+                           private val albumBundle: AlbumBundle,
+                           private val selectEntity: ArrayList<AlbumEntity>,
+                           private val bucketId: String)
+    : PreviewPresenter, LoaderManager.LoaderCallbacks<Cursor> {
 
-    private val scanView: ScanView = AlbumScanUtils[prevView.getPreViewActivity().contentResolver]
+    private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getPrevContext())
 
-    override fun startScan(bucketId: String, page: Int, count: Int) {
-        prevView.getPreViewActivity().runOnUiThread { prevView.showProgress() }
-        AlbumTask.instance.start(object : AlbumTaskCallBack.Call {
-            override fun start() {
-                scanView.startScan(this@PreviewPresenterImpl, bucketId, page, count, albumBundle.filterImg, albumBundle.sdName)
-            }
-        })
+    init {
+        prevView.showProgress()
+        loaderManager.initLoader(PREVIEW_LOADER_ID, null, this)
     }
 
-    override fun mergeEntity(albumEntityList: List<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        val selection = if (TextUtils.isEmpty(bucketId)) {
+            String.format(ALBUM_SELECTION, if (albumBundle.filterImg) FILTER_SUFFIX else "")
+        } else {
+            String.format(ALBUM_BUCKET_SELECTION, if (albumBundle.filterImg) FILTER_SUFFIX else "")
+        }
+        return CursorLoader(prevView.getPrevContext(), ALBUM_URL, ALBUM_PROJECTION, selection, selectionArgs(IMAGE, bucketId), ALBUM_SORT_ORDER)
+    }
+
+    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
+        data ?: return
+        val albumList = ArrayList<AlbumEntity>()
+        val dataColumnIndex = data.getColumnIndex(MediaStore.Images.Media.DATA)
+        val idColumnIndex = data.getColumnIndex(MediaStore.Images.Media._ID)
+        val sizeColumnIndex = data.getColumnIndex(MediaStore.Images.Media.SIZE)
+        while (data.moveToNext()) {
+            val path = data.getString(dataColumnIndex)
+            val id = data.getLong(idColumnIndex)
+            val size = data.getLong(sizeColumnIndex)
+            if (albumBundle.filterImg && size <= 0 || getParentFile(path) == null) {
+                continue
+            }
+            albumList.add(AlbumEntity(path = path, id = id))
+        }
+        prevView.hideProgress()
+        prevView.scanSuccess(mergeEntity(albumList, selectEntity))
+    }
+
+    override fun onLoaderReset(loader: Loader<Cursor>) {
+    }
+
+    private fun mergeEntity(albumEntityList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>): ArrayList<AlbumEntity> {
         for (albumEntity in selectEntity) {
             val path = albumEntity.path
             for (allAlbumEntity in albumEntityList) {
@@ -40,15 +74,6 @@ class PreviewPresenterImpl(private val prevView: PrevView, private val albumBund
                 }
             }
         }
+        return albumEntityList
     }
-
-    override fun scanCallBack(imageList: ArrayList<AlbumEntity>, finderList: ArrayList<FinderEntity>) {
-        prevView.getPreViewActivity().runOnUiThread {
-            prevView.hideProgress()
-            prevView.scanSuccess(imageList)
-        }
-    }
-
-    override fun resultCallBack(image: AlbumEntity?, finderList: ArrayList<FinderEntity>) {}
-
 }

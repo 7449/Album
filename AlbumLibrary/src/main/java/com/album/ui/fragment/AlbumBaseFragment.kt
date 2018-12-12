@@ -1,6 +1,5 @@
 package com.album.ui.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -8,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.album.TYPE_PERMISSIONS_ALBUM
 import com.album.TYPE_PERMISSIONS_CAMERA
-import com.album.util.AlbumTask
 import com.album.util.PermissionUtils
 
 /**
@@ -19,7 +18,7 @@ import com.album.util.PermissionUtils
 abstract class AlbumBaseFragment : Fragment() {
 
     lateinit var bundle: Bundle
-    lateinit var mActivity: Activity
+    lateinit var mActivity: FragmentActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +27,11 @@ abstract class AlbumBaseFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        mActivity = context as? Activity ?: activity!!
+        mActivity = context as? FragmentActivity ?: activity!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(getLayoutId(), container, false)
+        val view = inflater.inflate(layoutId, container, false)
         initView(view)
         initCreate(savedInstanceState)
         return view
@@ -79,10 +78,5 @@ abstract class AlbumBaseFragment : Fragment() {
 
     protected abstract fun permissionsDenied(type: Int)
 
-    protected abstract fun getLayoutId(): Int
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        AlbumTask.instance.quit()
-    }
+    protected abstract val layoutId: Int
 }

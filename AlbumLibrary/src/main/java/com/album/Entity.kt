@@ -120,7 +120,11 @@ class AlbumBundle(
 ) : Parcelable
 
 @Parcelize
-class AlbumEntity(private var dirPath: String, private var dirName: String, var path: String, var id: Long, var isCheck: Boolean) : Parcelable {
+class AlbumEntity(private var dirPath: String = "", private var dirName: String = "",
+                  var bucketId: String = "",
+                  var path: String = "",
+                  var id: Long = 0,
+                  var isCheck: Boolean = false) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -130,6 +134,7 @@ class AlbumEntity(private var dirPath: String, private var dirName: String, var 
 
         if (dirPath != other.dirPath) return false
         if (dirName != other.dirName) return false
+        if (bucketId != other.bucketId) return false
         if (path != other.path) return false
         if (id != other.id) return false
         if (isCheck != other.isCheck) return false
@@ -140,6 +145,7 @@ class AlbumEntity(private var dirPath: String, private var dirName: String, var 
     override fun hashCode(): Int {
         var result = dirPath.hashCode()
         result = 31 * result + dirName.hashCode()
+        result = 31 * result + bucketId.hashCode()
         result = 31 * result + path.hashCode()
         result = 31 * result + id.hashCode()
         result = 31 * result + isCheck.hashCode()
@@ -147,8 +153,8 @@ class AlbumEntity(private var dirPath: String, private var dirName: String, var 
     }
 
     override fun toString(): String {
-        return "AlbumEntity(dirPath='$dirPath', dirName='$dirName', path='$path', id=$id, isCheck=$isCheck)"
+        return "AlbumEntity(dirPath='$dirPath', dirName='$dirName', bucketId='$bucketId', path='$path', id=$id, isCheck=$isCheck)"
     }
 }
 
-class FinderEntity(var dirName: String, var thumbnailsPath: String, var thumbnailsId: Long, var bucketId: String, var count: Int)
+class FinderEntity(var dirName: String = "", var thumbnailsPath: String = "", var thumbnailsId: Long = 0, var bucketId: String = "", var count: Int = 0)

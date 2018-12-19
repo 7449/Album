@@ -1,4 +1,4 @@
-package com.album.presenter.impl
+package com.album.ui.fragment.impl
 
 import android.database.Cursor
 import android.os.Bundle
@@ -7,18 +7,16 @@ import android.text.TextUtils
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.album.AlbumBundle
-import com.album.AlbumEntity
-import com.album.IMAGE
-import com.album.presenter.PREVIEW_LOADER_ID
-import com.album.presenter.PreviewPresenter
-import com.album.ui.view.PrevView
-import com.album.util.*
+import com.album.*
+import com.album.ui.fragment.PrevView
 
 
 /**
  * by y on 17/08/2017.
  */
+
+interface PreviewPresenter
+
 
 class PreviewPresenterImpl(private val prevView: PrevView,
                            private val albumBundle: AlbumBundle,

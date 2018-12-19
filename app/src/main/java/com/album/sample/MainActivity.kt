@@ -24,7 +24,6 @@ import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
 import com.album.ui.fragment.AlbumBaseFragment
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
-import com.album.util.*
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.util.*
@@ -120,7 +119,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             options = dayOptions
             customCameraListener = object : AlbumCustomCameraListener {
                 override fun startCamera(fragment: AlbumBaseFragment) {
-                    if (PermissionUtils.storage(this@MainActivity) && PermissionUtils.camera(this@MainActivity)) {
+                    if (permissionStorage(this@MainActivity) && permissionCamera(this@MainActivity)) {
                         val activity = fragment.activity
                         Toast.makeText(activity, "camera", Toast.LENGTH_SHORT).show()
                         val intent = Intent(activity, SimpleCameraActivity::class.java)

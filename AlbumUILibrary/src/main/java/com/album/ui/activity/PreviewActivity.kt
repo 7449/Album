@@ -13,9 +13,9 @@ import com.album.*
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.fragment.PrevFragment
-import com.album.util.checkNotBundleNull
-import com.album.util.hasL
-import com.album.util.setStatusBarColor
+import com.album.checkNotBundleNull
+import com.album.hasL
+import com.album.setStatusBarColor
 
 /**
  * @author y

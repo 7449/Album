@@ -8,7 +8,7 @@ import com.album.AlbumEntity
 import com.album.AlbumImageLoader
 import com.album.FinderEntity
 import com.album.sample.R
-import com.album.ui.AlbumImageView
+import com.album.ui.widget.AlbumImageView
 import com.album.ui.widget.TouchImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader

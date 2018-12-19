@@ -11,17 +11,120 @@ import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.loader.app.LoaderManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.album.*
-import com.album.presenter.impl.AlbumPresenterImpl
-import com.album.ui.LoadMoreRecyclerView
-import com.album.ui.SimpleGridDivider
 import com.album.ui.adapter.AlbumAdapter
-import com.album.ui.view.AlbumMethodFragmentView
-import com.album.ui.view.AlbumView
-import com.album.util.*
+import com.album.ui.fragment.impl.AlbumPresenterImpl
+import com.album.ui.widget.LoadMoreRecyclerView
+import com.album.ui.widget.SimpleGridDivider
 import com.yalantis.ucrop.UCrop
 import java.io.File
+
+
+interface AlbumMethodFragmentView {
+
+    /**
+     * 获取文件夹list
+     */
+    fun getFinderEntity(): List<FinderEntity>
+
+    /**
+     * 断掉[SingleMediaScanner]
+     */
+    fun disconnectMediaScanner()
+
+    /**
+     * 扫描设备
+     * [bucketId] 文件夹唯一
+     * [isFinder] 是否点击文件夹扫描
+     * [result] 是否是拍照之后的扫描
+     */
+    fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean)
+
+    /**
+     * 打开相机
+     */
+    fun openCamera()
+
+    /**
+     * 裁剪
+     */
+    fun openUCrop(path: String)
+
+    /**
+     * 刷新图库
+     */
+    fun refreshMedia(type: Int, file: File)
+
+    /**
+     * 选择选中的数据
+     */
+    fun selectPreview(): ArrayList<AlbumEntity>
+
+    /**
+     * 确定数据[AlbumListener.onAlbumResources]
+     */
+    fun multipleSelect()
+
+    /**
+     * 刷新[FragmentActivity.onActivityResult]数据
+     */
+    fun onResultPreview(bundle: Bundle)
+}
+
+
+interface AlbumView {
+    /**
+     * 获取已经选择数据
+     */
+    fun getSelectEntity(): ArrayList<AlbumEntity>
+
+    /**
+     * [LoaderManager.getInstance]
+     */
+    fun getAlbumActivity(): FragmentActivity
+
+    /**
+     * 页码
+     */
+    fun getPage(): Int
+
+    /**
+     * 显示进度
+     */
+    fun showProgress()
+
+    /**
+     * 隐藏进度
+     */
+    fun hideProgress()
+
+    /**
+     * 扫描成功
+     */
+    fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>)
+
+    /**
+     * 扫描文件夹成功
+     */
+    fun scanFinderSuccess(list: ArrayList<FinderEntity>)
+
+    /**
+     * 没有数据了
+     */
+    fun onAlbumNoMore()
+
+    /**
+     * 没有数据
+     */
+    fun onAlbumEmpty()
+
+    /**
+     * 拍照扫描成功
+     */
+    fun resultSuccess(albumEntity: AlbumEntity?)
+}
 
 /**
  * by y on 14/08/2017.
@@ -49,7 +152,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     private lateinit var selectAlbumEntity: ArrayList<AlbumEntity>
 
     private var singleMediaScanner: SingleMediaScanner? = null
-    private var bucketId: String = ""
+    var bucketId: String = ""
     private var page = 0
 
     var finderName: String = ""
@@ -212,7 +315,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
 
     override fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
         if (position == 0 && TextUtils.equals(albumEntity.path, CAMERA)) {
-            if (PermissionUtils.camera(this)) {
+            if (permissionCamera(this)) {
                 openCamera()
             }
             return
@@ -256,7 +359,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             albumAdapter.removeAll()
         }
         this.bucketId = bucketId
-        if (PermissionUtils.storage(this)) {
+        if (permissionStorage(this)) {
             if (result && !albumAdapter.getAlbumList().isEmpty()) {
                 albumPresenter.resultScan(checkNotStringNull(imagePath.path))
                 return
@@ -344,7 +447,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun onLoadMore() {
-        if (PermissionUtils.storage(this)) {
+        if (permissionStorage(this)) {
             albumPresenter.startScan(bucketId, page)
         }
     }

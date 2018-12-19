@@ -1,9 +1,11 @@
-package com.album.util
+package com.album
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -15,10 +17,9 @@ import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.Window
 import androidx.annotation.ColorInt
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.album.CUSTOMIZE_CAMERA_RESULT_PATH_KEY
-import com.album.ITEM_CAMERA
 import java.io.File
 
 fun checkNotStringNull(notNull: String?): String {
@@ -74,7 +75,7 @@ fun openCamera(any: Any, cameraUri: Uri, video: Boolean): Int {
     if (any is Fragment) {
         cameraActivity = any.activity!!
     }
-    if (!PermissionUtils.camera(any) || !PermissionUtils.storage(any)) {
+    if (!permissionCamera(any) || !permissionStorage(any)) {
         return -1
     }
     val intent = if (video) Intent(MediaStore.ACTION_VIDEO_CAPTURE) else Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -136,4 +137,33 @@ fun getCameraFile(context: Context, path: String?, video: Boolean): File {
         }
     }
     return File(cachePath, System.currentTimeMillis().toString() + if (video) ".mp4" else ".jpg")
+}
+
+
+fun permissionStorage(any: Any): Boolean = if (any is Activity) permissionStorage(any) else permissionStorage(any as Fragment)
+
+fun permissionCamera(any: Any): Boolean = if (any is Activity) permissionCamera(any) else permissionCamera(any as Fragment)
+
+fun permissionStorage(activity: Activity): Boolean = permission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+
+fun permissionCamera(activity: Activity): Boolean = permission(activity, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
+
+fun permissionStorage(fragment: Fragment): Boolean = permission(fragment, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+
+fun permissionCamera(fragment: Fragment): Boolean = permission(fragment, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
+
+private fun permission(activity: Activity, permissions: String, code: Int): Boolean {
+    if (ContextCompat.checkSelfPermission(activity, permissions) != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(activity, arrayOf(permissions), code)
+        return false
+    }
+    return true
+}
+
+private fun permission(fragment: Fragment, permissions: String, code: Int): Boolean {
+    if (ContextCompat.checkSelfPermission(fragment.activity!!, permissions) != PackageManager.PERMISSION_GRANTED) {
+        fragment.requestPermissions(arrayOf(permissions), code)
+        return false
+    }
+    return true
 }

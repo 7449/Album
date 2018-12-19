@@ -1,4 +1,4 @@
-package com.album.ui
+package com.album.ui.widget
 
 import android.content.Context
 import android.graphics.Rect
@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.album.ui.widget.TouchImageView
 
 class AlbumImageView : AppCompatImageView {
     constructor(context: Context) : super(context)

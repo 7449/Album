@@ -1,4 +1,4 @@
-package com.album.presenter.impl
+package com.album.ui.fragment.impl
 
 import android.database.Cursor
 import android.os.Bundle
@@ -8,16 +8,18 @@ import androidx.collection.ArrayMap
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.album.*
-import com.album.presenter.ALBUM_LOADER_ID
-import com.album.presenter.AlbumPresenter
-import com.album.presenter.FINDER_LOADER_ID
-import com.album.presenter.RESULT_LOADER_ID
-import com.album.ui.view.AlbumView
-import com.album.util.*
+import com.album.ui.fragment.AlbumView
 
 /**
  * by y on 14/08/2017.
  */
+
+interface AlbumPresenter {
+    fun startScan(bucketId: String, page: Int)
+    fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>)
+    fun resultScan(path: String)
+    fun destroyLoaderManager()
+}
 
 @Suppress("PrivatePropertyName")
 class AlbumPresenterImpl(private val albumView: AlbumView,
@@ -157,7 +159,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
                 if (albumBundle.filterImg && size <= 0) {
                     continue
                 }
-                finderEntityMap[finderName] = FinderEntity(finderName, finderPath, id, bucketId,
+                finderEntityMap[finderName] = FinderEntity(if (TextUtils.equals(finderName, "0")) albumBundle.sdName else finderName, finderPath, id, bucketId,
                         if (albumBundle.scanType == VIDEO) VideoFinderCursorCount(albumView.getAlbumActivity(), bucketId, albumBundle.filterImg)
                         else ImageFinderCursorCount(albumView.getAlbumActivity(), bucketId, albumBundle.filterImg))
             }

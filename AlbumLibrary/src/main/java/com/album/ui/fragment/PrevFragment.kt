@@ -9,15 +9,35 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.fragment.app.FragmentActivity
+import androidx.loader.app.LoaderManager
 import androidx.viewpager.widget.ViewPager
 import com.album.*
-import com.album.presenter.PreviewPresenter
-import com.album.presenter.impl.PreviewPresenterImpl
-import com.album.ui.ExtendedViewPager
 import com.album.ui.adapter.PreviewAdapter
-import com.album.ui.view.PrevView
-import com.album.util.PermissionUtils
-import com.album.util.fileExists
+import com.album.ui.fragment.impl.PreviewPresenter
+import com.album.ui.fragment.impl.PreviewPresenterImpl
+import com.album.ui.widget.ExtendedViewPager
+
+interface PrevView {
+    /**
+     *  [LoaderManager.getInstance]
+     */
+    fun getPrevContext(): FragmentActivity
+
+    /**
+     * 扫描成功回调,如果是点击preview则不会触发
+     */
+    fun scanSuccess(entityList: ArrayList<AlbumEntity>)
+
+    /**
+     * 隐藏进度条
+     */
+    fun hideProgress()
+
+    /**
+     * 显示进度条
+     */
+    fun showProgress()
+}
 
 /**
  *  @author y
@@ -77,7 +97,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
 
         albumParentListener.onChangedCount(selectList.size)
 
-        if (PermissionUtils.storage(this)) {
+        if (permissionStorage(this)) {
             initPreview()
         }
     }
@@ -106,8 +126,8 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         initViewPager(albumList)
     }
 
-    override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
-        initViewPager(albumEntityList)
+    override fun scanSuccess(entityList: ArrayList<AlbumEntity>) {
+        initViewPager(entityList)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -6,6 +6,14 @@ import android.os.Bundle
 import android.os.Parcelable
 import com.yalantis.ucrop.UCrop
 
+const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0
+const val CAMERA_REQUEST_CODE = 1
+
+const val PREVIEW_LOADER_ID = -111
+const val ALBUM_LOADER_ID = -112
+const val RESULT_LOADER_ID = -113
+const val FINDER_LOADER_ID = -114
+
 const val IMAGE = 0
 const val VIDEO = 1
 const val MIXING = 2

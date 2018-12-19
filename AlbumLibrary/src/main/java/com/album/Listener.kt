@@ -2,8 +2,8 @@ package com.album
 
 import android.view.View
 import android.widget.FrameLayout
-import com.album.ui.AlbumImageView
 import com.album.ui.fragment.AlbumBaseFragment
+import com.album.ui.widget.AlbumImageView
 import com.album.ui.widget.TouchImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions

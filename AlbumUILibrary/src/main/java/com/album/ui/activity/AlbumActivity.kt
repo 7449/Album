@@ -16,9 +16,6 @@ import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.adapter.FinderAdapter
 import com.album.ui.fragment.AlbumFragment
-import com.album.util.getDrawable
-import com.album.util.hasL
-import com.album.util.setStatusBarColor
 
 /**
  * by y on 14/08/2017.
@@ -157,6 +154,10 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val finder = finderAdapter.getFinder(position)
+        if (TextUtils.equals(finder.bucketId, albumFragment.bucketId)) {
+            listPopupWindow.dismiss()
+            return
+        }
         albumFragment.finderName = finder.dirName
         finderTv.text = finder.dirName
         albumFragment.onScanAlbum(finder.bucketId, true, false)

@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.album.sample.R
-import com.album.util.finishCamera
-import com.album.util.getCameraFile
+import com.album.finishCamera
+import com.album.getCameraFile
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
 import java.io.FileOutputStream

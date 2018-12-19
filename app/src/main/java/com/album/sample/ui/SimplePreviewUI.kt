@@ -14,8 +14,8 @@ import com.album.sample.R
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.fragment.PrevFragment
-import com.album.util.checkNotBundleNull
-import com.album.util.hasL
+import com.album.checkNotBundleNull
+import com.album.hasL
 
 /**
  * by y on 22/08/2017.

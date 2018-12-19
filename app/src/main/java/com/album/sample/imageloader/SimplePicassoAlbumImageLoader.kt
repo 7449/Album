@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import com.album.AlbumEntity
 import com.album.AlbumImageLoader
 import com.album.FinderEntity
-import com.album.ui.AlbumImageView
+import com.album.ui.widget.AlbumImageView
 import com.album.ui.widget.TouchImageView
 import com.squareup.picasso.Picasso
 

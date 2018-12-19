@@ -8,9 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.album.CAMERA_REQUEST_CODE
 import com.album.TYPE_PERMISSIONS_ALBUM
 import com.album.TYPE_PERMISSIONS_CAMERA
-import com.album.util.PermissionUtils
+import com.album.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 
 /**
  * @author y
@@ -45,7 +46,7 @@ abstract class AlbumBaseFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            PermissionUtils.WRITE_EXTERNAL_STORAGE_REQUEST_CODE -> {
+            WRITE_EXTERNAL_STORAGE_REQUEST_CODE -> {
                 if (grantResults.isEmpty()) {
                     return
                 }
@@ -55,7 +56,7 @@ abstract class AlbumBaseFragment : Fragment() {
                     permissionsGranted(TYPE_PERMISSIONS_ALBUM)
                 }
             }
-            PermissionUtils.CAMERA_REQUEST_CODE -> {
+            CAMERA_REQUEST_CODE -> {
                 if (grantResults.isEmpty()) {
                     return
                 }

@@ -7,7 +7,7 @@ import com.album.AlbumEntity
 import com.album.AlbumImageLoader
 import com.album.FinderEntity
 import com.album.R
-import com.album.ui.AlbumImageView
+import com.album.ui.widget.AlbumImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget

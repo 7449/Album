@@ -50,7 +50,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         }
     }
 
-    lateinit var albumParentListener: AlbumPreviewParentListener
+    var albumParentListener: AlbumPreviewParentListener? = null
 
     private lateinit var adapter: PreviewAdapter
     private lateinit var appCompatCheckBox: AppCompatCheckBox
@@ -95,7 +95,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             albumList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
         }
 
-        albumParentListener.onChangedCount(selectList.size)
+        albumParentListener?.onChangedCount(selectList.size)
 
         if (permissionStorage(this)) {
             initPreview()
@@ -163,7 +163,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
             selectList.add(albumEntity)
         }
         Album.instance.albumListener?.onCheckBoxAlbum(selectList.size, albumBundle.multipleMaxCount)
-        albumParentListener.onChangedCount(selectList.size)
+        albumParentListener?.onChangedCount(selectList.size)
     }
 
     private fun initViewPager(albumEntityList: ArrayList<AlbumEntity>) {
@@ -178,10 +178,10 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
                 }
                 appCompatCheckBox.isChecked = albumEntityList[position].isCheck
                 selectPosition = position
-                albumParentListener.onChangedToolbarCount(position + 1, albumEntityList.size)
+                albumParentListener?.onChangedToolbarCount(position + 1, albumEntityList.size)
             }
         })
-        albumParentListener.onChangedToolbarCount(viewPager.currentItem + 1, albumEntityList.size)
+        albumParentListener?.onChangedToolbarCount(viewPager.currentItem + 1, albumEntityList.size)
         appCompatCheckBox.isChecked = albumEntityList[viewPager.currentItem].isCheck
     }
 

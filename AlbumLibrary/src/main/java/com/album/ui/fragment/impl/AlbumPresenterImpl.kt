@@ -25,7 +25,12 @@ interface AlbumPresenter {
 class AlbumPresenterImpl(private val albumView: AlbumView,
                          private val albumBundle: AlbumBundle)
     : AlbumPresenter, LoaderManager.LoaderCallbacks<Cursor> {
+
     private val loaderManager: LoaderManager = LoaderManager.getInstance(albumView.getAlbumActivity())
+
+    private val finderEntityMap = ArrayMap<String, FinderEntity>()
+    private val albumList = ArrayList<AlbumEntity>()
+    private val finderList = ArrayList<FinderEntity>()
 
     private val KEY_BUCKET = "bucket"
     private val KEY_PAGE = "page"
@@ -53,8 +58,6 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
         val cursor = data ?: return
-        val albumList = ArrayList<AlbumEntity>()
-        val finderList = ArrayList<FinderEntity>()
         val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
         val idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
         val bucketIdColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)
@@ -82,6 +85,8 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
             albumView.scanSuccess(albumList)
             albumView.scanFinderSuccess(finderList)
         }
+        albumList.clear()
+        finderList.clear()
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
@@ -115,7 +120,6 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
             override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
                 val cursor = data ?: return
                 var albumEntity: AlbumEntity? = null
-                val finderList = ArrayList<FinderEntity>()
                 val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
                 val idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
                 val bucketIdColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)
@@ -131,6 +135,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
                 refreshFinder(finderList)
                 albumView.resultSuccess(albumEntity)
                 albumView.scanFinderSuccess(finderList)
+                finderList.clear()
             }
 
             override fun onLoaderReset(loader: Loader<Cursor>) {
@@ -139,7 +144,6 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
     }
 
     private fun refreshFinder(finderList: ArrayList<FinderEntity>) {
-        val finderEntityMap = ArrayMap<String, FinderEntity>()
         val cursor = (if (albumBundle.scanType == VIDEO) VideoFinderScanCursor(albumView.getAlbumActivity(), albumBundle.filterImg)
         else ImageFinderScanCursor(albumView.getAlbumActivity(), albumBundle.filterImg))
                 ?: return
@@ -168,7 +172,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
         if (finderEntityMap.isEmpty) {
             return
         }
-        val finderEntity = FinderEntity(dirName = FINDER_ALL_DIR_NAME)
+        val finderEntity = FinderEntity(dirName = albumBundle.allName)
         var count = 0
         for ((_, value) in finderEntityMap) {
             finderList.add(value)

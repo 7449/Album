@@ -144,7 +144,8 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     private lateinit var emptyView: AppCompatImageView
     private lateinit var albumPresenter: AlbumPresenterImpl
 
-    lateinit var albumParentListener: AlbumParentListener
+    var albumParentListener: AlbumParentListener? = null
+
     private lateinit var finderEntityList: ArrayList<FinderEntity>
     private lateinit var imagePath: Uri
 
@@ -206,8 +207,9 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.setLoadingListener(this)
         recyclerView.addItemDecoration(SimpleGridDivider(albumBundle.dividerWidth))
-        albumAdapter = AlbumAdapter(ArrayList(), getImageViewWidth(mActivity, albumBundle.spanCount), albumBundle)
+        albumAdapter = AlbumAdapter(getImageViewWidth(mActivity, albumBundle.spanCount))
         albumAdapter.setOnItemClickListener(this)
+        albumAdapter.setAlbumBundle(albumBundle)
         recyclerView.adapter = albumAdapter
         onScanAlbum(bucketId, false, false)
     }
@@ -350,7 +352,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         if (albumBundle.noPreview) {
             return
         }
-        albumParentListener.onAlbumItemClick(albumAdapter.getMultiplePreviewList(), position, bucketId)
+        albumParentListener?.onAlbumItemClick(albumAdapter.getMultiplePreviewList(), position, bucketId)
     }
 
     override fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean) {

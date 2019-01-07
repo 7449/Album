@@ -7,7 +7,6 @@ import com.album.ui.widget.AlbumImageView
 import com.album.ui.widget.TouchImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import org.jetbrains.annotations.NotNull
 import java.io.File
 
 interface AlbumParentListener {
@@ -59,7 +58,7 @@ interface OnEmptyClickListener {
     /**
      * true 打开相机，false自定义点击事件
      */
-    fun click(@NotNull view: View): Boolean
+    fun click(view: View): Boolean
 }
 
 interface AlbumListener {

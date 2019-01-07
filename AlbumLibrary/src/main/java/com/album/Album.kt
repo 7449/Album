@@ -6,13 +6,16 @@ import android.os.Bundle
 import android.os.Parcelable
 import com.yalantis.ucrop.UCrop
 
-const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0
-const val CAMERA_REQUEST_CODE = 1
+internal const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0
+internal const val CAMERA_REQUEST_CODE = 1
 
-const val PREVIEW_LOADER_ID = -111
-const val ALBUM_LOADER_ID = -112
-const val RESULT_LOADER_ID = -113
-const val FINDER_LOADER_ID = -114
+internal const val PREVIEW_LOADER_ID = -111
+internal const val ALBUM_LOADER_ID = -112
+internal const val RESULT_LOADER_ID = -113
+internal const val FINDER_LOADER_ID = -114
+
+internal const val FINDER_ALL_DIR_NAME = "全部"
+internal const val CAMERA = "Album:Camera"
 
 const val IMAGE = 0
 const val VIDEO = 1
@@ -20,9 +23,6 @@ const val MIXING = 2
 
 const val EXTRA_ALBUM_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Options"
 const val EXTRA_ALBUM_UI_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Ui.Options"
-
-const val FINDER_ALL_DIR_NAME = "全部"
-const val CAMERA = "Album:Camera"
 
 const val ITEM_CAMERA = 1111
 const val TYPE_PREVIEW_CODE = 112
@@ -50,6 +50,7 @@ const val CUSTOMIZE_CAMERA_RESULT_CODE = 113
 const val CUSTOMIZE_CAMERA_RESULT_PATH_KEY = "customize_camera_path"
 
 class Album {
+
     companion object {
         val instance by lazy { Album() }
         fun destroy() {

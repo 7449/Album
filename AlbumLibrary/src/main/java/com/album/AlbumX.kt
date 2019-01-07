@@ -22,20 +22,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import java.io.File
 
-fun checkNotStringNull(notNull: String?): String {
-    return notNull ?: ""
-}
+fun checkNotStringNull(notNull: String?): String = notNull ?: ""
 
-fun checkNotBundleNull(notNull: Bundle?): Bundle {
-    return notNull ?: Bundle.EMPTY
-}
+fun checkNotBundleNull(notNull: Bundle?): Bundle = notNull ?: Bundle.EMPTY
 
-fun checkNotIntentNull(notNull: Intent?): Intent {
-    return notNull ?: Intent()
-}
+fun checkNotIntentNull(notNull: Intent?): Intent = notNull ?: Intent()
 
-fun setStatusBarColor(@ColorInt color: Int, window: Window?) {
-    if (window != null && hasL()) {
+fun hasL(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
+fun setStatusBarColor(@ColorInt color: Int, window: Window) {
+    if (hasL()) {
         window.statusBarColor = color
     }
 }
@@ -45,10 +41,6 @@ fun getImageViewWidth(activity: Activity, count: Int): Int {
     val dm = DisplayMetrics()
     display.getMetrics(dm)
     return dm.widthPixels / count
-}
-
-fun hasL(): Boolean {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 }
 
 fun getDrawable(context: Context, id: Int, color: Int): Drawable {
@@ -100,16 +92,12 @@ fun openCamera(any: Any, cameraUri: Uri, video: Boolean): Int {
     return 0
 }
 
-fun fileExists(path: String): Boolean {
-    return getParentFile(path) != null
-}
+fun fileExists(path: String): Boolean = getParentFile(path) != null
 
-fun pathToFile(path: String): File {
-    return File(path)
-}
+fun pathToFile(path: String): File = File(path)
 
 fun getParentFile(path: String): File? {
-    if (TextUtils.isEmpty(path)) {
+    if (path == "") {
         return null
     }
     val file = File(path)

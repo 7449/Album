@@ -8,10 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.album.CAMERA_REQUEST_CODE
-import com.album.TYPE_PERMISSIONS_ALBUM
-import com.album.TYPE_PERMISSIONS_CAMERA
-import com.album.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+import com.album.*
 
 /**
  * @author y
@@ -23,7 +20,7 @@ abstract class AlbumBaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bundle = arguments ?: Bundle()
+        bundle = checkNotBundleNull(arguments)
     }
 
     override fun onAttach(context: Context?) {

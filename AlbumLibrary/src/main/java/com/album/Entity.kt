@@ -50,6 +50,10 @@ class AlbumBundle(
          */
         var sdName: String = "根目录",
         /**
+         * 全部图片
+         */
+        var allName: String = FINDER_ALL_DIR_NAME,
+        /**
          * 是否过滤损坏图片
          */
         var filterImg: Boolean = false,

@@ -17,20 +17,26 @@ import com.album.*
 /**
  *   @author y
  */
-class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display: Int, private val albumBundle: AlbumBundle) : RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
+class AlbumAdapter(private val display: Int) : RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
-    private lateinit var onItemClickListener: OnItemClickListener
-    private var multiplePreviewList: ArrayList<AlbumEntity> = ArrayList()
+    private lateinit var albumBundle: AlbumBundle
+    private var onItemClickListener: OnItemClickListener? = null
+    private var list: ArrayList<AlbumEntity> = ArrayList()
+    private var multipleList: ArrayList<AlbumEntity> = ArrayList()
     private val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(display, display)
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
     }
 
+    fun setAlbumBundle(albumBundle: AlbumBundle) {
+        this.albumBundle = albumBundle
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album, parent, false)
         val viewHolder = ViewHolder(view)
-        view.setOnClickListener { v -> onItemClickListener.onItemClick(v, viewHolder.adapterPosition, list[viewHolder.adapterPosition]) }
+        view.setOnClickListener { v -> onItemClickListener?.onItemClick(v, viewHolder.adapterPosition, list[viewHolder.adapterPosition]) }
         return viewHolder
     }
 
@@ -43,31 +49,32 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
         holder.cameraRootView.visibility = View.GONE
         holder.imageView.visibility = View.VISIBLE
         holder.imageView.addView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, holder.imageView), layoutParams)
-        if (!albumBundle.radio) {
-            holder.checkBox.visibility = View.VISIBLE
-            holder.checkBox.isChecked = albumEntity.isCheck
-            holder.checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
-            holder.checkBox.setOnClickListener(View.OnClickListener {
-                if (!fileExists(albumEntity.path)) {
-                    holder.checkBox.isChecked = false
-                    Album.instance.albumListener?.onAlbumCheckFileNotExist()
-                    return@OnClickListener
-                }
-                if (!multiplePreviewList.contains(albumEntity) && multiplePreviewList.size >= albumBundle.multipleMaxCount) {
-                    holder.checkBox.isChecked = false
-                    Album.instance.albumListener?.onAlbumMaxCount()
-                    return@OnClickListener
-                }
-                if (!albumEntity.isCheck) {
-                    albumEntity.isCheck = true
-                    multiplePreviewList.add(albumEntity)
-                } else {
-                    multiplePreviewList.remove(albumEntity)
-                    albumEntity.isCheck = false
-                }
-                Album.instance.albumListener?.onCheckBoxAlbum(multiplePreviewList.size, albumBundle.multipleMaxCount)
-            })
+        if (albumBundle.radio) {
+            return
         }
+        holder.checkBox.visibility = View.VISIBLE
+        holder.checkBox.isChecked = albumEntity.isCheck
+        holder.checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
+        holder.checkBox.setOnClickListener(View.OnClickListener {
+            if (!fileExists(albumEntity.path)) {
+                holder.checkBox.isChecked = false
+                Album.instance.albumListener?.onAlbumCheckFileNotExist()
+                return@OnClickListener
+            }
+            if (!multipleList.contains(albumEntity) && multipleList.size >= albumBundle.multipleMaxCount) {
+                holder.checkBox.isChecked = false
+                Album.instance.albumListener?.onAlbumMaxCount()
+                return@OnClickListener
+            }
+            if (!albumEntity.isCheck) {
+                albumEntity.isCheck = true
+                multipleList.add(albumEntity)
+            } else {
+                multipleList.remove(albumEntity)
+                albumEntity.isCheck = false
+            }
+            Album.instance.albumListener?.onCheckBoxAlbum(multipleList.size, albumBundle.multipleMaxCount)
+        })
     }
 
     override fun getItemCount(): Int = list.size
@@ -81,10 +88,10 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
 
     fun getAlbumList(): ArrayList<AlbumEntity> = list
 
-    fun getMultiplePreviewList(): ArrayList<AlbumEntity> = multiplePreviewList
+    fun getMultiplePreviewList(): ArrayList<AlbumEntity> = multipleList
 
     fun setMultiplePreviewList(multiplePreviewList: ArrayList<AlbumEntity>) {
-        this.multiplePreviewList = multiplePreviewList
+        this.multipleList = multiplePreviewList
         notifyDataSetChanged()
     }
 
@@ -98,6 +105,7 @@ class AlbumAdapter(private val list: ArrayList<AlbumEntity>, private val display
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         val imageView: FrameLayout = itemView.findViewById(R.id.album_image)
         val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
         private val imageCamera: AppCompatImageView = itemView.findViewById(R.id.album_image_camera)

@@ -46,8 +46,8 @@ class FinderAdapter(private val list: ArrayList<FinderEntity>, private val album
     }
 
     private class ViewHolder {
-        internal lateinit var convertView: View
-        internal lateinit var frameLayout: FrameLayout
-        internal lateinit var appCompatTextView: AppCompatTextView
+        lateinit var convertView: View
+        lateinit var frameLayout: FrameLayout
+        lateinit var appCompatTextView: AppCompatTextView
     }
 }

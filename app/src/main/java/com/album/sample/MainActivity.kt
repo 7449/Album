@@ -25,6 +25,7 @@ import com.album.ui.activity.AlbumActivity
 import com.album.ui.fragment.AlbumBaseFragment
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.util.*
 
@@ -46,16 +47,16 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        findViewById<View>(R.id.btn_day_album).setOnClickListener(this)
-        findViewById<View>(R.id.btn_night_album).setOnClickListener(this)
-        findViewById<View>(R.id.btn_open_camera).setOnClickListener(this)
-        findViewById<View>(R.id.btn_sample_ui).setOnClickListener(this)
-        findViewById<View>(R.id.btn_customize_camera).setOnClickListener(this)
-        findViewById<View>(R.id.btn_dialog).setOnClickListener(this)
-        findViewById<View>(R.id.btn_video).setOnClickListener(this)
-        findViewById<View>(R.id.btn_imageloader).setOnClickListener(this)
-        findViewById<View>(R.id.btn_subsampling).setOnClickListener(this)
-        findViewById<View>(R.id.btn_wechat_ui).setOnClickListener(this)
+        btn_day_album.setOnClickListener(this)
+        btn_night_album.setOnClickListener(this)
+        btn_open_camera.setOnClickListener(this)
+        btn_sample_ui.setOnClickListener(this)
+        btn_customize_camera.setOnClickListener(this)
+        btn_dialog.setOnClickListener(this)
+        btn_video.setOnClickListener(this)
+        btn_imageloader.setOnClickListener(this)
+        btn_subsampling.setOnClickListener(this)
+        btn_wechat_ui.setOnClickListener(this)
 
         dayOptions = UCrop.Options()
         dayOptions.apply {

@@ -7,13 +7,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import com.album.sample.R
 import com.album.finishCamera
 import com.album.getCameraFile
+import com.album.sample.R
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
+import kotlinx.android.synthetic.main.activity_simple_camera.*
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
@@ -25,15 +25,11 @@ import java.io.OutputStream
 class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback, SimpleAspectRatioFragment.Listener {
 
     private var mCurrentFlash: Int = 0
-    private lateinit var mCameraView: CameraView
-    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_camera)
-        mCameraView = findViewById(R.id.camera)
-        findViewById<View>(R.id.take_picture).setOnClickListener { mCameraView.takePicture() }
-        toolbar = findViewById(R.id.toolbar)
+        findViewById<View>(R.id.take_picture).setOnClickListener { camera.takePicture() }
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayShowTitleEnabled(false)
@@ -42,11 +38,11 @@ class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermis
 
     override fun onResume() {
         super.onResume()
-        mCameraView.start()
+        camera.start()
     }
 
     override fun onPause() {
-        mCameraView.stop()
+        camera.stop()
         super.onPause()
     }
 
@@ -61,8 +57,8 @@ class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermis
             R.id.aspect_ratio -> {
                 val fragmentManager = supportFragmentManager
                 if (fragmentManager.findFragmentByTag(FRAGMENT_DIALOG) == null) {
-                    val ratios = mCameraView.supportedAspectRatios
-                    val currentRatio = mCameraView.aspectRatio
+                    val ratios = camera.supportedAspectRatios
+                    val currentRatio = camera.aspectRatio
                     SimpleAspectRatioFragment.newInstance(ratios, currentRatio!!)
                             .show(fragmentManager, FRAGMENT_DIALOG)
                 }
@@ -72,12 +68,12 @@ class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermis
                 mCurrentFlash = (mCurrentFlash + 1) % FLASH_OPTIONS.size
                 item.setTitle(FLASH_TITLES[mCurrentFlash])
                 item.setIcon(FLASH_ICONS[mCurrentFlash])
-                mCameraView.flash = FLASH_OPTIONS[mCurrentFlash]
+                camera.flash = FLASH_OPTIONS[mCurrentFlash]
                 return true
             }
             R.id.switch_camera -> {
-                val facing = mCameraView.facing
-                mCameraView.facing = if (facing == CameraView.FACING_FRONT) CameraView.FACING_BACK else CameraView.FACING_FRONT
+                val facing = camera.facing
+                camera.facing = if (facing == CameraView.FACING_FRONT) CameraView.FACING_BACK else CameraView.FACING_FRONT
                 return true
             }
         }
@@ -86,11 +82,11 @@ class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermis
 
     override fun onAspectRatioSelected(ratio: AspectRatio) {
         Toast.makeText(this, ratio.toString(), Toast.LENGTH_SHORT).show()
-        mCameraView.setAspectRatio(ratio)
+        camera.setAspectRatio(ratio)
     }
 
     private fun initCamera() {
-        mCameraView.addCallback(object : CameraView.Callback() {
+        camera.addCallback(object : CameraView.Callback() {
             override fun onCameraOpened(cameraView: CameraView) {
                 super.onCameraOpened(cameraView)
                 Log.d(TAG, "onCameraOpened")

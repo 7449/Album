@@ -6,16 +6,14 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
-import android.widget.RelativeLayout
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.ListPopupWindow
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.album.*
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.adapter.FinderAdapter
 import com.album.ui.fragment.AlbumFragment
+import kotlinx.android.synthetic.main.album_activity_album.*
 
 /**
  * by y on 14/08/2017.
@@ -23,12 +21,7 @@ import com.album.ui.fragment.AlbumFragment
 
 class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener, AlbumParentListener {
 
-    private lateinit var toolbar: Toolbar
-    private lateinit var preview: AppCompatTextView
-    private lateinit var select: AppCompatTextView
-    private lateinit var finderTv: AppCompatTextView
     private lateinit var listPopupWindow: ListPopupWindow
-    private lateinit var albumBottomView: RelativeLayout
     private lateinit var albumFragment: AlbumFragment
     private lateinit var finderAdapter: FinderAdapter
 
@@ -36,14 +29,9 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     private lateinit var albumUiBundle: AlbumUiBundle
 
     override fun initView() {
-        toolbar = findViewById(R.id.album_toolbar)
-        preview = findViewById(R.id.album_tv_preview)
-        select = findViewById(R.id.album_tv_select)
-        finderTv = findViewById(R.id.album_tv_finder_all)
-        albumBottomView = findViewById(R.id.album_bottom_view)
-        preview.setOnClickListener(this)
-        select.setOnClickListener(this)
-        finderTv.setOnClickListener(this)
+        album_tv_preview.setOnClickListener(this)
+        album_tv_select.setOnClickListener(this)
+        album_tv_finder_all.setOnClickListener(this)
         listPopupWindow = ListPopupWindow(this)
     }
 
@@ -52,18 +40,18 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
 
         setStatusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor), window)
-        preview.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
-        select.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
-        toolbar.setTitle(albumUiBundle.toolbarText)
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumUiBundle.toolbarTextColor))
+        album_tv_preview.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
+        album_tv_select.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
+        album_toolbar.setTitle(albumUiBundle.toolbarText)
+        album_toolbar.setTitleTextColor(ContextCompat.getColor(this, albumUiBundle.toolbarTextColor))
         val drawable = ContextCompat.getDrawable(this, albumUiBundle.toolbarIcon)
         drawable?.setColorFilter(ContextCompat.getColor(this, albumUiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
-        toolbar.navigationIcon = drawable
-        toolbar.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.toolbarBackground))
+        album_toolbar.navigationIcon = drawable
+        album_toolbar.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.toolbarBackground))
         if (hasL()) {
-            toolbar.elevation = albumUiBundle.toolbarElevation
+            album_toolbar.elevation = albumUiBundle.toolbarElevation
         }
-        toolbar.setNavigationOnClickListener {
+        album_toolbar.setNavigationOnClickListener {
             Album.instance.albumListener?.onAlbumActivityFinish()
             finish()
         }
@@ -90,30 +78,30 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     }
 
     private fun initBottomView() {
-        finderTv.text = if (TextUtils.isEmpty(albumFragment.finderName)) getString(R.string.album_all) else albumFragment.finderName
-        albumBottomView.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.bottomViewBackground))
-        finderTv.textSize = albumUiBundle.bottomFinderTextSize
-        finderTv.setTextColor(ContextCompat.getColor(this, albumUiBundle.bottomFinderTextColor))
-        finderTv.setCompoundDrawables(null, null, getDrawable(this, albumUiBundle.bottomFinderTextCompoundDrawable, albumUiBundle.bottomFinderTextDrawableColor), null)
+        album_tv_finder_all.text = if (TextUtils.isEmpty(albumFragment.finderName)) getString(R.string.album_all) else albumFragment.finderName
+        album_bottom_view.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.bottomViewBackground))
+        album_tv_finder_all.textSize = albumUiBundle.bottomFinderTextSize
+        album_tv_finder_all.setTextColor(ContextCompat.getColor(this, albumUiBundle.bottomFinderTextColor))
+        album_tv_finder_all.setCompoundDrawables(null, null, getDrawable(this, albumUiBundle.bottomFinderTextCompoundDrawable, albumUiBundle.bottomFinderTextDrawableColor), null)
         if (albumUiBundle.bottomFinderTextBackground != -1) {
-            finderTv.setBackgroundResource(albumUiBundle.bottomFinderTextBackground)
+            album_tv_finder_all.setBackgroundResource(albumUiBundle.bottomFinderTextBackground)
         }
-        preview.setText(albumUiBundle.bottomPreViewText)
-        preview.textSize = albumUiBundle.bottomPreViewTextSize
-        preview.setTextColor(ContextCompat.getColor(this, albumUiBundle.bottomPreViewTextColor))
+        album_tv_preview.setText(albumUiBundle.bottomPreViewText)
+        album_tv_preview.textSize = albumUiBundle.bottomPreViewTextSize
+        album_tv_preview.setTextColor(ContextCompat.getColor(this, albumUiBundle.bottomPreViewTextColor))
         if (albumUiBundle.bottomPreviewTextBackground != -1) {
-            preview.setBackgroundResource(albumUiBundle.bottomPreviewTextBackground)
+            album_tv_preview.setBackgroundResource(albumUiBundle.bottomPreviewTextBackground)
         }
-        select.setText(albumUiBundle.bottomSelectText)
-        select.textSize = albumUiBundle.bottomSelectTextSize
-        select.setTextColor(ContextCompat.getColor(this, albumUiBundle.bottomSelectTextColor))
+        album_tv_select.setText(albumUiBundle.bottomSelectText)
+        album_tv_select.textSize = albumUiBundle.bottomSelectTextSize
+        album_tv_select.setTextColor(ContextCompat.getColor(this, albumUiBundle.bottomSelectTextColor))
         if (albumUiBundle.bottomSelectTextBackground != -1) {
-            select.setBackgroundResource(albumUiBundle.bottomSelectTextBackground)
+            album_tv_select.setBackgroundResource(albumUiBundle.bottomSelectTextBackground)
         }
     }
 
     private fun initFinderView() {
-        listPopupWindow.anchorView = finderTv
+        listPopupWindow.anchorView = album_tv_finder_all
         listPopupWindow.width = albumUiBundle.listPopupWidth
         listPopupWindow.horizontalOffset = albumUiBundle.listPopupHorizontalOffset
         listPopupWindow.verticalOffset = albumUiBundle.listPopupVerticalOffset
@@ -159,7 +147,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             return
         }
         albumFragment.finderName = finder.dirName
-        finderTv.text = finder.dirName
+        album_tv_finder_all.text = finder.dirName
         albumFragment.onScanAlbum(finder.bucketId, true, false)
         listPopupWindow.dismiss()
     }

@@ -22,6 +22,7 @@ import java.io.File
  * 只是简单的示例,如果digloa显示需要判断更多的逻辑,例如预览返回需要更新选中数据
  */
 class SimpleDialogFragment : DialogFragment(), AlbumPreviewParentListener {
+
     override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {
     }
 

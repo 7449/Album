@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.ListPopupWindow
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.album.*
 import com.album.sample.R
@@ -15,6 +13,7 @@ import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.adapter.FinderAdapter
 import com.album.ui.fragment.AlbumFragment
+import kotlinx.android.synthetic.main.activity_simple_album.*
 
 /**
  * by y on 22/08/2017.
@@ -22,20 +21,16 @@ import com.album.ui.fragment.AlbumFragment
 
 class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, AlbumParentListener {
 
-    private lateinit var toolbar: Toolbar
     private lateinit var albumFragment: AlbumFragment
     private lateinit var listPopupWindow: ListPopupWindow
-    private lateinit var finerName: AppCompatTextView
     private lateinit var finderAdapter: FinderAdapter
 
     private lateinit var albumBundle: AlbumBundle
     private lateinit var albumUiBundle: AlbumUiBundle
 
     override fun initView() {
-        toolbar = findViewById(R.id.sample_toolbar)
-        finerName = findViewById(R.id.sample_finder_name)
         listPopupWindow = ListPopupWindow(this)
-        finerName.setOnClickListener {
+        sample_finder_name.setOnClickListener {
             val finderEntity = albumFragment.getFinderEntity()
             if (!finderEntity.isEmpty()) {
                 finderAdapter.refreshData(finderEntity)
@@ -51,18 +46,18 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
         albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
         albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
 
-        toolbar.title = "sample UI"
+        sample_toolbar.title = "sample UI"
         val drawable = ContextCompat.getDrawable(this, albumUiBundle.toolbarIcon)
         drawable?.setColorFilter(ContextCompat.getColor(this, albumUiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, albumUiBundle.toolbarTextColor))
-        toolbar.navigationIcon = drawable
-        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-        toolbar.setNavigationOnClickListener {
+        sample_toolbar.setTitleTextColor(ContextCompat.getColor(this, albumUiBundle.toolbarTextColor))
+        sample_toolbar.navigationIcon = drawable
+        sample_toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        sample_toolbar.setNavigationOnClickListener {
             Album.instance.albumListener?.onAlbumActivityFinish()
             finish()
         }
         initFragment()
-        finerName.text = if (TextUtils.isEmpty(albumFragment.finderName)) getString(R.string.album_all) else albumFragment.finderName
+        sample_finder_name.text = if (TextUtils.isEmpty(albumFragment.finderName)) getString(R.string.album_all) else albumFragment.finderName
         initListPopupWindow()
     }
 
@@ -83,7 +78,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
     }
 
     private fun initListPopupWindow() {
-        listPopupWindow.anchorView = finerName
+        listPopupWindow.anchorView = sample_finder_name
         listPopupWindow.width = albumUiBundle.listPopupWidth
         listPopupWindow.horizontalOffset = albumUiBundle.listPopupHorizontalOffset
         listPopupWindow.verticalOffset = albumUiBundle.listPopupVerticalOffset
@@ -98,7 +93,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val finder = finderAdapter.getFinder(position)
         albumFragment.finderName = finder.dirName
-        finerName.text = finder.dirName
+        sample_finder_name.text = finder.dirName
         albumFragment.onScanAlbum(finder.bucketId, true, false)
         listPopupWindow.dismiss()
     }

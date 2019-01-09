@@ -57,6 +57,7 @@ class PreviewPresenterImpl(private val prevView: PrevView,
         }
         prevView.hideProgress()
         prevView.scanSuccess(mergeEntity(albumList, selectEntity))
+        destroyLoaderManager()
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
@@ -73,5 +74,9 @@ class PreviewPresenterImpl(private val prevView: PrevView,
             }
         }
         return albumEntityList
+    }
+
+    private fun destroyLoaderManager() {
+        loaderManager.destroyLoader(PREVIEW_LOADER_ID)
     }
 }

@@ -393,7 +393,6 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             return
         }
         imagePath = Uri.fromFile(getCameraFile(mActivity, albumBundle.cameraPath, albumBundle.scanType == VIDEO))
-        albumPresenter.destroyLoaderManager()
         val i = openCamera(this, imagePath, albumBundle.scanType == VIDEO)
         if (i == 1) {
             Album.instance.albumListener?.onAlbumOpenCameraError()

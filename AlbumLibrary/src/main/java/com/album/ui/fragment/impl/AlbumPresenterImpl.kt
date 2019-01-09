@@ -18,7 +18,6 @@ interface AlbumPresenter {
     fun startScan(bucketId: String, page: Int)
     fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>)
     fun resultScan(path: String)
-    fun destroyLoaderManager()
 }
 
 @Suppress("PrivatePropertyName")
@@ -87,6 +86,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
         }
         albumList.clear()
         finderList.clear()
+        destroyLoaderManager()
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
@@ -136,6 +136,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
                 albumView.resultSuccess(albumEntity)
                 albumView.scanFinderSuccess(finderList)
                 finderList.clear()
+                destroyLoaderManager()
             }
 
             override fun onLoaderReset(loader: Loader<Cursor>) {
@@ -187,7 +188,7 @@ class AlbumPresenterImpl(private val albumView: AlbumView,
         finderEntityMap.clear()
     }
 
-    override fun destroyLoaderManager() {
+    private fun destroyLoaderManager() {
         loaderManager.destroyLoader(ALBUM_LOADER_ID)
         loaderManager.destroyLoader(RESULT_LOADER_ID)
         loaderManager.destroyLoader(FINDER_LOADER_ID)

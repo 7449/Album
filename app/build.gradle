@@ -22,25 +22,20 @@ android {
 }
 
 dependencies {
-    //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
-    //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
     implementation 'com.google.android.material:material:1.0.0'
-    //    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    //    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
+
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.squareup.picasso:picasso:$picassoVersion"
     implementation "com.nostra13.universalimageloader:universal-image-loader:$imageloaderVersion"
     implementation "com.facebook.fresco:fresco:$frescoVersion"
     implementation "com.facebook.fresco:animated-gif:$frescoVersion"
+
     implementation project(':AlbumLibrary')
     implementation project(':AlbumUILibrary')
     implementation project(':AlbumWeChatUILibrary')
     implementation(name: 'CameraViewLibrary', ext: 'aar')
-//    implementation(name: 'AlbumLibrary', ext: 'aar')
-//    implementation(name: 'AlbumUILibrary', ext: 'aar')
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-repositories {
-    mavenCentral()
+
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
+    implementation "com.github.yalantis:ucrop:$ucropVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

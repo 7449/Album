@@ -39,10 +39,7 @@ android {
 //    website = 'https://github.com/7449/Album'
 //}
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compileOnly 'androidx.appcompat:appcompat:1.0.2'
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly project(':AlbumLibrary')
-}
-repositories {
-    mavenCentral()
 }

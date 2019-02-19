@@ -1,4 +1,4 @@
-package com.album.sample.ui
+package com.album.ui.sample
 
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.album.*
-import com.album.sample.R
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.fragment.PrevFragment

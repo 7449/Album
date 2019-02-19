@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: "guru.stefma.bintrayrelease"
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -11,35 +10,10 @@ android {
         versionCode rootProject.projectVersionCode
         versionName rootProject.projectVersionName
     }
-    androidExtensions {
-        experimental = true
-    }
-    lintOptions {
-        abortOnError false
-    }
-    allprojects {
-        tasks.withType(Javadoc) {
-            options {
-                encoding "UTF-8"
-                charSet 'UTF-8'
-                links "http://docs.oracle.com/javase/7/docs/api"
-            }
-        }
-    }
 }
-//version = "0.0.1"
-//group = "com.ydevelop"
-//androidArtifact {
-//    artifactId = "album.ui.wechat"
-//    javadoc = false
-//}
-//publish {
-//    userOrg = 'ydevelop'
-//    desc = 'this is android album wechat ui'
-//    website = 'https://github.com/7449/Album'
-//}
+
 dependencies {
-    compileOnly 'androidx.appcompat:appcompat:1.0.2'
+    compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly project(':AlbumLibrary')
 }

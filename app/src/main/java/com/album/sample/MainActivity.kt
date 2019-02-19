@@ -18,11 +18,11 @@ import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
 import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader
 import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
-import com.album.sample.ui.SimpleAlbumUI
 import com.album.sample.ui.SimpleDialogFragment
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
 import com.album.ui.fragment.AlbumBaseFragment
+import com.album.ui.sample.SimpleAlbumUI
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         btn_day_album.setOnClickListener(this)
         btn_night_album.setOnClickListener(this)
         btn_open_camera.setOnClickListener(this)
@@ -72,6 +73,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         nightOptions.setToolbarColor(ContextCompat.getColor(this, R.color.colorAlbumToolbarBackgroundNight))
         nightOptions.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorAlbumToolbarBackgroundNight))
         nightOptions.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAlbumStatusBarColorNight))
+
         list = ArrayList()
     }
 

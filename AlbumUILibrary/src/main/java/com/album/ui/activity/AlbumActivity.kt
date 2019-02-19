@@ -148,7 +148,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         }
         albumFragment.finderName = finder.dirName
         album_tv_finder_all.text = finder.dirName
-        albumFragment.onScanAlbum(finder.bucketId, true, false)
+        albumFragment.onScanAlbum(finder.bucketId, isFinder = true, result = false)
         listPopupWindow.dismiss()
     }
 

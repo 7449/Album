@@ -1,4 +1,4 @@
-package com.album.sample.ui
+package com.album.ui.sample
 
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -8,7 +8,6 @@ import android.widget.AdapterView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
 import com.album.*
-import com.album.sample.R
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumBaseActivity
 import com.album.ui.adapter.FinderAdapter
@@ -94,7 +93,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
         val finder = finderAdapter.getFinder(position)
         albumFragment.finderName = finder.dirName
         sample_finder_name.text = finder.dirName
-        albumFragment.onScanAlbum(finder.bucketId, true, false)
+        albumFragment.onScanAlbum(finder.bucketId, isFinder = true, result = false)
         listPopupWindow.dismiss()
     }
 

@@ -1,1 +1,1 @@
-include ':app', ':AlbumLibrary', ':AlbumUILibrary', ':AlbumWeChatUILibrary'
+include ':app', ':AlbumLibrary', ':AlbumUILibrary', ':AlbumWeChatUILibrary', ':AlbumSampleUILibrary'

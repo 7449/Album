@@ -62,6 +62,7 @@ interface OnEmptyClickListener {
 }
 
 interface AlbumListener {
+
     /**
      * activity被销毁
      */

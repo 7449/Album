@@ -211,7 +211,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         albumAdapter.setOnItemClickListener(this)
         albumAdapter.setAlbumBundle(albumBundle)
         recyclerView.adapter = albumAdapter
-        onScanAlbum(bucketId, false, false)
+        onScanAlbum(bucketId, isFinder = false, result = false)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

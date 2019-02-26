@@ -124,7 +124,8 @@ class AlbumBundle(
 ) : Parcelable
 
 @Parcelize
-class AlbumEntity(private var dirPath: String = "", private var dirName: String = "",
+class AlbumEntity(private var dirPath: String = "",
+                  private var dirName: String = "",
                   var bucketId: String = "",
                   var path: String = "",
                   var id: Long = 0,

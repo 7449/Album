@@ -56,7 +56,7 @@ val ALBUM_PROJECTION = arrayOf(
 val VIDEO_PROJECTION = arrayOf(
         MediaStore.Video.Media.DATA,
         MediaStore.Video.Media._ID,
-        MediaStore.Images.Media.BUCKET_ID,
+        MediaStore.Video.Media.BUCKET_ID,
         MediaStore.Video.Media.SIZE)
 
 val ALBUM_FINDER_PROJECTION = arrayOf(

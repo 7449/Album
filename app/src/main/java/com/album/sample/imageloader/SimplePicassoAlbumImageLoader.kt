@@ -4,9 +4,9 @@ import android.content.ContentUris
 import android.provider.MediaStore
 import android.view.View
 import android.widget.FrameLayout
-import com.album.AlbumEntity
 import com.album.AlbumImageLoader
-import com.album.FinderEntity
+import com.album.core.scan.AlbumEntity
+import com.album.core.scan.FinderEntity
 import com.album.ui.widget.AlbumImageView
 import com.album.ui.widget.TouchImageView
 import com.squareup.picasso.Picasso

@@ -3,10 +3,10 @@ package com.album.sample.imageloader
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.FrameLayout
-import com.album.AlbumEntity
 import com.album.AlbumImageLoader
-import com.album.FinderEntity
 import com.album.R
+import com.album.core.scan.AlbumEntity
+import com.album.core.scan.FinderEntity
 import com.album.ui.widget.AlbumImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions

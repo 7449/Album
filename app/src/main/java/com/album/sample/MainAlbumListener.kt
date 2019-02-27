@@ -3,8 +3,8 @@ package com.album.sample
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.album.AlbumEntity
 import com.album.AlbumListener
+import com.album.core.scan.AlbumEntity
 import java.io.File
 
 /**

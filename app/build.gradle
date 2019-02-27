@@ -3,7 +3,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+
     compileSdkVersion rootProject.compileSdkVersion
+
     defaultConfig {
         applicationId rootProject.sampleApplicationId
         minSdkVersion rootProject.minSdkVersion
@@ -11,6 +13,7 @@ android {
         versionCode rootProject.projectVersionCode
         versionName rootProject.projectVersionName
     }
+
     repositories {
         flatDir {
             dirs 'libs'
@@ -29,9 +32,9 @@ dependencies {
     implementation "com.facebook.fresco:animated-gif:$frescoVersion"
 
     implementation project(':AlbumLibrary')
-    implementation project(':AlbumUILibrary')
-    implementation project(':AlbumWeChatUILibrary')
-    implementation project(':AlbumSampleUILibrary')
+    implementation project(':UI')
+    implementation project(':UIWeChat')
+    implementation project(':UISample')
     implementation(name: 'CameraViewLibrary', ext: 'aar')
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"

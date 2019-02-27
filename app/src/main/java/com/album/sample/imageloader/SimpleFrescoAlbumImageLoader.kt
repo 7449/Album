@@ -3,9 +3,9 @@ package com.album.sample.imageloader
 import android.net.Uri
 import android.view.View
 import android.widget.FrameLayout
-import com.album.AlbumEntity
 import com.album.AlbumImageLoader
-import com.album.FinderEntity
+import com.album.core.scan.AlbumEntity
+import com.album.core.scan.FinderEntity
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.view.SimpleDraweeView

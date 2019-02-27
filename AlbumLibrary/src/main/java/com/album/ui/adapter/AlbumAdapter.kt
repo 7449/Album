@@ -13,6 +13,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.album.*
+import com.album.core.scan.AlbumEntity
+import com.album.core.AlbumFile.fileExists
 
 /**
  *   @author y
@@ -56,7 +58,7 @@ class AlbumAdapter(private val display: Int) : RecyclerView.Adapter<AlbumAdapter
         holder.checkBox.isChecked = albumEntity.isCheck
         holder.checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
         holder.checkBox.setOnClickListener(View.OnClickListener {
-            if (!fileExists(albumEntity.path)) {
+            if (!albumEntity.path.fileExists()) {
                 holder.checkBox.isChecked = false
                 Album.instance.albumListener?.onAlbumCheckFileNotExist()
                 return@OnClickListener

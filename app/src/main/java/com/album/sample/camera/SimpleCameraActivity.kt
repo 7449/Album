@@ -6,10 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.album.finishCamera
-import com.album.getCameraFile
+import com.album.core.ui.AlbumBaseActivity
+import com.album.core.AlbumCamera.finishCamera
+import com.album.core.AlbumCamera.getCameraFile
 import com.album.sample.R
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
@@ -22,19 +22,21 @@ import java.io.OutputStream
  * by y on 28/08/2017.
  */
 
-class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback, SimpleAspectRatioFragment.Listener {
-
-    private var mCurrentFlash: Int = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_simple_camera)
+class SimpleCameraActivity : AlbumBaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback, SimpleAspectRatioFragment.Listener {
+    override fun initView() {
         findViewById<View>(R.id.take_picture).setOnClickListener { camera.takePicture() }
+    }
+
+    override fun initCreate(savedInstanceState: Bundle?) {
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayShowTitleEnabled(false)
         initCamera()
     }
+
+    override val layoutId: Int = R.layout.activity_simple_camera
+
+    private var mCurrentFlash: Int = 0
 
     override fun onResume() {
         super.onResume()
@@ -101,13 +103,13 @@ class SimpleCameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermis
                 super.onPictureTaken(cameraView, data)
                 Toast.makeText(cameraView.context, R.string.picture_taken, Toast.LENGTH_SHORT).show()
                 cameraView.post {
-                    val cameraFile = getCameraFile(cameraView.context, null, false)
+                    val cameraFile = getCameraFile(null, false)
                     val os: OutputStream
                     try {
                         os = FileOutputStream(cameraFile)
                         os.write(data)
                         os.close()
-                        finishCamera(this@SimpleCameraActivity, cameraFile.path)
+                        finishCamera(cameraFile.path)
                     } catch (e: IOException) {
                         Log.w(TAG, "Cannot write to " + cameraFile.path, e)
                     }

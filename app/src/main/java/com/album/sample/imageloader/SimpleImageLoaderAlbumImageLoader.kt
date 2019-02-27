@@ -4,9 +4,9 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.album.AlbumEntity
 import com.album.AlbumImageLoader
-import com.album.FinderEntity
+import com.album.core.scan.AlbumEntity
+import com.album.core.scan.FinderEntity
 import com.album.sample.R
 import com.album.ui.widget.AlbumImageView
 import com.album.ui.widget.TouchImageView

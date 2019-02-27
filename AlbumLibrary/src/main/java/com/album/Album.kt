@@ -4,27 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import com.album.core.scan.AlbumEntity
 import com.yalantis.ucrop.UCrop
-
-internal const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0
-internal const val CAMERA_REQUEST_CODE = 1
-
-internal const val PREVIEW_LOADER_ID = -111
-internal const val ALBUM_LOADER_ID = -112
-internal const val RESULT_LOADER_ID = -113
-internal const val FINDER_LOADER_ID = -114
 
 internal const val FINDER_ALL_DIR_NAME = "全部"
 internal const val CAMERA = "Album:Camera"
 
-const val IMAGE = 0
-const val VIDEO = 1
-const val MIXING = 2
-
 const val EXTRA_ALBUM_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Options"
 const val EXTRA_ALBUM_UI_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Ui.Options"
 
-const val ITEM_CAMERA = 1111
 const val TYPE_PREVIEW_CODE = 112
 
 const val TYPE_ALBUM_STATE_SELECT = "state_select"
@@ -40,14 +28,8 @@ const val TYPE_PREVIEW_BUCKET_ID = "preview_bucket_id"
 const val TYPE_PREVIEW_BUTTON_KEY = "preview_button"
 const val TYPE_PREVIEW_POSITION_KEY = "preview_position"
 
-const val TYPE_PERMISSIONS_ALBUM = 0
-const val TYPE_PERMISSIONS_CAMERA = 1
-
 const val TYPE_RESULT_CAMERA = 0
 const val TYPE_RESULT_CROP = 1
-
-const val CUSTOMIZE_CAMERA_RESULT_CODE = 113
-const val CUSTOMIZE_CAMERA_RESULT_PATH_KEY = "customize_camera_path"
 
 class Album {
 

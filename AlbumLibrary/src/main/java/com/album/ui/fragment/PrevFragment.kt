@@ -9,40 +9,22 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.fragment.app.FragmentActivity
-import androidx.loader.app.LoaderManager
 import androidx.viewpager.widget.ViewPager
 import com.album.*
+import com.album.core.scan.AlbumEntity
+import com.album.core.AlbumFile.fileExists
+import com.album.core.AlbumPermission.TYPE_PERMISSIONS_ALBUM
+import com.album.core.AlbumPermission.permissionStorage
+import com.album.core.scan.AlbumPreviewScanImpl
+import com.album.core.ui.AlbumBaseFragment
+import com.album.core.view.AlbumPreViewView
 import com.album.ui.adapter.PreviewAdapter
-import com.album.ui.fragment.impl.PreviewPresenter
-import com.album.ui.fragment.impl.PreviewPresenterImpl
 import com.album.ui.widget.ExtendedViewPager
-
-interface PrevView {
-    /**
-     *  [LoaderManager.getInstance]
-     */
-    fun getPrevContext(): FragmentActivity
-
-    /**
-     * 扫描成功回调,如果是点击preview则不会触发
-     */
-    fun scanSuccess(entityList: ArrayList<AlbumEntity>)
-
-    /**
-     * 隐藏进度条
-     */
-    fun hideProgress()
-
-    /**
-     * 显示进度条
-     */
-    fun showProgress()
-}
 
 /**
  *  @author y
  */
-class PrevFragment : AlbumBaseFragment(), PrevView {
+class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
 
     companion object {
         fun newInstance(bundle: Bundle): PrevFragment {
@@ -57,7 +39,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
     private lateinit var progressBar: ProgressBar
     private lateinit var viewPager: ExtendedViewPager
     private lateinit var rootView: FrameLayout
-    private lateinit var previewPresenter: PreviewPresenter
+    private lateinit var previewPresenter: AlbumPreviewScanImpl
 
     private lateinit var albumBundle: AlbumBundle
 
@@ -88,16 +70,18 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         appCompatCheckBox.setBackgroundResource(albumBundle.checkBoxDrawable)
         val previewBundle = savedInstanceState ?: bundle
 
-        selectList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY) ?: ArrayList()
+        selectList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
+                ?: ArrayList()
         selectPosition = previewBundle.getInt(TYPE_PREVIEW_POSITION_KEY)
 
         if (savedInstanceState != null && preview) {
-            albumList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_STATE_SELECT_ALL) ?: ArrayList()
+            albumList = previewBundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_STATE_SELECT_ALL)
+                    ?: ArrayList()
         }
 
         albumParentListener?.onChangedCount(selectList.size)
 
-        if (permissionStorage(this)) {
+        if (permissionStorage()) {
             initPreview()
         }
     }
@@ -117,7 +101,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
 
     private fun initPreview() {
         if (!preview) {
-            previewPresenter = PreviewPresenterImpl(this, albumBundle, selectList, bucketId)
+            previewPresenter = AlbumPreviewScanImpl.newInstance(this, albumBundle.filterImg, selectList, bucketId)
             return
         }
         if (albumList.isEmpty()) {
@@ -173,7 +157,7 @@ class PrevFragment : AlbumBaseFragment(), PrevView {
         viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (!fileExists(adapter.getAlbumPath(position))) {
+                if (!adapter.getAlbumPath(position).fileExists()) {
                     Album.instance.albumListener?.onAlbumPreviewFileNotExist()
                 }
                 appCompatCheckBox.isChecked = albumEntityList[position].isCheck

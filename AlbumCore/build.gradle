@@ -16,9 +16,6 @@ android {
 }
 
 dependencies {
-    compileOnly "androidx.recyclerview:recyclerview:$materialVersion"
-    compileOnly "com.github.yalantis:ucrop:$ucropVersion"
+    compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly "com.github.bumptech.glide:glide:$glideVersion"
-    api project(':AlbumCore')
 }

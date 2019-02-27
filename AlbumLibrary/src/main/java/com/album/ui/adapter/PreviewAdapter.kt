@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.viewpager.widget.PagerAdapter
 import com.album.Album
-import com.album.AlbumEntity
+import com.album.core.scan.AlbumEntity
 
 /**
  *   @author y

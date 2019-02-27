@@ -13,6 +13,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.album.*
+import com.album.core.AlbumCamera
+import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
+import com.album.core.AlbumCamera.getCameraFile
+import com.album.core.AlbumCamera.openCamera
+import com.album.core.scan.AlbumEntity
+import com.album.core.AlbumFile.pathToFile
+import com.album.core.AlbumPermission.permissionCamera
+import com.album.core.AlbumPermission.permissionStorage
+import com.album.core.scan.AlbumScan.VIDEO
+import com.album.core.scan.AlbumSingleMediaScanner
+import com.album.core.ui.AlbumBaseFragment
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
 import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader
@@ -21,7 +32,6 @@ import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
 import com.album.sample.ui.SimpleDialogFragment
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
-import com.album.ui.fragment.AlbumBaseFragment
 import com.album.ui.sample.SimpleAlbumUI
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.yalantis.ucrop.UCrop
@@ -29,7 +39,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.util.*
 
-class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener, OnEmptyClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScanner.SingleScannerListener, OnEmptyClickListener {
 
     override fun click(view: View): Boolean = true
 
@@ -104,9 +114,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
         }
     }
 
-    private fun openCamera() {
-        imagePath = Uri.fromFile(getCameraFile(this, null, false))
-        val i = openCamera(this, imagePath, false)
+    private fun startCamera() {
+        imagePath = Uri.fromFile(applicationContext.getCameraFile(null, false))
+        val i = openCamera(imagePath, false)
         Log.d(javaClass.simpleName, i.toString())
     }
 
@@ -122,11 +132,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             options = dayOptions
             customCameraListener = object : AlbumCustomCameraListener {
                 override fun startCamera(fragment: AlbumBaseFragment) {
-                    if (permissionStorage(this@MainActivity) && permissionCamera(this@MainActivity)) {
+                    if (permissionStorage() && permissionCamera()) {
                         val activity = fragment.activity
                         Toast.makeText(activity, "camera", Toast.LENGTH_SHORT).show()
                         val intent = Intent(activity, SimpleCameraActivity::class.java)
-                        fragment.startActivityForResult(intent, CUSTOMIZE_CAMERA_RESULT_CODE)
+                        fragment.startActivityForResult(intent, CUSTOMIZE_CAMERA_REQUEST_CODE)
                     }
                 }
             }
@@ -217,7 +227,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
                 onSimpleUi().start(this, SimpleAlbumUI::class.java)
             }
             R.id.btn_open_camera -> {
-                openCamera()
+                startCamera()
             }
             R.id.btn_dialog -> {
                 dialog()
@@ -260,16 +270,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, SingleScannerListener
             UCrop.RESULT_ERROR -> {
             }
             Activity.RESULT_OK -> when (requestCode) {
-                ITEM_CAMERA -> {
-                    SingleMediaScanner(this, pathToFile(imagePath.path ?: ""),
-                            this, TYPE_RESULT_CAMERA)
+                AlbumCamera.OPEN_CAMERA_REQUEST_CODE -> {
+                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty().pathToFile(), this, TYPE_RESULT_CAMERA)
                     UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
                             .withOptions(UCrop.Options())
                             .start(this)
                 }
                 UCrop.REQUEST_CROP -> {
-                    SingleMediaScanner(this, pathToFile(imagePath.path ?: ""),
-                            this, TYPE_RESULT_CROP)
+                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty().pathToFile(), this, TYPE_RESULT_CROP)
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

@@ -34,9 +34,10 @@ import com.album.core.scan.FinderEntity
 import com.album.core.scan.AlbumScanImpl
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumView
+import com.album.listener.AlbumParentListener
 import com.album.ui.adapter.AlbumAdapter
-import com.album.ui.widget.LoadMoreRecyclerView
-import com.album.ui.widget.SimpleGridDivider
+import com.album.widget.LoadMoreRecyclerView
+import com.album.widget.SimpleGridDivider
 import com.yalantis.ucrop.UCrop
 import java.io.File
 

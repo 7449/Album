@@ -24,6 +24,10 @@ import com.album.core.AlbumPermission.permissionStorage
 import com.album.core.scan.AlbumScan.VIDEO
 import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.core.ui.AlbumBaseFragment
+import com.album.listener.AlbumCustomCameraListener
+import com.album.listener.AlbumImageLoader
+import com.album.listener.OnEmptyClickListener
+import com.album.listener.SimpleAlbumImageLoader
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
 import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader

@@ -3,20 +3,20 @@ package com.album.sample
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.album.AlbumListener
 import com.album.core.scan.AlbumEntity
+import com.album.listener.OnAlbumListener
 import java.io.File
 
 /**
  * @author y
  */
-class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : AlbumListener {
+class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : OnAlbumListener {
 
     override fun onCheckBoxAlbum(count: Int, maxCount: Int) {
         toast("onCheckBoxAlbum:$count")
     }
 
-    override fun onAlbumActivityFinish() {
+    override fun onAlbumContainerFinish() {
         toast("onAlbumActivityFinish")
     }
 
@@ -38,7 +38,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("preview image has been deleted")
     }
 
-    override fun onAlbumFinderEmpty() {
+    override fun onAlbumContainerFinderEmpty() {
         toast("folder directory is empty")
     }
 
@@ -54,7 +54,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("album image has been deleted")
     }
 
-    override fun onAlbumPreviewSelectEmpty() {
+    override fun onAlbumContainerPreviewSelectEmpty() {
         toast("PreviewActivity,  preview no image")
     }
 
@@ -83,7 +83,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("select max count")
     }
 
-    override fun onAlbumActivityBackPressed() {
+    override fun onAlbumContainerBackPressed() {
         toast("AlbumActivity Back")
     }
 

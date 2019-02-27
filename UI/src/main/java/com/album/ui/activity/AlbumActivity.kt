@@ -14,6 +14,7 @@ import com.album.core.AlbumCore.drawable
 import com.album.core.AlbumCore.hasL
 import com.album.core.AlbumCore.settingStatusBarColor
 import com.album.core.scan.AlbumEntity
+import com.album.listener.AlbumParentListener
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.adapter.FinderAdapter
@@ -59,7 +60,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             album_toolbar.elevation = albumUiBundle.toolbarElevation
         }
         album_toolbar.setNavigationOnClickListener {
-            Album.instance.albumListener?.onAlbumActivityFinish()
+            Album.instance.albumListener?.onAlbumContainerFinish()
             finish()
         }
 
@@ -140,7 +141,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                     listPopupWindow.listView?.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.listPopupBackground))
                     return
                 }
-                Album.instance.albumListener?.onAlbumFinderEmpty()
+                Album.instance.albumListener?.onAlbumContainerFinderEmpty()
             }
         }
     }
@@ -162,7 +163,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     }
 
     override fun onBackPressed() {
-        Album.instance.albumListener?.onAlbumActivityBackPressed()
+        Album.instance.albumListener?.onAlbumContainerBackPressed()
         super.onBackPressed()
     }
 

@@ -18,8 +18,9 @@ import com.album.core.AlbumPermission.permissionStorage
 import com.album.core.scan.AlbumPreviewScanImpl
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumPreViewView
+import com.album.listener.AlbumPreviewParentListener
 import com.album.ui.adapter.PreviewAdapter
-import com.album.ui.widget.ExtendedViewPager
+import com.album.widget.ExtendedViewPager
 
 /**
  *  @author y

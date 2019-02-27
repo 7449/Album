@@ -6,11 +6,12 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.album.*
-import com.album.core.ui.AlbumBaseActivity
 import com.album.core.AlbumCore.hasL
 import com.album.core.AlbumCore.orEmpty
 import com.album.core.AlbumCore.settingStatusBarColor
 import com.album.core.scan.AlbumEntity
+import com.album.core.ui.AlbumBaseActivity
+import com.album.listener.AlbumPreviewParentListener
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.fragment.PrevFragment
@@ -45,7 +46,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
         preview_bottom_view_tv_select.setOnClickListener {
             val entity = prevFragment.getSelectEntity()
             if (entity.isEmpty()) {
-                Album.instance.albumListener?.onAlbumPreviewSelectEmpty()
+                Album.instance.albumListener?.onAlbumContainerPreviewSelectEmpty()
                 return@setOnClickListener
             }
             Album.instance.albumListener?.onAlbumResources(entity)

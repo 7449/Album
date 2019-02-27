@@ -28,6 +28,7 @@ class AlbumBundle(
         var cameraCrop: Boolean = false,
         /**
          * 权限被拒之后是否销毁
+         * 这个设置只有在fragment依赖activity时有效
          */
         var permissionsDeniedFinish: Boolean = false,
         /**

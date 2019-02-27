@@ -10,6 +10,7 @@ import com.album.core.ui.AlbumBaseActivity
 import com.album.core.AlbumCore.hasL
 import com.album.core.AlbumCore.orEmpty
 import com.album.core.scan.AlbumEntity
+import com.album.listener.AlbumPreviewParentListener
 import com.album.ui.AlbumUiBundle
 import com.album.ui.fragment.PrevFragment
 import kotlinx.android.synthetic.main.activity_simple_preview.*
@@ -42,11 +43,11 @@ class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
         preview_bottom_view_tv_select.setOnClickListener {
             val entity = prevFragment.getSelectEntity()
             if (entity.isEmpty()) {
-                Album.instance.albumListener?.onAlbumPreviewSelectEmpty()
+                Album.instance.albumListener?.onAlbumContainerPreviewSelectEmpty()
                 return@setOnClickListener
             }
             Album.instance.albumListener?.onAlbumResources(entity)
-            prevFragment.isRefreshAlbumUI(false, true)
+            prevFragment.isRefreshAlbumUI(isRefresh = false, isFinish = true)
         }
     }
 

@@ -4,12 +4,12 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.album.AlbumImageLoader
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.FinderEntity
+import com.album.listener.AlbumImageLoader
 import com.album.sample.R
-import com.album.ui.widget.AlbumImageView
-import com.album.ui.widget.TouchImageView
+import com.album.widget.AlbumImageView
+import com.album.widget.TouchImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware

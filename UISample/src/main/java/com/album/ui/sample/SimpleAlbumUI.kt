@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.album.*
 import com.album.core.scan.AlbumEntity
 import com.album.core.ui.AlbumBaseActivity
+import com.album.listener.AlbumParentListener
 import com.album.ui.AlbumUiBundle
 import com.album.ui.adapter.FinderAdapter
 import com.album.ui.fragment.AlbumFragment
@@ -40,7 +41,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
                 listPopupWindow.listView?.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.listPopupBackground))
                 return@setOnClickListener
             }
-            Album.instance.albumListener?.onAlbumFinderEmpty()
+            Album.instance.albumListener?.onAlbumContainerFinderEmpty()
         }
     }
 
@@ -55,7 +56,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
         sample_toolbar.navigationIcon = drawable
         sample_toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
         sample_toolbar.setNavigationOnClickListener {
-            Album.instance.albumListener?.onAlbumActivityFinish()
+            Album.instance.albumListener?.onAlbumContainerFinish()
             finish()
         }
         initFragment()
@@ -103,7 +104,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
     }
 
     override fun onBackPressed() {
-        Album.instance.albumListener?.onAlbumActivityBackPressed()
+        Album.instance.albumListener?.onAlbumContainerBackPressed()
         super.onBackPressed()
     }
 

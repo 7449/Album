@@ -12,6 +12,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.album.*
 import com.album.core.scan.AlbumEntity
+import com.album.listener.AlbumParentListener
+import com.album.listener.AlbumPreviewParentListener
+import com.album.listener.SimpleOnAlbumListener
 import com.album.sample.R
 import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
 import com.album.ui.AlbumUiBundle
@@ -83,7 +86,7 @@ class SimpleDialogFragment : DialogFragment(), AlbumPreviewParentListener {
                 .instance
                 .apply {
                     albumImageLoader = SimpleFrescoAlbumImageLoader()
-                    albumListener = object : SimpleAlbumListener() {
+                    albumListener = object : SimpleOnAlbumListener() {
                         override fun onAlbumResources(list: List<AlbumEntity>) {
                             super.onAlbumResources(list)
                             Toast.makeText(mActivity, list.toString(), Toast.LENGTH_SHORT).show()

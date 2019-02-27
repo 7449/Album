@@ -5,6 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import com.album.core.scan.AlbumEntity
+import com.album.listener.AlbumCustomCameraListener
+import com.album.listener.AlbumImageLoader
+import com.album.listener.OnAlbumListener
+import com.album.listener.OnEmptyClickListener
 import com.yalantis.ucrop.UCrop
 
 internal const val FINDER_ALL_DIR_NAME = "全部"
@@ -49,7 +53,7 @@ class Album {
 
     var options: UCrop.Options? = null
     var albumImageLoader: AlbumImageLoader? = null
-    var albumListener: AlbumListener? = null
+    var albumListener: OnAlbumListener? = null
     var customCameraListener: AlbumCustomCameraListener? = null
     var emptyClickListener: OnEmptyClickListener? = null
     var initList: ArrayList<AlbumEntity>? = null

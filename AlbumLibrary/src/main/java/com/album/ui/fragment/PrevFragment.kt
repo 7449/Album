@@ -15,7 +15,7 @@ import com.album.core.scan.AlbumEntity
 import com.album.core.AlbumFile.fileExists
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_ALBUM
 import com.album.core.AlbumPermission.permissionStorage
-import com.album.core.scan.AlbumPreviewScanImpl
+import com.album.core.scan.AlbumScanPreviewImpl
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumPreViewView
 import com.album.listener.AlbumPreviewParentListener
@@ -40,7 +40,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
     private lateinit var progressBar: ProgressBar
     private lateinit var viewPager: ExtendedViewPager
     private lateinit var rootView: FrameLayout
-    private lateinit var previewPresenter: AlbumPreviewScanImpl
+    private lateinit var presenterPreview: AlbumScanPreviewImpl
 
     private lateinit var albumBundle: AlbumBundle
 
@@ -102,7 +102,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
 
     private fun initPreview() {
         if (!preview) {
-            previewPresenter = AlbumPreviewScanImpl.newInstance(this, albumBundle.filterImg, selectList, bucketId)
+            presenterPreview = AlbumScanPreviewImpl.newInstance(this, albumBundle.filterImg, selectList, bucketId)
             return
         }
         if (albumList.isEmpty()) {

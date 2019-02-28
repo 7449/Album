@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
                                 cameraTextColor = R.color.colorAlbumContentViewTipsColorNight,
                                 cameraDrawable = R.drawable.ic_camera_drawable,
                                 cameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight,
-                                cameraBackgroundColor = R.color.colorAlbumContentViewBackgroundColorNight,
+                                cameraBackgroundColor = R.color.colorAlbumToolbarBackgroundNight,
                                 rootViewBackground = R.color.colorAlbumContentViewBackgroundNight,
                                 photoEmptyDrawable = R.drawable.ic_camera_drawable,
                                 photoEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorNight,

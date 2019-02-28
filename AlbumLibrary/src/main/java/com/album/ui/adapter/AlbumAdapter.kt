@@ -2,6 +2,7 @@ package com.album.ui.adapter
 
 import android.graphics.PorterDuff
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,49 +13,68 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.album.*
-import com.album.core.scan.AlbumEntity
+import com.album.Album
+import com.album.AlbumBundle
+import com.album.CAMERA
+import com.album.R
 import com.album.core.AlbumFile.fileExists
+import com.album.core.AlbumView.hide
+import com.album.core.AlbumView.show
+import com.album.core.scan.AlbumEntity
 
 /**
  *   @author y
  */
-class AlbumAdapter(private val display: Int) : RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
+class AlbumAdapter(
+        private val display: Int,
+        private val albumBundle: AlbumBundle,
+        private val onItemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
-    private lateinit var albumBundle: AlbumBundle
-    private var onItemClickListener: OnItemClickListener? = null
-    private var list: ArrayList<AlbumEntity> = ArrayList()
-    private var multipleList: ArrayList<AlbumEntity> = ArrayList()
+    /**
+     * 图片数据
+     */
+    var albumList: ArrayList<AlbumEntity> = ArrayList()
+
+    /**
+     * 多选时的临时数据
+     */
+    var multipleList: ArrayList<AlbumEntity> = ArrayList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    /**
+     * item 的 layoutParams,为正方形
+     */
     private val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(display, display)
-
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.onItemClickListener = onItemClickListener
-    }
-
-    fun setAlbumBundle(albumBundle: AlbumBundle) {
-        this.albumBundle = albumBundle
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album, parent, false)
-        val viewHolder = ViewHolder(view)
-        view.setOnClickListener { v -> onItemClickListener?.onItemClick(v, viewHolder.adapterPosition, list[viewHolder.adapterPosition]) }
+        val viewHolder = ViewHolder(view, albumBundle)
+        view.setOnClickListener { v -> onItemClickListener.onItemClick(v, viewHolder.adapterPosition, albumList[viewHolder.adapterPosition]) }
         return viewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val albumEntity = list[position]
+
+        val albumEntity = albumList[position]
+
+        // init camera
         if (TextUtils.equals(albumEntity.path, CAMERA)) {
             holder.camera()
             return
         }
-        holder.cameraRootView.visibility = View.GONE
-        holder.imageView.visibility = View.VISIBLE
-        holder.imageView.addView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, holder.imageView), layoutParams)
+
+        // imageLoader
+        holder.container.addView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, holder.container), layoutParams)
+
         if (albumBundle.radio) {
             return
         }
-        holder.checkBox.visibility = View.VISIBLE
+
+        holder.checkBox.show()
         holder.checkBox.isChecked = albumEntity.isCheck
         holder.checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
         holder.checkBox.setOnClickListener(View.OnClickListener {
@@ -79,26 +99,21 @@ class AlbumAdapter(private val display: Int) : RecyclerView.Adapter<AlbumAdapter
         })
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = albumList.size
 
+    /**
+     * 添加新数据
+     */
     fun addAll(newList: ArrayList<AlbumEntity>) {
-        if (!newList.isEmpty()) {
-            list.addAll(newList)
-            notifyDataSetChanged()
-        }
-    }
-
-    fun getAlbumList(): ArrayList<AlbumEntity> = list
-
-    fun getMultiplePreviewList(): ArrayList<AlbumEntity> = multipleList
-
-    fun setMultiplePreviewList(multiplePreviewList: ArrayList<AlbumEntity>) {
-        this.multipleList = multiplePreviewList
+        albumList.addAll(newList)
         notifyDataSetChanged()
     }
 
+    /**
+     * 清除所有数据
+     */
     fun removeAll() {
-        list.clear()
+        albumList.clear()
         notifyDataSetChanged()
     }
 
@@ -106,25 +121,33 @@ class AlbumAdapter(private val display: Int) : RecyclerView.Adapter<AlbumAdapter
         fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, private val albumBundle: AlbumBundle) : RecyclerView.ViewHolder(itemView) {
 
-        val imageView: FrameLayout = itemView.findViewById(R.id.album_image)
+        val container: FrameLayout = itemView.findViewById(R.id.album_container)
         val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
-        private val imageCamera: AppCompatImageView = itemView.findViewById(R.id.album_image_camera)
-        private val cameraTips: AppCompatTextView = itemView.findViewById(R.id.album_image_camera_tv)
-        val cameraRootView: LinearLayout = itemView.findViewById(R.id.album_camera_root_view)
 
         fun camera() {
+
+            val linearLayout = LinearLayout(itemView.context)
+            linearLayout.orientation = LinearLayout.VERTICAL
+
+            val cameraIv = AppCompatImageView(linearLayout.context)
+            val cameraTv = AppCompatTextView(linearLayout.context)
+            cameraTv.gravity = Gravity.CENTER
+
+            linearLayout.addView(cameraIv, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
+            linearLayout.addView(cameraTv)
+            container.addView(linearLayout)
+
             val drawable = ContextCompat.getDrawable(itemView.context, albumBundle.cameraDrawable)
             drawable?.setColorFilter(ContextCompat.getColor(itemView.context, albumBundle.cameraDrawableColor), PorterDuff.Mode.SRC_ATOP)
-            cameraTips.setText(albumBundle.cameraText)
-            cameraTips.textSize = albumBundle.cameraTextSize
-            cameraTips.setTextColor(ContextCompat.getColor(itemView.context, albumBundle.cameraTextColor))
-            cameraRootView.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.cameraBackgroundColor))
-            imageCamera.setImageDrawable(drawable)
-            cameraRootView.visibility = View.VISIBLE
-            imageView.visibility = View.GONE
-            checkBox.visibility = View.GONE
+            cameraTv.setText(albumBundle.cameraText)
+            cameraTv.textSize = albumBundle.cameraTextSize
+            cameraTv.setTextColor(ContextCompat.getColor(itemView.context, albumBundle.cameraTextColor))
+            container.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.cameraBackgroundColor))
+            cameraIv.setImageDrawable(drawable)
+            checkBox.hide()
+
         }
     }
 }

@@ -15,7 +15,7 @@ import com.album.core.view.AlbumPreViewView
  * @create 2019/2/27
  * 预览扫描工具类
  */
-class AlbumPreviewScanImpl(private val prevView: AlbumPreViewView,
+class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
                            private val filterImage: Boolean,
                            private val selectEntity: ArrayList<AlbumEntity>,
                            private val bucketId: String) : LoaderManager.LoaderCallbacks<Cursor> {
@@ -26,7 +26,7 @@ class AlbumPreviewScanImpl(private val prevView: AlbumPreViewView,
                 filterImage: Boolean,
                 selectEntity: ArrayList<AlbumEntity>,
                 bucketId: String
-        ) = AlbumPreviewScanImpl(prevView, filterImage, selectEntity, bucketId)
+        ) = AlbumScanPreviewImpl(prevView, filterImage, selectEntity, bucketId)
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getPrevContext())

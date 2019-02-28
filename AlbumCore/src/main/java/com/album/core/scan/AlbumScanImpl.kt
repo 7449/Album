@@ -1,3 +1,5 @@
+@file:Suppress("PrivatePropertyName")
+
 package com.album.core.scan
 
 import android.database.Cursor

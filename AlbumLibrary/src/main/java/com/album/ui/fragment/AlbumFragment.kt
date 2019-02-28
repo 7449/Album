@@ -21,17 +21,17 @@ import com.album.core.AlbumCamera.getCameraFile
 import com.album.core.AlbumCamera.openCamera
 import com.album.core.AlbumCore.imageViewWidthAndHeight
 import com.album.core.AlbumCore.orEmpty
-import com.album.core.scan.AlbumEntity
 import com.album.core.AlbumFile.fileExists
 import com.album.core.AlbumFile.pathToFile
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_ALBUM
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_CAMERA
 import com.album.core.AlbumPermission.permissionCamera
 import com.album.core.AlbumPermission.permissionStorage
+import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan.VIDEO
+import com.album.core.scan.AlbumScanImpl
 import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.core.scan.FinderEntity
-import com.album.core.scan.AlbumScanImpl
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumView
 import com.album.listener.AlbumParentListener
@@ -142,7 +142,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(TYPE_ALBUM_STATE_SELECT, albumAdapter.getMultiplePreviewList())
+        outState.putParcelableArrayList(TYPE_ALBUM_STATE_SELECT, albumAdapter.multipleList)
         outState.putString(TYPE_ALBUM_STATE_BUCKET_ID, bucketId)
         outState.putString(TYPE_ALBUM_STATE_FINDER_NAME, finderName)
         outState.putParcelable(TYPE_ALBUM_STATE_IMAGE_PATH, imagePath)
@@ -176,9 +176,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.setLoadingListener(this)
         recyclerView.addItemDecoration(SimpleGridDivider(albumBundle.dividerWidth))
-        albumAdapter = AlbumAdapter(mActivity.imageViewWidthAndHeight(albumBundle.spanCount))
-        albumAdapter.setOnItemClickListener(this)
-        albumAdapter.setAlbumBundle(albumBundle)
+        albumAdapter = AlbumAdapter(mActivity.imageViewWidthAndHeight(albumBundle.spanCount), albumBundle, this)
         recyclerView.adapter = albumAdapter
         onScanAlbum(bucketId, isFinder = false, result = false)
     }
@@ -247,7 +245,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             val selectEntity = Album.instance.initList
             if (selectEntity != null && !selectEntity.isEmpty() && !albumEntityList.isEmpty()) {
                 albumScan.mergeEntity(albumEntityList, selectEntity)
-                albumAdapter.setMultiplePreviewList(selectEntity)
+                albumAdapter.multipleList = selectEntity
                 selectAlbumEntity = selectEntity
             }
         }
@@ -261,9 +259,9 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
 
     override fun getSelectEntity(): ArrayList<AlbumEntity> {
         if (!selectAlbumEntity.isEmpty()) {
-            albumAdapter.setMultiplePreviewList(selectAlbumEntity)
+            albumAdapter.multipleList = selectAlbumEntity
         }
-        return albumAdapter.getMultiplePreviewList()
+        return albumAdapter.multipleList
     }
 
     override fun onAlbumNoMore() {
@@ -279,7 +277,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         if (albumEntity == null) {
             Album.instance.albumListener?.onAlbumResultCameraError()
         } else {
-            albumAdapter.getAlbumList().add(1, albumEntity)
+            albumAdapter.albumList.add(1, albumEntity)
             albumAdapter.notifyDataSetChanged()
         }
     }
@@ -321,7 +319,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         if (albumBundle.noPreview) {
             return
         }
-        albumParentListener?.onAlbumItemClick(albumAdapter.getMultiplePreviewList(), position, bucketId)
+        albumParentListener?.onAlbumItemClick(albumAdapter.multipleList, position, bucketId)
     }
 
     override fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean) {
@@ -331,7 +329,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         }
         this.bucketId = bucketId
         if (permissionStorage()) {
-            if (result && !albumAdapter.getAlbumList().isEmpty()) {
+            if (result && !albumAdapter.albumList.isEmpty()) {
                 albumScan.resultScan(imagePath.path.orEmpty())
                 return
             }
@@ -374,7 +372,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun selectPreview(): ArrayList<AlbumEntity> {
-        val albumEntityList = albumAdapter.getMultiplePreviewList()
+        val albumEntityList = albumAdapter.multipleList
         if (albumEntityList.isEmpty()) {
             Album.instance.albumListener?.onAlbumPreviewEmpty()
             return ArrayList()
@@ -383,7 +381,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun multipleSelect() {
-        val albumEntityList = albumAdapter.getMultiplePreviewList()
+        val albumEntityList = albumAdapter.multipleList
         if (albumEntityList.isEmpty()) {
             Album.instance.albumListener?.onAlbumSelectEmpty()
             return
@@ -412,8 +410,8 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
             return
         }
         selectAlbumEntity = previewAlbumEntity
-        albumScan.mergeEntity(albumAdapter.getAlbumList(), previewAlbumEntity)
-        albumAdapter.setMultiplePreviewList(previewAlbumEntity)
+        albumScan.mergeEntity(albumAdapter.albumList, previewAlbumEntity)
+        albumAdapter.multipleList = previewAlbumEntity
     }
 
     override fun onLoadMore() {

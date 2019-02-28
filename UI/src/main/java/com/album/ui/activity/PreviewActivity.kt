@@ -49,7 +49,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
                 return@setOnClickListener
             }
             Album.instance.albumListener?.onAlbumResources(prevFragment.selectList)
-            prevFragment.isRefreshAlbumUI(isRefresh = false, isFinish = true)
+            prevFragment.isRefreshAlbumUI(isRefresh = false, isFinish = uiBundle.previewSelectOkFinish)
         }
     }
 

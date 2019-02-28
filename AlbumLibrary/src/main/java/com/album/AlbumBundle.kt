@@ -28,7 +28,7 @@ class AlbumBundle(
         var cameraCrop: Boolean = false,
         /**
          * 权限被拒之后是否销毁
-         * 这个设置只有在fragment依赖activity时有效
+         * 如果依赖的Dialog默认即可
          */
         var permissionsDeniedFinish: Boolean = false,
         /**
@@ -61,14 +61,17 @@ class AlbumBundle(
         var filterImg: Boolean = false,
         /**
          * 裁剪异常是否退出
+         * 如果依赖的Dialog则设置为false
          */
         var cropErrorFinish: Boolean = true,
         /**
          * 选择图片之后是否退出
+         * 如果依赖的Dialog则设置为false
          */
         var selectImageFinish: Boolean = true,
         /**
          * 裁剪之后是否退出
+         * 如果依赖的Dialog则设置为false
          */
         var cropFinish: Boolean = true,
         /**

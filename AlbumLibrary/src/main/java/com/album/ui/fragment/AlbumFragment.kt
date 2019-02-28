@@ -34,6 +34,7 @@ import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.core.scan.FinderEntity
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumView
+import com.album.listener.AlbumMethodFragmentViewListener
 import com.album.listener.AlbumParentListener
 import com.album.ui.adapter.AlbumAdapter
 import com.album.widget.LoadMoreRecyclerView
@@ -42,66 +43,21 @@ import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.album_fragment_album.*
 import java.io.File
 
-
-interface AlbumMethodFragmentView {
-
-    /**
-     * 获取文件夹list
-     */
-    fun getFinderEntity(): List<FinderEntity>
-
-    /**
-     * 断掉MediaScanner
-     */
-    fun disconnectMediaScanner()
-
-    /**
-     * 扫描设备
-     * [bucketId] 文件夹唯一
-     * [isFinder] 是否点击文件夹扫描
-     * [result] 是否是拍照之后的扫描
-     */
-    fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean)
-
-    /**
-     * 打开相机
-     */
-    fun startCamera()
-
-    /**
-     * 裁剪
-     */
-    fun openUCrop(path: String)
-
-    /**
-     * 刷新图库
-     */
-    fun refreshMedia(type: Int, file: File)
-
-    /**
-     * 选择选中的数据
-     */
-    fun selectPreview(): ArrayList<AlbumEntity>
-
-    /**
-     * 确定数据
-     */
-    fun multipleSelect()
-
-    /**
-     * 刷新[FragmentActivity.onActivityResult]数据
-     */
-    fun onResultPreview(bundle: Bundle)
-}
-
-
 /**
  * by y on 14/08/2017.
  */
 
-class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, AlbumAdapter.OnItemClickListener, AlbumSingleMediaScanner.SingleScannerListener, LoadMoreRecyclerView.LoadMoreListener {
+class AlbumFragment : AlbumBaseFragment(),
+        AlbumView,
+        AlbumMethodFragmentViewListener,
+        AlbumAdapter.OnItemClickListener,
+        AlbumSingleMediaScanner.SingleScannerListener,
+        LoadMoreRecyclerView.LoadMoreListener {
 
     companion object {
+        /**
+         * 获取图库fragment
+         */
         fun newInstance(albumBundle: AlbumBundle) = AlbumFragment().apply {
             arguments = Bundle().apply { putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle) }
         }
@@ -109,19 +65,46 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
 
     private lateinit var albumAdapter: AlbumAdapter
     private lateinit var albumScan: AlbumScanImpl
+    private lateinit var albumBundle: AlbumBundle
 
+    /**
+     * UI使用回调,可能会用到
+     */
     var albumParentListener: AlbumParentListener? = null
 
+    /**
+     * 目录数据
+     */
     private lateinit var finderEntityList: ArrayList<FinderEntity>
-    private lateinit var imagePath: Uri
 
-    private lateinit var albumBundle: AlbumBundle
+    /**
+     * 已选择的数据
+     */
     private lateinit var selectAlbumEntity: ArrayList<AlbumEntity>
 
+    /**
+     * 拍照保存的图片Uri
+     */
+    private lateinit var imagePath: Uri
+
+    /**
+     * 拍照之后刷新数据库
+     */
     private var singleMediaScanner: AlbumSingleMediaScanner? = null
+
+    /**
+     *当前 bucketId
+     */
     var bucketId: String = ""
+
+    /**
+     * 当前页数
+     */
     private var page = 0
 
+    /**
+     *当前的文件夹名称
+     */
     var finderName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -312,19 +295,27 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         albumParentListener?.onAlbumItemClick(albumAdapter.multipleList, position, bucketId)
     }
 
+    /**
+     * 扫描图库
+     * [bucketId] 如果为空则扫描整个
+     * [isFinder] 是否是点击相册名称扫描
+     * [result] 是否是拍照之后扫描
+     */
     override fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean) {
         if (isFinder) {
             page = 0
             albumAdapter.removeAll()
         }
         this.bucketId = bucketId
-        if (permissionStorage()) {
-            if (result && !albumAdapter.albumList.isEmpty()) {
-                albumScan.resultScan(imagePath.path.orEmpty())
-                return
-            }
-            albumScan.scanAll(bucketId, page)
+        if (!permissionStorage()) {
+            return
         }
+        // 如果 albumList 为空则是没有图片拍照的第一张图片,这时直接扫描整个图库即可
+        if (result && !albumAdapter.albumList.isEmpty()) {
+            albumScan.resultScan(imagePath.path.orEmpty())
+            return
+        }
+        albumScan.scanAll(bucketId, page)
     }
 
     override fun onScanStart() {}
@@ -343,6 +334,10 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         }
     }
 
+    /**
+     * 启动相机
+     * [imagePath]每次都赋值,确保拍照时不会重复
+     */
     override fun startCamera() {
         val albumCameraListener = Album.instance.customCameraListener
         if (albumCameraListener != null) {
@@ -361,6 +356,9 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         singleMediaScanner = AlbumSingleMediaScanner(mActivity, file, this@AlbumFragment, type)
     }
 
+    /**
+     * 预览时多选的数据,可能为空,[multipleSelect]结果类似
+     */
     override fun selectPreview(): ArrayList<AlbumEntity> {
         val albumEntityList = albumAdapter.multipleList
         if (albumEntityList.isEmpty()) {
@@ -370,6 +368,9 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         return albumEntityList
     }
 
+    /**
+     * 获取多选时的数据,可能为空
+     */
     override fun multipleSelect() {
         val albumEntityList = albumAdapter.multipleList
         if (albumEntityList.isEmpty()) {
@@ -388,6 +389,12 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
                 .start(mActivity, this)
     }
 
+    /**
+     * 预览页返回到当前页时需要刷新的数据
+     * [TYPE_PREVIEW_KEY] 更新的已选择数据
+     * [TYPE_PREVIEW_REFRESH_UI] 是否刷新数据
+     * [TYPE_PREVIEW_SELECT_OK_FINISH] 是否销毁依赖的Activity,如果是依赖的Dialog则设置为false,具体参考 UI
+     */
     override fun onResultPreview(bundle: Bundle) {
         val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
         val isRefreshUI = bundle.getBoolean(TYPE_PREVIEW_REFRESH_UI, true)

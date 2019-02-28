@@ -149,6 +149,9 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
         initViewPager(entityList)
     }
 
+    /**
+     * 不适用于Dialog
+     */
     fun isRefreshAlbumUI(isRefresh: Boolean, isFinish: Boolean) {
         val bundle = Bundle()
         bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, selectList)

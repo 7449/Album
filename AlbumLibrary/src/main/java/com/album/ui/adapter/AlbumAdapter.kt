@@ -128,6 +128,8 @@ class AlbumAdapter(
 
         fun camera() {
 
+            container.removeAllViews()
+
             val linearLayout = LinearLayout(itemView.context)
             linearLayout.orientation = LinearLayout.VERTICAL
 

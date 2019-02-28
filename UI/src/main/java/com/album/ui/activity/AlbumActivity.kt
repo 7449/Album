@@ -126,10 +126,10 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                 if (!multiplePreview.isEmpty()) {
                     val bundle = Bundle()
                     bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreview)
-                    bundle.putString(TYPE_PREVIEW_BUCKET_ID, TYPE_PREVIEW_BUTTON_KEY)
+                    bundle.putString(TYPE_PREVIEW_BUCKET_ID, PREVIEW_BUTTON_KEY)
                     bundle.putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
                     bundle.putParcelable(EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
-                    albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_CODE)
+                    albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
                 }
             }
             R.id.album_tv_select -> albumFragment.multipleSelect()

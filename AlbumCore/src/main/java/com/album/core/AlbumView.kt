@@ -21,4 +21,5 @@ object AlbumView {
         }
         visibility = View.GONE
     }
+
 }

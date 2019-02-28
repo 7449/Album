@@ -32,17 +32,7 @@ abstract class AlbumBaseFragment : Fragment() {
         mActivity = context as? FragmentActivity ?: activity!!
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(layoutId, container, false)
-        initView(view)
-        initCreate(savedInstanceState)
-        return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        initActivityCreated(savedInstanceState)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(layoutId, container, false)
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -69,12 +59,6 @@ abstract class AlbumBaseFragment : Fragment() {
             }
         }
     }
-
-    protected abstract fun initView(view: View)
-
-    protected abstract fun initCreate(savedInstanceState: Bundle?)
-
-    protected abstract fun initActivityCreated(savedInstanceState: Bundle?)
 
     protected abstract fun permissionsGranted(type: Int)
 

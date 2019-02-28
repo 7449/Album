@@ -7,8 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.ProgressBar
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,6 +25,8 @@ import com.album.core.AlbumPermission.TYPE_PERMISSIONS_ALBUM
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_CAMERA
 import com.album.core.AlbumPermission.permissionCamera
 import com.album.core.AlbumPermission.permissionStorage
+import com.album.core.AlbumView.hide
+import com.album.core.AlbumView.show
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan.VIDEO
 import com.album.core.scan.AlbumScanImpl
@@ -39,6 +39,7 @@ import com.album.ui.adapter.AlbumAdapter
 import com.album.widget.LoadMoreRecyclerView
 import com.album.widget.SimpleGridDivider
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.album_fragment_album.*
 import java.io.File
 
 
@@ -50,7 +51,7 @@ interface AlbumMethodFragmentView {
     fun getFinderEntity(): List<FinderEntity>
 
     /**
-     * 断掉[SingleMediaScanner]
+     * 断掉MediaScanner
      */
     fun disconnectMediaScanner()
 
@@ -83,7 +84,7 @@ interface AlbumMethodFragmentView {
     fun selectPreview(): ArrayList<AlbumEntity>
 
     /**
-     * 确定数据[AlbumListener.onAlbumResources]
+     * 确定数据
      */
     fun multipleSelect()
 
@@ -106,10 +107,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         }
     }
 
-    private lateinit var recyclerView: LoadMoreRecyclerView
-    private lateinit var progressBar: ProgressBar
     private lateinit var albumAdapter: AlbumAdapter
-    private lateinit var emptyView: AppCompatImageView
     private lateinit var albumScan: AlbumScanImpl
 
     var albumParentListener: AlbumParentListener? = null
@@ -148,17 +146,13 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         outState.putParcelable(TYPE_ALBUM_STATE_IMAGE_PATH, imagePath)
     }
 
-    override fun initCreate(savedInstanceState: Bundle?) {}
-
-    override fun initView(view: View) {
-        view.findViewById<View>(R.id.album_content_view).setBackgroundColor(ContextCompat.getColor(view.context, albumBundle.rootViewBackground))
-        recyclerView = view.findViewById(R.id.album_recyclerView)
-        progressBar = view.findViewById(R.id.album_progress)
-        emptyView = view.findViewById(R.id.album_empty)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        album_content_view.setBackgroundColor(ContextCompat.getColor(mActivity, albumBundle.rootViewBackground))
         val drawable = ContextCompat.getDrawable(mActivity, albumBundle.photoEmptyDrawable)
         drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumBundle.photoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
-        emptyView.setImageDrawable(drawable)
-        emptyView.setOnClickListener { v ->
+        album_empty.setImageDrawable(drawable)
+        album_empty.setOnClickListener { v ->
             val emptyClickListener = Album.instance.emptyClickListener
             if (emptyClickListener != null) {
                 if (emptyClickListener.click(v)) {
@@ -166,18 +160,16 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
                 }
             }
         }
-    }
 
-    override fun initActivityCreated(savedInstanceState: Bundle?) {
         finderEntityList = ArrayList()
         albumScan = AlbumScanImpl.newInstance(this, albumBundle.scanType, albumBundle.scanCount, albumBundle.allName, albumBundle.sdName, albumBundle.filterImg)
-        recyclerView.setHasFixedSize(true)
+        album_recyclerView.setHasFixedSize(true)
         val gridLayoutManager = GridLayoutManager(mActivity, albumBundle.spanCount)
-        recyclerView.layoutManager = gridLayoutManager
-        recyclerView.setLoadingListener(this)
-        recyclerView.addItemDecoration(SimpleGridDivider(albumBundle.dividerWidth))
+        album_recyclerView.layoutManager = gridLayoutManager
+        album_recyclerView.setLoadingListener(this)
+        album_recyclerView.addItemDecoration(SimpleGridDivider(albumBundle.dividerWidth))
         albumAdapter = AlbumAdapter(mActivity.imageViewWidthAndHeight(albumBundle.spanCount), albumBundle, this)
-        recyclerView.adapter = albumAdapter
+        album_recyclerView.adapter = albumAdapter
         onScanAlbum(bucketId, isFinder = false, result = false)
     }
 
@@ -185,7 +177,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
             Activity.RESULT_CANCELED -> when (requestCode) {
-                TYPE_PREVIEW_CODE -> onResultPreview(data?.extras.orEmpty())
+                TYPE_PREVIEW_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
                 UCrop.REQUEST_CROP -> Album.instance.albumListener?.onAlbumCropCanceled()
                 OPEN_CAMERA_REQUEST_CODE -> Album.instance.albumListener?.onAlbumCameraCanceled()
             }
@@ -227,16 +219,14 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
                         mActivity.finish()
                     }
                 }
-                TYPE_PREVIEW_CODE -> onResultPreview(data?.extras.orEmpty())
+                TYPE_PREVIEW_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
             }
         }
     }
 
 
     override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
-        if (emptyView.visibility == View.VISIBLE) {
-            emptyView.visibility = View.GONE
-        }
+        album_empty.hide()
         if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera && page == 0 && !albumEntityList.isEmpty()) {
             albumEntityList.add(0, AlbumEntity(path = CAMERA))
         }
@@ -269,7 +259,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     }
 
     override fun onAlbumEmpty() {
-        emptyView.visibility = View.VISIBLE
+        album_empty.show()
         Album.instance.albumListener?.onAlbumEmpty()
     }
 
@@ -401,7 +391,7 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
     override fun onResultPreview(bundle: Bundle) {
         val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
         val isRefreshUI = bundle.getBoolean(TYPE_PREVIEW_REFRESH_UI, true)
-        val isFinish = bundle.getBoolean(TYPE_PREVIEW_FINISH, false)
+        val isFinish = bundle.getBoolean(TYPE_PREVIEW_SELECT_OK_FINISH, false)
         if (isFinish) {
             mActivity.finish()
             return
@@ -439,21 +429,16 @@ class AlbumFragment : AlbumBaseFragment(), AlbumView, AlbumMethodFragmentView, A
         disconnectMediaScanner()
     }
 
-    override fun showProgress() {
-        if (progressBar.visibility == View.GONE) {
-            progressBar.visibility = View.VISIBLE
-        }
-    }
+    override fun showProgress() = album_progress.show()
 
-    override fun hideProgress() {
-        if (progressBar.visibility == View.VISIBLE) {
-            progressBar.visibility = View.GONE
-        }
-    }
+    override fun hideProgress() = album_progress.hide()
 
     override fun getFinderEntity(): List<FinderEntity> = finderEntityList
+
     override fun getAlbumActivity(): FragmentActivity = mActivity
+
     override fun getPage(): Int = page
+
     override val layoutId: Int = R.layout.album_fragment_album
 }
 

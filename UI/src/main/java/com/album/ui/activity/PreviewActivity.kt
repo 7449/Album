@@ -33,7 +33,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
                 putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
                 putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
-            fragment.startActivityForResult(Intent(fragment.activity, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_CODE)
+            fragment.startActivityForResult(Intent(fragment.activity, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
         }
     }
 
@@ -44,12 +44,11 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
 
     override fun initView() {
         preview_bottom_view_tv_select.setOnClickListener {
-            val entity = prevFragment.getSelectEntity()
-            if (entity.isEmpty()) {
+            if (prevFragment.selectList.isEmpty()) {
                 Album.instance.albumListener?.onAlbumContainerPreviewSelectEmpty()
                 return@setOnClickListener
             }
-            Album.instance.albumListener?.onAlbumResources(entity)
+            Album.instance.albumListener?.onAlbumResources(prevFragment.selectList)
             prevFragment.isRefreshAlbumUI(isRefresh = false, isFinish = true)
         }
     }

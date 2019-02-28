@@ -17,10 +17,10 @@ import com.album.core.AlbumCamera
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.AlbumCamera.getCameraFile
 import com.album.core.AlbumCamera.openCamera
-import com.album.core.scan.AlbumEntity
 import com.album.core.AlbumFile.pathToFile
 import com.album.core.AlbumPermission.permissionCamera
 import com.album.core.AlbumPermission.permissionStorage
+import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan.VIDEO
 import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.core.ui.AlbumBaseFragment
@@ -33,9 +33,9 @@ import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
 import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader
 import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
-import com.album.sample.ui.SimpleDialogFragment
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
+import com.album.ui.dialog.AlbumDialogFragment
 import com.album.ui.sample.SimpleAlbumUI
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.yalantis.ucrop.UCrop
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
     }
 
     private fun dialog() {
-        SimpleDialogFragment().show(supportFragmentManager, "Dialog")
+        AlbumDialogFragment().show(supportFragmentManager, "Dialog")
     }
 
     private fun customizeCamera(): Album {

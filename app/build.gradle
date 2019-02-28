@@ -35,6 +35,7 @@ dependencies {
     implementation project(':UI')
     implementation project(':UIWeChat')
     implementation project(':UISample')
+    implementation project(':UIDialog')
     implementation(name: 'CameraViewLibrary', ext: 'aar')
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"

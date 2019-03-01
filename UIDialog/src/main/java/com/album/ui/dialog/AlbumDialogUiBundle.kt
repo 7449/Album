@@ -6,6 +6,14 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class AlbumDialogUiBundle(
         /**
+         * 预览toolbar返回是否刷新数据
+         */
+        var previewFinishRefresh: Boolean = true,
+        /**
+         * 预览back返回是否刷新数据
+         */
+        var previewBackRefresh: Boolean = true,
+        /**
          * toolbar背景色
          */
         var toolbarBackground: Int = R.color.colorAlbumToolbarBackground,

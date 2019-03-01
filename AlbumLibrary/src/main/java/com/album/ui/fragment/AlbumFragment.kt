@@ -78,11 +78,6 @@ class AlbumFragment : AlbumBaseFragment(),
     private lateinit var finderEntityList: ArrayList<FinderEntity>
 
     /**
-     * 已选择的数据
-     */
-    private lateinit var selectAlbumEntity: ArrayList<AlbumEntity>
-
-    /**
      * 拍照保存的图片Uri
      */
     private lateinit var imagePath: Uri
@@ -110,8 +105,6 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        selectAlbumEntity = savedInstanceState?.getParcelableArrayList(TYPE_ALBUM_STATE_SELECT)
-                ?: ArrayList()
         if (savedInstanceState == null) {
             imagePath = Uri.fromFile(mActivity.getCameraFile(albumBundle.cameraPath, albumBundle.scanType == VIDEO))
             return
@@ -123,7 +116,7 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(TYPE_ALBUM_STATE_SELECT, albumAdapter.multipleList)
+        outState.putParcelableArrayList(TYPE_ALBUM_STATE_SELECT, getSelectEntity())
         outState.putString(TYPE_ALBUM_STATE_BUCKET_ID, bucketId)
         outState.putString(TYPE_ALBUM_STATE_FINDER_NAME, finderName)
         outState.putParcelable(TYPE_ALBUM_STATE_IMAGE_PATH, imagePath)
@@ -152,8 +145,16 @@ class AlbumFragment : AlbumBaseFragment(),
         album_recyclerView.setLoadingListener(this)
         album_recyclerView.addItemDecoration(SimpleGridDivider(albumBundle.dividerWidth))
         albumAdapter = AlbumAdapter(mActivity.imageViewWidthAndHeight(albumBundle.spanCount), albumBundle, this)
+
+        val selectList = savedInstanceState?.getParcelableArrayList<AlbumEntity>(TYPE_ALBUM_STATE_SELECT)
+                ?: ArrayList()
+        if (!selectList.isEmpty()) {
+            albumAdapter.multipleList = selectList
+        }
+
         album_recyclerView.adapter = albumAdapter
         onScanAlbum(bucketId, isFinder = false, result = false)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -214,12 +215,11 @@ class AlbumFragment : AlbumBaseFragment(),
             albumEntityList.add(0, AlbumEntity(path = CAMERA))
         }
         albumAdapter.addAll(albumEntityList)
-        if (page == 0 && !albumBundle.radio) {
+        if (page == 0 && !albumBundle.radio && getSelectEntity().isEmpty()) {
             val selectEntity = Album.instance.initList
             if (selectEntity != null && !selectEntity.isEmpty() && !albumEntityList.isEmpty()) {
                 albumScan.mergeEntity(albumEntityList, selectEntity)
                 albumAdapter.multipleList = selectEntity
-                selectAlbumEntity = selectEntity
             }
         }
         ++page
@@ -228,13 +228,6 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun scanFinderSuccess(list: ArrayList<FinderEntity>) {
         finderEntityList.clear()
         finderEntityList.addAll(list)
-    }
-
-    override fun getSelectEntity(): ArrayList<AlbumEntity> {
-        if (!selectAlbumEntity.isEmpty()) {
-            albumAdapter.multipleList = selectAlbumEntity
-        }
-        return albumAdapter.multipleList
     }
 
     override fun onAlbumNoMore() {
@@ -250,7 +243,7 @@ class AlbumFragment : AlbumBaseFragment(),
         if (albumEntity == null) {
             Album.instance.albumListener?.onAlbumResultCameraError()
         } else {
-            albumAdapter.albumList.add(1, albumEntity)
+            getSelectEntity().add(1, albumEntity)
             albumAdapter.notifyDataSetChanged()
         }
     }
@@ -292,7 +285,7 @@ class AlbumFragment : AlbumBaseFragment(),
         if (albumBundle.noPreview) {
             return
         }
-        albumParentListener?.onAlbumItemClick(albumAdapter.multipleList, position, bucketId)
+        albumParentListener?.onAlbumItemClick(getSelectEntity(), position, bucketId)
     }
 
     /**
@@ -356,28 +349,28 @@ class AlbumFragment : AlbumBaseFragment(),
         singleMediaScanner = AlbumSingleMediaScanner(mActivity, file, this@AlbumFragment, type)
     }
 
+    override fun getSelectEntity(): ArrayList<AlbumEntity> = albumAdapter.multipleList
+
     /**
      * 预览时多选的数据,可能为空,[multipleSelect]结果类似
      */
     override fun selectPreview(): ArrayList<AlbumEntity> {
-        val albumEntityList = albumAdapter.multipleList
-        if (albumEntityList.isEmpty()) {
+        if (getSelectEntity().isEmpty()) {
             Album.instance.albumListener?.onAlbumPreviewEmpty()
             return ArrayList()
         }
-        return albumEntityList
+        return getSelectEntity()
     }
 
     /**
      * 获取多选时的数据,可能为空
      */
     override fun multipleSelect() {
-        val albumEntityList = albumAdapter.multipleList
-        if (albumEntityList.isEmpty()) {
+        if (getSelectEntity().isEmpty()) {
             Album.instance.albumListener?.onAlbumSelectEmpty()
             return
         }
-        Album.instance.albumListener?.onAlbumResources(albumEntityList)
+        Album.instance.albumListener?.onAlbumResources(getSelectEntity())
         if (albumBundle.selectImageFinish) {
             mActivity.finish()
         }
@@ -393,7 +386,7 @@ class AlbumFragment : AlbumBaseFragment(),
      * 预览页返回到当前页时需要刷新的数据
      * [TYPE_PREVIEW_KEY] 更新的已选择数据
      * [TYPE_PREVIEW_REFRESH_UI] 是否刷新数据
-     * [TYPE_PREVIEW_SELECT_OK_FINISH] 是否销毁依赖的Activity,如果是依赖的Dialog则设置为false,具体参考 UI
+     * [TYPE_PREVIEW_SELECT_OK_FINISH] 是否销毁依赖的Activity
      */
     override fun onResultPreview(bundle: Bundle) {
         val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
@@ -403,10 +396,29 @@ class AlbumFragment : AlbumBaseFragment(),
             mActivity.finish()
             return
         }
-        if (!isRefreshUI || previewAlbumEntity == null || selectAlbumEntity == previewAlbumEntity) {
+        if (!isRefreshUI || previewAlbumEntity == null || getSelectEntity() == previewAlbumEntity) {
             return
         }
-        selectAlbumEntity = previewAlbumEntity
+        albumScan.mergeEntity(albumAdapter.albumList, previewAlbumEntity)
+        albumAdapter.multipleList = previewAlbumEntity
+    }
+
+    /**
+     * 预览页返回到当前页时需要刷新的数据
+     * [TYPE_PREVIEW_KEY] 更新的已选择数据
+     * [TYPE_PREVIEW_REFRESH_UI] 是否刷新数据
+     */
+    override fun onDialogResultPreview(bundle: Bundle) {
+        val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
+        val isRefreshUI = bundle.getBoolean(TYPE_PREVIEW_REFRESH_UI, true)
+        val isFinish = bundle.getBoolean(TYPE_PREVIEW_SELECT_OK_FINISH, false)
+        if (isFinish) {
+            mActivity.finish()
+            return
+        }
+        if (!isRefreshUI || previewAlbumEntity == null) {
+            return
+        }
         albumScan.mergeEntity(albumAdapter.albumList, previewAlbumEntity)
         albumAdapter.multipleList = previewAlbumEntity
     }
@@ -434,6 +446,10 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun onDestroyView() {
         super.onDestroyView()
         disconnectMediaScanner()
+    }
+
+    override fun refreshUI() {
+        albumAdapter.notifyDataSetChanged()
     }
 
     override fun showProgress() = album_progress.show()

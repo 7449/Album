@@ -1,9 +1,5 @@
 package com.album
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.os.Parcelable
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumCustomCameraListener
 import com.album.listener.AlbumImageLoader
@@ -109,7 +105,6 @@ const val TYPE_RESULT_CAMERA = 0
 const val TYPE_RESULT_CROP = 1
 
 class Album {
-
     companion object {
         val instance by lazy { Album() }
         fun destroy() {
@@ -132,23 +127,3 @@ class Album {
     var initList: ArrayList<AlbumEntity>? = null
 }
 
-fun Album.start(context: Context, cls: Class<*>) {
-    start(context, AlbumBundle(), cls)
-}
-
-fun Album.start(context: Context, albumBundle: AlbumBundle, cls: Class<*>) {
-    context.startActivity(Intent(context, cls).apply {
-        putExtras(Bundle().apply { putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle) })
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    })
-}
-
-fun Album.start(context: Context, albumBundle: AlbumBundle, uiBundle: Parcelable, cls: Class<*>) {
-    context.startActivity(Intent(context, cls).apply {
-        putExtras(Bundle().apply {
-            putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
-            putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
-        })
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    })
-}

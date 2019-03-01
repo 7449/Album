@@ -15,7 +15,7 @@ interface OnAlbumListener {
     fun onAlbumContainerFinish()
 
     /**
-     * fragment 依赖的activity或者dialog back返回
+     * fragment 依赖的activity back返回
      */
     fun onAlbumContainerBackPressed()
 

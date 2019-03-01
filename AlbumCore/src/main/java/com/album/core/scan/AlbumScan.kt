@@ -49,7 +49,8 @@ class AlbumEntity(private var dirPath: String = "",
     }
 }
 
-class FinderEntity(var dirName: String = "", var thumbnailsPath: String = "", var thumbnailsId: Long = 0, var bucketId: String = "", var count: Int = 0)
+@Parcelize
+class FinderEntity(var dirName: String = "", var thumbnailsPath: String = "", var thumbnailsId: Long = 0, var bucketId: String = "", var count: Int = 0) : Parcelable
 
 object AlbumScan {
     /**

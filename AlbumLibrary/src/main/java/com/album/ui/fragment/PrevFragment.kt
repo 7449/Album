@@ -115,6 +115,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
         if (permissionStorage()) {
             initPreview()
         }
+
     }
 
     override fun permissionsGranted(type: Int) {
@@ -153,14 +154,23 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
      * 不适用于Dialog
      */
     fun isRefreshAlbumUI(isRefresh: Boolean, isFinish: Boolean) {
+        val intent = Intent()
+        intent.putExtras(resultBundle(isRefresh, isFinish))
+        mActivity.setResult(Activity.RESULT_OK, intent)
+        mActivity.finish()
+    }
+
+    /**
+     * 适用于Dialog
+     */
+    fun isDialogRefreshAlbumUI(isRefresh: Boolean) = resultBundle(isRefresh, false)
+
+    private fun resultBundle(isRefresh: Boolean, isFinish: Boolean): Bundle {
         val bundle = Bundle()
         bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, selectList)
         bundle.putBoolean(TYPE_PREVIEW_REFRESH_UI, isRefresh)
         bundle.putBoolean(TYPE_PREVIEW_SELECT_OK_FINISH, isFinish)
-        val intent = Intent()
-        intent.putExtras(bundle)
-        mActivity.setResult(Activity.RESULT_OK, intent)
-        mActivity.finish()
+        return bundle
     }
 
     private fun checkBoxClick() {

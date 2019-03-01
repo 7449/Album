@@ -12,7 +12,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.album.*
+import com.album.Album
+import com.album.AlbumBundle
+import com.album.TYPE_RESULT_CAMERA
+import com.album.TYPE_RESULT_CROP
 import com.album.core.AlbumCamera
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.AlbumCamera.getCameraFile
@@ -35,8 +38,9 @@ import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
-import com.album.ui.dialog.AlbumDialogFragment
+import com.album.ui.dialog.dialog
 import com.album.ui.sample.SimpleAlbumUI
+import com.album.ui.start
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
@@ -125,7 +129,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
     }
 
     private fun dialog() {
-        AlbumDialogFragment().show(supportFragmentManager, "Dialog")
+        Album.instance.apply {
+            albumListener = MainAlbumListener(this@MainActivity, null)
+            albumImageLoader = SimpleFrescoAlbumImageLoader()
+            options = dayOptions
+        }.dialog(AlbumBundle(filterImg = true, checkBoxDrawable = R.drawable.simple_selector_album_item_check), supportFragmentManager)
     }
 
     private fun customizeCamera(): Album {

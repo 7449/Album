@@ -15,7 +15,6 @@ class AlbumUiBundle(
         var previewBackRefresh: Boolean = true,
         /**
          * 预览页选择之后是否销毁上一页面
-         * 如果使用Dialog则需要设置为false
          */
         var previewSelectOkFinish: Boolean = true,
         /**

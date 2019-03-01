@@ -103,18 +103,8 @@ class AlbumScanImpl(private val albumView: AlbumView,
     }
 
     fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
-        for (albumEntity in albumList) {
-            albumEntity.isCheck = false
-        }
-        for (albumEntity in selectEntity) {
-            val path = albumEntity.path
-            for (allAlbumEntity in albumList) {
-                val allEntityPath = allAlbumEntity.path
-                if (TextUtils.equals(path, allEntityPath)) {
-                    allAlbumEntity.isCheck = albumEntity.isCheck
-                }
-            }
-        }
+        albumList.forEach { it.isCheck = false }
+        selectEntity.forEach { select -> albumList.filter { it.path == select.path }.forEach { it.isCheck = true } }
     }
 
     fun resultScan(path: String) {

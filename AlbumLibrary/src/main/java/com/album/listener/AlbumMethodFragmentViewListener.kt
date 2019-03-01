@@ -58,4 +58,9 @@ internal interface AlbumMethodFragmentViewListener {
      * 刷新[FragmentActivity.onActivityResult]数据
      */
     fun onResultPreview(bundle: Bundle)
+
+    /**
+     * 刷新数据
+     */
+    fun onDialogResultPreview(bundle: Bundle)
 }

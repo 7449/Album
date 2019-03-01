@@ -69,15 +69,7 @@ class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
     }
 
     private fun mergeEntity(albumEntityList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>): ArrayList<AlbumEntity> {
-        for (albumEntity in selectEntity) {
-            val path = albumEntity.path
-            for (allAlbumEntity in albumEntityList) {
-                val allEntityPath = allAlbumEntity.path
-                if (TextUtils.equals(path, allEntityPath)) {
-                    allAlbumEntity.isCheck = albumEntity.isCheck
-                }
-            }
-        }
+        selectEntity.forEach { select -> albumEntityList.filter { it.path == select.path }.forEach { it.isCheck = true } }
         return albumEntityList
     }
 

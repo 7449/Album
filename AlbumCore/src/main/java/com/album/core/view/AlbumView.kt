@@ -36,6 +36,11 @@ interface AlbumView {
     fun hideProgress()
 
     /**
+     * 刷新数据
+     */
+    fun refreshUI()
+
+    /**
      * 扫描成功
      */
     fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>)

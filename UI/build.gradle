@@ -2,6 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+if (uploadType == uiType) {
+    apply plugin: "guru.stefma.bintrayrelease"
+    apply from: '../gradle/UPLOAD.gradle'
+}
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -16,7 +21,11 @@ android {
 }
 
 dependencies {
-    compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    if (uploadType == debugType) {
+        compileOnly project(':AlbumLibrary')
+    } else {
+        compileOnly "com.ydevelop:album:$albumVersion"
+    }
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly project(':AlbumLibrary')
 }

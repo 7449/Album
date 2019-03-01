@@ -178,7 +178,7 @@ class AlbumFragment : AlbumBaseFragment(),
                         val customizePath = extras.getString(CUSTOMIZE_CAMERA_RESULT_PATH_KEY)
                         if (!TextUtils.isEmpty(customizePath)) {
                             imagePath = Uri.fromFile(File(customizePath))
-                            refreshMedia(TYPE_RESULT_CAMERA, imagePath.path.orEmpty().pathToFile())
+                            refreshMedia(TYPE_RESULT_CAMERA, imagePath.path.orEmpty())
                             if (albumBundle.cameraCrop) {
                                 openUCrop(imagePath.path.orEmpty())
                             }
@@ -186,7 +186,7 @@ class AlbumFragment : AlbumBaseFragment(),
                     }
                 }
                 OPEN_CAMERA_REQUEST_CODE -> {
-                    refreshMedia(TYPE_RESULT_CAMERA, imagePath.path.orEmpty().pathToFile())
+                    refreshMedia(TYPE_RESULT_CAMERA, imagePath.path.orEmpty())
                     if (albumBundle.cameraCrop) {
                         openUCrop(imagePath.path.orEmpty())
                     }
@@ -194,11 +194,11 @@ class AlbumFragment : AlbumBaseFragment(),
                 UCrop.REQUEST_CROP -> {
                     if (data == null) {
                         Album.instance.albumListener?.onAlbumUCropError(null)
-                    } else {
-                        val path = data.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path.orEmpty()
-                        Album.instance.albumListener?.onAlbumUCropResources(path.pathToFile())
-                        refreshMedia(TYPE_RESULT_CROP, path.pathToFile())
+                        return
                     }
+                    val path = data.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path.orEmpty()
+                    Album.instance.albumListener?.onAlbumUCropResources(path.pathToFile())
+                    refreshMedia(TYPE_RESULT_CROP, path)
                     if (albumBundle.cropFinish) {
                         mActivity.finish()
                     }
@@ -243,7 +243,7 @@ class AlbumFragment : AlbumBaseFragment(),
         if (albumEntity == null) {
             Album.instance.albumListener?.onAlbumResultCameraError()
         } else {
-            getSelectEntity().add(1, albumEntity)
+            albumAdapter.albumList.add(1, albumEntity)
             albumAdapter.notifyDataSetChanged()
         }
     }
@@ -311,13 +311,20 @@ class AlbumFragment : AlbumBaseFragment(),
         albumScan.scanAll(bucketId, page)
     }
 
+    override fun onScanCropAlbum(path: String) {
+        albumScan.resultScan(path)
+    }
+
     override fun onScanStart() {}
 
-    override fun onScanCompleted(type: Int) {
-        if (type == TYPE_RESULT_CROP) {
-            return
+    override fun onScanCompleted(type: Int, path: String) {
+        mActivity.runOnUiThread {
+            if (type == TYPE_RESULT_CROP) {
+                onScanCropAlbum(path)
+            } else {
+                onScanAlbum(bucketId, isFinder = false, result = true)
+            }
         }
-        mActivity.runOnUiThread { onScanAlbum(bucketId, isFinder = false, result = true) }
     }
 
     override fun disconnectMediaScanner() {
@@ -344,9 +351,9 @@ class AlbumFragment : AlbumBaseFragment(),
         }
     }
 
-    override fun refreshMedia(type: Int, file: File) {
+    override fun refreshMedia(type: Int, path: String) {
         disconnectMediaScanner()
-        singleMediaScanner = AlbumSingleMediaScanner(mActivity, file, this@AlbumFragment, type)
+        singleMediaScanner = AlbumSingleMediaScanner(mActivity, path, this@AlbumFragment, type)
     }
 
     override fun getSelectEntity(): ArrayList<AlbumEntity> = albumAdapter.multipleList
@@ -411,11 +418,6 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun onDialogResultPreview(bundle: Bundle) {
         val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
         val isRefreshUI = bundle.getBoolean(TYPE_PREVIEW_REFRESH_UI, true)
-        val isFinish = bundle.getBoolean(TYPE_PREVIEW_SELECT_OK_FINISH, false)
-        if (isFinish) {
-            mActivity.finish()
-            return
-        }
         if (!isRefreshUI || previewAlbumEntity == null) {
             return
         }

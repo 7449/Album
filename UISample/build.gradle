@@ -10,6 +10,9 @@ android {
         versionCode rootProject.projectVersionCode
         versionName rootProject.projectVersionName
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {

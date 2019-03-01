@@ -2,6 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+if (uploadType == libraryType) {
+    apply plugin: "guru.stefma.bintrayrelease"
+    apply from: '../gradle/UPLOAD.gradle'
+}
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -20,5 +25,10 @@ dependencies {
     compileOnly "com.github.yalantis:ucrop:$ucropVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "com.github.bumptech.glide:glide:$glideVersion"
-    api project(':AlbumCore')
+
+    if (uploadType == debugType) {
+        api project(':AlbumCore')
+    } else {
+        api "com.ydevelop:album.core:$albumVersion"
+    }
 }

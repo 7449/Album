@@ -72,7 +72,6 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
         super.onCreate(savedInstanceState)
         albumUiBundle = bundle.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumDialogUiBundle()
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        albumBundle.selectImageFinish = false
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

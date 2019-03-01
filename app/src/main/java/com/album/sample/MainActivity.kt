@@ -20,7 +20,6 @@ import com.album.core.AlbumCamera
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.AlbumCamera.getCameraFile
 import com.album.core.AlbumCamera.openCamera
-import com.album.core.AlbumFile.pathToFile
 import com.album.core.AlbumPermission.permissionCamera
 import com.album.core.AlbumPermission.permissionStorage
 import com.album.core.scan.AlbumEntity
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
 
     override fun click(view: View): Boolean = true
 
-    override fun onScanCompleted(type: Int) {
+    override fun onScanCompleted(type: Int, path: String) {
     }
 
     override fun onScanStart() {
@@ -133,7 +132,15 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             albumListener = MainAlbumListener(this@MainActivity, null)
             albumImageLoader = SimpleFrescoAlbumImageLoader()
             options = dayOptions
-        }.dialog(AlbumBundle(filterImg = true, checkBoxDrawable = R.drawable.simple_selector_album_item_check), supportFragmentManager)
+        }.dialog(AlbumBundle(
+                filterImg = true,
+                cameraCrop = true,
+//                checkBoxDrawable = R.drawable.simple_selector_album_item_check,
+                radio = true,
+                cropFinish = false,
+                selectImageFinish = false,
+                cropErrorFinish = false
+        ), supportFragmentManager)
     }
 
     private fun customizeCamera(): Album {
@@ -206,7 +213,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             R.id.btn_night_album -> {
                 onNightClick().start(this,
                         AlbumBundle(
-                                checkBoxDrawable = R.drawable.simple_selector_album_item_check, radio = true,
+                                cropFinish = false,
+                                checkBoxDrawable = R.drawable.simple_selector_album_item_check,
+                                radio = true,
                                 cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Album",
                                 uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop",
                                 cameraTextColor = R.color.colorAlbumContentViewTipsColorNight,
@@ -283,13 +292,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             }
             Activity.RESULT_OK -> when (requestCode) {
                 AlbumCamera.OPEN_CAMERA_REQUEST_CODE -> {
-                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty().pathToFile(), this, TYPE_RESULT_CAMERA)
+                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), this, TYPE_RESULT_CAMERA)
                     UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
                             .withOptions(UCrop.Options())
                             .start(this)
                 }
                 UCrop.REQUEST_CROP -> {
-                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty().pathToFile(), this, TYPE_RESULT_CROP)
+                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), this, TYPE_RESULT_CROP)
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.FinderEntity
-import java.io.File
 
 /**
  * @author y
@@ -30,6 +29,11 @@ internal interface AlbumMethodFragmentViewListener {
     fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean)
 
     /**
+     * 扫描裁剪之后的信息
+     */
+    fun onScanCropAlbum(path: String)
+
+    /**
      * 打开相机
      */
     fun startCamera()
@@ -42,7 +46,7 @@ internal interface AlbumMethodFragmentViewListener {
     /**
      * 刷新图库
      */
-    fun refreshMedia(type: Int, file: File)
+    fun refreshMedia(type: Int, path: String)
 
     /**
      * 选择选中的数据

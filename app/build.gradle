@@ -13,7 +13,6 @@ android {
         versionCode rootProject.projectVersionCode
         versionName rootProject.projectVersionName
     }
-
     repositories {
         flatDir {
             dirs 'libs'
@@ -31,11 +30,19 @@ dependencies {
     implementation "com.facebook.fresco:fresco:$frescoVersion"
     implementation "com.facebook.fresco:animated-gif:$frescoVersion"
 
-    implementation project(':AlbumLibrary')
-    implementation project(':UI')
+    if (uploadType == debugType) {
+        implementation project(':AlbumLibrary')
+        implementation project(':UI')
+    } else {
+        implementation "com.ydevelop:album.ui:$albumVersion"
+        implementation "com.ydevelop:album:$albumVersion"
+    }
+
     implementation project(':UIWeChat')
     implementation project(':UISample')
     implementation project(':UIDialog')
+
+
     implementation(name: 'CameraViewLibrary', ext: 'aar')
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"

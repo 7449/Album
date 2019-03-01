@@ -8,7 +8,7 @@ import com.album.core.scan.AlbumEntity
 import com.album.core.scan.FinderEntity
 import com.album.listener.AlbumImageLoader
 import com.album.widget.AlbumImageView
-import com.album.widget.TouchImageView
+import com.ortiz.touchview.TouchImageView
 import com.squareup.picasso.Picasso
 
 /**

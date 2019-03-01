@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.viewpager.widget.ViewPager
+import com.ortiz.touchview.TouchImageView
 
 /**
  * @author y

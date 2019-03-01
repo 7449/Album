@@ -9,10 +9,10 @@ import com.album.core.scan.FinderEntity
 import com.album.listener.AlbumImageLoader
 import com.album.sample.R
 import com.album.widget.AlbumImageView
-import com.album.widget.TouchImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware
+import com.ortiz.touchview.TouchImageView
 
 /**
  * by y on 20/08/2017.

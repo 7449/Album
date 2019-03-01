@@ -29,6 +29,7 @@ dependencies {
     implementation "com.nostra13.universalimageloader:universal-image-loader:$imageloaderVersion"
     implementation "com.facebook.fresco:fresco:$frescoVersion"
     implementation "com.facebook.fresco:animated-gif:$frescoVersion"
+    implementation "com.github.MikeOrtiz:TouchImageView:$touchVersion"
 
     if (uploadType == debugType) {
         implementation project(':AlbumLibrary')

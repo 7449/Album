@@ -27,5 +27,6 @@ dependencies {
     } else {
         compileOnly "com.ydevelop:album:$albumVersion"
     }
+    compileOnly "com.github.MikeOrtiz:TouchImageView:$touchVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -6,9 +6,9 @@ import com.album.R
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.FinderEntity
 import com.album.widget.AlbumImageView
-import com.album.widget.TouchImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.ortiz.touchview.TouchImageView
 import java.io.File
 
 /**

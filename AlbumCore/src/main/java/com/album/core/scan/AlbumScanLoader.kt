@@ -12,6 +12,7 @@ import com.album.core.AlbumFile.parentFile
  * @author y
  * @create 2019/3/4
  */
+@Deprecated(message = "see AlbumScanFileLoader")
 class AlbumScanLoader(
         private val activity: Context,
         private val scanType: Int,

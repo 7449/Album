@@ -56,10 +56,6 @@ class AlbumBundle(
          */
         var allName: String = FINDER_ALL_DIR_NAME,
         /**
-         * 是否过滤损坏图片
-         */
-        var filterImg: Boolean = false,
-        /**
          * 裁剪异常是否退出
          * 如果依赖的Dialog则设置为false
          */

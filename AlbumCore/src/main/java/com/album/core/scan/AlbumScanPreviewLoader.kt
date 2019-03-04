@@ -14,6 +14,7 @@ import com.album.core.AlbumFile.fileExists
  * @author y
  * @create 2019/3/4
  */
+@Deprecated(message = "see AlbumScanPrevFileLoader")
 class AlbumScanPreviewLoader(
         private val activity: Context,
         private val filterImage: Boolean,

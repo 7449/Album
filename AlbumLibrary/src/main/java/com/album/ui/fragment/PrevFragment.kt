@@ -137,7 +137,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
      */
     private fun initPreview() {
         if (!preview) {
-            presenterPreview = AlbumScanPreviewImpl.newInstance(this, albumBundle.filterImg, selectList, bucketId)
+            presenterPreview = AlbumScanPreviewImpl.newInstance(this, selectList, bucketId)
             return
         }
         if (albumList.isEmpty()) {

@@ -133,7 +133,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             albumImageLoader = SimpleFrescoAlbumImageLoader()
             options = dayOptions
         }.dialog(AlbumBundle(
-                filterImg = true,
                 cameraCrop = true,
 //                checkBoxDrawable = R.drawable.simple_selector_album_item_check,
                 radio = true,
@@ -207,7 +206,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
         when (v.id) {
             R.id.btn_day_album -> {
                 onDayAlbumClick().start(this,
-                        AlbumBundle(filterImg = true, scanCount = 200, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
+                        AlbumBundle(scanCount = 200, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
                         AlbumActivity::class.java)
             }
             R.id.btn_night_album -> {

@@ -13,6 +13,11 @@ import com.album.core.scan.AlbumScan.IMAGE
 import com.album.core.scan.AlbumScan.VIDEO
 
 /**
+ * 是否扫描全部
+ */
+const val SCAN_ALL = -1
+
+/**
  * 图片扫描 Uri
  */
 internal val ALBUM_URL: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -23,37 +28,38 @@ internal val ALBUM_URL: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 internal val VIDEO_URL: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
 /**
- * 是否扫描全部
+ * Album Uri
  */
-const val SCAN_ALL = -1
+internal val ALBUM_FILE_URI: Uri = MediaStore.Files.getContentUri("external")
 
 /**
  * 过滤大小小于0的脏数据
  */
-const val FILTER_SUFFIX = " and _size > 0 "
+internal const val FILTER_SUFFIX = " and _size > 0 "
 
 /**
- * 图片 sortOrder
+ * 按时间排序 sortOrder
  */
-const val ALBUM_SORT_ORDER = MediaStore.Images.Media.DATE_MODIFIED + " desc"
+internal const val ALBUM_SORT_ORDER = MediaStore.MediaColumns.DATE_MODIFIED + " desc"
 
 /**
- * 视频 sortOrder
+ * 拍照或者摄像返回 selection
  */
-const val VIDEO_SORT_ORDER = MediaStore.Video.Media.DATE_MODIFIED + " desc"
+internal const val ALBUM_RESULT_SELECTION = MediaStore.MediaColumns.DATA + "= ? "
+
 
 /**
- * 图片 selection 个数
+ * 图片 selection
  */
-const val ALBUM_SELECTION = MediaStore.Images.Media.MIME_TYPE + "= ? or " +
-        MediaStore.Images.Media.MIME_TYPE + "= ? or " +
-        MediaStore.Images.Media.MIME_TYPE + "= ? or " +
-        MediaStore.Images.Media.MIME_TYPE + "= ? %s"
+internal const val ALBUM_SELECTION = MediaStore.MediaColumns.MIME_TYPE + "= ? or " +
+        MediaStore.MediaColumns.MIME_TYPE + "= ? or " +
+        MediaStore.MediaColumns.MIME_TYPE + "= ? or " +
+        MediaStore.MediaColumns.MIME_TYPE + "= ? %s"
 
 /**
- * 视频 selection 个数
+ * 视频 selection
  */
-const val VIDEO_SELECTION = MediaStore.Video.Media.MIME_TYPE + "= ? or " +
+internal const val VIDEO_SELECTION = MediaStore.Video.Media.MIME_TYPE + "= ? or " +
         MediaStore.Video.Media.MIME_TYPE + "= ? or " +
         MediaStore.Video.Media.MIME_TYPE + "= ? or " +
         MediaStore.Video.Media.MIME_TYPE + "= ? or " +
@@ -63,46 +69,60 @@ const val VIDEO_SELECTION = MediaStore.Video.Media.MIME_TYPE + "= ? or " +
         MediaStore.Video.Media.MIME_TYPE + "= ? or " +
         MediaStore.Video.Media.MIME_TYPE + "= ? %s"
 
-/**
- * 图片拍照返回 selection 个数
- */
-const val ALBUM_RESULT_SELECTION = MediaStore.Images.Media.DATA + "= ? "
 
-/**
- * 视频拍摄返回 selection 个数
- */
-const val VIDEO_RESULT_SELECTION = MediaStore.Video.Media.DATA + "= ? "
+internal const val ALBUM_BUCKET_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and (" + ALBUM_SELECTION + ")"
 
-const val ALBUM_BUCKET_SELECTION = MediaStore.Images.Media.BUCKET_ID + "= ? and (" + ALBUM_SELECTION + ")"
+internal const val VIDEO_BUCKET_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? and (" + VIDEO_SELECTION + ")"
 
-const val VIDEO_BUCKET_SELECTION = MediaStore.Video.Media.BUCKET_ID + "= ? and (" + VIDEO_SELECTION + ")"
-
-val ALBUM_PROJECTION = arrayOf(
+internal val ALBUM_PROJECTION = arrayOf(
         MediaStore.Images.Media.DATA,
         MediaStore.Images.Media._ID,
         MediaStore.Images.Media.BUCKET_ID,
         MediaStore.Images.Media.SIZE)
 
-val VIDEO_PROJECTION = arrayOf(
+internal val VIDEO_PROJECTION = arrayOf(
         MediaStore.Video.Media.DATA,
         MediaStore.Video.Media._ID,
         MediaStore.Video.Media.BUCKET_ID,
         MediaStore.Video.Media.SIZE)
 
-val ALBUM_FINDER_PROJECTION = arrayOf(
+internal val ALBUM_FINDER_PROJECTION = arrayOf(
         MediaStore.Images.Media._ID,
         MediaStore.Images.Media.BUCKET_ID,
         MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
         MediaStore.Images.Media.DATA,
         MediaStore.Images.Media.SIZE)
 
-val VIDEO_FINDER_PROJECTION = arrayOf(
+internal val VIDEO_FINDER_PROJECTION = arrayOf(
         MediaStore.Video.Media._ID,
         MediaStore.Video.Media.BUCKET_ID,
         MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
         MediaStore.Video.Media.DATA,
         MediaStore.Video.Media.SIZE)
 
+/**
+ * 获取文件信息
+ */
+internal val FILE_PROJECTION = arrayOf(
+        MediaStore.Files.FileColumns.DATA,
+        MediaStore.Files.FileColumns._ID,
+        MediaStore.Files.FileColumns.MEDIA_TYPE
+)
+
+/**
+ * 文件 selection
+ */
+internal const val FILE_SELECTION = MediaStore.Files.FileColumns.MEDIA_TYPE + "= ? or " +
+        MediaStore.Files.FileColumns.MEDIA_TYPE + "= ? or " +
+        MediaStore.Files.FileColumns.MEDIA_TYPE + "= ? %s"
+
+/**
+ * sql语句参数
+ */
+internal val ALBUM_FILE_SELECTION_ARGS = arrayOf(
+        MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
+        MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
+)
 
 /**
  * 获取图片扫描 [CursorLoader]
@@ -125,8 +145,8 @@ internal fun Context.albumImageCursorLoader(count: Int, page: Int, bucketId: Str
  */
 internal fun Context.albumVideoCursorLoader(count: Int, page: Int, bucketId: String, filterImage: Boolean): CursorLoader {
     val sortOrder = when (count) {
-        SCAN_ALL -> VIDEO_SORT_ORDER
-        else -> VIDEO_SORT_ORDER + " limit " + page * count + "," + count
+        SCAN_ALL -> ALBUM_SORT_ORDER
+        else -> ALBUM_SORT_ORDER + " limit " + page * count + "," + count
     }
     val selection = if (TextUtils.isEmpty(bucketId)) {
         String.format(VIDEO_SELECTION, if (filterImage) FILTER_SUFFIX else "")
@@ -141,7 +161,7 @@ internal fun Context.albumImageResultCursorLoader(path: String): CursorLoader {
 }
 
 internal fun Context.albumVideoResultCursorLoader(path: String): CursorLoader {
-    return CursorLoader(this, VIDEO_URL, VIDEO_PROJECTION, VIDEO_RESULT_SELECTION, arrayOf(path), VIDEO_SORT_ORDER)
+    return CursorLoader(this, VIDEO_URL, VIDEO_PROJECTION, ALBUM_RESULT_SELECTION, arrayOf(path), ALBUM_SORT_ORDER)
 }
 
 internal fun Context.albumImageFinderScanCursor(filterImage: Boolean): Cursor? {
@@ -159,7 +179,7 @@ internal fun Context.albumVideoFinderScanCursor(filterImage: Boolean): Cursor? {
             VIDEO_FINDER_PROJECTION,
             String.format(VIDEO_SELECTION, if (filterImage) FILTER_SUFFIX else ""),
             "".albumSelectionArgs(VIDEO),
-            VIDEO_SORT_ORDER)
+            ALBUM_SORT_ORDER)
 }
 
 @SuppressLint("Recycle")
@@ -183,7 +203,7 @@ internal fun Context.albumVideoFinderCursorCount(bucketId: String, filterImage: 
             VIDEO_FINDER_PROJECTION,
             String.format(VIDEO_BUCKET_SELECTION, if (filterImage) FILTER_SUFFIX else ""),
             bucketId.albumSelectionArgs(VIDEO),
-            VIDEO_SORT_ORDER)
+            ALBUM_SORT_ORDER)
             ?: return 0
     val count = query.count
     query.close()

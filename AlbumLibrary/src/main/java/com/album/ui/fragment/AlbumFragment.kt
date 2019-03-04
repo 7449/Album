@@ -138,7 +138,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
 
         finderEntityList = ArrayList()
-        albumScan = AlbumScanImpl.newInstance(this, albumBundle.scanType, albumBundle.scanCount, albumBundle.allName, albumBundle.sdName, albumBundle.filterImg)
+        albumScan = AlbumScanImpl.newInstance(this, albumBundle.scanType, albumBundle.scanCount, albumBundle.allName, albumBundle.sdName)
         album_recyclerView.setHasFixedSize(true)
         val gridLayoutManager = GridLayoutManager(mActivity, albumBundle.spanCount)
         album_recyclerView.layoutManager = gridLayoutManager

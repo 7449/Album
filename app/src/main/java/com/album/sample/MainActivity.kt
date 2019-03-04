@@ -207,7 +207,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
         when (v.id) {
             R.id.btn_day_album -> {
                 onDayAlbumClick().start(this,
-                        AlbumBundle(filterImg = true, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
+                        AlbumBundle(filterImg = true, scanCount = 200, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
                         AlbumActivity::class.java)
             }
             R.id.btn_night_album -> {
@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
                         AlbumActivity::class.java)
             }
             R.id.btn_sample_ui -> {
-                onSimpleUi().start(this, SimpleAlbumUI::class.java)
+                onSimpleUi().start(this, AlbumBundle(hideCamera = true), SimpleAlbumUI::class.java)
             }
             R.id.btn_open_camera -> {
                 startCamera()

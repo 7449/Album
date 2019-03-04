@@ -1,13 +1,14 @@
 package com.album.ui.wechat.activity
 
 import android.os.Bundle
+import com.album.core.ui.AlbumBaseActivity
 import com.album.ui.wechat.R
 
 /**
  * @author y
  * @create 2018/12/3
  */
-class AlbumWeChatUiActivity : AlbumWeChatBaseActivity() {
+class AlbumWeChatUiActivity : AlbumBaseActivity() {
 
     override fun initView() {
 
@@ -16,5 +17,5 @@ class AlbumWeChatUiActivity : AlbumWeChatBaseActivity() {
     override fun initCreate(savedInstanceState: Bundle?) {
     }
 
-    override fun getLayoutId(): Int = R.layout.album_wechat_activity
+    override val layoutId: Int = R.layout.album_wechat_activity
 }

@@ -16,6 +16,7 @@ class AlbumEntity(private var dirPath: String = "",
                   var bucketId: String = "",
                   var path: String = "",
                   var id: Long = 0,
+                  var isVideo: Boolean = false,
                   var isCheck: Boolean = false) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
@@ -29,6 +30,7 @@ class AlbumEntity(private var dirPath: String = "",
         if (bucketId != other.bucketId) return false
         if (path != other.path) return false
         if (id != other.id) return false
+        if (isVideo != other.isVideo) return false
         if (isCheck != other.isCheck) return false
 
         return true
@@ -40,12 +42,13 @@ class AlbumEntity(private var dirPath: String = "",
         result = 31 * result + bucketId.hashCode()
         result = 31 * result + path.hashCode()
         result = 31 * result + id.hashCode()
+        result = 31 * result + isVideo.hashCode()
         result = 31 * result + isCheck.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "AlbumEntity(dirPath='$dirPath', dirName='$dirName', bucketId='$bucketId', path='$path', id=$id, isCheck=$isCheck)"
+        return "AlbumEntity(dirPath='$dirPath', dirName='$dirName', bucketId='$bucketId', path='$path', id=$id, isVideo=$isVideo, isCheck=$isCheck)"
     }
 }
 

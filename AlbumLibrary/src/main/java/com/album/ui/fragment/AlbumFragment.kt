@@ -305,14 +305,14 @@ class AlbumFragment : AlbumBaseFragment(),
         }
         // 如果 albumList 为空则是没有图片拍照的第一张图片,这时直接扫描整个图库即可
         if (result && !albumAdapter.albumList.isEmpty()) {
-            albumScan.resultScan(imagePath.path.orEmpty())
+            albumScan.scanResult(imagePath.path.orEmpty())
             return
         }
         albumScan.scanAll(bucketId, page)
     }
 
     override fun onScanCropAlbum(path: String) {
-        albumScan.resultScan(path)
+        albumScan.scanResult(path)
     }
 
     override fun onScanStart() {}

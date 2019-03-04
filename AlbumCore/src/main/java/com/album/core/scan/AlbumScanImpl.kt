@@ -2,13 +2,12 @@
 
 package com.album.core.scan
 
-import android.database.Cursor
+import android.content.Context
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import androidx.collection.ArrayMap
 import androidx.loader.app.LoaderManager
-import androidx.loader.content.Loader
 import com.album.core.AlbumFile.parentFile
 import com.album.core.view.AlbumView
 
@@ -22,9 +21,11 @@ class AlbumScanImpl(private val albumView: AlbumView,
                     private val scanCount: Int,
                     private val allName: String,
                     private val sdName: String,
-                    private val filterImg: Boolean) : LoaderManager.LoaderCallbacks<Cursor> {
+                    private val filterImg: Boolean) {
 
     companion object {
+        const val KEY_BUCKET = "bucket"
+        const val KEY_PAGE = "page"
         fun newInstance(
                 albumView: AlbumView,
                 scanType: Int,
@@ -38,11 +39,10 @@ class AlbumScanImpl(private val albumView: AlbumView,
     private val loaderManager: LoaderManager = LoaderManager.getInstance(albumView.getAlbumActivity())
 
     private val finderEntityMap = ArrayMap<String, FinderEntity>()
-    private val albumList = ArrayList<AlbumEntity>()
+
     private val finderList = ArrayList<FinderEntity>()
 
-    private val KEY_BUCKET = "bucket"
-    private val KEY_PAGE = "page"
+    private val activity: Context = albumView.getAlbumActivity()
 
     fun scanAll(bucketId: String, page: Int) {
         if (loaderManager.hasRunningLoaders()) {
@@ -52,101 +52,41 @@ class AlbumScanImpl(private val albumView: AlbumView,
         loaderManager.restartLoader(AlbumScan.ALBUM_LOADER_ID, Bundle().apply {
             putString(KEY_BUCKET, bucketId)
             putInt(KEY_PAGE, page)
-        }, this)
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        val page = args?.getInt(KEY_PAGE) ?: 0
-        val bucketId = args?.getString(KEY_BUCKET) ?: ""
-        return if (scanType == AlbumScan.VIDEO) {
-            VideoCursorLoader(albumView.getAlbumActivity(), scanCount, page, bucketId, filterImg)
-        } else {
-            ImageCursorLoader(albumView.getAlbumActivity(), scanCount, page, bucketId, filterImg)
-        }
-    }
-
-    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
-        val cursor = data ?: return
-        val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-        val idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-        val bucketIdColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)
-        val sizeColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
-        while (cursor.moveToNext()) {
-            val path = cursor.getString(dataColumnIndex)
-            val id = cursor.getLong(idColumnIndex)
-            val size = cursor.getLong(sizeColumnIndex)
-            val bucketId = cursor.getString(bucketIdColumnIndex)
-            if (filterImg && size <= 0 || path.parentFile() == null) {
-                continue
-            }
-            albumList.add(AlbumEntity(path = path, id = id, bucketId = bucketId))
-        }
-        albumView.hideProgress()
-        if (albumList.isEmpty()) {
-            if (albumView.getPage() == 0) {
-                albumView.onAlbumEmpty()
-            } else {
-                albumView.onAlbumNoMore()
-            }
-        } else {
-            refreshFinder(finderList)
-            mergeEntity(albumList, albumView.getSelectEntity())
-            albumView.scanSuccess(albumList)
-            albumView.scanFinderSuccess(finderList)
-        }
-        albumList.clear()
-        finderList.clear()
-        destroyLoaderManager()
-    }
-
-    override fun onLoaderReset(loader: Loader<Cursor>) {
-    }
-
-    fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
-        albumList.forEach { it.isCheck = false }
-        selectEntity.forEach { select -> albumList.filter { it.path == select.path }.forEach { it.isCheck = true } }
-    }
-
-    fun resultScan(path: String) {
-        loaderManager.restartLoader(AlbumScan.RESULT_LOADER_ID, null, object : LoaderManager.LoaderCallbacks<Cursor> {
-            override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-                return if (scanType == AlbumScan.VIDEO) {
-                    VideoResultCursorLoader(albumView.getAlbumActivity(), path)
+        }, AlbumScanLoader(activity, scanType, scanCount, filterImg) {
+            albumView.hideProgress()
+            if (it.isEmpty()) {
+                if (albumView.getPage() == 0) {
+                    albumView.onAlbumEmpty()
                 } else {
-                    ImageResultCursorLoader(albumView.getAlbumActivity(), path)
+                    albumView.onAlbumNoMore()
                 }
-            }
-
-            override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
-                val cursor = data ?: return
-                var albumEntity: AlbumEntity? = null
-                val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-                val idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                val bucketIdColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)
-                while (cursor.moveToNext()) {
-                    val resultPath = cursor.getString(dataColumnIndex)
-                    val id = cursor.getLong(idColumnIndex)
-                    val bucketId = cursor.getString(bucketIdColumnIndex)
-                    if (resultPath.parentFile() == null) {
-                        continue
-                    }
-                    albumEntity = AlbumEntity(path = resultPath, id = id, bucketId = bucketId)
-                }
+            } else {
                 refreshFinder(finderList)
-                albumView.resultSuccess(albumEntity)
+                mergeEntity(it, albumView.getSelectEntity())
+                albumView.scanSuccess(it)
                 albumView.scanFinderSuccess(finderList)
-                finderList.clear()
-                destroyLoaderManager()
             }
-
-            override fun onLoaderReset(loader: Loader<Cursor>) {
-            }
+            finderList.clear()
+            destroyLoaderManager()
         })
     }
 
+    fun scanResult(path: String) {
+        loaderManager.restartLoader(
+                AlbumScan.RESULT_LOADER_ID,
+                null,
+                AlbumScanResultLoader(activity, scanType, path) {
+                    refreshFinder(finderList)
+                    albumView.resultSuccess(it)
+                    albumView.scanFinderSuccess(finderList)
+                    finderList.clear()
+                    destroyLoaderManager()
+                })
+    }
+
     private fun refreshFinder(finderList: ArrayList<FinderEntity>) {
-        val cursor = (if (scanType == AlbumScan.VIDEO) VideoFinderScanCursor(albumView.getAlbumActivity(), filterImg)
-        else ImageFinderScanCursor(albumView.getAlbumActivity(), filterImg))
+        val cursor = (if (scanType == AlbumScan.VIDEO) activity.albumVideoFinderScanCursor(filterImg)
+        else activity.albumImageFinderScanCursor(filterImg))
                 ?: return
         val bucketIdColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_ID)
         val finderNameColumnIndex = cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
@@ -165,8 +105,8 @@ class AlbumScanImpl(private val albumView: AlbumView,
                     continue
                 }
                 finderEntityMap[finderName] = FinderEntity(if (TextUtils.equals(finderName, "0")) sdName else finderName, finderPath, id, bucketId,
-                        if (scanType == AlbumScan.VIDEO) VideoFinderCursorCount(albumView.getAlbumActivity(), bucketId, filterImg)
-                        else ImageFinderCursorCount(albumView.getAlbumActivity(), bucketId, filterImg))
+                        if (scanType == AlbumScan.VIDEO) activity.albumVideoFinderCursorCount(bucketId, filterImg)
+                        else activity.albumImageFinderCursorCount(bucketId, filterImg))
             }
         }
         cursor.close()
@@ -186,6 +126,11 @@ class AlbumScanImpl(private val albumView: AlbumView,
         }
         finderList.add(0, finderEntity)
         finderEntityMap.clear()
+    }
+
+    fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
+        albumList.forEach { it.isCheck = false }
+        selectEntity.forEach { select -> albumList.filter { it.path == select.path }.forEach { it.isCheck = true } }
     }
 
     private fun destroyLoaderManager() {

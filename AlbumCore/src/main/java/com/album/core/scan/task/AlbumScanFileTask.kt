@@ -29,6 +29,7 @@ class AlbumScanFileTask(
         val page = args?.getInt(AlbumColumns.PAGE) ?: 0
         val parent = args?.getLong(AlbumColumns.PARENT) ?: 0
         val path = args?.getString(AlbumColumns.DATA) ?: ""
+        val scanType = args?.getInt(AlbumColumns.SCAN_TYPE) ?: AlbumScan.IMAGE
 
         selection = if (!path.isEmpty()) {
             ALBUM_PATH_SELECTION(path)
@@ -42,7 +43,7 @@ class AlbumScanFileTask(
                 ALBUM_FILE_URI,
                 ALBUM_ALL_COLUMNS,
                 selection,
-                ALBUM_SELECTION_ARGS,
+                ALBUM_SELECTION_ARGS(scanType),
                 if (scanCount == SCAN_ALL) ALBUM_ORDER_BY else ALBUM_ORDER_BY_LIMIT(page, scanCount))
     }
 

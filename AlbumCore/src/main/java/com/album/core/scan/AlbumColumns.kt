@@ -18,6 +18,11 @@ object AlbumColumns {
     const val PAGE = "page"
 
     /**
+     * 扫描type
+     */
+    const val SCAN_TYPE = "scan_type"
+
+    /**
      * 个数
      */
     const val COUNT = "_count"

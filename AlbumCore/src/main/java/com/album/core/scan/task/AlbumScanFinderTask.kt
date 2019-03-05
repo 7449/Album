@@ -24,11 +24,12 @@ class AlbumScanFinderTask(
     private val finderEntity = ArrayList<AlbumEntity>()
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        val scanType = args?.getInt(AlbumColumns.SCAN_TYPE) ?: AlbumScan.IMAGE
         return CursorLoader(activity,
                 ALBUM_FILE_URI,
                 ALBUM_FINDER_ALL_COLUMNS,
                 ALBUM_FINDER_ALL_SELECTION,
-                ALBUM_SELECTION_ARGS,
+                ALBUM_SELECTION_ARGS(scanType),
                 ALBUM_ORDER_BY)
     }
 

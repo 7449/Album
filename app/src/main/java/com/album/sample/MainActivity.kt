@@ -23,6 +23,7 @@ import com.album.core.AlbumCamera.openCamera
 import com.album.core.AlbumPermission.permissionCamera
 import com.album.core.AlbumPermission.permissionStorage
 import com.album.core.scan.AlbumEntity
+import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumScan.VIDEO
 import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.core.ui.AlbumBaseFragment
@@ -150,7 +151,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             options = dayOptions
             customCameraListener = object : AlbumCustomCameraListener {
                 override fun startCamera(fragment: AlbumBaseFragment) {
-                    if (permissionStorage() && permissionCamera()) {
+                    if (fragment.permissionStorage() && fragment.permissionCamera()) {
                         val activity = fragment.activity
                         Toast.makeText(activity, "camera", Toast.LENGTH_SHORT).show()
                         val intent = Intent(activity, SimpleCameraActivity::class.java)
@@ -206,7 +207,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
         when (v.id) {
             R.id.btn_day_album -> {
                 onDayAlbumClick().start(this,
-                        AlbumBundle(scanCount = 200, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
+                        AlbumBundle(scanCount = 200, scanType = AlbumScan.MIXING, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
                         AlbumActivity::class.java)
             }
             R.id.btn_night_album -> {

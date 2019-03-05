@@ -42,6 +42,7 @@ class AlbumScanImpl(private val albumView: AlbumView,
         loaderManager.restartLoader(AlbumScan.ALBUM_LOADER_ID, Bundle().apply {
             putLong(AlbumColumns.PARENT, parent)
             putInt(AlbumColumns.PAGE, page)
+            putInt(AlbumColumns.SCAN_TYPE, scanType)
         }, AlbumScanFileTask(activity, scanCount) {
             albumView.hideProgress()
             if (it.isEmpty()) {
@@ -73,7 +74,9 @@ class AlbumScanImpl(private val albumView: AlbumView,
     }
 
     private fun refreshFinder() {
-        loaderManager.restartLoader(AlbumScan.FINDER_LOADER_ID, null, AlbumScanFinderTask(activity, allName, sdName) {
+        loaderManager.restartLoader(AlbumScan.FINDER_LOADER_ID, Bundle().apply {
+            putInt(AlbumColumns.SCAN_TYPE, scanType)
+        }, AlbumScanFinderTask(activity, allName, sdName) {
             albumView.scanFinderSuccess(it)
             destroyFinderLoaderManager()
         })

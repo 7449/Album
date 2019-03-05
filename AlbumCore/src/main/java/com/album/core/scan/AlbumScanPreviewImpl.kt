@@ -12,14 +12,16 @@ import com.album.core.view.AlbumPreViewView
  */
 class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
                            private val selectEntity: ArrayList<AlbumEntity>,
-                           parent: Long) {
+                           parent: Long,
+                           scanType: Int) {
 
     companion object {
         fun newInstance(
                 prevView: AlbumPreViewView,
                 selectEntity: ArrayList<AlbumEntity>,
-                parent: Long
-        ) = AlbumScanPreviewImpl(prevView, selectEntity, parent)
+                parent: Long,
+                scanType: Int
+        ) = AlbumScanPreviewImpl(prevView, selectEntity, parent, scanType)
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getPrevContext())
@@ -29,6 +31,7 @@ class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
         loaderManager.initLoader(AlbumScan.PREVIEW_LOADER_ID,
                 Bundle().apply {
                     putLong(AlbumColumns.PARENT, parent)
+                    putInt(AlbumColumns.SCAN_TYPE, scanType)
                 },
                 AlbumScanFileTask(prevView.getPrevContext(), SCAN_ALL) {
                     prevView.hideProgress()

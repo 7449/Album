@@ -103,8 +103,14 @@ internal fun ALBUM_ORDER_BY_LIMIT(page: Int, scanCount: Int) = ALBUM_SORT_ORDER 
 /**
  * 扫描条件
  */
-internal val ALBUM_SELECTION_ARGS = arrayOf(AlbumColumns.IMAGE, AlbumColumns.VIDEO)
-
+internal fun ALBUM_SELECTION_ARGS(scanType: Int): Array<String> {
+    return when (scanType) {
+        AlbumScan.VIDEO -> arrayOf(AlbumColumns.VIDEO)
+        AlbumScan.IMAGE -> arrayOf(AlbumColumns.IMAGE)
+        AlbumScan.MIXING -> arrayOf(AlbumColumns.IMAGE, AlbumColumns.VIDEO)
+        else -> throw  KotlinNullPointerException()
+    }
+}
 
 /**
  * 图片扫描 Uri

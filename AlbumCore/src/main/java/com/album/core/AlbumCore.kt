@@ -8,9 +8,12 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+
 
 /**
  * @author y
@@ -25,10 +28,21 @@ object AlbumCore {
 
     fun hasL(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
+    fun hasM(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+
     fun Window.settingStatusBarColor(@ColorInt color: Int) {
-        if (hasL()) {
+        if (hasM()) {
             statusBarColor = color
+            if (isLightColor(color)) {
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            }
         }
+    }
+
+    private fun isLightColor(@ColorInt color: Int): Boolean {
+        return ColorUtils.calculateLuminance(color) >= 0.5
     }
 
     fun Activity.imageViewWidthAndHeight(count: Int): Int {

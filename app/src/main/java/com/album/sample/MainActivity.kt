@@ -40,7 +40,7 @@ import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
 import com.album.ui.dialog.dialog
 import com.album.ui.sample.SimpleAlbumUI
-import com.album.ui.start
+import com.album.ui.ui
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
@@ -199,19 +199,19 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             initList = list
             options = dayOptions
             emptyClickListener = this@MainActivity
-        }.start(this, AlbumActivity::class.java)
+        }.ui(this, AlbumActivity::class.java)
     }
 
     override fun onClick(v: View) {
         Album.destroy()
         when (v.id) {
             R.id.btn_day_album -> {
-                onDayAlbumClick().start(this,
+                onDayAlbumClick().ui(this,
                         AlbumBundle(scanCount = 200, scanType = AlbumScan.MIXING, checkBoxDrawable = R.drawable.simple_selector_album_item_check),
                         AlbumActivity::class.java)
             }
             R.id.btn_night_album -> {
-                onNightClick().start(this,
+                onNightClick().ui(this,
                         AlbumBundle(
                                 cropFinish = false,
                                 checkBoxDrawable = R.drawable.simple_selector_album_item_check,
@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
                         AlbumActivity::class.java)
             }
             R.id.btn_sample_ui -> {
-                onSimpleUi().start(this, AlbumBundle(hideCamera = true), SimpleAlbumUI::class.java)
+                onSimpleUi().ui(this, AlbumBundle(hideCamera = true), SimpleAlbumUI::class.java)
             }
             R.id.btn_open_camera -> {
                 startCamera()
@@ -254,18 +254,20 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
                 dialog()
             }
             R.id.btn_customize_camera -> {
-                customizeCamera().start(this, AlbumActivity::class.java)
+                customizeCamera().ui(this, AlbumActivity::class.java)
             }
             R.id.btn_video -> {
-                openVideo().start(this, AlbumBundle(
+                openVideo().ui(this, AlbumBundle(
                         scanType = VIDEO, cameraText = R.string.video_tips),
                         AlbumUiBundle(toolbarText = R.string.album_video_title), AlbumActivity::class.java)
             }
             R.id.btn_subsampling -> {
-                onSubsampling().start(this, AlbumActivity::class.java)
+                onSubsampling().ui(this, AlbumActivity::class.java)
             }
             R.id.btn_wechat_ui -> {
-                onWeChatUI().start(this, AlbumWeChatUiActivity::class.java)
+                onWeChatUI().ui(this,
+                        AlbumBundle(scanType = AlbumScan.MIXING, hideCamera = true,
+                                checkBoxDrawable = R.drawable.simple_selector_album_item_check), AlbumWeChatUiActivity::class.java)
             }
             R.id.btn_imageloader -> {
                 AlertDialog.Builder(this@MainActivity)

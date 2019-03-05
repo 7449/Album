@@ -1,4 +1,4 @@
-package com.album.ui
+package com.album.ui.wechat.activity
 
 import android.content.Context
 import android.content.Intent
@@ -11,21 +11,21 @@ import com.album.EXTRA_ALBUM_UI_OPTIONS
 
 /**
  * @author y
- * @create 2019/3/1
+ * @create 2019/3/5
  */
 
-fun Album.ui(context: Context, cls: Class<*>) {
-    ui(context, AlbumBundle(), cls)
+fun Album.weChatUI(context: Context, cls: Class<*>) {
+    weChatUI(context, AlbumBundle(), cls)
 }
 
-fun Album.ui(context: Context, albumBundle: AlbumBundle, cls: Class<*>) {
+fun Album.weChatUI(context: Context, albumBundle: AlbumBundle, cls: Class<*>) {
     context.startActivity(Intent(context, cls).apply {
         putExtras(Bundle().apply { putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle) })
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     })
 }
 
-fun Album.ui(context: Context, albumBundle: AlbumBundle, uiBundle: Parcelable, cls: Class<*>) {
+fun Album.weChatUI(context: Context, albumBundle: AlbumBundle, uiBundle: Parcelable, cls: Class<*>) {
     context.startActivity(Intent(context, cls).apply {
         putExtras(Bundle().apply {
             putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)

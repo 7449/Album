@@ -9,11 +9,12 @@ import android.widget.AdapterView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
 import com.album.*
-import com.album.core.ui.AlbumBaseActivity
 import com.album.core.AlbumCore.drawable
 import com.album.core.AlbumCore.hasL
 import com.album.core.AlbumCore.settingStatusBarColor
 import com.album.core.scan.AlbumEntity
+import com.album.core.scan.AlbumScan
+import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumParentListener
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
@@ -74,13 +75,13 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         val fragment = supportFragmentManager.findFragmentByTag(AlbumFragment::class.java.simpleName)
         if (fragment != null) {
             albumFragment = fragment as AlbumFragment
-            supportFragmentManager.beginTransaction().show(fragment).commit()
+            supportFragmentManager.beginTransaction().show(fragment).commitAllowingStateLoss()
         } else {
             albumFragment = AlbumFragment.newInstance(albumBundle)
             supportFragmentManager
                     .beginTransaction()
                     .apply { add(R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName) }
-                    .commit()
+                    .commitAllowingStateLoss()
         }
         albumFragment.albumParentListener = this
     }
@@ -126,7 +127,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                 if (!multiplePreview.isEmpty()) {
                     val bundle = Bundle()
                     bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreview)
-                    bundle.putString(TYPE_PREVIEW_BUCKET_ID, PREVIEW_BUTTON_KEY)
+                    bundle.putLong(TYPE_PREVIEW_PARENT, AlbumScan.PREV_PARENT)
                     bundle.putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
                     bundle.putParcelable(EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
                     albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
@@ -148,18 +149,18 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val finder = finderAdapter.getFinder(position)
-        if (TextUtils.equals(finder.bucketId, albumFragment.bucketId)) {
+        if (finder.parent == albumFragment.parent) {
             listPopupWindow.dismiss()
             return
         }
-        albumFragment.finderName = finder.dirName
-        album_tv_finder_all.text = finder.dirName
-        albumFragment.onScanAlbum(finder.bucketId, isFinder = true, result = false)
+        albumFragment.finderName = finder.bucketDisplayName
+        album_tv_finder_all.text = finder.bucketDisplayName
+        albumFragment.onScanAlbum(finder.parent, isFinder = true, result = false)
         listPopupWindow.dismiss()
     }
 
-    override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String) {
-        PreviewActivity.start(albumBundle, albumUiBundle, multiplePreviewList, if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera) position - 1 else position, bucketId, albumFragment)
+    override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
+        PreviewActivity.start(albumBundle, albumUiBundle, multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent, albumFragment)
     }
 
     override fun onBackPressed() {

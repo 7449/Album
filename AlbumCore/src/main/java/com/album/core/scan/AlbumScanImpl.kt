@@ -5,6 +5,8 @@ package com.album.core.scan
 import android.content.Context
 import android.os.Bundle
 import androidx.loader.app.LoaderManager
+import com.album.core.scan.task.AlbumScanFileTask
+import com.album.core.scan.task.AlbumScanFinderTask
 import com.album.core.view.AlbumView
 
 /**
@@ -19,8 +21,6 @@ class AlbumScanImpl(private val albumView: AlbumView,
                     private val sdName: String) {
 
     companion object {
-        const val KEY_BUCKET = "bucket"
-        const val KEY_PAGE = "page"
         fun newInstance(
                 albumView: AlbumView,
                 scanType: Int,
@@ -34,15 +34,15 @@ class AlbumScanImpl(private val albumView: AlbumView,
 
     private val activity: Context = albumView.getAlbumActivity()
 
-    fun scanAll(bucketId: String, page: Int) {
+    fun scanAll(parent: Long, page: Int) {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
         albumView.showProgress()
         loaderManager.restartLoader(AlbumScan.ALBUM_LOADER_ID, Bundle().apply {
-            putString(KEY_BUCKET, bucketId)
-            putInt(KEY_PAGE, page)
-        }, AlbumScanFileLoader(activity, scanCount, "") {
+            putLong(AlbumColumns.PARENT, parent)
+            putInt(AlbumColumns.PAGE, page)
+        }, AlbumScanFileTask(activity, scanCount) {
             albumView.hideProgress()
             if (it.isEmpty()) {
                 if (albumView.getPage() == 0) {
@@ -62,16 +62,18 @@ class AlbumScanImpl(private val albumView: AlbumView,
     fun scanResult(path: String) {
         loaderManager.restartLoader(
                 AlbumScan.RESULT_LOADER_ID,
-                null,
-                AlbumScanResultLoader(activity, scanType, path) {
+                Bundle().apply {
+                    putString(AlbumColumns.DATA, path)
+                },
+                AlbumScanFileTask(activity, scanCount) {
                     refreshFinder()
-                    albumView.resultSuccess(it)
+                    albumView.resultSuccess(if (it.isEmpty()) null else it[0])
                     destroyResultLoaderManager()
                 })
     }
 
     private fun refreshFinder() {
-        loaderManager.restartLoader(AlbumScan.FINDER_LOADER_ID, null, AlbumScanFileFinderLoader(activity, allName, sdName) {
+        loaderManager.restartLoader(AlbumScan.FINDER_LOADER_ID, null, AlbumScanFinderTask(activity, allName, sdName) {
             albumView.scanFinderSuccess(it)
             destroyFinderLoaderManager()
         })

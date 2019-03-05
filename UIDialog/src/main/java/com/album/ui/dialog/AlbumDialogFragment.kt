@@ -3,7 +3,6 @@ package com.album.ui.dialog
 import android.content.DialogInterface
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.album.*
 import com.album.core.AlbumCore
 import com.album.core.scan.AlbumEntity
+import com.album.core.scan.AlbumScan
 import com.album.core.ui.AlbumBaseDialogFragment
 import com.album.listener.AlbumParentListener
 import com.album.ui.fragment.AlbumFragment
@@ -120,24 +120,24 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
                 Toast.makeText(mActivity, "正在预览阶段", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            initPrevFragment(albumFragment.getSelectEntity(), 0, PREVIEW_BUTTON_KEY)
+            initPrevFragment(albumFragment.getSelectEntity(), 0, AlbumScan.PREV_PARENT)
         }
 
         initAlbumFragment()
 
     }
 
-    override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String) {
-        initPrevFragment(multiplePreviewList, if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera) position - 1 else position, bucketId)
+    override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
+        initPrevFragment(multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent)
     }
 
     private fun hasShowPrevFragment() = ::prevFragment.isInitialized && prevFragment.isVisible
 
-    private fun initPrevFragment(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String) {
+    private fun initPrevFragment(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
         val bundle = Bundle().apply {
             putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
             putInt(TYPE_PREVIEW_POSITION_KEY, position)
-            putString(TYPE_PREVIEW_BUCKET_ID, bucketId)
+            putLong(TYPE_PREVIEW_PARENT, parent)
             putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
         }
         if (::prevFragment.isInitialized && !prevFragment.isRemoving) {

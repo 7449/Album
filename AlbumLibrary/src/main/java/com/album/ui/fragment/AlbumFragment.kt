@@ -28,10 +28,10 @@ import com.album.core.AlbumPermission.permissionStorage
 import com.album.core.AlbumView.hide
 import com.album.core.AlbumView.show
 import com.album.core.scan.AlbumEntity
+import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumScan.VIDEO
 import com.album.core.scan.AlbumScanImpl
 import com.album.core.scan.AlbumSingleMediaScanner
-import com.album.core.scan.FinderEntity
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumView
 import com.album.listener.AlbumMethodFragmentViewListener
@@ -75,7 +75,7 @@ class AlbumFragment : AlbumBaseFragment(),
     /**
      * 目录数据
      */
-    private lateinit var finderEntityList: ArrayList<FinderEntity>
+    private lateinit var finderEntityList: ArrayList<AlbumEntity>
 
     /**
      * 拍照保存的图片Uri
@@ -88,9 +88,9 @@ class AlbumFragment : AlbumBaseFragment(),
     private var singleMediaScanner: AlbumSingleMediaScanner? = null
 
     /**
-     *当前 bucketId
+     *当前文件夹的 parent
      */
-    var bucketId: String = ""
+    var parent: Long = AlbumScan.ALL_PARENT
 
     /**
      * 当前页数
@@ -109,7 +109,7 @@ class AlbumFragment : AlbumBaseFragment(),
             imagePath = Uri.fromFile(mActivity.getCameraFile(albumBundle.cameraPath, albumBundle.scanType == VIDEO))
             return
         }
-        bucketId = savedInstanceState.getString(TYPE_ALBUM_STATE_BUCKET_ID, "")
+        parent = savedInstanceState.getLong(TYPE_ALBUM_STATE_PARENT, AlbumScan.ALL_PARENT)
         finderName = savedInstanceState.getString(TYPE_ALBUM_STATE_FINDER_NAME, "")
         imagePath = savedInstanceState.getParcelable(TYPE_ALBUM_STATE_IMAGE_PATH) ?: Uri.EMPTY
     }
@@ -117,7 +117,7 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(TYPE_ALBUM_STATE_SELECT, getSelectEntity())
-        outState.putString(TYPE_ALBUM_STATE_BUCKET_ID, bucketId)
+        outState.putLong(TYPE_ALBUM_STATE_PARENT, parent)
         outState.putString(TYPE_ALBUM_STATE_FINDER_NAME, finderName)
         outState.putParcelable(TYPE_ALBUM_STATE_IMAGE_PATH, imagePath)
     }
@@ -153,7 +153,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
 
         album_recyclerView.adapter = albumAdapter
-        onScanAlbum(bucketId, isFinder = false, result = false)
+        onScanAlbum(parent, isFinder = false, result = false)
 
     }
 
@@ -211,7 +211,7 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
         album_empty.hide()
-        if (TextUtils.isEmpty(bucketId) && !albumBundle.hideCamera && page == 0 && !albumEntityList.isEmpty()) {
+        if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera && page == 0 && !albumEntityList.isEmpty()) {
             albumEntityList.add(0, AlbumEntity(path = CAMERA))
         }
         albumAdapter.addAll(albumEntityList)
@@ -225,7 +225,7 @@ class AlbumFragment : AlbumBaseFragment(),
         ++page
     }
 
-    override fun scanFinderSuccess(list: ArrayList<FinderEntity>) {
+    override fun scanFinderSuccess(list: ArrayList<AlbumEntity>) {
         finderEntityList.clear()
         finderEntityList.addAll(list)
     }
@@ -285,21 +285,21 @@ class AlbumFragment : AlbumBaseFragment(),
         if (albumBundle.noPreview) {
             return
         }
-        albumParentListener?.onAlbumItemClick(getSelectEntity(), position, bucketId)
+        albumParentListener?.onAlbumItemClick(getSelectEntity(), position, parent)
     }
 
     /**
      * 扫描图库
-     * [bucketId] 如果为空则扫描整个
+     * [parent] 文件夹 parent
      * [isFinder] 是否是点击相册名称扫描
      * [result] 是否是拍照之后扫描
      */
-    override fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean) {
+    override fun onScanAlbum(parent: Long, isFinder: Boolean, result: Boolean) {
         if (isFinder) {
             page = 0
             albumAdapter.removeAll()
         }
-        this.bucketId = bucketId
+        this.parent = parent
         if (!permissionStorage()) {
             return
         }
@@ -308,7 +308,7 @@ class AlbumFragment : AlbumBaseFragment(),
             albumScan.scanResult(imagePath.path.orEmpty())
             return
         }
-        albumScan.scanAll(bucketId, page)
+        albumScan.scanAll(parent, page)
     }
 
     override fun onScanCropAlbum(path: String) {
@@ -322,7 +322,7 @@ class AlbumFragment : AlbumBaseFragment(),
             if (type == TYPE_RESULT_CROP) {
                 onScanCropAlbum(path)
             } else {
-                onScanAlbum(bucketId, isFinder = false, result = true)
+                onScanAlbum(parent, isFinder = false, result = true)
             }
         }
     }
@@ -427,13 +427,13 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun onLoadMore() {
         if (permissionStorage()) {
-            albumScan.scanAll(bucketId, page)
+            albumScan.scanAll(parent, page)
         }
     }
 
     override fun permissionsGranted(type: Int) {
         when (type) {
-            TYPE_PERMISSIONS_ALBUM -> onScanAlbum(bucketId, isFinder = false, result = false)
+            TYPE_PERMISSIONS_ALBUM -> onScanAlbum(parent, isFinder = false, result = false)
             TYPE_PERMISSIONS_CAMERA -> startCamera()
         }
     }
@@ -458,7 +458,7 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun hideProgress() = album_progress.hide()
 
-    override fun getFinderEntity(): List<FinderEntity> = finderEntityList
+    override fun getFinderEntity(): List<AlbumEntity> = finderEntityList
 
     override fun getAlbumActivity(): FragmentActivity = mActivity
 

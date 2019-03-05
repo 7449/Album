@@ -11,5 +11,5 @@ interface AlbumParentListener {
     /**
      * 点击进入预览页,依赖的DialogFragment或者Activity继承即可
      */
-    fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String)
+    fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long)
 }

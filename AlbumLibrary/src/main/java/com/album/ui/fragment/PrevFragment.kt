@@ -3,7 +3,6 @@ package com.album.ui.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
 import com.album.*
@@ -13,6 +12,7 @@ import com.album.core.AlbumPermission.permissionStorage
 import com.album.core.AlbumView.hide
 import com.album.core.AlbumView.show
 import com.album.core.scan.AlbumEntity
+import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumScanPreviewImpl
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumPreViewView
@@ -29,14 +29,12 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
         /**
          * 获取预览的fragment,参数里面应该包含
          * [EXTRA_ALBUM_OPTIONS] AlbumBundle
-         * [TYPE_PREVIEW_BUCKET_ID] 预览扫描的bucketId,如果为空则扫描整个相册
+         * [TYPE_PREVIEW_PARENT] 预览扫描的parent,如果为 ALL_PARENT 是预览而不是点击进入
          * [TYPE_PREVIEW_POSITION_KEY] 扫描图片成功之后需要定位的位置
          * [TYPE_PREVIEW_KEY] 跳转预览页面时携带选中数据的key
          * 可参考自定义UI
          */
-        fun newInstance(bundle: Bundle): PrevFragment {
-            return PrevFragment().apply { arguments = bundle }
-        }
+        fun newInstance(bundle: Bundle): PrevFragment = PrevFragment().apply { arguments = bundle }
     }
 
     /**
@@ -51,7 +49,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
 
     /**
      * 如果是点击预览或者其他按钮进入的则为已选中的数据
-     * 如果是点击Itm进入的则是按照bucketId扫描得来的数据
+     * 如果是点击Itm进入的则是按照parent扫描得来的数据
      */
     private var albumList: ArrayList<AlbumEntity> = ArrayList()
 
@@ -73,24 +71,24 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
     private var currentPosition: Int = 0
 
     /**
-     * 点击的图片的bucketId,为空的话则是扫描整个数据,如果是[PREVIEW_BUTTON_KEY]则不扫描直接显示
+     * 文件夹的parent,如果为 ALL_PARENT 则为预览
      */
-    private var bucketId: String = ""
+    private var parent: Long = AlbumScan.ALL_PARENT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS)
                 ?: throw KotlinNullPointerException()
-        bucketId = bundle.getString(TYPE_PREVIEW_BUCKET_ID, "")
-        preview = TextUtils.equals(bucketId, PREVIEW_BUTTON_KEY)
+        parent = bundle.getLong(TYPE_PREVIEW_PARENT, AlbumScan.ALL_PARENT)
+        preview = parent == AlbumScan.PREV_PARENT
 
-        // albumBundle bucketId preview 这个几个变量直到销毁也不会变,所以先赋值
+        // albumBundle parent preview 这个几个变量直到销毁也不会变,所以先赋值
         //如果 savedInstanceState == null 则返回携带的Bundle，如果不等于null ，则是横竖屏切换了，要重新赋值一些保存的数据
 
         // selectList 是当前页选择的数据,如果是点击预览进入则为已选择的所有数据，如果不是,则有可能为空,但不会为Null
         // currentPosition 当前定位的position
-        // albumList 全部数据,如果是点击预览页进入则初始化赋值为 selectList , 如果不是则是根据 bucketId 扫描到的所有数据，赋值是在 initPreview()
+        // albumList 全部数据,如果是点击预览页进入则初始化赋值为 selectList , 如果不是则是根据 parent 扫描到的所有数据，赋值是在 initPreview()
         // 所以如果 savedInstanceState == null 或者 不是预览进入 则直接跳过横竖屏导致的数据变化赋值
         // 如果是预览,则会在横竖屏切换时保存 albumList ， 就是保存起来上一个页面所有的选择数据，相当于刚进来没有变化的 selectList,如果不是,则不用保存,横竖屏切换直接重新扫描
 
@@ -137,7 +135,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
      */
     private fun initPreview() {
         if (!preview) {
-            presenterPreview = AlbumScanPreviewImpl.newInstance(this, selectList, bucketId)
+            presenterPreview = AlbumScanPreviewImpl.newInstance(this, selectList, parent)
             return
         }
         if (albumList.isEmpty()) {

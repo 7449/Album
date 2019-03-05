@@ -25,11 +25,11 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
     override val layoutId: Int = R.layout.album_activity_preview
 
     companion object {
-        fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, bucketId: String, fragment: Fragment) {
+        fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, fragment: Fragment) {
             val bundle = Bundle().apply {
                 putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
                 putInt(TYPE_PREVIEW_POSITION_KEY, position)
-                putString(TYPE_PREVIEW_BUCKET_ID, bucketId)
+                putLong(TYPE_PREVIEW_PARENT, parent)
                 putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
                 putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
@@ -79,13 +79,13 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
         val fragment = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)
         if (fragment != null) {
             prevFragment = fragment as PrevFragment
-            supportFragmentManager.beginTransaction().show(fragment).commit()
+            supportFragmentManager.beginTransaction().show(fragment).commitAllowingStateLoss()
         } else {
             prevFragment = PrevFragment.newInstance(intent.extras.orEmpty())
             supportFragmentManager
                     .beginTransaction()
                     .apply { add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName) }
-                    .commit()
+                    .commitAllowingStateLoss()
         }
         prevFragment.albumParentListener = this
     }

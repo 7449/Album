@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.FrameLayout
 import com.album.R
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.FinderEntity
 import com.album.widget.AlbumImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -30,9 +29,9 @@ class SimpleAlbumImageLoader : AlbumImageLoader {
         return albumImageView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View {
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
         val albumImageView = AlbumImageView(container.context)
-        Glide.with(container.context).load(finderEntity.thumbnailsPath).apply(requestOptions).into(albumImageView)
+        Glide.with(container.context).load(finderEntity.path).apply(requestOptions).into(albumImageView)
         return albumImageView
     }
 

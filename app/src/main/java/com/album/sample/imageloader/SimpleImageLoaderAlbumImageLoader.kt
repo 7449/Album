@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.FinderEntity
 import com.album.listener.AlbumImageLoader
 import com.album.sample.R
 import com.album.widget.AlbumImageView
@@ -38,10 +37,10 @@ class SimpleImageLoaderAlbumImageLoader : AlbumImageLoader {
         return albumImageView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View {
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
         val albumImageView = AlbumImageView(container.context)
         albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
-        ImageLoader.getInstance().displayImage("file:///" + finderEntity.thumbnailsPath, ImageViewAware(albumImageView), displayImageOptions, null, null, null)
+        ImageLoader.getInstance().displayImage("file:///" + finderEntity.path, ImageViewAware(albumImageView), displayImageOptions, null, null, null)
         return albumImageView
     }
 

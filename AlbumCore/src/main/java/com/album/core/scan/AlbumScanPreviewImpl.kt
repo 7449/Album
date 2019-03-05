@@ -1,6 +1,8 @@
 package com.album.core.scan
 
+import android.os.Bundle
 import androidx.loader.app.LoaderManager
+import com.album.core.scan.task.AlbumScanFileTask
 import com.album.core.view.AlbumPreViewView
 
 /**
@@ -10,25 +12,29 @@ import com.album.core.view.AlbumPreViewView
  */
 class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
                            private val selectEntity: ArrayList<AlbumEntity>,
-                           bucketId: String) {
+                           parent: Long) {
 
     companion object {
         fun newInstance(
                 prevView: AlbumPreViewView,
                 selectEntity: ArrayList<AlbumEntity>,
-                bucketId: String
-        ) = AlbumScanPreviewImpl(prevView, selectEntity, bucketId)
+                parent: Long
+        ) = AlbumScanPreviewImpl(prevView, selectEntity, parent)
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getPrevContext())
 
     init {
         prevView.showProgress()
-        loaderManager.initLoader(AlbumScan.PREVIEW_LOADER_ID, null, AlbumScanPreviewLoader(prevView.getPrevContext(), true, bucketId) {
-            prevView.hideProgress()
-            prevView.scanSuccess(mergeEntity(it, selectEntity))
-            destroyLoaderManager()
-        })
+        loaderManager.initLoader(AlbumScan.PREVIEW_LOADER_ID,
+                Bundle().apply {
+                    putLong(AlbumColumns.PARENT, parent)
+                },
+                AlbumScanFileTask(prevView.getPrevContext(), SCAN_ALL) {
+                    prevView.hideProgress()
+                    prevView.scanSuccess(mergeEntity(it, selectEntity))
+                    destroyLoaderManager()
+                })
     }
 
     private fun mergeEntity(albumEntityList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>): ArrayList<AlbumEntity> {

@@ -33,9 +33,9 @@ const val EXTRA_ALBUM_UI_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Ui.Optio
 const val TYPE_ALBUM_STATE_SELECT = "album:state_select"
 
 /**
- * 保存当前bucketId的Bundle Key
+ * 保存当前文件夹的parent的Bundle Key
  */
-const val TYPE_ALBUM_STATE_BUCKET_ID = "album:state_bucket_id"
+const val TYPE_ALBUM_STATE_PARENT = "album:state_parent"
 
 /**
  * 保存当前文件夹名称的Bundle Key
@@ -49,6 +49,7 @@ const val TYPE_ALBUM_STATE_IMAGE_PATH = "album:state_image_path"
 
 /**
  * 预览页保存已选择信息的Bundle Key
+ * 如果是点击图片进入则结果为Null
  */
 const val TYPE_PREVIEW_STATE_SELECT_ALL = "state_preview_all"
 
@@ -78,16 +79,9 @@ const val TYPE_PREVIEW_REFRESH_UI = "preview_refresh_ui"
 const val TYPE_PREVIEW_SELECT_OK_FINISH = "preview_select_ok_finish"
 
 /**
- * 进入预览页 bucketId Bundle Key
- * 如果是[PREVIEW_BUTTON_KEY]则是只查看已选中数据跳转预览页
- * 和[TYPE_PREVIEW_KEY]相呼应,如果是只查看选中数据则缺一不可
+ * 进入预览页 parent Bundle Key
  */
-const val TYPE_PREVIEW_BUCKET_ID = "preview_bucket_id"
-
-/**
- * 只查看选中数据的 "bucketId"
- */
-const val PREVIEW_BUTTON_KEY = "preview_button"
+const val TYPE_PREVIEW_PARENT = "preview_parent"
 
 /**
  * 扫描图片成功之后需要定位的位置 Key
@@ -105,6 +99,7 @@ const val TYPE_RESULT_CAMERA = 0
 const val TYPE_RESULT_CROP = 1
 
 class Album {
+
     companion object {
         val instance by lazy { Album() }
         fun destroy() {

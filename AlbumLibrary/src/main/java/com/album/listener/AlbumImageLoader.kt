@@ -3,7 +3,6 @@ package com.album.listener
 import android.view.View
 import android.widget.FrameLayout
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.FinderEntity
 
 /**
  * @author y
@@ -18,7 +17,7 @@ interface AlbumImageLoader {
     /**
      * 目录图片加载
      */
-    fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View
+    fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View
 
     /**
      * 预览页图片加载

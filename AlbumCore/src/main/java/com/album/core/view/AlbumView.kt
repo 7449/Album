@@ -3,7 +3,6 @@ package com.album.core.view
 import androidx.fragment.app.FragmentActivity
 import androidx.loader.app.LoaderManager
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.FinderEntity
 
 /**
  * @author y
@@ -48,7 +47,7 @@ interface AlbumView {
     /**
      * 扫描文件夹成功
      */
-    fun scanFinderSuccess(list: ArrayList<FinderEntity>)
+    fun scanFinderSuccess(list: ArrayList<AlbumEntity>)
 
     /**
      * 没有数据了

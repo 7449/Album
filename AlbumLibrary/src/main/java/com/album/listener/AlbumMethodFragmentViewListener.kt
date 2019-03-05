@@ -3,7 +3,6 @@ package com.album.listener
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.FinderEntity
 
 /**
  * @author y
@@ -13,7 +12,7 @@ internal interface AlbumMethodFragmentViewListener {
     /**
      * 获取文件夹list
      */
-    fun getFinderEntity(): List<FinderEntity>
+    fun getFinderEntity(): List<AlbumEntity>
 
     /**
      * 断掉MediaScanner
@@ -22,11 +21,11 @@ internal interface AlbumMethodFragmentViewListener {
 
     /**
      * 扫描设备
-     * [bucketId] 文件夹唯一
+     * [parent] 文件夹唯一
      * [isFinder] 是否点击文件夹扫描
      * [result] 是否是拍照之后的扫描
      */
-    fun onScanAlbum(bucketId: String, isFinder: Boolean, result: Boolean)
+    fun onScanAlbum(parent: Long, isFinder: Boolean, result: Boolean)
 
     /**
      * 扫描裁剪之后的信息

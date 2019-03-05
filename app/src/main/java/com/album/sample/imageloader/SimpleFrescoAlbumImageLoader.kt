@@ -4,7 +4,6 @@ import android.net.Uri
 import android.view.View
 import android.widget.FrameLayout
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.FinderEntity
 import com.album.listener.AlbumImageLoader
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.drawable.ScalingUtils
@@ -43,9 +42,9 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         return simpleDraweeView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: FinderEntity, container: FrameLayout): View {
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
         val simpleDraweeView = SimpleDraweeView(container.context)
-        val uri = Uri.fromFile(File(finderEntity.thumbnailsPath))
+        val uri = Uri.fromFile(File(finderEntity.path))
         val request = ImageRequestBuilder
                 .newBuilderWithSource(uri)
                 .setRotationOptions(RotationOptions.autoRotate())

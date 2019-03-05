@@ -68,6 +68,7 @@ class AlbumAdapter(
         }
 
         // imageLoader
+        holder.container.removeAllViews()
         holder.container.addView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, holder.container), layoutParams)
 
         if (albumBundle.radio) {

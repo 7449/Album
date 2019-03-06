@@ -1,5 +1,6 @@
 package com.album.listener
 
+import android.view.View
 import com.album.core.scan.AlbumEntity
 
 /**
@@ -12,4 +13,9 @@ interface AlbumParentListener {
      * 点击进入预览页,依赖的DialogFragment或者Activity继承即可
      */
     fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long)
+
+    /**
+     * 点击checkbox时调用
+     */
+    fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
 }

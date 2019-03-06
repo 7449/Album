@@ -2,6 +2,7 @@ package com.album.ui.wechat.activity
 
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
@@ -71,6 +72,15 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
     }
 
     override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
+    }
+
+    override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
+        album_wechat_ui_title_send.isEnabled = currentMaxCount != 0
+        if (currentMaxCount == 0) {
+            album_wechat_ui_title_send.text = getString(R.string.album_wechat_ui_title_send)
+        } else {
+            album_wechat_ui_title_send.text = String.format(getString(R.string.album_wechat_ui_title_send_count), currentMaxCount, albumBundle.multipleMaxCount)
+        }
     }
 
     override fun onBackPressed() {

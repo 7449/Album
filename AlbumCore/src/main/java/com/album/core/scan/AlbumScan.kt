@@ -81,6 +81,10 @@ fun AlbumEntity.hasVideo(): Boolean {
     return this.mediaType == AlbumColumns.VIDEO
 }
 
+fun AlbumEntity.hasGif(): Boolean {
+    return this.displayName.endsWith("gif") || this.displayName.endsWith("GIF")
+}
+
 object AlbumScan {
     /**
      * 扫描类型：图片

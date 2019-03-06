@@ -163,6 +163,9 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         PreviewActivity.start(albumBundle, albumUiBundle, multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent, albumFragment)
     }
 
+    override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
+    }
+
     override fun onBackPressed() {
         Album.instance.albumListener?.onAlbumContainerBackPressed()
         super.onBackPressed()

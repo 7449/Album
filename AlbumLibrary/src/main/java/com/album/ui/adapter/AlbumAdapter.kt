@@ -62,7 +62,7 @@ class AlbumAdapter(
             }
             else -> {
                 val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams)
+                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, onItemClickListener)
                 photoView.setOnClickListener { v -> onItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, albumList[photoViewHolder.adapterPosition]) }
                 photoViewHolder
             }
@@ -110,6 +110,7 @@ class AlbumAdapter(
     }
 
     interface OnItemClickListener {
+        fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
         fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity)
         fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity)
     }
@@ -132,7 +133,7 @@ class AlbumAdapter(
         }
     }
 
-    class PhotoViewHolder(itemView: View, private val albumBundle: AlbumBundle, private val display: Int, private val layoutParams: ViewGroup.LayoutParams) : RecyclerView.ViewHolder(itemView) {
+    class PhotoViewHolder(itemView: View, private val albumBundle: AlbumBundle, private val display: Int, private val layoutParams: ViewGroup.LayoutParams, private val onItemClickListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         private val container: FrameLayout = itemView.findViewById(R.id.album_container)
         private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
@@ -167,6 +168,7 @@ class AlbumAdapter(
                     multipleList.remove(albumEntity)
                     albumEntity.isCheck = false
                 }
+                onItemClickListener.onItemCheckBoxClick(itemView, multipleList.size, albumEntity)
                 Album.instance.albumListener?.onCheckBoxAlbum(multipleList.size, albumBundle.multipleMaxCount)
             })
         }

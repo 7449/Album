@@ -154,7 +154,6 @@ class AlbumFragment : AlbumBaseFragment(),
 
         album_recyclerView.adapter = albumAdapter
         onScanAlbum(parent, isFinder = false, result = false)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -255,6 +254,10 @@ class AlbumFragment : AlbumBaseFragment(),
             albumAdapter.albumList.add(1, albumEntity)
             albumAdapter.notifyDataSetChanged()
         }
+    }
+
+    override fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
+        albumParentListener?.onChangedCheckBoxCount(view, currentMaxCount, albumEntity)
     }
 
     override fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity) {

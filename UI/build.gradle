@@ -24,9 +24,5 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "com.github.MikeOrtiz:TouchImageView:$touchVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    if (uploadType == libraryType) {
-        compileOnly project(':AlbumLibrary')
-    } else {
-        compileOnly "com.ydevelop:album:$albumLibraryVersion"
-    }
+    compileOnly project(':AlbumLibrary')
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="album_wechat_title">图片和视频</string>
     <string name="album_wechat_ui_title_send">发送</string>
+    <string name="album_wechat_ui_title_send_count">发送(%s/%s)</string>
 </resources>

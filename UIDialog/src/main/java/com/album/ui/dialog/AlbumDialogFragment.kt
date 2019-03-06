@@ -131,6 +131,9 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
         initPrevFragment(multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent)
     }
 
+    override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
+    }
+
     private fun hasShowPrevFragment() = ::prevFragment.isInitialized && prevFragment.isVisible
 
     private fun initPrevFragment(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {

@@ -32,10 +32,7 @@ import com.album.listener.AlbumImageLoader
 import com.album.listener.OnEmptyClickListener
 import com.album.listener.SimpleAlbumImageLoader
 import com.album.sample.camera.SimpleCameraActivity
-import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
-import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader
-import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
-import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
+import com.album.sample.imageloader.*
 import com.album.ui.AlbumUiBundle
 import com.album.ui.activity.AlbumActivity
 import com.album.ui.dialog.dialog
@@ -184,10 +181,8 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
 
     private fun onWeChatUI(): Album {
         return Album.instance.apply {
-            albumImageLoader = SimpleSubsamplingScaleImageLoader()
+            albumImageLoader = SimpleAlbumWeChatImageLoader()
             albumListener = MainAlbumListener(this@MainActivity, list)
-            initList = list
-            options = dayOptions
             emptyClickListener = this@MainActivity
         }
     }
@@ -267,8 +262,12 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             }
             R.id.btn_wechat_ui -> {
                 onWeChatUI().ui(this,
-                        AlbumBundle(scanType = AlbumScan.MIXING, hideCamera = true,
-                                checkBoxDrawable = R.drawable.simple_selector_album_item_check), AlbumWeChatUiActivity::class.java)
+                        AlbumBundle(
+                                scanType = AlbumScan.MIXING,
+                                spanCount = 4,
+                                photoBackgroundColor = R.color.colorAlbumContentEmptyDrawableColor,
+                                hideCamera = true,
+                                checkBoxDrawable = R.drawable.simple_selector_wechat_item_check), AlbumWeChatUiActivity::class.java)
             }
             R.id.btn_imageloader -> {
                 AlertDialog.Builder(this@MainActivity)

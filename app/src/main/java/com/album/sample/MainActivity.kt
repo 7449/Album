@@ -213,6 +213,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, AlbumSingleMediaScann
             R.id.btn_night_album -> {
                 onNightClick().ui(this,
                         AlbumBundle(
+                                spanCount = 4,
                                 cropFinish = false,
                                 checkBoxDrawable = R.drawable.simple_selector_album_item_check,
                                 radio = true,

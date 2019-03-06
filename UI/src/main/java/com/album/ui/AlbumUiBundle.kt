@@ -128,7 +128,7 @@ class AlbumUiBundle(
         /**
          * 预览页ViewPager背景色
          */
-        var previewBackground: Int = R.color.colorAlbumPreviewBackground,
+        var previewBackground: Int = R.color.colorAlbumContentViewBackgroundNight,
         /**
          * 预览页底部提示栏背景色
          */

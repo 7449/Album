@@ -2,9 +2,9 @@ package com.album.listener
 
 import android.view.View
 import android.widget.FrameLayout
+import androidx.appcompat.widget.AppCompatImageView
 import com.album.R
 import com.album.core.scan.AlbumEntity
-import com.album.widget.AlbumImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ortiz.touchview.TouchImageView
@@ -23,22 +23,42 @@ class SimpleAlbumImageLoader : AlbumImageLoader {
 
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_album_default_loading).error(R.drawable.ic_album_default_loading).centerCrop()
 
-    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = AlbumImageView(container.context)
-        Glide.with(container.context).load(albumEntity.path).apply(requestOptions.override(width, height)).into(albumImageView)
-        return albumImageView
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View? {
+        val imageView = AlbumImageView(container)
+        Glide.with(container.context).load(albumEntity.path).apply(requestOptions.override(width, height)).into(imageView)
+        return DisplayView(container, imageView)
     }
 
-    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = AlbumImageView(container.context)
-        Glide.with(container.context).load(finderEntity.path).apply(requestOptions).into(albumImageView)
-        return albumImageView
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View? {
+        val imageView = AlbumImageView(container)
+        Glide.with(container.context).load(finderEntity.path).apply(requestOptions).into(imageView)
+        return DisplayView(container, imageView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = TouchImageView(container.context)
-        Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(albumImageView)
-        return albumImageView
+    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+        val imageView = AlbumImageView(container)
+        Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(imageView)
+        return DisplayView(container, imageView)
+    }
+}
+
+fun AlbumImageLoader.DisplayView(container: FrameLayout, newView: View): View? {
+    return if (container.childCount > 0) null else newView
+}
+
+fun AlbumImageLoader.AlbumImageView(container: FrameLayout): AppCompatImageView {
+    return if (container.childCount > 0) {
+        container.getChildAt(0) as AppCompatImageView
+    } else {
+        AppCompatImageView(container.context)
+    }
+}
+
+fun AlbumImageLoader.AlbumTouchImageView(container: FrameLayout): TouchImageView {
+    return if (container.childCount > 0) {
+        container.getChildAt(0) as TouchImageView
+    } else {
+        TouchImageView(container.context)
     }
 }
 
@@ -61,7 +81,7 @@ open class SimpleOnAlbumListener : OnAlbumListener {
     override fun onAlbumCropCanceled() {}
     override fun onAlbumCameraCanceled() {}
     override fun onAlbumUCropError(data: Throwable?) {}
-    override fun onAlbumUCropResources(scannerFile: File) {}
+    override fun onAlbumUCropResources(cropFile: File) {}
     override fun onAlbumMaxCount() {}
     override fun onAlbumOpenCameraError() {}
     override fun onAlbumEmpty() {}

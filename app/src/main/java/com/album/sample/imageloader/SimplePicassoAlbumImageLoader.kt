@@ -6,8 +6,9 @@ import android.view.View
 import android.widget.FrameLayout
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumImageLoader
-import com.album.widget.AlbumImageView
-import com.ortiz.touchview.TouchImageView
+import com.album.listener.AlbumImageView
+import com.album.listener.AlbumTouchImageView
+import com.album.listener.DisplayView
 import com.squareup.picasso.Picasso
 
 /**
@@ -16,33 +17,33 @@ import com.squareup.picasso.Picasso
 
 class SimplePicassoAlbumImageLoader : AlbumImageLoader {
 
-    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = AlbumImageView(container.context)
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View? {
+        val albumImageView = AlbumImageView(container)
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.id))
                 .centerCrop()
                 .resize(width, height)
                 .into(albumImageView)
-        return albumImageView
+        return DisplayView(container, albumImageView)
     }
 
-    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = AlbumImageView(container.context)
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View? {
+        val albumImageView = AlbumImageView(container)
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, finderEntity.id))
                 .resize(50, 50)
                 .centerCrop()
                 .into(albumImageView)
-        return albumImageView
+        return DisplayView(container, albumImageView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = TouchImageView(container.context)
+    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+        val albumImageView = AlbumTouchImageView(container)
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.id))
                 .resize(50, 50)
                 .centerCrop()
                 .into(albumImageView)
-        return albumImageView
+        return DisplayView(container, albumImageView)
     }
 }

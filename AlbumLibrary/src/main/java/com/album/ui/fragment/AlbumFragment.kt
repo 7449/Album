@@ -248,13 +248,13 @@ class AlbumFragment : AlbumBaseFragment(),
         }
     }
 
-    override fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
-        if (position == 0 && TextUtils.equals(albumEntity.path, CAMERA)) {
-            if (permissionCamera()) {
-                startCamera()
-            }
-            return
+    override fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
+        if (permissionCamera()) {
+            startCamera()
         }
+    }
+
+    override fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
         if (!albumEntity.path.fileExists()) {
             Album.instance.albumListener?.onAlbumFileNotExist()
             return

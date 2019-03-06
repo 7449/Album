@@ -25,7 +25,8 @@ class FinderAdapter(private val list: ArrayList<AlbumEntity>, private val albumU
             viewHolder.convertView = LayoutInflater.from(parent.context).inflate(R.layout.album_item_finder, parent, false)
             viewHolder.frameLayout = viewHolder.convertView.findViewById(R.id.iv_album_finder_icon)
             viewHolder.appCompatTextView = viewHolder.convertView.findViewById(R.id.tv_album_finder_name)
-            viewHolder.frameLayout.addView(Album.instance.albumImageLoader?.displayAlbumThumbnails(finderEntity, viewHolder.frameLayout))
+            val imageView = Album.instance.albumImageLoader?.displayAlbumThumbnails(finderEntity, viewHolder.frameLayout)
+            imageView?.let { viewHolder.frameLayout.addView(it) }
             viewHolder.convertView.tag = viewHolder
         } else {
             viewHolder = convertView.tag as ViewHolder

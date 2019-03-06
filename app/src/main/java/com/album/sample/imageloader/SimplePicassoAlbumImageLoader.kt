@@ -9,6 +9,7 @@ import com.album.listener.AlbumImageLoader
 import com.album.listener.AlbumImageView
 import com.album.listener.AlbumTouchImageView
 import com.album.listener.DisplayView
+import com.album.widget.AlbumImageView
 import com.squareup.picasso.Picasso
 
 /**

@@ -20,7 +20,7 @@ import com.album.core.AlbumCamera.openCamera
 import com.album.core.AlbumCore.imageViewWidthAndHeight
 import com.album.core.AlbumCore.orEmpty
 import com.album.core.AlbumFile.fileExists
-import com.album.core.AlbumFile.pathToFile
+import com.album.core.AlbumFile.toFile
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_ALBUM
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_CAMERA
 import com.album.core.AlbumPermission.permissionCamera
@@ -163,7 +163,16 @@ class AlbumFragment : AlbumBaseFragment(),
             Activity.RESULT_CANCELED -> when (requestCode) {
                 TYPE_PREVIEW_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
                 UCrop.REQUEST_CROP -> Album.instance.albumListener?.onAlbumCropCanceled()
-                OPEN_CAMERA_REQUEST_CODE -> Album.instance.albumListener?.onAlbumCameraCanceled()
+                OPEN_CAMERA_REQUEST_CODE -> {
+                    val path = imagePath.path.orEmpty()
+                    if (path.fileExists() && path.toFile().length() > 0) {
+                        refreshMedia(TYPE_RESULT_CAMERA, imagePath.path.orEmpty())
+                        Album.instance.albumListener?.onAlbumCameraSuccessCanceled()
+                    } else {
+                        path.toFile().delete()
+                        Album.instance.albumListener?.onAlbumCameraCanceled()
+                    }
+                }
             }
             UCrop.RESULT_ERROR -> {
                 Album.instance.albumListener?.onAlbumUCropError(UCrop.getError(data.orEmpty()))
@@ -197,7 +206,7 @@ class AlbumFragment : AlbumBaseFragment(),
                         return
                     }
                     val path = data.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path.orEmpty()
-                    Album.instance.albumListener?.onAlbumUCropResources(path.pathToFile())
+                    Album.instance.albumListener?.onAlbumUCropResources(path.toFile())
                     refreshMedia(TYPE_RESULT_CROP, path)
                     if (albumBundle.cropFinish) {
                         mActivity.finish()

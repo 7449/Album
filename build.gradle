@@ -42,6 +42,8 @@ ext {
     touchVersion = '2.1.1'
 
     albumVersion = 'latest.release'
+    albumCoreVersion = 'beta02'
+    albumLibraryVersion = '0.0.7'
 
     sampleApplicationId = 'com.album.sample'
 }

@@ -31,18 +31,11 @@ dependencies {
     implementation "com.facebook.fresco:animated-gif:$frescoVersion"
     implementation "com.github.MikeOrtiz:TouchImageView:$touchVersion"
 
-    if (uploadType == debugType) {
-        implementation project(':AlbumLibrary')
-        implementation project(':UI')
-    } else {
-        implementation "com.ydevelop:album.ui:$albumVersion"
-        implementation "com.ydevelop:album:$albumVersion"
-    }
-
+    implementation project(':AlbumLibrary')
+    implementation project(':UI')
     implementation project(':UIWeChat')
     implementation project(':UISample')
     implementation project(':UIDialog')
-
 
     implementation(name: 'CameraViewLibrary', ext: 'aar')
 

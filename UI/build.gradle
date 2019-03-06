@@ -22,11 +22,11 @@ android {
 
 dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    if (uploadType == debugType) {
-        compileOnly project(':AlbumLibrary')
-    } else {
-        compileOnly "com.ydevelop:album:$albumVersion"
-    }
     compileOnly "com.github.MikeOrtiz:TouchImageView:$touchVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    if (uploadType == libraryType) {
+        compileOnly project(':AlbumLibrary')
+    } else {
+        compileOnly "com.ydevelop:album:$albumLibraryVersion"
+    }
 }

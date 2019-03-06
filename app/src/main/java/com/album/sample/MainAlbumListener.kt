@@ -12,6 +12,9 @@ import java.io.File
  */
 class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : OnAlbumListener {
 
+    override fun onAlbumCameraSuccessCanceled() {
+    }
+
     override fun onCheckBoxAlbum(count: Int, maxCount: Int) {
         toast("onCheckBoxAlbum:$count")
     }
@@ -75,8 +78,8 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("crop error:$data")
     }
 
-    override fun onAlbumUCropResources(scannerFile: File) {
-        toast("crop file:$scannerFile")
+    override fun onAlbumUCropResources(cropFile: File) {
+        toast("crop file:$cropFile")
     }
 
     override fun onAlbumMaxCount() {

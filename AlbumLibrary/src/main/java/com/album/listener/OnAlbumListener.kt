@@ -75,6 +75,11 @@ interface OnAlbumListener {
     fun onAlbumCameraCanceled()
 
     /**
+     * 拍照完成之后选择取消拍照
+     */
+    fun onAlbumCameraSuccessCanceled()
+
+    /**
      * 裁剪错误
      */
     fun onAlbumUCropError(data: Throwable?)

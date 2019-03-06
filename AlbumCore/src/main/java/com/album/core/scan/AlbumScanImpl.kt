@@ -65,6 +65,7 @@ class AlbumScanImpl(private val albumView: AlbumView,
                 AlbumScan.RESULT_LOADER_ID,
                 Bundle().apply {
                     putString(AlbumColumns.DATA, path)
+                    putInt(AlbumColumns.SCAN_TYPE, scanType)
                 },
                 AlbumScanFileTask(activity, scanCount) {
                     refreshFinder()

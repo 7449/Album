@@ -16,7 +16,7 @@ object AlbumFile {
     /**
      * 路径转[File]
      */
-    fun String.pathToFile(): File = File(this)
+    fun String.toFile(): File = File(this)
 
     /**
      * 获取父级路径

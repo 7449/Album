@@ -26,10 +26,9 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "com.github.bumptech.glide:glide:$glideVersion"
     compileOnly "com.github.MikeOrtiz:TouchImageView:$touchVersion"
-
-    if (uploadType == debugType) {
+    if (uploadType == coreType) {
         api project(':AlbumCore')
     } else {
-        api "com.ydevelop:album.core:$albumVersion"
+        api "com.ydevelop:album.core:$albumCoreVersion"
     }
 }

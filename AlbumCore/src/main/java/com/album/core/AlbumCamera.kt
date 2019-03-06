@@ -59,20 +59,19 @@ object AlbumCamera {
      */
     private fun openCamera(any: Any, cameraUri: Uri, video: Boolean): Int {
 
+        if (!any.permissionCamera() || !any.permissionStorage()) {
+            return OPEN_CAMERA_PERMISSION_ERROR
+        }
+
         var cameraActivity: Activity? = null
         if (any is Activity) {
             cameraActivity = any
         }
         if (any is Fragment) {
-            any.activity?.let {
-                cameraActivity = it
-            }
+            cameraActivity = any.activity
         }
 
         cameraActivity?.let {
-            if (!any.permissionCamera() || !any.permissionStorage()) {
-                return OPEN_CAMERA_PERMISSION_ERROR
-            }
             val intent = if (video) Intent(MediaStore.ACTION_VIDEO_CAPTURE) else Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (intent.resolveActivity(it.packageManager) == null) {
                 return OPEN_CAMERA_ERROR

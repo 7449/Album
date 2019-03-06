@@ -38,7 +38,6 @@ class AlbumScanFileTask(
         } else {
             ALBUM_PARENT_SELECTION(parent)
         }
-
         return CursorLoader(activity,
                 ALBUM_FILE_URI,
                 ALBUM_ALL_COLUMNS,

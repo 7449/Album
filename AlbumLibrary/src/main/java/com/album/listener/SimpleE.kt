@@ -66,6 +66,7 @@ fun AlbumImageLoader.AlbumTouchImageView(container: FrameLayout): TouchImageView
  * [OnAlbumListener]
  */
 open class SimpleOnAlbumListener : OnAlbumListener {
+    override fun onAlbumCameraSuccessCanceled() {}
     override fun onAlbumContainerFinish() {}
     override fun onAlbumContainerBackPressed() {}
     override fun onAlbumContainerFinderEmpty() {}

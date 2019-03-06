@@ -37,7 +37,7 @@ internal val ALBUM_ALL_COLUMNS = arrayOf(
 /**
  * 图片信息条件
  */
-internal const val ALBUM_ALL_SELECTION = AlbumColumns.MEDIA_TYPE + "=? or " +
+internal const val ALBUM_ALL_SELECTION = AlbumColumns.SIZE + " > 0 AND " +
         AlbumColumns.MEDIA_TYPE + "=? or " +
         AlbumColumns.MEDIA_TYPE + "=? or " +
         AlbumColumns.MEDIA_TYPE + "=? or " +
@@ -49,8 +49,8 @@ internal const val ALBUM_ALL_SELECTION = AlbumColumns.MEDIA_TYPE + "=? or " +
         AlbumColumns.MEDIA_TYPE + "=? or " +
         AlbumColumns.MEDIA_TYPE + "=? or " +
         AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? and " +
-        AlbumColumns.SIZE + " > 0 "
+        AlbumColumns.MEDIA_TYPE + "=? or " +
+        AlbumColumns.MEDIA_TYPE + "=? "
 
 /**
  * 图片信息条件
@@ -85,10 +85,9 @@ internal val ALBUM_FINDER_ALL_COLUMNS = arrayOf(
 /**
  * 文件夹信息条件
  */
-internal const val ALBUM_FINDER_ALL_SELECTION =
+internal const val ALBUM_FINDER_ALL_SELECTION = AlbumColumns.SIZE + " > 0 AND " +
         AlbumColumns.MEDIA_TYPE + "=? or " +
-                AlbumColumns.MEDIA_TYPE + "=? AND " +
-                AlbumColumns.SIZE + " > 0 )) GROUP BY (" + AlbumColumns.PARENT
+        AlbumColumns.MEDIA_TYPE + "=? )) GROUP BY (" + AlbumColumns.PARENT
 
 /**
  * 排序条件
@@ -98,7 +97,7 @@ internal const val ALBUM_ORDER_BY = AlbumColumns.DATA_MODIFIED + " DESC"
 /**
  * 排序分页条件
  */
-internal fun ALBUM_ORDER_BY_LIMIT(page: Int, scanCount: Int) = ALBUM_SORT_ORDER + " limit " + page * scanCount + "," + scanCount
+internal fun ALBUM_ORDER_BY_LIMIT(page: Int, scanCount: Int) = ALBUM_ORDER_BY + " limit " + page * scanCount + "," + scanCount
 
 /**
  * 扫描条件
@@ -111,25 +110,3 @@ internal fun ALBUM_SELECTION_ARGS(scanType: Int): Array<String> {
         else -> throw  KotlinNullPointerException()
     }
 }
-
-/**
- * 图片扫描 Uri
- */
-@Deprecated("")
-internal val ALBUM_URL: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-
-/**
- * 视频扫描 Uri
- */
-@Deprecated("")
-internal val VIDEO_URL: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-
-/**
- * 按时间排序 sortOrder
- */
-internal const val ALBUM_SORT_ORDER = MediaStore.MediaColumns.DATE_MODIFIED + " DESC"
-
-
-
-
-

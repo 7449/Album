@@ -3,7 +3,6 @@ package com.album.ui.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -50,11 +49,6 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
     private lateinit var albumBundle: AlbumBundle
 
     /**
-     * 是否是点击预览进入的页面
-     */
-    private var preview: Boolean = false
-
-    /**
      * 当前位置的position
      */
     private var currentPosition: Int = 0
@@ -71,7 +65,6 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
         super.onCreate(savedInstanceState)
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
         parent = bundle.getLong(TYPE_PREVIEW_PARENT, AlbumScan.ALL_PARENT)
-        preview = parent == AlbumScan.PREV_PARENT
         val previewBundle = savedInstanceState ?: bundle
         currentPosition = previewBundle.getInt(TYPE_PREVIEW_POSITION_KEY, 0)
     }
@@ -84,6 +77,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(TYPE_PREVIEW_STATE_SELECT_ALL, getSelectEntity())
+        outState.putParcelableArrayList(TYPE_PREVIEW_KEY, adapter.albumList)
         outState.putInt(TYPE_PREVIEW_POSITION_KEY, currentPosition)
     }
 
@@ -109,8 +103,11 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
             adapter.multipleList = selectList
         }
 
-        if (preview) {
+        if (parent == AlbumScan.PREV_PARENT) {
             adapter.addAll(bundle.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
+                    ?: ArrayList())
+        } else if (savedInstanceState != null) {
+            adapter.addAll(savedInstanceState.getParcelableArrayList<AlbumEntity>(TYPE_PREVIEW_KEY)
                     ?: ArrayList())
         }
 
@@ -133,11 +130,8 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
         }
     }
 
-    /**
-     * 如果不是预览则直接扫描图库 [scanSuccess]
-     */
     private fun initPreview() {
-        presenterPreview = AlbumScanPreviewImpl.newInstance(this, adapter.multipleList, if (preview) adapter.albumList else null, parent, albumBundle.scanType)
+        presenterPreview = AlbumScanPreviewImpl.newInstance(this, adapter.multipleList, if (parent == AlbumScan.PREV_PARENT || !adapter.albumList.isEmpty()) adapter.albumList else null, parent, albumBundle.scanType)
     }
 
     override fun scanSuccess(entityList: ArrayList<AlbumEntity>) {
@@ -159,7 +153,6 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
         albumParentListener?.onChangedViewPager(preview_viewPager.currentItem + 1, adapter.albumList.size)
         albumParentListener?.onChangedCheckBoxCount(getSelectEntity().size)
         preview_check_box.isChecked = adapter.albumList[preview_viewPager.currentItem].isCheck
-        Log.d("Album", preview_viewPager.currentItem.toString())
     }
 
     /**

@@ -9,14 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
  * @author y
  * @create 2019/2/27
  */
-class LoadMoreRecyclerView : RecyclerView {
+class LoadMoreRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RecyclerView(context, attrs, defStyleAttr) {
 
     private var lastVisibleItemPosition: Int = 0
     private lateinit var loadingListener: LoadMoreListener
-
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     fun setLoadingListener(loadingListener: LoadMoreListener) {
         this.loadingListener = loadingListener

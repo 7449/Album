@@ -10,11 +10,6 @@ import com.album.core.scan.AlbumEntity
  */
 internal interface AlbumMethodFragmentViewListener {
     /**
-     * 获取文件夹list
-     */
-    fun getFinderEntity(): List<AlbumEntity>
-
-    /**
      * 断掉MediaScanner
      */
     fun disconnectMediaScanner()

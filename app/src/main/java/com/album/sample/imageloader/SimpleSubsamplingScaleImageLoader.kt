@@ -31,7 +31,7 @@ class SimpleSubsamplingScaleImageLoader : AlbumImageLoader {
         return DisplayView(container, albumImageView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
         val subsamplingScaleImageView = AlbumSubsamplingScaleView(container)
         Glide.with(subsamplingScaleImageView).asBitmap().load(albumEntity.path).apply(requestOptions).into(object : SimpleTarget<Bitmap>() {
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {

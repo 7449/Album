@@ -70,7 +70,7 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         return DisplayView(container, simpleDraweeView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
         val simpleDraweeView = AlbumFrescoImageView(container)
         val uri = Uri.fromFile(File(albumEntity.path))
         val request = ImageRequestBuilder

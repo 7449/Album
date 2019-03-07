@@ -39,7 +39,7 @@ class SimpleAlbumWeChatImageLoader : AlbumImageLoader {
         return DisplayView(container, imageView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
         val imageView = AlbumImageView(container)
         Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(imageView)
         return DisplayView(container, imageView)

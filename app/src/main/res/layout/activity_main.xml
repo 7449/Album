@@ -18,13 +18,7 @@
             android:id="@+id/btn_night_album"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="night theme" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_sample_ui"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="sample ui" />
+            android:text="night theme and customize camera" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_open_camera"
@@ -33,22 +27,10 @@
             android:text="open camera" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_customize_camera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="customize camera" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_dialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="dialog" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_subsampling"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Subsampling Scale Image View" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_wechat_ui"

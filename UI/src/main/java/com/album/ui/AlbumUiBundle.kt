@@ -28,7 +28,7 @@ class AlbumUiBundle(
         /**
          * toolbar返回图标
          */
-        var toolbarIcon: Int = R.drawable.ic_action_back_day,
+        var toolbarIcon: Int = R.drawable.ic_album_ui_toolbar_back,
         /**
          * toolbar返回图片颜色
          */
@@ -44,7 +44,7 @@ class AlbumUiBundle(
         /**
          * toolbar elevation
          */
-        var toolbarElevation: Float = 6F,
+        var toolbarElevation: Float = 4F,
         /**
          * 底部背景色
          */
@@ -64,7 +64,7 @@ class AlbumUiBundle(
         /**
          * 底部文件目录图标
          */
-        var bottomFinderTextCompoundDrawable: Int = R.drawable.ic_action_album_finder_day,
+        var bottomFinderTextCompoundDrawable: Int = R.drawable.ic_album_ui_toolbar_back,
         /**
          * 底部文件目录图标颜色
          */

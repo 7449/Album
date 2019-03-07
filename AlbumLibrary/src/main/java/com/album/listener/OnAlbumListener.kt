@@ -117,10 +117,10 @@ interface OnAlbumListener {
     /**
      * 视频播放错误
      */
-    fun onVideoPlayError()
+    fun onAlbumVideoPlayError()
 
     /**
      * 每次checkbox选择时调用
      */
-    fun onCheckBoxAlbum(count: Int, maxCount: Int)
+    fun onAlbumCheckBox(count: Int, maxCount: Int)
 }

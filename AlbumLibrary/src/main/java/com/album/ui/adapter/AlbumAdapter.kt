@@ -169,7 +169,7 @@ class AlbumAdapter(
                     albumEntity.isCheck = false
                 }
                 onItemClickListener.onItemCheckBoxClick(itemView, multipleList.size, albumEntity)
-                Album.instance.albumListener?.onCheckBoxAlbum(multipleList.size, albumBundle.multipleMaxCount)
+                Album.instance.albumListener?.onAlbumCheckBox(multipleList.size, albumBundle.multipleMaxCount)
             })
         }
     }

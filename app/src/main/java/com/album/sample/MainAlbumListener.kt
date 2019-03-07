@@ -15,7 +15,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
     override fun onAlbumCameraSuccessCanceled() {
     }
 
-    override fun onCheckBoxAlbum(count: Int, maxCount: Int) {
+    override fun onAlbumCheckBox(count: Int, maxCount: Int) {
         toast("onCheckBoxAlbum:$count")
     }
 
@@ -102,7 +102,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("album no more")
     }
 
-    override fun onVideoPlayError() {
+    override fun onAlbumVideoPlayError() {
         toast("play video error : checked video app")
     }
 

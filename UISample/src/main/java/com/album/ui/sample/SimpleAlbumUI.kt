@@ -38,7 +38,7 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
     override fun initView() {
         listPopupWindow = ListPopupWindow(this)
         sample_finder_name.setOnClickListener {
-            val finderEntity = albumFragment.getFinderEntity()
+            val finderEntity = albumFragment.finderList
             if (!finderEntity.isEmpty()) {
                 finderAdapter.refreshData(finderEntity)
                 listPopupWindow.show()

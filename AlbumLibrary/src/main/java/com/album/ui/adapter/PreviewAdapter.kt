@@ -14,7 +14,7 @@ class PreviewAdapter(private val list: ArrayList<AlbumEntity>) : PagerAdapter() 
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val frameLayout = FrameLayout(container.context)
-        val imageView = Album.instance.albumImageLoader?.displayPreview(list[position], frameLayout)
+        val imageView = Album.instance.albumImageLoader?.displayAlbumPreview(list[position], frameLayout)
         imageView?.let { frameLayout.addView(it) }
         container.addView(frameLayout)
         return frameLayout

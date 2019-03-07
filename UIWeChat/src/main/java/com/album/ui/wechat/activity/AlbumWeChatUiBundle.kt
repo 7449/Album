@@ -29,7 +29,7 @@ class AlbumWeChatUiBundle(
         /**
          * toolbar返回图标
          */
-        var toolbarIcon: Int = R.drawable.ic_wechat_action_back,
+        var toolbarIcon: Int = R.drawable.ic_album_wechat_toolbar_back,
         /**
          * toolbar返回图片颜色
          */

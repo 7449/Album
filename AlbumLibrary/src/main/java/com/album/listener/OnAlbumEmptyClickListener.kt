@@ -8,9 +8,9 @@ import android.view.View
  *
  * 没有图片时点击显示的占位符点击事件
  */
-interface OnEmptyClickListener {
+interface OnAlbumEmptyClickListener {
     /**
      * true 打开相机，false自定义点击事件
      */
-    fun click(view: View): Boolean
+    fun onAlbumClick(view: View): Boolean
 }

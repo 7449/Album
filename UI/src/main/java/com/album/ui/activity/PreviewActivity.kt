@@ -90,11 +90,11 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
         prevFragment.albumParentListener = this
     }
 
-    override fun onChangedCount(currentCount: Int) {
-        preview_tv_preview_count.text = String.format("%s / %s", currentCount.toString(), albumBundle.multipleMaxCount)
+    override fun onChangedCheckBoxCount(currentMaxCount: Int) {
+        preview_tv_preview_count.text = String.format("%s / %s", currentMaxCount.toString(), albumBundle.multipleMaxCount)
     }
 
-    override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {
+    override fun onChangedViewPager(currentPos: Int, maxPos: Int) {
         preview_toolbar.title = getString(uiBundle.previewTitle) + "(" + currentPos + "/" + maxPos + ")"
     }
 

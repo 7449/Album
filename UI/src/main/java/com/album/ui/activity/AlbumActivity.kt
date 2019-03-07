@@ -135,7 +135,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             }
             R.id.album_tv_select -> albumFragment.multipleSelect()
             R.id.album_tv_finder_all -> {
-                val finderEntity = albumFragment.getFinderEntity()
+                val finderEntity = albumFragment.finderList
                 if (!finderEntity.isEmpty()) {
                     finderAdapter.refreshData(finderEntity)
                     listPopupWindow.show()

@@ -185,8 +185,8 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
             albumEntity.isCheck = true
             selectList.add(albumEntity)
         }
-        Album.instance.albumListener?.onCheckBoxAlbum(selectList.size, albumBundle.multipleMaxCount)
-        albumParentListener?.onChangedCount(selectList.size)
+        Album.instance.albumListener?.onAlbumCheckBox(selectList.size, albumBundle.multipleMaxCount)
+        albumParentListener?.onChangedCheckBoxCount(selectList.size)
     }
 
     private fun initViewPager(albumEntityList: ArrayList<AlbumEntity>) {
@@ -201,12 +201,12 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView {
                 }
                 preview_check_box.isChecked = albumEntityList[position].isCheck
                 currentPosition = position
-                albumParentListener?.onChangedToolbarCount(position + 1, albumEntityList.size)
+                albumParentListener?.onChangedViewPager(position + 1, albumEntityList.size)
             }
         })
-        albumParentListener?.onChangedToolbarCount(preview_viewPager.currentItem + 1, albumEntityList.size)
+        albumParentListener?.onChangedViewPager(preview_viewPager.currentItem + 1, albumEntityList.size)
         preview_check_box.isChecked = albumEntityList[preview_viewPager.currentItem].isCheck
-        albumParentListener?.onChangedCount(selectList.size)
+        albumParentListener?.onChangedCheckBoxCount(selectList.size)
     }
 
     /**

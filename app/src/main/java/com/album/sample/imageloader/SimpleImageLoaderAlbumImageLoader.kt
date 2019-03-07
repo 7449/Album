@@ -45,7 +45,7 @@ class SimpleImageLoaderAlbumImageLoader : AlbumImageLoader {
         return DisplayView(container, albumImageView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
         val albumImageView = AlbumTouchImageView(container)
         albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
         ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, ImageViewAware(albumImageView), displayImageOptions, null, null, null)

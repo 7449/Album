@@ -32,7 +32,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/album_button_margin"
             android:background="?android:selectableItemBackground"
-            android:drawableRight="@drawable/ic_action_album_finder_day"
+            android:drawableRight="@drawable/ic_album_ui_finder"
             android:gravity="right|center_vertical"
             android:padding="@dimen/album_bottom_padding"
             android:text="@string/album_all"

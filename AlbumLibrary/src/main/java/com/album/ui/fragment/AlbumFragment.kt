@@ -75,7 +75,7 @@ class AlbumFragment : AlbumBaseFragment(),
     /**
      * 目录数据
      */
-    private lateinit var finderEntityList: ArrayList<AlbumEntity>
+    lateinit var finderList: ArrayList<AlbumEntity>
 
     /**
      * 拍照保存的图片Uri
@@ -129,15 +129,15 @@ class AlbumFragment : AlbumBaseFragment(),
         drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumBundle.photoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
         album_empty.setImageDrawable(drawable)
         album_empty.setOnClickListener { v ->
-            val emptyClickListener = Album.instance.emptyClickListener
+            val emptyClickListener = Album.instance.albumEmptyClickListener
             if (emptyClickListener != null) {
-                if (emptyClickListener.click(v)) {
+                if (emptyClickListener.onAlbumClick(v)) {
                     startCamera()
                 }
             }
         }
 
-        finderEntityList = ArrayList()
+        finderList = ArrayList()
         albumScan = AlbumScanImpl.newInstance(this, albumBundle.scanType, albumBundle.scanCount, albumBundle.allName, albumBundle.sdName)
         album_recyclerView.setHasFixedSize(true)
         val gridLayoutManager = GridLayoutManager(mActivity, albumBundle.spanCount)
@@ -234,8 +234,8 @@ class AlbumFragment : AlbumBaseFragment(),
     }
 
     override fun scanFinderSuccess(list: ArrayList<AlbumEntity>) {
-        finderEntityList.clear()
-        finderEntityList.addAll(list)
+        finderList.clear()
+        finderList.addAll(list)
     }
 
     override fun onAlbumNoMore() {
@@ -277,7 +277,7 @@ class AlbumFragment : AlbumBaseFragment(),
                 openVideo.setDataAndType(Uri.parse(albumEntity.path), "video/*")
                 startActivity(openVideo)
             } catch (e: Exception) {
-                Album.instance.albumListener?.onVideoPlayError()
+                Album.instance.albumListener?.onAlbumVideoPlayError()
             }
             return
         }
@@ -353,7 +353,7 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun startCamera() {
         val albumCameraListener = Album.instance.customCameraListener
         if (albumCameraListener != null) {
-            albumCameraListener.startCamera(this)
+            albumCameraListener.openCustomCamera(this)
             return
         }
         imagePath = Uri.fromFile(mActivity.getCameraFile(albumBundle.cameraPath, albumBundle.scanType == VIDEO))
@@ -466,11 +466,17 @@ class AlbumFragment : AlbumBaseFragment(),
         albumAdapter.notifyDataSetChanged()
     }
 
-    override fun showProgress() = album_progress.show()
+    override fun showProgress() {
+        if (albumBundle.showProgress) {
+            album_progress.show()
+        }
+    }
 
-    override fun hideProgress() = album_progress.hide()
-
-    override fun getFinderEntity(): List<AlbumEntity> = finderEntityList
+    override fun hideProgress() {
+        if (albumBundle.showProgress) {
+            album_progress.hide()
+        }
+    }
 
     override fun getAlbumActivity(): FragmentActivity = mActivity
 

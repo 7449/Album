@@ -90,10 +90,10 @@ class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
         }
     }
 
-    override fun onChangedCount(currentCount: Int) {
+    override fun onChangedCheckBoxCount(currentMaxCount: Int) {
     }
 
-    override fun onChangedToolbarCount(currentPos: Int, maxPos: Int) {
+    override fun onChangedViewPager(currentPos: Int, maxPos: Int) {
         preview_toolbar.title = getString(uiBundle.previewTitle) + "(" + currentPos + "/" + maxPos + ")"
     }
 

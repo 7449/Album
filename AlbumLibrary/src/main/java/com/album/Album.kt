@@ -1,10 +1,10 @@
 package com.album
 
 import com.album.core.scan.AlbumEntity
-import com.album.listener.AlbumCustomCameraListener
+import com.album.listener.OnAlbumCustomCameraListener
 import com.album.listener.AlbumImageLoader
 import com.album.listener.OnAlbumListener
-import com.album.listener.OnEmptyClickListener
+import com.album.listener.OnAlbumEmptyClickListener
 import com.yalantis.ucrop.UCrop
 
 /**
@@ -107,7 +107,7 @@ class Album {
                 options = null
                 albumListener = null
                 customCameraListener = null
-                emptyClickListener = null
+                albumEmptyClickListener = null
                 albumImageLoader = null
                 initList = null
             }
@@ -117,8 +117,8 @@ class Album {
     var options: UCrop.Options? = null
     var albumImageLoader: AlbumImageLoader? = null
     var albumListener: OnAlbumListener? = null
-    var customCameraListener: AlbumCustomCameraListener? = null
-    var emptyClickListener: OnEmptyClickListener? = null
+    var customCameraListener: OnAlbumCustomCameraListener? = null
+    var albumEmptyClickListener: OnAlbumEmptyClickListener? = null
     var initList: ArrayList<AlbumEntity>? = null
 }
 

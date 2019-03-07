@@ -35,7 +35,7 @@ class SimpleAlbumImageLoader : AlbumImageLoader {
         return DisplayView(container, imageView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
         val imageView = AlbumImageView(container)
         Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(imageView)
         return DisplayView(container, imageView)
@@ -87,6 +87,6 @@ open class SimpleOnAlbumListener : OnAlbumListener {
     override fun onAlbumOpenCameraError() {}
     override fun onAlbumEmpty() {}
     override fun onAlbumNoMore() {}
-    override fun onVideoPlayError() {}
-    override fun onCheckBoxAlbum(count: Int, maxCount: Int) {}
+    override fun onAlbumVideoPlayError() {}
+    override fun onAlbumCheckBox(count: Int, maxCount: Int) {}
 }

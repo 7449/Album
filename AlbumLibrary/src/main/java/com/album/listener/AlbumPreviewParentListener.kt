@@ -9,10 +9,10 @@ interface AlbumPreviewParentListener {
     /**
      * 点击checkbox时调用
      */
-    fun onChangedCount(currentCount: Int)
+    fun onChangedCheckBoxCount(currentMaxCount: Int)
 
     /**
      * 滑动时调用，可改变toolbar数据
      */
-    fun onChangedToolbarCount(currentPos: Int, maxPos: Int)
+    fun onChangedViewPager(currentPos: Int, maxPos: Int)
 }

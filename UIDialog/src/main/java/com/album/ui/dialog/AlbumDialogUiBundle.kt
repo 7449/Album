@@ -20,7 +20,7 @@ class AlbumDialogUiBundle(
         /**
          * toolbar返回图标
          */
-        var toolbarIcon: Int = R.drawable.ic_action_back_day,
+        var toolbarIcon: Int = R.drawable.ic_album_dialog_toolbar_back,
         /**
          * toolbar返回图片颜色
          */

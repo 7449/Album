@@ -38,7 +38,7 @@ class SimplePicassoAlbumImageLoader : AlbumImageLoader {
         return DisplayView(container, albumImageView)
     }
 
-    override fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
         val albumImageView = AlbumTouchImageView(container)
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.id))

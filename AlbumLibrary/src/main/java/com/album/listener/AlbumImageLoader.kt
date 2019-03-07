@@ -22,5 +22,5 @@ interface AlbumImageLoader {
     /**
      * 预览页图片加载
      */
-    fun displayPreview(albumEntity: AlbumEntity, container: FrameLayout): View?
+    fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View?
 }

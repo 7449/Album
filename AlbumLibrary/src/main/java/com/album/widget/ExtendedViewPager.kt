@@ -10,10 +10,7 @@ import com.ortiz.touchview.TouchImageView
  * @author y
  * @create 2019/2/27
  */
-class ExtendedViewPager : ViewPager {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
+class ExtendedViewPager @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ViewPager(context, attrs) {
     override fun canScroll(v: View, checkV: Boolean, dx: Int, x: Int, y: Int): Boolean = (v as? TouchImageView)?.canScrollHorizontallyFroyo(-dx)
             ?: super.canScroll(v, checkV, dx, x, y)
 }

@@ -11,6 +11,10 @@ class AlbumBundle(
          */
         var scanType: Int = AlbumScan.IMAGE,
         /**
+         * 扫描数据库时是否显示进度条
+         */
+        var showProgress: Boolean = false,
+        /**
          * 隐藏相机
          */
         var hideCamera: Boolean = false,
@@ -81,7 +85,7 @@ class AlbumBundle(
         /**
          * 分割线宽度
          */
-        var dividerWidth: Int = 10,
+        var dividerWidth: Int = 8,
         /**
          * 相机提示文字
          */

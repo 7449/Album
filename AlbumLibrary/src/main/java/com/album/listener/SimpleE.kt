@@ -1,20 +1,22 @@
 package com.album.listener
 
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatImageView
 import com.album.R
 import com.album.core.scan.AlbumEntity
+import com.album.widget.AlbumImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.ortiz.touchview.TouchImageView
+import com.github.chrisbanes.photoview.PhotoView
 import java.io.File
 
 /**
  * @author y
  * @create 2019/2/27
  */
-
 
 /**
  * 内置一个图片加载器,需要依赖Glide
@@ -36,8 +38,8 @@ class SimpleAlbumImageLoader : AlbumImageLoader {
     }
 
     override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
-        val imageView = AlbumImageView(container)
-        Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(imageView)
+        val imageView = AlbumPhotoView(container)
+        Glide.with(container.context).load(albumEntity.path).apply(requestOptions.override(albumEntity.width, albumEntity.height)).into(imageView)
         return DisplayView(container, imageView)
     }
 }
@@ -46,19 +48,29 @@ fun AlbumImageLoader.DisplayView(container: FrameLayout, newView: View): View? {
     return if (container.childCount > 0) null else newView
 }
 
-fun AlbumImageLoader.AlbumImageView(container: FrameLayout): AppCompatImageView {
+fun AlbumImageLoader.AlbumImageView(container: FrameLayout): AlbumImageView {
+    return if (container.childCount > 0) {
+        container.getChildAt(0) as AlbumImageView
+    } else {
+        AlbumImageView(container.context)
+    }
+}
+
+fun AlbumImageLoader.AlbumPhotoView(container: FrameLayout): PhotoView {
+    return if (container.childCount > 0) {
+        container.getChildAt(0) as PhotoView
+    } else {
+        PhotoView(container.context).apply {
+            layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER)
+        }
+    }
+}
+
+fun AlbumImageLoader.AppCompatImageView(container: FrameLayout): AppCompatImageView {
     return if (container.childCount > 0) {
         container.getChildAt(0) as AppCompatImageView
     } else {
         AppCompatImageView(container.context)
-    }
-}
-
-fun AlbumImageLoader.AlbumTouchImageView(container: FrameLayout): TouchImageView {
-    return if (container.childCount > 0) {
-        container.getChildAt(0) as TouchImageView
-    } else {
-        TouchImageView(container.context)
     }
 }
 

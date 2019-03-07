@@ -64,7 +64,7 @@ class AlbumUiBundle(
         /**
          * 底部文件目录图标
          */
-        var bottomFinderTextCompoundDrawable: Int = R.drawable.ic_album_ui_toolbar_back,
+        var bottomFinderTextCompoundDrawable: Int = R.drawable.ic_album_ui_finder,
         /**
          * 底部文件目录图标颜色
          */
@@ -128,7 +128,7 @@ class AlbumUiBundle(
         /**
          * 预览页ViewPager背景色
          */
-        var previewBackground: Int = R.color.colorAlbumContentViewBackgroundNight,
+        var previewBackground: Int = R.color.colorAlbumPreviewBackground,
         /**
          * 预览页底部提示栏背景色
          */

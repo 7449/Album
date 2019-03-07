@@ -6,8 +6,8 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.album.*
-import com.album.core.AlbumCore.hasL
-import com.album.core.AlbumCore.orEmpty
+import com.album.core.hasL
+import com.album.core.orEmpty
 import com.album.core.scan.AlbumEntity
 import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumPreviewParentListener
@@ -41,11 +41,11 @@ class SimplePreviewUI : AlbumBaseActivity(), AlbumPreviewParentListener {
 
     override fun initView() {
         preview_bottom_view_tv_select.setOnClickListener {
-            if (prevFragment.selectList.isEmpty()) {
+            if (prevFragment.getSelectEntity().isEmpty()) {
                 Album.instance.albumListener?.onAlbumContainerPreviewSelectEmpty()
                 return@setOnClickListener
             }
-            Album.instance.albumListener?.onAlbumResources(prevFragment.selectList)
+            Album.instance.albumListener?.onAlbumResources(prevFragment.getSelectEntity())
             prevFragment.isRefreshAlbumUI(isRefresh = false, isFinish = true)
         }
     }

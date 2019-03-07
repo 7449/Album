@@ -11,22 +11,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.album.*
+import com.album.R
+import com.album.core.*
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_RESULT_PATH_KEY
 import com.album.core.AlbumCamera.OPEN_CAMERA_ERROR
 import com.album.core.AlbumCamera.OPEN_CAMERA_REQUEST_CODE
-import com.album.core.AlbumCamera.getCameraFile
-import com.album.core.AlbumCamera.openCamera
-import com.album.core.AlbumCore.imageViewWidthAndHeight
-import com.album.core.AlbumCore.orEmpty
-import com.album.core.AlbumFile.fileExists
-import com.album.core.AlbumFile.toFile
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_ALBUM
 import com.album.core.AlbumPermission.TYPE_PERMISSIONS_CAMERA
-import com.album.core.AlbumPermission.permissionCamera
-import com.album.core.AlbumPermission.permissionStorage
-import com.album.core.AlbumView.hide
-import com.album.core.AlbumView.show
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumScan.VIDEO
@@ -50,7 +42,7 @@ import java.io.File
 class AlbumFragment : AlbumBaseFragment(),
         AlbumView,
         AlbumMethodFragmentViewListener,
-        AlbumAdapter.OnItemClickListener,
+        AlbumAdapter.OnAlbumItemClickListener,
         AlbumSingleMediaScanner.SingleScannerListener,
         LoadMoreRecyclerView.LoadMoreListener {
 
@@ -147,9 +139,11 @@ class AlbumFragment : AlbumBaseFragment(),
         albumAdapter = AlbumAdapter(mActivity.imageViewWidthAndHeight(albumBundle.spanCount), albumBundle, this)
 
         val selectList = savedInstanceState?.getParcelableArrayList<AlbumEntity>(TYPE_ALBUM_STATE_SELECT)
-                ?: ArrayList()
-        if (!selectList.isEmpty()) {
+
+        if (!selectList.isNullOrEmpty()) {
             albumAdapter.multipleList = selectList
+        } else if (!albumBundle.radio && !Album.instance.initList.isNullOrEmpty()) {
+            albumAdapter.multipleList = Album.instance.initList ?: ArrayList()
         }
 
         album_recyclerView.adapter = albumAdapter
@@ -181,9 +175,8 @@ class AlbumFragment : AlbumBaseFragment(),
             }
             Activity.RESULT_OK -> when (requestCode) {
                 CUSTOMIZE_CAMERA_REQUEST_CODE -> {
-                    val extras = data?.extras
-                    if (extras != null) {
-                        val customizePath = extras.getString(CUSTOMIZE_CAMERA_RESULT_PATH_KEY)
+                    data?.extras?.let {
+                        val customizePath = it.getString(CUSTOMIZE_CAMERA_RESULT_PATH_KEY)
                         if (!TextUtils.isEmpty(customizePath)) {
                             imagePath = Uri.fromFile(File(customizePath))
                             refreshMedia(TYPE_RESULT_CAMERA, imagePath.path.orEmpty())
@@ -223,13 +216,6 @@ class AlbumFragment : AlbumBaseFragment(),
             albumEntityList.add(0, AlbumEntity(path = CAMERA))
         }
         albumAdapter.addAll(albumEntityList)
-        if (page == 0 && !albumBundle.radio && getSelectEntity().isEmpty()) {
-            val selectEntity = Album.instance.initList
-            if (selectEntity != null && !selectEntity.isEmpty() && !albumEntityList.isEmpty()) {
-                albumScan.mergeEntity(albumEntityList, selectEntity)
-                albumAdapter.multipleList = selectEntity
-            }
-        }
         ++page
     }
 
@@ -340,10 +326,7 @@ class AlbumFragment : AlbumBaseFragment(),
     }
 
     override fun disconnectMediaScanner() {
-        if (singleMediaScanner != null) {
-            singleMediaScanner?.disconnect()
-            singleMediaScanner = null
-        }
+        singleMediaScanner?.disconnect()
     }
 
     /**

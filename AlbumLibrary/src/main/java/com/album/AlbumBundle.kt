@@ -115,6 +115,10 @@ class AlbumBundle(
          */
         var photoBackgroundColor: Int = R.color.colorAlbumPhotoBackgroundColor,
         /**
+         * 相机背景色
+         */
+        var prevPhotoBackgroundColor: Int = R.color.colorAlbumPhotoBackgroundColor,
+        /**
          * RootView背景色
          */
         var rootViewBackground: Int = R.color.colorAlbumContentViewBackground,

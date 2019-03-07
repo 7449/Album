@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.album.*
-import com.album.core.AlbumCore
+import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan
 import com.album.core.ui.AlbumBaseDialogFragment
@@ -85,7 +85,7 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
         drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumUiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
         album_dialog_title.navigationIcon = drawable
         album_dialog_title.setBackgroundColor(ContextCompat.getColor(mActivity, albumUiBundle.toolbarBackground))
-        if (AlbumCore.hasL()) {
+        if (hasL()) {
             album_dialog_title.elevation = albumUiBundle.toolbarElevation
         }
 

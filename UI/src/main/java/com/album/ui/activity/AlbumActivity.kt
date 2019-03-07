@@ -9,11 +9,11 @@ import android.widget.AdapterView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
 import com.album.*
-import com.album.core.AlbumCore.drawable
-import com.album.core.AlbumCore.hasL
-import com.album.core.AlbumCore.settingStatusBarColor
+import com.album.core.drawable
+import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan
+import com.album.core.settingStatusBarColor
 import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumParentListener
 import com.album.ui.AlbumUiBundle

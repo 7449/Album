@@ -8,9 +8,9 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.EXTRA_ALBUM_OPTIONS
 import com.album.EXTRA_ALBUM_UI_OPTIONS
-import com.album.core.AlbumCore
-import com.album.core.AlbumCore.settingStatusBarColor
+import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
+import com.album.core.settingStatusBarColor
 import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumParentListener
 import com.album.ui.fragment.AlbumFragment
@@ -45,7 +45,7 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
         drawable?.setColorFilter(ContextCompat.getColor(this, albumUiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
         album_wechat_ui_toolbar.navigationIcon = drawable
         album_wechat_ui_toolbar.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.toolbarBackground))
-        if (AlbumCore.hasL()) {
+        if (hasL()) {
             album_wechat_ui_toolbar.elevation = albumUiBundle.toolbarElevation
         }
         album_wechat_ui_toolbar.setNavigationOnClickListener {

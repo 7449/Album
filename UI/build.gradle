@@ -22,7 +22,6 @@ android {
 
 dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    compileOnly "com.github.MikeOrtiz:TouchImageView:$touchVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly project(':AlbumLibrary')
 }

@@ -7,7 +7,6 @@ import android.widget.ImageView
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumImageLoader
 import com.album.listener.AlbumImageView
-import com.album.listener.AlbumTouchImageView
 import com.album.listener.DisplayView
 import com.album.sample.R
 import com.nostra13.universalimageloader.core.DisplayImageOptions
@@ -46,7 +45,7 @@ class SimpleImageLoaderAlbumImageLoader : AlbumImageLoader {
     }
 
     override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
-        val albumImageView = AlbumTouchImageView(container)
+        val albumImageView = AlbumImageView(container)
         albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
         ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, ImageViewAware(albumImageView), displayImageOptions, null, null, null)
         return DisplayView(container, albumImageView)

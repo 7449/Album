@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import com.album.core.AlbumCore.orEmpty
+import com.album.core.orEmpty
 
 /**
  * @author y

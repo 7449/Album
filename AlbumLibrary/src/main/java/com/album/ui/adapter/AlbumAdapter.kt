@@ -15,9 +15,9 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.CAMERA
 import com.album.R
-import com.album.core.AlbumFile.fileExists
-import com.album.core.AlbumView.show
+import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
+import com.album.core.show
 
 /**
  *   @author y
@@ -25,7 +25,7 @@ import com.album.core.scan.AlbumEntity
 class AlbumAdapter(
         private val display: Int,
         private val albumBundle: AlbumBundle,
-        private val onItemClickListener: OnItemClickListener
+        private val onAlbumItemClickListener: OnAlbumItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -57,13 +57,13 @@ class AlbumAdapter(
             AlbumAdapter.TYPE_CAMERA -> {
                 val cameraView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album_camera, parent, false)
                 val cameraViewHolder = CameraViewHolder(cameraView, albumBundle)
-                cameraView.setOnClickListener { v -> onItemClickListener.onCameraItemClick(v, cameraViewHolder.adapterPosition, albumList[cameraViewHolder.adapterPosition]) }
+                cameraView.setOnClickListener { v -> onAlbumItemClickListener.onCameraItemClick(v, cameraViewHolder.adapterPosition, albumList[cameraViewHolder.adapterPosition]) }
                 cameraViewHolder
             }
             else -> {
                 val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, onItemClickListener)
-                photoView.setOnClickListener { v -> onItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, albumList[photoViewHolder.adapterPosition]) }
+                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, onAlbumItemClickListener)
+                photoView.setOnClickListener { v -> onAlbumItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, albumList[photoViewHolder.adapterPosition]) }
                 photoViewHolder
             }
         }
@@ -109,7 +109,7 @@ class AlbumAdapter(
         notifyDataSetChanged()
     }
 
-    interface OnItemClickListener {
+    interface OnAlbumItemClickListener {
         fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
         fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity)
         fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity)
@@ -133,7 +133,7 @@ class AlbumAdapter(
         }
     }
 
-    class PhotoViewHolder(itemView: View, private val albumBundle: AlbumBundle, private val display: Int, private val layoutParams: ViewGroup.LayoutParams, private val onItemClickListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
+    class PhotoViewHolder(itemView: View, private val albumBundle: AlbumBundle, private val display: Int, private val layoutParams: ViewGroup.LayoutParams, private val onAlbumItemClickListener: OnAlbumItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         private val container: FrameLayout = itemView.findViewById(R.id.album_container)
         private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
@@ -168,7 +168,7 @@ class AlbumAdapter(
                     multipleList.remove(albumEntity)
                     albumEntity.isCheck = false
                 }
-                onItemClickListener.onItemCheckBoxClick(itemView, multipleList.size, albumEntity)
+                onAlbumItemClickListener.onItemCheckBoxClick(itemView, multipleList.size, albumEntity)
                 Album.instance.albumListener?.onAlbumCheckBox(multipleList.size, albumBundle.multipleMaxCount)
             })
         }

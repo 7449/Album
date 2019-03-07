@@ -7,9 +7,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.album.core.finishCamera
+import com.album.core.getCameraFile
 import com.album.core.ui.AlbumBaseActivity
-import com.album.core.AlbumCamera.finishCamera
-import com.album.core.AlbumCamera.getCameraFile
 import com.album.sample.R
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView

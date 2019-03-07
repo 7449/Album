@@ -3,10 +3,10 @@ package com.album.sample.imageloader
 import android.view.View
 import android.widget.FrameLayout
 import com.album.R
-import com.album.core.AlbumView.hide
-import com.album.core.AlbumView.show
+import com.album.core.hide
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.hasGif
+import com.album.core.show
 import com.album.listener.AlbumImageLoader
 import com.album.listener.AlbumImageView
 import com.album.listener.DisplayView

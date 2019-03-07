@@ -72,21 +72,17 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
 
     override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
         val simpleDraweeView = AlbumFrescoImageView(container)
-        val uri = Uri.fromFile(File(albumEntity.path))
-        val request = ImageRequestBuilder
-                .newBuilderWithSource(uri)
-                .setRotationOptions(RotationOptions.autoRotate())
-                .setResizeOptions(ResizeOptions(400, 350))
-                .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
-                .build()
-        val controller = Fresco.newDraweeControllerBuilder()
+        simpleDraweeView.controller = Fresco.newDraweeControllerBuilder()
                 .setTapToRetryEnabled(true)
-                .setImageRequest(request)
+                .setImageRequest(ImageRequestBuilder
+                        .newBuilderWithSource(Uri.fromFile(File(albumEntity.path)))
+                        .setRotationOptions(RotationOptions.autoRotate())
+                        .setResizeOptions(ResizeOptions(albumEntity.width, albumEntity.height))
+                        .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
+                        .build())
+                .setAutoPlayAnimations(true)
                 .setOldController(simpleDraweeView.controller)
                 .build()
-        val hierarchy = simpleDraweeView.hierarchy
-        hierarchy.actualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP
-        simpleDraweeView.controller = controller
         return DisplayView(container, simpleDraweeView)
     }
 }

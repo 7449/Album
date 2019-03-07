@@ -20,44 +20,46 @@ import androidx.core.graphics.ColorUtils
  * @create 2019/2/27
  */
 
-object AlbumCore {
 
-    fun Bundle?.orEmpty(): Bundle = this ?: Bundle.EMPTY
+fun Context.px2dip(pxValue: Int): Int = (pxValue / resources.displayMetrics.density + 0.5f).toInt()
 
-    fun Intent?.orEmpty(): Intent = this ?: Intent()
+fun Context.dip2px(dpValue: Int): Int = (dpValue * resources.displayMetrics.density + 0.5f).toInt()
 
-    fun hasL(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+fun Bundle?.orEmpty(): Bundle = this ?: Bundle.EMPTY
 
-    fun hasM(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+fun Intent?.orEmpty(): Intent = this ?: Intent()
 
-    fun Window.settingStatusBarColor(@ColorInt color: Int) {
-        if (hasM()) {
-            statusBarColor = color
-            if (isLightColor(color)) {
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            } else {
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-            }
+fun hasL(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
+fun hasM(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+
+fun Window.settingStatusBarColor(@ColorInt color: Int) {
+    if (hasM()) {
+        statusBarColor = color
+        if (isLightColor(color)) {
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
     }
-
-    private fun isLightColor(@ColorInt color: Int): Boolean {
-        return ColorUtils.calculateLuminance(color) >= 0.5
-    }
-
-    fun Activity.imageViewWidthAndHeight(count: Int): Int {
-        val display = window.windowManager.defaultDisplay
-        val dm = DisplayMetrics()
-        display.getMetrics(dm)
-        return dm.widthPixels / count
-    }
-
-    fun Context.drawable(id: Int, color: Int): Drawable {
-        val drawable = resources.getDrawable(id)
-        drawable.setColorFilter(ContextCompat.getColor(this, color), PorterDuff.Mode.SRC_ATOP)
-        drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-        return drawable
-    }
-
 }
+
+private fun isLightColor(@ColorInt color: Int): Boolean {
+    return ColorUtils.calculateLuminance(color) >= 0.5
+}
+
+fun Activity.imageViewWidthAndHeight(count: Int): Int {
+    val display = window.windowManager.defaultDisplay
+    val dm = DisplayMetrics()
+    display.getMetrics(dm)
+    return dm.widthPixels / count
+}
+
+fun Context.drawable(id: Int, color: Int): Drawable {
+    val drawable = resources.getDrawable(id)
+    drawable.setColorFilter(ContextCompat.getColor(this, color), PorterDuff.Mode.SRC_ATOP)
+    drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+    return drawable
+}
+
 

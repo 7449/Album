@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
  */
 
 object AlbumPermission {
-
     /**
      * 读写code
      */
@@ -33,49 +32,49 @@ object AlbumPermission {
      * 拍照权限
      */
     const val TYPE_PERMISSIONS_CAMERA = 1
+}
 
-    fun Any.permissionStorage(): Boolean {
-        return when {
-            this is Activity -> permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
-            this is Fragment -> permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
-            else -> throw KotlinNullPointerException()
-        }
+fun Any.permissionStorage(): Boolean {
+    return when {
+        this is Activity -> permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumPermission.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+        this is Fragment -> permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumPermission.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+        else -> throw KotlinNullPointerException()
     }
+}
 
-    fun Any.permissionCamera(): Boolean {
-        return when {
-            this is Activity -> permission(this, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
-            this is Fragment -> permission(this, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
-            else -> throw KotlinNullPointerException()
-        }
+fun Any.permissionCamera(): Boolean {
+    return when {
+        this is Activity -> permission(this, Manifest.permission.CAMERA, AlbumPermission.CAMERA_REQUEST_CODE)
+        this is Fragment -> permission(this, Manifest.permission.CAMERA, AlbumPermission.CAMERA_REQUEST_CODE)
+        else -> throw KotlinNullPointerException()
     }
+}
 
-    fun Activity.permissionStorage(): Boolean = permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+fun Activity.permissionStorage(): Boolean = permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumPermission.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
 
-    fun Fragment.permissionStorage(): Boolean = permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+fun Fragment.permissionStorage(): Boolean = permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumPermission.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
 
-    fun Activity.permissionCamera(): Boolean = permission(this, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
+fun Activity.permissionCamera(): Boolean = permission(this, Manifest.permission.CAMERA, AlbumPermission.CAMERA_REQUEST_CODE)
 
-    fun Fragment.permissionCamera(): Boolean = permission(this, Manifest.permission.CAMERA, CAMERA_REQUEST_CODE)
+fun Fragment.permissionCamera(): Boolean = permission(this, Manifest.permission.CAMERA, AlbumPermission.CAMERA_REQUEST_CODE)
 
-    private fun permission(activity: Activity, permissions: String, code: Int): Boolean {
-        if (ContextCompat.checkSelfPermission(activity, permissions) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, arrayOf(permissions), code)
+private fun permission(activity: Activity, permissions: String, code: Int): Boolean {
+    if (ContextCompat.checkSelfPermission(activity, permissions) != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(activity, arrayOf(permissions), code)
+        return false
+    }
+    return true
+}
+
+private fun permission(fragment: Fragment, permissions: String, code: Int): Boolean {
+    fragment.activity?.let {
+        if (ContextCompat.checkSelfPermission(it, permissions) != PackageManager.PERMISSION_GRANTED) {
+            fragment.requestPermissions(arrayOf(permissions), code)
             return false
         }
         return true
     }
-
-    private fun permission(fragment: Fragment, permissions: String, code: Int): Boolean {
-        fragment.activity?.let {
-            if (ContextCompat.checkSelfPermission(it, permissions) != PackageManager.PERMISSION_GRANTED) {
-                fragment.requestPermissions(arrayOf(permissions), code)
-                return false
-            }
-            return true
-        }
-        return false
-    }
+    return false
 }
 
 

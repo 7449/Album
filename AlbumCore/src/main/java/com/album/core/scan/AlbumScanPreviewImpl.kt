@@ -12,6 +12,7 @@ import com.album.core.view.AlbumPreViewView
  */
 class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
                            private val selectEntity: ArrayList<AlbumEntity>,
+                           allEntity: ArrayList<AlbumEntity>?,
                            parent: Long,
                            scanType: Int) {
 
@@ -19,25 +20,32 @@ class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
         fun newInstance(
                 prevView: AlbumPreViewView,
                 selectEntity: ArrayList<AlbumEntity>,
+                allEntity: ArrayList<AlbumEntity>?,
                 parent: Long,
                 scanType: Int
-        ) = AlbumScanPreviewImpl(prevView, selectEntity, parent, scanType)
+        ) = AlbumScanPreviewImpl(prevView, selectEntity, allEntity, parent, scanType)
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getPrevContext())
 
     init {
-        prevView.showProgress()
-        loaderManager.initLoader(AlbumScan.PREVIEW_LOADER_ID,
-                Bundle().apply {
-                    putLong(AlbumColumns.PARENT, parent)
-                    putInt(AlbumColumns.SCAN_TYPE, scanType)
-                },
-                AlbumScanFileTask(prevView.getPrevContext(), SCAN_ALL) {
-                    prevView.hideProgress()
-                    prevView.scanSuccess(mergeEntity(it, selectEntity))
-                    destroyLoaderManager()
-                })
+        if (allEntity != null) {
+            val newEntity = ArrayList<AlbumEntity>()
+            newEntity.addAll(allEntity)
+            prevView.scanSuccess(mergeEntity(newEntity, selectEntity))
+        } else {
+            prevView.showProgress()
+            loaderManager.initLoader(AlbumScan.PREVIEW_LOADER_ID,
+                    Bundle().apply {
+                        putLong(AlbumColumns.PARENT, parent)
+                        putInt(AlbumColumns.SCAN_TYPE, scanType)
+                    },
+                    AlbumScanFileTask(prevView.getPrevContext(), SCAN_ALL) {
+                        prevView.hideProgress()
+                        prevView.scanSuccess(mergeEntity(it, selectEntity))
+                        destroyLoaderManager()
+                    })
+        }
     }
 
     private fun mergeEntity(albumEntityList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>): ArrayList<AlbumEntity> {

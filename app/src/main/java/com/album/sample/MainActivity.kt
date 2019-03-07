@@ -18,12 +18,8 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.TYPE_RESULT_CAMERA
 import com.album.TYPE_RESULT_CROP
-import com.album.core.AlbumCamera
+import com.album.core.*
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
-import com.album.core.AlbumCamera.getCameraFile
-import com.album.core.AlbumCamera.openCamera
-import com.album.core.AlbumPermission.permissionCamera
-import com.album.core.AlbumPermission.permissionStorage
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumSingleMediaScanner
@@ -83,7 +79,7 @@ fun NightAlbumUIBundle(): AlbumUiBundle {
 
 fun MainActivity.dayAlbum() {
     Album.instance.apply {
-        albumImageLoader = SimpleFrescoAlbumImageLoader()
+        albumImageLoader = SimpleAlbumImageLoader()
         albumListener = MainAlbumListener(applicationContext, list)
         initList = list
         options = dayOptions
@@ -120,8 +116,6 @@ fun MainActivity.dialog() {
         albumImageLoader = SimpleFrescoAlbumImageLoader()
         options = dayOptions
     }.dialog(AlbumBundle(
-            cameraCrop = true,
-            radio = true,
             cropFinish = false,
             selectImageFinish = false,
             cropErrorFinish = false), supportFragmentManager)

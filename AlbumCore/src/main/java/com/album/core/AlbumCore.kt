@@ -20,7 +20,6 @@ import androidx.core.graphics.ColorUtils
  * @create 2019/2/27
  */
 
-
 fun Context.px2dip(pxValue: Int): Int = (pxValue / resources.displayMetrics.density + 0.5f).toInt()
 
 fun Context.dip2px(dpValue: Int): Int = (dpValue * resources.displayMetrics.density + 0.5f).toInt()

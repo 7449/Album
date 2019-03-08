@@ -211,7 +211,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
 
     fun getSelectEntity(): ArrayList<AlbumEntity> = adapter.multipleList
 
-    override fun getPrevContext(): FragmentActivity = mActivity
+    override fun getAlbumContext(): FragmentActivity = mActivity
 
     override val layoutId: Int = R.layout.album_fragment_preview
 

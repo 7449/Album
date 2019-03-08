@@ -30,9 +30,9 @@ class AlbumScanImpl(private val albumView: AlbumView,
         ) = AlbumScanImpl(albumView, scanType, scanCount, allName, sdName)
     }
 
-    private val loaderManager: LoaderManager = LoaderManager.getInstance(albumView.getAlbumActivity())
+    private val loaderManager: LoaderManager = LoaderManager.getInstance(albumView.getAlbumContext())
 
-    private val activity: Context = albumView.getAlbumActivity()
+    private val activity: Context = albumView.getAlbumContext()
 
     fun scanAll(parent: Long, page: Int) {
         if (loaderManager.hasRunningLoaders()) {
@@ -46,11 +46,7 @@ class AlbumScanImpl(private val albumView: AlbumView,
         }, AlbumScanFileTask(activity, scanCount) {
             albumView.hideProgress()
             if (it.isEmpty()) {
-                if (albumView.getPage() == 0) {
-                    albumView.onAlbumEmpty()
-                } else {
-                    albumView.onAlbumNoMore()
-                }
+                albumView.onAlbumScanCallback(if (albumView.getPage() == 0) AlbumScan.SCAN_EMPTY else AlbumScan.SCAN_NO_MORE)
             } else {
                 refreshFinder()
                 mergeEntity(it, albumView.getSelectEntity())

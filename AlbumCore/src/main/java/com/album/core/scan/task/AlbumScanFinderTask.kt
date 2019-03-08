@@ -40,6 +40,7 @@ class AlbumScanFinderTask(
         val countColumnIndex = cursor.getColumnIndex(AlbumColumns.COUNT)
         val dataColumnIndex = cursor.getColumnIndex(AlbumColumns.DATA)
         val sizeColumnIndex = cursor.getColumnIndex(AlbumColumns.SIZE)
+        val durationColumnIndex = cursor.getColumnIndex(AlbumColumns.DURATION)
         val parentColumnIndex = cursor.getColumnIndex(AlbumColumns.PARENT)
         val mimeTypeColumnIndex = cursor.getColumnIndex(AlbumColumns.MIME_TYPE)
         val displayNameColumnIndex = cursor.getColumnIndex(AlbumColumns.DISPLAY_NAME)
@@ -58,6 +59,7 @@ class AlbumScanFinderTask(
             val count = cursor.getInt(countColumnIndex)
             val path = cursor.getString(dataColumnIndex)
             val size = cursor.getLong(sizeColumnIndex)
+            val duration = cursor.getLong(durationColumnIndex)
             val parent = cursor.getLong(parentColumnIndex)
             val mimeType = cursor.getString(mimeTypeColumnIndex)
             val displayName = cursor.getString(displayNameColumnIndex)
@@ -69,12 +71,12 @@ class AlbumScanFinderTask(
             val height = cursor.getInt(heightColumnIndex)
             val dataModified = cursor.getLong(dataModifiedColumnIndex)
             maxCount += count
-            finderEntity.add(AlbumEntity(id, path, size, parent, mimeType, displayName, orientation, bucketId, if (bucketDisplayName == "0") sdName else bucketDisplayName, mediaType, width, height, dataModified, count, false))
+            finderEntity.add(AlbumEntity(id, path, size, duration, parent, mimeType, displayName, orientation, bucketId, if (bucketDisplayName == "0") sdName else bucketDisplayName, mediaType, width, height, dataModified, count, false))
         }
 
         if (!finderEntity.isEmpty()) {
             val first = finderEntity.first()
-            finderEntity.add(0, AlbumEntity(parent = ALL_PARENT, path = first.path, bucketDisplayName = allName, mediaType = first.mediaType, mimeType = first.mimeType, id = first.id, count = maxCount))
+            finderEntity.add(0, AlbumEntity(parent = ALL_PARENT, duration = first.duration, path = first.path, bucketDisplayName = allName, mediaType = first.mediaType, mimeType = first.mimeType, id = first.id, count = maxCount))
         }
 
         loaderSuccess(finderEntity)

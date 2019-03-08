@@ -43,7 +43,7 @@ ext {
     viewpagerVersion = '1.0.0-alpha01'
 
     albumVersion = 'latest.release'
-    albumCoreVersion = 'beta02'
+    albumCoreVersion = 'beta03'
     albumLibraryVersion = '0.0.7'
 
     sampleApplicationId = 'com.album.sample'

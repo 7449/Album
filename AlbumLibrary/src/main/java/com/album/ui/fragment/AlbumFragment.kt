@@ -136,7 +136,7 @@ class AlbumFragment : AlbumBaseFragment(),
         album_recyclerView.layoutManager = gridLayoutManager
         album_recyclerView.setLoadingListener(this)
         album_recyclerView.addItemDecoration(SimpleGridDivider(albumBundle.dividerWidth))
-        albumAdapter = AlbumAdapter(mActivity.imageViewWidthAndHeight(albumBundle.spanCount), albumBundle, this)
+        albumAdapter = AlbumAdapter(mActivity.imageViewWidthAndHeight(albumBundle.spanCount), albumBundle, albumParentListener, this)
 
         val selectList = savedInstanceState?.getParcelableArrayList<AlbumEntity>(TYPE_ALBUM_STATE_SELECT)
 
@@ -147,6 +147,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
 
         album_recyclerView.adapter = albumAdapter
+        savedInstanceState?.let { albumParentListener?.onAlbumScreenChanged(albumAdapter.multipleList.size) }
         onScanAlbum(parent, isFinder = false, result = false)
     }
 
@@ -224,13 +225,13 @@ class AlbumFragment : AlbumBaseFragment(),
         finderList.addAll(list)
     }
 
-    override fun onAlbumNoMore() {
-        Album.instance.albumListener?.onAlbumNoMore()
-    }
-
-    override fun onAlbumEmpty() {
-        album_empty.show()
-        Album.instance.albumListener?.onAlbumEmpty()
+    override fun onAlbumScanCallback(type: Int) {
+        if (type == AlbumScan.SCAN_NO_MORE) {
+            Album.instance.albumListener?.onAlbumNoMore()
+        } else {
+            album_empty.show()
+            Album.instance.albumListener?.onAlbumEmpty()
+        }
     }
 
     override fun resultSuccess(albumEntity: AlbumEntity?) {
@@ -461,7 +462,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
     }
 
-    override fun getAlbumActivity(): FragmentActivity = mActivity
+    override fun getAlbumContext(): FragmentActivity = mActivity
 
     override fun getPage(): Int = page
 

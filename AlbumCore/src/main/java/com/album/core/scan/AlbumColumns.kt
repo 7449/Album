@@ -39,6 +39,10 @@ object AlbumColumns {
      */
     const val SIZE = "_size"
     /**
+     * 视频时长
+     */
+    const val DURATION = "duration"
+    /**
      * 父级文件夹 parent
      */
     const val PARENT = "parent"

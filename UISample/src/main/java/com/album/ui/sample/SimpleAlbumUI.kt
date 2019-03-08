@@ -110,6 +110,9 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
     override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
     }
 
+    override fun onAlbumScreenChanged(currentMaxCount: Int) {
+    }
+
     override fun onBackPressed() {
         Album.instance.albumListener?.onAlbumContainerBackPressed()
         super.onBackPressed()

@@ -52,6 +52,7 @@ class AlbumScanFileTask(
         val idColumnIndex = cursor.getColumnIndex(AlbumColumns.ID)
         val dataColumnIndex = cursor.getColumnIndex(AlbumColumns.DATA)
         val sizeColumnIndex = cursor.getColumnIndex(AlbumColumns.SIZE)
+        val durationColumnIndex = cursor.getColumnIndex(AlbumColumns.DURATION)
         val parentColumnIndex = cursor.getColumnIndex(AlbumColumns.PARENT)
         val mimeTypeColumnIndex = cursor.getColumnIndex(AlbumColumns.MIME_TYPE)
         val displayNameColumnIndex = cursor.getColumnIndex(AlbumColumns.DISPLAY_NAME)
@@ -67,6 +68,7 @@ class AlbumScanFileTask(
             val id = cursor.getLong(idColumnIndex)
             val path = cursor.getString(dataColumnIndex)
             val size = cursor.getLong(sizeColumnIndex)
+            val duration = cursor.getLong(durationColumnIndex)
             val parent = cursor.getLong(parentColumnIndex)
             val mimeType = cursor.getString(mimeTypeColumnIndex)
             val displayName = cursor.getString(displayNameColumnIndex)
@@ -77,7 +79,7 @@ class AlbumScanFileTask(
             val width = cursor.getInt(widthColumnIndex)
             val height = cursor.getInt(heightColumnIndex)
             val dataModified = cursor.getLong(dataModifiedColumnIndex)
-            albumList.add(AlbumEntity(id, path, size, parent, mimeType, displayName, orientation, bucketId, bucketDisplayName, mediaType, width, height, dataModified, 0, false))
+            albumList.add(AlbumEntity(id, path, size, duration, parent, mimeType, displayName, orientation, bucketId, bucketDisplayName, mediaType, width, height, dataModified, 0, false))
         }
 
         loaderSuccess(albumList)

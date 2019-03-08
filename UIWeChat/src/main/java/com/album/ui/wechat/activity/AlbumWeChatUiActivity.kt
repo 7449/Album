@@ -3,6 +3,7 @@ package com.album.ui.wechat.activity
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
@@ -14,8 +15,8 @@ import com.album.core.settingStatusBarColor
 import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumParentListener
 import com.album.ui.fragment.AlbumFragment
-import com.album.ui.wechat.R
 import kotlinx.android.synthetic.main.album_wechat_activity.*
+
 
 /**
  * @author y
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.album_wechat_activity.*
  */
 class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
 
-    override val layoutId: Int = R.layout.album_wechat_activity
+    override val layoutId: Int = com.album.ui.wechat.R.layout.album_wechat_activity
 
     private lateinit var albumFragment: AlbumFragment
 
@@ -52,6 +53,13 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
             Album.instance.albumListener?.onAlbumContainerFinish()
             finish()
         }
+        album_wechat_ui_title_send.setOnClickListener {
+            val selectEntity = albumFragment.getSelectEntity()
+            if (selectEntity.isEmpty()) {
+                return@setOnClickListener
+            }
+            Toast.makeText(applicationContext, album_wechat_ui_original_image.isChecked.toString(), Toast.LENGTH_SHORT).show()
+        }
         initFragment()
     }
 
@@ -65,7 +73,7 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
             albumFragment = AlbumFragment.newInstance(albumBundle)
             supportFragmentManager
                     .beginTransaction()
-                    .apply { add(R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName) }
+                    .apply { add(com.album.ui.wechat.R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName) }
                     .commitAllowingStateLoss()
         }
         albumFragment.albumParentListener = this
@@ -74,12 +82,31 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
     override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
     }
 
+    override fun onAlbumScreenChanged(currentMaxCount: Int) {
+        onChangedCheckBoxCount(View(applicationContext), currentMaxCount, AlbumEntity())
+    }
+
+    override fun onAlbumCheckBoxFilter(view: View, position: Int, albumEntity: AlbumEntity): Boolean {
+        Toast.makeText(view.context, format(albumEntity.duration.toInt()), Toast.LENGTH_SHORT).show()
+        return super.onAlbumCheckBoxFilter(view, position, albumEntity)
+    }
+
     override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
         album_wechat_ui_title_send.isEnabled = currentMaxCount != 0
         if (currentMaxCount == 0) {
-            album_wechat_ui_title_send.text = getString(R.string.album_wechat_ui_title_send)
+            album_wechat_ui_title_send.text = getString(com.album.ui.wechat.R.string.album_wechat_ui_title_send)
+            album_wechat_ui_preview.text = getString(com.album.ui.wechat.R.string.album_wechat_ui_title_prev)
         } else {
-            album_wechat_ui_title_send.text = String.format(getString(R.string.album_wechat_ui_title_send_count), currentMaxCount, albumBundle.multipleMaxCount)
+            album_wechat_ui_title_send.text = String.format(getString(com.album.ui.wechat.R.string.album_wechat_ui_title_send_count), currentMaxCount, albumBundle.multipleMaxCount)
+            album_wechat_ui_preview.text = String.format(getString(com.album.ui.wechat.R.string.album_wechat_ui_title_prev_count), currentMaxCount, albumBundle.multipleMaxCount)
+        }
+    }
+
+    private fun format(t: Int): String {
+        return when {
+            t < 60000 -> (t % 60000 / 1000).toString() + "秒"
+            t in 60000..3599999 -> getString(t % 3600000 / 60000) + ":" + getString(t % 60000 / 1000)
+            else -> getString(t / 3600000) + ":" + getString(t % 3600000 / 60000) + ":" + getString(t % 60000 / 1000)
         }
     }
 

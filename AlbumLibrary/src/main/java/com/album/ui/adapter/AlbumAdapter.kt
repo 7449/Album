@@ -18,6 +18,7 @@ import com.album.R
 import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
 import com.album.core.show
+import com.album.listener.AlbumParentListener
 
 /**
  *   @author y
@@ -25,6 +26,7 @@ import com.album.core.show
 class AlbumAdapter(
         private val display: Int,
         private val albumBundle: AlbumBundle,
+        private val albumParentListener: AlbumParentListener?,
         private val onAlbumItemClickListener: OnAlbumItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -62,7 +64,7 @@ class AlbumAdapter(
             }
             else -> {
                 val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, onAlbumItemClickListener)
+                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, albumParentListener, onAlbumItemClickListener)
                 photoView.setOnClickListener { v -> onAlbumItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, albumList[photoViewHolder.adapterPosition]) }
                 photoViewHolder
             }
@@ -79,7 +81,7 @@ class AlbumAdapter(
 
         } else if (holder is PhotoViewHolder) {
 
-            holder.photo(albumEntity, multipleList)
+            holder.photo(position, albumEntity, multipleList)
         }
     }
 
@@ -133,12 +135,17 @@ class AlbumAdapter(
         }
     }
 
-    class PhotoViewHolder(itemView: View, private val albumBundle: AlbumBundle, private val display: Int, private val layoutParams: ViewGroup.LayoutParams, private val onAlbumItemClickListener: OnAlbumItemClickListener) : RecyclerView.ViewHolder(itemView) {
+    class PhotoViewHolder(itemView: View,
+                          private val albumBundle: AlbumBundle,
+                          private val display: Int,
+                          private val layoutParams: ViewGroup.LayoutParams,
+                          private val albumParentListener: AlbumParentListener?,
+                          private val onAlbumItemClickListener: OnAlbumItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         private val container: FrameLayout = itemView.findViewById(R.id.album_container)
         private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
 
-        fun photo(albumEntity: AlbumEntity, multipleList: ArrayList<AlbumEntity>) {
+        fun photo(position: Int, albumEntity: AlbumEntity, multipleList: ArrayList<AlbumEntity>) {
             val imageView = Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, container)
             imageView?.let { container.addView(it, layoutParams) }
             container.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.photoBackgroundColor))
@@ -151,6 +158,11 @@ class AlbumAdapter(
             checkBox.isChecked = albumEntity.isCheck
             checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
             checkBox.setOnClickListener(View.OnClickListener {
+
+                if (albumParentListener?.onAlbumCheckBoxFilter(itemView, position, albumEntity) == true) {
+                    return@OnClickListener
+                }
+
                 if (!albumEntity.path.fileExists()) {
                     checkBox.isChecked = false
                     Album.instance.albumListener?.onAlbumCheckFileNotExist()

@@ -6,6 +6,7 @@ import com.album.R
 import com.album.core.hide
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.hasGif
+import com.album.core.scan.hasVideo
 import com.album.core.show
 import com.album.listener.AlbumImageLoader
 import com.album.listener.AlbumImageView
@@ -28,6 +29,11 @@ class SimpleAlbumWeChatImageLoader : AlbumImageLoader {
             imageView.gifTipView().show()
         } else {
             imageView.gifTipView().hide()
+        }
+        if (albumEntity.hasVideo()) {
+            imageView.videoTipView().show()
+        } else {
+            imageView.videoTipView().hide()
         }
         Glide.with(container.context).load(albumEntity.path).apply(requestOptions.override(width, height).dontAnimate()).into(imageView.imageView())
         return DisplayView(container, imageView)

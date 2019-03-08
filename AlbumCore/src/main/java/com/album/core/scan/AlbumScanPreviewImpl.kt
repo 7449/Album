@@ -26,7 +26,7 @@ class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
         ) = AlbumScanPreviewImpl(prevView, selectEntity, allEntity, parent, scanType)
     }
 
-    private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getPrevContext())
+    private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getAlbumContext())
 
     init {
         if (allEntity != null) {
@@ -40,7 +40,7 @@ class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
                         putLong(AlbumColumns.PARENT, parent)
                         putInt(AlbumColumns.SCAN_TYPE, scanType)
                     },
-                    AlbumScanFileTask(prevView.getPrevContext(), SCAN_ALL) {
+                    AlbumScanFileTask(prevView.getAlbumContext(), SCAN_ALL) {
                         prevView.hideProgress()
                         prevView.scanSuccess(mergeEntity(it, selectEntity))
                         destroyLoaderManager()

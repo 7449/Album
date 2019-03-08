@@ -22,6 +22,7 @@ internal val ALBUM_ALL_COLUMNS = arrayOf(
         AlbumColumns.DATA,
         AlbumColumns.ID,
         AlbumColumns.SIZE,
+        AlbumColumns.DURATION,
         AlbumColumns.PARENT,
         AlbumColumns.MIME_TYPE,
         AlbumColumns.DISPLAY_NAME,
@@ -37,20 +38,7 @@ internal val ALBUM_ALL_COLUMNS = arrayOf(
 /**
  * 图片信息条件
  */
-internal const val ALBUM_ALL_SELECTION = AlbumColumns.SIZE + " > 0 AND " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? "
+internal const val ALBUM_ALL_SELECTION = AlbumColumns.SIZE + " > 0 AND " + AlbumColumns.MEDIA_TYPE + "=? or " + AlbumColumns.MEDIA_TYPE + "=? "
 
 /**
  * 图片信息条件
@@ -70,6 +58,7 @@ internal val ALBUM_FINDER_ALL_COLUMNS = arrayOf(
         AlbumColumns.DATA,
         AlbumColumns.ID,
         AlbumColumns.SIZE,
+        AlbumColumns.DURATION,
         AlbumColumns.PARENT,
         AlbumColumns.MIME_TYPE,
         AlbumColumns.DISPLAY_NAME,

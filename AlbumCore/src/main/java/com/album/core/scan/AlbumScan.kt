@@ -15,6 +15,7 @@ class AlbumEntity(
         var id: Long = 0,
         var path: String = "",
         var size: Long = 0,
+        var duration: Long = 0,
         var parent: Long = 0,
         var mimeType: String = "",
         var displayName: String = "",
@@ -37,6 +38,7 @@ class AlbumEntity(
         if (id != other.id) return false
         if (path != other.path) return false
         if (size != other.size) return false
+        if (duration != other.duration) return false
         if (parent != other.parent) return false
         if (mimeType != other.mimeType) return false
         if (displayName != other.displayName) return false
@@ -57,6 +59,7 @@ class AlbumEntity(
         var result = id.hashCode()
         result = 31 * result + path.hashCode()
         result = 31 * result + size.hashCode()
+        result = 31 * result + duration.hashCode()
         result = 31 * result + parent.hashCode()
         result = 31 * result + mimeType.hashCode()
         result = 31 * result + displayName.hashCode()
@@ -73,8 +76,10 @@ class AlbumEntity(
     }
 
     override fun toString(): String {
-        return "AlbumEntity(id=$id, path='$path', size=$size, parent=$parent, mimeType='$mimeType', displayName='$displayName', orientation=$orientation, bucketId='$bucketId', bucketDisplayName='$bucketDisplayName', mediaType='$mediaType', width=$width, height=$height, dataModified=$dataModified, count=$count, isCheck=$isCheck)"
+        return "AlbumEntity(id=$id, path='$path', size=$size, duration=$duration, parent=$parent, mimeType='$mimeType', displayName='$displayName', orientation=$orientation, bucketId='$bucketId', bucketDisplayName='$bucketDisplayName', mediaType='$mediaType', width=$width, height=$height, dataModified=$dataModified, count=$count, isCheck=$isCheck)"
     }
+
+
 }
 
 fun AlbumEntity.hasVideo(): Boolean {
@@ -98,6 +103,16 @@ object AlbumScan {
      * 扫描类型：混合
      */
     const val MIXING = 2
+
+    /**
+     * 没有更多数据了
+     */
+    const val SCAN_NO_MORE = 0
+
+    /**
+     * 没有扫描到图片
+     */
+    const val SCAN_EMPTY = 1
 
     /**
      * 全部 parent

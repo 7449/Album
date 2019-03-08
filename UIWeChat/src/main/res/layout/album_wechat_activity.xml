@@ -34,7 +34,8 @@
     <RelativeLayout
         android:id="@+id/album_wechat_ui_bottom"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
+        android:layout_height="?actionBarSize"
+        android:background="@color/album_wechat_ui_bottom_root">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -47,15 +48,16 @@
             android:drawableRight="@drawable/ic_album_wechat_finder"
             android:gravity="right|center_vertical"
             android:text="图库"
-            android:textColor="@color/album_wechat_ui_black"
+            android:textColor="@color/album_wechat_ui_white"
             tools:ignore="RtlHardcoded" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/album_wechat_ui_original_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="原图"
-            android:textColor="@color/album_wechat_ui_black" />
+            android:textColor="@color/album_wechat_ui_white" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/album_wechat_ui_preview"
@@ -67,7 +69,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:text="预览"
-            android:textColor="@color/album_wechat_ui_black" />
+            android:textColor="@color/album_wechat_ui_white" />
 
     </RelativeLayout>
 </LinearLayout>

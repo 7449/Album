@@ -2,4 +2,5 @@
 <resources>
     <color name="album_wechat_ui_white">#fff</color>
     <color name="album_wechat_ui_black">#000</color>
+    <color name="album_wechat_ui_bottom_root">#FF3D4040</color>
 </resources>

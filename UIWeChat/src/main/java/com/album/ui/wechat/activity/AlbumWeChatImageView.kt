@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import com.album.ui.wechat.R
 import kotlinx.android.synthetic.main.album_wechat_image_view.view.*
 
@@ -25,5 +26,9 @@ class AlbumWeChatImageView @JvmOverloads constructor(context: Context, attrs: At
 
     fun gifTipView(): AppCompatImageView {
         return album_wechat_gif
+    }
+
+    fun videoTipView(): AppCompatTextView {
+        return album_wechat_video
     }
 }

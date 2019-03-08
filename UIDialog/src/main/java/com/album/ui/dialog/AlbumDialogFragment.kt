@@ -134,6 +134,9 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
     override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
     }
 
+    override fun onAlbumScreenChanged(currentMaxCount: Int) {
+    }
+
     private fun hasShowPrevFragment() = ::prevFragment.isInitialized && prevFragment.isVisible
 
     private fun initPrevFragment(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {

@@ -15,7 +15,17 @@ interface AlbumParentListener {
     fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long)
 
     /**
+     * 横竖屏切换时调用
+     */
+    fun onAlbumScreenChanged(currentMaxCount: Int)
+
+    /**
      * 点击checkbox时调用
      */
     fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
+
+    /**
+     * 选择时的筛选，返回true拦截
+     */
+    fun onAlbumCheckBoxFilter(view: View, position: Int, albumEntity: AlbumEntity): Boolean = false
 }

@@ -134,17 +134,14 @@ fun MainActivity.video() {
 }
 
 fun MainActivity.wechat() {
-    Album.instance.apply {
-        albumImageLoader = SimpleAlbumWeChatImageLoader()
-        albumListener = MainAlbumListener(applicationContext, list)
-        albumEmptyClickListener = SimpleOnAlbumEmptyClickListener()
-    }.ui(this, AlbumBundle(
-            scanType = AlbumScan.MIXING,
-            spanCount = 4,
-            dividerWidth = 5,
-            photoBackgroundColor = R.color.colorAlbumContentEmptyDrawableColor,
-            hideCamera = true,
-            checkBoxDrawable = R.drawable.simple_selector_wechat_item_check),
+    Album.instance.apply { albumImageLoader = SimpleAlbumWeChatImageLoader() }.ui(this,
+            AlbumBundle(
+                    scanType = AlbumScan.MIXING,
+                    spanCount = 4,
+                    dividerWidth = 5,
+                    photoBackgroundColor = R.color.colorAlbumContentEmptyDrawableColor,
+                    hideCamera = true,
+                    checkBoxDrawable = R.drawable.simple_selector_wechat_item_check),
             AlbumWeChatUiActivity::class.java)
 }
 

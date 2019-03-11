@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.album.core.orEmpty
 
@@ -15,8 +15,7 @@ import com.album.core.orEmpty
  * @author y
  * @create 2019/2/27
  */
-abstract class AlbumBaseDialogFragment : DialogFragment() {
-
+abstract class AlbumBaseDialogFragment : AppCompatDialogFragment() {
     lateinit var bundle: Bundle
     lateinit var mActivity: FragmentActivity
     lateinit var rootView: View

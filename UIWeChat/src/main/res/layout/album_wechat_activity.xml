@@ -38,6 +38,7 @@
         android:background="@color/album_wechat_ui_bottom_root">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/album_wechat_ui_finder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

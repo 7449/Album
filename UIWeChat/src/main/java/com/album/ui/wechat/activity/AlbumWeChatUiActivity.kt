@@ -22,11 +22,12 @@ import kotlinx.android.synthetic.main.album_wechat_activity.*
  * @author y
  * @create 2018/12/3
  */
-class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
+class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeChatUiFinder.OnFinderActionListener {
 
     override val layoutId: Int = com.album.ui.wechat.R.layout.album_wechat_activity
 
     private lateinit var albumFragment: AlbumFragment
+    private var finderFragment: AlbumWeChatUiFinder? = null
 
     private lateinit var albumBundle: AlbumBundle
     private lateinit var albumUiBundle: AlbumWeChatUiBundle
@@ -59,6 +60,10 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
                 return@setOnClickListener
             }
             Toast.makeText(applicationContext, album_wechat_ui_original_image.isChecked.toString(), Toast.LENGTH_SHORT).show()
+        }
+        album_wechat_ui_finder.setOnClickListener {
+            finderFragment = AlbumWeChatUiFinder.newInstance(albumFragment.finderList, supportFragmentManager, AlbumWeChatUiFinder::class.java.simpleName)
+            finderFragment?.onfinderAction = this@AlbumWeChatUiActivity
         }
         initFragment()
     }
@@ -100,6 +105,17 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener {
             album_wechat_ui_title_send.text = String.format(getString(com.album.ui.wechat.R.string.album_wechat_ui_title_send_count), currentMaxCount, albumBundle.multipleMaxCount)
             album_wechat_ui_preview.text = String.format(getString(com.album.ui.wechat.R.string.album_wechat_ui_title_prev_count), currentMaxCount, albumBundle.multipleMaxCount)
         }
+    }
+
+    override fun onFinderActionItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
+        if (albumEntity.parent == albumFragment.parent) {
+            finderFragment?.dismiss()
+            return
+        }
+        albumFragment.finderName = albumEntity.bucketDisplayName
+        album_wechat_ui_finder.text = albumEntity.bucketDisplayName
+        albumFragment.onScanAlbum(albumEntity.parent, isFinder = true, result = false)
+        finderFragment?.dismiss()
     }
 
     private fun format(t: Int): String {

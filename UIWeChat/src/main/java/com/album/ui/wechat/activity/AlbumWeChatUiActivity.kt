@@ -1,16 +1,15 @@
 package com.album.ui.wechat.activity
 
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.album.Album
-import com.album.AlbumBundle
-import com.album.EXTRA_ALBUM_OPTIONS
-import com.album.EXTRA_ALBUM_UI_OPTIONS
+import com.album.*
 import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
+import com.album.core.scan.AlbumScan
 import com.album.core.scan.hasVideo
 import com.album.core.settingStatusBarColor
 import com.album.core.ui.AlbumBaseActivity
@@ -55,16 +54,21 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeC
             Album.instance.albumListener?.onAlbumContainerFinish()
             finish()
         }
-        album_wechat_ui_title_send.setOnClickListener {
-            val selectEntity = albumFragment.getSelectEntity()
-            if (selectEntity.isEmpty()) {
-                return@setOnClickListener
-            }
-            Toast.makeText(applicationContext, album_wechat_ui_original_image.isChecked.toString(), Toast.LENGTH_SHORT).show()
-        }
+        album_wechat_ui_title_send.setOnClickListener { albumFragment.multipleSelect() }
         album_wechat_ui_finder.setOnClickListener {
             finderFragment = AlbumWeChatUiFinder.newInstance(albumFragment.finderList, supportFragmentManager, AlbumWeChatUiFinder::class.java.simpleName)
             finderFragment?.onfinderAction = this@AlbumWeChatUiActivity
+        }
+        album_wechat_ui_preview.setOnClickListener {
+            val multiplePreview = albumFragment.selectPreview()
+            if (!multiplePreview.isEmpty()) {
+                val bundle = Bundle()
+                bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreview)
+                bundle.putLong(TYPE_PREVIEW_PARENT, AlbumScan.PREV_PARENT)
+                bundle.putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
+                bundle.putParcelable(EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
+                albumFragment.startActivityForResult(Intent(this, AlbumWeChatPreUiActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
+            }
         }
         initFragment()
     }
@@ -86,6 +90,7 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeC
     }
 
     override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
+        AlbumWeChatPreUiActivity.start(albumBundle, albumUiBundle, multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent, album_wechat_ui_original_image.isChecked, albumFragment)
     }
 
     override fun onAlbumScreenChanged(currentMaxCount: Int) {
@@ -97,6 +102,10 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeC
             Toast.makeText(view.context, format(albumEntity.duration.toInt()), Toast.LENGTH_SHORT).show()
         }
         return super.onAlbumCheckBoxFilter(view, position, albumEntity)
+    }
+
+    override fun onPrevChangedCount(currentMaxCount: Int) {
+        onChangedCheckBoxCount(View(applicationContext), currentMaxCount, AlbumEntity())
     }
 
     override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {

@@ -25,6 +25,11 @@ interface AlbumParentListener {
     fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
 
     /**
+     * 预览页退回之后选择数据如果有改动则触发
+     */
+    fun onPrevChangedCount(currentMaxCount: Int)
+
+    /**
      * 选择时的筛选，返回true拦截
      */
     fun onAlbumCheckBoxFilter(view: View, position: Int, albumEntity: AlbumEntity): Boolean = false

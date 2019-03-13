@@ -153,6 +153,9 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
     override fun onAlbumScreenChanged(currentMaxCount: Int) {
     }
 
+    override fun onPrevChangedCount(currentMaxCount: Int) {
+    }
+
     override fun onAlbumCustomCrop(path: String): Boolean {
         openUCrop(path)
         return true
@@ -226,6 +229,6 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Album.destroy()
+        Album.instance.destroy()
     }
 }

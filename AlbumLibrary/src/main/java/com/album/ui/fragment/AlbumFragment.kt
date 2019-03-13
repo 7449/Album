@@ -408,6 +408,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
         albumScan.mergeEntity(albumAdapter.albumList, previewAlbumEntity)
         albumAdapter.multipleList = previewAlbumEntity
+        albumParentListener?.onPrevChangedCount(getSelectEntity().size)
     }
 
     /**
@@ -423,6 +424,7 @@ class AlbumFragment : AlbumBaseFragment(),
         }
         albumScan.mergeEntity(albumAdapter.albumList, previewAlbumEntity)
         albumAdapter.multipleList = previewAlbumEntity
+        albumParentListener?.onPrevChangedCount(getSelectEntity().size)
     }
 
     override fun onLoadMore() {

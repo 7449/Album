@@ -14,10 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.album.Album
-import com.album.AlbumBundle
-import com.album.TYPE_RESULT_CAMERA
-import com.album.TYPE_RESULT_CROP
+import com.album.*
 import com.album.core.*
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.scan.AlbumEntity
@@ -136,7 +133,10 @@ fun MainActivity.video() {
 }
 
 fun MainActivity.wechat() {
-    Album.instance.apply { albumImageLoader = SimpleAlbumWeChatImageLoader() }.ui(this,
+    Album.instance.apply {
+        albumImageLoader = SimpleAlbumWeChatImageLoader()
+        albumListener = MainAlbumListener(applicationContext, null)
+    }.ui(this,
             AlbumBundle(
                     scanType = AlbumScan.MIXING,
                     spanCount = 4,
@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
     }
 
     override fun onClick(v: View) {
-        Album.destroy()
+        Album.instance.destroy()
         when (v.id) {
             R.id.btn_day_album -> dayAlbum()
             R.id.btn_night_album -> nightAlbum()

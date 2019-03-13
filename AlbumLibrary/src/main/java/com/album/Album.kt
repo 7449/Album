@@ -1,10 +1,10 @@
 package com.album
 
 import com.album.core.scan.AlbumEntity
-import com.album.listener.OnAlbumCustomCameraListener
 import com.album.listener.AlbumImageLoader
-import com.album.listener.OnAlbumListener
+import com.album.listener.OnAlbumCustomCameraListener
 import com.album.listener.OnAlbumEmptyClickListener
+import com.album.listener.OnAlbumListener
 import com.yalantis.ucrop.UCrop
 
 /**
@@ -102,16 +102,6 @@ class Album {
 
     companion object {
         val instance by lazy { Album() }
-        fun destroy() {
-            instance.apply {
-                options = null
-                albumListener = null
-                customCameraListener = null
-                albumEmptyClickListener = null
-                albumImageLoader = null
-                initList = null
-            }
-        }
     }
 
     var options: UCrop.Options? = null

@@ -113,6 +113,9 @@ class SimpleAlbumUI : AlbumBaseActivity(), AdapterView.OnItemClickListener, Albu
     override fun onAlbumScreenChanged(currentMaxCount: Int) {
     }
 
+    override fun onPrevChangedCount(currentMaxCount: Int) {
+    }
+
     override fun onBackPressed() {
         Album.instance.albumListener?.onAlbumContainerBackPressed()
         super.onBackPressed()

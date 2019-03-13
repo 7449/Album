@@ -134,9 +134,9 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
         presenterPreview = AlbumScanPreviewImpl.newInstance(this, adapter.multipleList, if (parent == AlbumScan.PREV_PARENT || !adapter.albumList.isEmpty()) adapter.albumList else null, parent, albumBundle.scanType)
     }
 
-    override fun scanSuccess(entityList: ArrayList<AlbumEntity>) {
+    override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
         adapter.removeAll()
-        adapter.addAll(entityList)
+        adapter.addAll(albumEntityList)
         preview_viewPager.setCurrentItem(currentPosition, false)
         prevOnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -210,6 +210,14 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
     }
 
     fun getSelectEntity(): ArrayList<AlbumEntity> = adapter.multipleList
+
+    fun getCurrentEntity(): AlbumEntity = adapter.albumList[currentPosition]
+
+    fun getAlbumList(): ArrayList<AlbumEntity> = adapter.albumList
+
+    fun setCurrentItem(position: Int) {
+        preview_viewPager.setCurrentItem(position, false)
+    }
 
     override fun getAlbumContext(): FragmentActivity = mActivity
 

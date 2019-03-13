@@ -1,5 +1,6 @@
 package com.album.sample.imageloader
 
+import android.graphics.Color
 import android.view.View
 import android.widget.FrameLayout
 import com.album.R
@@ -10,6 +11,7 @@ import com.album.core.scan.hasVideo
 import com.album.core.show
 import com.album.listener.AlbumImageLoader
 import com.album.listener.AlbumImageView
+import com.album.listener.AlbumPhotoView
 import com.album.listener.DisplayView
 import com.album.ui.wechat.activity.AlbumWeChatTouchImageView
 import com.bumptech.glide.Glide
@@ -46,8 +48,9 @@ class SimpleAlbumWeChatImageLoader : AlbumImageLoader {
     }
 
     override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
-        val imageView = AlbumImageView(container)
+        val imageView = AlbumPhotoView(container)
         Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(imageView)
+        imageView.setBackgroundColor(Color.BLACK)
         return DisplayView(container, imageView)
     }
 }

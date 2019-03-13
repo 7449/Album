@@ -169,6 +169,9 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
     }
 
+    override fun onPrevChangedCount(currentMaxCount: Int) {
+    }
+
     override fun onBackPressed() {
         Album.instance.albumListener?.onAlbumContainerBackPressed()
         super.onBackPressed()

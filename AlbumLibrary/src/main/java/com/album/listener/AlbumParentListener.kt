@@ -28,4 +28,9 @@ interface AlbumParentListener {
      * 选择时的筛选，返回true拦截
      */
     fun onAlbumCheckBoxFilter(view: View, position: Int, albumEntity: AlbumEntity): Boolean = false
+
+    /**
+     * 接管裁剪 true
+     */
+    fun onAlbumCustomCrop(path: String): Boolean = false
 }

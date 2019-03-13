@@ -11,6 +11,7 @@ import com.album.EXTRA_ALBUM_OPTIONS
 import com.album.EXTRA_ALBUM_UI_OPTIONS
 import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
+import com.album.core.scan.hasVideo
 import com.album.core.settingStatusBarColor
 import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumParentListener
@@ -92,7 +93,9 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeC
     }
 
     override fun onAlbumCheckBoxFilter(view: View, position: Int, albumEntity: AlbumEntity): Boolean {
-        Toast.makeText(view.context, format(albumEntity.duration.toInt()), Toast.LENGTH_SHORT).show()
+        if (albumEntity.hasVideo()) {
+            Toast.makeText(view.context, format(albumEntity.duration.toInt()), Toast.LENGTH_SHORT).show()
+        }
         return super.onAlbumCheckBoxFilter(view, position, albumEntity)
     }
 

@@ -1,8 +1,11 @@
 package com.album.ui.dialog
 
+import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -10,14 +13,21 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.album.*
+import com.album.core.getCameraFile
 import com.album.core.hasL
+import com.album.core.orEmpty
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan
+import com.album.core.toFile
 import com.album.core.ui.AlbumBaseDialogFragment
 import com.album.listener.AlbumParentListener
 import com.album.ui.fragment.AlbumFragment
 import com.album.ui.fragment.PrevFragment
+import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.UCropFragment
+import com.yalantis.ucrop.UCropFragmentCallback
 import kotlinx.android.synthetic.main.album_fragment_dialog.*
+import java.io.File
 
 class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
@@ -41,6 +51,7 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
     private lateinit var albumFragment: AlbumFragment
     private lateinit var prevFragment: PrevFragment
+    private var cropFragment: UCropFragment? = null
 
     override fun onStart() {
         super.onStart()
@@ -59,7 +70,11 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
         view.isFocusableInTouchMode = true
         view.requestFocus()
         view.setOnKeyListener { _, keyCode, _ ->
-            if (keyCode == KeyEvent.KEYCODE_BACK && hasShowPrevFragment()) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && (hasShowPrevFragment() || cropFragment != null)) {
+                cropFragment?.let {
+                    childFragmentManager.beginTransaction().show(albumFragment).remove(it).commitAllowingStateLoss()
+                    return@setOnKeyListener true
+                }
                 albumFragment.onDialogResultPreview(prevFragment.isDialogRefreshAlbumUI(albumUiBundle.previewBackRefresh))
                 childFragmentManager.beginTransaction().show(albumFragment).remove(prevFragment).commitAllowingStateLoss()
                 return@setOnKeyListener true
@@ -123,8 +138,9 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
             initPrevFragment(albumFragment.getSelectEntity(), 0, AlbumScan.PREV_PARENT)
         }
 
-        initAlbumFragment()
+        album_dialog_bottom_view_crop.setOnClickListener { cropFragment?.cropAndSaveImage() }
 
+        initAlbumFragment()
     }
 
     override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
@@ -135,6 +151,11 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
     }
 
     override fun onAlbumScreenChanged(currentMaxCount: Int) {
+    }
+
+    override fun onAlbumCustomCrop(path: String): Boolean {
+        openUCrop(path)
+        return true
     }
 
     private fun hasShowPrevFragment() = ::prevFragment.isInitialized && prevFragment.isVisible
@@ -166,6 +187,35 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
                     .commitAllowingStateLoss()
         }
         albumFragment.albumParentListener = this
+    }
+
+    private fun openUCrop(path: String) {
+        cropFragment?.let { childFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss() }
+        cropFragment = UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(mActivity.getCameraFile(albumBundle.uCropPath, albumBundle.scanType == AlbumScan.VIDEO)))
+                .withOptions(Album.instance.options ?: UCrop.Options()).fragment
+        cropFragment?.let {
+            childFragmentManager.beginTransaction().hide(albumFragment).add(R.id.album_dialog_fragment, it, UCropFragment.TAG).commitAllowingStateLoss()
+            Handler().postDelayed({
+                it.setCallback(object : UCropFragmentCallback {
+
+                    override fun onCropFinish(result: UCropFragment.UCropResult) {
+                        childFragmentManager.beginTransaction().show(albumFragment).remove(it).commitAllowingStateLoss()
+                        cropFragment = null
+                        when (result.mResultCode) {
+                            UCrop.RESULT_ERROR -> Album.instance.albumListener?.onAlbumUCropError(UCrop.getError(result.mResultData.orEmpty()))
+                            RESULT_OK -> {
+                                val cropPath = result.mResultData.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path.orEmpty()
+                                Album.instance.albumListener?.onAlbumUCropResources(cropPath.toFile())
+                                albumFragment.refreshMedia(TYPE_RESULT_CROP, cropPath)
+                            }
+                        }
+                    }
+
+                    override fun loadingProgress(showLoader: Boolean) {
+                    }
+                })
+            }, 500)
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface?) {

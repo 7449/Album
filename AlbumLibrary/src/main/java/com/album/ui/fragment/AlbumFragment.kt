@@ -380,6 +380,10 @@ class AlbumFragment : AlbumBaseFragment(),
     }
 
     override fun openUCrop(path: String) {
+        val onAlbumCustomCrop = albumParentListener?.onAlbumCustomCrop(path) ?: false
+        if (onAlbumCustomCrop) {
+            return
+        }
         UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(mActivity.getCameraFile(albumBundle.uCropPath, albumBundle.scanType == VIDEO)))
                 .withOptions(Album.instance.options ?: UCrop.Options())
                 .start(mActivity, this)

@@ -34,6 +34,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="预览" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/album_dialog_bottom_view_crop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="裁剪" />
     </LinearLayout>
 
 </LinearLayout>

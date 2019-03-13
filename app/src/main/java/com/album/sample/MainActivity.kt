@@ -36,6 +36,8 @@ import com.album.ui.dialog.dialog
 import com.album.ui.ui
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.UCropFragment
+import com.yalantis.ucrop.UCropFragmentCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.util.*
@@ -164,7 +166,7 @@ class SimpleSingleScannerListener : AlbumSingleMediaScanner.SingleScannerListene
     override fun onScanStart() {}
 }
 
-class MainActivity : AppCompatActivity(), OnClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback {
 
     lateinit var dayOptions: UCrop.Options
     lateinit var nightOptions: UCrop.Options
@@ -223,6 +225,12 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                         dialog.dismiss()
                     }.show()
         }
+    }
+
+    override fun onCropFinish(result: UCropFragment.UCropResult) {
+    }
+
+    override fun loadingProgress(showLoader: Boolean) {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

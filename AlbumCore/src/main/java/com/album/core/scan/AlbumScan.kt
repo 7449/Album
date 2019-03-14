@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
  */
 
 @Parcelize
-class AlbumEntity(
+data class AlbumEntity(
         var id: Long = 0,
         var path: String = "",
         var size: Long = 0,
@@ -27,60 +27,7 @@ class AlbumEntity(
         var height: Int = 0,
         var dataModified: Long = 0,
         var count: Int = 0,
-        var isCheck: Boolean = false) : Parcelable {
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as AlbumEntity
-
-        if (id != other.id) return false
-        if (path != other.path) return false
-        if (size != other.size) return false
-        if (duration != other.duration) return false
-        if (parent != other.parent) return false
-        if (mimeType != other.mimeType) return false
-        if (displayName != other.displayName) return false
-        if (orientation != other.orientation) return false
-        if (bucketId != other.bucketId) return false
-        if (bucketDisplayName != other.bucketDisplayName) return false
-        if (mediaType != other.mediaType) return false
-        if (width != other.width) return false
-        if (height != other.height) return false
-        if (dataModified != other.dataModified) return false
-        if (count != other.count) return false
-        if (isCheck != other.isCheck) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + path.hashCode()
-        result = 31 * result + size.hashCode()
-        result = 31 * result + duration.hashCode()
-        result = 31 * result + parent.hashCode()
-        result = 31 * result + mimeType.hashCode()
-        result = 31 * result + displayName.hashCode()
-        result = 31 * result + orientation
-        result = 31 * result + bucketId.hashCode()
-        result = 31 * result + bucketDisplayName.hashCode()
-        result = 31 * result + mediaType.hashCode()
-        result = 31 * result + width
-        result = 31 * result + height
-        result = 31 * result + dataModified.hashCode()
-        result = 31 * result + count
-        result = 31 * result + isCheck.hashCode()
-        return result
-    }
-
-    override fun toString(): String {
-        return "AlbumEntity(id=$id, path='$path', size=$size, duration=$duration, parent=$parent, mimeType='$mimeType', displayName='$displayName', orientation=$orientation, bucketId='$bucketId', bucketDisplayName='$bucketDisplayName', mediaType='$mediaType', width=$width, height=$height, dataModified=$dataModified, count=$count, isCheck=$isCheck)"
-    }
-
-
-}
+        var isCheck: Boolean = false) : Parcelable
 
 fun AlbumEntity.hasVideo(): Boolean {
     return this.mediaType == AlbumColumns.VIDEO

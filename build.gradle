@@ -40,7 +40,7 @@ ext {
     frescoVersion = '1.10.0'
     subsamplingVersion = '3.10.0'
     photoViewVersion = '2.3.0'
-    viewpagerVersion = '1.0.0-alpha01'
+    viewpagerVersion = '1.0.0-alpha03'
 
     albumVersion = 'latest.release'
     albumCoreVersion = 'beta03'

@@ -81,5 +81,5 @@ object AlbumColumns {
     /**
      * 时间
      */
-    const val DATA_MODIFIED = "date_modified"
+    const val DATE_MODIFIED = "date_modified"
 }

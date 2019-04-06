@@ -32,7 +32,7 @@ internal val ALBUM_ALL_COLUMNS = arrayOf(
         AlbumColumns.MEDIA_TYPE,
         AlbumColumns.WIDTH,
         AlbumColumns.HEIGHT,
-        AlbumColumns.DATA_MODIFIED
+        AlbumColumns.DATE_MODIFIED
 )
 
 /**
@@ -68,7 +68,7 @@ internal val ALBUM_FINDER_ALL_COLUMNS = arrayOf(
         AlbumColumns.MEDIA_TYPE,
         AlbumColumns.WIDTH,
         AlbumColumns.HEIGHT,
-        AlbumColumns.DATA_MODIFIED + "  FROM (SELECT *"
+        AlbumColumns.DATE_MODIFIED + "  FROM (SELECT *"
 )
 
 /**
@@ -81,7 +81,7 @@ internal const val ALBUM_FINDER_ALL_SELECTION = AlbumColumns.SIZE + " > 0 AND " 
 /**
  * 排序条件
  */
-internal const val ALBUM_ORDER_BY = AlbumColumns.DATA_MODIFIED + " DESC"
+internal const val ALBUM_ORDER_BY = AlbumColumns.DATE_MODIFIED + " DESC"
 
 /**
  * 排序分页条件

@@ -50,7 +50,7 @@ class AlbumScanFinderTask(
         val mediaTypeColumnIndex = cursor.getColumnIndex(AlbumColumns.MEDIA_TYPE)
         val widthColumnIndex = cursor.getColumnIndex(AlbumColumns.WIDTH)
         val heightColumnIndex = cursor.getColumnIndex(AlbumColumns.HEIGHT)
-        val dataModifiedColumnIndex = cursor.getColumnIndex(AlbumColumns.DATA_MODIFIED)
+        val dateModifiedColumnIndex = cursor.getColumnIndex(AlbumColumns.DATE_MODIFIED)
 
         var maxCount = 0
 
@@ -69,7 +69,7 @@ class AlbumScanFinderTask(
             val mediaType = cursor.getString(mediaTypeColumnIndex)
             val width = cursor.getInt(widthColumnIndex)
             val height = cursor.getInt(heightColumnIndex)
-            val dataModified = cursor.getLong(dataModifiedColumnIndex)
+            val dataModified = cursor.getLong(dateModifiedColumnIndex)
             maxCount += count
             finderEntity.add(AlbumEntity(id, path, size, duration, parent, mimeType, displayName, orientation, bucketId, if (bucketDisplayName == "0") sdName else bucketDisplayName, mediaType, width, height, dataModified, count, false))
         }

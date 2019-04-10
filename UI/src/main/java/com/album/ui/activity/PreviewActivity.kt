@@ -25,6 +25,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
     override val layoutId: Int = R.layout.album_activity_preview
 
     companion object {
+        @JvmStatic
         fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, fragment: Fragment) {
             val bundle = Bundle().apply {
                 putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)

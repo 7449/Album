@@ -20,9 +20,9 @@ abstract class AlbumBaseDialogFragment : AppCompatDialogFragment() {
     lateinit var mActivity: FragmentActivity
     lateinit var rootView: View
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
-        mActivity = context as? FragmentActivity ?: activity!!
+        mActivity = context as FragmentActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

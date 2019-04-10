@@ -1,5 +1,6 @@
 package com.album.ui.dialog
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.graphics.PorterDuff
@@ -89,6 +90,7 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
         albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
     }
 
+    @SuppressLint("NewApi")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(true)
@@ -221,7 +223,7 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
         }
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         albumFragment.disconnectMediaScanner()
         super.onDismiss(dialog)
         Album.instance.albumListener?.onAlbumContainerFinish()

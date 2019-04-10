@@ -29,7 +29,7 @@ abstract class AlbumBaseFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mActivity = context as? FragmentActivity ?: activity!!
+        mActivity = context as FragmentActivity
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(layoutId, container, false)

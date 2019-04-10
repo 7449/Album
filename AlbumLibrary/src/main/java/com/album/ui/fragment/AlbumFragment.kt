@@ -50,6 +50,7 @@ class AlbumFragment : AlbumBaseFragment(),
         /**
          * 获取图库fragment
          */
+        @JvmStatic
         fun newInstance(albumBundle: AlbumBundle) = AlbumFragment().apply {
             arguments = Bundle().apply { putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle) }
         }

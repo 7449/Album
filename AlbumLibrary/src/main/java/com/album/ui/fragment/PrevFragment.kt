@@ -34,6 +34,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
          * [TYPE_PREVIEW_KEY] 跳转预览页面时携带选中数据的key
          * 可参考自定义UI
          */
+        @JvmStatic
         fun newInstance(bundle: Bundle): PrevFragment = PrevFragment().apply { arguments = bundle }
     }
 

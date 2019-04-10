@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="album_toolbar_height">56dp</dimen>
     <dimen name="album_bottom_text_size">16sp</dimen>
     <dimen name="album_bottom_padding">10dp</dimen>
     <dimen name="album_bottom_marginRight">20dp</dimen>

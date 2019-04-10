@@ -10,15 +10,14 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/preview_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:layout_height="@dimen/album_toolbar_height" />
 
     <FrameLayout
         android:id="@+id/preview_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:layout_weight="1" />
 
     <RelativeLayout

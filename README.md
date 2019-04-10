@@ -3,16 +3,11 @@ android album
 
 Chinese : [wiki](https://github.com/7449/Album/wiki)
 
-## Screenshot
+## version
 
-#### multiple, radio, preview, crop, sample ui,customize camera
-
-![](https://github.com/7449/Album/blob/master/screenshot/album_multiple.png)
-![](https://github.com/7449/Album/blob/master/screenshot/album_radio.png)
-![](https://github.com/7449/Album/blob/master/screenshot/album_preview.png)
-![](https://github.com/7449/Album/blob/master/screenshot/album_crop.png)
-![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.png)
-![](https://github.com/7449/Album/blob/master/screenshot/album_customize_camera.png)
+core:![](https://api.bintray.com/packages/ydevelop/maven/album.core/images/download.svg)
+library:![](https://api.bintray.com/packages/ydevelop/maven/album/images/download.svg)
+ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.svg)
 
 ## sample
 
@@ -28,24 +23,30 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
             android:name="com.album.ui.activity.PreviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
             
-#### gradle
+#### dependencies
 
-     implementation 'com.ydevelop:album:album:0.0.7'
-     implementation "com.ydevelop:album.ui:beta02"
-     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+     implementation "androidx.appcompat:appcompat:$appcompatVersion"
+     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
+     implementation "com.ydevelop:album.ui:version"
+     implementation "com.github.yalantis:ucrop:$ucropVersion"
      implementation "com.github.bumptech.glide:glide:$glideVersion"
+     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   
-  If you use the built-in frame, please rely on glide
-  
-    glide
-    
-#### demo-kotlin
+#### demo
 
     Album
             .instance
             .apply {
             // album config
             }.start(this)
+            
+## custom ui
+
+[CustomWeChat](https://github.com/android-develop-team/Album/tree/master/UIWeChat)
+
+[CustomDialog](https://github.com/android-develop-team/Album/tree/master/UIDialog)
+
+     implementation "com.ydevelop:album:version"
               
 ## customize camera
 
@@ -98,58 +99,6 @@ Chinese : [wiki](https://github.com/7449/Album/wiki)
         }
     }
 
-
-## UI
-
-#### album
-
-see: [SimpleAlbumUI](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/ui/SimpleAlbumUI.kt)
-
-#### preview
-
-see: [SimpleAlbumUI](https://github.com/7449/Album/blob/master/app/src/main/java/com/album/sample/ui/SimplePreviewUI.kt)
-
-## Listener
-
-see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrary/src/main/java/com/album/Listener.kt)
-
-    open class SimpleAlbumListener : AlbumListener {
-        override fun onAlbumActivityFinish() {}
-        override fun onAlbumResultCameraError() {}
-        override fun onAlbumPermissionsDenied(type: Int) {}
-        override fun onAlbumPreviewFileNotExist() {}
-        override fun onAlbumFinderEmpty() {}
-        override fun onAlbumPreviewEmpty() {}
-        override fun onAlbumSelectEmpty() {}
-        override fun onAlbumFileNotExist() {}
-        override fun onAlbumPreviewSelectEmpty() {}
-        override fun onAlbumCheckFileNotExist() {}
-        override fun onAlbumCropCanceled() {}
-        override fun onAlbumCameraCanceled() {}
-        override fun onAlbumUCropError(data: Throwable?) {}
-        override fun onAlbumResources(list: List<AlbumEntity>) {}
-        override fun onAlbumUCropResources(scannerFile: File) {}
-        override fun onAlbumMaxCount() {}
-        override fun onAlbumActivityBackPressed() {}
-        override fun onAlbumOpenCameraError() {}
-        override fun onAlbumEmpty() {}
-        override fun onAlbumNoMore() {}
-        override fun onVideoPlayError() {}
-        override fun onCheckBoxAlbum(count: Int, maxCount: Int) {}
-    }
-
-## TestPhone
-
-* onePlus3T           7.1.1
-* huawei ale-cl00        4.4.4
-* meizu mx5         5.1
-* galaxy S8+         7.0
-* hanzhong       5.1
-* xiaomi note        6.0.1
-* redmi note4 6.0
-* oppo R7c      4.4.4
-* Lenovo K30-T  4.4.4
-
 ## ProGuard
 
     -dontwarn com.album.**
@@ -170,6 +119,17 @@ see: [SimpleAlbumListener](https://github.com/7449/Album/blob/master/AlbumLibrar
 
  * https://issuetracker.google.com/issues/37046656
  * https://github.com/square/leakcanary/issues/26
+
+## Screenshot
+
+#### multiple, radio, preview, crop, sample ui,customize camera
+
+![](https://github.com/7449/Album/blob/master/screenshot/album_multiple.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_radio.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_preview.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_crop.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.png)
+![](https://github.com/7449/Album/blob/master/screenshot/album_customize_camera.png)
 
 ## LICENSE
 

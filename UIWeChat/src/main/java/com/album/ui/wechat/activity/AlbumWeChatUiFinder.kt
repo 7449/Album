@@ -36,11 +36,11 @@ class AlbumWeChatUiFinder : BottomSheetDialogFragment() {
 
     lateinit var bundle: Bundle
     private lateinit var mActivity: FragmentActivity
-    var onfinderAction: OnFinderActionListener? = null
+    var onFinderAction: OnFinderActionListener? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
-        mActivity = context as? FragmentActivity ?: activity!!
+        mActivity = context as FragmentActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class AlbumWeChatUiFinder : BottomSheetDialogFragment() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FinderViewHolder {
                 val finderView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_wechat_item_finder, parent, false)
                 val finderViewHolder = FinderViewHolder(finderView)
-                finderView.setOnClickListener { v -> onfinderAction?.onFinderActionItemClick(v, finderViewHolder.adapterPosition, parcelableArrayList[finderViewHolder.adapterPosition]) }
+                finderView.setOnClickListener { v -> onFinderAction?.onFinderActionItemClick(v, finderViewHolder.adapterPosition, parcelableArrayList[finderViewHolder.adapterPosition]) }
                 return finderViewHolder
             }
 

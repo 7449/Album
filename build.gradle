@@ -31,20 +31,27 @@ ext {
     projectVersionCode = 1
     projectVersionName = '1.0'
 
-    appcompatVersion = '1.0.2'
+    appcompatVersion = '1.1.0-alpha04'
+    viewpagerVersion = '1.0.0-alpha03'
     materialVersion = '1.0.0'
-    glideVersion = '4.8.0'
-    ucropVersion = '2.2.2'
+
+    albumCoreVersion = getMavenVersion("$rootDir/AlbumCore")
+    albumLibraryVersion = getMavenVersion("$rootDir/AlbumLibrary")
+    albumUIVersion = getMavenVersion("$rootDir/UI")
+
+    glideVersion = '4.9.0'
+    ucropVersion = '2.2.3'
     picassoVersion = '2.71828'
     imageloaderVersion = '1.9.5'
-    frescoVersion = '1.10.0'
+    frescoVersion = '1.13.0'
     subsamplingVersion = '3.10.0'
     photoViewVersion = '2.3.0'
-    viewpagerVersion = '1.0.0-alpha03'
-
-    albumVersion = 'latest.release'
-    albumCoreVersion = 'beta03'
-    albumLibraryVersion = '0.0.7'
 
     sampleApplicationId = 'com.album.sample'
+}
+
+static def getMavenVersion(path) {
+    Properties properties = new Properties()
+    properties.load(new FileInputStream(path + "/gradle.properties"))
+    return properties.getProperty("mavenVersion")
 }

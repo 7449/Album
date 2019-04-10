@@ -101,6 +101,7 @@ const val TYPE_RESULT_CROP = 1
 class Album {
 
     companion object {
+        @JvmStatic
         val instance by lazy { Album() }
     }
 

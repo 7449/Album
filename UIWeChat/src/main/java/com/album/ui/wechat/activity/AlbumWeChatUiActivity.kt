@@ -1,10 +1,10 @@
 package com.album.ui.wechat.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.album.*
 import com.album.core.hasL
@@ -35,6 +35,7 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeC
     override fun initView() {
     }
 
+    @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
         albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
         albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS)
@@ -57,7 +58,7 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeC
         album_wechat_ui_title_send.setOnClickListener { albumFragment.multipleSelect() }
         album_wechat_ui_finder.setOnClickListener {
             finderFragment = AlbumWeChatUiFinder.newInstance(albumFragment.finderList, supportFragmentManager, AlbumWeChatUiFinder::class.java.simpleName)
-            finderFragment?.onfinderAction = this@AlbumWeChatUiActivity
+            finderFragment?.onFinderAction = this@AlbumWeChatUiActivity
         }
         album_wechat_ui_preview.setOnClickListener {
             val multiplePreview = albumFragment.selectPreview()
@@ -99,7 +100,7 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumParentListener, AlbumWeC
 
     override fun onAlbumCheckBoxFilter(view: View, position: Int, albumEntity: AlbumEntity): Boolean {
         if (albumEntity.hasVideo()) {
-            Toast.makeText(view.context, format(albumEntity.duration.toInt()), Toast.LENGTH_SHORT).show()
+//            Toast.makeText(view.context, format(albumEntity.duration.toInt()), Toast.LENGTH_SHORT).show()
         }
         return super.onAlbumCheckBoxFilter(view, position, albumEntity)
     }

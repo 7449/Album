@@ -31,12 +31,10 @@ class AlbumScanFileTask(
         val path = args?.getString(AlbumColumns.DATA) ?: ""
         val scanType = args?.getInt(AlbumColumns.SCAN_TYPE) ?: AlbumScan.IMAGE
 
-        selection = if (!path.isEmpty()) {
-            ALBUM_PATH_SELECTION(path)
-        } else if (parent == AlbumScan.ALL_PARENT) {
-            ALBUM_ALL_SELECTION
-        } else {
-            ALBUM_PARENT_SELECTION(parent)
+        selection = when {
+            path.isNotEmpty() -> ALBUM_PATH_SELECTION(path)
+            parent == AlbumScan.ALL_PARENT -> ALBUM_ALL_SELECTION
+            else -> ALBUM_PARENT_SELECTION(parent)
         }
         return CursorLoader(activity,
                 ALBUM_FILE_URI,

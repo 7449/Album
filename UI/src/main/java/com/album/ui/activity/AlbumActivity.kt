@@ -1,5 +1,6 @@
 package com.album.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -44,6 +45,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         listPopupWindow = ListPopupWindow(this)
     }
 
+    @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
         albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
         albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
@@ -124,7 +126,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         when (v.id) {
             R.id.album_tv_preview -> {
                 val multiplePreview = albumFragment.selectPreview()
-                if (!multiplePreview.isEmpty()) {
+                if (multiplePreview.isNotEmpty()) {
                     val bundle = Bundle()
                     bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreview)
                     bundle.putLong(TYPE_PREVIEW_PARENT, AlbumScan.PREV_PARENT)
@@ -136,7 +138,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             R.id.album_tv_select -> albumFragment.multipleSelect()
             R.id.album_tv_finder_all -> {
                 val finderEntity = albumFragment.finderList
-                if (!finderEntity.isEmpty()) {
+                if (finderEntity.isNotEmpty()) {
                     finderAdapter.refreshData(finderEntity)
                     listPopupWindow.show()
                     listPopupWindow.listView?.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.listPopupBackground))

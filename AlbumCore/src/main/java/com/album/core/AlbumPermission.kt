@@ -34,7 +34,7 @@ object AlbumPermission {
     const val TYPE_PERMISSIONS_CAMERA = 1
 }
 
-fun Any.permissionStorage(): Boolean {
+internal fun Any.permissionStorage(): Boolean {
     return when {
         this is Activity -> permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumPermission.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
         this is Fragment -> permission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, AlbumPermission.WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
@@ -42,7 +42,7 @@ fun Any.permissionStorage(): Boolean {
     }
 }
 
-fun Any.permissionCamera(): Boolean {
+internal fun Any.permissionCamera(): Boolean {
     return when {
         this is Activity -> permission(this, Manifest.permission.CAMERA, AlbumPermission.CAMERA_REQUEST_CODE)
         this is Fragment -> permission(this, Manifest.permission.CAMERA, AlbumPermission.CAMERA_REQUEST_CODE)

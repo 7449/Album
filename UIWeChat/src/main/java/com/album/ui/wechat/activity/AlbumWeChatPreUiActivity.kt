@@ -1,5 +1,6 @@
 package com.album.ui.wechat.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -63,6 +64,7 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener
         }
     }
 
+    @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
         albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
         albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS)

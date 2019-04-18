@@ -8,31 +8,29 @@ import androidx.loader.app.LoaderManager
 import com.album.core.scan.task.AlbumScanFileTask
 import com.album.core.scan.task.AlbumScanFinderTask
 import com.album.core.view.AlbumView
+import com.album.core.view.AlbumViewKt
 
 /**
  * @author y
  * @create 2019/2/27
  * 图库扫描工具类
  */
-class AlbumScanImpl(private val albumView: AlbumView,
-                    private val scanType: Int,
-                    private val scanCount: Int,
-                    private val allName: String,
-                    private val sdName: String) {
+class AlbumScanImpl private constructor(private val albumView: AlbumView) {
 
     companion object {
-        fun newInstance(
-                albumView: AlbumView,
-                scanType: Int,
-                scanCount: Int,
-                allName: String,
-                sdName: String
-        ) = AlbumScanImpl(albumView, scanType, scanCount, allName, sdName)
+        @JvmStatic
+        fun newInstance(albumView: AlbumView) = AlbumScanImpl(albumView)
+
+        fun newInstance(albumViewKt: AlbumViewKt.() -> Unit) = newInstance(AlbumViewKt().also(albumViewKt).build())
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(albumView.getAlbumContext())
 
     private val activity: Context = albumView.getAlbumContext()
+
+    private val scanType: Int = albumView.currentScanType()
+
+    private val scanCount: Int = albumView.getScanCount()
 
     fun scanAll(parent: Long, page: Int) {
         if (loaderManager.hasRunningLoaders()) {
@@ -42,8 +40,9 @@ class AlbumScanImpl(private val albumView: AlbumView,
         loaderManager.restartLoader(AlbumScan.ALBUM_LOADER_ID, Bundle().apply {
             putLong(AlbumColumns.PARENT, parent)
             putInt(AlbumColumns.PAGE, page)
+            putInt(AlbumColumns.COUNT, scanCount)
             putInt(AlbumColumns.SCAN_TYPE, scanType)
-        }, AlbumScanFileTask(activity, scanCount) {
+        }, AlbumScanFileTask.newInstance(activity) {
             albumView.hideProgress()
             if (it.isEmpty()) {
                 albumView.onAlbumScanCallback(if (albumView.getPage() == 0) AlbumScan.SCAN_EMPTY else AlbumScan.SCAN_NO_MORE)
@@ -62,8 +61,9 @@ class AlbumScanImpl(private val albumView: AlbumView,
                 Bundle().apply {
                     putString(AlbumColumns.DATA, path)
                     putInt(AlbumColumns.SCAN_TYPE, scanType)
+                    putInt(AlbumColumns.COUNT, scanCount)
                 },
-                AlbumScanFileTask(activity, scanCount) {
+                AlbumScanFileTask.newInstance(activity) {
                     refreshFinder()
                     albumView.resultSuccess(if (it.isEmpty()) null else it[0])
                     destroyResultLoaderManager()
@@ -71,17 +71,16 @@ class AlbumScanImpl(private val albumView: AlbumView,
     }
 
     private fun refreshFinder() {
-        loaderManager.restartLoader(AlbumScan.FINDER_LOADER_ID, Bundle().apply {
-            putInt(AlbumColumns.SCAN_TYPE, scanType)
-        }, AlbumScanFinderTask(activity, allName, sdName) {
-            albumView.scanFinderSuccess(it)
-            destroyFinderLoaderManager()
-        })
+        loaderManager.restartLoader(AlbumScan.FINDER_LOADER_ID, Bundle().apply { putInt(AlbumColumns.SCAN_TYPE, scanType) },
+                AlbumScanFinderTask.newInstance(activity) {
+                    albumView.scanFinderSuccess(it)
+                    destroyFinderLoaderManager()
+                })
     }
 
     fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
         albumList.forEach { it.isCheck = false }
-        selectEntity.forEach { select -> albumList.filter { it.path == select.path }.forEach { it.isCheck = true } }
+        selectEntity.forEach { select -> albumList.find { it.path == select.path }?.isCheck = true }
     }
 
     private fun destroyAlbumLoaderManager() {

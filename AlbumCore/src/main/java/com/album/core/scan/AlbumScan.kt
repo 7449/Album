@@ -34,7 +34,7 @@ fun AlbumEntity.hasVideo(): Boolean {
 }
 
 fun AlbumEntity.hasGif(): Boolean {
-    return this.displayName.endsWith("gif") || this.displayName.endsWith("GIF")
+    return this.mimeType == "image/gif"
 }
 
 object AlbumScan {

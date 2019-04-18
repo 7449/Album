@@ -7,8 +7,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/album_dialog_title"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:layout_height="56dp" />
 
     <FrameLayout
         android:id="@+id/album_dialog_fragment"

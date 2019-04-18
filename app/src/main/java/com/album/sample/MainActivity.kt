@@ -14,7 +14,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.album.*
+import com.album.Album
+import com.album.AlbumBundle
+import com.album.TYPE_RESULT_CAMERA
+import com.album.TYPE_RESULT_CROP
 import com.album.core.*
 import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.scan.AlbumEntity
@@ -204,7 +207,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
     }
 
     override fun onClick(v: View) {
-        Album.instance.destroy()
+        Album.destroy()
         when (v.id) {
             R.id.btn_day_album -> dayAlbum()
             R.id.btn_night_album -> nightAlbum()
@@ -242,13 +245,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             }
             Activity.RESULT_OK -> when (requestCode) {
                 AlbumCamera.OPEN_CAMERA_REQUEST_CODE -> {
-                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), SimpleSingleScannerListener(), TYPE_RESULT_CAMERA)
+                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
                     UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
                             .withOptions(UCrop.Options())
                             .start(this)
                 }
                 UCrop.REQUEST_CROP -> {
-                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), SimpleSingleScannerListener(), TYPE_RESULT_CROP)
+                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), TYPE_RESULT_CROP, SimpleSingleScannerListener())
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

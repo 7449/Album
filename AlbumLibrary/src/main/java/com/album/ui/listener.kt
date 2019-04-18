@@ -1,13 +1,31 @@
-package com.album.listener
+package com.album.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.album.core.scan.AlbumEntity
 
 /**
  * @author y
- * @create 2019/2/28
+ * @create 2019-04-18
  */
+interface OnAlbumPrevItemClickListener {
+
+    fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
+
+    fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity)
+
+}
+
+interface OnAlbumItemClickListener {
+
+    fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity)
+
+    fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity)
+
+}
+
+
 internal interface AlbumMethodFragmentViewListener {
     /**
      * 断掉MediaScanner

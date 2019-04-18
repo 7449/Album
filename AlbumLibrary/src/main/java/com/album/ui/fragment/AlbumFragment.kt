@@ -26,8 +26,9 @@ import com.album.core.scan.AlbumScanImpl
 import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumView
-import com.album.listener.AlbumMethodFragmentViewListener
 import com.album.listener.AlbumParentListener
+import com.album.ui.AlbumMethodFragmentViewListener
+import com.album.ui.OnAlbumItemClickListener
 import com.album.ui.adapter.AlbumAdapter
 import com.album.widget.LoadMoreRecyclerView
 import com.album.widget.SimpleGridDivider
@@ -42,7 +43,7 @@ import java.io.File
 class AlbumFragment : AlbumBaseFragment(),
         AlbumView,
         AlbumMethodFragmentViewListener,
-        AlbumAdapter.OnAlbumItemClickListener,
+        OnAlbumItemClickListener,
         AlbumSingleMediaScanner.SingleScannerListener,
         LoadMoreRecyclerView.LoadMoreListener {
 
@@ -122,16 +123,12 @@ class AlbumFragment : AlbumBaseFragment(),
         drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumBundle.photoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
         album_empty.setImageDrawable(drawable)
         album_empty.setOnClickListener { v ->
-            val emptyClickListener = Album.instance.albumEmptyClickListener
-            if (emptyClickListener != null) {
-                if (emptyClickListener.onAlbumClick(v)) {
-                    startCamera()
-                }
+            if (Album.instance.albumEmptyClickListener?.onAlbumClick(v) == true) {
+                startCamera()
             }
         }
-
         finderList = ArrayList()
-        albumScan = AlbumScanImpl.newInstance(this, albumBundle.scanType, albumBundle.scanCount, albumBundle.allName, albumBundle.sdName)
+        albumScan = AlbumScanImpl.newInstance(this)
         album_recyclerView.setHasFixedSize(true)
         val gridLayoutManager = GridLayoutManager(mActivity, albumBundle.spanCount)
         album_recyclerView.layoutManager = gridLayoutManager
@@ -214,7 +211,7 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
         album_empty.hide()
-        if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera && page == 0 && !albumEntityList.isEmpty()) {
+        if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera && page == 0 && albumEntityList.isNotEmpty()) {
             albumEntityList.add(0, AlbumEntity(path = CAMERA))
         }
         albumAdapter.addAll(albumEntityList)
@@ -222,6 +219,8 @@ class AlbumFragment : AlbumBaseFragment(),
     }
 
     override fun scanFinderSuccess(list: ArrayList<AlbumEntity>) {
+        list.find { it.bucketDisplayName == "0" }?.bucketDisplayName = albumBundle.sdName
+        list.find { it.parent == AlbumScan.ALL_PARENT }?.bucketDisplayName = albumBundle.allName
         finderList.clear()
         finderList.addAll(list)
     }
@@ -242,10 +241,6 @@ class AlbumFragment : AlbumBaseFragment(),
             albumAdapter.albumList.add(1, albumEntity)
             albumAdapter.notifyDataSetChanged()
         }
-    }
-
-    override fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
-        albumParentListener?.onChangedCheckBoxCount(view, currentMaxCount, albumEntity)
     }
 
     override fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
@@ -304,7 +299,7 @@ class AlbumFragment : AlbumBaseFragment(),
             return
         }
         // 如果 albumList 为空则是没有图片拍照的第一张图片,这时直接扫描整个图库即可
-        if (result && !albumAdapter.albumList.isEmpty()) {
+        if (result && albumAdapter.albumList.isNotEmpty()) {
             albumScan.scanResult(imagePath.path.orEmpty())
             return
         }
@@ -350,7 +345,7 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun refreshMedia(type: Int, path: String) {
         disconnectMediaScanner()
-        singleMediaScanner = AlbumSingleMediaScanner(mActivity, path, this@AlbumFragment, type)
+        singleMediaScanner = AlbumSingleMediaScanner.newInstance(mActivity, path, type, this@AlbumFragment)
     }
 
     override fun getSelectEntity(): ArrayList<AlbumEntity> = albumAdapter.multipleList
@@ -468,6 +463,10 @@ class AlbumFragment : AlbumBaseFragment(),
             album_progress.hide()
         }
     }
+
+    override fun currentScanType(): Int = albumBundle.scanType
+
+    override fun getScanCount(): Int = albumBundle.scanCount
 
     override fun getAlbumContext(): FragmentActivity = mActivity
 

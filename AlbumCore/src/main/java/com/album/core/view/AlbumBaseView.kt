@@ -28,4 +28,10 @@ interface AlbumBaseView {
      * 显示进度条
      */
     fun showProgress()
+
+    /**
+     * 当前扫描类型
+     * []
+     */
+    fun currentScanType(): Int
 }

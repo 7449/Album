@@ -4,29 +4,30 @@ import android.os.Bundle
 import androidx.loader.app.LoaderManager
 import com.album.core.scan.task.AlbumScanFileTask
 import com.album.core.view.AlbumPreViewView
+import com.album.core.view.AlbumPreViewViewKt
 
 /**
  * @author y
  * @create 2019/2/27
  * 预览扫描工具类
  */
-class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
-                           private val selectEntity: ArrayList<AlbumEntity>,
-                           allEntity: ArrayList<AlbumEntity>?,
-                           parent: Long,
-                           scanType: Int) {
+
+class AlbumScanPreviewImpl private constructor(private val prevView: AlbumPreViewView) {
 
     companion object {
-        fun newInstance(
-                prevView: AlbumPreViewView,
-                selectEntity: ArrayList<AlbumEntity>,
-                allEntity: ArrayList<AlbumEntity>?,
-                parent: Long,
-                scanType: Int
-        ) = AlbumScanPreviewImpl(prevView, selectEntity, allEntity, parent, scanType)
+        @JvmStatic
+        fun newInstance(prevView: AlbumPreViewView) = AlbumScanPreviewImpl(prevView)
+
+        fun newInstance(albumPreViewViewKt: AlbumPreViewViewKt.() -> Unit) = newInstance(AlbumPreViewViewKt().also(albumPreViewViewKt).build())
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(prevView.getAlbumContext())
+
+    private val allEntity = prevView.getAllEntity()
+
+    private val selectEntity = prevView.getSelectEntity()
+
+    private val parent = prevView.getParent()
 
     init {
         if (allEntity != null) {
@@ -38,9 +39,10 @@ class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
             loaderManager.initLoader(AlbumScan.PREVIEW_LOADER_ID,
                     Bundle().apply {
                         putLong(AlbumColumns.PARENT, parent)
-                        putInt(AlbumColumns.SCAN_TYPE, scanType)
+                        putInt(AlbumColumns.COUNT, SCAN_ALL)
+                        putInt(AlbumColumns.SCAN_TYPE, prevView.currentScanType())
                     },
-                    AlbumScanFileTask(prevView.getAlbumContext(), SCAN_ALL) {
+                    AlbumScanFileTask.newInstance(prevView.getAlbumContext()) {
                         prevView.hideProgress()
                         prevView.scanSuccess(mergeEntity(it, selectEntity))
                         destroyLoaderManager()
@@ -49,7 +51,7 @@ class AlbumScanPreviewImpl(private val prevView: AlbumPreViewView,
     }
 
     private fun mergeEntity(albumEntityList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>): ArrayList<AlbumEntity> {
-        selectEntity.forEach { select -> albumEntityList.filter { it.path == select.path }.forEach { it.isCheck = true } }
+        selectEntity.forEach { select -> albumEntityList.find { it.path == select.path }?.isCheck = true }
         return albumEntityList
     }
 

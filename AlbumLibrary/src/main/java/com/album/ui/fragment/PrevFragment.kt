@@ -18,12 +18,13 @@ import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumPreViewView
 import com.album.listener.AlbumPreviewParentListener
 import com.album.ui.adapter.AlbumPrevAdapter
+import com.album.ui.OnAlbumPrevItemClickListener
 import kotlinx.android.synthetic.main.album_fragment_preview.*
 
 /**
  *  @author y
  */
-class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnAlbumPrevItemClickListener {
+class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClickListener {
 
     companion object {
         /**
@@ -100,7 +101,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
         selectList.addAll(savedInstanceState?.getParcelableArrayList(TYPE_PREVIEW_STATE_SELECT_ALL)
                 ?: bundle.getParcelableArrayList(TYPE_PREVIEW_KEY) ?: ArrayList())
 
-        if (!selectList.isEmpty()) {
+        if (selectList.isNotEmpty()) {
             adapter.multipleList = selectList
         }
 
@@ -132,7 +133,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
     }
 
     private fun initPreview() {
-        presenterPreview = AlbumScanPreviewImpl.newInstance(this, adapter.multipleList, if (parent == AlbumScan.PREV_PARENT || !adapter.albumList.isEmpty()) adapter.albumList else null, parent, albumBundle.scanType)
+        presenterPreview = AlbumScanPreviewImpl.newInstance(this)
     }
 
     override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
@@ -210,15 +211,21 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, AlbumPrevAdapter.OnA
     override fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity) {
     }
 
-    fun getSelectEntity(): ArrayList<AlbumEntity> = adapter.multipleList
+    override fun getSelectEntity(): ArrayList<AlbumEntity> = adapter.multipleList
 
     fun getCurrentEntity(): AlbumEntity = adapter.albumList[currentPosition]
+
+    override fun getParent(): Long = parent
+
+    override fun currentScanType(): Int = albumBundle.scanType
 
     fun getAlbumList(): ArrayList<AlbumEntity> = adapter.albumList
 
     fun setCurrentItem(position: Int) {
         preview_viewPager.setCurrentItem(position, false)
     }
+
+    override fun getAllEntity(): ArrayList<AlbumEntity>? = if (parent == AlbumScan.PREV_PARENT || adapter.albumList.isNotEmpty()) adapter.albumList else null
 
     override fun getAlbumContext(): FragmentActivity = mActivity
 

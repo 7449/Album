@@ -103,6 +103,31 @@ class Album {
     companion object {
         @JvmStatic
         val instance by lazy { Album() }
+
+        @JvmStatic
+        fun destroy() = instance.apply {
+            options = null
+            albumListener = null
+            customCameraListener = null
+            albumEmptyClickListener = null
+            albumImageLoader = null
+            initList = null
+        }
+
+        @JvmStatic
+        fun listenerDestroy() = instance.apply {
+            albumListener = null
+            customCameraListener = null
+            albumEmptyClickListener = null
+        }
+
+        @JvmStatic
+        fun removeInitList() = instance.initList?.clear()
+
+        @JvmStatic
+        fun imageLoaderDestroy() = instance.apply {
+            albumImageLoader = null
+        }
     }
 
     var options: UCrop.Options? = null

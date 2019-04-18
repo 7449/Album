@@ -34,7 +34,9 @@ dependencies {
     implementation(name: 'CameraViewLibrary', ext: 'aar')
 
 
-    implementation "com.ydevelop:album.ui:$albumUIVersion"
+//    implementation "com.ydevelop:album.ui:$albumUIVersion"
+    implementation project(':AlbumLibrary')
+    implementation project(':UI')
     implementation project(':UIWeChat')
     implementation project(':UIDialog')
 

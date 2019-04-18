@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @author y
  * @create 2019/2/27
  */
-class LoadMoreRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RecyclerView(context, attrs, defStyleAttr) {
+internal class LoadMoreRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RecyclerView(context, attrs, defStyleAttr) {
 
     private var lastVisibleItemPosition: Int = 0
     private lateinit var loadingListener: LoadMoreListener
@@ -28,7 +28,7 @@ class LoadMoreRecyclerView @JvmOverloads constructor(context: Context, attrs: At
         super.onScrollStateChanged(state)
         val visibleItemCount = layoutManager?.childCount ?: 0
         val totalItemCount = layoutManager?.itemCount ?: 0
-        if (visibleItemCount > 0 && state == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition == totalItemCount - 1) {
+        if (visibleItemCount > 0 && state == SCROLL_STATE_IDLE && lastVisibleItemPosition == totalItemCount - 1) {
             loadingListener.onLoadMore()
         }
     }

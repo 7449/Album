@@ -14,12 +14,14 @@ import com.album.core.scan.AlbumScan.ALL_PARENT
  * @author y
  * @create 2019/3/4
  */
-class AlbumScanFinderTask(
-        private val activity: Context,
-        private val allName: String,
-        private val sdName: String,
-        private val loaderSuccess: (ArrayList<AlbumEntity>) -> Unit
-) : LoaderManager.LoaderCallbacks<Cursor> {
+class AlbumScanFinderTask private constructor(private val activity: Context, private val loaderSuccess: (ArrayList<AlbumEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
+
+    companion object {
+        @JvmStatic
+        fun newInstance(activity: Context, loaderSuccess: (ArrayList<AlbumEntity>) -> Unit): AlbumScanFinderTask {
+            return AlbumScanFinderTask(activity, loaderSuccess)
+        }
+    }
 
     private val finderEntity = ArrayList<AlbumEntity>()
 
@@ -71,12 +73,12 @@ class AlbumScanFinderTask(
             val height = cursor.getInt(heightColumnIndex)
             val dataModified = cursor.getLong(dateModifiedColumnIndex)
             maxCount += count
-            finderEntity.add(AlbumEntity(id, path, size, duration, parent, mimeType, displayName, orientation, bucketId, if (bucketDisplayName == "0") sdName else bucketDisplayName, mediaType, width, height, dataModified, count, false))
+            finderEntity.add(AlbumEntity(id, path, size, duration, parent, mimeType, displayName, orientation, bucketId, bucketDisplayName, mediaType, width, height, dataModified, count, false))
         }
 
-        if (!finderEntity.isEmpty()) {
+        if (finderEntity.isNotEmpty()) {
             val first = finderEntity.first()
-            finderEntity.add(0, AlbumEntity(parent = ALL_PARENT, duration = first.duration, path = first.path, bucketDisplayName = allName, mediaType = first.mediaType, mimeType = first.mimeType, id = first.id, count = maxCount))
+            finderEntity.add(0, AlbumEntity(parent = ALL_PARENT, duration = first.duration, path = first.path, mediaType = first.mediaType, mimeType = first.mimeType, id = first.id, count = maxCount))
         }
 
         loaderSuccess(finderEntity)

@@ -231,6 +231,6 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Album.instance.destroy()
+        Album.destroy()
     }
 }

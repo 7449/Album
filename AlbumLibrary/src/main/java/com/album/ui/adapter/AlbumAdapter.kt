@@ -19,6 +19,7 @@ import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
 import com.album.core.show
 import com.album.listener.AlbumParentListener
+import com.album.ui.OnAlbumItemClickListener
 
 /**
  *   @author y
@@ -49,14 +50,11 @@ class AlbumAdapter(
             notifyDataSetChanged()
         }
 
-    /**
-     * item 的 layoutParams,为正方形
-     */
     private val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(display, display)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            AlbumAdapter.TYPE_CAMERA -> {
+            TYPE_CAMERA -> {
                 val cameraView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album_camera, parent, false)
                 val cameraViewHolder = CameraViewHolder(cameraView, albumBundle)
                 cameraView.setOnClickListener { v -> onAlbumItemClickListener.onCameraItemClick(v, cameraViewHolder.adapterPosition, albumList[cameraViewHolder.adapterPosition]) }
@@ -64,7 +62,7 @@ class AlbumAdapter(
             }
             else -> {
                 val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, albumParentListener, onAlbumItemClickListener)
+                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, albumParentListener)
                 photoView.setOnClickListener { v -> onAlbumItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, albumList[photoViewHolder.adapterPosition]) }
                 photoViewHolder
             }
@@ -72,16 +70,10 @@ class AlbumAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-        val albumEntity = albumList[position]
-
         if (holder is CameraViewHolder) {
-
             holder.camera()
-
         } else if (holder is PhotoViewHolder) {
-
-            holder.photo(position, albumEntity, multipleList)
+            holder.photo(position, albumList[position], multipleList)
         }
     }
 
@@ -89,34 +81,21 @@ class AlbumAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when {
-            albumList.isEmpty() -> AlbumAdapter.TYPE_PHOTO
-            albumList[position].path == CAMERA -> AlbumAdapter.TYPE_CAMERA
-            else -> AlbumAdapter.TYPE_PHOTO
+            albumList.isEmpty() -> TYPE_PHOTO
+            albumList[position].path == CAMERA -> TYPE_CAMERA
+            else -> TYPE_PHOTO
         }
     }
 
-    /**
-     * 添加新数据
-     */
     fun addAll(newList: ArrayList<AlbumEntity>) {
         albumList.addAll(newList)
         notifyDataSetChanged()
     }
 
-    /**
-     * 清除所有数据
-     */
     fun removeAll() {
         albumList.clear()
         notifyDataSetChanged()
     }
-
-    interface OnAlbumItemClickListener {
-        fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
-        fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity)
-        fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity)
-    }
-
 
     class CameraViewHolder(itemView: View, private val albumBundle: AlbumBundle) : RecyclerView.ViewHolder(itemView) {
 
@@ -139,8 +118,7 @@ class AlbumAdapter(
                           private val albumBundle: AlbumBundle,
                           private val display: Int,
                           private val layoutParams: ViewGroup.LayoutParams,
-                          private val albumParentListener: AlbumParentListener?,
-                          private val onAlbumItemClickListener: OnAlbumItemClickListener) : RecyclerView.ViewHolder(itemView) {
+                          private val albumParentListener: AlbumParentListener?) : RecyclerView.ViewHolder(itemView) {
 
         private val container: FrameLayout = itemView.findViewById(R.id.album_container)
         private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
@@ -149,29 +127,25 @@ class AlbumAdapter(
             val imageView = Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, container)
             imageView?.let { container.addView(it, layoutParams) }
             container.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.photoBackgroundColor))
-
             if (albumBundle.radio) {
                 return
             }
-
             checkBox.show()
             checkBox.isChecked = albumEntity.isCheck
             checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
-            checkBox.setOnClickListener(View.OnClickListener {
-
+            checkBox.setOnClickListener {
                 if (albumParentListener?.onAlbumCheckBoxFilter(itemView, position, albumEntity) == true) {
-                    return@OnClickListener
+                    return@setOnClickListener
                 }
-
                 if (!albumEntity.path.fileExists()) {
                     checkBox.isChecked = false
                     Album.instance.albumListener?.onAlbumCheckFileNotExist()
-                    return@OnClickListener
+                    return@setOnClickListener
                 }
                 if (!multipleList.contains(albumEntity) && multipleList.size >= albumBundle.multipleMaxCount) {
                     checkBox.isChecked = false
                     Album.instance.albumListener?.onAlbumMaxCount()
-                    return@OnClickListener
+                    return@setOnClickListener
                 }
                 if (!albumEntity.isCheck) {
                     albumEntity.isCheck = true
@@ -180,9 +154,9 @@ class AlbumAdapter(
                     multipleList.remove(albumEntity)
                     albumEntity.isCheck = false
                 }
-                onAlbumItemClickListener.onItemCheckBoxClick(itemView, multipleList.size, albumEntity)
+                albumParentListener?.onChangedCheckBoxCount(itemView, multipleList.size, albumEntity)
                 Album.instance.albumListener?.onAlbumCheckBox(multipleList.size, albumBundle.multipleMaxCount)
-            })
+            }
         }
     }
 }

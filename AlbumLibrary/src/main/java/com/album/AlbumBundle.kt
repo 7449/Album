@@ -31,11 +31,6 @@ class AlbumBundle(
          */
         var cameraCrop: Boolean = false,
         /**
-         * 权限被拒之后是否销毁
-         * 如果依赖的Dialog默认即可
-         */
-        var permissionsDeniedFinish: Boolean = false,
-        /**
          * 多选最多数
          */
         var multipleMaxCount: Int = 9,
@@ -59,21 +54,6 @@ class AlbumBundle(
          * 全部图片
          */
         var allName: String = FINDER_ALL_DIR_NAME,
-        /**
-         * 裁剪异常是否退出
-         * 如果依赖的Dialog则设置为false
-         */
-        var cropErrorFinish: Boolean = true,
-        /**
-         * 选择图片之后是否退出
-         * 如果依赖的Dialog则设置为false
-         */
-        var selectImageFinish: Boolean = true,
-        /**
-         * 裁剪之后是否退出
-         * 如果依赖的Dialog则设置为false
-         */
-        var cropFinish: Boolean = true,
         /**
          * 是否预览
          */
@@ -133,6 +113,26 @@ class AlbumBundle(
         /**
          * 没有图片显示的图片背景色
          */
-        var photoEmptyDrawableColor: Int = R.color.colorAlbumContentEmptyDrawableColor
+        var photoEmptyDrawableColor: Int = R.color.colorAlbumContentEmptyDrawableColor,
+        /**
+         * 权限被拒之后是否销毁
+         * 如果依赖的Dialog默认即可
+         */
+        var permissionsDeniedFinish: Boolean = false,
+        /**
+         * 裁剪异常是否退出
+         * 如果依赖的Dialog则设置为false
+         */
+        var cropErrorFinish: Boolean = true,
+        /**
+         * 选择图片之后是否退出
+         * 如果依赖的Dialog则设置为false
+         */
+        var selectImageFinish: Boolean = true,
+        /**
+         * 裁剪之后是否退出
+         * 如果依赖的Dialog则设置为false
+         */
+        var cropFinish: Boolean = true
 ) : Parcelable
 

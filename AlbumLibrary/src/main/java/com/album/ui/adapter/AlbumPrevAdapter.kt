@@ -10,15 +10,13 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.R
 import com.album.core.scan.AlbumEntity
+import com.album.ui.OnAlbumPrevItemClickListener
 
 /**
  * @author y
  * @create 2019/3/7
  */
-class AlbumPrevAdapter(
-        private val albumBundle: AlbumBundle,
-        private val onAlbumPrevItemClickListener: OnAlbumPrevItemClickListener
-) : RecyclerView.Adapter<AlbumPrevAdapter.PhotoViewHolder>() {
+class AlbumPrevAdapter(private val albumBundle: AlbumBundle, private val onAlbumPrevItemClickListener: OnAlbumPrevItemClickListener) : RecyclerView.Adapter<AlbumPrevAdapter.PhotoViewHolder>() {
 
     /**
      * 图片数据
@@ -42,37 +40,23 @@ class AlbumPrevAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        val albumEntity = albumList[position]
-        holder.photo(albumEntity, multipleList)
+        holder.photo(albumList[position], multipleList)
     }
 
     override fun getItemCount(): Int = albumList.size
 
-    /**
-     * 添加新数据
-     */
     fun addAll(newList: ArrayList<AlbumEntity>) {
         albumList.addAll(newList)
         notifyDataSetChanged()
     }
 
-    /**
-     * 清除数据
-     */
     fun removeAll() {
         albumList.clear()
         notifyDataSetChanged()
     }
 
-    interface OnAlbumPrevItemClickListener {
-        fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
-        fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity)
-    }
-
-    class PhotoViewHolder(itemView: View,
-                          private val albumBundle: AlbumBundle,
-                          private val onAlbumPrevItemClickListener: OnAlbumPrevItemClickListener)
-        : RecyclerView.ViewHolder(itemView) {
+    @Suppress("unused", "UNUSED_PARAMETER")
+    class PhotoViewHolder(itemView: View, private val albumBundle: AlbumBundle, private val onAlbumPrevItemClickListener: OnAlbumPrevItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         private val container: FrameLayout = itemView.findViewById(R.id.album_prev_container)
 //        private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_prev_check_box)

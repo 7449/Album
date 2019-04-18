@@ -14,11 +14,14 @@ import com.album.core.scan.*
  *
  * 文件扫描
  */
-class AlbumScanFileTask(
-        private val activity: Context,
-        private val scanCount: Int,
-        private val loaderSuccess: (ArrayList<AlbumEntity>) -> Unit
-) : LoaderManager.LoaderCallbacks<Cursor> {
+class AlbumScanFileTask private constructor(private val activity: Context, private val loaderSuccess: (ArrayList<AlbumEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
+
+    companion object {
+        @JvmStatic
+        fun newInstance(activity: Context, loaderSuccess: (ArrayList<AlbumEntity>) -> Unit): AlbumScanFileTask {
+            return AlbumScanFileTask(activity, loaderSuccess)
+        }
+    }
 
     private val albumList = ArrayList<AlbumEntity>()
 
@@ -28,6 +31,7 @@ class AlbumScanFileTask(
 
         val page = args?.getInt(AlbumColumns.PAGE) ?: 0
         val parent = args?.getLong(AlbumColumns.PARENT) ?: 0
+        val count = args?.getInt(AlbumColumns.COUNT) ?: 0
         val path = args?.getString(AlbumColumns.DATA) ?: ""
         val scanType = args?.getInt(AlbumColumns.SCAN_TYPE) ?: AlbumScan.IMAGE
 
@@ -41,7 +45,7 @@ class AlbumScanFileTask(
                 ALBUM_ALL_COLUMNS,
                 selection,
                 ALBUM_SELECTION_ARGS(scanType),
-                if (scanCount == SCAN_ALL) ALBUM_ORDER_BY else ALBUM_ORDER_BY_LIMIT(page, scanCount))
+                if (count == SCAN_ALL) ALBUM_ORDER_BY else ALBUM_ORDER_BY_LIMIT(page, count))
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {

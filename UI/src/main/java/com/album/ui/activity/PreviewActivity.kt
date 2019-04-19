@@ -27,7 +27,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
 
     companion object {
         @JvmStatic
-        fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, fragment: AlbumFragment) {
+        fun newInstance(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, fragment: AlbumFragment) {
             val bundle = Bundle().apply {
                 putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
                 putInt(TYPE_PREVIEW_POSITION_KEY, position)
@@ -57,9 +57,8 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
 
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
+
         albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
-        uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
         uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
 
         preview_bottom_view.setBackgroundColor(ContextCompat.getColor(this, uiBundle.previewBottomViewBackground))
@@ -79,7 +78,6 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
         if (hasL()) {
             preview_toolbar.elevation = uiBundle.toolbarElevation
         }
-
         val supportFragmentManager = supportFragmentManager
         val fragment = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)
         if (fragment != null) {
@@ -89,7 +87,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
             prevFragment = PrevFragment.newInstance(intent.extras.orEmpty())
             supportFragmentManager
                     .beginTransaction()
-                    .apply { add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName) }
+                    .add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
         }
         prevFragment.albumParentListener = this

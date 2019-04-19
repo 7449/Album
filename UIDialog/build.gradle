@@ -24,6 +24,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.github.yalantis:ucrop:$ucropVersion"
-//    implementation "com.ydevelop:album:$albumLibraryVersion"
-    compileOnly project(':AlbumLibrary')
+    implementation "com.ydevelop:album:$albumLibraryVersion"
 }

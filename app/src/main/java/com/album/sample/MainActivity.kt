@@ -28,10 +28,10 @@ import com.album.listener.SimpleAlbumImageLoader
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.*
 import com.album.ui.AlbumUiBundle
-import com.album.ui.activity.AlbumActivity
 import com.album.ui.dialog.dialog
 import com.album.ui.ui
 import com.album.ui.wechat.activity.AlbumWeChatUiActivity
+import com.album.ui.wechat.activity.weChatUI
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropFragment
 import com.yalantis.ucrop.UCropFragmentCallback
@@ -83,11 +83,14 @@ fun MainActivity.dayAlbum() {
         initList = list
         options = dayOptions
         albumEmptyClickListener = { true }
+        customCameraListener = {
+
+        }
     }.ui(this,
             AlbumBundle(scanCount = 200,
+                    allName = "..",
                     scanType = AlbumScan.IMAGE,
-                    checkBoxDrawable = R.drawable.simple_selector_album_item_check),
-            AlbumActivity::class.java)
+                    checkBoxDrawable = R.drawable.simple_selector_album_item_check))
 }
 
 fun MainActivity.nightAlbum() {
@@ -103,7 +106,7 @@ fun MainActivity.nightAlbum() {
                 it.startActivityForResult(intent, CUSTOMIZE_CAMERA_REQUEST_CODE)
             }
         }
-    }.ui(this, NightAlbumBundle(), NightAlbumUIBundle(), AlbumActivity::class.java)
+    }.ui(this, NightAlbumBundle(), NightAlbumUIBundle())
 }
 
 fun MainActivity.dialog() {
@@ -125,15 +128,14 @@ fun MainActivity.video() {
     }.ui(this, AlbumBundle(
             scanType = AlbumScan.VIDEO,
             cameraText = R.string.video_tips),
-            AlbumUiBundle(toolbarText = R.string.album_video_title),
-            AlbumActivity::class.java)
+            AlbumUiBundle(toolbarText = R.string.album_video_title))
 }
 
 fun MainActivity.wechat() {
     Album.instance.apply {
         albumImageLoader = SimpleAlbumWeChatImageLoader()
         albumListener = MainAlbumListener(applicationContext, null)
-    }.ui(this,
+    }.weChatUI(this,
             AlbumBundle(
                     scanType = AlbumScan.MIXING,
                     spanCount = 4,
@@ -151,7 +153,7 @@ fun MainActivity.startCamera() {
 }
 
 fun MainActivity.imageLoader(imageLoader: AlbumImageLoader) {
-    Album.instance.apply { albumImageLoader = imageLoader }.ui(this, AlbumActivity::class.java)
+    Album.instance.apply { albumImageLoader = imageLoader }.ui(this)
 }
 
 class SimpleSingleScannerListener : AlbumSingleMediaScanner.SingleScannerListener {

@@ -16,10 +16,16 @@ import com.album.ui.R
 /**
  *   @author y
  */
-class FinderAdapter(private val list: ArrayList<AlbumEntity>, private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
+class FinderAdapter(private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
+
+    var list: ArrayList<AlbumEntity> = ArrayList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val finderEntity = getFinder(position)
+        val finderEntity = getItem(position)
         val viewHolder: ViewHolder
         if (convertView == null) {
             viewHolder = ViewHolder()
@@ -36,16 +42,9 @@ class FinderAdapter(private val list: ArrayList<AlbumEntity>, private val albumU
         return viewHolder.convertView
     }
 
-    override fun getItem(position: Int): Any = list[position]
+    override fun getItem(position: Int): AlbumEntity = list[position]
     override fun getItemId(position: Int): Long = position.toLong()
     override fun getCount(): Int = list.size
-    fun getFinder(position: Int): AlbumEntity = list[position]
-    fun refreshData(finderEntity: List<AlbumEntity>) {
-        list.clear()
-        list.addAll(finderEntity)
-        notifyDataSetChanged()
-    }
-
     private class ViewHolder {
         lateinit var convertView: View
         lateinit var frameLayout: FrameLayout

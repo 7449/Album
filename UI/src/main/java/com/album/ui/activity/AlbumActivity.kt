@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.widget.ListPopupWindow
@@ -51,6 +50,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
 
         window.settingStatusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor))
+        album_tv_finder_all.text = albumBundle.allName
         album_tv_preview.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
         album_tv_select.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
         album_toolbar.setTitle(albumUiBundle.toolbarText)
@@ -66,7 +66,6 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             Album.instance.albumListener?.onAlbumContainerFinish()
             finish()
         }
-
         initFragment()
         initBottomView()
         initFinderView()
@@ -82,14 +81,13 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             albumFragment = AlbumFragment.newInstance(albumBundle)
             supportFragmentManager
                     .beginTransaction()
-                    .apply { add(R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName) }
+                    .add(R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
         }
         albumFragment.albumParentListener = this
     }
 
     private fun initBottomView() {
-        album_tv_finder_all.text = if (TextUtils.isEmpty(albumFragment.finderName)) getString(R.string.album_all) else albumFragment.finderName
         album_bottom_view.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.bottomViewBackground))
         album_tv_finder_all.textSize = albumUiBundle.bottomFinderTextSize
         album_tv_finder_all.setTextColor(ContextCompat.getColor(this, albumUiBundle.bottomFinderTextColor))
@@ -118,7 +116,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         listPopupWindow.verticalOffset = albumUiBundle.listPopupVerticalOffset
         listPopupWindow.isModal = true
         listPopupWindow.setOnItemClickListener(this)
-        finderAdapter = FinderAdapter(ArrayList(), albumUiBundle)
+        finderAdapter = FinderAdapter(albumUiBundle)
         listPopupWindow.setAdapter(finderAdapter)
     }
 
@@ -139,7 +137,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             R.id.album_tv_finder_all -> {
                 val finderEntity = albumFragment.finderList
                 if (finderEntity.isNotEmpty()) {
-                    finderAdapter.refreshData(finderEntity)
+                    finderAdapter.list = finderEntity
                     listPopupWindow.show()
                     listPopupWindow.listView?.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.listPopupBackground))
                     return
@@ -150,7 +148,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     }
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val finder = finderAdapter.getFinder(position)
+        val finder = finderAdapter.getItem(position)
         if (finder.parent == albumFragment.parent) {
             listPopupWindow.dismiss()
             return
@@ -162,7 +160,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     }
 
     override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
-        PreviewActivity.start(albumBundle, albumUiBundle, multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent, albumFragment)
+        PreviewActivity.newInstance(albumBundle, albumUiBundle, multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent, albumFragment)
     }
 
     override fun onAlbumScreenChanged(currentMaxCount: Int) {

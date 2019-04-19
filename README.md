@@ -38,7 +38,7 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.
             .instance
             .apply {
             // album config
-            }.start(this)
+            }.ui(this)
             
 ## custom ui
 
@@ -57,11 +57,10 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.
      Album
         .instance
         .apply {
-            customCameraListener = object : AlbumCameraListener {
-                override fun startCamera(fragment: AlbumBaseFragment) {
-                }
+            customCameraListener = {
+
             }
-        }.start(this)
+        }.ui(this)
 
 
     finishCamera(SimpleCameraActivity.this, cameraFile.path);

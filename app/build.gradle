@@ -33,13 +33,9 @@ dependencies {
     implementation "com.github.chrisbanes:PhotoView:$photoViewVersion"
     implementation(name: 'CameraViewLibrary', ext: 'aar')
 
-
-//    implementation "com.ydevelop:album.ui:$albumUIVersion"
-    implementation project(':AlbumLibrary')
     implementation project(':UI')
     implementation project(':UIWeChat')
     implementation project(':UIDialog')
-
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

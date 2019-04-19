@@ -166,16 +166,10 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
     private fun hasShowPrevFragment() = ::prevFragment.isInitialized && prevFragment.isVisible
 
     private fun initPrevFragment(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
-        val bundle = Bundle().apply {
-            putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
-            putInt(TYPE_PREVIEW_POSITION_KEY, position)
-            putLong(TYPE_PREVIEW_PARENT, parent)
-            putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
-        }
         if (::prevFragment.isInitialized && !prevFragment.isRemoving) {
             childFragmentManager.beginTransaction().remove(prevFragment).commitAllowingStateLoss()
         }
-        prevFragment = PrevFragment.newInstance(bundle)
+        prevFragment = PrevFragment.newInstance(albumBundle, position, parent, multiplePreviewList)
         childFragmentManager.beginTransaction().apply { add(R.id.album_dialog_fragment, prevFragment, PrevFragment::class.java.simpleName) }.hide(albumFragment).commitAllowingStateLoss()
     }
 

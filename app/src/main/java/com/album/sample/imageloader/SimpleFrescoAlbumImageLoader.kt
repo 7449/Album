@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.FrameLayout
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumImageLoader
-import com.album.listener.DisplayView
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.view.SimpleDraweeView
@@ -29,7 +28,7 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         }
     }
 
-    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
         val simpleDraweeView = AlbumFrescoImageView(container)
         val uri = Uri.fromFile(File(albumEntity.path))
         val request = ImageRequestBuilder
@@ -47,10 +46,10 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         val hierarchy = simpleDraweeView.hierarchy
         hierarchy.actualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP
         simpleDraweeView.controller = controller
-        return DisplayView(container, simpleDraweeView)
+        return simpleDraweeView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
         val simpleDraweeView = AlbumFrescoImageView(container)
         val uri = Uri.fromFile(File(finderEntity.path))
         val request = ImageRequestBuilder
@@ -67,10 +66,10 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
         val hierarchy = simpleDraweeView.hierarchy
         hierarchy.actualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP
         simpleDraweeView.controller = controller
-        return DisplayView(container, simpleDraweeView)
+        return simpleDraweeView
     }
 
-    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
         val simpleDraweeView = AlbumFrescoImageView(container)
         simpleDraweeView.controller = Fresco.newDraweeControllerBuilder()
                 .setTapToRetryEnabled(true)
@@ -83,6 +82,6 @@ class SimpleFrescoAlbumImageLoader : AlbumImageLoader {
                 .setAutoPlayAnimations(true)
                 .setOldController(simpleDraweeView.controller)
                 .build()
-        return DisplayView(container, simpleDraweeView)
+        return simpleDraweeView
     }
 }

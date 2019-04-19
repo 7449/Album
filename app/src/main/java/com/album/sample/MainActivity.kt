@@ -23,10 +23,7 @@ import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumSingleMediaScanner
-import com.album.core.ui.AlbumBaseFragment
 import com.album.listener.AlbumImageLoader
-import com.album.listener.OnAlbumCustomCameraListener
-import com.album.listener.OnAlbumEmptyClickListener
 import com.album.listener.SimpleAlbumImageLoader
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.*
@@ -85,7 +82,7 @@ fun MainActivity.dayAlbum() {
         albumListener = MainAlbumListener(applicationContext, list)
         initList = list
         options = dayOptions
-        albumEmptyClickListener = SimpleOnAlbumEmptyClickListener()
+        albumEmptyClickListener = { true }
     }.ui(this,
             AlbumBundle(scanCount = 200,
                     scanType = AlbumScan.IMAGE,
@@ -98,15 +95,12 @@ fun MainActivity.nightAlbum() {
         albumListener = MainAlbumListener(applicationContext, null)
         options = nightOptions
         albumImageLoader = SimpleAlbumImageLoader()
-        albumEmptyClickListener = SimpleOnAlbumEmptyClickListener()
-        customCameraListener = object : OnAlbumCustomCameraListener {
-            override fun openCustomCamera(fragment: AlbumBaseFragment) {
-                if (fragment.permissionStorage() && fragment.permissionCamera()) {
-                    val activity = fragment.activity
-                    Toast.makeText(activity, "camera", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(activity, SimpleCameraActivity::class.java)
-                    fragment.startActivityForResult(intent, CUSTOMIZE_CAMERA_REQUEST_CODE)
-                }
+        albumEmptyClickListener = { true }
+        customCameraListener = {
+            if (it.permissionStorage() && it.permissionCamera()) {
+                Toast.makeText(it.activity, "camera", Toast.LENGTH_SHORT).show()
+                val intent = Intent(it.activity, SimpleCameraActivity::class.java)
+                it.startActivityForResult(intent, CUSTOMIZE_CAMERA_REQUEST_CODE)
             }
         }
     }.ui(this, NightAlbumBundle(), NightAlbumUIBundle(), AlbumActivity::class.java)
@@ -127,7 +121,7 @@ fun MainActivity.video() {
     Album.instance.apply {
         albumImageLoader = SimpleAlbumImageLoader()
         albumListener = MainAlbumListener(applicationContext, null)
-        albumEmptyClickListener = SimpleOnAlbumEmptyClickListener()
+        albumEmptyClickListener = { true }
     }.ui(this, AlbumBundle(
             scanType = AlbumScan.VIDEO,
             cameraText = R.string.video_tips),
@@ -158,10 +152,6 @@ fun MainActivity.startCamera() {
 
 fun MainActivity.imageLoader(imageLoader: AlbumImageLoader) {
     Album.instance.apply { albumImageLoader = imageLoader }.ui(this, AlbumActivity::class.java)
-}
-
-class SimpleOnAlbumEmptyClickListener : OnAlbumEmptyClickListener {
-    override fun onAlbumClick(view: View): Boolean = true
 }
 
 class SimpleSingleScannerListener : AlbumSingleMediaScanner.SingleScannerListener {

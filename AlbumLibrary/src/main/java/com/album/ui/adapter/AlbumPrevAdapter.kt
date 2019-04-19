@@ -10,6 +10,7 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.R
 import com.album.core.scan.AlbumEntity
+import com.album.listener.addChildView
 import com.album.ui.OnAlbumPrevItemClickListener
 
 /**
@@ -62,9 +63,7 @@ class AlbumPrevAdapter(private val albumBundle: AlbumBundle, private val onAlbum
 //        private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_prev_check_box)
 
         fun photo(albumEntity: AlbumEntity, multipleList: ArrayList<AlbumEntity>) {
-            val imageView = Album.instance.albumImageLoader?.displayAlbumPreview(albumEntity, container)
-            imageView?.let { container.addView(it) }
-
+            container.addChildView(Album.instance.albumImageLoader?.displayAlbumPreview(albumEntity, container))
             container.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.prevPhotoBackgroundColor))
 
 //            checkBox.isChecked = albumEntity.isCheck

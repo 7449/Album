@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.core.scan.AlbumEntity
+import com.album.listener.addChildView
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 
@@ -25,8 +26,7 @@ class FinderAdapter(private val list: ArrayList<AlbumEntity>, private val albumU
             viewHolder.convertView = LayoutInflater.from(parent.context).inflate(R.layout.album_item_finder, parent, false)
             viewHolder.frameLayout = viewHolder.convertView.findViewById(R.id.iv_album_finder_icon)
             viewHolder.appCompatTextView = viewHolder.convertView.findViewById(R.id.tv_album_finder_name)
-            val imageView = Album.instance.albumImageLoader?.displayAlbumThumbnails(finderEntity, viewHolder.frameLayout)
-            imageView?.let { viewHolder.frameLayout.addView(it) }
+            viewHolder.frameLayout.addChildView(Album.instance.albumImageLoader?.displayAlbumThumbnails(finderEntity, viewHolder.frameLayout))
             viewHolder.convertView.tag = viewHolder
         } else {
             viewHolder = convertView.tag as ViewHolder

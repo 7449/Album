@@ -6,9 +6,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumImageLoader
-import com.album.listener.AlbumImageView
-import com.album.listener.AlbumPhotoView
-import com.album.listener.DisplayView
+import com.album.listener.ImageView
+import com.album.listener.PhotoView
 import com.album.sample.R
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
@@ -31,24 +30,24 @@ class SimpleImageLoaderAlbumImageLoader : AlbumImageLoader {
             .build()
 
 
-    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View? {
-        val albumImageView = AlbumImageView(container)
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
+        val albumImageView = container.ImageView()
         albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
         ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, albumImageView, displayImageOptions, null)
-        return DisplayView(container, albumImageView)
+        return albumImageView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View? {
-        val albumImageView = AlbumImageView(container)
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
+        val albumImageView = container.ImageView()
         albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
         ImageLoader.getInstance().displayImage("file:///" + finderEntity.path, ImageViewAware(albumImageView), displayImageOptions, null, null, null)
-        return DisplayView(container, albumImageView)
+        return albumImageView
     }
 
-    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
-        val albumImageView = AlbumPhotoView(container)
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
+        val albumImageView = container.PhotoView()
         albumImageView.scaleType = ImageView.ScaleType.CENTER_CROP
         ImageLoader.getInstance().displayImage("file:///" + albumEntity.path, ImageViewAware(albumImageView), displayImageOptions, null, null, null)
-        return DisplayView(container, albumImageView)
+        return albumImageView
     }
 }

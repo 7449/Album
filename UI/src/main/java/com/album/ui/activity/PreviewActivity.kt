@@ -1,10 +1,10 @@
 package com.album.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.album.*
 import com.album.core.hasL
 import com.album.core.orEmpty
@@ -14,6 +14,7 @@ import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumPreviewParentListener
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
+import com.album.ui.fragment.AlbumFragment
 import com.album.ui.fragment.PrevFragment
 import kotlinx.android.synthetic.main.album_activity_preview.*
 
@@ -26,7 +27,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
 
     companion object {
         @JvmStatic
-        fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, fragment: Fragment) {
+        fun start(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, fragment: AlbumFragment) {
             val bundle = Bundle().apply {
                 putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
                 putInt(TYPE_PREVIEW_POSITION_KEY, position)
@@ -54,8 +55,11 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
         }
     }
 
+    @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
         albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
+        uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
         uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
 
         preview_bottom_view.setBackgroundColor(ContextCompat.getColor(this, uiBundle.previewBottomViewBackground))

@@ -17,8 +17,8 @@ import com.album.core.show
 import com.album.core.ui.AlbumBaseFragment
 import com.album.core.view.AlbumPreViewView
 import com.album.listener.AlbumPreviewParentListener
-import com.album.ui.adapter.AlbumPrevAdapter
 import com.album.ui.OnAlbumPrevItemClickListener
+import com.album.ui.adapter.AlbumPrevAdapter
 import kotlinx.android.synthetic.main.album_fragment_preview.*
 
 /**
@@ -27,6 +27,10 @@ import kotlinx.android.synthetic.main.album_fragment_preview.*
 class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClickListener {
 
     companion object {
+
+        @JvmStatic
+        fun newInstance(bundle: Bundle): PrevFragment = PrevFragment().apply { arguments = bundle }
+
         /**
          * 获取预览的fragment,参数里面应该包含
          * [EXTRA_ALBUM_OPTIONS] AlbumBundle
@@ -36,7 +40,13 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
          * 可参考自定义UI
          */
         @JvmStatic
-        fun newInstance(bundle: Bundle): PrevFragment = PrevFragment().apply { arguments = bundle }
+        fun newInstance(albumBundle: AlbumBundle, position: Int, parent: Long, previewList: ArrayList<AlbumEntity>) = newInstance(Bundle().apply {
+            putParcelableArrayList(TYPE_PREVIEW_KEY, previewList)
+            putInt(TYPE_PREVIEW_POSITION_KEY, position)
+            putLong(TYPE_PREVIEW_PARENT, parent)
+            putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
+        })
+
     }
 
     /**

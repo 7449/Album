@@ -25,7 +25,6 @@ interface OnAlbumItemClickListener {
 
 }
 
-
 internal interface AlbumMethodFragmentViewListener {
     /**
      * 断掉MediaScanner

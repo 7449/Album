@@ -1,10 +1,12 @@
 package com.album
 
+import android.view.View
 import com.album.core.scan.AlbumEntity
+import com.album.core.ui.AlbumBaseFragment
 import com.album.listener.AlbumImageLoader
-import com.album.listener.OnAlbumCustomCameraListener
-import com.album.listener.OnAlbumEmptyClickListener
 import com.album.listener.OnAlbumListener
+import com.album.listener.SimpleAlbumImageLoaderKt
+import com.album.listener.SimpleOnAlbumListenerKt
 import com.yalantis.ucrop.UCrop
 
 /**
@@ -107,11 +109,9 @@ class Album {
         @JvmStatic
         fun destroy() = instance.apply {
             options = null
-            albumListener = null
-            customCameraListener = null
-            albumEmptyClickListener = null
-            albumImageLoader = null
             initList = null
+            imageLoaderDestroy()
+            listenerDestroy()
         }
 
         @JvmStatic
@@ -133,8 +133,11 @@ class Album {
     var options: UCrop.Options? = null
     var albumImageLoader: AlbumImageLoader? = null
     var albumListener: OnAlbumListener? = null
-    var customCameraListener: OnAlbumCustomCameraListener? = null
-    var albumEmptyClickListener: OnAlbumEmptyClickListener? = null
+    var customCameraListener: ((fragment: AlbumBaseFragment) -> Unit)? = null
+    var albumEmptyClickListener: ((view: View) -> Boolean)? = null
     var initList: ArrayList<AlbumEntity>? = null
 }
 
+fun Album.albumListenerKt(albumListenerKt: SimpleOnAlbumListenerKt.() -> Unit) = apply { albumListener = SimpleOnAlbumListenerKt().also(albumListenerKt).build() }
+
+fun Album.albumImageLoaderKt(albumImageLoaderKt: SimpleAlbumImageLoaderKt.() -> Unit) = apply { albumImageLoader = SimpleAlbumImageLoaderKt().also(albumImageLoaderKt).build() }

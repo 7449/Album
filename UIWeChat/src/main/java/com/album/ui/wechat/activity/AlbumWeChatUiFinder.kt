@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.album.Album
 import com.album.core.orEmpty
 import com.album.core.scan.AlbumEntity
+import com.album.listener.addChildView
 import com.album.ui.wechat.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.album_wechat_ui_finder.*
@@ -52,7 +53,7 @@ class AlbumWeChatUiFinder : BottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val parcelableArrayList = arguments?.getParcelableArrayList<AlbumEntity>(AlbumWeChatUiFinder.OPTION)
+        val parcelableArrayList = arguments?.getParcelableArrayList<AlbumEntity>(OPTION)
                 ?: ArrayList()
         album_wechat_ui_finder_view.setHasFixedSize(true)
         album_wechat_ui_finder_view.layoutManager = LinearLayoutManager(mActivity)
@@ -69,8 +70,7 @@ class AlbumWeChatUiFinder : BottomSheetDialogFragment() {
             override fun onBindViewHolder(holder: FinderViewHolder, position: Int) {
                 val albumEntity = parcelableArrayList[position]
                 holder.appCompatTextView.text = String.format("%s(%s)", albumEntity.bucketDisplayName, albumEntity.count.toString())
-                val imageView = Album.instance.albumImageLoader?.displayAlbumThumbnails(albumEntity, holder.frameLayout)
-                imageView?.let { holder.frameLayout.addView(it) }
+                holder.frameLayout.addChildView(Album.instance.albumImageLoader?.displayAlbumThumbnails(albumEntity, holder.frameLayout))
             }
         }
     }

@@ -48,9 +48,6 @@ class AlbumFragment : AlbumBaseFragment(),
         LoadMoreRecyclerView.LoadMoreListener {
 
     companion object {
-        /**
-         * 获取图库fragment
-         */
         @JvmStatic
         fun newInstance(albumBundle: AlbumBundle) = AlbumFragment().apply {
             arguments = Bundle().apply { putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle) }
@@ -123,7 +120,7 @@ class AlbumFragment : AlbumBaseFragment(),
         drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumBundle.photoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
         album_empty.setImageDrawable(drawable)
         album_empty.setOnClickListener { v ->
-            if (Album.instance.albumEmptyClickListener?.onAlbumClick(v) == true) {
+            if (Album.instance.albumEmptyClickListener?.invoke(v) == true) {
                 startCamera()
             }
         }
@@ -333,7 +330,7 @@ class AlbumFragment : AlbumBaseFragment(),
     override fun startCamera() {
         val albumCameraListener = Album.instance.customCameraListener
         if (albumCameraListener != null) {
-            albumCameraListener.openCustomCamera(this)
+            albumCameraListener.invoke(this)
             return
         }
         imagePath = Uri.fromFile(mActivity.getCameraFile(albumBundle.cameraPath, albumBundle.scanType == VIDEO))

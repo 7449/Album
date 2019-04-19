@@ -10,9 +10,8 @@ import com.album.core.scan.hasGif
 import com.album.core.scan.hasVideo
 import com.album.core.show
 import com.album.listener.AlbumImageLoader
-import com.album.listener.AlbumImageView
-import com.album.listener.AlbumPhotoView
-import com.album.listener.DisplayView
+import com.album.listener.ImageView
+import com.album.listener.PhotoView
 import com.album.ui.wechat.activity.AlbumWeChatTouchImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -25,7 +24,7 @@ class SimpleAlbumWeChatImageLoader : AlbumImageLoader {
 
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_album_default_loading).error(R.drawable.ic_album_default_loading).centerCrop()
 
-    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View? {
+    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
         val imageView = AlbumWeChatTouchImageView(container)
         if (albumEntity.hasGif()) {
             imageView.gifTipView().show()
@@ -38,19 +37,19 @@ class SimpleAlbumWeChatImageLoader : AlbumImageLoader {
             imageView.videoTipView().hide()
         }
         Glide.with(container.context).load(albumEntity.path).apply(requestOptions.override(width, height).dontAnimate()).into(imageView.imageView())
-        return DisplayView(container, imageView)
+        return imageView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View? {
-        val imageView = AlbumImageView(container)
+    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
+        val imageView = container.ImageView()
         Glide.with(container.context).load(finderEntity.path).apply(requestOptions).into(imageView)
-        return DisplayView(container, imageView)
+        return imageView
     }
 
-    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View? {
-        val imageView = AlbumPhotoView(container)
+    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
+        val imageView = container.PhotoView()
         Glide.with(container.context).load(albumEntity.path).apply(requestOptions).into(imageView)
         imageView.setBackgroundColor(Color.BLACK)
-        return DisplayView(container, imageView)
+        return imageView
     }
 }

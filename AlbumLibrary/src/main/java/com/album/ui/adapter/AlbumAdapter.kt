@@ -19,6 +19,7 @@ import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
 import com.album.core.show
 import com.album.listener.AlbumParentListener
+import com.album.listener.addChildView
 import com.album.ui.OnAlbumItemClickListener
 
 /**
@@ -124,8 +125,7 @@ class AlbumAdapter(
         private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
 
         fun photo(position: Int, albumEntity: AlbumEntity, multipleList: ArrayList<AlbumEntity>) {
-            val imageView = Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, container)
-            imageView?.let { container.addView(it, layoutParams) }
+            container.addChildView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, container), layoutParams)
             container.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.photoBackgroundColor))
             if (albumBundle.radio) {
                 return

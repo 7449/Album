@@ -33,6 +33,7 @@ import java.io.File
 class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
     companion object {
+        @JvmStatic
         fun newInstance(albumBundle: AlbumBundle, uiBundle: AlbumDialogUiBundle): AlbumDialogFragment {
             val albumDialogFragment = AlbumDialogFragment()
             albumDialogFragment.arguments = Bundle().apply {

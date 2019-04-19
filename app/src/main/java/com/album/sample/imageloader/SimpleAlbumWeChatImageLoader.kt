@@ -25,7 +25,7 @@ class SimpleAlbumWeChatImageLoader : AlbumImageLoader {
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_album_default_loading).error(R.drawable.ic_album_default_loading).centerCrop()
 
     override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
-        val imageView = AlbumWeChatTouchImageView(container)
+        val imageView = container.AlbumWeChatTouchImageView()
         if (albumEntity.hasGif()) {
             imageView.gifTipView().show()
         } else {

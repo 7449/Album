@@ -30,12 +30,6 @@
             android:name="com.album.ui.activity.PreviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.album.ui.sample.SimplePreviewUI"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.album.ui.sample.SimpleAlbumUI"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
             android:name="com.album.ui.wechat.activity.AlbumWeChatUiActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity

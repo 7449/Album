@@ -30,7 +30,6 @@ import com.album.sample.imageloader.*
 import com.album.ui.AlbumUiBundle
 import com.album.ui.dialog.dialog
 import com.album.ui.ui
-import com.album.ui.wechat.activity.AlbumWeChatUiActivity
 import com.album.ui.wechat.activity.weChatUI
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropFragment
@@ -142,8 +141,7 @@ fun MainActivity.wechat() {
                     dividerWidth = 5,
                     photoBackgroundColor = R.color.colorAlbumContentEmptyDrawableColor,
                     hideCamera = true,
-                    checkBoxDrawable = R.drawable.simple_selector_wechat_item_check),
-            AlbumWeChatUiActivity::class.java)
+                    checkBoxDrawable = R.drawable.simple_selector_wechat_item_check))
 }
 
 fun MainActivity.startCamera() {

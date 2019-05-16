@@ -237,6 +237,7 @@ class AlbumFragment : AlbumBaseFragment(),
         } else {
             albumAdapter.albumList.add(1, albumEntity)
             albumAdapter.notifyDataSetChanged()
+            albumScan.refreshResultFinder(finderList, albumEntity)
         }
     }
 

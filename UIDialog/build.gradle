@@ -2,11 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-if (uploadType == dialogType) {
-    apply plugin: "guru.stefma.bintrayrelease"
-    apply from: '../gradle/UPLOAD.gradle'
-}
-
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {

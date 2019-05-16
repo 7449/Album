@@ -74,7 +74,7 @@ class SimpleAspectRatioFragment : DialogFragment() {
         }
 
         override fun getView(position: Int, view: View?, parent: ViewGroup): View? {
-            val holder: AspectRatioAdapter.ViewHolder
+            val holder: ViewHolder
             if (view == null) {
                 holder = ViewHolder()
                 holder.itemView = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)

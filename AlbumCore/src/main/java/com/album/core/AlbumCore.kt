@@ -20,6 +20,14 @@ import androidx.core.graphics.ColorUtils
  * @create 2019/2/27
  */
 
+inline fun <T> Iterable<T>.index(predicate: (T) -> Boolean): Int {
+    for ((index, item) in this.withIndex()) {
+        if (predicate(item))
+            return index
+    }
+    return -1
+}
+
 fun Context.px2dip(pxValue: Int): Int = (pxValue / resources.displayMetrics.density + 0.5f).toInt()
 
 fun Context.dip2px(dpValue: Int): Int = (dpValue * resources.displayMetrics.density + 0.5f).toInt()

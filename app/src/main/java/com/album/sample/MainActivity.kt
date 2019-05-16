@@ -82,9 +82,6 @@ fun MainActivity.dayAlbum() {
         initList = list
         options = dayOptions
         albumEmptyClickListener = { true }
-        customCameraListener = {
-
-        }
     }.ui(this,
             AlbumBundle(scanCount = 200,
                     allName = "..",

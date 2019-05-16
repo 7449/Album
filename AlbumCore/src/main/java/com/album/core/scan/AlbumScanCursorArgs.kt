@@ -51,34 +51,6 @@ internal fun ALBUM_PARENT_SELECTION(parent: Long) = AlbumColumns.PARENT + "=" + 
 internal fun ALBUM_PATH_SELECTION(path: String) = AlbumColumns.DATA + "=\"" + path + "\" and (" + ALBUM_ALL_SELECTION + ")"
 
 /**
- * 文件夹信息字段
- */
-internal val ALBUM_FINDER_ALL_COLUMNS = arrayOf(
-        "count(" + AlbumColumns.PARENT + ") AS " + AlbumColumns.COUNT,
-        AlbumColumns.DATA,
-        AlbumColumns.ID,
-        AlbumColumns.SIZE,
-        AlbumColumns.DURATION,
-        AlbumColumns.PARENT,
-        AlbumColumns.MIME_TYPE,
-        AlbumColumns.DISPLAY_NAME,
-        AlbumColumns.ORIENTATION,
-        AlbumColumns.BUCKET_ID,
-        AlbumColumns.BUCKET_DISPLAY_NAME,
-        AlbumColumns.MEDIA_TYPE,
-        AlbumColumns.WIDTH,
-        AlbumColumns.HEIGHT,
-        AlbumColumns.DATE_MODIFIED + "  FROM (SELECT *"
-)
-
-/**
- * 文件夹信息条件
- */
-internal const val ALBUM_FINDER_ALL_SELECTION = AlbumColumns.SIZE + " > 0 AND " +
-        AlbumColumns.MEDIA_TYPE + "=? or " +
-        AlbumColumns.MEDIA_TYPE + "=? )) GROUP BY (" + AlbumColumns.PARENT
-
-/**
  * 排序条件
  */
 internal const val ALBUM_ORDER_BY = AlbumColumns.DATE_MODIFIED + " DESC"

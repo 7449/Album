@@ -82,7 +82,6 @@ private fun openCamera(any: Any, cameraUri: Uri, video: Boolean): Int {
         } else {
             val contentValues = ContentValues(1)
             contentValues.put(MediaStore.Images.Media.DATA, cameraUri.path)
-            contentValues.put(MediaStore.Images.Media.MIME_TYPE, AlbumCamera.OPEN_CAMERA_REQUEST_CODE)
             val uri = it.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         }

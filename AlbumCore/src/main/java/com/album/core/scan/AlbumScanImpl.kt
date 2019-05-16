@@ -4,9 +4,10 @@ package com.album.core.scan
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.loader.app.LoaderManager
+import com.album.core.index
 import com.album.core.scan.task.AlbumScanFileTask
-import com.album.core.scan.task.AlbumScanFinderTask
 import com.album.core.view.AlbumView
 import com.album.core.view.AlbumViewKt
 
@@ -47,7 +48,9 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
             if (it.isEmpty()) {
                 albumView.onAlbumScanCallback(if (albumView.getPage() == 0) AlbumScan.SCAN_EMPTY else AlbumScan.SCAN_NO_MORE)
             } else {
-                refreshFinder()
+                if (parent == AlbumScan.ALL_PARENT) {
+                    refreshFinder(it)
+                }
                 mergeEntity(it, albumView.getSelectEntity())
                 albumView.scanSuccess(it)
             }
@@ -64,18 +67,77 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
                     putInt(AlbumColumns.COUNT, scanCount)
                 },
                 AlbumScanFileTask.newInstance(activity) {
-                    refreshFinder()
                     albumView.resultSuccess(if (it.isEmpty()) null else it[0])
                     destroyResultLoaderManager()
                 })
     }
 
-    private fun refreshFinder() {
-        loaderManager.restartLoader(AlbumScan.FINDER_LOADER_ID, Bundle().apply { putInt(AlbumColumns.SCAN_TYPE, scanType) },
-                AlbumScanFinderTask.newInstance(activity) {
-                    albumView.scanFinderSuccess(it)
-                    destroyFinderLoaderManager()
-                })
+    fun refreshResultFinder(list: ArrayList<AlbumEntity>, albumEntity: AlbumEntity) {
+        list.forEach {
+            if (it.parent == albumEntity.parent) {
+                it.id = albumEntity.id
+                it.path = albumEntity.path
+                it.size = albumEntity.size
+                it.duration = albumEntity.duration
+                it.mimeType = albumEntity.mimeType
+                it.displayName = albumEntity.displayName
+                it.orientation = albumEntity.orientation
+                it.bucketId = albumEntity.bucketId
+                it.bucketDisplayName = albumEntity.bucketDisplayName
+                it.mediaType = albumEntity.mediaType
+                it.width = albumEntity.width
+                it.height = albumEntity.height
+                it.dataModified = albumEntity.dataModified
+                it.count = it.count + 1
+            }
+        }
+        val allEntity = list.find { it.parent == AlbumScan.ALL_PARENT }
+        allEntity?.let {
+            it.count = it.count + 1
+            it.path = albumEntity.path
+            it.duration = albumEntity.duration
+            it.mediaType = albumEntity.mediaType
+            it.mimeType = albumEntity.mimeType
+            it.id = albumEntity.id
+        }
+    }
+
+    private fun refreshFinder(list: ArrayList<AlbumEntity>) {
+        if (list.isEmpty()) {
+            return
+        }
+        val finderList = ArrayList<AlbumEntity>()
+        list.forEach { item ->
+            if (finderList.index { it.parent == item.parent } == -1) {
+                finderList.add(AlbumEntity(
+                        item.id,
+                        item.path,
+                        item.size,
+                        item.duration,
+                        item.parent,
+                        item.mimeType,
+                        item.displayName,
+                        item.orientation,
+                        item.bucketId,
+                        item.bucketDisplayName,
+                        item.mediaType,
+                        item.width,
+                        item.height,
+                        item.dataModified,
+                        list.count { it.parent == item.parent },
+                        false))
+            }
+        }
+        val first = finderList.first()
+        finderList.add(0, AlbumEntity(
+                parent = AlbumScan.ALL_PARENT,
+                duration = first.duration,
+                path = first.path,
+                mediaType = first.mediaType,
+                mimeType = first.mimeType,
+                id = first.id,
+                count = list.size))
+        albumView.scanFinderSuccess(finderList)
     }
 
     fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
@@ -89,9 +151,5 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
 
     private fun destroyResultLoaderManager() {
         loaderManager.destroyLoader(AlbumScan.RESULT_LOADER_ID)
-    }
-
-    private fun destroyFinderLoaderManager() {
-        loaderManager.destroyLoader(AlbumScan.FINDER_LOADER_ID)
     }
 }

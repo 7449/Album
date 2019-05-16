@@ -1,11 +1,11 @@
 buildscript {
-    ext.kotlin_version = '1.3.30'
+    ext.kotlin_version = '1.3.31'
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -27,12 +27,12 @@ task clean(type: Delete) {
 ext {
     compileSdkVersion = 28
     minSdkVersion = 14
-    targetSdkVersion = 28
+    targetSdkVersion = 29
     projectVersionCode = 1
     projectVersionName = '1.0'
 
-    appcompatVersion = '1.1.0-alpha04'
-    viewpagerVersion = '1.0.0-alpha03'
+    appcompatVersion = '1.1.0-alpha05'
+    viewpagerVersion = '1.0.0-alpha04'
     materialVersion = '1.0.0'
 
     albumCoreVersion = getMavenVersion("$rootDir/AlbumCore")

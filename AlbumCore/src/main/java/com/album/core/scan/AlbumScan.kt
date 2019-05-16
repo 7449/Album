@@ -83,9 +83,5 @@ object AlbumScan {
      * 拍照刷新 LoaderManager id
      */
     internal const val RESULT_LOADER_ID = -113
-    /**
-     * 文件夹 LoaderManager id
-     */
-    internal const val FINDER_LOADER_ID = -114
 }
 

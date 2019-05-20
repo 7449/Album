@@ -1,12 +1,9 @@
-# Album
-android album
-
-Chinese : [wiki](https://github.com/7449/Album/wiki)
-
 ## version
 
 core:![](https://api.bintray.com/packages/ydevelop/maven/album.core/images/download.svg)
+
 library:![](https://api.bintray.com/packages/ydevelop/maven/album/images/download.svg)
+
 ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.svg)
 
 ## sample

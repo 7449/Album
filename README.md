@@ -17,7 +17,7 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.
 * 内存回收空指针异常
 
     这个问题一般不会出现,当用户进入图片选择界面时按`Home`返回桌面,长时间不使用导致系统回收,有一定可能会造成空指针
-    `kotlin`很好的避免的报错,但是会没有任何提示
+    `kotlin`很好的避免了报错,但是会没有任何提示
 
 既然目前的问题是单例引起的那么只需要去除掉单例即可
 
@@ -26,6 +26,9 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.
 如果需要后期维护建议在`onActivityResult`返回不同的状态码,然后利用`kotlin`的扩展属性自行扩展一个方法,直接使用即可,
 如果回调过多,可直接在方法中插入一个`callback`,简单处理回调即可
 
+#### 为什么回调不使用`rxbus`或者`eventbus`
+
+不想引入过多的库,如果只是简单的实现回调,没有必要
 
 #### Manifests.xml
 

@@ -11,15 +11,15 @@ object AlbumConst {
     const val TYPE_RESULT_CROP = 1
 }
 
-object AlbumInternalConst {
+internal object AlbumInternalConst {
     //相机type
     internal const val CAMERA = "Album:Camera"
     //横竖屏切换保存已选择数据 Key
-    const val TYPE_ALBUM_STATE_SELECT = "album:state_select"
+    internal const val TYPE_ALBUM_STATE_SELECT = "album:state_select"
     //横竖屏切换保存当前文件夹的parent Key
-    const val TYPE_ALBUM_STATE_PARENT = "album:state_parent"
+    internal const val TYPE_ALBUM_STATE_PARENT = "album:state_parent"
     //横竖屏切换保存当前文件夹名称 Key
-    const val TYPE_ALBUM_STATE_FINDER_NAME = "album:state_finder_name"
+    internal const val TYPE_ALBUM_STATE_FINDER_NAME = "album:state_finder_name"
     //横竖屏切换保存拍照图片路径 Key
-    const val TYPE_ALBUM_STATE_IMAGE_PATH = "album:state_image_path"
+    internal const val TYPE_ALBUM_STATE_IMAGE_PATH = "album:state_image_path"
 }

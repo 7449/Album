@@ -1,4 +1,4 @@
-package com.album.core.scan.task
+package com.album.core.scan
 
 import android.content.Context
 import android.database.Cursor
@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.album.core.scan.*
+import com.album.core.AlbumScan
 
 /**
  * @author y
@@ -29,9 +29,7 @@ class AlbumScanFileTask private constructor(private val activity: Context, priva
 
         val selection: String
 
-        val page = args?.getInt(AlbumColumns.PAGE) ?: 0
         val parent = args?.getLong(AlbumColumns.PARENT) ?: 0
-        val count = args?.getInt(AlbumColumns.COUNT) ?: 0
         val path = args?.getString(AlbumColumns.DATA) ?: ""
         val scanType = args?.getInt(AlbumColumns.SCAN_TYPE) ?: AlbumScan.IMAGE
 
@@ -45,7 +43,7 @@ class AlbumScanFileTask private constructor(private val activity: Context, priva
                 ALBUM_ALL_COLUMNS,
                 selection,
                 ALBUM_SELECTION_ARGS(scanType),
-                if (count == SCAN_ALL) ALBUM_ORDER_BY else ALBUM_ORDER_BY_LIMIT(page, count))
+                ALBUM_ORDER_BY)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {

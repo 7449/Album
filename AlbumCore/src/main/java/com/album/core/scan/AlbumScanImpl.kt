@@ -6,10 +6,10 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.loader.app.LoaderManager
+import com.album.core.AlbumScan
 import com.album.core.index
-import com.album.core.scan.task.AlbumScanFileTask
+import com.album.core.mergeEntity
 import com.album.core.view.AlbumView
-import com.album.core.view.AlbumViewKt
 
 /**
  * @author y
@@ -19,10 +19,9 @@ import com.album.core.view.AlbumViewKt
 class AlbumScanImpl private constructor(private val albumView: AlbumView) {
 
     companion object {
+        private const val ALBUM_LOADER_ID = 111
         @JvmStatic
         fun newInstance(albumView: AlbumView) = AlbumScanImpl(albumView)
-
-        fun newInstance(albumViewKt: AlbumViewKt.() -> Unit) = newInstance(AlbumViewKt().also(albumViewKt).build())
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(albumView.getAlbumContext())
@@ -31,103 +30,73 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
 
     private val scanType: Int = albumView.currentScanType()
 
-    private val scanCount: Int = albumView.getScanCount()
+    private var finderList = ArrayList<AlbumEntity>()
 
-    fun scanAll(parent: Long, page: Int) {
+    fun scanAll(parent: Long) {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        albumView.showProgress()
-        loaderManager.restartLoader(AlbumScan.ALBUM_LOADER_ID, Bundle().apply {
+        loaderManager.restartLoader(ALBUM_LOADER_ID, Bundle().apply {
             putLong(AlbumColumns.PARENT, parent)
-            putInt(AlbumColumns.PAGE, page)
-            putInt(AlbumColumns.COUNT, scanCount)
             putInt(AlbumColumns.SCAN_TYPE, scanType)
         }, AlbumScanFileTask.newInstance(activity) {
-            albumView.hideProgress()
-            if (it.isEmpty()) {
-                albumView.onAlbumScanCallback(if (albumView.getPage() == 0) AlbumScan.SCAN_EMPTY else AlbumScan.SCAN_NO_MORE)
-            } else {
-                if (parent == AlbumScan.ALL_PARENT) {
-                    refreshFinder(it)
-                }
-                mergeEntity(it, albumView.getSelectEntity())
-                albumView.scanSuccess(it)
+            if (parent == AlbumScan.ALL_PARENT && !it.isNullOrEmpty()) {
+                refreshFinder(it)
             }
-            destroyAlbumLoaderManager()
+            albumView.scanSuccess(it.mergeEntity(albumView.getSelectEntity()))
+            albumView.scanFinderSuccess(finderList)
+            loaderManager.destroyLoader(ALBUM_LOADER_ID)
         })
     }
 
     fun scanResult(path: String) {
-        loaderManager.restartLoader(
-                AlbumScan.RESULT_LOADER_ID,
-                Bundle().apply {
-                    putString(AlbumColumns.DATA, path)
-                    putInt(AlbumColumns.SCAN_TYPE, scanType)
-                    putInt(AlbumColumns.COUNT, scanCount)
-                },
-                AlbumScanFileTask.newInstance(activity) {
-                    albumView.resultSuccess(if (it.isEmpty()) null else it[0])
-                    destroyResultLoaderManager()
-                })
+        loaderManager.restartLoader(ALBUM_LOADER_ID, Bundle().apply {
+            putString(AlbumColumns.DATA, path)
+            putInt(AlbumColumns.SCAN_TYPE, scanType)
+        }, AlbumScanFileTask.newInstance(activity) {
+            albumView.resultSuccess(if (it.isEmpty()) null else it[0])
+            loaderManager.destroyLoader(ALBUM_LOADER_ID)
+        })
     }
 
-    fun refreshResultFinder(list: ArrayList<AlbumEntity>, albumEntity: AlbumEntity) {
-        list.forEach {
-            if (it.parent == albumEntity.parent) {
-                it.id = albumEntity.id
-                it.path = albumEntity.path
-                it.size = albumEntity.size
-                it.duration = albumEntity.duration
-                it.mimeType = albumEntity.mimeType
-                it.displayName = albumEntity.displayName
-                it.orientation = albumEntity.orientation
-                it.bucketId = albumEntity.bucketId
-                it.bucketDisplayName = albumEntity.bucketDisplayName
-                it.mediaType = albumEntity.mediaType
-                it.width = albumEntity.width
-                it.height = albumEntity.height
-                it.dataModified = albumEntity.dataModified
-                it.count = it.count + 1
-            }
-        }
-        val allEntity = list.find { it.parent == AlbumScan.ALL_PARENT }
-        allEntity?.let {
-            it.count = it.count + 1
-            it.path = albumEntity.path
-            it.duration = albumEntity.duration
-            it.mediaType = albumEntity.mediaType
-            it.mimeType = albumEntity.mimeType
+    fun refreshResultFinder(finderList: ArrayList<AlbumEntity>, albumEntity: AlbumEntity) {
+        finderList.find { it.parent == AlbumScan.ALL_PARENT }?.let {
             it.id = albumEntity.id
+            it.path = albumEntity.path
+            it.size = albumEntity.size
+            it.duration = albumEntity.duration
+            it.mimeType = albumEntity.mimeType
+            it.displayName = albumEntity.displayName
+            it.orientation = albumEntity.orientation
+            it.bucketId = albumEntity.bucketId
+            it.bucketDisplayName = albumEntity.bucketDisplayName
+            it.mediaType = albumEntity.mediaType
+            it.width = albumEntity.width
+            it.height = albumEntity.height
+            it.dataModified = albumEntity.dataModified
+            it.count = it.count + 1
+        }
+        finderList.find { it.parent == albumEntity.parent }?.let {
+            it.id = albumEntity.id
+            it.path = albumEntity.path
+            it.size = albumEntity.size
+            it.duration = albumEntity.duration
+            it.mimeType = albumEntity.mimeType
+            it.displayName = albumEntity.displayName
+            it.orientation = albumEntity.orientation
+            it.bucketId = albumEntity.bucketId
+            it.bucketDisplayName = albumEntity.bucketDisplayName
+            it.mediaType = albumEntity.mediaType
+            it.width = albumEntity.width
+            it.height = albumEntity.height
+            it.dataModified = albumEntity.dataModified
+            it.count = it.count + 1
         }
     }
 
     private fun refreshFinder(list: ArrayList<AlbumEntity>) {
-        if (list.isEmpty()) {
-            return
-        }
-        val finderList = ArrayList<AlbumEntity>()
-        list.forEach { item ->
-            if (finderList.index { it.parent == item.parent } == -1) {
-                finderList.add(AlbumEntity(
-                        item.id,
-                        item.path,
-                        item.size,
-                        item.duration,
-                        item.parent,
-                        item.mimeType,
-                        item.displayName,
-                        item.orientation,
-                        item.bucketId,
-                        item.bucketDisplayName,
-                        item.mediaType,
-                        item.width,
-                        item.height,
-                        item.dataModified,
-                        list.count { it.parent == item.parent },
-                        false))
-            }
-        }
+        finderList.clear()
+        list.forEach { item -> if (finderList.find { it.parent == item.parent } == null) finderList.add(item.apply { count = list.count { it.parent == item.parent } }) }
         val first = finderList.first()
         finderList.add(0, AlbumEntity(
                 parent = AlbumScan.ALL_PARENT,
@@ -137,19 +106,5 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
                 mimeType = first.mimeType,
                 id = first.id,
                 count = list.size))
-        albumView.scanFinderSuccess(finderList)
-    }
-
-    fun mergeEntity(albumList: ArrayList<AlbumEntity>, selectEntity: ArrayList<AlbumEntity>) {
-        albumList.forEach { it.isCheck = false }
-        selectEntity.forEach { select -> albumList.find { it.path == select.path }?.isCheck = true }
-    }
-
-    private fun destroyAlbumLoaderManager() {
-        loaderManager.destroyLoader(AlbumScan.ALBUM_LOADER_ID)
-    }
-
-    private fun destroyResultLoaderManager() {
-        loaderManager.destroyLoader(AlbumScan.RESULT_LOADER_ID)
     }
 }

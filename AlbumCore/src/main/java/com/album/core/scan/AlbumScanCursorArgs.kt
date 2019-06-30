@@ -4,11 +4,7 @@ package com.album.core.scan
 
 import android.net.Uri
 import android.provider.MediaStore
-
-/**
- * 是否扫描全部
- */
-const val SCAN_ALL = -1
+import com.album.core.AlbumScan
 
 /**
  * Album Uri
@@ -56,18 +52,13 @@ internal fun ALBUM_PATH_SELECTION(path: String) = AlbumColumns.DATA + "=\"" + pa
 internal const val ALBUM_ORDER_BY = AlbumColumns.DATE_MODIFIED + " DESC"
 
 /**
- * 排序分页条件
- */
-internal fun ALBUM_ORDER_BY_LIMIT(page: Int, scanCount: Int) = ALBUM_ORDER_BY + " limit " + page * scanCount + "," + scanCount
-
-/**
  * 扫描条件
  */
 internal fun ALBUM_SELECTION_ARGS(scanType: Int): Array<String> {
     return when (scanType) {
         AlbumScan.VIDEO -> arrayOf(AlbumColumns.VIDEO)
         AlbumScan.IMAGE -> arrayOf(AlbumColumns.IMAGE)
-        AlbumScan.MIXING -> arrayOf(AlbumColumns.IMAGE, AlbumColumns.VIDEO)
+        AlbumScan.MIX -> arrayOf(AlbumColumns.IMAGE, AlbumColumns.VIDEO)
         else -> throw  KotlinNullPointerException()
     }
 }

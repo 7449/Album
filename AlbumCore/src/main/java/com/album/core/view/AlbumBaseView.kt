@@ -15,23 +15,17 @@ interface AlbumBaseView {
     fun getAlbumContext(): FragmentActivity
 
     /**
+     * 获取已经选择数据
+     */
+    fun getSelectEntity(): ArrayList<AlbumEntity>
+
+    /**
      * 扫描成功
      */
-    fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>)
-
-    /**
-     * 隐藏进度条
-     */
-    fun hideProgress()
-
-    /**
-     * 显示进度条
-     */
-    fun showProgress()
+    fun scanSuccess(arrayList: ArrayList<AlbumEntity>)
 
     /**
      * 当前扫描类型
-     * []
      */
     fun currentScanType(): Int
 }

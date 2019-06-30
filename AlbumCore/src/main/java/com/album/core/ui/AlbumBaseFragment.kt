@@ -8,10 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.album.core.AlbumPermission.CAMERA_REQUEST_CODE
-import com.album.core.AlbumPermission.TYPE_PERMISSIONS_ALBUM
-import com.album.core.AlbumPermission.TYPE_PERMISSIONS_CAMERA
-import com.album.core.AlbumPermission.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+import com.album.core.AlbumPermissionConst
 import com.album.core.orEmpty
 
 /**
@@ -37,24 +34,24 @@ abstract class AlbumBaseFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            WRITE_EXTERNAL_STORAGE_REQUEST_CODE -> {
+            AlbumPermissionConst.WRITE_REQUEST_CODE -> {
                 if (grantResults.isEmpty()) {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(TYPE_PERMISSIONS_ALBUM)
+                    permissionsDenied(AlbumPermissionConst.TYPE_PERMISSIONS_ALBUM)
                 } else {
-                    permissionsGranted(TYPE_PERMISSIONS_ALBUM)
+                    permissionsGranted(AlbumPermissionConst.TYPE_PERMISSIONS_ALBUM)
                 }
             }
-            CAMERA_REQUEST_CODE -> {
+            AlbumPermissionConst.CAMERA_REQUEST_CODE -> {
                 if (grantResults.isEmpty()) {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(TYPE_PERMISSIONS_CAMERA)
+                    permissionsDenied(AlbumPermissionConst.TYPE_PERMISSIONS_CAMERA)
                 } else {
-                    permissionsGranted(TYPE_PERMISSIONS_CAMERA)
+                    permissionsGranted(AlbumPermissionConst.TYPE_PERMISSIONS_CAMERA)
                 }
             }
         }

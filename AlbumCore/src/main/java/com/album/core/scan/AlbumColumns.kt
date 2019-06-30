@@ -13,19 +13,10 @@ object AlbumColumns {
     const val VIDEO = MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
 
     /**
-     * 页数
-     */
-    const val PAGE = "page"
-
-    /**
      * 扫描type
      */
     const val SCAN_TYPE = "scan_type"
 
-    /**
-     * 个数
-     */
-    const val COUNT = "_count"
     /**
      * id
      */
@@ -59,7 +50,7 @@ object AlbumColumns {
      */
     const val ORIENTATION = "orientation"
     /**
-     * bucket_id 每个文件夹下的 bucket_id 都是相同的
+     * bucket_id
      */
     const val BUCKET_ID = "bucket_id"
     /**

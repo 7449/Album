@@ -7,24 +7,22 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.album.*
+import com.album.core.AlbumScan
 import com.album.core.fileExists
-import com.album.core.hide
 import com.album.core.permissionStorage
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumScanPreviewImpl
-import com.album.core.show
 import com.album.core.ui.AlbumBaseFragment
-import com.album.core.view.AlbumPreViewView
-import com.album.listener.AlbumPreviewParentListener
-import com.album.ui.OnAlbumPrevItemClickListener
+import com.album.core.view.AlbumPreView
+import com.album.listener.AlbumPreParentListener
+import com.album.listener.OnAlbumPrevItemClickListener
 import com.album.ui.adapter.AlbumPrevAdapter
 import kotlinx.android.synthetic.main.album_fragment_preview.*
 
 /**
  *  @author y
  */
-class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClickListener {
+class PrevFragment : AlbumBaseFragment(), AlbumPreView, OnAlbumPrevItemClickListener {
 
     companion object {
 
@@ -33,7 +31,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
 
         /**
          * 获取预览的fragment,参数里面应该包含
-         * [EXTRA_ALBUM_OPTIONS] AlbumBundle
+         * [AlbumConst.EXTRA_ALBUM_OPTIONS] AlbumBundle
          * [TYPE_PREVIEW_PARENT] 预览扫描的parent,如果为 ALL_PARENT 是预览而不是点击进入
          * [TYPE_PREVIEW_POSITION_KEY] 扫描图片成功之后需要定位的位置
          * [TYPE_PREVIEW_KEY] 跳转预览页面时携带选中数据的key
@@ -44,7 +42,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
             putParcelableArrayList(TYPE_PREVIEW_KEY, previewList)
             putInt(TYPE_PREVIEW_POSITION_KEY, position)
             putLong(TYPE_PREVIEW_PARENT, parent)
-            putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
+            putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
         })
 
     }
@@ -52,7 +50,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
     /**
      * UI使用回调,可能会用到
      */
-    var albumParentListener: AlbumPreviewParentListener? = null
+    var albumParentListener: AlbumPreParentListener? = null
 
     private lateinit var adapter: AlbumPrevAdapter
     private lateinit var presenterPreview: AlbumScanPreviewImpl
@@ -75,7 +73,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        albumBundle = bundle.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
         parent = bundle.getLong(TYPE_PREVIEW_PARENT, AlbumScan.ALL_PARENT)
         val previewBundle = savedInstanceState ?: bundle
         currentPosition = previewBundle.getInt(TYPE_PREVIEW_POSITION_KEY, 0)
@@ -104,7 +102,7 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         adapter = AlbumPrevAdapter(albumBundle, this)
-        preview_viewPager.adapter = adapter
+        preViewPager.adapter = adapter
 
         val selectList: ArrayList<AlbumEntity> = ArrayList()
 
@@ -123,8 +121,8 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
                     ?: ArrayList())
         }
 
-        preview_check_box.setBackgroundResource(albumBundle.checkBoxDrawable)
-        preview_check_box.setOnClickListener { checkBoxClick() }
+        preCheckBox.setBackgroundResource(albumBundle.checkBoxDrawable)
+        preCheckBox.setOnClickListener { checkBoxClick() }
 
         if (permissionStorage()) {
             initPreview()
@@ -146,10 +144,10 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
         presenterPreview = AlbumScanPreviewImpl.newInstance(this)
     }
 
-    override fun scanSuccess(albumEntityList: ArrayList<AlbumEntity>) {
+    override fun scanSuccess(arrayList: ArrayList<AlbumEntity>) {
         adapter.removeAll()
-        adapter.addAll(albumEntityList)
-        preview_viewPager.setCurrentItem(currentPosition, false)
+        adapter.addAll(arrayList)
+        preViewPager.setCurrentItem(currentPosition, false)
         prevOnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -157,14 +155,14 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
                     Album.instance.albumListener?.onAlbumPreviewFileNotExist()
                 }
                 currentPosition = position
-                preview_check_box.isChecked = adapter.albumList[position].isCheck
+                preCheckBox.isChecked = adapter.albumList[position].isCheck
                 albumParentListener?.onChangedViewPager(position + 1, adapter.albumList.size)
             }
         }
-        prevOnPageChangeCallback?.let { preview_viewPager.registerOnPageChangeCallback(it) }
-        albumParentListener?.onChangedViewPager(preview_viewPager.currentItem + 1, adapter.albumList.size)
+        prevOnPageChangeCallback?.let { preViewPager.registerOnPageChangeCallback(it) }
+        albumParentListener?.onChangedViewPager(preViewPager.currentItem + 1, adapter.albumList.size)
         albumParentListener?.onChangedCheckBoxCount(getSelectEntity().size)
-        preview_check_box.isChecked = adapter.albumList[preview_viewPager.currentItem].isCheck
+        preCheckBox.isChecked = adapter.albumList[preViewPager.currentItem].isCheck
     }
 
     /**
@@ -191,15 +189,15 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
     }
 
     private fun checkBoxClick() {
-        val albumEntity = adapter.albumList[preview_viewPager.currentItem]
+        val albumEntity = adapter.albumList[preViewPager.currentItem]
 
         if (!albumEntity.path.fileExists()) {
-            preview_check_box.isChecked = false
+            preCheckBox.isChecked = false
             Album.instance.albumListener?.onAlbumCheckFileNotExist()
         }
 
         if (!getSelectEntity().contains(albumEntity) && getSelectEntity().size >= albumBundle.multipleMaxCount) {
-            preview_check_box.isChecked = false
+            preCheckBox.isChecked = false
             Album.instance.albumListener?.onAlbumMaxCount()
             return
         }
@@ -225,14 +223,14 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
 
     fun getCurrentEntity(): AlbumEntity = adapter.albumList[currentPosition]
 
-    override fun getParent(): Long = parent
+    override fun getParentId(): Long = parent
 
     override fun currentScanType(): Int = albumBundle.scanType
 
     fun getAlbumList(): ArrayList<AlbumEntity> = adapter.albumList
 
     fun setCurrentItem(position: Int) {
-        preview_viewPager.setCurrentItem(position, false)
+        preViewPager.setCurrentItem(position, false)
     }
 
     override fun getAllEntity(): ArrayList<AlbumEntity>? = if (parent == AlbumScan.PREV_PARENT || adapter.albumList.isNotEmpty()) adapter.albumList else null
@@ -241,20 +239,8 @@ class PrevFragment : AlbumBaseFragment(), AlbumPreViewView, OnAlbumPrevItemClick
 
     override val layoutId: Int = R.layout.album_fragment_preview
 
-    override fun showProgress() {
-        if (albumBundle.showProgress) {
-            preview_progress.show()
-        }
-    }
-
-    override fun hideProgress() {
-        if (albumBundle.showProgress) {
-            preview_progress.hide()
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        prevOnPageChangeCallback?.let { preview_viewPager.unregisterOnPageChangeCallback(it) }
+        prevOnPageChangeCallback?.let { preViewPager.unregisterOnPageChangeCallback(it) }
     }
 }

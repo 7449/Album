@@ -9,11 +9,11 @@ import android.widget.AdapterView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
 import com.album.*
+import com.album.core.AlbumScan
 import com.album.core.drawable
 import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.AlbumScan
-import com.album.core.settingStatusBarColor
+import com.album.core.statusBarColor
 import com.album.core.ui.AlbumBaseActivity
 import com.album.listener.AlbumParentListener
 import com.album.ui.AlbumUiBundle
@@ -46,11 +46,11 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
 
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
-        albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
+        albumBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        albumUiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
 
-        window.settingStatusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor))
-        album_tv_finder_all.text = albumBundle.allName
+        window.statusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor))
+        album_tv_finder_all.text = getString(albumBundle.allName)
         album_tv_preview.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
         album_tv_select.visibility = if (albumBundle.radio) View.GONE else View.VISIBLE
         album_toolbar.setTitle(albumUiBundle.toolbarText)
@@ -128,8 +128,8 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                     val bundle = Bundle()
                     bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreview)
                     bundle.putLong(TYPE_PREVIEW_PARENT, AlbumScan.PREV_PARENT)
-                    bundle.putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
-                    bundle.putParcelable(EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
+                    bundle.putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
+                    bundle.putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
                     albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
                 }
             }

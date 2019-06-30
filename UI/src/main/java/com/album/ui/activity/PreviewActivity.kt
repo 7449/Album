@@ -9,9 +9,9 @@ import com.album.*
 import com.album.core.hasL
 import com.album.core.orEmpty
 import com.album.core.scan.AlbumEntity
-import com.album.core.settingStatusBarColor
+import com.album.core.statusBarColor
 import com.album.core.ui.AlbumBaseActivity
-import com.album.listener.AlbumPreviewParentListener
+import com.album.listener.AlbumPreParentListener
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.fragment.AlbumFragment
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.album_activity_preview.*
 /**
  * @author y
  */
-class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
+class PreviewActivity : AlbumBaseActivity(), AlbumPreParentListener {
 
     override val layoutId: Int = R.layout.album_activity_preview
 
@@ -32,8 +32,8 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
                 putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
                 putInt(TYPE_PREVIEW_POSITION_KEY, position)
                 putLong(TYPE_PREVIEW_PARENT, parent)
-                putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
-                putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
+                putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
+                putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
             fragment.startActivityForResult(Intent(fragment.activity, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
         }
@@ -58,8 +58,8 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
 
-        albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        uiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
+        albumBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        uiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
 
         preview_bottom_view.setBackgroundColor(ContextCompat.getColor(this, uiBundle.previewBottomViewBackground))
         preview_bottom_view_tv_select.setText(uiBundle.previewBottomOkText)
@@ -68,7 +68,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
         preview_tv_preview_count.textSize = uiBundle.previewBottomCountTextSize
         preview_tv_preview_count.setTextColor(ContextCompat.getColor(this, uiBundle.previewBottomCountTextColor))
         preview_root_view.setBackgroundColor(ContextCompat.getColor(this, uiBundle.previewBackground))
-        window.settingStatusBarColor(ContextCompat.getColor(this, uiBundle.statusBarColor))
+        window.statusBarColor(ContextCompat.getColor(this, uiBundle.statusBarColor))
         preview_toolbar.setNavigationOnClickListener { prevFragment.isRefreshAlbumUI(uiBundle.previewFinishRefresh, false) }
         preview_toolbar.setTitleTextColor(ContextCompat.getColor(this, uiBundle.toolbarTextColor))
         val drawable = ContextCompat.getDrawable(this, uiBundle.toolbarIcon)

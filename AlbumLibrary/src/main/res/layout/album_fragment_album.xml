@@ -4,24 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <com.album.widget.LoadMoreRecyclerView
-        android:id="@+id/album_recyclerView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/albumRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingTop="@dimen/album_padding_top" />
 
-    <ProgressBar
-        android:id="@+id/album_progress"
-        android:layout_width="@dimen/album_progress_width"
-        android:layout_height="@dimen/album_progress_height"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/album_empty"
+        android:id="@+id/albumEmpty"
         android:layout_width="@dimen/album_empty_width"
         android:layout_height="@dimen/album_empty_height"
         android:layout_gravity="center"

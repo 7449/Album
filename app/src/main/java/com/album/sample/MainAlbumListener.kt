@@ -98,10 +98,6 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("no image")
     }
 
-    override fun onAlbumNoMore() {
-        toast("album no more")
-    }
-
     override fun onAlbumVideoPlayError() {
         toast("play video error : checked video app")
     }

@@ -5,7 +5,7 @@ package com.album.listener
  * @create 2019/2/27
  * 预览页回调
  */
-interface AlbumPreviewParentListener {
+interface AlbumPreParentListener {
     /**
      * 点击checkbox时调用
      */

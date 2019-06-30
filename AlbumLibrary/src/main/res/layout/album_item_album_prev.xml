@@ -4,13 +4,13 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/album_prev_container"
+        android:id="@+id/albumPrevContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/album_prev_check_box"
+        android:id="@+id/albumPrevCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

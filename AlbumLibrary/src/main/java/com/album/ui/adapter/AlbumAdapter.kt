@@ -13,17 +13,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.album.Album
 import com.album.AlbumBundle
-import com.album.CAMERA
+import com.album.AlbumInternalConst
 import com.album.R
 import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
 import com.album.core.show
 import com.album.listener.AlbumParentListener
+import com.album.listener.OnAlbumItemClickListener
 import com.album.listener.addChildView
-import com.album.ui.OnAlbumItemClickListener
 
 /**
- *   @author y
+ * @author y
  */
 class AlbumAdapter(
         private val display: Int,
@@ -33,8 +33,8 @@ class AlbumAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        internal const val TYPE_CAMERA = 0
-        internal const val TYPE_PHOTO = 1
+        private const val TYPE_CAMERA = 0
+        private const val TYPE_PHOTO = 1
     }
 
     /**
@@ -83,7 +83,7 @@ class AlbumAdapter(
     override fun getItemViewType(position: Int): Int {
         return when {
             albumList.isEmpty() -> TYPE_PHOTO
-            albumList[position].path == CAMERA -> TYPE_CAMERA
+            albumList[position].path == AlbumInternalConst.CAMERA -> TYPE_CAMERA
             else -> TYPE_PHOTO
         }
     }
@@ -101,8 +101,8 @@ class AlbumAdapter(
     class CameraViewHolder(itemView: View, private val albumBundle: AlbumBundle) : RecyclerView.ViewHolder(itemView) {
 
         private val container: LinearLayout = itemView.findViewById(R.id.album_camera_root_view)
-        private val cameraIv: AppCompatImageView = itemView.findViewById(R.id.album_image_camera)
-        private val cameraTv: AppCompatTextView = itemView.findViewById(R.id.album_image_camera_tv)
+        private val cameraIv: AppCompatImageView = itemView.findViewById(R.id.albumImageCamera)
+        private val cameraTv: AppCompatTextView = itemView.findViewById(R.id.albumImageCameraTv)
 
         fun camera() {
             val drawable = ContextCompat.getDrawable(itemView.context, albumBundle.cameraDrawable)
@@ -121,8 +121,8 @@ class AlbumAdapter(
                           private val layoutParams: ViewGroup.LayoutParams,
                           private val albumParentListener: AlbumParentListener?) : RecyclerView.ViewHolder(itemView) {
 
-        private val container: FrameLayout = itemView.findViewById(R.id.album_container)
-        private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_check_box)
+        private val container: FrameLayout = itemView.findViewById(R.id.albumContainer)
+        private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.albumCheckBox)
 
         fun photo(position: Int, albumEntity: AlbumEntity, multipleList: ArrayList<AlbumEntity>) {
             container.addChildView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, container), layoutParams)

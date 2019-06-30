@@ -6,13 +6,13 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/album_image_camera"
+        android:id="@+id/albumImageCamera"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/album_image_camera_tv"
+        android:id="@+id/albumImageCameraTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"

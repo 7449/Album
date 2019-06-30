@@ -7,7 +7,6 @@ import android.widget.FrameLayout
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumImageLoader
 import com.album.listener.ImageView
-import com.album.listener.PhotoView
 import com.squareup.picasso.Picasso
 
 /**
@@ -37,7 +36,7 @@ class SimplePicassoAlbumImageLoader : AlbumImageLoader {
     }
 
     override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = container.PhotoView()
+        val albumImageView = container.ImageView()
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.id))
                 .resize(50, 50)

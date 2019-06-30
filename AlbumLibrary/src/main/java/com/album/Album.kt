@@ -5,49 +5,8 @@ import com.album.core.scan.AlbumEntity
 import com.album.core.ui.AlbumBaseFragment
 import com.album.listener.AlbumImageLoader
 import com.album.listener.OnAlbumListener
-import com.album.listener.SimpleAlbumImageLoaderKt
-import com.album.listener.SimpleOnAlbumListenerKt
 import com.yalantis.ucrop.UCrop
 
-/**
- * 扫描全部图片时显示的文件夹名称
- */
-internal const val FINDER_ALL_DIR_NAME = "全部"
-
-/**
- * 相机Type
- */
-internal const val CAMERA = "Album:Camera"
-
-/**
- *  [AlbumBundle] 主要数据的Key
- */
-const val EXTRA_ALBUM_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Options"
-
-/**
- * 使用内置的UI框架时的数据Key
- */
-const val EXTRA_ALBUM_UI_OPTIONS = BuildConfig.APPLICATION_ID + ".Album.Ui.Options"
-
-/**
- * 保存已选择信息的Bundle Key
- */
-const val TYPE_ALBUM_STATE_SELECT = "album:state_select"
-
-/**
- * 保存当前文件夹的parent的Bundle Key
- */
-const val TYPE_ALBUM_STATE_PARENT = "album:state_parent"
-
-/**
- * 保存当前文件夹名称的Bundle Key
- */
-const val TYPE_ALBUM_STATE_FINDER_NAME = "album:state_finder_name"
-
-/**
- * 保存保存的图片路径的Bundle Key
- */
-const val TYPE_ALBUM_STATE_IMAGE_PATH = "album:state_image_path"
 
 /**
  * 预览页保存已选择信息的Bundle Key
@@ -90,16 +49,6 @@ const val TYPE_PREVIEW_PARENT = "preview_parent"
  */
 const val TYPE_PREVIEW_POSITION_KEY = "preview_position"
 
-/**
- * 刷新图库的Type,为拍照成功之后刷新的Type
- */
-const val TYPE_RESULT_CAMERA = 0
-
-/**
- * 刷新图库的Type,为裁剪成功之后刷新的Type
- */
-const val TYPE_RESULT_CROP = 1
-
 class Album {
 
     companion object {
@@ -137,7 +86,3 @@ class Album {
     var albumEmptyClickListener: ((view: View) -> Boolean)? = null
     var initList: ArrayList<AlbumEntity>? = null
 }
-
-fun Album.albumListenerKt(albumListenerKt: SimpleOnAlbumListenerKt.() -> Unit) = apply { albumListener = SimpleOnAlbumListenerKt().also(albumListenerKt).build() }
-
-fun Album.albumImageLoaderKt(albumImageLoaderKt: SimpleAlbumImageLoaderKt.() -> Unit) = apply { albumImageLoader = SimpleAlbumImageLoaderKt().also(albumImageLoaderKt).build() }

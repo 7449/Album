@@ -10,8 +10,8 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.R
 import com.album.core.scan.AlbumEntity
+import com.album.listener.OnAlbumPrevItemClickListener
 import com.album.listener.addChildView
-import com.album.ui.OnAlbumPrevItemClickListener
 
 /**
  * @author y
@@ -59,7 +59,7 @@ class AlbumPrevAdapter(private val albumBundle: AlbumBundle, private val onAlbum
     @Suppress("unused", "UNUSED_PARAMETER")
     class PhotoViewHolder(itemView: View, private val albumBundle: AlbumBundle, private val onAlbumPrevItemClickListener: OnAlbumPrevItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
-        private val container: FrameLayout = itemView.findViewById(R.id.album_prev_container)
+        private val container: FrameLayout = itemView.findViewById(R.id.albumPrevContainer)
 //        private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.album_prev_check_box)
 
         fun photo(albumEntity: AlbumEntity, multipleList: ArrayList<AlbumEntity>) {

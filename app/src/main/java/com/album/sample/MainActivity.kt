@@ -16,21 +16,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
-import com.album.TYPE_RESULT_CAMERA
-import com.album.TYPE_RESULT_CROP
+import com.album.AlbumConst
 import com.album.core.*
-import com.album.core.AlbumCamera.CUSTOMIZE_CAMERA_REQUEST_CODE
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.AlbumScan
 import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.listener.AlbumImageLoader
-import com.album.listener.SimpleAlbumImageLoader
 import com.album.sample.camera.SimpleCameraActivity
-import com.album.sample.imageloader.*
+import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
+import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader
+import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
+import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
+import com.album.simple.SimpleAlbumImageLoader
 import com.album.ui.AlbumUiBundle
-import com.album.ui.dialog.dialog
 import com.album.ui.ui
-import com.album.ui.wechat.activity.weChatUI
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropFragment
 import com.yalantis.ucrop.UCropFragmentCallback
@@ -83,10 +81,7 @@ fun MainActivity.dayAlbum() {
         options = dayOptions
         albumEmptyClickListener = { true }
     }.ui(this,
-            AlbumBundle(scanCount = 200,
-                    allName = "..",
-                    scanType = AlbumScan.IMAGE,
-                    checkBoxDrawable = R.drawable.simple_selector_album_item_check))
+            AlbumBundle(scanType = AlbumScan.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
 }
 
 fun MainActivity.nightAlbum() {
@@ -99,21 +94,21 @@ fun MainActivity.nightAlbum() {
             if (it.permissionStorage() && it.permissionCamera()) {
                 Toast.makeText(it.activity, "camera", Toast.LENGTH_SHORT).show()
                 val intent = Intent(it.activity, SimpleCameraActivity::class.java)
-                it.startActivityForResult(intent, CUSTOMIZE_CAMERA_REQUEST_CODE)
+                it.startActivityForResult(intent, AlbumCameraConst.CUSTOM_CAMERA_REQUEST_CODE)
             }
         }
     }.ui(this, NightAlbumBundle(), NightAlbumUIBundle())
 }
 
 fun MainActivity.dialog() {
-    Album.instance.apply {
-        albumListener = MainAlbumListener(applicationContext, null)
-        albumImageLoader = SimpleFrescoAlbumImageLoader()
-        options = dayOptions
-    }.dialog(AlbumBundle(
-            cropFinish = false,
-            selectImageFinish = false,
-            cropErrorFinish = false), supportFragmentManager)
+//    Album.instance.apply {
+//        albumListener = MainAlbumListener(applicationContext, null)
+//        albumImageLoader = SimpleFrescoAlbumImageLoader()
+//        options = dayOptions
+//    }.dialog(AlbumBundle(
+//            cropFinish = false,
+//            selectImageFinish = false,
+//            cropErrorFinish = false), supportFragmentManager)
 }
 
 fun MainActivity.video() {
@@ -128,21 +123,21 @@ fun MainActivity.video() {
 }
 
 fun MainActivity.wechat() {
-    Album.instance.apply {
-        albumImageLoader = SimpleAlbumWeChatImageLoader()
-        albumListener = MainAlbumListener(applicationContext, null)
-    }.weChatUI(this,
-            AlbumBundle(
-                    scanType = AlbumScan.MIXING,
-                    spanCount = 4,
-                    dividerWidth = 5,
-                    photoBackgroundColor = R.color.colorAlbumContentEmptyDrawableColor,
-                    hideCamera = true,
-                    checkBoxDrawable = R.drawable.simple_selector_wechat_item_check))
+//    Album.instance.apply {
+//        albumImageLoader = SimpleAlbumWeChatImageLoader()
+//        albumListener = MainAlbumListener(applicationContext, null)
+//    }.weChatUI(this,
+//            AlbumBundle(
+//                    scanType = AlbumScan.MIXING,
+//                    spanCount = 4,
+//                    dividerWidth = 5,
+//                    photoBackgroundColor = R.color.colorAlbumContentEmptyDrawableColor,
+//                    hideCamera = true,
+//                    checkBoxDrawable = R.drawable.simple_selector_wechat_item_check))
 }
 
 fun MainActivity.startCamera() {
-    imagePath = Uri.fromFile(applicationContext.getCameraFile(null, false))
+    imagePath = Uri.fromFile(applicationContext.cameraFile(null, false))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
 }
@@ -231,14 +226,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             UCrop.RESULT_ERROR -> {
             }
             Activity.RESULT_OK -> when (requestCode) {
-                AlbumCamera.OPEN_CAMERA_REQUEST_CODE -> {
-                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
+                AlbumCameraConst.OPEN_CAMERA_REQUEST_CODE -> {
+                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
                     UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
                             .withOptions(UCrop.Options())
                             .start(this)
                 }
                 UCrop.REQUEST_CROP -> {
-                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), TYPE_RESULT_CROP, SimpleSingleScannerListener())
+                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

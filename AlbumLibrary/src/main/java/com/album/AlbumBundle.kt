@@ -1,7 +1,7 @@
 package com.album
 
 import android.os.Parcelable
-import com.album.core.scan.AlbumScan
+import com.album.core.AlbumScan
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -10,10 +10,6 @@ class AlbumBundle(
          * 扫描类型
          */
         var scanType: Int = AlbumScan.IMAGE,
-        /**
-         * 扫描数据库时是否显示进度条
-         */
-        var showProgress: Boolean = false,
         /**
          * 隐藏相机
          */
@@ -43,17 +39,13 @@ class AlbumBundle(
          */
         var uCropPath: String? = null,
         /**
-         * 扫描数据库时一次最多扫描多少张
-         */
-        var scanCount: Int = 500,
-        /**
          * 根目录名称,有的会出现0所以设置下
          */
-        var sdName: String = "根目录",
+        var sdName: Int = R.string.album_sd_name,
         /**
          * 全部图片
          */
-        var allName: String = FINDER_ALL_DIR_NAME,
+        var allName: Int = R.string.album_all_name,
         /**
          * 是否预览
          */
@@ -91,11 +83,11 @@ class AlbumBundle(
          */
         var cameraBackgroundColor: Int = R.color.colorAlbumCameraBackgroundColor,
         /**
-         * 相机背景色
+         * 图片背景色
          */
         var photoBackgroundColor: Int = R.color.colorAlbumPhotoBackgroundColor,
         /**
-         * 相机背景色
+         * 预览图片背景色
          */
         var prevPhotoBackgroundColor: Int = R.color.colorAlbumPhotoBackgroundColor,
         /**
@@ -107,11 +99,11 @@ class AlbumBundle(
          */
         var checkBoxDrawable: Int = R.drawable.selector_album_item_check,
         /**
-         * 没有图片显示的图片
+         * 没有图片显示的占位图片
          */
         var photoEmptyDrawable: Int = R.drawable.ic_camera_drawable,
         /**
-         * 没有图片显示的图片背景色
+         * 没有图片显示的占位图片背景色
          */
         var photoEmptyDrawableColor: Int = R.color.colorAlbumContentEmptyDrawableColor,
         /**

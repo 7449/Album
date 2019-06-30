@@ -1,35 +1,14 @@
-package com.album.ui
+package com.album.simple
 
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.album.core.scan.AlbumEntity
 
-/**
- * @author y
- * @create 2019-04-18
- */
-interface OnAlbumPrevItemClickListener {
-
-    fun onItemCheckBoxClick(view: View, currentMaxCount: Int, albumEntity: AlbumEntity)
-
-    fun onItemClick(view: View, position: Int, albumEntity: AlbumEntity)
-
-}
-
-interface OnAlbumItemClickListener {
-
-    fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity)
-
-    fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity)
-
-}
-
-internal interface AlbumMethodFragmentViewListener {
+internal interface SimpleAlbumFragmentInterface {
     /**
-     * 断掉MediaScanner
+     * 打开相机
      */
-    fun disconnectMediaScanner()
+    fun startCamera()
 
     /**
      * 扫描设备
@@ -43,11 +22,6 @@ internal interface AlbumMethodFragmentViewListener {
      * 扫描裁剪之后的信息
      */
     fun onScanCropAlbum(path: String)
-
-    /**
-     * 打开相机
-     */
-    fun startCamera()
 
     /**
      * 裁剪
@@ -78,4 +52,9 @@ internal interface AlbumMethodFragmentViewListener {
      * 刷新数据
      */
     fun onDialogResultPreview(bundle: Bundle)
+
+    /**
+     * 断掉MediaScanner
+     */
+    fun disconnectMediaScanner()
 }

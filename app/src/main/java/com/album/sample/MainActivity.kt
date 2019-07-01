@@ -22,11 +22,7 @@ import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumSingleMediaScanner
 import com.album.listener.AlbumImageLoader
 import com.album.sample.camera.SimpleCameraActivity
-import com.album.sample.imageloader.SimpleFrescoAlbumImageLoader
-import com.album.sample.imageloader.SimpleImageLoaderAlbumImageLoader
-import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
-import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
-import com.album.simple.SimpleAlbumImageLoader
+import com.album.sample.imageloader.*
 import com.album.ui.AlbumUiBundle
 import com.album.ui.ui
 import com.yalantis.ucrop.UCrop
@@ -75,7 +71,7 @@ fun NightAlbumUIBundle(): AlbumUiBundle {
 
 fun MainActivity.dayAlbum() {
     Album.instance.apply {
-        albumImageLoader = SimpleAlbumImageLoader()
+        albumImageLoader = SimplePicassoAlbumImageLoader()
         albumListener = MainAlbumListener(applicationContext, list)
         initList = list
         options = dayOptions
@@ -88,7 +84,7 @@ fun MainActivity.nightAlbum() {
     Album.instance.apply {
         albumListener = MainAlbumListener(applicationContext, null)
         options = nightOptions
-        albumImageLoader = SimpleAlbumImageLoader()
+        albumImageLoader = SimplePicassoAlbumImageLoader()
         albumEmptyClickListener = { true }
         customCameraListener = {
             if (it.permissionStorage() && it.permissionCamera()) {
@@ -113,7 +109,7 @@ fun MainActivity.dialog() {
 
 fun MainActivity.video() {
     Album.instance.apply {
-        albumImageLoader = SimpleAlbumImageLoader()
+        albumImageLoader = SimplePicassoAlbumImageLoader()
         albumListener = MainAlbumListener(applicationContext, null)
         albumEmptyClickListener = { true }
     }.ui(this, AlbumBundle(
@@ -201,7 +197,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
                     .setSingleChoiceItems(arrayOf("Glide", "ImageLoader", "Fresco", "Picasso", "SubsamplingScale"), -1
                     ) { dialog, which ->
                         when (which) {
-                            0 -> imageLoader(SimpleAlbumImageLoader())
+                            0 -> imageLoader(SimpleGlideImageLoader())
                             1 -> imageLoader(SimpleImageLoaderAlbumImageLoader())
                             2 -> imageLoader(SimpleFrescoAlbumImageLoader())
                             3 -> imageLoader(SimplePicassoAlbumImageLoader())

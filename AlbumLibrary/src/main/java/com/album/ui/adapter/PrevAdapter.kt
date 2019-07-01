@@ -27,12 +27,8 @@ class PrevAdapter : RecyclerView.Adapter<PrevAdapter.PhotoViewHolder>() {
     override fun getItemCount(): Int = albumList.size
 
     fun addAll(newList: ArrayList<AlbumEntity>) {
-        albumList.addAll(newList)
-        notifyDataSetChanged()
-    }
-
-    fun removeAll() {
         albumList.clear()
+        albumList.addAll(newList)
         notifyDataSetChanged()
     }
 

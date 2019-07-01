@@ -12,7 +12,6 @@ internal interface SimpleAlbumFragmentInterface {
 
     /**
      * 扫描设备
-     * [parent] 文件夹唯一
      * [isFinder] 是否点击文件夹扫描
      * [result] 是否是拍照之后的扫描
      */

@@ -123,12 +123,15 @@ class AlbumAdapter(
             checkBox.isChecked = albumEntity.isCheck
             checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
             checkBox.setOnClickListener {
-                if (callback?.onAlbumCheckBoxFilter(itemView, position, albumEntity) == true) {
-                    return@setOnClickListener
-                }
                 if (!albumEntity.path.fileExists()) {
                     checkBox.isChecked = false
+                    if (multipleList.contains(albumEntity)) {
+                        multipleList.remove(albumEntity)
+                    }
                     Album.instance.albumListener?.onAlbumCheckFileNotExist()
+                    return@setOnClickListener
+                }
+                if (callback?.onAlbumCheckBoxFilter(itemView, position, albumEntity) == true) {
                     return@setOnClickListener
                 }
                 if (!multipleList.contains(albumEntity) && multipleList.size >= albumBundle.multipleMaxCount) {

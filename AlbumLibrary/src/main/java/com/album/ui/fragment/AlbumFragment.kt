@@ -23,7 +23,7 @@ import com.album.listener.AlbumCallback
 import com.album.listener.OnAlbumItemClickListener
 import com.album.simple.SimpleAlbumFragmentInterface
 import com.album.ui.adapter.AlbumAdapter
-import com.album.widget.SimpleGridDivider
+import com.album.simple.SimpleGridDivider
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.album_fragment_album.*
 import java.io.File

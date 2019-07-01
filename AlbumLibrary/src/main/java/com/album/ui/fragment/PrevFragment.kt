@@ -112,6 +112,9 @@ class PrevFragment : AlbumBaseFragment() {
         val albumEntity = adapter.albumList[preViewPager.currentItem]
         if (!albumEntity.path.fileExists()) {
             preCheckBox.isChecked = false
+            if (getSelectEntity().contains(albumEntity)) {
+                getSelectEntity().remove(albumEntity)
+            }
             Album.instance.albumListener?.onAlbumCheckFileNotExist()
             return
         }

@@ -1,4 +1,4 @@
-package com.album.widget
+package com.album.simple
 
 import android.graphics.Rect
 import android.view.View

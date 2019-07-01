@@ -1,15 +1,15 @@
-package com.album.simple
+package com.album.sample.imageloader
 
 import android.view.View
 import android.widget.FrameLayout
-import com.album.R
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumImageLoader
 import com.album.listener.ImageView
+import com.album.sample.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class SimpleAlbumImageLoader : AlbumImageLoader {
+class SimpleGlideImageLoader : AlbumImageLoader {
 
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_album_default_loading).error(R.drawable.ic_album_default_loading).centerCrop()
 

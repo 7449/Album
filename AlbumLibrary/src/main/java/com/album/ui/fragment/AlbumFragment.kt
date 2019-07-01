@@ -28,10 +28,6 @@ import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.album_fragment_album.*
 import java.io.File
 
-/**
- * by y on 14/08/2017.
- */
-
 class AlbumFragment : AlbumBaseFragment(),
         AlbumView,
         SimpleAlbumFragmentInterface,
@@ -242,12 +238,6 @@ class AlbumFragment : AlbumBaseFragment(),
         albumCallback?.onAlbumItemClick(getSelectEntity(), position, parent)
     }
 
-    /**
-     * 扫描图库
-     * [parent] 文件夹 parent
-     * [isFinder] 是否是点击相册名称扫描
-     * [result] 是否是拍照之后扫描
-     */
     override fun onScanAlbum(parent: Long, isFinder: Boolean, result: Boolean) {
         if (isFinder) {
             albumAdapter.removeAll()
@@ -256,7 +246,6 @@ class AlbumFragment : AlbumBaseFragment(),
         if (!permissionStorage()) {
             return
         }
-        // 如果 albumList 为空则是没有图片拍照的第一张图片,这时直接扫描整个图库即可
         if (result && albumAdapter.albumList.isNotEmpty()) {
             albumScan.scanResult(imagePath.path.orEmpty())
             return
@@ -284,10 +273,6 @@ class AlbumFragment : AlbumBaseFragment(),
         singleMediaScanner?.disconnect()
     }
 
-    /**
-     * 启动相机
-     * [imagePath]每次都赋值,确保拍照时不会重复
-     */
     override fun startCamera() {
         val albumCameraListener = Album.instance.customCameraListener
         if (albumCameraListener != null) {
@@ -308,9 +293,6 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun getSelectEntity(): ArrayList<AlbumEntity> = albumAdapter.multipleList
 
-    /**
-     * 预览时多选的数据,可能为空,[multipleSelect]结果类似
-     */
     override fun selectPreview(): ArrayList<AlbumEntity> {
         if (getSelectEntity().isEmpty()) {
             Album.instance.albumListener?.onAlbumPreviewEmpty()
@@ -321,9 +303,6 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun allPreview(): ArrayList<AlbumEntity> = albumAdapter.albumList
 
-    /**
-     * 获取多选时的数据,可能为空
-     */
     override fun multipleSelect() {
         if (getSelectEntity().isEmpty()) {
             Album.instance.albumListener?.onAlbumSelectEmpty()

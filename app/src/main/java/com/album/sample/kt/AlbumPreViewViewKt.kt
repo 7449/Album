@@ -1,7 +1,7 @@
 package com.album.sample.kt
 
 import androidx.fragment.app.FragmentActivity
-import com.album.core.AlbumScan
+import com.album.core.AlbumScanConst
 import com.album.core.scan.AlbumEntity
 import com.album.core.view.AlbumPreView
 
@@ -47,7 +47,7 @@ class AlbumPreViewViewKt {
                     ?: throw KotlinNullPointerException("check currentActivity")
 
             override fun currentScanType(): Int = currentScanType?.invoke()
-                    ?: AlbumScan.IMAGE
+                    ?: AlbumScanConst.IMAGE
 
             override fun scanSuccess(arrayList: ArrayList<AlbumEntity>) {
                 scanSuccess?.invoke(arrayList)

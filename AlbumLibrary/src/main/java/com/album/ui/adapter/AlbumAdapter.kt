@@ -18,17 +18,14 @@ import com.album.R
 import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
 import com.album.core.show
-import com.album.listener.AlbumParentListener
+import com.album.listener.AlbumCallback
 import com.album.listener.OnAlbumItemClickListener
 import com.album.listener.addChildView
 
-/**
- * @author y
- */
 class AlbumAdapter(
         private val display: Int,
         private val albumBundle: AlbumBundle,
-        private val albumParentListener: AlbumParentListener?,
+        private val albumCallback: AlbumCallback?,
         private val onAlbumItemClickListener: OnAlbumItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -37,14 +34,8 @@ class AlbumAdapter(
         private const val TYPE_PHOTO = 1
     }
 
-    /**
-     * 图片数据
-     */
     var albumList: ArrayList<AlbumEntity> = ArrayList()
 
-    /**
-     * 多选时的临时数据
-     */
     var multipleList: ArrayList<AlbumEntity> = ArrayList()
         set(value) {
             field = value
@@ -63,7 +54,7 @@ class AlbumAdapter(
             }
             else -> {
                 val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.album_item_album, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, albumParentListener)
+                val photoViewHolder = PhotoViewHolder(photoView, albumBundle, display, layoutParams, albumCallback)
                 photoView.setOnClickListener { v -> onAlbumItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, albumList[photoViewHolder.adapterPosition]) }
                 photoViewHolder
             }
@@ -80,12 +71,10 @@ class AlbumAdapter(
 
     override fun getItemCount(): Int = albumList.size
 
-    override fun getItemViewType(position: Int): Int {
-        return when {
-            albumList.isEmpty() -> TYPE_PHOTO
-            albumList[position].path == AlbumInternalConst.CAMERA -> TYPE_CAMERA
-            else -> TYPE_PHOTO
-        }
+    override fun getItemViewType(position: Int): Int = when {
+        albumList.isEmpty() -> TYPE_PHOTO
+        albumList[position].path == AlbumInternalConst.CAMERA -> TYPE_CAMERA
+        else -> TYPE_PHOTO
     }
 
     fun addAll(newList: ArrayList<AlbumEntity>) {
@@ -119,7 +108,7 @@ class AlbumAdapter(
                           private val albumBundle: AlbumBundle,
                           private val display: Int,
                           private val layoutParams: ViewGroup.LayoutParams,
-                          private val albumParentListener: AlbumParentListener?) : RecyclerView.ViewHolder(itemView) {
+                          private val callback: AlbumCallback?) : RecyclerView.ViewHolder(itemView) {
 
         private val container: FrameLayout = itemView.findViewById(R.id.albumContainer)
         private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.albumCheckBox)
@@ -134,7 +123,7 @@ class AlbumAdapter(
             checkBox.isChecked = albumEntity.isCheck
             checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
             checkBox.setOnClickListener {
-                if (albumParentListener?.onAlbumCheckBoxFilter(itemView, position, albumEntity) == true) {
+                if (callback?.onAlbumCheckBoxFilter(itemView, position, albumEntity) == true) {
                     return@setOnClickListener
                 }
                 if (!albumEntity.path.fileExists()) {
@@ -154,7 +143,7 @@ class AlbumAdapter(
                     multipleList.remove(albumEntity)
                     albumEntity.isCheck = false
                 }
-                albumParentListener?.onChangedCheckBoxCount(itemView, multipleList.size, albumEntity)
+                callback?.onChangedCheckBoxCount(itemView, multipleList.size, albumEntity)
                 Album.instance.albumListener?.onAlbumCheckBox(multipleList.size, albumBundle.multipleMaxCount)
             }
         }

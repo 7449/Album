@@ -13,7 +13,7 @@ open class SimpleOnAlbumListener : OnAlbumListener {
     override fun onAlbumResources(list: List<AlbumEntity>) {}
     override fun onAlbumResultCameraError() {}
     override fun onAlbumPermissionsDenied(type: Int) {}
-    override fun onAlbumPreviewFileNotExist() {}
+    override fun onAlbumPreFileNotExist() {}
     override fun onAlbumPreviewEmpty() {}
     override fun onAlbumSelectEmpty() {}
     override fun onAlbumFileNotExist() {}

@@ -7,8 +7,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.album.core.finishCamera
 import com.album.core.cameraFile
+import com.album.core.finishCamera
 import com.album.core.ui.AlbumBaseActivity
 import com.album.sample.R
 import com.google.android.cameraview.AspectRatio
@@ -103,7 +103,7 @@ class SimpleCameraActivity : AlbumBaseActivity(), ActivityCompat.OnRequestPermis
                 super.onPictureTaken(cameraView, data)
                 Toast.makeText(cameraView.context, R.string.picture_taken, Toast.LENGTH_SHORT).show()
                 cameraView.post {
-                    val cameraFile = cameraFile(null, false)
+                    val cameraFile = cameraFile(null, System.currentTimeMillis().toString(), "jpg")
                     val os: OutputStream
                     try {
                         os = FileOutputStream(cameraFile)

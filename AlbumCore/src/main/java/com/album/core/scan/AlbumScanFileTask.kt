@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.album.core.AlbumScan
+import com.album.core.AlbumScanConst
 
 /**
  * @author y
@@ -31,11 +31,11 @@ class AlbumScanFileTask private constructor(private val activity: Context, priva
 
         val parent = args?.getLong(AlbumColumns.PARENT) ?: 0
         val path = args?.getString(AlbumColumns.DATA) ?: ""
-        val scanType = args?.getInt(AlbumColumns.SCAN_TYPE) ?: AlbumScan.IMAGE
+        val scanType = args?.getInt(AlbumColumns.SCAN_TYPE) ?: AlbumScanConst.IMAGE
 
         selection = when {
             path.isNotEmpty() -> ALBUM_PATH_SELECTION(path)
-            parent == AlbumScan.ALL_PARENT -> ALBUM_ALL_SELECTION
+            parent == AlbumScanConst.ALL_PARENT -> ALBUM_ALL_SELECTION
             else -> ALBUM_PARENT_SELECTION(parent)
         }
         return CursorLoader(activity,

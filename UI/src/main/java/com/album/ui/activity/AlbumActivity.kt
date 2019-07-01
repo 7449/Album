@@ -8,14 +8,17 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
-import com.album.*
-import com.album.core.AlbumScan
+import com.album.Album
+import com.album.AlbumBundle
+import com.album.AlbumConst
+import com.album.TYPE_PREVIEW_REQUEST_CODE
+import com.album.core.AlbumScanConst
 import com.album.core.drawable
 import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
 import com.album.core.statusBarColor
 import com.album.core.ui.AlbumBaseActivity
-import com.album.listener.AlbumParentListener
+import com.album.listener.AlbumCallback
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.adapter.FinderAdapter
@@ -26,7 +29,7 @@ import kotlinx.android.synthetic.main.album_activity_album.*
  * by y on 14/08/2017.
  */
 
-class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener, AlbumParentListener {
+class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener, AlbumCallback {
 
     override val layoutId: Int = R.layout.album_activity_album
 
@@ -47,7 +50,8 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
         albumBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        albumUiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
+        albumUiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS)
+                ?: AlbumUiBundle()
 
         window.statusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor))
         album_tv_finder_all.text = getString(albumBundle.allName)
@@ -84,7 +88,6 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                     .add(R.id.album_frame, albumFragment, AlbumFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
         }
-        albumFragment.albumParentListener = this
     }
 
     private fun initBottomView() {
@@ -126,8 +129,8 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                 val multiplePreview = albumFragment.selectPreview()
                 if (multiplePreview.isNotEmpty()) {
                     val bundle = Bundle()
-                    bundle.putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreview)
-                    bundle.putLong(TYPE_PREVIEW_PARENT, AlbumScan.PREV_PARENT)
+                    bundle.putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, multiplePreview)
+                    bundle.putParcelableArrayList(AlbumConst.TYPE_PRE_ALL, albumFragment.allPreview())
                     bundle.putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
                     bundle.putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
                     albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
@@ -159,17 +162,17 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         listPopupWindow.dismiss()
     }
 
-    override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
-        PreviewActivity.newInstance(albumBundle, albumUiBundle, multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent, albumFragment)
+    override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parentId: Long) {
+        PreviewActivity.newInstance(albumBundle, albumUiBundle, multiplePreviewList, if (parentId == AlbumScanConst.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, albumFragment)
     }
 
-    override fun onAlbumScreenChanged(currentMaxCount: Int) {
+    override fun onAlbumScreenChanged(maxCount: Int) {
     }
 
-    override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
+    override fun onChangedCheckBoxCount(view: View, maxCount: Int, albumEntity: AlbumEntity) {
     }
 
-    override fun onPrevChangedCount(currentMaxCount: Int) {
+    override fun onPrevChangedCount(maxCount: Int) {
     }
 
     override fun onBackPressed() {

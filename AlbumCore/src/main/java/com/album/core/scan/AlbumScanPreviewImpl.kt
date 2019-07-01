@@ -2,7 +2,6 @@ package com.album.core.scan
 
 import android.os.Bundle
 import androidx.loader.app.LoaderManager
-import com.album.core.AlbumScan
 import com.album.core.mergeEntity
 import com.album.core.view.AlbumPreView
 

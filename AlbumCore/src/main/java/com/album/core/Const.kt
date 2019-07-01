@@ -26,7 +26,7 @@ object AlbumCameraConst {
     const val OPEN_CAMERA_ERROR = 2
 }
 
-object AlbumScan {
+object AlbumScanConst {
     //扫描类型：图片
     const val IMAGE = 0
     //扫描类型：视频

@@ -5,13 +5,16 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import com.album.*
+import com.album.Album
+import com.album.AlbumBundle
+import com.album.AlbumConst
+import com.album.TYPE_PREVIEW_REQUEST_CODE
 import com.album.core.hasL
 import com.album.core.orEmpty
 import com.album.core.scan.AlbumEntity
 import com.album.core.statusBarColor
 import com.album.core.ui.AlbumBaseActivity
-import com.album.listener.AlbumPreParentListener
+import com.album.listener.AlbumPreCallback
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.fragment.AlbumFragment
@@ -21,17 +24,21 @@ import kotlinx.android.synthetic.main.album_activity_preview.*
 /**
  * @author y
  */
-class PreviewActivity : AlbumBaseActivity(), AlbumPreParentListener {
+class PreviewActivity : AlbumBaseActivity(), AlbumPreCallback {
 
     override val layoutId: Int = R.layout.album_activity_preview
 
     companion object {
         @JvmStatic
-        fun newInstance(albumBundle: AlbumBundle, uiBundle: AlbumUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, fragment: AlbumFragment) {
+        fun newInstance(albumBundle: AlbumBundle,
+                        uiBundle: AlbumUiBundle,
+                        multiplePreviewList: ArrayList<AlbumEntity>,
+                        position: Int,
+                        fragment: AlbumFragment) {
             val bundle = Bundle().apply {
-                putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
-                putInt(TYPE_PREVIEW_POSITION_KEY, position)
-                putLong(TYPE_PREVIEW_PARENT, parent)
+                putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, multiplePreviewList)
+                putParcelableArrayList(AlbumConst.TYPE_PRE_ALL, fragment.allPreview())
+                putInt(AlbumConst.TYPE_PRE_POSITION, position)
                 putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
                 putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
@@ -59,7 +66,8 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreParentListener {
     override fun initCreate(savedInstanceState: Bundle?) {
 
         albumBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        uiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS) ?: AlbumUiBundle()
+        uiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS)
+                ?: AlbumUiBundle()
 
         preview_bottom_view.setBackgroundColor(ContextCompat.getColor(this, uiBundle.previewBottomViewBackground))
         preview_bottom_view_tv_select.setText(uiBundle.previewBottomOkText)
@@ -90,11 +98,10 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreParentListener {
                     .add(R.id.preview_fragment, prevFragment, PrevFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
         }
-        prevFragment.albumParentListener = this
     }
 
-    override fun onChangedCheckBoxCount(currentMaxCount: Int) {
-        preview_tv_preview_count.text = String.format("%s / %s", currentMaxCount.toString(), albumBundle.multipleMaxCount)
+    override fun onChangedCheckBoxCount(maxCount: Int) {
+        preview_tv_preview_count.text = String.format("%s / %s", maxCount.toString(), albumBundle.multipleMaxCount)
     }
 
     override fun onChangedViewPager(currentPos: Int, maxPos: Int) {

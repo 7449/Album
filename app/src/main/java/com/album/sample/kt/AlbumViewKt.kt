@@ -1,7 +1,7 @@
 package com.album.sample.kt
 
 import androidx.fragment.app.FragmentActivity
-import com.album.core.AlbumScan
+import com.album.core.AlbumScanConst
 import com.album.core.scan.AlbumEntity
 import com.album.core.view.AlbumView
 
@@ -51,7 +51,7 @@ class AlbumViewKt {
             }
 
             override fun currentScanType(): Int = currentScanType?.invoke()
-                    ?: AlbumScan.IMAGE
+                    ?: AlbumScanConst.IMAGE
 
             override fun getAlbumContext(): FragmentActivity = currentActivity?.invoke()
                     ?: throw KotlinNullPointerException("check currentActivity")

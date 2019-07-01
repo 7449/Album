@@ -5,11 +5,11 @@ package com.album.listener
  * @create 2019/2/27
  * 预览页回调
  */
-interface AlbumPreParentListener {
+interface AlbumPreCallback {
     /**
      * 点击checkbox时调用
      */
-    fun onChangedCheckBoxCount(currentMaxCount: Int)
+    fun onChangedCheckBoxCount(maxCount: Int)
 
     /**
      * 滑动时调用，可改变toolbar数据

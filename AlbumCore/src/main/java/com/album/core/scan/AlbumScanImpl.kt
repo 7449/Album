@@ -4,10 +4,8 @@ package com.album.core.scan
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.loader.app.LoaderManager
-import com.album.core.AlbumScan
-import com.album.core.index
+import com.album.core.AlbumScanConst
 import com.album.core.mergeEntity
 import com.album.core.view.AlbumView
 
@@ -40,7 +38,7 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
             putLong(AlbumColumns.PARENT, parent)
             putInt(AlbumColumns.SCAN_TYPE, scanType)
         }, AlbumScanFileTask.newInstance(activity) {
-            if (parent == AlbumScan.ALL_PARENT && !it.isNullOrEmpty()) {
+            if (parent == AlbumScanConst.ALL_PARENT && !it.isNullOrEmpty()) {
                 refreshFinder(it)
             }
             albumView.scanSuccess(it.mergeEntity(albumView.getSelectEntity()))
@@ -60,7 +58,7 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
     }
 
     fun refreshResultFinder(finderList: ArrayList<AlbumEntity>, albumEntity: AlbumEntity) {
-        finderList.find { it.parent == AlbumScan.ALL_PARENT }?.let {
+        finderList.find { it.parent == AlbumScanConst.ALL_PARENT }?.let {
             it.id = albumEntity.id
             it.path = albumEntity.path
             it.size = albumEntity.size
@@ -99,7 +97,7 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
         list.forEach { item -> if (finderList.find { it.parent == item.parent } == null) finderList.add(item.apply { count = list.count { it.parent == item.parent } }) }
         val first = finderList.first()
         finderList.add(0, AlbumEntity(
-                parent = AlbumScan.ALL_PARENT,
+                parent = AlbumScanConst.ALL_PARENT,
                 duration = first.duration,
                 path = first.path,
                 mediaType = first.mediaType,

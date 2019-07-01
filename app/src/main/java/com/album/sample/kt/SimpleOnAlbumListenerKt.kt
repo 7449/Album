@@ -148,7 +148,7 @@ class SimpleOnAlbumListenerKt {
                 onAlbumPermissionsDenied?.invoke(type)
             }
 
-            override fun onAlbumPreviewFileNotExist() {
+            override fun onAlbumPreFileNotExist() {
                 onAlbumPreviewFileNotExist?.invoke()
             }
 

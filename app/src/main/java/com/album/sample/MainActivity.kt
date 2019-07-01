@@ -81,7 +81,7 @@ fun MainActivity.dayAlbum() {
         options = dayOptions
         albumEmptyClickListener = { true }
     }.ui(this,
-            AlbumBundle(scanType = AlbumScan.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
+            AlbumBundle(scanType = AlbumScanConst.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
 }
 
 fun MainActivity.nightAlbum() {
@@ -117,7 +117,7 @@ fun MainActivity.video() {
         albumListener = MainAlbumListener(applicationContext, null)
         albumEmptyClickListener = { true }
     }.ui(this, AlbumBundle(
-            scanType = AlbumScan.VIDEO,
+            scanType = AlbumScanConst.VIDEO,
             cameraText = R.string.video_tips),
             AlbumUiBundle(toolbarText = R.string.album_video_title))
 }
@@ -137,7 +137,7 @@ fun MainActivity.wechat() {
 }
 
 fun MainActivity.startCamera() {
-    imagePath = Uri.fromFile(applicationContext.cameraFile(null, false))
+    imagePath = Uri.fromFile(applicationContext.cameraFile(null, System.currentTimeMillis().toString(), "jpg"))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
 }

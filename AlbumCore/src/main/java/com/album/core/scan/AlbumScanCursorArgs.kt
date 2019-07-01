@@ -4,7 +4,7 @@ package com.album.core.scan
 
 import android.net.Uri
 import android.provider.MediaStore
-import com.album.core.AlbumScan
+import com.album.core.AlbumScanConst
 
 /**
  * Album Uri
@@ -56,9 +56,9 @@ internal const val ALBUM_ORDER_BY = AlbumColumns.DATE_MODIFIED + " DESC"
  */
 internal fun ALBUM_SELECTION_ARGS(scanType: Int): Array<String> {
     return when (scanType) {
-        AlbumScan.VIDEO -> arrayOf(AlbumColumns.VIDEO)
-        AlbumScan.IMAGE -> arrayOf(AlbumColumns.IMAGE)
-        AlbumScan.MIX -> arrayOf(AlbumColumns.IMAGE, AlbumColumns.VIDEO)
+        AlbumScanConst.VIDEO -> arrayOf(AlbumColumns.VIDEO)
+        AlbumScanConst.IMAGE -> arrayOf(AlbumColumns.IMAGE)
+        AlbumScanConst.MIX -> arrayOf(AlbumColumns.IMAGE, AlbumColumns.VIDEO)
         else -> throw  KotlinNullPointerException()
     }
 }

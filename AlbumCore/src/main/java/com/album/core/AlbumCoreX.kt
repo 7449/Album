@@ -157,7 +157,6 @@ inline fun Fragment.permission(permissions: String, code: Int): Boolean {
     return false
 }
 
-
 //打开相机(需要提前请求权限)）
 inline fun openCamera(root: Any, cameraUri: Uri, video: Boolean): Int {
     var activity: Activity? = null
@@ -193,8 +192,7 @@ inline fun openCamera(root: Any, cameraUri: Uri, video: Boolean): Int {
 }
 
 //获取相机拍照或者录像时的路径
-//TODO("可对文件名称或后缀扩展自定义")
-inline fun Context.cameraFile(path: String?, video: Boolean): File {
+inline fun Context.cameraFile(path: String?, name: String, suffix: String): File {
     var cachePath: String? = null
     if (TextUtils.isEmpty(path)) {
         if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageRemovable()) {
@@ -209,7 +207,7 @@ inline fun Context.cameraFile(path: String?, video: Boolean): File {
             pathFile.mkdirs()
         }
     }
-    return File(cachePath, System.currentTimeMillis().toString() + if (video) ".mp4" else ".jpg")
+    return File(cachePath, name + "." + suffix)
 }
 
 //自定义相机可以使用此方法直接返回路径,也可以自定义

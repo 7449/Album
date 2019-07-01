@@ -46,7 +46,7 @@ interface OnAlbumListener {
     /**
      * 预览滑动图片已经被删
      */
-    fun onAlbumPreviewFileNotExist()
+    fun onAlbumPreFileNotExist()
 
     /**
      * 点击选择但是未选择图片 [onAlbumResources]

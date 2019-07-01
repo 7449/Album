@@ -44,6 +44,11 @@ internal interface SimpleAlbumFragmentInterface {
     fun multipleSelect()
 
     /**
+     * 全部数据
+     */
+    fun allPreview(): ArrayList<AlbumEntity>
+
+    /**
      * 刷新[FragmentActivity.onActivityResult]数据
      */
     fun onResultPreview(bundle: Bundle)

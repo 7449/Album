@@ -37,7 +37,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("permissions error")
     }
 
-    override fun onAlbumPreviewFileNotExist() {
+    override fun onAlbumPreFileNotExist() {
         toast("preview image has been deleted")
     }
 

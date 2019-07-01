@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumConst
-import com.album.TYPE_PREVIEW_REQUEST_CODE
 import com.album.core.hasL
 import com.album.core.orEmpty
 import com.album.core.scan.AlbumEntity
@@ -42,7 +41,7 @@ class PreviewActivity : AlbumBaseActivity(), AlbumPreCallback {
                 putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
                 putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
-            fragment.startActivityForResult(Intent(fragment.activity, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
+            fragment.startActivityForResult(Intent(fragment.activity, PreviewActivity::class.java).putExtras(bundle), AlbumConst.TYPE_PRE_REQUEST_CODE)
         }
     }
 

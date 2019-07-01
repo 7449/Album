@@ -7,15 +7,37 @@ import com.album.listener.AlbumImageLoader
 import com.album.listener.OnAlbumListener
 import com.yalantis.ucrop.UCrop
 
-/**
- * fragment进入到预览页的 request_code
- * 因为需要操作一些数据,依赖于 setResult
- * 例如预览时多选数据变化,按Toolbar返回时是否需要刷新数据
- */
-const val TYPE_PREVIEW_REQUEST_CODE = 112
-
-
 class Album {
+
+    /**
+     * UCrop setting
+     */
+    var options: UCrop.Options? = null
+
+    /**
+     * 图片加载框架
+     */
+    var albumImageLoader: AlbumImageLoader? = null
+
+    /**
+     * 回调
+     */
+    var albumListener: OnAlbumListener? = null
+
+    /**
+     * 自定义相机
+     */
+    var customCameraListener: ((fragment: AlbumBaseFragment) -> Unit)? = null
+
+    /**
+     * 占位符自定义点击
+     */
+    var emptyClickListener: ((view: View) -> Boolean)? = null
+
+    /**
+     * 默认初始化选中数据
+     */
+    var selectList: ArrayList<AlbumEntity>? = null
 
     companion object {
         @JvmStatic
@@ -24,31 +46,11 @@ class Album {
         @JvmStatic
         fun destroy() = instance.apply {
             options = null
-            initList = null
-            imageLoaderDestroy()
-            listenerDestroy()
-        }
-
-        @JvmStatic
-        fun listenerDestroy() = instance.apply {
+            albumImageLoader = null
             albumListener = null
             customCameraListener = null
-            albumEmptyClickListener = null
-        }
-
-        @JvmStatic
-        fun removeInitList() = instance.initList?.clear()
-
-        @JvmStatic
-        fun imageLoaderDestroy() = instance.apply {
-            albumImageLoader = null
+            emptyClickListener = null
+            selectList = null
         }
     }
-
-    var options: UCrop.Options? = null
-    var albumImageLoader: AlbumImageLoader? = null
-    var albumListener: OnAlbumListener? = null
-    var customCameraListener: ((fragment: AlbumBaseFragment) -> Unit)? = null
-    var albumEmptyClickListener: ((view: View) -> Boolean)? = null
-    var initList: ArrayList<AlbumEntity>? = null
 }

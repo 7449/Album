@@ -15,6 +15,8 @@ object AlbumConst {
     const val TYPE_RESULT_CAMERA = 0
     //裁剪成功之后刷新的Type
     const val TYPE_RESULT_CROP = 1
+    //fragment进入到预览页的 request_code
+    const val TYPE_PRE_REQUEST_CODE = 112
 }
 
 internal object AlbumInternalConst {

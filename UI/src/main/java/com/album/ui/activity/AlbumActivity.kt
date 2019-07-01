@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumConst
-import com.album.TYPE_PREVIEW_REQUEST_CODE
 import com.album.core.AlbumScanConst
 import com.album.core.drawable
 import com.album.core.hasL
@@ -133,7 +132,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                     bundle.putParcelableArrayList(AlbumConst.TYPE_PRE_ALL, albumFragment.allPreview())
                     bundle.putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
                     bundle.putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, albumUiBundle)
-                    albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
+                    albumFragment.startActivityForResult(Intent(this, PreviewActivity::class.java).putExtras(bundle), AlbumConst.TYPE_PRE_REQUEST_CODE)
                 }
             }
             R.id.album_tv_select -> albumFragment.multipleSelect()

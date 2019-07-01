@@ -45,8 +45,6 @@ fun NightAlbumBundle(): AlbumBundle {
             cameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight,
             cameraBackgroundColor = R.color.colorAlbumToolbarBackgroundNight,
             rootViewBackground = R.color.colorAlbumContentViewBackgroundNight,
-            photoEmptyDrawable = R.drawable.ic_camera_drawable,
-            photoEmptyDrawableColor = R.color.colorAlbumContentEmptyDrawableColorNight,
             cameraCrop = true)
 }
 
@@ -73,9 +71,8 @@ fun MainActivity.dayAlbum() {
     Album.instance.apply {
         albumImageLoader = SimplePicassoAlbumImageLoader()
         albumListener = MainAlbumListener(applicationContext, list)
-        initList = list
+        selectList = list
         options = dayOptions
-        albumEmptyClickListener = { true }
     }.ui(this,
             AlbumBundle(scanType = AlbumScanConst.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
 }
@@ -85,7 +82,6 @@ fun MainActivity.nightAlbum() {
         albumListener = MainAlbumListener(applicationContext, null)
         options = nightOptions
         albumImageLoader = SimplePicassoAlbumImageLoader()
-        albumEmptyClickListener = { true }
         customCameraListener = {
             if (it.permissionStorage() && it.permissionCamera()) {
                 Toast.makeText(it.activity, "camera", Toast.LENGTH_SHORT).show()
@@ -111,7 +107,6 @@ fun MainActivity.video() {
     Album.instance.apply {
         albumImageLoader = SimplePicassoAlbumImageLoader()
         albumListener = MainAlbumListener(applicationContext, null)
-        albumEmptyClickListener = { true }
     }.ui(this, AlbumBundle(
             scanType = AlbumScanConst.VIDEO,
             cameraText = R.string.video_tips),

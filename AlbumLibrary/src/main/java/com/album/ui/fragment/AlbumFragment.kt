@@ -22,8 +22,8 @@ import com.album.core.view.AlbumView
 import com.album.listener.AlbumCallback
 import com.album.listener.OnAlbumItemClickListener
 import com.album.simple.SimpleAlbumFragmentInterface
-import com.album.ui.adapter.AlbumAdapter
 import com.album.simple.SimpleGridDivider
+import com.album.ui.adapter.AlbumAdapter
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.album_fragment_album.*
 import java.io.File
@@ -43,35 +43,14 @@ class AlbumFragment : AlbumBaseFragment(),
         fun newInstance(albumBundle: AlbumBundle) = AlbumFragment().apply { arguments = Bundle().apply { putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle) } }
     }
 
+    private var albumCallback: AlbumCallback? = null
+    private var singleMediaScanner: AlbumSingleMediaScanner? = null
+    private lateinit var albumBundle: AlbumBundle
     private lateinit var albumAdapter: AlbumAdapter
     private lateinit var albumScan: AlbumScanImpl
-    private lateinit var albumBundle: AlbumBundle
-
-    private var albumCallback: AlbumCallback? = null
-
-    /**
-     * 目录数据
-     */
     lateinit var finderList: ArrayList<AlbumEntity>
-
-    /**
-     * 拍照保存的图片Uri
-     */
     private lateinit var imagePath: Uri
-
-    /**
-     * 拍照之后刷新数据库
-     */
-    private var singleMediaScanner: AlbumSingleMediaScanner? = null
-
-    /**
-     *当前文件夹的 parent
-     */
     var parent: Long = AlbumScanConst.ALL_PARENT
-
-    /**
-     *当前的文件夹名称
-     */
     var finderName: String = ""
 
     override fun onAttach(context: Context) {
@@ -106,12 +85,12 @@ class AlbumFragment : AlbumBaseFragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        album_content_view.setBackgroundColor(ContextCompat.getColor(mActivity, albumBundle.rootViewBackground))
+        albumRootView.setBackgroundColor(ContextCompat.getColor(mActivity, albumBundle.rootViewBackground))
         val drawable = ContextCompat.getDrawable(mActivity, albumBundle.photoEmptyDrawable)
         drawable?.setColorFilter(ContextCompat.getColor(mActivity, albumBundle.photoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
         albumEmpty.setImageDrawable(drawable)
         albumEmpty.setOnClickListener { v ->
-            if (Album.instance.albumEmptyClickListener?.invoke(v) == true) {
+            if (Album.instance.emptyClickListener?.invoke(v) == true) {
                 startCamera()
             }
         }
@@ -127,8 +106,8 @@ class AlbumFragment : AlbumBaseFragment(),
 
         if (!selectList.isNullOrEmpty()) {
             albumAdapter.multipleList = selectList
-        } else if (!albumBundle.radio && !Album.instance.initList.isNullOrEmpty()) {
-            albumAdapter.multipleList = Album.instance.initList ?: ArrayList()
+        } else if (!albumBundle.radio && !Album.instance.selectList.isNullOrEmpty()) {
+            albumAdapter.multipleList = Album.instance.selectList ?: ArrayList()
         }
 
         albumRecyclerView.adapter = albumAdapter
@@ -140,7 +119,7 @@ class AlbumFragment : AlbumBaseFragment(),
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
             Activity.RESULT_CANCELED -> when (requestCode) {
-                TYPE_PREVIEW_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
+                AlbumConst.TYPE_PRE_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
                 UCrop.REQUEST_CROP -> Album.instance.albumListener?.onAlbumCropCanceled()
                 AlbumCameraConst.OPEN_CAMERA_REQUEST_CODE -> {
                     val path = imagePath.path.orEmpty()
@@ -190,20 +169,17 @@ class AlbumFragment : AlbumBaseFragment(),
                         mActivity.finish()
                     }
                 }
-                TYPE_PREVIEW_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
+                AlbumConst.TYPE_PRE_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
             }
         }
     }
 
-
     override fun scanSuccess(arrayList: ArrayList<AlbumEntity>) {
         if (arrayList.isEmpty()) {
-            albumEmpty.show()
             Album.instance.albumListener?.onAlbumEmpty()
             return
         }
-        albumEmpty.hide()
-        if (parent == AlbumScanConst.ALL_PARENT && !albumBundle.hideCamera && arrayList.isNotEmpty()) {
+        if (parent == AlbumScanConst.ALL_PARENT && !albumBundle.hideCamera) {
             arrayList.add(0, AlbumEntity(path = AlbumInternalConst.CAMERA))
         }
         albumAdapter.addAll(arrayList)
@@ -360,18 +336,11 @@ class AlbumFragment : AlbumBaseFragment(),
     }
 
     override fun openUCrop(path: String) {
-        val onAlbumCustomCrop = albumCallback?.onAlbumCustomCrop(path) ?: false
-        if (onAlbumCustomCrop) {
-            return
-        }
         UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(mActivity.cameraFile(albumBundle.uCropPath, albumBundle.cameraName, albumBundle.cameraSuffix)))
                 .withOptions(Album.instance.options ?: UCrop.Options())
                 .start(mActivity, this)
     }
 
-    /**
-     * 预览页返回到当前页时需要刷新的数据
-     */
     override fun onResultPreview(bundle: Bundle) {
         val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(AlbumConst.TYPE_PRE_SELECT)
         val isRefreshUI = bundle.getBoolean(AlbumInternalConst.TYPE_PRE_REFRESH_UI, true)
@@ -388,9 +357,6 @@ class AlbumFragment : AlbumBaseFragment(),
         albumCallback?.onPrevChangedCount(getSelectEntity().size)
     }
 
-    /**
-     * 预览页返回到当前页时需要刷新的数据
-     */
     override fun onDialogResultPreview(bundle: Bundle) {
         val previewAlbumEntity = bundle.getParcelableArrayList<AlbumEntity>(AlbumConst.TYPE_PRE_SELECT)
         val isRefreshUI = bundle.getBoolean(AlbumInternalConst.TYPE_PRE_REFRESH_UI, true)

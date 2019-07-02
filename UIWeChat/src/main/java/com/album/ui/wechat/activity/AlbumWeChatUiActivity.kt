@@ -9,13 +9,13 @@ import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumConst
+import com.album.callback.AlbumCallback
 import com.album.core.AlbumScanConst
 import com.album.core.hasL
 import com.album.core.hasVideo
 import com.album.core.scan.AlbumEntity
 import com.album.core.statusBarColor
 import com.album.core.ui.AlbumBaseActivity
-import com.album.callback.AlbumCallback
 import com.album.ui.fragment.AlbumFragment
 import kotlinx.android.synthetic.main.album_wechat_activity.*
 
@@ -92,7 +92,11 @@ class AlbumWeChatUiActivity : AlbumBaseActivity(), AlbumCallback, AlbumWeChatUiF
     }
 
     override fun onAlbumItemClick(selectEntity: ArrayList<AlbumEntity>, position: Int, parentId: Long) {
-        AlbumWeChatPreUiActivity.start(albumBundle, albumUiBundle, selectEntity, if (parentId == AlbumScanConst.ALL && !albumBundle.hideCamera) position - 1 else position, album_wechat_ui_original_image.isChecked, albumFragment)
+        AlbumWeChatPreUiActivity.start(albumBundle, albumUiBundle, selectEntity,
+                albumFragment.allPreview(),
+                if (parentId == AlbumScanConst.ALL && !albumBundle.hideCamera) position - 1 else position,
+                album_wechat_ui_original_image.isChecked,
+                albumFragment)
     }
 
     override fun onAlbumScreenChanged(selectCount: Int) {

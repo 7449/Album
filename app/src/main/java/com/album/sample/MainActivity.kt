@@ -117,6 +117,7 @@ fun MainActivity.video() {
 
 fun MainActivity.wechat() {
     Album.instance.apply {
+        albumImageLoader = SimpleAlbumWeChatImageLoader()
         albumListener = MainAlbumListener(applicationContext, null)
     }.weChatUI(this,
             AlbumBundle(

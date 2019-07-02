@@ -11,16 +11,16 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumConst
+import com.album.callback.AlbumPreCallback
 import com.album.core.*
 import com.album.core.scan.AlbumEntity
 import com.album.core.ui.AlbumBaseActivity
-import com.album.callback.AlbumPreCallback
+import com.album.ui.fragment.AlbumFragment
 import com.album.ui.fragment.PrevFragment
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.album_wechat_preview_activity.*
@@ -34,9 +34,17 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreCallback {
 
     companion object {
         private const val TYPE_HAS_ORIGINAL_IMAGE = "original_image"
-        fun start(albumBundle: AlbumBundle, uiBundle: AlbumWeChatUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, originalImage: Boolean, fragment: Fragment) {
+        fun start(
+                albumBundle: AlbumBundle,
+                uiBundle: AlbumWeChatUiBundle,
+                selectList: ArrayList<AlbumEntity>,
+                allList: ArrayList<AlbumEntity>,
+                position: Int,
+                originalImage: Boolean,
+                fragment: AlbumFragment) {
             val bundle = Bundle().apply {
-                putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, multiplePreviewList)
+                putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, selectList)
+                putParcelableArrayList(AlbumConst.TYPE_PRE_ALL, allList)
                 putInt(AlbumConst.TYPE_PRE_POSITION, position)
                 putBoolean(TYPE_HAS_ORIGINAL_IMAGE, originalImage)
                 putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
@@ -82,7 +90,6 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreCallback {
         if (hasL()) {
             album_wechat_preview_ui_toolbar.elevation = albumUiBundle.toolbarElevation
         }
-
         album_wechat_preview_ui_bottom_prev.setHasFixedSize(true)
         album_wechat_preview_ui_bottom_prev.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         album_wechat_preview_ui_bottom_prev.adapter = object : RecyclerView.Adapter<PrevViewHolder>() {

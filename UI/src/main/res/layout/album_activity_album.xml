@@ -7,25 +7,25 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/album_toolbar"
+        android:id="@+id/albumToolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/album_toolbar_height" />
 
     <FrameLayout
-        android:id="@+id/album_frame"
+        android:id="@+id/albumFrame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
     <RelativeLayout
-        android:id="@+id/album_bottom_view"
+        android:id="@+id/albumBottomView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/album_bottom_height"
         android:background="@color/colorAlbumBottomViewBackground">
 
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/album_tv_finder_all"
+            android:id="@+id/albumFinderAll"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
@@ -40,13 +40,13 @@
             tools:ignore="RtlHardcoded" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/album_tv_preview"
+            android:id="@+id/albumPre"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/album_button_margin"
             android:layout_marginRight="@dimen/album_bottom_marginRight"
-            android:layout_toLeftOf="@+id/album_tv_select"
+            android:layout_toLeftOf="@+id/albumSelect"
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/album_bottom_padding"
@@ -56,7 +56,7 @@
             tools:ignore="RelativeOverlap,RtlHardcoded" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/album_tv_select"
+            android:id="@+id/albumSelect"
             android:layout_width="@dimen/album_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

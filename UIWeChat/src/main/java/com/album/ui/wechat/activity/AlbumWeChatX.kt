@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import com.album.Album
 import com.album.AlbumBundle
-import com.album.EXTRA_ALBUM_OPTIONS
-import com.album.EXTRA_ALBUM_UI_OPTIONS
+import com.album.AlbumConst
 
 /**
  * @author y
@@ -21,8 +20,8 @@ fun Album.weChatUI(context: Context, albumBundle: AlbumBundle) = weChatUI(contex
 fun Album.weChatUI(context: Context, albumBundle: AlbumBundle, uiBundle: AlbumWeChatUiBundle) = apply {
     context.startActivity(Intent(context, AlbumWeChatUiActivity::class.java).apply {
         putExtras(Bundle().apply {
-            putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
-            putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
+            putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
+            putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, uiBundle)
         })
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     })

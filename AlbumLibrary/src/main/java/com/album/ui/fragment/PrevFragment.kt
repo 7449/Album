@@ -11,7 +11,7 @@ import com.album.core.fileExists
 import com.album.core.mergeEntity
 import com.album.core.scan.AlbumEntity
 import com.album.core.ui.AlbumBaseFragment
-import com.album.listener.AlbumPreCallback
+import com.album.callback.AlbumPreCallback
 import com.album.ui.adapter.PrevAdapter
 import kotlinx.android.synthetic.main.album_fragment_preview.*
 

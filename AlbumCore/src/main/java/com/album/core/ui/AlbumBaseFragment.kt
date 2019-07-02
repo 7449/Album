@@ -39,9 +39,9 @@ abstract class AlbumBaseFragment : Fragment() {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(AlbumPermissionConst.TYPE_PERMISSIONS_ALBUM)
+                    permissionsDenied(AlbumPermissionConst.ALBUM)
                 } else {
-                    permissionsGranted(AlbumPermissionConst.TYPE_PERMISSIONS_ALBUM)
+                    permissionsGranted(AlbumPermissionConst.ALBUM)
                 }
             }
             AlbumPermissionConst.CAMERA_REQUEST_CODE -> {
@@ -49,9 +49,9 @@ abstract class AlbumBaseFragment : Fragment() {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(AlbumPermissionConst.TYPE_PERMISSIONS_CAMERA)
+                    permissionsDenied(AlbumPermissionConst.CAMERA)
                 } else {
-                    permissionsGranted(AlbumPermissionConst.TYPE_PERMISSIONS_CAMERA)
+                    permissionsGranted(AlbumPermissionConst.CAMERA)
                 }
             }
         }

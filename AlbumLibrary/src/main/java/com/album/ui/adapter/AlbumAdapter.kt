@@ -15,12 +15,11 @@ import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumInternalConst
 import com.album.R
+import com.album.callback.AlbumCallback
+import com.album.core.addChildView
 import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
 import com.album.core.show
-import com.album.listener.AlbumCallback
-import com.album.listener.OnAlbumItemClickListener
-import com.album.listener.addChildView
 
 class AlbumAdapter(
         private val display: Int,
@@ -28,6 +27,11 @@ class AlbumAdapter(
         private val albumCallback: AlbumCallback?,
         private val onAlbumItemClickListener: OnAlbumItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    interface OnAlbumItemClickListener {
+        fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity)
+        fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity)
+    }
 
     companion object {
         private const val TYPE_CAMERA = 0

@@ -35,7 +35,7 @@ class AlbumScanFileTask private constructor(private val activity: Context, priva
 
         selection = when {
             path.isNotEmpty() -> ALBUM_PATH_SELECTION(path)
-            parent == AlbumScanConst.ALL_PARENT -> ALBUM_ALL_SELECTION
+            parent == AlbumScanConst.ALL -> ALBUM_ALL_SELECTION
             else -> ALBUM_PARENT_SELECTION(parent)
         }
         return CursorLoader(activity,

@@ -27,7 +27,7 @@
             android:name="com.album.ui.activity.AlbumActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.album.ui.activity.PreviewActivity"
+            android:name="com.album.ui.activity.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.album.ui.wechat.activity.AlbumWeChatUiActivity"

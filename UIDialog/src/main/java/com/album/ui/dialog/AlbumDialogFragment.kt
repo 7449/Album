@@ -13,15 +13,13 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.album.*
-import com.album.core.getCameraFile
-import com.album.core.hasL
-import com.album.core.orEmpty
+import com.album.Album
+import com.album.AlbumBundle
+import com.album.AlbumConst
+import com.album.callback.AlbumCallback
+import com.album.core.*
 import com.album.core.scan.AlbumEntity
-import com.album.core.scan.AlbumScan
-import com.album.core.toFile
 import com.album.core.ui.AlbumBaseDialogFragment
-import com.album.listener.AlbumParentListener
 import com.album.ui.fragment.AlbumFragment
 import com.album.ui.fragment.PrevFragment
 import com.yalantis.ucrop.UCrop
@@ -30,15 +28,15 @@ import com.yalantis.ucrop.UCropFragmentCallback
 import kotlinx.android.synthetic.main.album_fragment_dialog.*
 import java.io.File
 
-class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
+class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumCallback {
 
     companion object {
         @JvmStatic
         fun newInstance(albumBundle: AlbumBundle, uiBundle: AlbumDialogUiBundle): AlbumDialogFragment {
             val albumDialogFragment = AlbumDialogFragment()
             albumDialogFragment.arguments = Bundle().apply {
-                putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
-                putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
+                putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
+                putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
             return albumDialogFragment
         }
@@ -87,8 +85,9 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        albumUiBundle = bundle.getParcelable(EXTRA_ALBUM_UI_OPTIONS) ?: AlbumDialogUiBundle()
-        albumBundle = bundle.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        albumUiBundle = bundle.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS)
+                ?: AlbumDialogUiBundle()
+        albumBundle = bundle.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
     }
 
     @SuppressLint("NewApi")
@@ -131,14 +130,14 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
         album_dialog_bottom_view_preview.setOnClickListener {
             if (albumFragment.getSelectEntity().isEmpty()) {
-                Album.instance.albumListener?.onAlbumPreviewEmpty()
+                Album.instance.albumListener?.onAlbumPreEmpty()
                 return@setOnClickListener
             }
             if (hasShowPrevFragment()) {
                 Toast.makeText(mActivity, "正在预览阶段", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            initPrevFragment(albumFragment.getSelectEntity(), 0, AlbumScan.PREV_PARENT)
+            initPrevFragment(albumFragment.getSelectEntity(), 0)
         }
 
         album_dialog_bottom_view_crop.setOnClickListener { cropFragment?.cropAndSaveImage() }
@@ -146,17 +145,17 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
         initAlbumFragment()
     }
 
-    override fun onAlbumItemClick(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
-        initPrevFragment(multiplePreviewList, if (parent == AlbumScan.ALL_PARENT && !albumBundle.hideCamera) position - 1 else position, parent)
+    override fun onAlbumItemClick(selectEntity: ArrayList<AlbumEntity>, position: Int, parentId: Long) {
+        initPrevFragment(selectEntity, if (parentId == AlbumScanConst.ALL && !albumBundle.hideCamera) position - 1 else position)
     }
 
-    override fun onChangedCheckBoxCount(view: View, currentMaxCount: Int, albumEntity: AlbumEntity) {
+    override fun onChangedCheckBoxCount(view: View, selectCount: Int, albumEntity: AlbumEntity) {
     }
 
-    override fun onAlbumScreenChanged(currentMaxCount: Int) {
+    override fun onAlbumScreenChanged(selectCount: Int) {
     }
 
-    override fun onPrevChangedCount(currentMaxCount: Int) {
+    override fun onPrevChangedCount(selectCount: Int) {
     }
 
     override fun onAlbumCustomCrop(path: String): Boolean {
@@ -166,11 +165,11 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
 
     private fun hasShowPrevFragment() = ::prevFragment.isInitialized && prevFragment.isVisible
 
-    private fun initPrevFragment(multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long) {
+    private fun initPrevFragment(multiplePreviewList: ArrayList<AlbumEntity>, position: Int) {
         if (::prevFragment.isInitialized && !prevFragment.isRemoving) {
             childFragmentManager.beginTransaction().remove(prevFragment).commitAllowingStateLoss()
         }
-        prevFragment = PrevFragment.newInstance(albumBundle, position, parent, multiplePreviewList)
+        prevFragment = PrevFragment.newInstance(albumBundle, position, multiplePreviewList, albumFragment.allPreview())
         childFragmentManager.beginTransaction().apply { add(R.id.album_dialog_fragment, prevFragment, PrevFragment::class.java.simpleName) }.hide(albumFragment).commitAllowingStateLoss()
     }
 
@@ -186,14 +185,13 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
                     .apply { add(R.id.album_dialog_fragment, albumFragment, AlbumFragment::class.java.simpleName) }
                     .commitAllowingStateLoss()
         }
-        albumFragment.albumParentListener = this
     }
 
     private fun openUCrop(path: String) {
         cropFragment?.let { childFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss() }
-        cropFragment = UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(mActivity.getCameraFile(albumBundle.uCropPath, albumBundle.scanType == AlbumScan.VIDEO)))
+        cropFragment = UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(mActivity.cameraFile(albumBundle.uCropPath, System.currentTimeMillis().toString(), ".jpg")))
                 .withOptions(Album.instance.options ?: UCrop.Options()).fragment
-        cropFragment?.let {
+        cropFragment?.let { it ->
             childFragmentManager.beginTransaction().hide(albumFragment).add(R.id.album_dialog_fragment, it, UCropFragment.TAG).commitAllowingStateLoss()
             Handler().postDelayed({
                 it.setCallback(object : UCropFragmentCallback {
@@ -205,8 +203,8 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumParentListener {
                             UCrop.RESULT_ERROR -> Album.instance.albumListener?.onAlbumUCropError(UCrop.getError(result.mResultData.orEmpty()))
                             RESULT_OK -> {
                                 val cropPath = result.mResultData.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path.orEmpty()
-                                Album.instance.albumListener?.onAlbumUCropResources(cropPath.toFile())
-                                albumFragment.refreshMedia(TYPE_RESULT_CROP, cropPath)
+                                cropPath.toFile()?.let { Album.instance.albumListener?.onAlbumUCropResources(it) }
+                                albumFragment.refreshMedia(AlbumConst.TYPE_RESULT_CROP, cropPath)
                             }
                         }
                     }

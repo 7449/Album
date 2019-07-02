@@ -14,11 +14,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.album.*
+import com.album.Album
+import com.album.AlbumBundle
+import com.album.AlbumConst
 import com.album.core.*
 import com.album.core.scan.AlbumEntity
 import com.album.core.ui.AlbumBaseActivity
-import com.album.listener.AlbumPreviewParentListener
+import com.album.callback.AlbumPreCallback
 import com.album.ui.fragment.PrevFragment
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.album_wechat_preview_activity.*
@@ -28,20 +30,19 @@ import kotlinx.android.synthetic.main.album_wechat_preview_activity.*
  * @author y
  * @create 2018/12/3
  */
-class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener {
+class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreCallback {
 
     companion object {
         private const val TYPE_HAS_ORIGINAL_IMAGE = "original_image"
-        fun start(albumBundle: AlbumBundle, uiBundle: AlbumWeChatUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, parent: Long, originalImage: Boolean, fragment: Fragment) {
+        fun start(albumBundle: AlbumBundle, uiBundle: AlbumWeChatUiBundle, multiplePreviewList: ArrayList<AlbumEntity>, position: Int, originalImage: Boolean, fragment: Fragment) {
             val bundle = Bundle().apply {
-                putParcelableArrayList(TYPE_PREVIEW_KEY, multiplePreviewList)
-                putInt(TYPE_PREVIEW_POSITION_KEY, position)
+                putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, multiplePreviewList)
+                putInt(AlbumConst.TYPE_PRE_POSITION, position)
                 putBoolean(TYPE_HAS_ORIGINAL_IMAGE, originalImage)
-                putLong(TYPE_PREVIEW_PARENT, parent)
-                putParcelable(EXTRA_ALBUM_OPTIONS, albumBundle)
-                putParcelable(EXTRA_ALBUM_UI_OPTIONS, uiBundle)
+                putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
+                putParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS, uiBundle)
             }
-            fragment.startActivityForResult(Intent(fragment.activity, AlbumWeChatPreUiActivity::class.java).putExtras(bundle), TYPE_PREVIEW_REQUEST_CODE)
+            fragment.startActivityForResult(Intent(fragment.activity, AlbumWeChatPreUiActivity::class.java).putExtras(bundle), AlbumConst.TYPE_PRE_REQUEST_CODE)
         }
     }
 
@@ -52,11 +53,11 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener
     private lateinit var prevFragment: PrevFragment
 
     override fun initView() {
-        album_wechat_preview_ui_original_image.isChecked = intent.extras?.getBoolean(AlbumWeChatPreUiActivity.TYPE_HAS_ORIGINAL_IMAGE, false)
+        album_wechat_preview_ui_original_image.isChecked = intent.extras?.getBoolean(TYPE_HAS_ORIGINAL_IMAGE, false)
                 ?: false
         album_wechat_preview_ui_title_send.setOnClickListener {
             if (prevFragment.getSelectEntity().isEmpty()) {
-                Album.instance.albumListener?.onAlbumContainerPreviewSelectEmpty()
+                Album.instance.albumListener?.onAlbumContainerPreSelectEmpty()
                 return@setOnClickListener
             }
             Album.instance.albumListener?.onAlbumResources(prevFragment.getSelectEntity())
@@ -66,11 +67,11 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener
 
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
-        albumBundle = intent.extras?.getParcelable(EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        albumUiBundle = intent.extras?.getParcelable(EXTRA_ALBUM_UI_OPTIONS)
+        albumBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
+        albumUiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS)
                 ?: AlbumWeChatUiBundle()
 
-        window.settingStatusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor))
+        window.statusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor))
         album_wechat_preview_ui_toolbar.setTitle(albumUiBundle.toolbarText)
         album_wechat_preview_ui_toolbar.setTitleTextColor(ContextCompat.getColor(this, albumUiBundle.toolbarTextColor))
         val drawable = ContextCompat.getDrawable(this, albumUiBundle.toolbarIcon)
@@ -95,10 +96,10 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener
             override fun onBindViewHolder(holder: PrevViewHolder, position: Int) {
                 val arrayList = prevFragment.getSelectEntity()
                 val albumEntity = arrayList[position]
-                val currentEntity = prevFragment.getCurrentEntity()
+                val currentEntity = prevFragment.getCurrentItem()
                 Glide.with(holder.itemView.context).load(albumEntity.path).into(holder.imageView)
                 holder.rootView.setBackgroundColor(if (currentEntity.path == albumEntity.path) Color.WHITE else ContextCompat.getColor(this@AlbumWeChatPreUiActivity, com.album.ui.wechat.R.color.album_wechat_ui_bottom_root))
-                holder.itemView.setOnClickListener { prevFragment.setCurrentItem(prevFragment.getAlbumList().indexOf(albumEntity)) }
+                holder.itemView.setOnClickListener { prevFragment.setCurrentItem(prevFragment.getAllList().indexOf(albumEntity)) }
             }
 
         }
@@ -110,15 +111,15 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener
         val rootView: FrameLayout = itemView.findViewById(com.album.ui.wechat.R.id.album_wechat_pre_bottom_pre_item_root)
     }
 
-    override fun onChangedCheckBoxCount(currentMaxCount: Int) {
-        album_wechat_preview_ui_title_send.isEnabled = currentMaxCount != 0
+    override fun onChangedCheckBoxCount(selectCount: Int) {
+        album_wechat_preview_ui_title_send.isEnabled = selectCount != 0
         album_wechat_preview_ui_bottom_prev.adapter?.notifyDataSetChanged()
-        if (currentMaxCount == 0) {
+        if (selectCount == 0) {
             album_wechat_preview_ui_bottom_prev.hide()
             album_wechat_preview_ui_title_send.text = getString(com.album.ui.wechat.R.string.album_wechat_ui_title_send)
         } else {
             album_wechat_preview_ui_bottom_prev.show()
-            album_wechat_preview_ui_title_send.text = String.format(getString(com.album.ui.wechat.R.string.album_wechat_ui_title_send_count), currentMaxCount, albumBundle.multipleMaxCount)
+            album_wechat_preview_ui_title_send.text = String.format(getString(com.album.ui.wechat.R.string.album_wechat_ui_title_send_count), selectCount, albumBundle.multipleMaxCount)
         }
         moveToPosition()
     }
@@ -131,7 +132,7 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener
 
 
     private fun moveToPosition() {
-        val currentEntity = prevFragment.getCurrentEntity()
+        val currentEntity = prevFragment.getCurrentItem()
         if (!currentEntity.isCheck) {
             return
         }
@@ -164,7 +165,6 @@ class AlbumWeChatPreUiActivity : AlbumBaseActivity(), AlbumPreviewParentListener
                     .apply { add(com.album.ui.wechat.R.id.album_frame_preview, prevFragment, PrevFragment::class.java.simpleName) }
                     .commitAllowingStateLoss()
         }
-        prevFragment.albumParentListener = this
     }
 
     override fun onBackPressed() {

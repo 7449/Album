@@ -20,4 +20,5 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "com.ydevelop:album:$albumLibraryVersion"
+//    api project(':AlbumLibrary')
 }

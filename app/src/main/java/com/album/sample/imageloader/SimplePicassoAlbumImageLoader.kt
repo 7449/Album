@@ -4,9 +4,9 @@ import android.content.ContentUris
 import android.provider.MediaStore
 import android.view.View
 import android.widget.FrameLayout
+import com.album.core.AlbumImageView
 import com.album.core.scan.AlbumEntity
 import com.album.listener.AlbumImageLoader
-import com.album.listener.ImageView
 import com.squareup.picasso.Picasso
 
 /**
@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 class SimplePicassoAlbumImageLoader : AlbumImageLoader {
 
     override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = container.ImageView()
+        val albumImageView = container.AlbumImageView()
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.id))
                 .centerCrop()
@@ -26,7 +26,7 @@ class SimplePicassoAlbumImageLoader : AlbumImageLoader {
     }
 
     override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = container.ImageView()
+        val albumImageView = container.AlbumImageView()
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, finderEntity.id))
                 .resize(50, 50)
@@ -36,7 +36,7 @@ class SimplePicassoAlbumImageLoader : AlbumImageLoader {
     }
 
     override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
-        val albumImageView = container.ImageView()
+        val albumImageView = container.AlbumImageView()
         Picasso.get()
                 .load(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, albumEntity.id))
                 .resize(50, 50)

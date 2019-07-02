@@ -38,7 +38,7 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
             putLong(AlbumColumns.PARENT, parent)
             putInt(AlbumColumns.SCAN_TYPE, scanType)
         }, AlbumScanFileTask.newInstance(activity) {
-            if (parent == AlbumScanConst.ALL_PARENT && !it.isNullOrEmpty()) {
+            if (parent == AlbumScanConst.ALL && !it.isNullOrEmpty()) {
                 refreshFinder(it)
             }
             albumView.scanSuccess(it.mergeEntity(albumView.getSelectEntity()))
@@ -58,20 +58,12 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
     }
 
     fun refreshResultFinder(finderList: ArrayList<AlbumEntity>, albumEntity: AlbumEntity) {
-        finderList.find { it.parent == AlbumScanConst.ALL_PARENT }?.let {
-            it.id = albumEntity.id
-            it.path = albumEntity.path
-            it.size = albumEntity.size
+        finderList.find { it.parent == AlbumScanConst.ALL }?.let {
             it.duration = albumEntity.duration
-            it.mimeType = albumEntity.mimeType
-            it.displayName = albumEntity.displayName
-            it.orientation = albumEntity.orientation
-            it.bucketId = albumEntity.bucketId
-            it.bucketDisplayName = albumEntity.bucketDisplayName
+            it.path = albumEntity.path
             it.mediaType = albumEntity.mediaType
-            it.width = albumEntity.width
-            it.height = albumEntity.height
-            it.dataModified = albumEntity.dataModified
+            it.mimeType = albumEntity.mimeType
+            it.id = albumEntity.id
             it.count = it.count + 1
         }
         finderList.find { it.parent == albumEntity.parent }?.let {
@@ -97,7 +89,7 @@ class AlbumScanImpl private constructor(private val albumView: AlbumView) {
         list.forEach { item -> if (finderList.find { it.parent == item.parent } == null) finderList.add(item.apply { count = list.count { it.parent == item.parent } }) }
         val first = finderList.first()
         finderList.add(0, AlbumEntity(
-                parent = AlbumScanConst.ALL_PARENT,
+                parent = AlbumScanConst.ALL,
                 duration = first.duration,
                 path = first.path,
                 mediaType = first.mediaType,

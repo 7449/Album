@@ -8,15 +8,15 @@ class AlbumUiBundle(
         /**
          * 预览toolbar返回是否刷新数据
          */
-        var previewFinishRefresh: Boolean = true,
+        var preFinishRefresh: Boolean = true,
         /**
          * 预览back返回是否刷新数据
          */
-        var previewBackRefresh: Boolean = true,
+        var preBackRefresh: Boolean = true,
         /**
          * 预览页选择之后是否销毁上一页面
          */
-        var previewSelectOkFinish: Boolean = true,
+        var preSelectOkFinish: Boolean = true,
         /**
          * 状态栏颜色
          */
@@ -124,33 +124,33 @@ class AlbumUiBundle(
         /**
          * 预览页title
          */
-        var previewTitle: Int = R.string.preview_title,
+        var preTitle: Int = R.string.preview_title,
         /**
          * 预览页ViewPager背景色
          */
-        var previewBackground: Int = R.color.colorAlbumPreviewBackground,
+        var preBackground: Int = R.color.colorAlbumPreviewBackground,
         /**
          * 预览页底部提示栏背景色
          */
-        var previewBottomViewBackground: Int = R.color.colorAlbumPreviewBottomViewBackground,
+        var preBottomViewBackground: Int = R.color.colorAlbumPreviewBottomViewBackground,
         /**
          * 预览页底部提示栏确认文字
          */
-        var previewBottomOkText: Int = R.string.preview_select,
+        var preBottomOkText: Int = R.string.preview_select,
         /**
          * 预览页底部提示栏确认文字颜色
          */
-        var previewBottomOkTextColor: Int = R.color.colorAlbumPreviewBottomViewOkColor,
+        var preBottomOkTextColor: Int = R.color.colorAlbumPreviewBottomViewOkColor,
         /**
          * 预览页底部提示栏数字文字
          */
-        var previewBottomCountTextColor: Int = R.color.colorAlbumPreviewBottomViewCountColor,
+        var preBottomCountTextColor: Int = R.color.colorAlbumPreviewBottomViewCountColor,
         /**
          * 预览页底部提示栏确认文字大小
          */
-        var previewBottomOkTextSize: Float = 16F,
+        var preBottomOkTextSize: Float = 16F,
         /**
          * 预览页底部提示栏数字文字大小
          */
-        var previewBottomCountTextSize: Float = 16F
+        var preBottomCountTextSize: Float = 16F
 ) : Parcelable

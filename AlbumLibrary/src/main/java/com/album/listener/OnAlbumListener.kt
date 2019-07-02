@@ -26,7 +26,7 @@ interface OnAlbumListener {
     /**
      * fragment 依赖的activity或者dialog 预览页点击确定但是没有选中图片
      */
-    fun onAlbumContainerPreviewSelectEmpty()
+    fun onAlbumContainerPreSelectEmpty()
 
     /**
      * 选择图片
@@ -34,9 +34,14 @@ interface OnAlbumListener {
     fun onAlbumResources(list: List<AlbumEntity>)
 
     /**
-     * 获取预览但是未选择图片
+     * 点击预览但是未选择图片
      */
-    fun onAlbumPreviewEmpty()
+    fun onAlbumPreEmpty()
+
+    /**
+     * 点击选择但是未选择图片
+     */
+    fun onAlbumSelectEmpty()
 
     /**
      * 权限被拒
@@ -44,22 +49,17 @@ interface OnAlbumListener {
     fun onAlbumPermissionsDenied(type: Int)
 
     /**
-     * 预览滑动图片已经被删
+     * 预览页滑动但图片不存在
      */
     fun onAlbumPreFileNotExist()
 
     /**
-     * 点击选择但是未选择图片 [onAlbumResources]
-     */
-    fun onAlbumSelectEmpty()
-
-    /**
-     * 点击图片时图片已经被删
+     * 点击图片时图片不存在
      */
     fun onAlbumFileNotExist()
 
     /**
-     * 多选图片时图片已经被删
+     * 多选图片时图片不存在
      */
     fun onAlbumCheckFileNotExist()
 
@@ -114,7 +114,7 @@ interface OnAlbumListener {
     fun onAlbumVideoPlayError()
 
     /**
-     * 每次checkbox选择时调用
+     * CheckBox选择时调用
      */
-    fun onAlbumCheckBox(count: Int, maxCount: Int)
+    fun onAlbumCheckBox(selectCount: Int, maxCount: Int)
 }

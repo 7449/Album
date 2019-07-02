@@ -15,8 +15,8 @@ class MainAlbumListener internal constructor(context: Context, private val list:
     override fun onAlbumCameraSuccessCanceled() {
     }
 
-    override fun onAlbumCheckBox(count: Int, maxCount: Int) {
-        toast("onCheckBoxAlbum:$count")
+    override fun onAlbumCheckBox(selectCount: Int, maxCount: Int) {
+        toast("onCheckBoxAlbum:$selectCount")
     }
 
     override fun onAlbumContainerFinish() {
@@ -45,7 +45,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("folder directory is empty")
     }
 
-    override fun onAlbumPreviewEmpty() {
+    override fun onAlbumPreEmpty() {
         toast("preview no image")
     }
 
@@ -57,7 +57,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("album image has been deleted")
     }
 
-    override fun onAlbumContainerPreviewSelectEmpty() {
+    override fun onAlbumContainerPreSelectEmpty() {
         toast("PreviewActivity,  preview no image")
     }
 

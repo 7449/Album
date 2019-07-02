@@ -7,8 +7,8 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.album.Album
 import com.album.R
+import com.album.core.addChildView
 import com.album.core.scan.AlbumEntity
-import com.album.listener.addChildView
 
 class PrevAdapter : RecyclerView.Adapter<PrevAdapter.PhotoViewHolder>() {
 

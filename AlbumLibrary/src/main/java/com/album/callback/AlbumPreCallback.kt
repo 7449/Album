@@ -1,4 +1,4 @@
-package com.album.listener
+package com.album.callback
 
 /**
  * @author y
@@ -9,7 +9,7 @@ interface AlbumPreCallback {
     /**
      * 点击checkbox时调用
      */
-    fun onChangedCheckBoxCount(maxCount: Int)
+    fun onChangedCheckBoxCount(selectCount: Int)
 
     /**
      * 滑动时调用，可改变toolbar数据

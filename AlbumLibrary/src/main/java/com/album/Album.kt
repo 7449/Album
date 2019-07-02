@@ -32,7 +32,7 @@ class Album {
     /**
      * 占位符自定义点击
      */
-    var emptyClickListener: ((view: View) -> Boolean)? = null
+    var emptyClickListener: ((view: View) -> Unit)? = null
 
     /**
      * 默认初始化选中数据

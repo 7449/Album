@@ -18,6 +18,7 @@ import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.core.app.ActivityCompat
@@ -27,6 +28,7 @@ import androidx.fragment.app.Fragment
 import com.album.core.scan.AlbumColumns
 import com.album.core.scan.AlbumEntity
 import com.album.core.ui.AlbumBaseActivity
+import com.album.core.widget.AlbumImageView
 import java.io.File
 
 //文件是否为视频
@@ -87,19 +89,10 @@ inline fun Activity.permissionCamera(): Boolean = permission(Manifest.permission
 inline fun Fragment.permissionCamera(): Boolean = permission(Manifest.permission.CAMERA, AlbumPermissionConst.CAMERA_REQUEST_CODE)
 
 //activity 打开相机
-inline fun Activity.openCamera(cameraUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.OPEN_CAMERA_PERMISSION_ERROR else openCamera(this, cameraUri, video)
+inline fun Activity.openCamera(cameraUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, cameraUri, video)
 
 //fragment 打开相机
-inline fun Fragment.openCamera(cameraUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.OPEN_CAMERA_PERMISSION_ERROR else openCamera(this, cameraUri, video)
-
-//取集合中某个item的角标,如果没有返回-1
-inline fun <T> Iterable<T>.index(predicate: (T) -> Boolean): Int {
-    for ((index, item) in this.withIndex()) {
-        if (predicate(item))
-            return index
-    }
-    return -1
-}
+inline fun Fragment.openCamera(cameraUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, cameraUri, video)
 
 //合并选择数据
 inline fun ArrayList<AlbumEntity>.mergeEntity(selectEntity: ArrayList<AlbumEntity>) = apply {
@@ -117,6 +110,35 @@ inline fun Window.statusBarColor(@ColorInt color: Int) {
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
     }
+}
+
+//添加子View
+inline fun ViewGroup.addChildView(childView: View?) {
+    if (indexOfChild(childView) == -1 && childView != null) {
+        addView(childView)
+    }
+}
+
+//添加子View
+inline fun ViewGroup.addChildView(childView: View?, layoutParams: ViewGroup.LayoutParams?) {
+    if (indexOfChild(childView) == -1 && childView != null) {
+        if (layoutParams != null) {
+            addView(childView, layoutParams)
+        } else {
+            addView(childView)
+        }
+    }
+}
+
+//AlbumImageView
+inline fun ViewGroup.AlbumImageView(): AlbumImageView = let {
+    for (i in 0 until childCount) {
+        val childAt = getChildAt(i)
+        if (childAt is AlbumImageView) {
+            return childAt
+        }
+    }
+    return AlbumImageView(context)
 }
 
 //获取Album宽高
@@ -169,7 +191,7 @@ inline fun openCamera(root: Any, cameraUri: Uri, video: Boolean): Int {
     val intent = if (video) Intent(MediaStore.ACTION_VIDEO_CAPTURE) else Intent(MediaStore.ACTION_IMAGE_CAPTURE)
     activity?.let {
         if (intent.resolveActivity(it.packageManager) == null) {
-            return AlbumCameraConst.OPEN_CAMERA_ERROR
+            return AlbumCameraConst.CAMERA_ERROR
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri)
@@ -180,14 +202,14 @@ inline fun openCamera(root: Any, cameraUri: Uri, video: Boolean): Int {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         }
         if (root is Activity) {
-            root.startActivityForResult(intent, AlbumCameraConst.OPEN_CAMERA_REQUEST_CODE)
+            root.startActivityForResult(intent, AlbumCameraConst.CAMERA_REQUEST_CODE)
         }
         if (root is Fragment) {
-            root.startActivityForResult(intent, AlbumCameraConst.OPEN_CAMERA_REQUEST_CODE)
+            root.startActivityForResult(intent, AlbumCameraConst.CAMERA_REQUEST_CODE)
         }
-        return AlbumCameraConst.OPEN_CAMERA_SUCCESS
+        return AlbumCameraConst.CAMERA_SUCCESS
     }
-    return AlbumCameraConst.OPEN_CAMERA_ERROR
+    return AlbumCameraConst.CAMERA_ERROR
 
 }
 
@@ -207,13 +229,13 @@ inline fun Context.cameraFile(path: String?, name: String, suffix: String): File
             pathFile.mkdirs()
         }
     }
-    return File(cachePath, name + "." + suffix)
+    return File(cachePath, System.currentTimeMillis().toString() + "_" + name + "." + suffix)
 }
 
 //自定义相机可以使用此方法直接返回路径,也可以自定义
 inline fun AlbumBaseActivity.finishCamera(path: String) {
     val bundle = Bundle()
-    bundle.putString(AlbumCameraConst.CUSTOM_CAMERA_RESULT_PATH, path)
+    bundle.putString(AlbumCameraConst.RESULT_PATH, path)
     val intent = Intent()
     intent.putExtras(bundle)
     setResult(Activity.RESULT_OK, intent)

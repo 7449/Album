@@ -132,7 +132,7 @@ class SimpleOnAlbumListenerKt {
                 onAlbumContainerFinderEmpty?.invoke()
             }
 
-            override fun onAlbumContainerPreviewSelectEmpty() {
+            override fun onAlbumContainerPreSelectEmpty() {
                 onAlbumContainerPreviewSelectEmpty?.invoke()
             }
 
@@ -140,7 +140,7 @@ class SimpleOnAlbumListenerKt {
                 onAlbumResources?.invoke(list)
             }
 
-            override fun onAlbumPreviewEmpty() {
+            override fun onAlbumPreEmpty() {
                 onAlbumPreviewEmpty?.invoke()
             }
 
@@ -204,8 +204,8 @@ class SimpleOnAlbumListenerKt {
                 onAlbumVideoPlayError?.invoke()
             }
 
-            override fun onAlbumCheckBox(count: Int, maxCount: Int) {
-                onAlbumCheckBox?.invoke(count, maxCount)
+            override fun onAlbumCheckBox(selectCount: Int, maxCount: Int) {
+                onAlbumCheckBox?.invoke(selectCount, maxCount)
             }
         }
     }

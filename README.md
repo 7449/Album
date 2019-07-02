@@ -15,7 +15,7 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.
             android:name="com.album.ui.activity.AlbumActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.album.ui.activity.PreviewActivity"
+            android:name="com.album.ui.activity.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
             
 #### dependencies

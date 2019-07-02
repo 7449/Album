@@ -12,9 +12,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.album.Album
+import com.album.core.addChildView
 import com.album.core.orEmpty
 import com.album.core.scan.AlbumEntity
-import com.album.listener.addChildView
 import com.album.ui.wechat.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.album_wechat_ui_finder.*

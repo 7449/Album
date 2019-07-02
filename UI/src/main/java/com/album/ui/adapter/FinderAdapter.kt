@@ -8,14 +8,11 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.album.Album
+import com.album.core.addChildView
 import com.album.core.scan.AlbumEntity
-import com.album.listener.addChildView
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 
-/**
- *   @author y
- */
 class FinderAdapter(private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
 
     var list: ArrayList<AlbumEntity> = ArrayList()

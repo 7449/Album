@@ -1,15 +1,17 @@
 package com.album.core
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import java.io.File
 
@@ -48,18 +50,26 @@ fun Context.drawable(id: Int, color: Int): Drawable {
     return drawable
 }
 
-//获取content Uri
-@Suppress("HasPlatformType")
-fun Context.uri(file: File) = if (hasN()) {
-    FileProvider.getUriForFile(this, "$packageName.AlbumProvider", file)
+fun Context.insertImage(contentValues: ContentValues) = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+    contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            ?: throw KotlinNullPointerException()
 } else {
-    Uri.fromFile(file)
+    contentResolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, contentValues)
+            ?: throw KotlinNullPointerException()
 }
 
 //获取content Uri
 @Suppress("HasPlatformType")
-fun Context.uri(path: String) = if (hasN()) {
-    FileProvider.getUriForFile(this, "$packageName.AlbumProvider", File(path))
-} else {
-    Uri.fromFile(File(path))
+fun Context.uri(file: File?) = when {
+    hasQ() -> insertImage(ContentValues())
+    hasN() -> insertImage(ContentValues(1).apply { put(MediaStore.Images.Media.DATA, file?.path) })
+    else -> Uri.fromFile(file)
+}
+
+//获取content Uri
+@Suppress("HasPlatformType")
+fun Context.uri(path: String?) = when {
+    hasQ() -> insertImage(ContentValues())
+    hasN() -> insertImage(ContentValues(1).apply { put(MediaStore.Images.Media.DATA, path) })
+    else -> Uri.fromFile(File(path ?: ""))
 }

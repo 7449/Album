@@ -14,14 +14,7 @@ import com.album.core.AlbumScanConst
  *
  * 文件扫描
  */
-class AlbumScanFileTask private constructor(private val activity: Context, private val loaderSuccess: (ArrayList<AlbumEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
-
-    companion object {
-        @JvmStatic
-        fun newInstance(activity: Context, loaderSuccess: (ArrayList<AlbumEntity>) -> Unit): AlbumScanFileTask {
-            return AlbumScanFileTask(activity, loaderSuccess)
-        }
-    }
+class AlbumScanFileTask(private val activity: Context, private val loaderSuccess: (ArrayList<AlbumEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
 
     private val albumList = ArrayList<AlbumEntity>()
 

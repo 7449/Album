@@ -30,7 +30,6 @@ import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropFragment
 import com.yalantis.ucrop.UCropFragmentCallback
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 import java.util.*
 
 fun NightAlbumBundle(): AlbumBundle {
@@ -203,13 +202,12 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             }
             Activity.RESULT_OK -> when (requestCode) {
                 AlbumCameraConst.CAMERA_REQUEST_CODE -> {
-                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
-                    UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
-                            .withOptions(UCrop.Options())
-                            .start(this)
+                    AlbumSingleMediaScanner(this, imagePath.path
+                            ?: "", AlbumConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
                 }
                 UCrop.REQUEST_CROP -> {
-                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
+                    AlbumSingleMediaScanner(this, imagePath.path
+                            ?: "", AlbumConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

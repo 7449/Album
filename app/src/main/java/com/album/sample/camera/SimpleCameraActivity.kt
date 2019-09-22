@@ -109,9 +109,9 @@ class SimpleCameraActivity : AlbumBaseActivity(), ActivityCompat.OnRequestPermis
                         os = FileOutputStream(cameraFile)
                         os.write(data)
                         os.close()
-                        finishCamera(cameraFile)
+                        finishCamera(cameraFile.path)
                     } catch (e: IOException) {
-                        Log.w(TAG, "Cannot write to $cameraFile", e)
+                        Log.w(TAG, "Cannot write to ${cameraFile.path}", e)
                     }
                 }
             }

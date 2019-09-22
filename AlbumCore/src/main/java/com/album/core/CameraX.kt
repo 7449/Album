@@ -12,13 +12,13 @@ import com.album.core.ui.AlbumBaseActivity
 import java.io.File
 
 //activity 打开相机
-fun Activity.openCamera(cameraUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, cameraUri, video)
+fun Activity.openCamera(fileUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, fileUri, video)
 
 //fragment 打开相机
-fun Fragment.openCamera(cameraUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, cameraUri, video)
+fun Fragment.openCamera(fileUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, fileUri, video)
 
 //打开相机(需要提前请求权限)）
-internal fun openCamera(root: Any, cameraUri: Uri, video: Boolean): Int {
+internal fun openCamera(root: Any, fileUri: Uri, video: Boolean): Int {
     val activity = when (root) {
         is Activity -> root
         is Fragment -> root.activity
@@ -28,7 +28,7 @@ internal fun openCamera(root: Any, cameraUri: Uri, video: Boolean): Int {
     if (activity == null || intent.resolveActivity(activity.packageManager) == null) {
         return AlbumCameraConst.CAMERA_ERROR
     }
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri)
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri)
     when (root) {
         is Activity -> root.startActivityForResult(intent, AlbumCameraConst.CAMERA_REQUEST_CODE)
         is Fragment -> root.startActivityForResult(intent, AlbumCameraConst.CAMERA_REQUEST_CODE)
@@ -36,14 +36,31 @@ internal fun openCamera(root: Any, cameraUri: Uri, video: Boolean): Int {
     return AlbumCameraConst.CAMERA_SUCCESS
 }
 
-fun Context.albumPathFile(path: String?, name: String, suffix: String): String {
+// 不支持FileProvider获取的Uri
+fun Context.scanFilePath(uri: Uri): String? {
+    if (hasN()) {
+        contentResolver.query(uri, arrayOf(MediaStore.Images.Media.DATA), null, null, null).use {
+            val index = it?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA) ?: -11
+            it?.moveToFirst()
+            return if (index == -11) {
+                null
+            } else {
+                it?.getString(index)
+            }
+        }
+    } else {
+        return uri.path
+    }
+}
+
+fun Context.albumPathFile(path: String?, name: String, suffix: String): File {
     val fileName = System.currentTimeMillis().toString() + "_" + name + "." + suffix
     if (path != null && path.isNotEmpty()) {
         val pathFile = File(path)
         if (!pathFile.exists()) {
             pathFile.mkdirs()
         }
-        return File(path, fileName).path
+        return File(path, fileName)
     }
     return File(
             if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageRemovable()) {
@@ -51,7 +68,7 @@ fun Context.albumPathFile(path: String?, name: String, suffix: String): String {
             } else {
                 externalCacheDir?.path
             },
-            fileName).path
+            fileName)
 }
 
 //自定义相机可以使用此方法直接返回路径,也可以自定义

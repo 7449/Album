@@ -12,4 +12,4 @@ fun hasM(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 fun hasN(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
 //Android版本是否为Q
-//fun hasQ(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+fun hasQ(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q

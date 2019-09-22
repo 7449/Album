@@ -34,7 +34,7 @@ class AlbumScanImpl(private val albumView: AlbumView) {
         loaderManager.restartLoader(ALBUM_LOADER_ID, Bundle().apply {
             putLong(AlbumColumns.PARENT, parent)
             putInt(AlbumColumns.SCAN_TYPE, scanType)
-        }, AlbumScanFileTask.newInstance(activity) {
+        }, AlbumScanFileTask(activity) {
             if (parent == AlbumScanConst.ALL && !it.isNullOrEmpty()) {
                 refreshFinder(it)
             }
@@ -48,7 +48,7 @@ class AlbumScanImpl(private val albumView: AlbumView) {
         loaderManager.restartLoader(ALBUM_LOADER_ID, Bundle().apply {
             putString(AlbumColumns.DATA, path)
             putInt(AlbumColumns.SCAN_TYPE, scanType)
-        }, AlbumScanFileTask.newInstance(activity) {
+        }, AlbumScanFileTask(activity) {
             albumView.resultSuccess(if (it.isEmpty()) null else it[0])
             loaderManager.destroyLoader(ALBUM_LOADER_ID)
         })

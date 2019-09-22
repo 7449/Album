@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.album.*
-import com.album.callback.AlbumPreCallback
+import com.album.action.AlbumPreAction
 import com.album.core.fileExists
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.mergeEntity
@@ -19,10 +19,8 @@ class PrevFragment : AlbumBaseFragment() {
 
     companion object {
 
-        @JvmStatic
-        fun newInstance(bundle: Bundle): PrevFragment = PrevFragment().apply { arguments = bundle }
+        private fun newInstance(bundle: Bundle): PrevFragment = PrevFragment().apply { arguments = bundle }
 
-        @JvmStatic
         fun newInstance(
                 albumBundle: AlbumBundle,
                 position: Int,
@@ -35,7 +33,7 @@ class PrevFragment : AlbumBaseFragment() {
         })
     }
 
-    private var albumPreCallback: AlbumPreCallback? = null
+    private var albumPreAction: AlbumPreAction? = null
     private var pageChangeCallback: ViewPager2.OnPageChangeCallback? = null
 
     private lateinit var adapter: PrevAdapter
@@ -44,10 +42,10 @@ class PrevFragment : AlbumBaseFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (parentFragment is AlbumPreCallback) {
-            albumPreCallback = parentFragment as AlbumPreCallback
-        } else if (context is AlbumPreCallback) {
-            albumPreCallback = context
+        if (parentFragment is AlbumPreAction) {
+            albumPreAction = parentFragment as AlbumPreAction
+        } else if (context is AlbumPreAction) {
+            albumPreAction = context
         }
     }
 
@@ -83,11 +81,11 @@ class PrevFragment : AlbumBaseFragment() {
                 }
                 currentPos = position
                 preCheckBox.isChecked = getCurrentItem().isCheck
-                albumPreCallback?.onChangedViewPager(position + 1, adapter.albumList.size)
+                albumPreAction?.onChangedViewPager(position + 1, adapter.albumList.size)
             }
         }.also { preViewPager.registerOnPageChangeCallback(it) }
-        albumPreCallback?.onChangedViewPager(preViewPager.currentItem + 1, adapter.albumList.size)
-        albumPreCallback?.onChangedCheckBoxCount(getSelectEntity().size)
+        albumPreAction?.onChangedViewPager(preViewPager.currentItem + 1, adapter.albumList.size)
+        albumPreAction?.onChangedCheckBoxCount(getSelectEntity().size)
         preCheckBox.isChecked = adapter.albumList[preViewPager.currentItem].isCheck
     }
 
@@ -98,7 +96,7 @@ class PrevFragment : AlbumBaseFragment() {
         mActivity.finish()
     }
 
-    fun isDialogRefreshAlbumUI(isRefresh: Boolean) = resultBundle(isRefresh, false)
+    fun isRefreshAlbumUI(isRefresh: Boolean) = resultBundle(isRefresh, false)
 
     private fun resultBundle(isRefresh: Boolean, isFinish: Boolean): Bundle {
         val bundle = Bundle()
@@ -131,7 +129,7 @@ class PrevFragment : AlbumBaseFragment() {
             getSelectEntity().add(albumEntity)
         }
         Album.instance.albumListener?.onAlbumCheckBox(getSelectEntity().size, albumBundle.multipleMaxCount)
-        albumPreCallback?.onChangedCheckBoxCount(getSelectEntity().size)
+        albumPreAction?.onChangedCheckBoxCount(getSelectEntity().size)
     }
 
     fun getCurrentItem(): AlbumEntity = adapter.albumList[currentPos]

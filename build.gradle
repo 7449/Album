@@ -42,8 +42,6 @@ ext {
     glideVersion = '4.9.0'
     ucropVersion = '2.2.4'
     picassoVersion = '2.71828'
-    imageloaderVersion = '1.9.5'
-    frescoVersion = '1.13.0'
     subsamplingVersion = '3.10.0'
     photoViewVersion = '2.3.0'
 

@@ -36,10 +36,9 @@ internal fun openCamera(root: Any, fileUri: Uri, video: Boolean): Int {
     return AlbumCameraConst.CAMERA_SUCCESS
 }
 
-// 不支持FileProvider获取的Uri
-fun Context.scanFilePath(uri: Uri): String? {
-    if (hasN()) {
-        contentResolver.query(uri, arrayOf(MediaStore.Images.Media.DATA), null, null, null).use {
+fun Context.scanFilePath(uri: Uri, fileProviderPath: String): String? {
+    when {
+        hasQ() -> contentResolver.query(uri, arrayOf(MediaStore.Images.Media.DATA), null, null, null).use {
             val index = it?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA) ?: -11
             it?.moveToFirst()
             return if (index == -11) {
@@ -48,8 +47,10 @@ fun Context.scanFilePath(uri: Uri): String? {
                 it?.getString(index)
             }
         }
-    } else {
-        return uri.path
+        hasN() -> {
+            return fileProviderPath
+        }
+        else -> return uri.path
     }
 }
 

@@ -1,7 +1,7 @@
 package com.album.sample.kt
 
+import com.album.action.OnAlbumListener
 import com.album.core.scan.AlbumEntity
-import com.album.listener.OnAlbumListener
 import java.io.File
 
 
@@ -170,10 +170,6 @@ class SimpleOnAlbumListenerKt {
 
             override fun onAlbumCameraCanceled() {
                 onAlbumCameraCanceled?.invoke()
-            }
-
-            override fun onAlbumCameraSuccessCanceled() {
-                onAlbumCameraSuccessCanceled?.toString()
             }
 
             override fun onAlbumUCropError(data: Throwable?) {

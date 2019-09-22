@@ -3,17 +3,14 @@ package com.album.sample
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.album.action.OnAlbumListener
 import com.album.core.scan.AlbumEntity
-import com.album.listener.OnAlbumListener
 import java.io.File
 
 /**
  * @author y
  */
 class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : OnAlbumListener {
-
-    override fun onAlbumCameraSuccessCanceled() {
-    }
 
     override fun onAlbumCheckBox(selectCount: Int, maxCount: Int) {
         toast("onCheckBoxAlbum:$selectCount")

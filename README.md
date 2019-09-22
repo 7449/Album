@@ -6,6 +6,11 @@ library:![](https://api.bintray.com/packages/ydevelop/maven/album/images/downloa
 
 ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.svg)
 
+
+#### next version
+
+delete path attribute
+
 #### Manifests.xml
 
         <activity

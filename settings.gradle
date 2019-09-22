@@ -1,6 +1,4 @@
 include ':AlbumCore'
 include ':AlbumLibrary'
 include ':UI'
-
 include ':app'
-include ':UIDialog'

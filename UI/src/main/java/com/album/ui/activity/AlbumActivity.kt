@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumConst
-import com.album.callback.AlbumCallback
+import com.album.action.AlbumAction
 import com.album.core.AlbumScanConst
 import com.album.core.drawable
 import com.album.core.hasL
@@ -23,7 +23,7 @@ import com.album.ui.adapter.FinderAdapter
 import com.album.ui.fragment.AlbumFragment
 import kotlinx.android.synthetic.main.album_activity_album.*
 
-class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener, AlbumCallback {
+class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener, AlbumAction {
 
     override val layoutId: Int = R.layout.album_activity_album
 

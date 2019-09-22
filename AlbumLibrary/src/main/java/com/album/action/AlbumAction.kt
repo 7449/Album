@@ -1,4 +1,4 @@
-package com.album.callback
+package com.album.action
 
 import android.view.View
 import com.album.core.scan.AlbumEntity
@@ -8,7 +8,7 @@ import com.album.core.scan.AlbumEntity
  * @create 2019/2/27
  * 点击单个图片最终触发这个回调,可以进入预览页
  */
-interface AlbumCallback {
+interface AlbumAction {
     /**
      * 点击进入预览页,依赖的DialogFragment或者Activity继承即可
      */

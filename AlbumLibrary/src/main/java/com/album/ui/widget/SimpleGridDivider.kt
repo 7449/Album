@@ -1,4 +1,4 @@
-package com.album.simple
+package com.album.ui.widget
 
 import android.graphics.Rect
 import android.view.View
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @author y
  * @create 2019/2/27
  */
-internal class SimpleGridDivider(private val divider: Int) : RecyclerView.ItemDecoration() {
+class SimpleGridDivider(private val divider: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
         val position = parent.getChildAdapterPosition(view)

@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import java.io.File
 
@@ -62,7 +63,7 @@ fun Context.insertImage(contentValues: ContentValues) = if (Environment.getExter
 @Suppress("HasPlatformType")
 fun Context.uri(file: File?) = when {
     hasQ() -> insertImage(ContentValues())
-    hasN() -> insertImage(ContentValues(1).apply { put(MediaStore.Images.Media.DATA, file?.path) })
+    hasN() -> FileProvider.getUriForFile(this, "$packageName.AlbumProvider", file ?: throw KotlinNullPointerException())
     else -> Uri.fromFile(file)
 }
 
@@ -70,6 +71,6 @@ fun Context.uri(file: File?) = when {
 @Suppress("HasPlatformType")
 fun Context.uri(path: String?) = when {
     hasQ() -> insertImage(ContentValues())
-    hasN() -> insertImage(ContentValues(1).apply { put(MediaStore.Images.Media.DATA, path) })
+    hasN() -> FileProvider.getUriForFile(this, "$packageName.AlbumProvider", File(path.orEmpty()))
     else -> Uri.fromFile(File(path ?: ""))
 }

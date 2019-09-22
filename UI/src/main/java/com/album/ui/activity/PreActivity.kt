@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumConst
-import com.album.callback.AlbumPreCallback
+import com.album.action.AlbumPreAction
 import com.album.core.hasL
 import com.album.core.scan.AlbumEntity
 import com.album.core.statusBarColor
@@ -19,7 +19,7 @@ import com.album.ui.fragment.AlbumFragment
 import com.album.ui.fragment.PrevFragment
 import kotlinx.android.synthetic.main.album_activity_preview.*
 
-class PreActivity : AlbumBaseActivity(), AlbumPreCallback {
+class PreActivity : AlbumBaseActivity(), AlbumPreAction {
 
     override val layoutId: Int = R.layout.album_activity_preview
 

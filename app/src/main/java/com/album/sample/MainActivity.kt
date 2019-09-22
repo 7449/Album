@@ -17,14 +17,15 @@ import androidx.core.content.ContextCompat
 import com.album.Album
 import com.album.AlbumBundle
 import com.album.AlbumConst
+import com.album.action.AlbumImageLoader
 import com.album.core.*
 import com.album.core.scan.AlbumEntity
 import com.album.core.scan.AlbumSingleMediaScanner
-import com.album.listener.AlbumImageLoader
 import com.album.sample.camera.SimpleCameraActivity
-import com.album.sample.imageloader.*
+import com.album.sample.imageloader.SimpleGlideImageLoader
+import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
+import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
 import com.album.ui.AlbumUiBundle
-import com.album.ui.dialog.dialog
 import com.album.ui.ui
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropFragment
@@ -92,17 +93,6 @@ fun MainActivity.nightAlbum() {
     }.ui(this, NightAlbumBundle(), NightAlbumUIBundle())
 }
 
-fun MainActivity.dialog() {
-    Album.instance.apply {
-        albumListener = MainAlbumListener(applicationContext, null)
-        albumImageLoader = SimpleFrescoAlbumImageLoader()
-        options = dayOptions
-    }.dialog(AlbumBundle(
-            cropFinish = false,
-            selectImageFinish = false,
-            cropErrorFinish = false), supportFragmentManager)
-}
-
 fun MainActivity.video() {
     Album.instance.apply {
         albumImageLoader = SimplePicassoAlbumImageLoader()
@@ -142,7 +132,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
         btn_day_album.setOnClickListener(this)
         btn_night_album.setOnClickListener(this)
         btn_open_camera.setOnClickListener(this)
-        btn_dialog.setOnClickListener(this)
         btn_video.setOnClickListener(this)
         btn_imageloader.setOnClickListener(this)
 
@@ -170,17 +159,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             R.id.btn_day_album -> dayAlbum()
             R.id.btn_night_album -> nightAlbum()
             R.id.btn_open_camera -> startCamera()
-            R.id.btn_dialog -> dialog()
             R.id.btn_video -> video()
             R.id.btn_imageloader -> AlertDialog.Builder(this@MainActivity)
-                    .setSingleChoiceItems(arrayOf("Glide", "ImageLoader", "Fresco", "Picasso", "SubsamplingScale"), -1
+                    .setSingleChoiceItems(arrayOf("Glide", "Picasso", "SubsamplingScale"), -1
                     ) { dialog, which ->
                         when (which) {
                             0 -> imageLoader(SimpleGlideImageLoader())
-                            1 -> imageLoader(SimpleImageLoaderAlbumImageLoader())
-                            2 -> imageLoader(SimpleFrescoAlbumImageLoader())
-                            3 -> imageLoader(SimplePicassoAlbumImageLoader())
-                            4 -> imageLoader(SimpleSubsamplingScaleImageLoader())
+                            1 -> imageLoader(SimplePicassoAlbumImageLoader())
+                            2 -> imageLoader(SimpleSubsamplingScaleImageLoader())
                         }
                         dialog.dismiss()
                     }.show()

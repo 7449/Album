@@ -1,4 +1,4 @@
-package com.album.listener
+package com.album.action
 
 import com.album.core.scan.AlbumEntity
 import java.io.File
@@ -72,11 +72,6 @@ interface OnAlbumListener {
      * 取消拍照
      */
     fun onAlbumCameraCanceled()
-
-    /**
-     * 拍照完成之后选择取消拍照
-     */
-    fun onAlbumCameraSuccessCanceled()
 
     /**
      * 裁剪错误

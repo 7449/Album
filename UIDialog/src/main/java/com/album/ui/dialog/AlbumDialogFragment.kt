@@ -189,7 +189,7 @@ class AlbumDialogFragment : AlbumBaseDialogFragment(), AlbumCallback {
 
     private fun openUCrop(path: String) {
         cropFragment?.let { childFragmentManager.beginTransaction().remove(it).commitAllowingStateLoss() }
-        cropFragment = UCrop.of(Uri.fromFile(File(path)), Uri.fromFile(mActivity.cameraFile(albumBundle.uCropPath, System.currentTimeMillis().toString(), ".jpg")))
+        cropFragment = UCrop.of(Uri.fromFile(File(path)), mActivity.uri(mActivity.albumPathFile(albumBundle.uCropPath, System.currentTimeMillis().toString(), ".jpg")))
                 .withOptions(Album.instance.options ?: UCrop.Options()).fragment
         cropFragment?.let { it ->
             childFragmentManager.beginTransaction().hide(albumFragment).add(R.id.album_dialog_fragment, it, UCropFragment.TAG).commitAllowingStateLoss()

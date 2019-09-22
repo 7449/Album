@@ -22,5 +22,11 @@ data class AlbumEntity(
         var count: Int = 0,
         var isCheck: Boolean = false) : Parcelable
 
+fun AlbumEntity.hasVideo(): Boolean = this.mediaType == AlbumColumns.VIDEO
 
+fun AlbumEntity.hasGif(): Boolean = this.mimeType == "image/gif"
 
+fun ArrayList<AlbumEntity>.mergeEntity(selectEntity: ArrayList<AlbumEntity>) = apply {
+    forEach { it.isCheck = false }
+    selectEntity.forEach { select -> this.find { it.path == select.path }?.isCheck = true }
+}

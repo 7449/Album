@@ -33,12 +33,6 @@
             android:text="dialog" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_wechat_ui"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="WeChat UI" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_imageloader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

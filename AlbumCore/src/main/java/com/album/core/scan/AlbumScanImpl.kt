@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.loader.app.LoaderManager
 import com.album.core.AlbumScanConst
-import com.album.core.mergeEntity
 import com.album.core.view.AlbumView
 
 /**
@@ -14,12 +13,10 @@ import com.album.core.view.AlbumView
  * @create 2019/2/27
  * 图库扫描工具类
  */
-class AlbumScanImpl private constructor(private val albumView: AlbumView) {
+class AlbumScanImpl(private val albumView: AlbumView) {
 
     companion object {
         private const val ALBUM_LOADER_ID = 111
-        @JvmStatic
-        fun newInstance(albumView: AlbumView) = AlbumScanImpl(albumView)
     }
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(albumView.getAlbumContext())

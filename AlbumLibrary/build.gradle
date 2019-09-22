@@ -21,8 +21,8 @@ android {
 }
 
 dependencies {
-    api "com.ydevelop:album.core:$albumCoreVersion"
-//    api project(':AlbumCore')
+    api project(':AlbumCore')
+//    api "com.ydevelop:album.core:$albumCoreVersion"
     compileOnly "androidx.viewpager2:viewpager2:$viewpagerVersion"
     compileOnly "com.github.yalantis:ucrop:$ucropVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

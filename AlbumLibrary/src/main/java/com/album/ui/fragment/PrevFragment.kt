@@ -7,11 +7,11 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.album.*
-import com.album.core.fileExists
-import com.album.core.mergeEntity
-import com.album.core.scan.AlbumEntity
-import com.album.core.ui.AlbumBaseFragment
 import com.album.callback.AlbumPreCallback
+import com.album.core.fileExists
+import com.album.core.scan.AlbumEntity
+import com.album.core.scan.mergeEntity
+import com.album.core.ui.AlbumBaseFragment
 import com.album.ui.adapter.PrevAdapter
 import kotlinx.android.synthetic.main.album_fragment_preview.*
 
@@ -71,8 +71,8 @@ class PrevFragment : AlbumBaseFragment() {
         preCheckBox.setOnClickListener { checkBoxClick() }
         preRootView.setBackgroundColor(ContextCompat.getColor(mActivity, albumBundle.prevPhotoBackgroundColor))
         adapter.multipleList = (savedInstanceState
-                ?: bundle).getParcelableArrayList(AlbumConst.TYPE_PRE_SELECT)
-        adapter.addAll(bundle.getParcelableArrayList<AlbumEntity>(AlbumConst.TYPE_PRE_ALL).filter { it.path != AlbumInternalConst.CAMERA } as ArrayList<AlbumEntity>)
+                ?: bundle).getParcelableArrayList(AlbumConst.TYPE_PRE_SELECT) ?: ArrayList()
+        adapter.addAll(bundle.getParcelableArrayList<AlbumEntity>(AlbumConst.TYPE_PRE_ALL)?.filter { it.path != AlbumInternalConst.CAMERA } as ArrayList<AlbumEntity>)
         adapter.albumList.mergeEntity(adapter.multipleList)
         preViewPager.setCurrentItem(currentPos, false)
         pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {

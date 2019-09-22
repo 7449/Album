@@ -53,7 +53,7 @@ class SimpleAspectRatioFragment : DialogFragment() {
         val ratios = args!!.getParcelableArray(ARG_ASPECT_RATIOS) as Array<AspectRatio>
         Arrays.sort(ratios)
         val current = args.getParcelable<AspectRatio>(ARG_CURRENT_ASPECT_RATIO)
-        val adapter = AspectRatioAdapter(ratios, current)
+        val adapter = AspectRatioAdapter(ratios, current!!)
         return AlertDialog.Builder(activity!!)
                 .setAdapter(adapter) { _, position -> mListener?.onAspectRatioSelected(ratios[position]) }
                 .create()

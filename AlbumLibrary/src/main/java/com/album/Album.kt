@@ -40,10 +40,9 @@ class Album {
     var selectList: ArrayList<AlbumEntity>? = null
 
     companion object {
-        @JvmStatic
+
         val instance by lazy { Album() }
 
-        @JvmStatic
         fun destroy() = instance.apply {
             options = null
             albumImageLoader = null

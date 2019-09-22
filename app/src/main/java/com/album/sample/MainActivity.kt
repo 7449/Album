@@ -26,7 +26,6 @@ import com.album.sample.imageloader.*
 import com.album.ui.AlbumUiBundle
 import com.album.ui.dialog.dialog
 import com.album.ui.ui
-import com.album.ui.wechat.activity.weChatUI
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropFragment
 import com.yalantis.ucrop.UCropFragmentCallback
@@ -115,22 +114,8 @@ fun MainActivity.video() {
             AlbumUiBundle(toolbarText = R.string.album_video_title))
 }
 
-fun MainActivity.wechat() {
-    Album.instance.apply {
-        albumImageLoader = SimpleAlbumWeChatImageLoader()
-        albumListener = MainAlbumListener(applicationContext, null)
-    }.weChatUI(this,
-            AlbumBundle(
-                    scanType = AlbumScanConst.MIX,
-                    spanCount = 4,
-                    dividerWidth = 5,
-                    photoBackgroundColor = R.color.colorAlbumContentEmptyDrawableColor,
-                    hideCamera = true,
-                    checkBoxDrawable = R.drawable.simple_selector_wechat_item_check))
-}
-
 fun MainActivity.startCamera() {
-    imagePath = Uri.fromFile(applicationContext.cameraFile(null, System.currentTimeMillis().toString(), "jpg"))
+    imagePath = uri(applicationContext.albumPathFile(null, System.currentTimeMillis().toString(), "jpg"))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
 }
@@ -161,7 +146,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
         btn_dialog.setOnClickListener(this)
         btn_video.setOnClickListener(this)
         btn_imageloader.setOnClickListener(this)
-        btn_wechat_ui.setOnClickListener(this)
 
         dayOptions = UCrop.Options()
         dayOptions.apply {
@@ -189,7 +173,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             R.id.btn_open_camera -> startCamera()
             R.id.btn_dialog -> dialog()
             R.id.btn_video -> video()
-            R.id.btn_wechat_ui -> wechat()
             R.id.btn_imageloader -> AlertDialog.Builder(this@MainActivity)
                     .setSingleChoiceItems(arrayOf("Glide", "ImageLoader", "Fresco", "Picasso", "SubsamplingScale"), -1
                     ) { dialog, which ->
@@ -220,13 +203,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             }
             Activity.RESULT_OK -> when (requestCode) {
                 AlbumCameraConst.CAMERA_REQUEST_CODE -> {
-                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
+                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
                     UCrop.of(Uri.fromFile(File(imagePath.path)), imagePath)
                             .withOptions(UCrop.Options())
                             .start(this)
                 }
                 UCrop.REQUEST_CROP -> {
-                    AlbumSingleMediaScanner.newInstance(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
+                    AlbumSingleMediaScanner(this, imagePath.path.orEmpty(), AlbumConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

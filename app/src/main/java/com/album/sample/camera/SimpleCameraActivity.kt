@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.album.core.cameraFile
+import com.album.core.albumPathFile
 import com.album.core.finishCamera
 import com.album.core.ui.AlbumBaseActivity
 import com.album.sample.R
@@ -103,15 +103,15 @@ class SimpleCameraActivity : AlbumBaseActivity(), ActivityCompat.OnRequestPermis
                 super.onPictureTaken(cameraView, data)
                 Toast.makeText(cameraView.context, R.string.picture_taken, Toast.LENGTH_SHORT).show()
                 cameraView.post {
-                    val cameraFile = cameraFile(null, System.currentTimeMillis().toString(), "jpg")
+                    val cameraFile = albumPathFile(null, System.currentTimeMillis().toString(), "jpg")
                     val os: OutputStream
                     try {
                         os = FileOutputStream(cameraFile)
                         os.write(data)
                         os.close()
-                        finishCamera(cameraFile.path)
+                        finishCamera(cameraFile)
                     } catch (e: IOException) {
-                        Log.w(TAG, "Cannot write to " + cameraFile.path, e)
+                        Log.w(TAG, "Cannot write to $cameraFile", e)
                     }
                 }
             }

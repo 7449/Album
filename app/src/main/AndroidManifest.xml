@@ -30,12 +30,6 @@
             android:name="com.album.ui.activity.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.album.ui.wechat.activity.AlbumWeChatUiActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.album.ui.wechat.activity.AlbumWeChatPreUiActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
             android:name=".camera.SimpleCameraActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>

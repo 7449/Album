@@ -1,13 +1,13 @@
 package com.album
 
 import android.view.View
-import com.album.core.scan.AlbumEntity
-import com.album.core.ui.AlbumBaseFragment
 import com.album.action.AlbumImageLoader
 import com.album.action.OnAlbumListener
+import com.album.core.scan.AlbumEntity
+import com.album.core.ui.AlbumBaseFragment
 import com.yalantis.ucrop.UCrop
 
-class Album {
+class Album private constructor() {
 
     /**
      * UCrop setting

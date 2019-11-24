@@ -9,12 +9,12 @@ import com.album.core.Album
 import com.album.core.AlbumBundle
 import com.album.core.AlbumConst
 import com.album.core.action.AlbumPreAction
-import com.album.core.ui.fragment.AlbumFragment
+import com.album.core.ext.hasL
+import com.album.core.ext.statusBarColor
+import com.album.core.ui.fragment.ScanFragment
 import com.album.core.ui.fragment.PrevFragment
-import com.album.scan.hasL
-import com.album.scan.scan.AlbumEntity
-import com.album.scan.statusBarColor
-import com.album.scan.ui.AlbumBaseActivity
+import com.album.scan.ScanEntity
+import com.album.core.ui.base.AlbumBaseActivity
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import kotlinx.android.synthetic.main.album_activity_preview.*
@@ -27,10 +27,10 @@ class PreActivity : AlbumBaseActivity(), AlbumPreAction {
         @JvmStatic
         fun newInstance(albumBundle: AlbumBundle,
                         uiBundle: AlbumUiBundle,
-                        selectList: ArrayList<AlbumEntity>,
-                        allList: ArrayList<AlbumEntity>,
+                        selectList: ArrayList<ScanEntity>,
+                        allList: ArrayList<ScanEntity>,
                         position: Int,
-                        fragment: AlbumFragment) {
+                        fragment: ScanFragment) {
             val bundle = Bundle().apply {
                 putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, selectList)
                 putParcelableArrayList(AlbumConst.TYPE_PRE_ALL, allList)

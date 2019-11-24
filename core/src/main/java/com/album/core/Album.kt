@@ -3,8 +3,8 @@ package com.album.core
 import android.view.View
 import com.album.core.action.AlbumImageLoader
 import com.album.core.action.OnAlbumListener
-import com.album.scan.scan.AlbumEntity
-import com.album.scan.ui.AlbumBaseFragment
+import com.album.scan.ScanEntity
+import com.album.core.ui.base.AlbumBaseFragment
 import com.yalantis.ucrop.UCrop
 
 class Album private constructor() {
@@ -37,7 +37,7 @@ class Album private constructor() {
     /**
      * 默认初始化选中数据
      */
-    var selectList: ArrayList<AlbumEntity>? = null
+    var selectList: ArrayList<ScanEntity>? = null
 
     companion object {
 

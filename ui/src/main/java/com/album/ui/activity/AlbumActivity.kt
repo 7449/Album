@@ -11,13 +11,13 @@ import com.album.core.Album
 import com.album.core.AlbumBundle
 import com.album.core.AlbumConst
 import com.album.core.action.AlbumAction
-import com.album.core.ui.fragment.AlbumFragment
-import com.album.scan.AlbumScanConst
-import com.album.scan.drawable
-import com.album.scan.hasL
-import com.album.scan.scan.AlbumEntity
-import com.album.scan.statusBarColor
-import com.album.scan.ui.AlbumBaseActivity
+import com.album.core.ext.drawable
+import com.album.core.ext.hasL
+import com.album.core.ext.statusBarColor
+import com.album.core.ui.fragment.ScanFragment
+import com.album.scan.args.ScanConst
+import com.album.scan.ScanEntity
+import com.album.core.ui.base.AlbumBaseActivity
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.adapter.FinderAdapter
@@ -28,7 +28,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     override val layoutId: Int = R.layout.album_activity_album
 
     private lateinit var listPopupWindow: ListPopupWindow
-    private lateinit var albumFragment: AlbumFragment
+    private lateinit var albumFragment: ScanFragment
     private lateinit var finderAdapter: FinderAdapter
 
     private lateinit var albumBundle: AlbumBundle
@@ -71,15 +71,15 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
 
     private fun initFragment() {
         val supportFragmentManager = supportFragmentManager
-        val fragment = supportFragmentManager.findFragmentByTag(AlbumFragment::class.java.simpleName)
+        val fragment = supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)
         if (fragment != null) {
-            albumFragment = fragment as AlbumFragment
+            albumFragment = fragment as ScanFragment
             supportFragmentManager.beginTransaction().show(fragment).commitAllowingStateLoss()
         } else {
-            albumFragment = AlbumFragment.newInstance(albumBundle)
+            albumFragment = ScanFragment.newInstance(albumBundle)
             supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.albumFrame, albumFragment, AlbumFragment::class.java.simpleName)
+                    .add(R.id.albumFrame, albumFragment, ScanFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
         }
     }
@@ -158,20 +158,20 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         listPopupWindow.dismiss()
     }
 
-    override fun onAlbumItemClick(selectEntity: ArrayList<AlbumEntity>, position: Int, parentId: Long) {
+    override fun onAlbumItemClick(selectEntity: ArrayList<ScanEntity>, position: Int, parentId: Long) {
         PreActivity.newInstance(
                 albumBundle,
                 albumUiBundle,
                 selectEntity,
                 albumFragment.allPreview(),
-                if (parentId == AlbumScanConst.ALL && !albumBundle.hideCamera) position - 1 else position,
+                if (parentId == ScanConst.ALL && !albumBundle.hideCamera) position - 1 else position,
                 albumFragment)
     }
 
     override fun onAlbumScreenChanged(selectCount: Int) {
     }
 
-    override fun onChangedCheckBoxCount(view: View, selectCount: Int, albumEntity: AlbumEntity) {
+    override fun onChangedCheckBoxCount(view: View, selectCount: Int, albumEntity: ScanEntity) {
     }
 
     override fun onPrevChangedCount(selectCount: Int) {

@@ -1,4 +1,4 @@
-package com.album.scan.widget
+package com.album.core.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet

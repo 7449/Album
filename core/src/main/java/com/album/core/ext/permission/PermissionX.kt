@@ -1,4 +1,4 @@
-package com.album.scan
+package com.album.core.ext.permission
 
 import android.Manifest
 import android.app.Activity
@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.album.core.AlbumPermissionConst
 
 //判断权限,如果有返回true,没有返回false并直接请求
 fun Activity.permission(permissions: String, code: Int): Boolean {

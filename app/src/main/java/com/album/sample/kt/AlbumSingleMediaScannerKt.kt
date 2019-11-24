@@ -1,6 +1,6 @@
 package com.album.sample.kt
 
-import com.album.scan.scan.AlbumSingleMediaScanner
+import com.album.scan.SingleMediaScanner
 
 
 class AlbumSingleMediaScannerKt {
@@ -16,8 +16,8 @@ class AlbumSingleMediaScannerKt {
         this.onScanCompleted = onScanCompleted
     }
 
-    internal fun build(): AlbumSingleMediaScanner.SingleScannerListener {
-        return object : AlbumSingleMediaScanner.SingleScannerListener {
+    internal fun build(): SingleMediaScanner.SingleScannerListener {
+        return object : SingleMediaScanner.SingleScannerListener {
             override fun onScanStart() {
                 onScanStart?.invoke()
             }

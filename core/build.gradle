@@ -16,7 +16,6 @@ android {
 }
 dependencies {
     api project(':scan')
-//    api "com.ydevelop:album.core:$albumCoreVersion"
     compileOnly "androidx.viewpager2:viewpager2:$viewpagerVersion"
     compileOnly "com.github.yalantis:ucrop:$ucropVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

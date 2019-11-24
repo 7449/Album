@@ -1,4 +1,4 @@
-package com.album.scan.scan
+package com.album.scan.args
 
 import android.provider.MediaStore
 
@@ -6,7 +6,7 @@ import android.provider.MediaStore
  * @author y
  * @create 2019/3/5
  */
-object AlbumColumns {
+object Columns {
 
     const val IMAGE = MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
 

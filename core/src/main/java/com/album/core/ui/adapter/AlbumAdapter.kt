@@ -11,7 +11,7 @@ import com.album.core.R
 import com.album.core.action.AlbumAction
 import com.album.core.ui.adapter.vh.CameraViewHolder
 import com.album.core.ui.adapter.vh.PhotoViewHolder
-import com.album.scan.scan.AlbumEntity
+import com.album.scan.ScanEntity
 
 class AlbumAdapter(
         private val display: Int,
@@ -21,8 +21,8 @@ class AlbumAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnAlbumItemClickListener {
-        fun onCameraItemClick(view: View, position: Int, albumEntity: AlbumEntity)
-        fun onPhotoItemClick(view: View, position: Int, albumEntity: AlbumEntity)
+        fun onCameraItemClick(view: View, position: Int, albumEntity: ScanEntity)
+        fun onPhotoItemClick(view: View, position: Int, albumEntity: ScanEntity)
     }
 
     companion object {
@@ -30,9 +30,9 @@ class AlbumAdapter(
         private const val TYPE_PHOTO = 1
     }
 
-    var albumList: ArrayList<AlbumEntity> = ArrayList()
+    var albumList: ArrayList<ScanEntity> = ArrayList()
 
-    var multipleList: ArrayList<AlbumEntity> = ArrayList()
+    var multipleList: ArrayList<ScanEntity> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -73,7 +73,7 @@ class AlbumAdapter(
         else -> TYPE_PHOTO
     }
 
-    fun addAll(newList: ArrayList<AlbumEntity>) {
+    fun addAll(newList: ArrayList<ScanEntity>) {
         albumList.addAll(newList)
         notifyDataSetChanged()
     }

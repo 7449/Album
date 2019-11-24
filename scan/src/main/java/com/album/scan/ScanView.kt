@@ -1,23 +1,22 @@
-package com.album.scan.view
+package com.album.scan
 
 import androidx.fragment.app.FragmentActivity
 import androidx.loader.app.LoaderManager
-import com.album.scan.scan.AlbumEntity
 
 /**
  * @author y
  * @create 2019/2/27
  */
-interface AlbumView {
+interface ScanView {
     /**
      *  [LoaderManager.getInstance]
      */
-    fun getAlbumContext(): FragmentActivity
+    fun getScanContext(): FragmentActivity
 
     /**
      * 获取已经选择数据
      */
-    fun getSelectEntity(): ArrayList<AlbumEntity>
+    fun getSelectEntity(): ArrayList<ScanEntity>
 
     /**
      * 当前扫描类型
@@ -32,15 +31,15 @@ interface AlbumView {
     /**
      * 扫描成功
      */
-    fun scanSuccess(arrayList: ArrayList<AlbumEntity>)
+    fun scanSuccess(arrayList: ArrayList<ScanEntity>)
 
     /**
      * 扫描文件夹成功
      */
-    fun scanFinderSuccess(finderList: ArrayList<AlbumEntity>)
+    fun scanFinderSuccess(finderList: ArrayList<ScanEntity>)
 
     /**
      * 拍照扫描成功
      */
-    fun resultSuccess(albumEntity: AlbumEntity?)
+    fun resultSuccess(scanEntity: ScanEntity?)
 }

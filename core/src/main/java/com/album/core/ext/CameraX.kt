@@ -1,4 +1,4 @@
-package com.album.scan
+package com.album.core.ext
 
 import android.app.Activity
 import android.content.Context
@@ -8,7 +8,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
-import com.album.scan.ui.AlbumBaseActivity
+import com.album.core.AlbumCameraConst
+import com.album.core.ext.permission.permissionCamera
+import com.album.core.ext.permission.permissionStorage
+import com.album.core.ui.base.AlbumBaseActivity
 import java.io.File
 
 //activity 打开相机

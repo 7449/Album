@@ -1,4 +1,4 @@
-package com.album.scan.ui
+package com.album.core.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

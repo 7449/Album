@@ -1,10 +1,10 @@
-package com.album.scan
+package com.album.core.ext
 
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.ColorInt
-import com.album.scan.widget.AlbumImageView
+import com.album.core.ui.widget.AlbumImageView
 
 //View是否显示
 fun View.hasVisible(): Boolean = visibility == View.VISIBLE

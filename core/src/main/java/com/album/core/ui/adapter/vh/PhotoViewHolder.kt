@@ -10,10 +10,10 @@ import com.album.core.Album
 import com.album.core.AlbumBundle
 import com.album.core.R
 import com.album.core.action.AlbumAction
-import com.album.scan.addChildView
-import com.album.scan.fileExists
-import com.album.scan.scan.AlbumEntity
-import com.album.scan.show
+import com.album.core.ext.addChildView
+import com.album.core.ext.fileExists
+import com.album.core.ext.show
+import com.album.scan.ScanEntity
 
 class PhotoViewHolder(itemView: View,
                       private val albumBundle: AlbumBundle,
@@ -24,7 +24,7 @@ class PhotoViewHolder(itemView: View,
     private val container: FrameLayout = itemView.findViewById(R.id.albumContainer)
     private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.albumCheckBox)
 
-    fun photo(position: Int, albumEntity: AlbumEntity, multipleList: ArrayList<AlbumEntity>) {
+    fun photo(position: Int, albumEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
         container.addChildView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, container), layoutParams)
         container.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.photoBackgroundColor))
         if (albumBundle.radio) {

@@ -1,4 +1,4 @@
-package com.album.scan.ui
+package com.album.core.ui.base
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.album.scan.AlbumPermissionConst
-import com.album.scan.orEmpty
+import com.album.core.AlbumPermissionConst
+import com.album.core.ext.orEmpty
 
 /**
  * @author y

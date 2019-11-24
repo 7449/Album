@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.album.core.R
 import com.album.core.ui.adapter.vh.PrevViewHolder
-import com.album.scan.scan.AlbumEntity
+import com.album.scan.ScanEntity
 
 class PrevAdapter : RecyclerView.Adapter<PrevViewHolder>() {
 
-    var albumList: ArrayList<AlbumEntity> = ArrayList()
+    var albumList: ArrayList<ScanEntity> = ArrayList()
 
-    var multipleList: ArrayList<AlbumEntity> = ArrayList()
+    var multipleList: ArrayList<ScanEntity> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -23,7 +23,7 @@ class PrevAdapter : RecyclerView.Adapter<PrevViewHolder>() {
 
     override fun getItemCount(): Int = albumList.size
 
-    fun addAll(newList: ArrayList<AlbumEntity>) {
+    fun addAll(newList: ArrayList<ScanEntity>) {
         albumList.clear()
         albumList.addAll(newList)
         notifyDataSetChanged()

@@ -3,9 +3,9 @@ package com.album.sample.imageloader
 import android.view.View
 import android.widget.FrameLayout
 import com.album.core.action.AlbumImageLoader
-import com.album.core.uri
-import com.album.scan.AlbumImageView
-import com.album.scan.scan.AlbumEntity
+import com.album.core.ext.AlbumImageView
+import com.album.scan.ScanEntity
+import com.album.scan.uri
 import com.squareup.picasso.Picasso
 
 /**
@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 
 class SimplePicassoAlbumImageLoader : AlbumImageLoader {
 
-    override fun displayAlbum(width: Int, height: Int, albumEntity: AlbumEntity, container: FrameLayout): View {
+    override fun displayAlbum(width: Int, height: Int, albumEntity: ScanEntity, container: FrameLayout): View {
         val albumImageView = container.AlbumImageView()
         Picasso.get()
                 .load(albumEntity.uri())
@@ -24,7 +24,7 @@ class SimplePicassoAlbumImageLoader : AlbumImageLoader {
         return albumImageView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: AlbumEntity, container: FrameLayout): View {
+    override fun displayAlbumThumbnails(finderEntity: ScanEntity, container: FrameLayout): View {
         val albumImageView = container.AlbumImageView()
         Picasso.get()
                 .load(finderEntity.uri())
@@ -34,7 +34,7 @@ class SimplePicassoAlbumImageLoader : AlbumImageLoader {
         return albumImageView
     }
 
-    override fun displayAlbumPreview(albumEntity: AlbumEntity, container: FrameLayout): View {
+    override fun displayAlbumPreview(albumEntity: ScanEntity, container: FrameLayout): View {
         val albumImageView = container.AlbumImageView()
         Picasso.get()
                 .load(albumEntity.uri())

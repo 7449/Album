@@ -1,7 +1,7 @@
 package com.album.core
 
 import android.os.Parcelable
-import com.album.scan.AlbumScanConst
+import com.album.scan.args.ScanConst
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -9,7 +9,7 @@ class AlbumBundle(
         /**
          * 扫描类型
          */
-        var scanType: Int = AlbumScanConst.IMAGE,
+        var scanType: Int = ScanConst.IMAGE,
         /**
          * 摄像或拍照文件名称
          */
@@ -17,7 +17,7 @@ class AlbumBundle(
         /**
          * 摄像或拍照文件后缀
          */
-        var cameraSuffix: String = if (scanType == AlbumScanConst.IMAGE) "jpg" else "mp4",
+        var cameraSuffix: String = if (scanType == ScanConst.IMAGE) "jpg" else "mp4",
         /**
          * 隐藏相机
          */

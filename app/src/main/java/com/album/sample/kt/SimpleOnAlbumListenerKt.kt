@@ -1,7 +1,7 @@
 package com.album.sample.kt
 
 import com.album.core.action.OnAlbumListener
-import com.album.scan.scan.AlbumEntity
+import com.album.scan.ScanEntity
 import java.io.File
 
 
@@ -12,7 +12,7 @@ class SimpleOnAlbumListenerKt {
     private var onAlbumContainerBackPressed: (() -> Unit)? = null
     private var onAlbumContainerFinderEmpty: (() -> Unit)? = null
     private var onAlbumContainerPreviewSelectEmpty: (() -> Unit)? = null
-    private var onAlbumResources: ((list: List<AlbumEntity>) -> Unit)? = null
+    private var onAlbumResources: ((list: List<ScanEntity>) -> Unit)? = null
     private var onAlbumResultCameraError: (() -> Unit)? = null
     private var onAlbumPreviewEmpty: (() -> Unit)? = null
     private var onAlbumPermissionsDenied: ((type: Int) -> Unit)? = null
@@ -50,7 +50,7 @@ class SimpleOnAlbumListenerKt {
         this.onAlbumContainerPreviewSelectEmpty = onAlbumContainerPreviewSelectEmpty
     }
 
-    fun onAlbumResources(onAlbumResources: (list: List<AlbumEntity>) -> Unit) {
+    fun onAlbumResources(onAlbumResources: (list: List<ScanEntity>) -> Unit) {
         this.onAlbumResources = onAlbumResources
     }
 
@@ -136,7 +136,7 @@ class SimpleOnAlbumListenerKt {
                 onAlbumContainerPreviewSelectEmpty?.invoke()
             }
 
-            override fun onAlbumResources(list: List<AlbumEntity>) {
+            override fun onAlbumResources(list: List<ScanEntity>) {
                 onAlbumResources?.invoke(list)
             }
 

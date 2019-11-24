@@ -16,7 +16,6 @@ android {
 }
 dependencies {
     api project(':core')
-//    api "com.ydevelop:album:$albumLibraryVersion"
     compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

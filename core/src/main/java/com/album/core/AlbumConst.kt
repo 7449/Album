@@ -1,8 +1,30 @@
 package com.album.core
 
-import android.content.ContentUris
-import android.provider.MediaStore
-import com.album.scan.scan.AlbumEntity
+object AlbumPermissionConst {
+    //读写code
+    const val WRITE_REQUEST_CODE = 360
+    //拍照code
+    const val CAMERA_REQUEST_CODE = 361
+    //图库权限
+    const val ALBUM = 362
+    //拍照权限
+    const val CAMERA = 363
+}
+
+object AlbumCameraConst {
+    //自定义拍照返回时使用的 REQUEST_CODE
+    const val CUSTOM_CAMERA_REQUEST_CODE = 364
+    //自定义拍照返回时使用的路径Key,返回时直接调用[finishCamera]即可
+    const val RESULT_PATH = "custom_camera_path"
+    //拍照返回的 REQUEST_CODE
+    const val CAMERA_REQUEST_CODE = 365
+    //打开相机没有权限code
+    const val CAMERA_PERMISSION_ERROR = 366
+    //打开相机成功code
+    const val CAMERA_SUCCESS = 367
+    //打开相机错误code
+    const val CAMERA_ERROR = 368
+}
 
 object AlbumConst {
     //[AlbumBundle]主要数据的Key
@@ -42,4 +64,3 @@ internal object AlbumInternalConst {
     internal const val TYPE_PRE_DONE_FINISH = "pre_select_ok_finish"
 }
 
-fun AlbumEntity.uri() = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)

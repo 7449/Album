@@ -1,10 +1,10 @@
-package com.album.scan.scan
+package com.album.scan
 
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
 
-class AlbumSingleMediaScanner(context: Context, private val path: String, private val type: Int, private val listener: SingleScannerListener) : MediaScannerConnection.MediaScannerConnectionClient {
+class SingleMediaScanner(context: Context, private val path: String, private val type: Int, private val listener: SingleScannerListener) : MediaScannerConnection.MediaScannerConnectionClient {
 
     interface SingleScannerListener {
         fun onScanStart()
@@ -12,7 +12,7 @@ class AlbumSingleMediaScanner(context: Context, private val path: String, privat
         fun onScanCompleted(type: Int, path: String)
     }
 
-    private var connection: MediaScannerConnection = MediaScannerConnection(context.applicationContext, this)
+    private val connection: MediaScannerConnection = MediaScannerConnection(context.applicationContext, this)
 
     init {
         connection.connect()

@@ -8,14 +8,14 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.album.core.Album
-import com.album.scan.addChildView
-import com.album.scan.scan.AlbumEntity
+import com.album.core.ext.addChildView
+import com.album.scan.ScanEntity
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 
 class FinderAdapter(private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
 
-    var list: ArrayList<AlbumEntity> = ArrayList()
+    var list: ArrayList<ScanEntity> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -39,7 +39,7 @@ class FinderAdapter(private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
         return viewHolder.convertView
     }
 
-    override fun getItem(position: Int): AlbumEntity = list[position]
+    override fun getItem(position: Int): ScanEntity = list[position]
     override fun getItemId(position: Int): Long = position.toLong()
     override fun getCount(): Int = list.size
     private class ViewHolder {

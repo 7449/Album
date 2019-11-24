@@ -1,4 +1,4 @@
-package com.album.scan
+package com.album.core.ext
 
 import android.app.Activity
 import android.content.ContentValues

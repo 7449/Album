@@ -8,11 +8,11 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.album.core.*
 import com.album.core.action.AlbumPreAction
+import com.album.core.ext.fileExists
 import com.album.core.ui.adapter.PrevAdapter
-import com.album.scan.fileExists
-import com.album.scan.scan.AlbumEntity
-import com.album.scan.scan.mergeEntity
-import com.album.scan.ui.AlbumBaseFragment
+import com.album.scan.ScanEntity
+import com.album.scan.mergeEntity
+import com.album.core.ui.base.AlbumBaseFragment
 import kotlinx.android.synthetic.main.album_fragment_preview.*
 
 class PrevFragment : AlbumBaseFragment() {
@@ -24,8 +24,8 @@ class PrevFragment : AlbumBaseFragment() {
         fun newInstance(
                 albumBundle: AlbumBundle,
                 position: Int,
-                selectList: ArrayList<AlbumEntity>,
-                allList: ArrayList<AlbumEntity>) = newInstance(Bundle().apply {
+                selectList: ArrayList<ScanEntity>,
+                allList: ArrayList<ScanEntity>) = newInstance(Bundle().apply {
             putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
             putInt(AlbumConst.TYPE_PRE_POSITION, position)
             putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, selectList)
@@ -70,7 +70,7 @@ class PrevFragment : AlbumBaseFragment() {
         preRootView.setBackgroundColor(ContextCompat.getColor(mActivity, albumBundle.prevPhotoBackgroundColor))
         adapter.multipleList = (savedInstanceState
                 ?: bundle).getParcelableArrayList(AlbumConst.TYPE_PRE_SELECT) ?: ArrayList()
-        adapter.addAll(bundle.getParcelableArrayList<AlbumEntity>(AlbumConst.TYPE_PRE_ALL)?.filter { it.path != AlbumInternalConst.CAMERA } as ArrayList<AlbumEntity>)
+        adapter.addAll(bundle.getParcelableArrayList<ScanEntity>(AlbumConst.TYPE_PRE_ALL)?.filter { it.path != AlbumInternalConst.CAMERA } as ArrayList<ScanEntity>)
         adapter.albumList.mergeEntity(adapter.multipleList)
         preViewPager.setCurrentItem(currentPos, false)
         pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
@@ -132,11 +132,11 @@ class PrevFragment : AlbumBaseFragment() {
         albumPreAction?.onChangedCheckBoxCount(getSelectEntity().size)
     }
 
-    fun getCurrentItem(): AlbumEntity = adapter.albumList[currentPos]
+    fun getCurrentItem(): ScanEntity = adapter.albumList[currentPos]
 
-    fun getAllList(): ArrayList<AlbumEntity> = adapter.albumList
+    fun getAllList(): ArrayList<ScanEntity> = adapter.albumList
 
-    fun getSelectEntity(): ArrayList<AlbumEntity> = adapter.multipleList
+    fun getSelectEntity(): ArrayList<ScanEntity> = adapter.multipleList
 
     fun setCurrentItem(position: Int) = let { preViewPager.setCurrentItem(position, false) }
 

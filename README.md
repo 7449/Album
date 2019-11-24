@@ -98,22 +98,6 @@ delete path attribute
         }
     }
 
-## ProGuard
-
-    -dontwarn com.album.**
-    -keep class  com.album.** { *;}
-    -keep interface  com.album.** { *;}
-    
-#### ucrop
-
-    -dontwarn com.yalantis.ucrop**
-    -keep class com.yalantis.ucrop** { *; }
-    -keep interface com.yalantis.ucrop** { *; }
-    
-## Thanks
-
-[cameraview](https://github.com/google/cameraview)
-    
 ## MediaScannerConnection Memory leak
 
  * https://issuetracker.google.com/issues/37046656
@@ -121,15 +105,9 @@ delete path attribute
 
 ## Screenshot
 
-#### multiple, radio, preview, crop, sample ui,customize camera
-
 ![](https://github.com/7449/Album/blob/master/screenshot/album_multiple.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_radio.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_preview.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_crop.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_sample_ui.png)
 ![](https://github.com/7449/Album/blob/master/screenshot/album_customize_camera.png)
-
-## LICENSE
-
-    Mozilla Public License 2.0

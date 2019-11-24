@@ -16,15 +16,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.album.core.Album
 import com.album.core.AlbumBundle
+import com.album.core.AlbumCameraConst
 import com.album.core.AlbumConst
 import com.album.core.action.AlbumImageLoader
+import com.album.core.ext.albumPathFile
+import com.album.core.ext.openCamera
+import com.album.core.ext.permission.permissionCamera
+import com.album.core.ext.permission.permissionStorage
+import com.album.core.ext.uri
 import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleGlideImageLoader
 import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
-import com.album.scan.*
-import com.album.scan.scan.AlbumEntity
-import com.album.scan.scan.AlbumSingleMediaScanner
+import com.album.scan.ScanEntity
+import com.album.scan.SingleMediaScanner
+import com.album.scan.args.ScanConst
 import com.album.ui.AlbumUiBundle
 import com.album.ui.ui
 import com.yalantis.ucrop.UCrop
@@ -75,7 +81,7 @@ fun MainActivity.dayAlbum() {
         selectList = list
         options = dayOptions
     }.ui(this,
-            AlbumBundle(scanType = AlbumScanConst.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
+            AlbumBundle(scanType = ScanConst.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
 }
 
 fun MainActivity.nightAlbum() {
@@ -98,7 +104,7 @@ fun MainActivity.video() {
         albumImageLoader = SimplePicassoAlbumImageLoader()
         albumListener = MainAlbumListener(applicationContext, null)
     }.ui(this, AlbumBundle(
-            scanType = AlbumScanConst.VIDEO,
+            scanType = ScanConst.VIDEO,
             cameraText = R.string.video_tips),
             AlbumUiBundle(toolbarText = R.string.album_video_title))
 }
@@ -113,7 +119,7 @@ fun MainActivity.imageLoader(imageLoader: AlbumImageLoader) {
     Album.instance.apply { albumImageLoader = imageLoader }.ui(this)
 }
 
-class SimpleSingleScannerListener : AlbumSingleMediaScanner.SingleScannerListener {
+class SimpleSingleScannerListener : SingleMediaScanner.SingleScannerListener {
     override fun onScanCompleted(type: Int, path: String) {}
     override fun onScanStart() {}
 }
@@ -122,7 +128,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
 
     lateinit var dayOptions: UCrop.Options
     lateinit var nightOptions: UCrop.Options
-    lateinit var list: ArrayList<AlbumEntity>
+    lateinit var list: ArrayList<ScanEntity>
     lateinit var imagePath: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -188,11 +194,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             }
             Activity.RESULT_OK -> when (requestCode) {
                 AlbumCameraConst.CAMERA_REQUEST_CODE -> {
-                    AlbumSingleMediaScanner(this, imagePath.path
+                    SingleMediaScanner(this, imagePath.path
                             ?: "", AlbumConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
                 }
                 UCrop.REQUEST_CROP -> {
-                    AlbumSingleMediaScanner(this, imagePath.path
+                    SingleMediaScanner(this, imagePath.path
                             ?: "", AlbumConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }

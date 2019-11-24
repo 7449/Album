@@ -4,13 +4,13 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.album.core.action.OnAlbumListener
-import com.album.scan.scan.AlbumEntity
+import com.album.scan.ScanEntity
 import java.io.File
 
 /**
  * @author y
  */
-class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<AlbumEntity>?) : OnAlbumListener {
+class MainAlbumListener internal constructor(context: Context, private val list: ArrayList<ScanEntity>?) : OnAlbumListener {
 
     override fun onAlbumCheckBox(selectCount: Int, maxCount: Int) {
         toast("onCheckBoxAlbum:$selectCount")
@@ -99,7 +99,7 @@ class MainAlbumListener internal constructor(context: Context, private val list:
         toast("play video error : checked video app")
     }
 
-    override fun onAlbumResources(list: List<AlbumEntity>) {
+    override fun onAlbumResources(list: List<ScanEntity>) {
         toast("select count :" + list.size)
         if (this.list == null) return
         this.list.clear()

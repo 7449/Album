@@ -1,6 +1,6 @@
 package com.album.core.action
 
-import com.album.scan.scan.AlbumEntity
+import com.album.scan.ScanEntity
 import java.io.File
 
 /**
@@ -31,7 +31,7 @@ interface OnAlbumListener {
     /**
      * 选择图片
      */
-    fun onAlbumResources(list: List<AlbumEntity>)
+    fun onAlbumResources(list: List<ScanEntity>)
 
     /**
      * 点击预览但是未选择图片

@@ -1,0 +1,20 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+if (uploadType == coreType) {
+    apply from: '../gradle/UPLOAD.gradle'
+}
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+    androidExtensions {
+        experimental = true
+    }
+}
+dependencies {
+    compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

@@ -2,10 +2,10 @@ package com.album.sample.imageloader
 
 import android.view.View
 import android.widget.FrameLayout
-import com.album.action.AlbumImageLoader
-import com.album.core.AlbumImageView
-import com.album.core.scan.AlbumEntity
-import com.album.uri
+import com.album.core.action.AlbumImageLoader
+import com.album.core.uri
+import com.album.scan.AlbumImageView
+import com.album.scan.scan.AlbumEntity
 import com.squareup.picasso.Picasso
 
 /**

@@ -2,11 +2,11 @@ package com.album.sample.imageloader
 
 import android.view.View
 import android.widget.FrameLayout
-import com.album.action.AlbumImageLoader
-import com.album.core.AlbumImageView
-import com.album.core.scan.AlbumEntity
+import com.album.core.action.AlbumImageLoader
+import com.album.core.uri
 import com.album.sample.R
-import com.album.uri
+import com.album.scan.AlbumImageView
+import com.album.scan.scan.AlbumEntity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 

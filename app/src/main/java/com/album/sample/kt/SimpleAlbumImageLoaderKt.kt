@@ -2,8 +2,8 @@ package com.album.sample.kt
 
 import android.view.View
 import android.widget.FrameLayout
-import com.album.core.scan.AlbumEntity
-import com.album.action.AlbumImageLoader
+import com.album.core.action.AlbumImageLoader
+import com.album.scan.scan.AlbumEntity
 
 class SimpleAlbumImageLoaderKt {
 

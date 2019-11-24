@@ -7,10 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.album.core.albumPathFile
-import com.album.core.finishCamera
-import com.album.core.ui.AlbumBaseActivity
 import com.album.sample.R
+import com.album.scan.albumPathFile
+import com.album.scan.finishCamera
+import com.album.scan.ui.AlbumBaseActivity
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
 import kotlinx.android.synthetic.main.activity_simple_camera.*

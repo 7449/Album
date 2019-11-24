@@ -1,9 +1,9 @@
 package com.album.sample.kt
 
 import androidx.fragment.app.FragmentActivity
-import com.album.core.AlbumScanConst
-import com.album.core.scan.AlbumEntity
-import com.album.core.view.AlbumView
+import com.album.scan.AlbumScanConst
+import com.album.scan.scan.AlbumEntity
+import com.album.scan.view.AlbumView
 
 
 class AlbumViewKt {

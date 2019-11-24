@@ -32,14 +32,14 @@ ext {
     projectVersionName = '1.0'
 
     appcompatVersion = '1.1.0'
-    viewpagerVersion = '1.0.0-beta04'
+    viewpagerVersion = '1.0.0'
     materialVersion = '1.0.0'
 
-    albumCoreVersion = getMavenVersion("$rootDir/AlbumCore")
-    albumLibraryVersion = getMavenVersion("$rootDir/AlbumLibrary")
-    albumUIVersion = getMavenVersion("$rootDir/UI")
+    albumCoreVersion = getMavenVersion("$rootDir/scan")
+    albumLibraryVersion = getMavenVersion("$rootDir/core")
+    albumUIVersion = getMavenVersion("$rootDir/ui")
 
-    glideVersion = '4.9.0'
+    glideVersion = '4.10.0'
     ucropVersion = '2.2.4'
     picassoVersion = '2.71828'
     subsamplingVersion = '3.10.0'

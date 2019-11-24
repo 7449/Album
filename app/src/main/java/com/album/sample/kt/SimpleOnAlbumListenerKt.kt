@@ -1,7 +1,7 @@
 package com.album.sample.kt
 
-import com.album.action.OnAlbumListener
-import com.album.core.scan.AlbumEntity
+import com.album.core.action.OnAlbumListener
+import com.album.scan.scan.AlbumEntity
 import java.io.File
 
 

@@ -1,4 +1,4 @@
-include ':AlbumCore'
-include ':AlbumLibrary'
-include ':UI'
+include ':scan'
+include ':core'
+include ':ui'
 include ':app'

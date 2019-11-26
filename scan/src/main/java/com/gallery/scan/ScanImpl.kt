@@ -1,10 +1,10 @@
-package com.album.scan
+package com.gallery.scan
 
 import android.content.Context
 import android.os.Bundle
 import androidx.loader.app.LoaderManager
-import com.album.scan.args.Columns
-import com.album.scan.args.ScanConst
+import com.gallery.scan.args.Columns
+import com.gallery.scan.args.ScanConst
 
 /**
  * @author y
@@ -36,10 +36,14 @@ class ScanImpl(private val scanView: ScanView) {
             if (parent == ScanConst.ALL && !it.isNullOrEmpty()) {
                 refreshFinder(it)
             }
-            scanView.scanSuccess(it.mergeEntity(scanView.getSelectEntity()))
-            scanView.scanFinderSuccess(finderList)
+            scanView.scanSuccess(it.mergeEntity(scanView.getSelectEntity()), finderList)
             loaderManager.destroyLoader(SCAN_LOADER_ID)
         })
+    }
+
+    private fun ArrayList<ScanEntity>.mergeEntity(selectEntity: ArrayList<ScanEntity>) = also {
+        forEach { it.isCheck = false }
+        selectEntity.forEach { select -> this.find { it.id == select.id }?.isCheck = true }
     }
 
     fun scanResult(path: String) {

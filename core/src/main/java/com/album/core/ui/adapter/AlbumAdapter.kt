@@ -11,7 +11,7 @@ import com.album.core.R
 import com.album.core.action.AlbumAction
 import com.album.core.ui.adapter.vh.CameraViewHolder
 import com.album.core.ui.adapter.vh.PhotoViewHolder
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 
 class AlbumAdapter(
         private val display: Int,

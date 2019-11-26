@@ -1,4 +1,4 @@
-package com.album.scan.args
+package com.gallery.scan.args
 
 object ScanConst {
     //扫描类型：图片

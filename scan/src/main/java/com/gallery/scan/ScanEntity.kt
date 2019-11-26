@@ -1,12 +1,13 @@
-package com.album.scan
+package com.gallery.scan
 
 import android.os.Parcelable
-import com.album.scan.args.Columns
+import com.gallery.scan.args.Columns
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ScanEntity(
         var id: Long = 0,
+        @Deprecated("ContentResolver#openFileDescriptor(Uri, String)")
         var path: String = "",
         var size: Long = 0,
         var duration: Long = 0,

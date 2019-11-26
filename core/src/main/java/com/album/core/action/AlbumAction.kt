@@ -1,7 +1,7 @@
 package com.album.core.action
 
 import android.view.View
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 
 /**
  * @author y

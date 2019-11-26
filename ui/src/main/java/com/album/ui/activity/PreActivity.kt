@@ -13,7 +13,7 @@ import com.album.core.ext.hasL
 import com.album.core.ext.statusBarColor
 import com.album.core.ui.fragment.ScanFragment
 import com.album.core.ui.fragment.PrevFragment
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 import com.album.core.ui.base.AlbumBaseActivity
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R

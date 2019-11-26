@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-if (uploadType == coreType) {
+if (uploadType == scanType) {
     apply from: '../gradle/UPLOAD.gradle'
 }
 android {

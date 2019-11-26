@@ -1,6 +1,6 @@
 package com.album.core.action
 
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 import java.io.File
 
 /**

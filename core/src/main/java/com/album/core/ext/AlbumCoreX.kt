@@ -1,6 +1,7 @@
 package com.album.core.ext
 
 import android.app.Activity
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -14,6 +15,7 @@ import android.util.DisplayMetrics
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
+import com.gallery.scan.ScanEntity
 import java.io.File
 
 //文件是否存在
@@ -74,4 +76,11 @@ fun Context.uri(path: String?) = when {
     hasQ() -> insertImage(ContentValues())
     hasN() -> FileProvider.getUriForFile(this, "$packageName.AlbumProvider", File(path.orEmpty()))
     else -> Uri.fromFile(File(path ?: ""))
+}
+
+fun ScanEntity.uri() = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+
+fun ArrayList<ScanEntity>.mergeEntity(selectEntity: ArrayList<ScanEntity>) = also {
+    forEach { it.isCheck = false }
+    selectEntity.forEach { select -> this.find { it.id == select.id }?.isCheck = true }
 }

@@ -28,9 +28,9 @@ import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleGlideImageLoader
 import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
-import com.album.scan.ScanEntity
-import com.album.scan.SingleMediaScanner
-import com.album.scan.args.ScanConst
+import com.gallery.scan.ScanEntity
+import com.gallery.scan.SingleMediaScanner
+import com.gallery.scan.args.ScanConst
 import com.album.ui.AlbumUiBundle
 import com.album.ui.ui
 import com.yalantis.ucrop.UCrop

@@ -1,4 +1,4 @@
-package com.album.scan.args
+package com.gallery.scan.args
 
 import android.net.Uri
 import android.provider.MediaStore

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.album.core.R
 import com.album.core.ui.adapter.vh.PrevViewHolder
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 
 class PrevAdapter : RecyclerView.Adapter<PrevViewHolder>() {
 

@@ -3,7 +3,7 @@ package com.album.core
 import android.view.View
 import com.album.core.action.AlbumImageLoader
 import com.album.core.action.OnAlbumListener
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 import com.album.core.ui.base.AlbumBaseFragment
 import com.yalantis.ucrop.UCrop
 

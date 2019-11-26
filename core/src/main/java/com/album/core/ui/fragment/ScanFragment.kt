@@ -17,14 +17,10 @@ import com.album.core.ext.*
 import com.album.core.ext.permission.permissionCamera
 import com.album.core.ext.permission.permissionStorage
 import com.album.core.ui.adapter.AlbumAdapter
-import com.album.core.ui.widget.SimpleGridDivider
-import com.album.scan.ScanEntity
-import com.album.scan.ScanImpl
-import com.album.scan.SingleMediaScanner
-import com.album.scan.mergeEntity
 import com.album.core.ui.base.AlbumBaseFragment
-import com.album.scan.ScanView
-import com.album.scan.args.ScanConst
+import com.album.core.ui.widget.SimpleGridDivider
+import com.gallery.scan.*
+import com.gallery.scan.args.ScanConst
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.album_fragment_album.*
 import java.io.File
@@ -162,7 +158,7 @@ class ScanFragment : AlbumBaseFragment(), ScanView, SimpleAlbumFragmentInterface
         }
     }
 
-    override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
+    override fun scanSuccess(arrayList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) {
         if (arrayList.isEmpty()) {
             albumEmpty.show()
             Album.instance.albumListener?.onAlbumEmpty()
@@ -173,9 +169,6 @@ class ScanFragment : AlbumBaseFragment(), ScanView, SimpleAlbumFragmentInterface
             arrayList.add(0, ScanEntity(path = AlbumInternalConst.CAMERA))
         }
         albumAdapter.addAll(arrayList)
-    }
-
-    override fun scanFinderSuccess(finderList: ArrayList<ScanEntity>) {
         finderList.find { it.bucketDisplayName == "0" }?.bucketDisplayName = getString(albumBundle.sdName)
         finderList.find { it.parent == ScanConst.ALL }?.bucketDisplayName = getString(albumBundle.allName)
         this.finderList.clear()

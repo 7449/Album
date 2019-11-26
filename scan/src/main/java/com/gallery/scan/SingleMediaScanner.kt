@@ -1,4 +1,4 @@
-package com.album.scan
+package com.gallery.scan
 
 import android.content.Context
 import android.media.MediaScannerConnection

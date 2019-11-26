@@ -1,4 +1,4 @@
-package com.album.scan
+package com.gallery.scan
 
 import android.content.Context
 import android.database.Cursor
@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.album.scan.args.Columns
-import com.album.scan.args.CursorArgs
-import com.album.scan.args.ScanConst
+import com.gallery.scan.args.Columns
+import com.gallery.scan.args.CursorArgs
+import com.gallery.scan.args.ScanConst
 
 /**
  * @author y

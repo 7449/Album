@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.album.core.action.OnAlbumListener
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 import java.io.File
 
 /**

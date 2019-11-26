@@ -4,9 +4,9 @@ import android.view.View
 import android.widget.FrameLayout
 import com.album.core.action.AlbumImageLoader
 import com.album.core.ext.AlbumImageView
+import com.album.core.ext.uri
 import com.album.sample.R
-import com.album.scan.ScanEntity
-import com.album.scan.uri
+import com.gallery.scan.ScanEntity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 

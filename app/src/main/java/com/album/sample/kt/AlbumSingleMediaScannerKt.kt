@@ -1,6 +1,6 @@
 package com.album.sample.kt
 
-import com.album.scan.SingleMediaScanner
+import com.gallery.scan.SingleMediaScanner
 
 
 class AlbumSingleMediaScannerKt {

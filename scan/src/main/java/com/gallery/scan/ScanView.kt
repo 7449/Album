@@ -1,4 +1,4 @@
-package com.album.scan
+package com.gallery.scan
 
 import androidx.fragment.app.FragmentActivity
 import androidx.loader.app.LoaderManager
@@ -30,13 +30,9 @@ interface ScanView {
 
     /**
      * 扫描成功
-     */
-    fun scanSuccess(arrayList: ArrayList<ScanEntity>)
-
-    /**
      * 扫描文件夹成功
      */
-    fun scanFinderSuccess(finderList: ArrayList<ScanEntity>)
+    fun scanSuccess(arrayList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>)
 
     /**
      * 拍照扫描成功

@@ -2,7 +2,7 @@ package com.album.core.action
 
 import android.view.View
 import android.widget.FrameLayout
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 
 /**
  * @author y

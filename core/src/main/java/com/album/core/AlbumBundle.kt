@@ -1,7 +1,7 @@
 package com.album.core
 
 import android.os.Parcelable
-import com.album.scan.args.ScanConst
+import com.gallery.scan.args.ScanConst
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

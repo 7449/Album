@@ -13,7 +13,7 @@ import com.album.core.action.AlbumAction
 import com.album.core.ext.addChildView
 import com.album.core.ext.fileExists
 import com.album.core.ext.show
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 
 class PhotoViewHolder(itemView: View,
                       private val albumBundle: AlbumBundle,

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.album.core.Album
 import com.album.core.R
 import com.album.core.ext.addChildView
-import com.album.scan.ScanEntity
+import com.gallery.scan.ScanEntity
 
 class PrevViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

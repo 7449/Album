@@ -9,10 +9,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.album.core.*
 import com.album.core.action.AlbumPreAction
 import com.album.core.ext.fileExists
+import com.album.core.ext.mergeEntity
 import com.album.core.ui.adapter.PrevAdapter
-import com.album.scan.ScanEntity
-import com.album.scan.mergeEntity
 import com.album.core.ui.base.AlbumBaseFragment
+import com.gallery.scan.ScanEntity
 import kotlinx.android.synthetic.main.album_fragment_preview.*
 
 class PrevFragment : AlbumBaseFragment() {

@@ -24,10 +24,10 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.album.ui.activity.AlbumActivity"
+            android:name="com.gallery.ui.activity.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.album.ui.activity.PreActivity"
+            android:name="com.gallery.ui.activity.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".camera.SimpleCameraActivity"

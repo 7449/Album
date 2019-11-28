@@ -1,4 +1,4 @@
-package com.album.ui.activity
+package com.gallery.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -11,22 +11,22 @@ import com.gallery.core.GalleryConst
 import com.gallery.core.action.GalleryPreAction
 import com.gallery.core.ext.hasL
 import com.gallery.core.ext.statusBarColor
-import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.core.ui.fragment.PrevFragment
-import com.gallery.scan.ScanEntity
 import com.gallery.core.ui.base.GalleryBaseActivity
-import com.album.ui.AlbumUiBundle
-import com.album.ui.R
-import kotlinx.android.synthetic.main.album_activity_preview.*
+import com.gallery.core.ui.fragment.PrevFragment
+import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.scan.ScanEntity
+import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.R
+import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 class PreActivity : GalleryBaseActivity(), GalleryPreAction {
 
-    override val layoutId: Int = R.layout.album_activity_preview
+    override val layoutId: Int = R.layout.gallery_activity_preview
 
     companion object {
         @JvmStatic
-        fun newInstance(albumBundle: GalleryBundle,
-                        uiBundle: AlbumUiBundle,
+        fun newInstance(galleryBundle: GalleryBundle,
+                        uiBundle: GalleryUiBundle,
                         selectList: ArrayList<ScanEntity>,
                         allList: ArrayList<ScanEntity>,
                         position: Int,
@@ -35,7 +35,7 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
                 putParcelableArrayList(GalleryConst.TYPE_PRE_SELECT, selectList)
                 putParcelableArrayList(GalleryConst.TYPE_PRE_ALL, allList)
                 putInt(GalleryConst.TYPE_PRE_POSITION, position)
-                putParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS, albumBundle)
+                putParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS, galleryBundle)
                 putParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS, uiBundle)
             }
             fragment.startActivityForResult(Intent(fragment.activity, PreActivity::class.java).putExtras(bundle), GalleryConst.TYPE_PRE_REQUEST_CODE)
@@ -43,8 +43,8 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
     }
 
     private lateinit var prevFragment: PrevFragment
-    private lateinit var albumBundle: GalleryBundle
-    private lateinit var uiBundle: AlbumUiBundle
+    private lateinit var galleryBundle: GalleryBundle
+    private lateinit var uiBundle: GalleryUiBundle
 
     override fun initView() {
         preBottomViewSelect.setOnClickListener {
@@ -60,9 +60,10 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
 
-        albumBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS) ?: GalleryBundle()
+        galleryBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS)
+                ?: GalleryBundle()
         uiBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS)
-                ?: AlbumUiBundle()
+                ?: GalleryUiBundle()
 
         preBottomView.setBackgroundColor(ContextCompat.getColor(this, uiBundle.preBottomViewBackground))
         preBottomViewSelect.setText(uiBundle.preBottomOkText)
@@ -88,7 +89,7 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
             supportFragmentManager.beginTransaction().show(fragment).commitAllowingStateLoss()
         } else {
             prevFragment = PrevFragment.newInstance(
-                    albumBundle,
+                    galleryBundle,
                     intent.extras?.getInt(GalleryConst.TYPE_PRE_POSITION) ?: 0,
                     intent.extras?.getParcelableArrayList(GalleryConst.TYPE_PRE_SELECT)
                             ?: ArrayList(),
@@ -102,7 +103,7 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
     }
 
     override fun onChangedCheckBoxCount(selectCount: Int) {
-        preCount.text = String.format("%s / %s", selectCount.toString(), albumBundle.multipleMaxCount)
+        preCount.text = String.format("%s / %s", selectCount.toString(), galleryBundle.multipleMaxCount)
     }
 
     override fun onChangedViewPager(currentPos: Int, maxPos: Int) {

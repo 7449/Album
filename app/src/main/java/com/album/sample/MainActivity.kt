@@ -18,8 +18,8 @@ import com.album.sample.camera.SimpleCameraActivity
 import com.album.sample.imageloader.SimpleGlideImageLoader
 import com.album.sample.imageloader.SimplePicassoGalleryImageLoader
 import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
-import com.album.ui.AlbumUiBundle
-import com.album.ui.ui
+import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.ui
 import com.gallery.core.GalleryBundle
 import com.gallery.core.Gallery
 import com.gallery.core.GalleryCameraConst
@@ -47,31 +47,31 @@ fun NightAlbumBundle(): GalleryBundle {
             radio = true,
             cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Album",
             uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop",
-            cameraTextColor = R.color.colorAlbumContentViewTipsColorNight,
+            cameraTextColor = R.color.colorGalleryContentViewTipsColorNight,
             cameraDrawable = R.drawable.ic_camera_drawable,
-            cameraDrawableColor = R.color.colorAlbumContentViewCameraDrawableColorNight,
-            cameraBackgroundColor = R.color.colorAlbumToolbarBackgroundNight,
-            rootViewBackground = R.color.colorAlbumContentViewBackgroundNight,
+            cameraDrawableColor = R.color.colorGalleryContentViewCameraDrawableColorNight,
+            cameraBackgroundColor = R.color.colorGalleryToolbarBackgroundNight,
+            rootViewBackground = R.color.colorGalleryContentViewBackgroundNight,
             cameraCrop = true)
 }
 
-fun NightAlbumUIBundle(): AlbumUiBundle {
-    return AlbumUiBundle(
-            statusBarColor = R.color.colorAlbumStatusBarColorNight,
-            toolbarBackground = R.color.colorAlbumToolbarBackgroundNight,
-            toolbarIconColor = R.color.colorAlbumToolbarIconColorNight,
-            toolbarTextColor = R.color.colorAlbumToolbarTextColorNight,
-            bottomFinderTextBackground = R.color.colorAlbumBottomViewBackgroundNight,
-            bottomFinderTextColor = R.color.colorAlbumBottomFinderTextColorNight,
-            bottomFinderTextDrawableColor = R.color.colorAlbumBottomFinderTextDrawableColorNight,
-            bottomPreViewTextColor = R.color.colorAlbumBottomPreViewTextColorNight,
-            bottomSelectTextColor = R.color.colorAlbumBottomSelectTextColorNight,
-            listPopupBackground = R.color.colorAlbumListPopupBackgroundNight,
-            listPopupItemTextColor = R.color.colorAlbumListPopupItemTextColorNight,
-            preBackground = R.color.colorAlbumPreviewBackgroundNight,
-            preBottomViewBackground = R.color.colorAlbumPreviewBottomViewBackgroundNight,
-            preBottomOkTextColor = R.color.colorAlbumPreviewBottomViewOkColorNight,
-            preBottomCountTextColor = R.color.colorAlbumPreviewBottomViewCountColorNight)
+fun NightAlbumUIBundle(): GalleryUiBundle {
+    return GalleryUiBundle(
+            statusBarColor = R.color.colorGalleryStatusBarColorNight,
+            toolbarBackground = R.color.colorGalleryToolbarBackgroundNight,
+            toolbarIconColor = R.color.colorGalleryToolbarIconColorNight,
+            toolbarTextColor = R.color.colorGalleryToolbarTextColorNight,
+            bottomFinderTextBackground = R.color.colorGalleryBottomViewBackgroundNight,
+            bottomFinderTextColor = R.color.colorGalleryBottomFinderTextColorNight,
+            bottomFinderTextDrawableColor = R.color.colorGalleryBottomFinderTextDrawableColorNight,
+            bottomPreViewTextColor = R.color.colorGalleryBottomPreViewTextColorNight,
+            bottomSelectTextColor = R.color.colorGalleryBottomSelectTextColorNight,
+            listPopupBackground = R.color.colorGalleryListPopupBackgroundNight,
+            listPopupItemTextColor = R.color.colorGalleryListPopupItemTextColorNight,
+            preBackground = R.color.colorGalleryPreviewBackgroundNight,
+            preBottomViewBackground = R.color.colorGalleryPreviewBottomViewBackgroundNight,
+            preBottomOkTextColor = R.color.colorGalleryPreviewBottomViewOkColorNight,
+            preBottomCountTextColor = R.color.colorGalleryPreviewBottomViewCountColorNight)
 }
 
 fun MainActivity.dayAlbum() {
@@ -106,7 +106,7 @@ fun MainActivity.video() {
     }.ui(this, GalleryBundle(
             scanType = ScanConst.VIDEO,
             cameraText = R.string.video_tips),
-            AlbumUiBundle(toolbarText = R.string.album_video_title))
+            GalleryUiBundle(toolbarText = R.string.album_video_title))
 }
 
 fun MainActivity.startCamera() {
@@ -144,17 +144,17 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
         dayOptions = UCrop.Options()
         dayOptions.apply {
             setToolbarTitle("DayTheme")
-            setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackground))
-            setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumStatusBarColor))
-            setActiveWidgetColor(ContextCompat.getColor(this@MainActivity, R.color.colorAlbumToolbarBackground))
+            setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.colorGalleryToolbarBackground))
+            setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.colorGalleryStatusBarColor))
+            setActiveWidgetColor(ContextCompat.getColor(this@MainActivity, R.color.colorGalleryToolbarBackground))
         }
 
         nightOptions = UCrop.Options()
         nightOptions.setToolbarTitle("NightTheme")
-        nightOptions.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.colorAlbumToolbarTextColorNight))
-        nightOptions.setToolbarColor(ContextCompat.getColor(this, R.color.colorAlbumToolbarBackgroundNight))
-        nightOptions.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorAlbumToolbarBackgroundNight))
-        nightOptions.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAlbumStatusBarColorNight))
+        nightOptions.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.colorGalleryToolbarTextColorNight))
+        nightOptions.setToolbarColor(ContextCompat.getColor(this, R.color.colorGalleryToolbarBackgroundNight))
+        nightOptions.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorGalleryToolbarBackgroundNight))
+        nightOptions.setStatusBarColor(ContextCompat.getColor(this, R.color.colorGalleryStatusBarColorNight))
 
         list = ArrayList()
     }

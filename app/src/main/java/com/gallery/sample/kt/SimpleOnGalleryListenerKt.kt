@@ -1,4 +1,4 @@
-package com.album.sample.kt
+package com.gallery.sample.kt
 
 import com.gallery.core.action.OnGalleryListener
 import com.gallery.scan.ScanEntity

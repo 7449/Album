@@ -1,4 +1,4 @@
-package com.album.sample
+package com.gallery.sample
 
 import android.content.Context
 import android.util.Log
@@ -51,7 +51,7 @@ class MainGalleryListener internal constructor(context: Context, private val lis
     }
 
     override fun onGalleryFileNotExist() {
-        toast("album image has been deleted")
+        toast("gallery image has been deleted")
     }
 
     override fun onGalleryContainerPreSelectEmpty() {

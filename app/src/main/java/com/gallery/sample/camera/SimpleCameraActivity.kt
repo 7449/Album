@@ -1,4 +1,4 @@
-package com.album.sample.camera
+package com.gallery.sample.camera
 
 import android.os.Bundle
 import android.util.Log
@@ -7,10 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ext.finishCamera
-import com.album.sample.R
+import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ui.base.GalleryBaseActivity
+import com.gallery.sample.R
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
 import kotlinx.android.synthetic.main.activity_simple_camera.*

@@ -1,4 +1,4 @@
-package com.album.sample
+package com.gallery.sample
 
 import android.app.Application
 

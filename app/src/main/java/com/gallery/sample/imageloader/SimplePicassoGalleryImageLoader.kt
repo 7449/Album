@@ -1,4 +1,4 @@
-package com.album.sample.imageloader
+package com.gallery.sample.imageloader
 
 import android.view.View
 import android.widget.FrameLayout
@@ -15,32 +15,32 @@ import com.squareup.picasso.Picasso
 class SimplePicassoGalleryImageLoader : GalleryImageLoader {
 
     override fun displayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.GalleryImageView()
+        val galleryImageView = container.GalleryImageView()
         Picasso.get()
                 .load(galleryEntity.uri())
                 .centerCrop()
                 .resize(width, height)
-                .into(albumImageView)
-        return albumImageView
+                .into(galleryImageView)
+        return galleryImageView
     }
 
     override fun displayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.GalleryImageView()
+        val galleryImageView = container.GalleryImageView()
         Picasso.get()
                 .load(finderEntity.uri())
                 .resize(50, 50)
                 .centerCrop()
-                .into(albumImageView)
-        return albumImageView
+                .into(galleryImageView)
+        return galleryImageView
     }
 
     override fun displayGalleryPreview(galleryEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.GalleryImageView()
+        val galleryImageView = container.GalleryImageView()
         Picasso.get()
                 .load(galleryEntity.uri())
                 .resize(50, 50)
                 .centerCrop()
-                .into(albumImageView)
-        return albumImageView
+                .into(galleryImageView)
+        return galleryImageView
     }
 }

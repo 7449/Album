@@ -1,9 +1,8 @@
-package com.album.sample.imageloader
+package com.gallery.sample.imageloader
 
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.FrameLayout
-import com.album.sample.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
@@ -13,6 +12,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.gallery.core.action.GalleryImageLoader
 import com.gallery.core.ext.GalleryImageView
 import com.gallery.core.ext.uri
+import com.gallery.sample.R
 import com.gallery.scan.ScanEntity
 
 class SimpleSubsamplingScaleImageLoader : GalleryImageLoader {
@@ -20,15 +20,15 @@ class SimpleSubsamplingScaleImageLoader : GalleryImageLoader {
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
 
     override fun displayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.GalleryImageView()
-        Glide.with(container.context).load(galleryEntity.uri()).apply(requestOptions).into(albumImageView)
-        return albumImageView
+        val galleryImageView = container.GalleryImageView()
+        Glide.with(container.context).load(galleryEntity.uri()).apply(requestOptions).into(galleryImageView)
+        return galleryImageView
     }
 
     override fun displayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.GalleryImageView()
-        Glide.with(container.context).load(finderEntity.uri()).apply(requestOptions).into(albumImageView)
-        return albumImageView
+        val galleryImageView = container.GalleryImageView()
+        Glide.with(container.context).load(finderEntity.uri()).apply(requestOptions).into(galleryImageView)
+        return galleryImageView
     }
 
     override fun displayGalleryPreview(galleryEntity: ScanEntity, container: FrameLayout): View {

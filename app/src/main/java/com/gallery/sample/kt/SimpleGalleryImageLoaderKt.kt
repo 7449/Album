@@ -1,4 +1,4 @@
-package com.album.sample.kt
+package com.gallery.sample.kt
 
 import android.view.View
 import android.widget.FrameLayout

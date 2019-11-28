@@ -1,9 +1,9 @@
-package com.album.sample.kt
+package com.gallery.sample.kt
 
 import com.gallery.scan.SingleMediaScanner
 
 
-class AlbumSingleMediaScannerKt {
+class GallerySingleMediaScannerKt {
 
     private var onScanStart: (() -> Unit)? = null
     private var onScanCompleted: ((type: Int, path: String) -> Unit)? = null

@@ -1,13 +1,13 @@
-package com.album.sample.imageloader
+package com.gallery.sample.imageloader
 
 import android.view.View
 import android.widget.FrameLayout
-import com.album.sample.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.action.GalleryImageLoader
 import com.gallery.core.ext.GalleryImageView
 import com.gallery.core.ext.uri
+import com.gallery.sample.R
 import com.gallery.scan.ScanEntity
 
 class SimpleGlideImageLoader : GalleryImageLoader {

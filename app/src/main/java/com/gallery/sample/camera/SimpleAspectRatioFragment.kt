@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.album.sample.camera
+package com.gallery.sample.camera
 
 import android.app.Dialog
 import android.content.Context

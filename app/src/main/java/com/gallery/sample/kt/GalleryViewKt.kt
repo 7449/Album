@@ -1,4 +1,4 @@
-package com.album.sample.kt
+package com.gallery.sample.kt
 
 import androidx.fragment.app.FragmentActivity
 import com.gallery.scan.ScanEntity
@@ -6,12 +6,12 @@ import com.gallery.scan.ScanView
 import com.gallery.scan.args.ScanConst
 
 
-class AlbumViewKt {
+class GalleryViewKt {
 
     private var currentActivity: (() -> FragmentActivity)? = null
     private var currentScanTypes: (() -> Int)? = null
-    private var scanSuccess: ((albumEntityList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) -> Unit)? = null
-    private var resultSuccess: ((albumEntity: ScanEntity?) -> Unit)? = null
+    private var scanSuccess: ((galleryEntityList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) -> Unit)? = null
+    private var resultSuccess: ((galleryEntity: ScanEntity?) -> Unit)? = null
     private var refreshUI: (() -> Unit)? = null
     private var currentSelectEntity: (() -> ArrayList<ScanEntity>)? = null
 
@@ -27,7 +27,7 @@ class AlbumViewKt {
         this.currentScanTypes = currentScanType
     }
 
-    fun scanSuccess(scanSuccess: (albumEntityList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) -> Unit) {
+    fun scanSuccess(scanSuccess: (galleryEntityList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) -> Unit) {
         this.scanSuccess = scanSuccess
     }
 

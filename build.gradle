@@ -42,5 +42,5 @@ ext {
     subsamplingVersion = '3.10.0'
     photoViewVersion = '2.3.0'
 
-    sampleApplicationId = 'com.album.sample'
+    sampleApplicationId = 'com.gallery.sample'
 }

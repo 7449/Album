@@ -9,13 +9,13 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_day_album"
+            android:id="@+id/btn_day_gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="day theme" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_night_album"
+            android:id="@+id/btn_night_gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="night theme and customize camera" />

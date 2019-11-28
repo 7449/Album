@@ -10,6 +10,6 @@ androidArtifact {
 
 publish {
     userOrg = 'ydevelop'
-    desc = 'this is android album library'
+    desc = 'this is android gallery library'
     website = 'https://github.com/7449/Album'
 }

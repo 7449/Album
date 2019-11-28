@@ -11,17 +11,17 @@ interface ScanView {
     /**
      *  [LoaderManager.getInstance]
      */
-    fun getScanContext(): FragmentActivity
+    val scanContext: FragmentActivity
 
     /**
      * 获取已经选择数据
      */
-    fun getSelectEntity(): ArrayList<ScanEntity>
+    val selectEntity: ArrayList<ScanEntity>
 
     /**
      * 当前扫描类型
      */
-    fun currentScanType(): Int
+    val currentScanType: Int
 
     /**
      * 刷新数据

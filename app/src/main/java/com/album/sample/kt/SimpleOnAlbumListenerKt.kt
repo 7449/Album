@@ -1,6 +1,6 @@
 package com.album.sample.kt
 
-import com.album.core.action.OnAlbumListener
+import com.gallery.core.action.OnAlbumListener
 import com.gallery.scan.ScanEntity
 import java.io.File
 

@@ -3,9 +3,9 @@ package com.album.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.album.core.Album
-import com.album.core.AlbumBundle
-import com.album.core.AlbumConst
+import com.gallery.core.Album
+import com.gallery.core.AlbumBundle
+import com.gallery.core.AlbumConst
 import com.album.ui.activity.AlbumActivity
 
 /**

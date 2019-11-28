@@ -10,15 +10,15 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/album_padding_top"
-        android:paddingBottom="@dimen/album_padding_bottom" />
+        android:paddingTop="@dimen/gallery_padding_top"
+        android:paddingBottom="@dimen/gallery_padding_bottom" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/preCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_margin="@dimen/item_album_check_margin"
+        android:layout_margin="@dimen/item_gallery_check_margin"
         android:button="@null" />
 
 </FrameLayout>

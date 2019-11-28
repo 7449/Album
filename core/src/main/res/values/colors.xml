@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAlbumCameraBackgroundColor">#FFB0B7B7</color>
-    <color name="colorAlbumPhotoBackgroundColor">#FFFFFFFF</color>
-    <color name="colorAlbumContentViewTipsColor">#FF3D4040</color>
-    <color name="colorAlbumContentViewBackground">#FFFFFFFF</color>
-    <color name="colorAlbumContentViewCameraDrawableColor">#FF1B1D1D</color>
-    <color name="colorAlbumContentEmptyDrawableColor">#FF1B1D1D</color>
+    <color name="colorGalleryCameraBackgroundColor">#FFB0B7B7</color>
+    <color name="colorGalleryPhotoBackgroundColor">#FFFFFFFF</color>
+    <color name="colorGalleryContentViewTipsColor">#FF3D4040</color>
+    <color name="colorGalleryContentViewBackground">#FFFFFFFF</color>
+    <color name="colorGalleryContentViewCameraDrawableColor">#FF1B1D1D</color>
+    <color name="colorGalleryContentEmptyDrawableColor">#FF1B1D1D</color>
 </resources>

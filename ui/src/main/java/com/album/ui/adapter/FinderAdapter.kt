@@ -7,8 +7,8 @@ import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import com.album.core.Album
-import com.album.core.ext.addChildView
+import com.gallery.core.Album
+import com.gallery.core.ext.addChildView
 import com.gallery.scan.ScanEntity
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R

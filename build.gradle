@@ -17,6 +17,7 @@ allprojects {
         maven { url "https://jitpack.io" }
         google()
         mavenCentral()
+        maven { url 'https://dl.bintray.com/ydevelop/maven' }
     }
 }
 
@@ -35,10 +36,6 @@ ext {
     viewpagerVersion = '1.0.0'
     materialVersion = '1.0.0'
 
-    albumCoreVersion = getMavenVersion("$rootDir/scan")
-    albumLibraryVersion = getMavenVersion("$rootDir/core")
-    albumUIVersion = getMavenVersion("$rootDir/ui")
-
     glideVersion = '4.10.0'
     ucropVersion = '2.2.4'
     picassoVersion = '2.71828'
@@ -46,10 +43,4 @@ ext {
     photoViewVersion = '2.3.0'
 
     sampleApplicationId = 'com.album.sample'
-}
-
-static def getMavenVersion(path) {
-    Properties properties = new Properties()
-    properties.load(new FileInputStream(path + "/gradle.properties"))
-    return properties.getProperty("mavenVersion")
 }

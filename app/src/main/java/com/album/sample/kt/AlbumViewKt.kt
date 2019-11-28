@@ -1,18 +1,17 @@
 package com.album.sample.kt
 
 import androidx.fragment.app.FragmentActivity
-import com.gallery.scan.args.ScanConst
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanView
+import com.gallery.scan.args.ScanConst
 
 
 class AlbumViewKt {
 
     private var currentActivity: (() -> FragmentActivity)? = null
-    private var currentScanType: (() -> Int)? = null
-    private var scanSuccess: ((albumEntityList: ArrayList<ScanEntity>) -> Unit)? = null
+    private var currentScanTypes: (() -> Int)? = null
+    private var scanSuccess: ((albumEntityList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) -> Unit)? = null
     private var resultSuccess: ((albumEntity: ScanEntity?) -> Unit)? = null
-    private var scanFinderSuccess: ((list: ArrayList<ScanEntity>) -> Unit)? = null
     private var refreshUI: (() -> Unit)? = null
     private var currentSelectEntity: (() -> ArrayList<ScanEntity>)? = null
 
@@ -25,39 +24,37 @@ class AlbumViewKt {
     }
 
     fun currentScanType(currentScanType: () -> Int) {
-        this.currentScanType = currentScanType
+        this.currentScanTypes = currentScanType
     }
 
-    fun scanSuccess(scanSuccess: (albumEntityList: ArrayList<ScanEntity>) -> Unit) {
+    fun scanSuccess(scanSuccess: (albumEntityList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) -> Unit) {
         this.scanSuccess = scanSuccess
     }
 
     internal fun build(): ScanView {
         return object : ScanView {
 
-            override fun getSelectEntity(): ArrayList<ScanEntity> = currentSelectEntity?.invoke()
-                    ?: ArrayList()
+            override val selectEntity: ArrayList<ScanEntity>
+                get() = currentSelectEntity?.invoke()
+                        ?: ArrayList()
 
             override fun refreshUI() {
                 refreshUI?.invoke()
-            }
-
-            override fun scanFinderSuccess(finderList: ArrayList<ScanEntity>) {
-                scanFinderSuccess?.invoke(finderList)
             }
 
             override fun resultSuccess(scanEntity: ScanEntity?) {
                 resultSuccess?.invoke(scanEntity)
             }
 
-            override fun currentScanType(): Int = currentScanType?.invoke()
-                    ?: ScanConst.IMAGE
+            override val currentScanType: Int
+                get() = currentScanTypes?.invoke() ?: ScanConst.IMAGE
 
-            override fun getScanContext(): FragmentActivity = currentActivity?.invoke()
-                    ?: throw KotlinNullPointerException("check currentActivity")
+            override val scanContext: FragmentActivity
+                get() = currentActivity?.invoke()
+                        ?: throw KotlinNullPointerException("check currentActivity")
 
-            override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
-                scanSuccess?.invoke(arrayList)
+            override fun scanSuccess(arrayList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>) {
+                scanSuccess?.invoke(arrayList, finderList)
             }
 
         }

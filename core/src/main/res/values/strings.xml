@@ -1,5 +1,5 @@
 <resources>
-    <string name="album_camera_text">相机</string>
-    <string name="album_sd_name">根目录</string>
-    <string name="album_all_name">全部</string>
+    <string name="gallery_camera_text">相机</string>
+    <string name="gallery_sd_name">根目录</string>
+    <string name="gallery_all_name">全部</string>
 </resources>

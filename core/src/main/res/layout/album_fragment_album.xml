@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/albumRootView"
+    android:id="@+id/galleryRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/albumRecyclerView"
+        android:id="@+id/galleryRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/album_padding_top" />
+        android:paddingTop="@dimen/gallery_padding_top" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/albumEmpty"
-        android:layout_width="@dimen/album_empty_width"
-        android:layout_height="@dimen/album_empty_height"
+        android:id="@+id/galleryEmpty"
+        android:layout_width="@dimen/gallery_empty_width"
+        android:layout_height="@dimen/gallery_empty_height"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
         android:visibility="gone" />

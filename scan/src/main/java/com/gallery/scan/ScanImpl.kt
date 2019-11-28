@@ -17,12 +17,9 @@ class ScanImpl(private val scanView: ScanView) {
         private const val SCAN_LOADER_ID = 111
     }
 
-    private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.getScanContext())
-
-    private val context: Context = scanView.getScanContext()
-
-    private val scanType: Int = scanView.currentScanType()
-
+    private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
+    private val context: Context = scanView.scanContext
+    private val scanType: Int = scanView.currentScanType
     private var finderList = ArrayList<ScanEntity>()
 
     fun scanAll(parent: Long) {
@@ -36,7 +33,7 @@ class ScanImpl(private val scanView: ScanView) {
             if (parent == ScanConst.ALL && !it.isNullOrEmpty()) {
                 refreshFinder(it)
             }
-            scanView.scanSuccess(it.mergeEntity(scanView.getSelectEntity()), finderList)
+            scanView.scanSuccess(it.mergeEntity(scanView.selectEntity), finderList)
             loaderManager.destroyLoader(SCAN_LOADER_ID)
         })
     }

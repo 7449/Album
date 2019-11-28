@@ -3,7 +3,7 @@ package com.album.sample
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.album.core.action.OnAlbumListener
+import com.gallery.core.action.OnAlbumListener
 import com.gallery.scan.ScanEntity
 import java.io.File
 

@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.ColorInt
-import com.gallery.core.ui.widget.AlbumImageView
+import com.gallery.core.ui.widget.GalleryImageView
 
 //View是否显示
 fun View.hasVisible(): Boolean = visibility == View.VISIBLE
@@ -45,13 +45,13 @@ fun ViewGroup.addChildView(childView: View?, layoutParams: ViewGroup.LayoutParam
     }
 }
 
-//AlbumImageView
-fun ViewGroup.AlbumImageView(): AlbumImageView = let {
+//GalleryImageView
+fun ViewGroup.GalleryImageView(): GalleryImageView = let {
     for (i in 0 until childCount) {
         val childAt = getChildAt(i)
-        if (childAt is AlbumImageView) {
+        if (childAt is GalleryImageView) {
             return childAt
         }
     }
-    return AlbumImageView(context)
+    return GalleryImageView(context)
 }

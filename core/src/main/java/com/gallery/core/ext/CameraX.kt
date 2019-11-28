@@ -8,17 +8,17 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
-import com.gallery.core.AlbumCameraConst
+import com.gallery.core.GalleryCameraConst
 import com.gallery.core.ext.permission.permissionCamera
 import com.gallery.core.ext.permission.permissionStorage
-import com.gallery.core.ui.base.AlbumBaseActivity
+import com.gallery.core.ui.base.GalleryBaseActivity
 import java.io.File
 
 //activity 打开相机
-fun Activity.openCamera(fileUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, fileUri, video)
+fun Activity.openCamera(fileUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) GalleryCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, fileUri, video)
 
 //fragment 打开相机
-fun Fragment.openCamera(fileUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) AlbumCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, fileUri, video)
+fun Fragment.openCamera(fileUri: Uri, video: Boolean): Int = if (!permissionCamera() || !permissionStorage()) GalleryCameraConst.CAMERA_PERMISSION_ERROR else openCamera(this, fileUri, video)
 
 //打开相机(需要提前请求权限)）
 internal fun openCamera(root: Any, fileUri: Uri, video: Boolean): Int {
@@ -29,14 +29,14 @@ internal fun openCamera(root: Any, fileUri: Uri, video: Boolean): Int {
     }
     val intent = if (video) Intent(MediaStore.ACTION_VIDEO_CAPTURE) else Intent(MediaStore.ACTION_IMAGE_CAPTURE)
     if (activity == null || intent.resolveActivity(activity.packageManager) == null) {
-        return AlbumCameraConst.CAMERA_ERROR
+        return GalleryCameraConst.CAMERA_ERROR
     }
     intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri)
     when (root) {
-        is Activity -> root.startActivityForResult(intent, AlbumCameraConst.CAMERA_REQUEST_CODE)
-        is Fragment -> root.startActivityForResult(intent, AlbumCameraConst.CAMERA_REQUEST_CODE)
+        is Activity -> root.startActivityForResult(intent, GalleryCameraConst.CAMERA_REQUEST_CODE)
+        is Fragment -> root.startActivityForResult(intent, GalleryCameraConst.CAMERA_REQUEST_CODE)
     }
-    return AlbumCameraConst.CAMERA_SUCCESS
+    return GalleryCameraConst.CAMERA_SUCCESS
 }
 
 fun Context.scanFilePath(uri: Uri, fileProviderPath: String): String? {
@@ -57,7 +57,7 @@ fun Context.scanFilePath(uri: Uri, fileProviderPath: String): String? {
     }
 }
 
-fun Context.albumPathFile(path: String?, name: String, suffix: String): File {
+fun Context.galleryPathFile(path: String?, name: String, suffix: String): File {
     val fileName = System.currentTimeMillis().toString() + "_" + name + "." + suffix
     if (path != null && path.isNotEmpty()) {
         val pathFile = File(path)
@@ -76,7 +76,7 @@ fun Context.albumPathFile(path: String?, name: String, suffix: String): File {
 }
 
 //自定义相机可以使用此方法直接返回路径,也可以自定义
-fun AlbumBaseActivity.finishCamera(path: String) {
-    setResult(Activity.RESULT_OK, Intent().putExtras(Bundle().apply { putString(AlbumCameraConst.RESULT_PATH, path) }))
+fun GalleryBaseActivity.finishCamera(path: String) {
+    setResult(Activity.RESULT_OK, Intent().putExtras(Bundle().apply { putString(GalleryCameraConst.RESULT_PATH, path) }))
     finish()
 }

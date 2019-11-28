@@ -9,7 +9,7 @@ import com.gallery.scan.ScanEntity
 
 class PrevAdapter : RecyclerView.Adapter<PrevViewHolder>() {
 
-    var albumList: ArrayList<ScanEntity> = ArrayList()
+    var galleryList: ArrayList<ScanEntity> = ArrayList()
 
     var multipleList: ArrayList<ScanEntity> = ArrayList()
         set(value) {
@@ -17,15 +17,15 @@ class PrevAdapter : RecyclerView.Adapter<PrevViewHolder>() {
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrevViewHolder = PrevViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.album_item_album_prev, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrevViewHolder = PrevViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_prev, parent, false))
 
-    override fun onBindViewHolder(holder: PrevViewHolder, position: Int) = holder.photo(albumList[position])
+    override fun onBindViewHolder(holder: PrevViewHolder, position: Int) = holder.photo(galleryList[position])
 
-    override fun getItemCount(): Int = albumList.size
+    override fun getItemCount(): Int = galleryList.size
 
     fun addAll(newList: ArrayList<ScanEntity>) {
-        albumList.clear()
-        albumList.addAll(newList)
+        galleryList.clear()
+        galleryList.addAll(newList)
         notifyDataSetChanged()
     }
 }

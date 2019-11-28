@@ -5,7 +5,7 @@ package com.gallery.core.action
  * @create 2019/2/27
  * 预览页回调
  */
-interface AlbumPreAction {
+interface GalleryPreAction {
     /**
      * 点击checkbox时调用
      */

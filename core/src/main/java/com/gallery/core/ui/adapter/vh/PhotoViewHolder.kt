@@ -6,59 +6,59 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.Album
-import com.gallery.core.AlbumBundle
+import com.gallery.core.Gallery
+import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.action.AlbumAction
+import com.gallery.core.action.GalleryAction
 import com.gallery.core.ext.addChildView
 import com.gallery.core.ext.fileExists
 import com.gallery.core.ext.show
 import com.gallery.scan.ScanEntity
 
 class PhotoViewHolder(itemView: View,
-                      private val albumBundle: AlbumBundle,
+                      private val galleryBundle: GalleryBundle,
                       private val display: Int,
                       private val layoutParams: ViewGroup.LayoutParams,
-                      private val albumAction: AlbumAction?) : RecyclerView.ViewHolder(itemView) {
+                      private val galleryAction: GalleryAction?) : RecyclerView.ViewHolder(itemView) {
 
     private val container: FrameLayout = itemView.findViewById(R.id.galleryContainer)
     private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.galleryCheckBox)
 
-    fun photo(position: Int, albumEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
-        container.addChildView(Album.instance.albumImageLoader?.displayAlbum(display, display, albumEntity, container), layoutParams)
-        container.setBackgroundColor(ContextCompat.getColor(itemView.context, albumBundle.photoBackgroundColor))
-        if (albumBundle.radio) {
+    fun photo(position: Int, galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
+        container.addChildView(Gallery.instance.galleryImageLoader?.displayGallery(display, display, galleryEntity, container), layoutParams)
+        container.setBackgroundColor(ContextCompat.getColor(itemView.context, galleryBundle.photoBackgroundColor))
+        if (galleryBundle.radio) {
             return
         }
         checkBox.show()
-        checkBox.isChecked = albumEntity.isCheck
-        checkBox.setBackgroundResource(albumBundle.checkBoxDrawable)
+        checkBox.isChecked = galleryEntity.isCheck
+        checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener {
-            if (!albumEntity.path.fileExists()) {
+            if (!galleryEntity.path.fileExists()) {
                 checkBox.isChecked = false
-                if (multipleList.contains(albumEntity)) {
-                    multipleList.remove(albumEntity)
+                if (multipleList.contains(galleryEntity)) {
+                    multipleList.remove(galleryEntity)
                 }
-                Album.instance.albumListener?.onAlbumCheckFileNotExist()
+                Gallery.instance.galleryListener?.onGalleryCheckFileNotExist()
                 return@setOnClickListener
             }
-            if (albumAction?.onAlbumCheckBoxFilter(itemView, position, albumEntity) == true) {
+            if (galleryAction?.onGalleryCheckBoxFilter(itemView, position, galleryEntity) == true) {
                 return@setOnClickListener
             }
-            if (!multipleList.contains(albumEntity) && multipleList.size >= albumBundle.multipleMaxCount) {
+            if (!multipleList.contains(galleryEntity) && multipleList.size >= galleryBundle.multipleMaxCount) {
                 checkBox.isChecked = false
-                Album.instance.albumListener?.onAlbumMaxCount()
+                Gallery.instance.galleryListener?.onGalleryMaxCount()
                 return@setOnClickListener
             }
-            if (!albumEntity.isCheck) {
-                albumEntity.isCheck = true
-                multipleList.add(albumEntity)
+            if (!galleryEntity.isCheck) {
+                galleryEntity.isCheck = true
+                multipleList.add(galleryEntity)
             } else {
-                multipleList.remove(albumEntity)
-                albumEntity.isCheck = false
+                multipleList.remove(galleryEntity)
+                galleryEntity.isCheck = false
             }
-            albumAction?.onChangedCheckBoxCount(itemView, multipleList.size, albumEntity)
-            Album.instance.albumListener?.onAlbumCheckBox(multipleList.size, albumBundle.multipleMaxCount)
+            galleryAction?.onChangedCheckBoxCount(itemView, multipleList.size, galleryEntity)
+            Gallery.instance.galleryListener?.onGalleryCheckBox(multipleList.size, galleryBundle.multipleMaxCount)
         }
     }
 }

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
  * @author y
  * @create 2019/2/27
  */
-abstract class AlbumBaseActivity : AppCompatActivity() {
+abstract class GalleryBaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

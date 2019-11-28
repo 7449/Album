@@ -14,33 +14,33 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.gallery.core.Album
-import com.gallery.core.AlbumBundle
-import com.gallery.core.AlbumCameraConst
-import com.gallery.core.AlbumConst
-import com.gallery.core.action.AlbumImageLoader
-import com.gallery.core.ext.albumPathFile
+import com.album.sample.camera.SimpleCameraActivity
+import com.album.sample.imageloader.SimpleGlideImageLoader
+import com.album.sample.imageloader.SimplePicassoGalleryImageLoader
+import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
+import com.album.ui.AlbumUiBundle
+import com.album.ui.ui
+import com.gallery.core.GalleryBundle
+import com.gallery.core.Gallery
+import com.gallery.core.GalleryCameraConst
+import com.gallery.core.GalleryConst
+import com.gallery.core.action.GalleryImageLoader
+import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ext.openCamera
 import com.gallery.core.ext.permission.permissionCamera
 import com.gallery.core.ext.permission.permissionStorage
 import com.gallery.core.ext.uri
-import com.album.sample.camera.SimpleCameraActivity
-import com.album.sample.imageloader.SimpleGlideImageLoader
-import com.album.sample.imageloader.SimplePicassoAlbumImageLoader
-import com.album.sample.imageloader.SimpleSubsamplingScaleImageLoader
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.SingleMediaScanner
 import com.gallery.scan.args.ScanConst
-import com.album.ui.AlbumUiBundle
-import com.album.ui.ui
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropFragment
 import com.yalantis.ucrop.UCropFragmentCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-fun NightAlbumBundle(): AlbumBundle {
-    return AlbumBundle(
+fun NightAlbumBundle(): GalleryBundle {
+    return GalleryBundle(
             spanCount = 4,
             cropFinish = false,
             checkBoxDrawable = R.drawable.simple_selector_album_item_check,
@@ -75,48 +75,48 @@ fun NightAlbumUIBundle(): AlbumUiBundle {
 }
 
 fun MainActivity.dayAlbum() {
-    Album.instance.apply {
-        albumImageLoader = SimplePicassoAlbumImageLoader()
-        albumListener = MainAlbumListener(applicationContext, list)
+    Gallery.instance.apply {
+        galleryImageLoader = SimplePicassoGalleryImageLoader()
+        galleryListener = MainGalleryListener(applicationContext, list)
         selectList = list
         options = dayOptions
     }.ui(this,
-            AlbumBundle(scanType = ScanConst.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
+            GalleryBundle(scanType = ScanConst.IMAGE, checkBoxDrawable = R.drawable.simple_selector_album_item_check))
 }
 
 fun MainActivity.nightAlbum() {
-    Album.instance.apply {
-        albumListener = MainAlbumListener(applicationContext, null)
+    Gallery.instance.apply {
+        galleryListener = MainGalleryListener(applicationContext, null)
         options = nightOptions
-        albumImageLoader = SimplePicassoAlbumImageLoader()
+        galleryImageLoader = SimplePicassoGalleryImageLoader()
         customCameraListener = {
             if (it.permissionStorage() && it.permissionCamera()) {
                 Toast.makeText(it.activity, "camera", Toast.LENGTH_SHORT).show()
                 val intent = Intent(it.activity, SimpleCameraActivity::class.java)
-                it.startActivityForResult(intent, AlbumCameraConst.CUSTOM_CAMERA_REQUEST_CODE)
+                it.startActivityForResult(intent, GalleryCameraConst.CUSTOM_CAMERA_REQUEST_CODE)
             }
         }
     }.ui(this, NightAlbumBundle(), NightAlbumUIBundle())
 }
 
 fun MainActivity.video() {
-    Album.instance.apply {
-        albumImageLoader = SimplePicassoAlbumImageLoader()
-        albumListener = MainAlbumListener(applicationContext, null)
-    }.ui(this, AlbumBundle(
+    Gallery.instance.apply {
+        galleryImageLoader = SimplePicassoGalleryImageLoader()
+        galleryListener = MainGalleryListener(applicationContext, null)
+    }.ui(this, GalleryBundle(
             scanType = ScanConst.VIDEO,
             cameraText = R.string.video_tips),
             AlbumUiBundle(toolbarText = R.string.album_video_title))
 }
 
 fun MainActivity.startCamera() {
-    imagePath = uri(applicationContext.albumPathFile(null, System.currentTimeMillis().toString(), "jpg"))
+    imagePath = uri(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString(), "jpg"))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
 }
 
-fun MainActivity.imageLoader(imageLoader: AlbumImageLoader) {
-    Album.instance.apply { albumImageLoader = imageLoader }.ui(this)
+fun MainActivity.imageLoader(imageLoader: GalleryImageLoader) {
+    Gallery.instance.apply { galleryImageLoader = imageLoader }.ui(this)
 }
 
 class SimpleSingleScannerListener : SingleMediaScanner.SingleScannerListener {
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
     }
 
     override fun onClick(v: View) {
-        Album.destroy()
+        Gallery.destroy()
         when (v.id) {
             R.id.btn_day_album -> dayAlbum()
             R.id.btn_night_album -> nightAlbum()
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
                     ) { dialog, which ->
                         when (which) {
                             0 -> imageLoader(SimpleGlideImageLoader())
-                            1 -> imageLoader(SimplePicassoAlbumImageLoader())
+                            1 -> imageLoader(SimplePicassoGalleryImageLoader())
                             2 -> imageLoader(SimpleSubsamplingScaleImageLoader())
                         }
                         dialog.dismiss()
@@ -193,13 +193,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             UCrop.RESULT_ERROR -> {
             }
             Activity.RESULT_OK -> when (requestCode) {
-                AlbumCameraConst.CAMERA_REQUEST_CODE -> {
+                GalleryCameraConst.CAMERA_REQUEST_CODE -> {
                     SingleMediaScanner(this, imagePath.path
-                            ?: "", AlbumConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
+                            ?: "", GalleryConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
                 }
                 UCrop.REQUEST_CROP -> {
                     SingleMediaScanner(this, imagePath.path
-                            ?: "", AlbumConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
+                            ?: "", GalleryConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

@@ -7,23 +7,23 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
-import com.gallery.core.Album
-import com.gallery.core.AlbumBundle
-import com.gallery.core.AlbumConst
-import com.gallery.core.action.AlbumAction
-import com.gallery.core.ext.drawable
-import com.gallery.core.ext.hasL
-import com.gallery.core.ext.statusBarColor
-import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.args.ScanConst
-import com.gallery.scan.ScanEntity
-import com.gallery.core.ui.base.AlbumBaseActivity
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
 import com.album.ui.adapter.FinderAdapter
+import com.gallery.core.Gallery
+import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConst
+import com.gallery.core.action.GalleryAction
+import com.gallery.core.ext.drawable
+import com.gallery.core.ext.hasL
+import com.gallery.core.ext.statusBarColor
+import com.gallery.core.ui.base.GalleryBaseActivity
+import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanConst
 import kotlinx.android.synthetic.main.album_activity_album.*
 
-class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener, AlbumAction {
+class AlbumActivity : GalleryBaseActivity(), View.OnClickListener, AdapterView.OnItemClickListener, GalleryAction {
 
     override val layoutId: Int = R.layout.album_activity_album
 
@@ -31,7 +31,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
     private lateinit var albumFragment: ScanFragment
     private lateinit var finderAdapter: FinderAdapter
 
-    private lateinit var albumBundle: AlbumBundle
+    private lateinit var albumBundle: GalleryBundle
     private lateinit var albumUiBundle: AlbumUiBundle
 
     override fun initView() {
@@ -43,8 +43,8 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
 
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
-        albumBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        albumUiBundle = intent.extras?.getParcelable(AlbumConst.EXTRA_ALBUM_UI_OPTIONS)
+        albumBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS) ?: GalleryBundle()
+        albumUiBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS)
                 ?: AlbumUiBundle()
 
         window.statusBarColor(ContextCompat.getColor(this, albumUiBundle.statusBarColor))
@@ -61,7 +61,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
             albumToolbar.elevation = albumUiBundle.toolbarElevation
         }
         albumToolbar.setNavigationOnClickListener {
-            Album.instance.albumListener?.onAlbumContainerFinish()
+            Gallery.instance.galleryListener?.onGalleryContainerFinish()
             finish()
         }
         initFragment()
@@ -141,7 +141,7 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                     listPopupWindow.listView?.setBackgroundColor(ContextCompat.getColor(this, albumUiBundle.listPopupBackground))
                     return
                 }
-                Album.instance.albumListener?.onAlbumContainerFinderEmpty()
+                Gallery.instance.galleryListener?.onGalleryContainerFinderEmpty()
             }
         }
     }
@@ -154,11 +154,11 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
         }
         albumFragment.finderName = finder.bucketDisplayName
         albumFinderAll.text = finder.bucketDisplayName
-        albumFragment.onScanAlbum(finder.parent, isFinder = true, result = false)
+        albumFragment.onScanGallery(finder.parent, isFinder = true, result = false)
         listPopupWindow.dismiss()
     }
 
-    override fun onAlbumItemClick(selectEntity: ArrayList<ScanEntity>, position: Int, parentId: Long) {
+    override fun onGalleryItemClick(selectEntity: ArrayList<ScanEntity>, position: Int, parentId: Long) {
         PreActivity.newInstance(
                 albumBundle,
                 albumUiBundle,
@@ -168,23 +168,23 @@ class AlbumActivity : AlbumBaseActivity(), View.OnClickListener, AdapterView.OnI
                 albumFragment)
     }
 
-    override fun onAlbumScreenChanged(selectCount: Int) {
+    override fun onGalleryScreenChanged(selectCount: Int) {
     }
 
-    override fun onChangedCheckBoxCount(view: View, selectCount: Int, albumEntity: ScanEntity) {
+    override fun onChangedCheckBoxCount(view: View, selectCount: Int, galleryEntity: ScanEntity) {
     }
 
     override fun onPrevChangedCount(selectCount: Int) {
     }
 
     override fun onBackPressed() {
-        Album.instance.albumListener?.onAlbumContainerBackPressed()
+        Gallery.instance.galleryListener?.onGalleryContainerBackPressed()
         super.onBackPressed()
     }
 
     override fun onDestroy() {
         albumFragment.disconnectMediaScanner()
         super.onDestroy()
-        Album.destroy()
+        Gallery.destroy()
     }
 }

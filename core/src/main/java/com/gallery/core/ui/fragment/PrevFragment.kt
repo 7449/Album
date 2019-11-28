@@ -7,135 +7,134 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.*
-import com.gallery.core.AlbumInternalConst
-import com.gallery.core.action.AlbumPreAction
+import com.gallery.core.action.GalleryPreAction
 import com.gallery.core.ext.fileExists
 import com.gallery.core.ext.mergeEntity
 import com.gallery.core.ui.adapter.PrevAdapter
-import com.gallery.core.ui.base.AlbumBaseFragment
+import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
-import kotlinx.android.synthetic.main.album_fragment_preview.*
+import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
-class PrevFragment : AlbumBaseFragment() {
+class PrevFragment : GalleryBaseFragment() {
 
     companion object {
 
         private fun newInstance(bundle: Bundle): PrevFragment = PrevFragment().apply { arguments = bundle }
 
         fun newInstance(
-                albumBundle: AlbumBundle,
+                galleryBundle: GalleryBundle,
                 position: Int,
                 selectList: ArrayList<ScanEntity>,
                 allList: ArrayList<ScanEntity>) = newInstance(Bundle().apply {
-            putParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS, albumBundle)
-            putInt(AlbumConst.TYPE_PRE_POSITION, position)
-            putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, selectList)
-            putParcelableArrayList(AlbumConst.TYPE_PRE_ALL, allList)
+            putParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS, galleryBundle)
+            putInt(GalleryConst.TYPE_PRE_POSITION, position)
+            putParcelableArrayList(GalleryConst.TYPE_PRE_SELECT, selectList)
+            putParcelableArrayList(GalleryConst.TYPE_PRE_ALL, allList)
         })
     }
 
-    private var albumPreAction: AlbumPreAction? = null
+    private var galleryPreAction: GalleryPreAction? = null
     private var pageChangeCallback: ViewPager2.OnPageChangeCallback? = null
 
     private lateinit var adapter: PrevAdapter
-    private lateinit var albumBundle: AlbumBundle
+    private lateinit var galleryBundle: GalleryBundle
     private var currentPos: Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (parentFragment is AlbumPreAction) {
-            albumPreAction = parentFragment as AlbumPreAction
-        } else if (context is AlbumPreAction) {
-            albumPreAction = context
+        if (parentFragment is GalleryPreAction) {
+            galleryPreAction = parentFragment as GalleryPreAction
+        } else if (context is GalleryPreAction) {
+            galleryPreAction = context
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        albumBundle = bundle.getParcelable(AlbumConst.EXTRA_ALBUM_OPTIONS) ?: AlbumBundle()
-        currentPos = (savedInstanceState ?: bundle).getInt(AlbumConst.TYPE_PRE_POSITION, 0)
+        galleryBundle = bundle.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS) ?: GalleryBundle()
+        currentPos = (savedInstanceState ?: bundle).getInt(GalleryConst.TYPE_PRE_POSITION, 0)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(AlbumConst.TYPE_PRE_POSITION, currentPos)
-        outState.putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, adapter.multipleList)
+        outState.putInt(GalleryConst.TYPE_PRE_POSITION, currentPos)
+        outState.putParcelableArrayList(GalleryConst.TYPE_PRE_SELECT, adapter.multipleList)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         adapter = PrevAdapter()
         preViewPager.adapter = adapter
-        preCheckBox.setBackgroundResource(albumBundle.checkBoxDrawable)
+        preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         preCheckBox.setOnClickListener { checkBoxClick() }
-        preRootView.setBackgroundColor(ContextCompat.getColor(mActivity, albumBundle.prevPhotoBackgroundColor))
+        preRootView.setBackgroundColor(ContextCompat.getColor(mActivity, galleryBundle.prevPhotoBackgroundColor))
         adapter.multipleList = (savedInstanceState
-                ?: bundle).getParcelableArrayList(AlbumConst.TYPE_PRE_SELECT) ?: ArrayList()
-        adapter.addAll(bundle.getParcelableArrayList<ScanEntity>(AlbumConst.TYPE_PRE_ALL)?.filter { it.path != AlbumInternalConst.CAMERA } as ArrayList<ScanEntity>)
-        adapter.albumList.mergeEntity(adapter.multipleList)
+                ?: bundle).getParcelableArrayList(GalleryConst.TYPE_PRE_SELECT) ?: ArrayList()
+        adapter.addAll(bundle.getParcelableArrayList<ScanEntity>(GalleryConst.TYPE_PRE_ALL)?.filter { it.path != GalleryInternalConst.CAMERA } as ArrayList<ScanEntity>)
+        adapter.galleryList.mergeEntity(adapter.multipleList)
         preViewPager.setCurrentItem(currentPos, false)
         pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (!adapter.albumList[position].path.fileExists()) {
-                    Album.instance.albumListener?.onAlbumPreFileNotExist()
+                if (!adapter.galleryList[position].path.fileExists()) {
+                    Gallery.instance.galleryListener?.onGalleryPreFileNotExist()
                 }
                 currentPos = position
                 preCheckBox.isChecked = getCurrentItem().isCheck
-                albumPreAction?.onChangedViewPager(position + 1, adapter.albumList.size)
+                galleryPreAction?.onChangedViewPager(position + 1, adapter.galleryList.size)
             }
         }.also { preViewPager.registerOnPageChangeCallback(it) }
-        albumPreAction?.onChangedViewPager(preViewPager.currentItem + 1, adapter.albumList.size)
-        albumPreAction?.onChangedCheckBoxCount(getSelectEntity().size)
-        preCheckBox.isChecked = adapter.albumList[preViewPager.currentItem].isCheck
+        galleryPreAction?.onChangedViewPager(preViewPager.currentItem + 1, adapter.galleryList.size)
+        galleryPreAction?.onChangedCheckBoxCount(getSelectEntity().size)
+        preCheckBox.isChecked = adapter.galleryList[preViewPager.currentItem].isCheck
     }
 
-    fun isRefreshAlbumUI(isRefresh: Boolean, isFinish: Boolean) {
+    fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean) {
         val intent = Intent()
         intent.putExtras(resultBundle(isRefresh, isFinish))
         mActivity.setResult(Activity.RESULT_OK, intent)
         mActivity.finish()
     }
 
-    fun isRefreshAlbumUI(isRefresh: Boolean) = resultBundle(isRefresh, false)
+    fun isRefreshGalleryUI(isRefresh: Boolean) = resultBundle(isRefresh, false)
 
     private fun resultBundle(isRefresh: Boolean, isFinish: Boolean): Bundle {
         val bundle = Bundle()
-        bundle.putParcelableArrayList(AlbumConst.TYPE_PRE_SELECT, getSelectEntity())
-        bundle.putBoolean(AlbumInternalConst.TYPE_PRE_REFRESH_UI, isRefresh)
-        bundle.putBoolean(AlbumInternalConst.TYPE_PRE_DONE_FINISH, isFinish)
+        bundle.putParcelableArrayList(GalleryConst.TYPE_PRE_SELECT, getSelectEntity())
+        bundle.putBoolean(GalleryInternalConst.TYPE_PRE_REFRESH_UI, isRefresh)
+        bundle.putBoolean(GalleryInternalConst.TYPE_PRE_DONE_FINISH, isFinish)
         return bundle
     }
 
     private fun checkBoxClick() {
-        val albumEntity = adapter.albumList[preViewPager.currentItem]
-        if (!albumEntity.path.fileExists()) {
+        val galleryEntity = adapter.galleryList[preViewPager.currentItem]
+        if (!galleryEntity.path.fileExists()) {
             preCheckBox.isChecked = false
-            if (getSelectEntity().contains(albumEntity)) {
-                getSelectEntity().remove(albumEntity)
+            if (getSelectEntity().contains(galleryEntity)) {
+                getSelectEntity().remove(galleryEntity)
             }
-            Album.instance.albumListener?.onAlbumCheckFileNotExist()
+            Gallery.instance.galleryListener?.onGalleryCheckFileNotExist()
             return
         }
-        if (!getSelectEntity().contains(albumEntity) && getSelectEntity().size >= albumBundle.multipleMaxCount) {
+        if (!getSelectEntity().contains(galleryEntity) && getSelectEntity().size >= galleryBundle.multipleMaxCount) {
             preCheckBox.isChecked = false
-            Album.instance.albumListener?.onAlbumMaxCount()
+            Gallery.instance.galleryListener?.onGalleryMaxCount()
             return
         }
-        if (albumEntity.isCheck) {
-            getSelectEntity().remove(albumEntity)
-            albumEntity.isCheck = false
+        if (galleryEntity.isCheck) {
+            getSelectEntity().remove(galleryEntity)
+            galleryEntity.isCheck = false
         } else {
-            albumEntity.isCheck = true
-            getSelectEntity().add(albumEntity)
+            galleryEntity.isCheck = true
+            getSelectEntity().add(galleryEntity)
         }
-        Album.instance.albumListener?.onAlbumCheckBox(getSelectEntity().size, albumBundle.multipleMaxCount)
-        albumPreAction?.onChangedCheckBoxCount(getSelectEntity().size)
+        Gallery.instance.galleryListener?.onGalleryCheckBox(getSelectEntity().size, galleryBundle.multipleMaxCount)
+        galleryPreAction?.onChangedCheckBoxCount(getSelectEntity().size)
     }
 
-    fun getCurrentItem(): ScanEntity = adapter.albumList[currentPos]
+    fun getCurrentItem(): ScanEntity = adapter.galleryList[currentPos]
 
-    fun getAllList(): ArrayList<ScanEntity> = adapter.albumList
+    fun getAllList(): ArrayList<ScanEntity> = adapter.galleryList
 
     fun getSelectEntity(): ArrayList<ScanEntity> = adapter.multipleList
 
@@ -145,7 +144,7 @@ class PrevFragment : AlbumBaseFragment() {
 
     override fun permissionsDenied(type: Int) = Unit
 
-    override val layoutId: Int = R.layout.album_fragment_preview
+    override val layoutId: Int = R.layout.gallery_fragment_preview
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -5,7 +5,7 @@ import com.gallery.scan.args.ScanConst
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class AlbumBundle(
+class GalleryBundle(
         /**
          * 扫描类型
          */
@@ -105,7 +105,7 @@ class AlbumBundle(
         /**
          * 选择框
          */
-        var checkBoxDrawable: Int = R.drawable.selector_album_item_check,
+        var checkBoxDrawable: Int = R.drawable.selector_gallery_item_check,
         /**
          * 没有图片显示的占位图片
          */

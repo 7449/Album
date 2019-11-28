@@ -36,7 +36,7 @@ fun Intent?.orEmpty(): Intent = this ?: Intent()
 //判断颜色是否为亮色
 fun Int.isLightColor(): Boolean = ColorUtils.calculateLuminance(this) >= 0.5
 
-//获取Album宽高
+//获取Gallery宽高
 fun Activity.square(count: Int): Int {
     val display = window.windowManager.defaultDisplay
     val dm = DisplayMetrics()

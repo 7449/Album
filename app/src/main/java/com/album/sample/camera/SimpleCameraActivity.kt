@@ -7,10 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.gallery.core.ext.albumPathFile
+import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ext.finishCamera
 import com.album.sample.R
-import com.gallery.core.ui.base.AlbumBaseActivity
+import com.gallery.core.ui.base.GalleryBaseActivity
 import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
 import kotlinx.android.synthetic.main.activity_simple_camera.*
@@ -22,7 +22,7 @@ import java.io.OutputStream
  * by y on 28/08/2017.
  */
 
-class SimpleCameraActivity : AlbumBaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback, SimpleAspectRatioFragment.Listener {
+class SimpleCameraActivity : GalleryBaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback, SimpleAspectRatioFragment.Listener {
     override fun initView() {
         findViewById<View>(R.id.take_picture).setOnClickListener { camera.takePicture() }
     }
@@ -103,7 +103,7 @@ class SimpleCameraActivity : AlbumBaseActivity(), ActivityCompat.OnRequestPermis
                 super.onPictureTaken(cameraView, data)
                 Toast.makeText(cameraView.context, R.string.picture_taken, Toast.LENGTH_SHORT).show()
                 cameraView.post {
-                    val cameraFile = albumPathFile(null, System.currentTimeMillis().toString(), "jpg")
+                    val cameraFile = galleryPathFile(null, System.currentTimeMillis().toString(), "jpg")
                     val os: OutputStream
                     try {
                         os = FileOutputStream(cameraFile)

@@ -7,109 +7,109 @@ import java.io.File
  * @author y
  * @create 2019/2/27
  */
-interface OnAlbumListener {
+interface OnGalleryListener {
     /**
      * fragment 依赖的activity或者dialog被销毁
      */
-    fun onAlbumContainerFinish()
+    fun onGalleryContainerFinish()
 
     /**
      * fragment 依赖的activity back返回
      */
-    fun onAlbumContainerBackPressed()
+    fun onGalleryContainerBackPressed()
 
     /**
      * 扫描到的文件目录为空
      */
-    fun onAlbumContainerFinderEmpty()
+    fun onGalleryContainerFinderEmpty()
 
     /**
      * fragment 依赖的activity或者dialog 预览页点击确定但是没有选中图片
      */
-    fun onAlbumContainerPreSelectEmpty()
+    fun onGalleryContainerPreSelectEmpty()
 
     /**
      * 选择图片
      */
-    fun onAlbumResources(list: List<ScanEntity>)
+    fun onGalleryResources(list: List<ScanEntity>)
 
     /**
      * 点击预览但是未选择图片
      */
-    fun onAlbumPreEmpty()
+    fun onGalleryPreEmpty()
 
     /**
      * 点击选择但是未选择图片
      */
-    fun onAlbumSelectEmpty()
+    fun onGallerySelectEmpty()
 
     /**
      * 权限被拒
      */
-    fun onAlbumPermissionsDenied(type: Int)
+    fun onGalleryPermissionsDenied(type: Int)
 
     /**
      * 预览页滑动但图片不存在
      */
-    fun onAlbumPreFileNotExist()
+    fun onGalleryPreFileNotExist()
 
     /**
      * 点击图片时图片不存在
      */
-    fun onAlbumFileNotExist()
+    fun onGalleryFileNotExist()
 
     /**
      * 多选图片时图片不存在
      */
-    fun onAlbumCheckFileNotExist()
+    fun onGalleryCheckFileNotExist()
 
     /**
      * 取消裁剪
      */
-    fun onAlbumCropCanceled()
+    fun onGalleryCropCanceled()
 
     /**
      * 取消拍照
      */
-    fun onAlbumCameraCanceled()
+    fun onGalleryCameraCanceled()
 
     /**
      * 裁剪错误
      */
-    fun onAlbumUCropError(data: Throwable?)
+    fun onGalleryUCropError(data: Throwable?)
 
     /**
      * 裁剪成功
      */
-    fun onAlbumUCropResources(cropFile: File)
+    fun onGalleryUCropResources(cropFile: File)
 
     /**
      * 已达多选最大数
      */
-    fun onAlbumMaxCount()
+    fun onGalleryMaxCount()
 
     /**
      * 打开相机错误
      */
-    fun onAlbumOpenCameraError()
+    fun onGalleryOpenCameraError()
 
     /**
      * 没有扫描到图片
      */
-    fun onAlbumEmpty()
+    fun onGalleryEmpty()
 
     /**
      * 拍照返回错误
      */
-    fun onAlbumResultCameraError()
+    fun onGalleryResultCameraError()
 
     /**
      * 视频播放错误
      */
-    fun onAlbumVideoPlayError()
+    fun onGalleryVideoPlayError()
 
     /**
      * CheckBox选择时调用
      */
-    fun onAlbumCheckBox(selectCount: Int, maxCount: Int)
+    fun onGalleryCheckBox(selectCount: Int, maxCount: Int)
 }

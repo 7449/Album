@@ -7,11 +7,11 @@ import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import com.gallery.core.Album
-import com.gallery.core.ext.addChildView
-import com.gallery.scan.ScanEntity
 import com.album.ui.AlbumUiBundle
 import com.album.ui.R
+import com.gallery.core.Gallery
+import com.gallery.core.ext.addChildView
+import com.gallery.scan.ScanEntity
 
 class FinderAdapter(private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
 
@@ -29,7 +29,7 @@ class FinderAdapter(private val albumUiBundle: AlbumUiBundle) : BaseAdapter() {
             viewHolder.convertView = LayoutInflater.from(parent.context).inflate(R.layout.album_item_finder, parent, false)
             viewHolder.frameLayout = viewHolder.convertView.findViewById(R.id.iv_album_finder_icon)
             viewHolder.appCompatTextView = viewHolder.convertView.findViewById(R.id.tv_album_finder_name)
-            viewHolder.frameLayout.addChildView(Album.instance.albumImageLoader?.displayAlbumThumbnails(finderEntity, viewHolder.frameLayout))
+            viewHolder.frameLayout.addChildView(Gallery.instance.galleryImageLoader?.displayGalleryThumbnails(finderEntity, viewHolder.frameLayout))
             viewHolder.convertView.tag = viewHolder
         } else {
             viewHolder = convertView.tag as ViewHolder

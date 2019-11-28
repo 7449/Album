@@ -1,13 +1,13 @@
 package com.gallery.core
 
 import android.view.View
-import com.gallery.core.action.AlbumImageLoader
-import com.gallery.core.action.OnAlbumListener
+import com.gallery.core.action.GalleryImageLoader
+import com.gallery.core.action.OnGalleryListener
+import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
-import com.gallery.core.ui.base.AlbumBaseFragment
 import com.yalantis.ucrop.UCrop
 
-class Album private constructor() {
+class Gallery private constructor() {
 
     /**
      * UCrop setting
@@ -17,17 +17,17 @@ class Album private constructor() {
     /**
      * 图片加载框架
      */
-    var albumImageLoader: AlbumImageLoader? = null
+    var galleryImageLoader: GalleryImageLoader? = null
 
     /**
      * 回调
      */
-    var albumListener: OnAlbumListener? = null
+    var galleryListener: OnGalleryListener? = null
 
     /**
      * 自定义相机
      */
-    var customCameraListener: ((fragment: AlbumBaseFragment) -> Unit)? = null
+    var customCameraListener: ((fragment: GalleryBaseFragment) -> Unit)? = null
 
     /**
      * 占位符自定义点击
@@ -41,12 +41,12 @@ class Album private constructor() {
 
     companion object {
 
-        val instance by lazy { Album() }
+        val instance by lazy { Gallery() }
 
         fun destroy() = instance.apply {
             options = null
-            albumImageLoader = null
-            albumListener = null
+            galleryImageLoader = null
+            galleryListener = null
             customCameraListener = null
             emptyClickListener = null
             selectList = null

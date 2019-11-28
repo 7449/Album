@@ -2,8 +2,8 @@ package com.album.sample.imageloader
 
 import android.view.View
 import android.widget.FrameLayout
-import com.gallery.core.action.AlbumImageLoader
-import com.gallery.core.ext.AlbumImageView
+import com.gallery.core.action.GalleryImageLoader
+import com.gallery.core.ext.GalleryImageView
 import com.gallery.core.ext.uri
 import com.gallery.scan.ScanEntity
 import com.squareup.picasso.Picasso
@@ -12,20 +12,20 @@ import com.squareup.picasso.Picasso
  * by y on 19/08/2017.
  */
 
-class SimplePicassoAlbumImageLoader : AlbumImageLoader {
+class SimplePicassoGalleryImageLoader : GalleryImageLoader {
 
-    override fun displayAlbum(width: Int, height: Int, albumEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.AlbumImageView()
+    override fun displayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout): View {
+        val albumImageView = container.GalleryImageView()
         Picasso.get()
-                .load(albumEntity.uri())
+                .load(galleryEntity.uri())
                 .centerCrop()
                 .resize(width, height)
                 .into(albumImageView)
         return albumImageView
     }
 
-    override fun displayAlbumThumbnails(finderEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.AlbumImageView()
+    override fun displayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout): View {
+        val albumImageView = container.GalleryImageView()
         Picasso.get()
                 .load(finderEntity.uri())
                 .resize(50, 50)
@@ -34,10 +34,10 @@ class SimplePicassoAlbumImageLoader : AlbumImageLoader {
         return albumImageView
     }
 
-    override fun displayAlbumPreview(albumEntity: ScanEntity, container: FrameLayout): View {
-        val albumImageView = container.AlbumImageView()
+    override fun displayGalleryPreview(galleryEntity: ScanEntity, container: FrameLayout): View {
+        val albumImageView = container.GalleryImageView()
         Picasso.get()
-                .load(albumEntity.uri())
+                .load(galleryEntity.uri())
                 .resize(50, 50)
                 .centerCrop()
                 .into(albumImageView)

@@ -1,17 +1,17 @@
 package com.gallery.core
 
-object AlbumPermissionConst {
+object GalleryPermissionConst {
     //读写code
     const val WRITE_REQUEST_CODE = 360
     //拍照code
     const val CAMERA_REQUEST_CODE = 361
     //图库权限
-    const val ALBUM = 362
+    const val GALLERY = 362
     //拍照权限
     const val CAMERA = 363
 }
 
-object AlbumCameraConst {
+object GalleryCameraConst {
     //自定义拍照返回时使用的 REQUEST_CODE
     const val CUSTOM_CAMERA_REQUEST_CODE = 364
     //自定义拍照返回时使用的路径Key,返回时直接调用[finishCamera]即可
@@ -26,11 +26,11 @@ object AlbumCameraConst {
     const val CAMERA_ERROR = 368
 }
 
-object AlbumConst {
-    //[AlbumBundle]主要数据的Key
-    const val EXTRA_ALBUM_OPTIONS = BuildConfig.LIBRARY_PACKAGE_NAME + ".Album.Options"
+object GalleryConst {
+    //[GalleryBundle]主要数据的Key
+    const val EXTRA_GALLERY_OPTIONS = BuildConfig.LIBRARY_PACKAGE_NAME + ".Gallery.Options"
     //UI数据Key
-    const val EXTRA_ALBUM_UI_OPTIONS = BuildConfig.LIBRARY_PACKAGE_NAME + ".Album.Ui.Options"
+    const val EXTRA_GALLERY_UI_OPTIONS = BuildConfig.LIBRARY_PACKAGE_NAME + ".Gallery.Ui.Options"
     //预览页扫描图片成功之后需要定位的位置 Key
     const val TYPE_PRE_POSITION = "pre_position"
     //跳转预览页面时携带选中数据 key
@@ -45,19 +45,19 @@ object AlbumConst {
     const val TYPE_PRE_REQUEST_CODE = 462
 }
 
-internal object AlbumInternalConst {
+internal object GalleryInternalConst {
     //相机type
-    internal const val CAMERA = "Album:Camera"
+    internal const val CAMERA = "Gallery:Camera"
     //横竖屏切换保存已选择数据 Key
-    internal const val TYPE_STATE_SELECT = "album:state_select"
+    internal const val TYPE_STATE_SELECT = "gallery:state_select"
     //横竖屏切换保存当前文件夹的parent Key
-    internal const val TYPE_STATE_PARENT = "album:state_parent"
+    internal const val TYPE_STATE_PARENT = "gallery:state_parent"
     //横竖屏切换保存当前文件夹名称 Key
-    internal const val TYPE_STATE_FINDER_NAME = "album:state_finder_name"
+    internal const val TYPE_STATE_FINDER_NAME = "gallery:state_finder_name"
     //横竖屏切换保存拍照图片Uri Key
-    internal const val TYPE_STATE_IMAGE_URI = "album:state_image_uri"
+    internal const val TYPE_STATE_IMAGE_URI = "gallery:state_image_uri"
     //横竖屏切换保存拍照图片路径 针对FileProvider Key
-    internal const val TYPE_STATE_IMAGE_PATH = "album:state_image_path"
+    internal const val TYPE_STATE_IMAGE_PATH = "gallery:state_image_path"
     //是否刷新前一个页面的数据
     internal const val TYPE_PRE_REFRESH_UI = "pre_refresh_ui"
     //预览页确定数据之后是否销毁前一个页面

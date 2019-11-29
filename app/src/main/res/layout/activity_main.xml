@@ -27,12 +27,6 @@
             android:text="open camera" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_imageloader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ImageLoader" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_video"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

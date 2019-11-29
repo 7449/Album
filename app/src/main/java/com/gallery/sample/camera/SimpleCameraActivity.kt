@@ -1,5 +1,7 @@
 package com.gallery.sample.camera
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -7,7 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.gallery.core.ext.finishCamera
+import com.gallery.core.constant.GalleryCameraConst
 import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.sample.R
@@ -137,5 +139,10 @@ class SimpleCameraActivity : GalleryBaseActivity(), ActivityCompat.OnRequestPerm
         private val FLASH_TITLES = intArrayOf(R.string.flash_auto, R.string.flash_off, R.string.flash_on)
     }
 
+    //自定义相机可以使用此方法直接返回路径,也可以自定义
+    fun finishCamera(path: String) {
+        setResult(Activity.RESULT_OK, Intent().putExtras(Bundle().apply { putString(GalleryCameraConst.RESULT_PATH, path) }))
+        finish()
+    }
 
 }

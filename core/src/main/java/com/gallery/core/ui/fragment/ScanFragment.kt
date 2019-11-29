@@ -10,11 +10,16 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.gallery.core.*
+import com.gallery.core.Gallery
+import com.gallery.core.GalleryBundle
+import com.gallery.core.R
 import com.gallery.core.action.GalleryAction
+import com.gallery.core.action.SimpleGalleryFragmentInterface
+import com.gallery.core.constant.GalleryCameraConst
+import com.gallery.core.constant.GalleryConst
+import com.gallery.core.constant.GalleryInternalConst
+import com.gallery.core.constant.GalleryPermissionConst
 import com.gallery.core.ext.*
-import com.gallery.core.ext.permission.permissionCamera
-import com.gallery.core.ext.permission.permissionStorage
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.widget.SimpleGridDivider
@@ -42,7 +47,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
     private var fileProviderPath: String = ""
     var parent: Long = ScanConst.ALL
     var finderName: String = ""
-    lateinit var finderList: ArrayList<ScanEntity>
+    var finderList: ArrayList<ScanEntity> = ArrayList()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -77,6 +82,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        scan = ScanImpl(this)
         galleryRootView.setBackgroundColor(ContextCompat.getColor(mActivity, galleryBundle.rootViewBackground))
         val drawable = ContextCompat.getDrawable(mActivity, galleryBundle.photoEmptyDrawable)
         drawable?.setColorFilter(ContextCompat.getColor(mActivity, galleryBundle.photoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
@@ -88,8 +94,6 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
             }
             Gallery.instance.emptyClickListener?.invoke(v)
         }
-        finderList = ArrayList()
-        scan = ScanImpl(this)
         galleryRecyclerView.setHasFixedSize(true)
         val gridLayoutManager = GridLayoutManager(mActivity, galleryBundle.spanCount)
         galleryRecyclerView.layoutManager = gridLayoutManager
@@ -138,9 +142,10 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
                         }
                     }
                     GalleryCameraConst.CAMERA_REQUEST_CODE -> {
-                        refreshMedia(GalleryConst.TYPE_RESULT_CAMERA, mActivity.scanFilePath(fileUri, fileProviderPath).orEmpty())
+                        val path = mActivity.scanFilePath(fileUri, fileProviderPath).orEmpty()
+                        refreshMedia(GalleryConst.TYPE_RESULT_CAMERA, path)
                         if (galleryBundle.cameraCrop) {
-                            openUCrop(mActivity.scanFilePath(fileUri, fileProviderPath).orEmpty())
+                            openUCrop(path)
                         }
                     }
                     UCrop.REQUEST_CROP -> {
@@ -373,63 +378,4 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
         get() = galleryAdapter.multipleList
 
     override val layoutId: Int = R.layout.gallery_fragment_gallery
-}
-
-internal interface SimpleGalleryFragmentInterface {
-    /**
-     * 打开相机
-     */
-    fun startCamera()
-
-    /**
-     * 扫描设备
-     * [isFinder] 是否点击文件夹扫描
-     * [result] 是否是拍照之后的扫描
-     */
-    fun onScanGallery(parent: Long, isFinder: Boolean, result: Boolean)
-
-    /**
-     * 扫描裁剪之后的信息
-     */
-    fun onScanCropGallery(path: String)
-
-    /**
-     * 裁剪
-     */
-    fun openUCrop(path: String)
-
-    /**
-     * 刷新图库
-     */
-    fun refreshMedia(type: Int, path: String)
-
-    /**
-     * 选择选中的数据
-     */
-    fun selectPreview(): ArrayList<ScanEntity>
-
-    /**
-     * 确定数据
-     */
-    fun multipleSelect()
-
-    /**
-     * 全部数据
-     */
-    fun allPreview(): ArrayList<ScanEntity>
-
-    /**
-     * 刷新[FragmentActivity.onActivityResult]数据
-     */
-    fun onResultPreview(bundle: Bundle)
-
-    /**
-     * 刷新数据
-     */
-    fun onDialogResultPreview(bundle: Bundle)
-
-    /**
-     * 断掉MediaScanner
-     */
-    fun disconnectMediaScanner()
 }

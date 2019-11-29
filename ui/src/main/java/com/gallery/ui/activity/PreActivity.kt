@@ -1,14 +1,15 @@
 package com.gallery.ui.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConst
 import com.gallery.core.action.GalleryPreAction
+import com.gallery.core.constant.GalleryConst
 import com.gallery.core.ext.hasL
 import com.gallery.core.ext.statusBarColor
 import com.gallery.core.ui.base.GalleryBaseActivity
@@ -53,7 +54,7 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
                 return@setOnClickListener
             }
             Gallery.instance.galleryListener?.onGalleryResources(prevFragment.getSelectEntity())
-            prevFragment.isRefreshGalleryUI(isRefresh = false, isFinish = uiBundle.preSelectOkFinish)
+            isRefreshGalleryUI(isRefresh = false, isFinish = uiBundle.preSelectOkFinish)
         }
     }
 
@@ -73,7 +74,7 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
         preCount.setTextColor(ContextCompat.getColor(this, uiBundle.preBottomCountTextColor))
         preRootView.setBackgroundColor(ContextCompat.getColor(this, uiBundle.preBackground))
         window.statusBarColor(ContextCompat.getColor(this, uiBundle.statusBarColor))
-        preToolbar.setNavigationOnClickListener { prevFragment.isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
+        preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
         preToolbar.setTitleTextColor(ContextCompat.getColor(this, uiBundle.toolbarTextColor))
         val drawable = ContextCompat.getDrawable(this, uiBundle.toolbarIcon)
         drawable?.setColorFilter(ContextCompat.getColor(this, uiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
@@ -111,8 +112,15 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
     }
 
     override fun onBackPressed() {
-        prevFragment.isRefreshGalleryUI(uiBundle.preBackRefresh, false)
+        isRefreshGalleryUI(uiBundle.preBackRefresh, false)
         super.onBackPressed()
+    }
+
+    private fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean) {
+        val intent = Intent()
+        intent.putExtras(prevFragment.resultBundle(isRefresh, isFinish))
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
 }

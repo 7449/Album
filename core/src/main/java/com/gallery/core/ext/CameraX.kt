@@ -4,14 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
-import com.gallery.core.GalleryCameraConst
-import com.gallery.core.ext.permission.permissionCamera
-import com.gallery.core.ext.permission.permissionStorage
-import com.gallery.core.ui.base.GalleryBaseActivity
+import com.gallery.core.constant.GalleryCameraConst
 import java.io.File
 
 //activity 打开相机
@@ -73,10 +69,4 @@ fun Context.galleryPathFile(path: String?, name: String, suffix: String): File {
                 externalCacheDir?.path
             },
             fileName)
-}
-
-//自定义相机可以使用此方法直接返回路径,也可以自定义
-fun GalleryBaseActivity.finishCamera(path: String) {
-    setResult(Activity.RESULT_OK, Intent().putExtras(Bundle().apply { putString(GalleryCameraConst.RESULT_PATH, path) }))
-    finish()
 }

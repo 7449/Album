@@ -27,31 +27,5 @@ fun Window.statusBarColor(@ColorInt color: Int) {
     }
 }
 
-//添加子View
-fun ViewGroup.addChildView(childView: View?) {
-    if (indexOfChild(childView) == -1 && childView != null) {
-        addView(childView)
-    }
-}
-
-//添加子View
-fun ViewGroup.addChildView(childView: View?, layoutParams: ViewGroup.LayoutParams?) {
-    if (indexOfChild(childView) == -1 && childView != null) {
-        if (layoutParams != null) {
-            addView(childView, layoutParams)
-        } else {
-            addView(childView)
-        }
-    }
-}
-
 //GalleryImageView
-fun ViewGroup.GalleryImageView(): GalleryImageView = let {
-    for (i in 0 until childCount) {
-        val childAt = getChildAt(i)
-        if (childAt is GalleryImageView) {
-            return childAt
-        }
-    }
-    return GalleryImageView(context)
-}
+fun ViewGroup.galleryImageView() = GalleryImageView(context)

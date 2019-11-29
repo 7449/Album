@@ -3,12 +3,11 @@ package com.gallery.core.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryInternalConst
 import com.gallery.core.R
 import com.gallery.core.action.GalleryAction
+import com.gallery.core.constant.GalleryInternalConst
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.scan.ScanEntity
@@ -38,8 +37,6 @@ class GalleryAdapter(
             notifyDataSetChanged()
         }
 
-    private val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(display, display)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_CAMERA -> {
@@ -50,7 +47,7 @@ class GalleryAdapter(
             }
             else -> {
                 val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, layoutParams, galleryAction)
+                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryAction)
                 photoView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, galleryList[photoViewHolder.adapterPosition]) }
                 photoViewHolder
             }

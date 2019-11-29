@@ -1,7 +1,6 @@
 package com.gallery.core.ui.adapter.vh
 
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
@@ -10,7 +9,6 @@ import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.action.GalleryAction
-import com.gallery.core.ext.addChildView
 import com.gallery.core.ext.fileExists
 import com.gallery.core.ext.show
 import com.gallery.scan.ScanEntity
@@ -18,14 +16,13 @@ import com.gallery.scan.ScanEntity
 class PhotoViewHolder(itemView: View,
                       private val galleryBundle: GalleryBundle,
                       private val display: Int,
-                      private val layoutParams: ViewGroup.LayoutParams,
                       private val galleryAction: GalleryAction?) : RecyclerView.ViewHolder(itemView) {
 
     private val container: FrameLayout = itemView.findViewById(R.id.galleryContainer)
     private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.galleryCheckBox)
 
     fun photo(position: Int, galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
-        container.addChildView(Gallery.instance.galleryImageLoader?.displayGallery(display, display, galleryEntity, container), layoutParams)
+        Gallery.instance.galleryImageLoader?.displayGallery(display, display, galleryEntity, container)
         container.setBackgroundColor(ContextCompat.getColor(itemView.context, galleryBundle.photoBackgroundColor))
         if (galleryBundle.radio) {
             return

@@ -11,23 +11,15 @@ import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryCameraConst
-import com.gallery.core.GalleryConst
-import com.gallery.core.action.GalleryImageLoader
-import com.gallery.core.ext.galleryPathFile
-import com.gallery.core.ext.openCamera
-import com.gallery.core.ext.permission.permissionCamera
-import com.gallery.core.ext.permission.permissionStorage
-import com.gallery.core.ext.uri
+import com.gallery.core.constant.GalleryCameraConst
+import com.gallery.core.constant.GalleryConst
+import com.gallery.core.ext.*
+import com.gallery.glide.GlideImageLoader
 import com.gallery.sample.camera.SimpleCameraActivity
-import com.gallery.sample.imageloader.SimpleGlideImageLoader
-import com.gallery.sample.imageloader.SimplePicassoGalleryImageLoader
-import com.gallery.sample.imageloader.SimpleSubsamplingScaleImageLoader
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.SingleMediaScanner
 import com.gallery.scan.args.ScanConst
@@ -76,7 +68,7 @@ fun NightGalleryUIBundle(): GalleryUiBundle {
 
 fun MainActivity.dayGallery() {
     Gallery.instance.apply {
-        galleryImageLoader = SimplePicassoGalleryImageLoader()
+        galleryImageLoader = GlideImageLoader()
         galleryListener = MainGalleryListener(applicationContext, list)
         selectList = list
         options = dayOptions
@@ -88,7 +80,7 @@ fun MainActivity.nightGallery() {
     Gallery.instance.apply {
         galleryListener = MainGalleryListener(applicationContext, null)
         options = nightOptions
-        galleryImageLoader = SimplePicassoGalleryImageLoader()
+        galleryImageLoader = GlideImageLoader()
         customCameraListener = {
             if (it.permissionStorage() && it.permissionCamera()) {
                 Toast.makeText(it.activity, "camera", Toast.LENGTH_SHORT).show()
@@ -101,7 +93,7 @@ fun MainActivity.nightGallery() {
 
 fun MainActivity.video() {
     Gallery.instance.apply {
-        galleryImageLoader = SimplePicassoGalleryImageLoader()
+        galleryImageLoader = GlideImageLoader()
         galleryListener = MainGalleryListener(applicationContext, null)
     }.ui(this, GalleryBundle(
             scanType = ScanConst.VIDEO,
@@ -113,10 +105,6 @@ fun MainActivity.startCamera() {
     imagePath = uri(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString(), "jpg"))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
-}
-
-fun MainActivity.imageLoader(imageLoader: GalleryImageLoader) {
-    Gallery.instance.apply { galleryImageLoader = imageLoader }.ui(this)
 }
 
 class SimpleSingleScannerListener : SingleMediaScanner.SingleScannerListener {
@@ -139,7 +127,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
         btn_night_gallery.setOnClickListener(this)
         btn_open_camera.setOnClickListener(this)
         btn_video.setOnClickListener(this)
-        btn_imageloader.setOnClickListener(this)
 
         dayOptions = UCrop.Options()
         dayOptions.apply {
@@ -166,16 +153,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             R.id.btn_night_gallery -> nightGallery()
             R.id.btn_open_camera -> startCamera()
             R.id.btn_video -> video()
-            R.id.btn_imageloader -> AlertDialog.Builder(this@MainActivity)
-                    .setSingleChoiceItems(arrayOf("Glide", "Picasso", "SubsamplingScale"), -1
-                    ) { dialog, which ->
-                        when (which) {
-                            0 -> imageLoader(SimpleGlideImageLoader())
-                            1 -> imageLoader(SimplePicassoGalleryImageLoader())
-                            2 -> imageLoader(SimpleSubsamplingScaleImageLoader())
-                        }
-                        dialog.dismiss()
-                    }.show()
         }
     }
 

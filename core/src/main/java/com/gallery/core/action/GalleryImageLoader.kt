@@ -1,6 +1,5 @@
 package com.gallery.core.action
 
-import android.view.View
 import android.widget.FrameLayout
 import com.gallery.scan.ScanEntity
 
@@ -12,15 +11,15 @@ interface GalleryImageLoader {
     /**
      * 首页图片加载
      */
-    fun displayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout): View
+    fun displayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout)
 
     /**
      * 目录图片加载
      */
-    fun displayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout): View
+    fun displayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout)
 
     /**
      * 预览页图片加载
      */
-    fun displayGalleryPreview(galleryEntity: ScanEntity, container: FrameLayout): View
+    fun displayGalleryPreview(galleryEntity: ScanEntity, container: FrameLayout)
 }

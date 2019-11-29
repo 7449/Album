@@ -2,9 +2,9 @@ package com.gallery.core.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatImageView
+import android.widget.ImageView
 
-class GalleryImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : AppCompatImageView(context, attrs, defStyleAttr) {
+class GalleryImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ImageView(context, attrs, defStyleAttr) {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(measuredWidth, measuredWidth)

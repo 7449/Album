@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConst
+import com.gallery.core.constant.GalleryConst
 import com.gallery.ui.activity.GalleryActivity
 
 /**

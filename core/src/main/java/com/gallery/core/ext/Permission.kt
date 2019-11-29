@@ -1,4 +1,4 @@
-package com.gallery.core.ext.permission
+package com.gallery.core.ext
 
 import android.Manifest
 import android.app.Activity
@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.gallery.core.GalleryPermissionConst
+import com.gallery.core.constant.GalleryPermissionConst
 
 //判断权限,如果有返回true,没有返回false并直接请求
 fun Activity.permission(permissions: String, code: Int): Boolean {

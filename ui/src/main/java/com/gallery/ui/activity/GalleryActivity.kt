@@ -9,8 +9,8 @@ import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
 import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConst
 import com.gallery.core.action.GalleryAction
+import com.gallery.core.constant.GalleryConst
 import com.gallery.core.ext.drawable
 import com.gallery.core.ext.hasL
 import com.gallery.core.ext.statusBarColor
@@ -186,6 +186,5 @@ class GalleryActivity : GalleryBaseActivity(), View.OnClickListener, AdapterView
     override fun onDestroy() {
         galleryFragment.disconnectMediaScanner()
         super.onDestroy()
-        Gallery.destroy()
     }
 }

@@ -18,14 +18,14 @@ import androidx.core.graphics.ColorUtils
 import com.gallery.scan.ScanEntity
 import java.io.File
 
-//文件是否存在
-fun String.fileExists(): Boolean = parentFile() != null
-
 //路径转[File]
 fun String.toFile(): File? = if (isNullOrEmpty()) null else File(this)
 
 //获取父级路径
 fun String.parentFile(): File? = toFile()?.let { if (it.exists()) it.parentFile else null }
+
+//文件是否存在
+fun String.fileExists(): Boolean = parentFile() != null
 
 //如果Bundle为Null则返回一个空的Bundle
 fun Bundle?.orEmpty(): Bundle = this ?: Bundle.EMPTY
@@ -54,31 +54,26 @@ fun Context.drawable(id: Int, color: Int): Drawable {
 }
 
 fun Context.insertImage(contentValues: ContentValues) = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-    contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-            ?: throw KotlinNullPointerException()
+    contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues) ?: throw KotlinNullPointerException()
 } else {
-    contentResolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, contentValues)
-            ?: throw KotlinNullPointerException()
+    contentResolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, contentValues) ?: throw KotlinNullPointerException()
 }
 
 //获取content Uri
-@Suppress("HasPlatformType")
-fun Context.uri(file: File?) = when {
+fun Context.uri(file: File?): Uri = when {
     hasQ() -> insertImage(ContentValues())
-    hasN() -> FileProvider.getUriForFile(this, "$packageName.GalleryProvider", file
-            ?: throw KotlinNullPointerException())
+    hasN() -> FileProvider.getUriForFile(this, "$packageName.GalleryProvider", file ?: throw KotlinNullPointerException())
     else -> Uri.fromFile(file)
 }
 
 //获取content Uri
-@Suppress("HasPlatformType")
-fun Context.uri(path: String?) = when {
+fun Context.uri(path: String?): Uri = when {
     hasQ() -> insertImage(ContentValues())
     hasN() -> FileProvider.getUriForFile(this, "$packageName.GalleryProvider", File(path.orEmpty()))
-    else -> Uri.fromFile(File(path ?: ""))
+    else -> Uri.fromFile(File(path.orEmpty()))
 }
 
-fun ScanEntity.uri() = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+fun ScanEntity.uri(): Uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
 fun ArrayList<ScanEntity>.mergeEntity(selectEntity: ArrayList<ScanEntity>) = also {
     forEach { it.isCheck = false }

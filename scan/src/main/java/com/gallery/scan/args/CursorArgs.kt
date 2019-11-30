@@ -5,8 +5,6 @@ import android.provider.MediaStore
 
 internal object CursorArgs {
 
-    const val PATH_DEPRECATED_MESSAGE = "android10:ContentResolver#openFileDescriptor(Uri, String)"
-
     /**
      * Scan Uri
      */
@@ -16,7 +14,6 @@ internal object CursorArgs {
      * 图片信息字段
      */
     val ALL_COLUMNS = arrayOf(
-            Columns.DATA,
             Columns.ID,
             Columns.SIZE,
             Columns.DURATION,

@@ -9,6 +9,7 @@ import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.action.GalleryAction
+import com.gallery.core.ext.externalUri
 import com.gallery.core.ext.fileExists
 import com.gallery.core.ext.show
 import com.gallery.scan.ScanEntity
@@ -31,7 +32,7 @@ class PhotoViewHolder(itemView: View,
         checkBox.isChecked = galleryEntity.isCheck
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener {
-            if (!galleryEntity.path.fileExists()) {
+            if (!checkBox.context.fileExists(galleryEntity.externalUri())) {
                 checkBox.isChecked = false
                 if (multipleList.contains(galleryEntity)) {
                     multipleList.remove(galleryEntity)

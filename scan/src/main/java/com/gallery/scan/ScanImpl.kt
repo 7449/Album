@@ -56,7 +56,6 @@ class ScanImpl(private val scanView: ScanView) {
     fun refreshResultFinder(finderList: ArrayList<ScanEntity>, scanEntity: ScanEntity) {
         finderList.find { it.parent == ScanConst.ALL }?.let {
             it.duration = scanEntity.duration
-            it.path = scanEntity.path
             it.mediaType = scanEntity.mediaType
             it.mimeType = scanEntity.mimeType
             it.id = scanEntity.id
@@ -64,7 +63,6 @@ class ScanImpl(private val scanView: ScanView) {
         }
         finderList.find { it.parent == scanEntity.parent }?.let {
             it.id = scanEntity.id
-            it.path = scanEntity.path
             it.size = scanEntity.size
             it.duration = scanEntity.duration
             it.mimeType = scanEntity.mimeType
@@ -87,7 +85,6 @@ class ScanImpl(private val scanView: ScanView) {
         finderList.add(0, ScanEntity(
                 parent = ScanConst.ALL,
                 duration = first.duration,
-                path = first.path,
                 mediaType = first.mediaType,
                 mimeType = first.mimeType,
                 id = first.id,

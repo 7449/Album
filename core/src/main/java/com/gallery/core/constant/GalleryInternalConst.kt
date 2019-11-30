@@ -2,7 +2,7 @@ package com.gallery.core.constant
 
 internal object GalleryInternalConst {
     //相机type
-    internal const val CAMERA = "Gallery:Camera"
+    internal const val CAMERA_ID = -11111L
     //横竖屏切换保存已选择数据 Key
     internal const val TYPE_STATE_SELECT = "gallery:state_select"
     //横竖屏切换保存当前文件夹的parent Key

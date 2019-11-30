@@ -5,7 +5,7 @@ import com.gallery.scan.args.ScanConst
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class GalleryBundle(
+data class GalleryBundle(
         /**
          * 扫描类型
          */

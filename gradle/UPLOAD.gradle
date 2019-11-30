@@ -1,6 +1,6 @@
 apply plugin: "guru.stefma.bintrayrelease"
 
-version = lastVersion
+version = mavenVersion
 group = "com.ydevelop"
 
 androidArtifact {

@@ -10,6 +10,7 @@ import com.gallery.core.R
 import com.gallery.core.action.GalleryPreAction
 import com.gallery.core.constant.GalleryConst
 import com.gallery.core.constant.GalleryInternalConst
+import com.gallery.core.ext.externalUri
 import com.gallery.core.ext.fileExists
 import com.gallery.core.ext.mergeEntity
 import com.gallery.core.ui.adapter.PrevAdapter
@@ -68,13 +69,13 @@ class PrevFragment : GalleryBaseFragment() {
         preCheckBox.setOnClickListener { checkBoxClick() }
         preRootView.setBackgroundColor(ContextCompat.getColor(mActivity, galleryBundle.prevPhotoBackgroundColor))
         multipleList = (savedInstanceState ?: bundle).getParcelableArrayList(GalleryConst.TYPE_PRE_SELECT) ?: ArrayList()
-        adapter.addAll(bundle.getParcelableArrayList<ScanEntity>(GalleryConst.TYPE_PRE_ALL)?.filter { it.path != GalleryInternalConst.CAMERA } as ArrayList<ScanEntity>)
+        adapter.addAll(bundle.getParcelableArrayList<ScanEntity>(GalleryConst.TYPE_PRE_ALL)?.filter { it.id != GalleryInternalConst.CAMERA_ID } as ArrayList<ScanEntity>)
         adapter.galleryList.mergeEntity(multipleList)
         setCurrentItem(currentPos)
         pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (!adapter.galleryList[position].path.fileExists()) {
+                if (!mActivity.fileExists(adapter.galleryList[position].externalUri())) {
                     Gallery.instance.galleryListener?.onGalleryPreFileNotExist()
                 }
                 currentPos = position
@@ -89,7 +90,7 @@ class PrevFragment : GalleryBaseFragment() {
 
     private fun checkBoxClick() {
         val galleryEntity = adapter.galleryList[preViewPager.currentItem]
-        if (!galleryEntity.path.fileExists()) {
+        if (!mActivity.fileExists(galleryEntity.externalUri())) {
             preCheckBox.isChecked = false
             if (multipleList.contains(galleryEntity)) {
                 multipleList.remove(galleryEntity)

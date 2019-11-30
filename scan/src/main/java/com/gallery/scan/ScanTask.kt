@@ -46,7 +46,6 @@ class ScanTask(private val context: Context, private val loaderSuccess: (ArrayLi
         val cursor = data ?: return
 
         val idColumnIndex = cursor.getColumnIndex(Columns.ID)
-        val dataColumnIndex = cursor.getColumnIndex(Columns.DATA)
         val sizeColumnIndex = cursor.getColumnIndex(Columns.SIZE)
         val durationColumnIndex = cursor.getColumnIndex(Columns.DURATION)
         val parentColumnIndex = cursor.getColumnIndex(Columns.PARENT)
@@ -61,7 +60,6 @@ class ScanTask(private val context: Context, private val loaderSuccess: (ArrayLi
         val dateModifiedColumnIndex = cursor.getColumnIndex(Columns.DATE_MODIFIED)
         while (cursor.moveToNext()) {
             val id = cursor.getLong(idColumnIndex)
-            val path = cursor.getString(dataColumnIndex)
             val size = cursor.getLong(sizeColumnIndex)
             val duration = cursor.getLong(durationColumnIndex)
             val parent = cursor.getLong(parentColumnIndex)
@@ -74,7 +72,7 @@ class ScanTask(private val context: Context, private val loaderSuccess: (ArrayLi
             val width = cursor.getInt(widthColumnIndex)
             val height = cursor.getInt(heightColumnIndex)
             val dataModified = cursor.getLong(dateModifiedColumnIndex)
-            arrayList.add(ScanEntity(id, path, size, duration, parent, mimeType, displayName, orientation, bucketId, bucketDisplayName, mediaType, width, height, dataModified, 0, false))
+            arrayList.add(ScanEntity(id, size, duration, parent, mimeType, displayName, orientation, bucketId, bucketDisplayName, mediaType, width, height, dataModified, 0, false))
         }
 
         loaderSuccess(arrayList)

@@ -173,7 +173,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
         }
         galleryEmpty.hide()
         if (parent == ScanConst.ALL && !galleryBundle.hideCamera) {
-            arrayList.add(0, ScanEntity(path = GalleryInternalConst.CAMERA))
+            arrayList.add(0, ScanEntity(id = GalleryInternalConst.CAMERA_ID))
         }
         galleryAdapter.addAll(arrayList)
         finderList.find { it.bucketDisplayName == "0" }?.bucketDisplayName = getString(galleryBundle.sdName)
@@ -199,14 +199,14 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
     }
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
-        if (!galleryEntity.path.fileExists()) {
+        if (!mActivity.fileExists(galleryEntity.externalUri())) {
             Gallery.instance.galleryListener?.onGalleryFileNotExist()
             return
         }
         if (galleryBundle.scanType == ScanConst.VIDEO) {
             try {
                 val openVideo = Intent(Intent.ACTION_VIEW)
-                openVideo.setDataAndType(Uri.parse(galleryEntity.path), "video/*")
+//                openVideo.setDataAndType(Uri.parse(galleryEntity.path), "video/*")
                 startActivity(openVideo)
             } catch (e: Exception) {
                 Gallery.instance.galleryListener?.onGalleryVideoPlayError()
@@ -215,7 +215,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                openUCrop(galleryEntity.path)
+//                openUCrop(galleryEntity.path)
             } else {
                 val list = ArrayList<ScanEntity>()
                 list.add(galleryEntity)
@@ -275,7 +275,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
         }
         val file = if (hasQ()) null else mActivity.galleryPathFile(galleryBundle.cameraPath, galleryBundle.cameraName, galleryBundle.cameraSuffix)
         fileProviderPath = file?.path.orEmpty()
-        fileUri = mActivity.uri(file)
+        fileUri = mActivity.externalUri(file)
         val i = openCamera(fileUri, galleryBundle.scanType == ScanConst.VIDEO)
         if (i == GalleryCameraConst.CAMERA_ERROR) {
             Gallery.instance.galleryListener?.onGalleryOpenCameraError()

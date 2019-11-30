@@ -66,7 +66,7 @@ class GalleryAdapter(
 
     override fun getItemViewType(position: Int): Int = when {
         galleryList.isEmpty() -> TYPE_PHOTO
-        galleryList[position].path == GalleryInternalConst.CAMERA -> TYPE_CAMERA
+        galleryList[position].id == GalleryInternalConst.CAMERA_ID -> TYPE_CAMERA
         else -> TYPE_PHOTO
     }
 

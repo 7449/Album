@@ -24,11 +24,6 @@ object Columns {
      */
     const val ID = MediaStore.Files.FileColumns._ID
     /**
-     * 路径
-     */
-    @Deprecated(CursorArgs.PATH_DEPRECATED_MESSAGE)
-    const val DATA = MediaStore.Files.FileColumns.DATA
-    /**
      * 大小
      */
     const val SIZE = MediaStore.Files.FileColumns.SIZE

@@ -102,7 +102,7 @@ fun MainActivity.video() {
 }
 
 fun MainActivity.startCamera() {
-    imagePath = uri(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString(), "jpg"))
+    imagePath = externalUri(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString(), "jpg"))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
 }

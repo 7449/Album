@@ -2,14 +2,11 @@ package com.gallery.scan
 
 import android.os.Parcelable
 import com.gallery.scan.args.Columns
-import com.gallery.scan.args.CursorArgs
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ScanEntity(
         var id: Long = 0,
-        @Deprecated(CursorArgs.PATH_DEPRECATED_MESSAGE)
-        var path: String = "",
         var size: Long = 0,
         var duration: Long = 0,
         var parent: Long = 0,

@@ -1,5 +1,6 @@
 package com.gallery.glide
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -16,6 +17,7 @@ class GlideImageLoader : GalleryImageLoader {
     private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
 
     override fun displayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
+        Log.d("glide", galleryEntity.id.toString() + "  " + galleryEntity.path)
         val imageView = container.galleryImageView()
         Glide.with(container.context).load(galleryEntity.uri()).apply(requestOptions.override(width, height)).into(imageView)
         container.addChildView(imageView, FrameLayout.LayoutParams(width, height))

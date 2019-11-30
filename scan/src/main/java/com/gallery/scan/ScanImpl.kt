@@ -43,9 +43,9 @@ class ScanImpl(private val scanView: ScanView) {
         selectEntity.forEach { select -> this.find { it.id == select.id }?.isCheck = true }
     }
 
-    fun scanResult(path: String) {
+    fun scanResult(id: Long) {
         loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
-            putString(Columns.DATA, path)
+            putLong(Columns.ID, id)
             putInt(Columns.SCAN_TYPE, scanType)
         }, ScanTask(context) {
             scanView.resultSuccess(if (it.isEmpty()) null else it[0])

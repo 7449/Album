@@ -18,18 +18,19 @@ import com.gallery.scan.args.ScanConst
  */
 class ScanTask(private val context: Context, private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
 
+    companion object {
+        private const val PARENT_DEFAULT = 0L
+        private const val ID_DEFAULT = 0L
+    }
+
     private val arrayList = ArrayList<ScanEntity>()
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-
-        val selection: String
-
-        val parent = args?.getLong(Columns.PARENT) ?: 0
-        val path = args?.getString(Columns.DATA) ?: ""
+        val parent = args?.getLong(Columns.PARENT) ?: PARENT_DEFAULT
+        val fileId = args?.getLong(Columns.ID) ?: ID_DEFAULT
         val scanType = args?.getInt(Columns.SCAN_TYPE) ?: ScanConst.IMAGE
-
-        selection = when {
-            path.isNotEmpty() -> CursorArgs.getPathSelection(path)
+        val selection = when {
+            fileId != ID_DEFAULT -> CursorArgs.getResultSelection(fileId)
             parent == ScanConst.ALL -> CursorArgs.ALL_SELECTION
             else -> CursorArgs.getParentSelection(parent)
         }
@@ -58,7 +59,6 @@ class ScanTask(private val context: Context, private val loaderSuccess: (ArrayLi
         val widthColumnIndex = cursor.getColumnIndex(Columns.WIDTH)
         val heightColumnIndex = cursor.getColumnIndex(Columns.HEIGHT)
         val dateModifiedColumnIndex = cursor.getColumnIndex(Columns.DATE_MODIFIED)
-
         while (cursor.moveToNext()) {
             val id = cursor.getLong(idColumnIndex)
             val path = cursor.getString(dataColumnIndex)

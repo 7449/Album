@@ -5,6 +5,8 @@ import android.provider.MediaStore
 
 internal object CursorArgs {
 
+    const val PATH_DEPRECATED_MESSAGE = "android10:ContentResolver#openFileDescriptor(Uri, String)"
+
     /**
      * Scan Uri
      */
@@ -48,7 +50,7 @@ internal object CursorArgs {
     /**
      * 图片信息条件
      */
-    fun getPathSelection(path: String) = Columns.DATA + "=\"" + path + "\" and (" + ALL_SELECTION + ")"
+    fun getResultSelection(id: Long) = Columns.ID + "=\"" + id + "\" and (" + ALL_SELECTION + ")"
 
     /**
      * 扫描条件

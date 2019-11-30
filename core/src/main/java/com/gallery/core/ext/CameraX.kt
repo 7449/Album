@@ -8,6 +8,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.gallery.core.constant.GalleryCameraConst
+import com.gallery.scan.args.Columns
 import java.io.File
 
 //activity 打开相机
@@ -33,6 +34,18 @@ internal fun openCamera(root: Any, fileUri: Uri, video: Boolean): Int {
         is Fragment -> root.startActivityForResult(intent, GalleryCameraConst.CAMERA_REQUEST_CODE)
     }
     return GalleryCameraConst.CAMERA_SUCCESS
+}
+
+fun Context.scanId(uri: Uri): Long {
+    contentResolver.query(uri, arrayOf(Columns.DATA), null, null, null).use {
+        val index = it?.getColumnIndexOrThrow(Columns.ID) ?: -1
+        it?.moveToFirst()
+        return if (index == -1) {
+            -11L
+        } else {
+            it?.getLong(index) ?: -11L
+        }
+    }
 }
 
 fun Context.scanFilePath(uri: Uri, fileProviderPath: String): String? {

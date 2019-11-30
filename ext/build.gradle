@@ -11,5 +11,6 @@ android {
 }
 dependencies {
     compileOnly project(':core')
+    compileOnly "androidx.fragment:fragment:1.1.0"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

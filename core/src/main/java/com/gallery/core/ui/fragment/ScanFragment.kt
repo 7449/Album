@@ -241,14 +241,14 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
             return
         }
         if (result && galleryAdapter.galleryList.isNotEmpty()) {
-            scan.scanResult(mActivity.scanFilePath(fileUri, fileProviderPath).orEmpty())
+            scan.scanResult(9130)
             return
         }
         scan.scanAll(parent)
     }
 
     override fun onScanCropGallery(path: String) {
-        scan.scanResult(path)
+        scan.scanResult(9130)
     }
 
     override fun onScanStart() {}

@@ -26,7 +26,7 @@ object Columns {
     /**
      * 路径
      */
-    @Deprecated("ContentResolver#openFileDescriptor(Uri, String)")
+    @Deprecated(CursorArgs.PATH_DEPRECATED_MESSAGE)
     const val DATA = MediaStore.Files.FileColumns.DATA
     /**
      * 大小

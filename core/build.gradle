@@ -13,8 +13,8 @@ android {
     }
 }
 dependencies {
-    api 'com.ydevelop:gallery.scan:0.0.2'
 //    api project(':scan')
+    api 'com.ydevelop:gallery.scan:0.0.4'
     compileOnly "androidx.viewpager2:viewpager2:$viewpagerVersion"
     compileOnly "com.github.yalantis:ucrop:$ucropVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

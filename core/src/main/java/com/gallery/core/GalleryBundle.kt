@@ -15,10 +15,6 @@ data class GalleryBundle(
          */
         var cameraName: String = System.currentTimeMillis().toString(),
         /**
-         * 摄像或拍照文件后缀
-         */
-        var cameraSuffix: String = if (scanType == ScanConst.IMAGE) "jpg" else "mp4",
-        /**
          * 隐藏相机
          */
         var hideCamera: Boolean = false,
@@ -40,6 +36,7 @@ data class GalleryBundle(
         var multipleMaxCount: Int = 3,
         /**
          * 拍照路径
+         * 支持在Android10版本以下
          */
         var cameraPath: String? = null,
         /**

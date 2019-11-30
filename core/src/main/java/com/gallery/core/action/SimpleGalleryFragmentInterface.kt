@@ -1,5 +1,6 @@
 package com.gallery.core.action
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.gallery.scan.ScanEntity
@@ -18,14 +19,9 @@ internal interface SimpleGalleryFragmentInterface {
     fun onScanGallery(parent: Long, isFinder: Boolean, result: Boolean)
 
     /**
-     * 扫描裁剪之后的信息
-     */
-    fun onScanCropGallery(path: String)
-
-    /**
      * 裁剪
      */
-    fun openUCrop(path: String)
+    fun openUCrop(uri: Uri)
 
     /**
      * 刷新图库
@@ -51,11 +47,6 @@ internal interface SimpleGalleryFragmentInterface {
      * 刷新[FragmentActivity.onActivityResult]数据
      */
     fun onResultPreview(bundle: Bundle)
-
-    /**
-     * 刷新数据
-     */
-    fun onDialogResultPreview(bundle: Bundle)
 
     /**
      * 断掉MediaScanner

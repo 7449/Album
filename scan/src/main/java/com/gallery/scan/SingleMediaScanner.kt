@@ -9,7 +9,7 @@ class SingleMediaScanner(context: Context, private val path: String, private val
     interface SingleScannerListener {
         fun onScanStart()
 
-        fun onScanCompleted(type: Int, path: String)
+        fun onScanCompleted(type: Int, path: String?, uri: Uri?)
     }
 
     private val connection: MediaScannerConnection = MediaScannerConnection(context.applicationContext, this)
@@ -27,8 +27,8 @@ class SingleMediaScanner(context: Context, private val path: String, private val
         connection.disconnect()
     }
 
-    override fun onScanCompleted(path: String, uri: Uri?) {
+    override fun onScanCompleted(path: String?, uri: Uri?) {
         disconnect()
-        listener.onScanCompleted(type, path)
+        listener.onScanCompleted(type, path, uri)
     }
 }

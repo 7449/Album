@@ -7,10 +7,12 @@
         android:name=".App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        tools:replace="android:label">
+        tools:replace="android:label"
+        tools:targetApi="q">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +28,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.gallery.ui.activity.PreActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".camera.SimpleCameraActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

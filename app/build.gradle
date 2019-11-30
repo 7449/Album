@@ -13,18 +13,12 @@ android {
         versionCode rootProject.projectVersionCode
         versionName rootProject.projectVersionName
     }
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
 }
 
 dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
-    implementation(name: 'CameraViewLibrary', ext: 'aar')
 
     implementation project(':ui')
     implementation project(':glide')

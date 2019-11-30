@@ -1,11 +1,5 @@
 <resources>
     <string name="appName">Gallery</string>
-    <string name="picture_taken">Picture taken</string>
-    <string name="aspect_ratio">Aspect ratio</string>
-    <string name="switch_camera">Switch camera</string>
-    <string name="flash_auto">Flash auto</string>
-    <string name="flash_off">Flash off</string>
-    <string name="flash_on">Flash on</string>
     <string name="video_tips">摄像</string>
     <string name="gallery_video_title">视频选择</string>
 </resources>

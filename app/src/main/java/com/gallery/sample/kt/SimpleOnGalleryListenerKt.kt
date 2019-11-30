@@ -1,8 +1,8 @@
 package com.gallery.sample.kt
 
+import android.net.Uri
 import com.gallery.core.action.OnGalleryListener
 import com.gallery.scan.ScanEntity
-import java.io.File
 
 class SimpleOnGalleryListenerKt {
 
@@ -22,7 +22,7 @@ class SimpleOnGalleryListenerKt {
     private var onGalleryCropCanceled: (() -> Unit)? = null
     private var onGalleryCameraCanceled: (() -> Unit)? = null
     private var onGalleryUCropError: ((data: Throwable?) -> Unit)? = null
-    private var onGalleryUCropResources: ((cropFile: File) -> Unit)? = null
+    private var onGalleryUCropResources: ((uri: Uri) -> Unit)? = null
     private var onGalleryMaxCount: (() -> Unit)? = null
     private var onGalleryOpenCameraError: (() -> Unit)? = null
     private var onGalleryEmpty: (() -> Unit)? = null
@@ -93,7 +93,7 @@ class SimpleOnGalleryListenerKt {
         this.onGalleryUCropError = onGalleryUCropError
     }
 
-    fun onGalleryUCropResources(onGalleryUCropResources: (file: File) -> Unit) {
+    fun onGalleryUCropResources(onGalleryUCropResources: (uri: Uri) -> Unit) {
         this.onGalleryUCropResources = onGalleryUCropResources
     }
 
@@ -175,8 +175,8 @@ class SimpleOnGalleryListenerKt {
                 onGalleryUCropError?.invoke(data)
             }
 
-            override fun onGalleryUCropResources(cropFile: File) {
-                onGalleryUCropResources?.invoke(cropFile)
+            override fun onGalleryUCropResources(uri: Uri) {
+                onGalleryUCropResources?.invoke(uri)
             }
 
             override fun onGalleryMaxCount() {

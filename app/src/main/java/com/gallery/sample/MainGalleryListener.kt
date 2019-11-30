@@ -1,11 +1,11 @@
 package com.gallery.sample
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import com.gallery.core.action.OnGalleryListener
 import com.gallery.scan.ScanEntity
-import java.io.File
 
 /**
  * @author y
@@ -75,8 +75,8 @@ class MainGalleryListener internal constructor(context: Context, private val lis
         toast("crop error:$data")
     }
 
-    override fun onGalleryUCropResources(cropFile: File) {
-        toast("crop file:$cropFile")
+    override fun onGalleryUCropResources(uri: Uri) {
+        toast("crop file:$uri")
     }
 
     override fun onGalleryMaxCount() {

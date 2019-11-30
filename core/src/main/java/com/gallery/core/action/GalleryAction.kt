@@ -1,5 +1,6 @@
 package com.gallery.core.action
 
+import android.net.Uri
 import android.view.View
 import com.gallery.scan.ScanEntity
 
@@ -37,5 +38,5 @@ interface GalleryAction {
     /**
      * 接管裁剪 true
      */
-    fun onGalleryCustomCrop(path: String): Boolean = false
+    fun onGalleryCustomCrop(uri: Uri): Boolean = false
 }

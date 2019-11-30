@@ -1,7 +1,7 @@
 package com.gallery.core.action
 
+import android.net.Uri
 import com.gallery.scan.ScanEntity
-import java.io.File
 
 /**
  * @author y
@@ -81,7 +81,7 @@ interface OnGalleryListener {
     /**
      * 裁剪成功
      */
-    fun onGalleryUCropResources(cropFile: File)
+    fun onGalleryUCropResources(uri: Uri)
 
     /**
      * 已达多选最大数

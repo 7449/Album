@@ -5,6 +5,7 @@ package com.gallery.core.ext
 import android.Manifest
 import android.app.Activity
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +14,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.View
@@ -24,10 +26,20 @@ import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import com.gallery.core.constant.GalleryPermissionConst
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.Columns
 import java.io.File
 
 //获取文件的Uri
-fun ScanEntity.externalUri(): Uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+fun ScanEntity.externalUri(): Uri {
+    return if (mediaType == Columns.IMAGE) {
+        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+    } else {
+        ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
+    }
+}
+
+//根据Id查询文件是否存在
+fun Context.fileExists(uri: Uri) = fileExists(uri, Columns.ID)
 
 //Android版本是否为L
 fun hasL(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
@@ -128,4 +140,26 @@ fun Fragment.permission(permissions: String, code: Int): Boolean {
         return true
     }
     return false
+}
+
+//根据column查询文件是否存在
+fun Context.fileExists(uri: Uri, columnsName: String): Boolean {
+    contentResolver.query(uri, arrayOf(columnsName), null, null, null).use {
+        return it?.moveToNext() ?: false
+    }
+}
+
+//插入ContentValues
+fun Context.insertImage(contentValues: ContentValues) = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+    contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            ?: throw KotlinNullPointerException()
+} else {
+    contentResolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, contentValues)
+            ?: throw KotlinNullPointerException()
+}
+
+//合并选择数据和全部数据
+fun ArrayList<ScanEntity>.mergeEntity(selectEntity: ArrayList<ScanEntity>) = also {
+    forEach { it.isCheck = false }
+    selectEntity.forEach { select -> this.find { it.id == select.id }?.isCheck = true }
 }

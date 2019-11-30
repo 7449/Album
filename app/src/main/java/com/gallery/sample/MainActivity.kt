@@ -17,9 +17,10 @@ import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
 import com.gallery.core.constant.GalleryCameraConst
 import com.gallery.core.constant.GalleryConst
-import com.gallery.core.ext.*
+import com.gallery.core.ext.galleryPathFile
+import com.gallery.core.ext.getFileUri
+import com.gallery.core.ext.openCamera
 import com.gallery.glide.GlideImageLoader
-import com.gallery.sample.camera.SimpleCameraActivity
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.SingleMediaScanner
 import com.gallery.scan.args.ScanConst
@@ -81,13 +82,6 @@ fun MainActivity.nightGallery() {
         galleryListener = MainGalleryListener(applicationContext, null)
         options = nightOptions
         galleryImageLoader = GlideImageLoader()
-        customCameraListener = {
-            if (it.permissionStorage() && it.permissionCamera()) {
-                Toast.makeText(it.activity, "camera", Toast.LENGTH_SHORT).show()
-                val intent = Intent(it.activity, SimpleCameraActivity::class.java)
-                it.startActivityForResult(intent, GalleryCameraConst.CUSTOM_CAMERA_REQUEST_CODE)
-            }
-        }
     }.ui(this, NightGalleryBundle(), NightGalleryUIBundle())
 }
 
@@ -102,13 +96,15 @@ fun MainActivity.video() {
 }
 
 fun MainActivity.startCamera() {
-    imagePath = externalUri(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString(), "jpg"))
+    imagePath = getFileUri(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
 }
 
 class SimpleSingleScannerListener : SingleMediaScanner.SingleScannerListener {
-    override fun onScanCompleted(type: Int, path: String) {}
+    override fun onScanCompleted(type: Int, path: String?, uri: Uri?) {
+    }
+
     override fun onScanStart() {}
 }
 

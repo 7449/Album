@@ -3,7 +3,6 @@ package com.gallery.core
 import android.view.View
 import com.gallery.core.action.GalleryImageLoader
 import com.gallery.core.action.OnGalleryListener
-import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
 import com.yalantis.ucrop.UCrop
 
@@ -25,11 +24,6 @@ class Gallery private constructor() {
     var galleryListener: OnGalleryListener? = null
 
     /**
-     * 自定义相机
-     */
-    var customCameraListener: ((fragment: GalleryBaseFragment) -> Unit)? = null
-
-    /**
      * 占位符自定义点击
      */
     var emptyClickListener: ((view: View) -> Unit)? = null
@@ -47,7 +41,6 @@ class Gallery private constructor() {
             options = null
             galleryImageLoader = null
             galleryListener = null
-            customCameraListener = null
             emptyClickListener = null
             selectList = null
         }

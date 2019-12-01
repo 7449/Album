@@ -54,19 +54,24 @@ class ScanImpl(private val scanView: ScanView) {
     }
 
     fun refreshResultFinder(finderList: ArrayList<ScanEntity>, scanEntity: ScanEntity) {
-        finderList.find { it.parent == ScanConst.ALL }?.let {
-            it.id = scanEntity.id
-            it.duration = scanEntity.duration
-            it.mediaType = scanEntity.mediaType
-            it.mimeType = scanEntity.mimeType
-            it.count = it.count + 1
-        }
-        finderList.find { it.parent == scanEntity.parent }?.let {
-            it.id = scanEntity.id
-            it.duration = scanEntity.duration
-            it.mediaType = scanEntity.mediaType
-            it.mimeType = scanEntity.mimeType
-            it.count = it.count + 1
+        finderList.forEach {
+            if (it.parent == ScanConst.ALL || it.parent == scanEntity.parent) {
+                it.id = scanEntity.id
+                it.size = scanEntity.size
+                it.duration = scanEntity.duration
+                it.parent = if (it.parent == ScanConst.ALL) ScanConst.ALL else scanEntity.parent
+                it.mimeType = scanEntity.mimeType
+                it.displayName = scanEntity.displayName
+                it.orientation = scanEntity.orientation
+                it.bucketId = scanEntity.bucketId
+                it.bucketDisplayName = scanEntity.bucketDisplayName
+                it.mediaType = scanEntity.mediaType
+                it.width = scanEntity.width
+                it.height = scanEntity.height
+                it.dataModified = scanEntity.dataModified
+                it.count = it.count + 1
+                it.isCheck = scanEntity.isCheck
+            }
         }
     }
 
@@ -74,25 +79,10 @@ class ScanImpl(private val scanView: ScanView) {
         finderList.clear()
         list.forEach { item ->
             if (finderList.find { it.parent == item.parent } == null) {
-                finderList.add(
-                        ScanEntity(
-                                id = item.id,
-                                duration = item.duration,
-                                mediaType = item.mediaType,
-                                mimeType = item.mimeType,
-                                parent = item.parent,
-                                count = list.count { it.parent == item.parent }
-                        )
-                )
+                finderList.add(item.copy(count = list.count { it.parent == item.parent }))
             }
-            val first = finderList.first()
-            finderList.add(0, ScanEntity(
-                    id = first.id,
-                    duration = first.duration,
-                    mediaType = first.mediaType,
-                    mimeType = first.mimeType,
-                    parent = ScanConst.ALL,
-                    count = list.size))
         }
+        val first = finderList.first()
+        finderList.add(0, first.copy(parent = ScanConst.ALL, count = list.size))
     }
 }

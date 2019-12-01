@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
@@ -32,45 +31,10 @@ import com.yalantis.ucrop.UCropFragmentCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-fun NightGalleryBundle(): GalleryBundle {
-    return GalleryBundle(
-            spanCount = 4,
-            cropFinish = false,
-            checkBoxDrawable = R.drawable.simple_selector_gallery_item_check,
-            radio = true,
-            cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Gallery",
-            uCropPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM" + "/" + "uCrop",
-            cameraTextColor = R.color.colorGalleryContentViewTipsColorNight,
-            cameraDrawable = R.drawable.ic_camera_drawable,
-            cameraDrawableColor = R.color.colorGalleryContentViewCameraDrawableColorNight,
-            cameraBackgroundColor = R.color.colorGalleryToolbarBackgroundNight,
-            rootViewBackground = R.color.colorGalleryContentViewBackgroundNight,
-            cameraCrop = true)
-}
-
-fun NightGalleryUIBundle(): GalleryUiBundle {
-    return GalleryUiBundle(
-            statusBarColor = R.color.colorGalleryStatusBarColorNight,
-            toolbarBackground = R.color.colorGalleryToolbarBackgroundNight,
-            toolbarIconColor = R.color.colorGalleryToolbarIconColorNight,
-            toolbarTextColor = R.color.colorGalleryToolbarTextColorNight,
-            bottomFinderTextBackground = R.color.colorGalleryBottomViewBackgroundNight,
-            bottomFinderTextColor = R.color.colorGalleryBottomFinderTextColorNight,
-            bottomFinderTextDrawableColor = R.color.colorGalleryBottomFinderTextDrawableColorNight,
-            bottomPreViewTextColor = R.color.colorGalleryBottomPreViewTextColorNight,
-            bottomSelectTextColor = R.color.colorGalleryBottomSelectTextColorNight,
-            listPopupBackground = R.color.colorGalleryListPopupBackgroundNight,
-            listPopupItemTextColor = R.color.colorGalleryListPopupItemTextColorNight,
-            preBackground = R.color.colorGalleryPreviewBackgroundNight,
-            preBottomViewBackground = R.color.colorGalleryPreviewBottomViewBackgroundNight,
-            preBottomOkTextColor = R.color.colorGalleryPreviewBottomViewOkColorNight,
-            preBottomCountTextColor = R.color.colorGalleryPreviewBottomViewCountColorNight)
-}
-
 fun MainActivity.dayGallery() {
     Gallery.instance.apply {
         galleryImageLoader = GlideImageLoader()
-        galleryListener = MainGalleryListener(applicationContext, list)
+        galleryListener = GalleryListener(applicationContext, list)
         selectList = list
         options = dayOptions
     }.ui(this,
@@ -79,16 +43,16 @@ fun MainActivity.dayGallery() {
 
 fun MainActivity.nightGallery() {
     Gallery.instance.apply {
-        galleryListener = MainGalleryListener(applicationContext, null)
+        galleryListener = GalleryListener(applicationContext, null)
         options = nightOptions
         galleryImageLoader = GlideImageLoader()
-    }.ui(this, NightGalleryBundle(), NightGalleryUIBundle())
+    }.ui(this, GalleryTheme.NightGalleryBundle(), GalleryTheme.NightGalleryUIBundle())
 }
 
 fun MainActivity.video() {
     Gallery.instance.apply {
         galleryImageLoader = GlideImageLoader()
-        galleryListener = MainGalleryListener(applicationContext, null)
+        galleryListener = GalleryListener(applicationContext, null)
     }.ui(this, GalleryBundle(
             scanType = ScanConst.VIDEO,
             cameraText = R.string.video_tips),

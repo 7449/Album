@@ -61,10 +61,8 @@ class PreActivity : GalleryBaseActivity(), GalleryPreAction {
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
 
-        galleryBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS)
-                ?: GalleryBundle()
-        uiBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS)
-                ?: GalleryUiBundle()
+        galleryBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS) ?: GalleryBundle()
+        uiBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS) ?: GalleryUiBundle()
 
         preBottomView.setBackgroundColor(ContextCompat.getColor(this, uiBundle.preBottomViewBackground))
         preBottomViewSelect.setText(uiBundle.preBottomOkText)

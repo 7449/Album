@@ -43,10 +43,8 @@ class GalleryActivity : GalleryBaseActivity(), View.OnClickListener, AdapterView
 
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
-        galleryBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS)
-                ?: GalleryBundle()
-        galleryUiBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS)
-                ?: GalleryUiBundle()
+        galleryBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS) ?: GalleryBundle()
+        galleryUiBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS) ?: GalleryUiBundle()
 
         window.statusBarColor(ContextCompat.getColor(this, galleryUiBundle.statusBarColor))
         galleryFinderAll.text = getString(galleryBundle.allName)
@@ -90,19 +88,19 @@ class GalleryActivity : GalleryBaseActivity(), View.OnClickListener, AdapterView
         galleryFinderAll.textSize = galleryUiBundle.bottomFinderTextSize
         galleryFinderAll.setTextColor(ContextCompat.getColor(this, galleryUiBundle.bottomFinderTextColor))
         galleryFinderAll.setCompoundDrawables(null, null, drawable(galleryUiBundle.bottomFinderTextCompoundDrawable, galleryUiBundle.bottomFinderTextDrawableColor), null)
-        if (galleryUiBundle.bottomFinderTextBackground != -1) {
+        if (galleryUiBundle.bottomFinderTextBackground != View.NO_ID) {
             galleryFinderAll.setBackgroundResource(galleryUiBundle.bottomFinderTextBackground)
         }
         galleryPre.setText(galleryUiBundle.bottomPreViewText)
         galleryPre.textSize = galleryUiBundle.bottomPreViewTextSize
         galleryPre.setTextColor(ContextCompat.getColor(this, galleryUiBundle.bottomPreViewTextColor))
-        if (galleryUiBundle.bottomPreviewTextBackground != -1) {
+        if (galleryUiBundle.bottomPreviewTextBackground != View.NO_ID) {
             galleryPre.setBackgroundResource(galleryUiBundle.bottomPreviewTextBackground)
         }
         gallerySelect.setText(galleryUiBundle.bottomSelectText)
         gallerySelect.textSize = galleryUiBundle.bottomSelectTextSize
         gallerySelect.setTextColor(ContextCompat.getColor(this, galleryUiBundle.bottomSelectTextColor))
-        if (galleryUiBundle.bottomSelectTextBackground != -1) {
+        if (galleryUiBundle.bottomSelectTextBackground != View.NO_ID) {
             gallerySelect.setBackgroundResource(galleryUiBundle.bottomSelectTextBackground)
         }
     }
@@ -121,19 +119,29 @@ class GalleryActivity : GalleryBaseActivity(), View.OnClickListener, AdapterView
     override fun onClick(v: View) {
         when (v.id) {
             R.id.galleryPre -> {
-                val multiplePreview = galleryFragment.selectPreview()
-                if (multiplePreview.isNotEmpty()) {
-                    PreActivity.newInstance(
-                            galleryBundle,
-                            galleryUiBundle,
-                            multiplePreview,
-                            multiplePreview,
-                            0,
-                            galleryFragment
-                    )
+                if (galleryFragment.selectEntity.isEmpty()) {
+                    Gallery.instance.galleryListener?.onGalleryPreEmpty()
+                    return
+                }
+                PreActivity.newInstance(
+                        galleryBundle,
+                        galleryUiBundle,
+                        galleryFragment.selectEntity,
+                        galleryFragment.selectEntity,
+                        0,
+                        galleryFragment
+                )
+            }
+            R.id.gallerySelect -> {
+                if (galleryFragment.selectEntity.isEmpty()) {
+                    Gallery.instance.galleryListener?.onGallerySelectEmpty()
+                    return
+                }
+                Gallery.instance.galleryListener?.onGalleryResources(galleryFragment.selectEntity)
+                if (galleryBundle.selectImageFinish) {
+                    finish()
                 }
             }
-            R.id.gallerySelect -> galleryFragment.multipleSelect()
             R.id.galleryFinderAll -> {
                 val finderEntity = galleryFragment.finderList
                 if (finderEntity.isNotEmpty()) {
@@ -164,7 +172,7 @@ class GalleryActivity : GalleryBaseActivity(), View.OnClickListener, AdapterView
                 galleryBundle,
                 galleryUiBundle,
                 selectEntity,
-                galleryFragment.allPreview(),
+                galleryFragment.allGalleryList,
                 if (parentId == ScanConst.ALL && !galleryBundle.hideCamera) position - 1 else position,
                 galleryFragment)
     }
@@ -184,7 +192,7 @@ class GalleryActivity : GalleryBaseActivity(), View.OnClickListener, AdapterView
     }
 
     override fun onDestroy() {
-        galleryFragment.disconnectMediaScanner()
+        galleryFragment.disconnect()
         super.onDestroy()
     }
 }

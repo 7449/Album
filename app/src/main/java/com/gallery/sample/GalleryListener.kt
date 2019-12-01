@@ -10,7 +10,7 @@ import com.gallery.scan.ScanEntity
 /**
  * @author y
  */
-class MainGalleryListener internal constructor(context: Context, private val list: ArrayList<ScanEntity>?) : OnGalleryListener {
+class GalleryListener internal constructor(context: Context, private val list: ArrayList<ScanEntity>?) : OnGalleryListener {
 
     override fun onGalleryCheckBox(selectCount: Int, maxCount: Int) {
         toast("onCheckBoxGallery:$selectCount")

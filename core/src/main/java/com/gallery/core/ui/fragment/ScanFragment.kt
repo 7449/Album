@@ -14,7 +14,7 @@ import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.action.GalleryAction
-import com.gallery.core.action.SimpleGalleryFragmentInterface
+import com.gallery.core.action.ScanInterface
 import com.gallery.core.constant.GalleryCameraConst
 import com.gallery.core.constant.GalleryConst
 import com.gallery.core.constant.GalleryInternalConst
@@ -31,7 +31,7 @@ import com.gallery.scan.args.ScanConst
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
-class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInterface, GalleryAdapter.OnGalleryItemClickListener, SingleMediaScanner.SingleScannerListener {
+class ScanFragment : GalleryBaseFragment(), ScanView, ScanInterface, GalleryAdapter.OnGalleryItemClickListener, SingleMediaScanner.SingleScannerListener {
 
     companion object {
         fun newInstance(galleryBundle: GalleryBundle) = ScanFragment().apply { arguments = Bundle().apply { putParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS, galleryBundle) } }
@@ -126,9 +126,9 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
                 when (requestCode) {
                     GalleryCameraConst.CAMERA_REQUEST_CODE -> {
                         mActivity.uriToFilePath(fileUri)?.let {
-                            refreshMedia(GalleryConst.TYPE_RESULT_CAMERA, it)
+                            scanFile(GalleryConst.TYPE_RESULT_CAMERA, it)
                             if (galleryBundle.cameraCrop) {
-                                openUCrop(fileUri)
+                                openCrop(fileUri)
                             }
                         }
                     }
@@ -143,7 +143,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
                             return
                         }
                         Gallery.instance.galleryListener?.onGalleryUCropResources(parcelable)
-                        parcelable.path?.let { refreshMedia(GalleryConst.TYPE_RESULT_CROP, it) }
+                        parcelable.path?.let { scanFile(GalleryConst.TYPE_RESULT_CROP, it) }
                         if (galleryBundle.cropFinish) {
                             mActivity.finish()
                         }
@@ -203,7 +203,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                openUCrop(galleryEntity.externalUri())
+                openCrop(galleryEntity.externalUri())
             } else {
                 val list = ArrayList<ScanEntity>()
                 list.add(galleryEntity)
@@ -250,12 +250,12 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
         }
     }
 
-    override fun refreshMedia(type: Int, path: String) {
-        disconnectMediaScanner()
+    override fun scanFile(type: Int, path: String) {
+        disconnect()
         singleMediaScanner = SingleMediaScanner(mActivity, path, type, this@ScanFragment)
     }
 
-    override fun disconnectMediaScanner() {
+    override fun disconnect() {
         singleMediaScanner?.disconnect()
     }
 
@@ -267,28 +267,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
         }
     }
 
-    override fun selectPreview(): ArrayList<ScanEntity> {
-        if (selectEntity.isEmpty()) {
-            Gallery.instance.galleryListener?.onGalleryPreEmpty()
-            return ArrayList()
-        }
-        return selectEntity
-    }
-
-    override fun allPreview(): ArrayList<ScanEntity> = galleryAdapter.galleryList
-
-    override fun multipleSelect() {
-        if (selectEntity.isEmpty()) {
-            Gallery.instance.galleryListener?.onGallerySelectEmpty()
-            return
-        }
-        Gallery.instance.galleryListener?.onGalleryResources(selectEntity)
-        if (galleryBundle.selectImageFinish) {
-            mActivity.finish()
-        }
-    }
-
-    override fun openUCrop(uri: Uri) {
+    override fun openCrop(uri: Uri) {
         val onGalleryCustomCrop = galleryAction?.onGalleryCustomCrop(uri) ?: false
         if (onGalleryCustomCrop) {
             return
@@ -330,7 +309,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
 
     override fun onDestroyView() {
         super.onDestroyView()
-        disconnectMediaScanner()
+        disconnect()
     }
 
     override fun refreshUI() {
@@ -342,6 +321,9 @@ class ScanFragment : GalleryBaseFragment(), ScanView, SimpleGalleryFragmentInter
 
     override val scanContext: FragmentActivity
         get() = mActivity
+
+    override val allGalleryList: ArrayList<ScanEntity>
+        get() = galleryAdapter.galleryList
 
     override val selectEntity: ArrayList<ScanEntity>
         get() = galleryAdapter.multipleList

@@ -1,15 +1,12 @@
 ## version
 
-core:![](https://api.bintray.com/packages/ydevelop/maven/album.core/images/download.svg)
+scan:![](https://api.bintray.com/packages/ydevelop/maven/gallery.scan/images/download.svg)
 
-library:![](https://api.bintray.com/packages/ydevelop/maven/album/images/download.svg)
+core:![](https://api.bintray.com/packages/ydevelop/maven/gallery.core/images/download.svg)
 
-ui:![](https://api.bintray.com/packages/ydevelop/maven/album.ui/images/download.svg)
+ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/download.svg)
 
-
-#### next version
-
-delete path attribute
+glide:![](https://api.bintray.com/packages/ydevelop/maven/gallery.glide/images/download.svg)
 
 #### Manifests.xml
 
@@ -25,12 +22,8 @@ delete path attribute
             
 #### dependencies
 
-     implementation "androidx.appcompat:appcompat:$appcompatVersion"
-     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
-     implementation "com.ydevelop:album.ui:version"
-     implementation "com.github.yalantis:ucrop:$ucropVersion"
-     implementation "com.github.bumptech.glide:glide:$glideVersion"
-     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.ydevelop:gallery.ui:0.0.1'
+    implementation 'com.ydevelop:gallery.glide:0.0.1'
   
 #### demo
 
@@ -40,40 +33,7 @@ delete path attribute
             // gallery config
             }.ui(this)
             
-## customize camera
-
-> picture folder can not exist `.nomedia`, otherwise the picture is not scanned
-
-[CustomizeCamera](https://github.com/7449/Album/blob/master/app/src/main/java/com/gallery/sample/camera)
-
-     Gallery
-        .instance
-        .apply {
-            customCameraListener = {
-
-            }
-        }.ui(this)
-
-
-    finishCamera(SimpleCameraActivity.this, cameraFile.path);
-    
-    fun finishCamera(activity: Activity, path: String) {
-        val bundle = Bundle()
-        bundle.putString(GalleryConstant.CUSTOMIZE_CAMERA_RESULT_PATH_KEY, path)
-        val intent = Intent()
-        intent.putExtras(bundle)
-        activity.setResult(RESULT_OK, intent)
-        activity.finish()
-    }
-                
 ## ImageLoader
-
-[SimpleGlideImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/gallery/sample/imageloader/SimpleGlideImageLoader.kt)
-
-[SimplePicassoGalleryImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/gallery/sample/imageloader/SimplePicassoGalleryImageLoader.kt)
-
-[SimpleSubsamplingScaleImageLoader](https://github.com/7449/Album/blob/master/app/src/main/java/com/gallery/sample/imageloader/SimpleSubsamplingScaleImageLoader.kt)
-
 
     class SimpleImageLoader : GalleryImageLoader {
     

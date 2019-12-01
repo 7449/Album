@@ -4,7 +4,6 @@
     package="com.gallery.sample">
 
     <application
-        android:name=".App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
         android:requestLegacyExternalStorage="true"

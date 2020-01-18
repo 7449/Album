@@ -20,9 +20,9 @@ class ScanImpl(private val scanView: ScanView) {
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext
     private val scanType: Int = scanView.currentScanType
-    private var finderList = ArrayList<ScanEntity>()
+    private val finderList = ArrayList<ScanEntity>()
 
-    fun scanAll(parent: Long) {
+    fun scanAllOrParent(parent: Long) {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
@@ -38,11 +38,6 @@ class ScanImpl(private val scanView: ScanView) {
         })
     }
 
-    private fun ArrayList<ScanEntity>.mergeEntity(selectEntity: ArrayList<ScanEntity>) = also {
-        forEach { it.isCheck = false }
-        selectEntity.forEach { select -> this.find { it.id == select.id }?.isCheck = true }
-    }
-
     fun scanResult(id: Long) {
         loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
             putLong(Columns.ID, id)
@@ -53,7 +48,7 @@ class ScanImpl(private val scanView: ScanView) {
         })
     }
 
-    fun refreshResultFinder(finderList: ArrayList<ScanEntity>, scanEntity: ScanEntity) {
+    fun scanResultFinder(finderList: ArrayList<ScanEntity>, scanEntity: ScanEntity) {
         finderList.forEach {
             if (it.parent == ScanConst.ALL || it.parent == scanEntity.parent) {
                 it.id = scanEntity.id
@@ -75,6 +70,11 @@ class ScanImpl(private val scanView: ScanView) {
         }
     }
 
+    private fun ArrayList<ScanEntity>.mergeEntity(selectEntity: ArrayList<ScanEntity>) = also {
+        forEach { it.isCheck = false }
+        selectEntity.forEach { select -> this.find { it.id == select.id }?.isCheck = true }
+    }
+
     private fun refreshFinder(list: ArrayList<ScanEntity>) {
         finderList.clear()
         list.forEach { item ->
@@ -82,7 +82,6 @@ class ScanImpl(private val scanView: ScanView) {
                 finderList.add(item.copy(count = list.count { it.parent == item.parent }))
             }
         }
-        val first = finderList.first()
-        finderList.add(0, first.copy(parent = ScanConst.ALL, count = list.size))
+        finderList.add(0, finderList.first().copy(parent = ScanConst.ALL, count = list.size))
     }
 }

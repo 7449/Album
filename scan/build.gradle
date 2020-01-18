@@ -1,12 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply from: '../gradle/UPLOAD.gradle'
+apply from: '../gradle/UPLOAD.gradle'
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    //noinspection GradleCompatible
+    compileSdkVersion 19
     defaultConfig {
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion 19
+        targetSdkVersion 29
     }
     androidExtensions {
         experimental = true

@@ -16,19 +16,17 @@ import com.gallery.scan.args.ScanConst
  *
  * 图片扫描
  */
-class ScanTask(private val context: Context, private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
+internal class ScanTask(private val context: Context, private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
 
     companion object {
-        private const val PARENT_DEFAULT = 0L
         private const val ID_DEFAULT = 0L
     }
 
-    private val arrayList = ArrayList<ScanEntity>()
-
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        val parent = args?.getLong(Columns.PARENT) ?: PARENT_DEFAULT
-        val fileId = args?.getLong(Columns.ID) ?: ID_DEFAULT
-        val scanType = args?.getInt(Columns.SCAN_TYPE) ?: ScanConst.IMAGE
+        args ?: throw KotlinNullPointerException("args == null")
+        val parent = args.getLong(Columns.PARENT)
+        val fileId = args.getLong(Columns.ID)
+        val scanType = args.getInt(Columns.SCAN_TYPE)
         val selection = when {
             fileId != ID_DEFAULT -> CursorArgs.getResultSelection(fileId)
             parent == ScanConst.ALL -> CursorArgs.ALL_SELECTION
@@ -44,7 +42,6 @@ class ScanTask(private val context: Context, private val loaderSuccess: (ArrayLi
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
         val cursor = data ?: return
-
         val idColumnIndex = cursor.getColumnIndex(Columns.ID)
         val sizeColumnIndex = cursor.getColumnIndex(Columns.SIZE)
         val durationColumnIndex = cursor.getColumnIndex(Columns.DURATION)
@@ -58,26 +55,54 @@ class ScanTask(private val context: Context, private val loaderSuccess: (ArrayLi
         val widthColumnIndex = cursor.getColumnIndex(Columns.WIDTH)
         val heightColumnIndex = cursor.getColumnIndex(Columns.HEIGHT)
         val dateModifiedColumnIndex = cursor.getColumnIndex(Columns.DATE_MODIFIED)
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(idColumnIndex)
-            val size = cursor.getLong(sizeColumnIndex)
-            val duration = cursor.getLong(durationColumnIndex)
-            val parent = cursor.getLong(parentColumnIndex)
-            val mimeType = cursor.getString(mimeTypeColumnIndex)
-            val displayName = cursor.getString(displayNameColumnIndex)
-            val orientation = cursor.getInt(orientationColumnIndex)
-            val bucketId = cursor.getString(bucketIdColumnIndex)
-            val bucketDisplayName = cursor.getString(bucketDisplayNameColumnIndex)
-            val mediaType = cursor.getString(mediaTypeColumnIndex)
-            val width = cursor.getInt(widthColumnIndex)
-            val height = cursor.getInt(heightColumnIndex)
-            val dataModified = cursor.getLong(dateModifiedColumnIndex)
-            arrayList.add(ScanEntity(id, size, duration, parent, mimeType, displayName, orientation, bucketId, bucketDisplayName, mediaType, width, height, dataModified, 0, false))
-        }
 
+        val arrayList = ArrayList<ScanEntity>()
+        while (cursor.moveToNext()) {
+            arrayList.add(ScanEntity(
+                    cursor.getLongOrDefault(idColumnIndex),
+                    cursor.getLongOrDefault(sizeColumnIndex),
+                    cursor.getLongOrDefault(durationColumnIndex),
+                    cursor.getLongOrDefault(parentColumnIndex),
+                    cursor.getStringOrDefault(mimeTypeColumnIndex),
+                    cursor.getStringOrDefault(displayNameColumnIndex),
+                    cursor.getIntOrDefault(orientationColumnIndex),
+                    cursor.getStringOrDefault(bucketIdColumnIndex),
+                    cursor.getStringOrDefault(bucketDisplayNameColumnIndex),
+                    cursor.getStringOrDefault(mediaTypeColumnIndex),
+                    cursor.getIntOrDefault(widthColumnIndex),
+                    cursor.getIntOrDefault(heightColumnIndex),
+                    cursor.getLongOrDefault(dateModifiedColumnIndex),
+                    0,
+                    false)
+            )
+        }
         loaderSuccess(arrayList)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
+    }
+
+    private fun Cursor.getLongOrDefault(index: Int): Long {
+        return if (index == -1) {
+            0L
+        } else {
+            getLong(index)
+        }
+    }
+
+    private fun Cursor.getIntOrDefault(index: Int): Int {
+        return if (index == -1) {
+            0
+        } else {
+            getInt(index)
+        }
+    }
+
+    private fun Cursor.getStringOrDefault(index: Int): String {
+        return if (index == -1) {
+            ""
+        } else {
+            getString(index)
+        }
     }
 }

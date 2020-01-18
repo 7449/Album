@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply from: '../gradle/UPLOAD.gradle'
+apply from: '../gradle/UPLOAD.gradle'
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -11,7 +11,7 @@ android {
 }
 dependencies {
     api 'com.github.bumptech.glide:glide:4.10.0'
-//    compileOnly project(':core')
+    compileOnly project(':core')
     compileOnly 'com.ydevelop:gallery.core:0.0.2'
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

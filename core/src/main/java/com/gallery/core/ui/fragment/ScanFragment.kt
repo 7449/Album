@@ -176,7 +176,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, ScanInterface, GalleryAdap
         } else {
             galleryAdapter.galleryList.add(1, scanEntity)
             galleryAdapter.notifyDataSetChanged()
-            scan.refreshResultFinder(finderList, scanEntity)
+            scan.scanResultFinder(finderList, scanEntity)
         }
     }
 
@@ -232,7 +232,7 @@ class ScanFragment : GalleryBaseFragment(), ScanView, ScanInterface, GalleryAdap
             scan.scanResult(mActivity.getUriId(fileUri))
             return
         }
-        scan.scanAll(parent)
+        scan.scanAllOrParent(parent)
     }
 
     override fun onScanStart() {}

@@ -1,13 +1,11 @@
 package com.gallery.scan.args
 
-import android.annotation.SuppressLint
 import android.provider.MediaStore
 
 /**
  * @author y
  * @create 2019/3/5
  */
-@SuppressLint("InlinedApi")
 object Columns {
 
     const val IMAGE = MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
@@ -58,17 +56,17 @@ object Columns {
     /**
      * 视频时长
      */
-    const val DURATION = MediaStore.Files.FileColumns.DURATION
+    const val DURATION = MediaStore.Video.VideoColumns.DURATION
     /**
      * 方向
      */
-    const val ORIENTATION = MediaStore.Files.FileColumns.ORIENTATION
+    const val ORIENTATION = MediaStore.Images.ImageColumns.ORIENTATION
     /**
      * bucket_id
      */
-    const val BUCKET_ID = MediaStore.Files.FileColumns.BUCKET_ID
+    const val BUCKET_ID = MediaStore.Images.ImageColumns.BUCKET_ID
     /**
      * 文件夹名称
      */
-    const val BUCKET_DISPLAY_NAME = MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME
+    const val BUCKET_DISPLAY_NAME = MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME
 }

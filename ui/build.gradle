@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply from: '../gradle/UPLOAD.gradle'
+apply from: '../gradle/UPLOAD.gradle'
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -13,8 +13,8 @@ android {
     }
 }
 dependencies {
-//    api project(':core')
-    api 'com.ydevelop:gallery.core:0.0.2'
+    api project(':core')
+//    api 'com.ydevelop:gallery.core:0.0.2'
     compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -13,8 +13,7 @@ android {
     }
 }
 dependencies {
-    api project(':core')
-//    api 'com.ydevelop:gallery.core:0.0.2'
+    api 'com.ydevelop:gallery.core:0.0.3'
     compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

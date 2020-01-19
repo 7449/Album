@@ -20,8 +20,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
 
-    implementation 'com.ydevelop:gallery.ui:0.0.1'
-    implementation 'com.ydevelop:gallery.glide:0.0.1'
+    implementation 'com.ydevelop:gallery.ui:0.0.2'
+    implementation 'com.ydevelop:gallery.glide:0.0.2'
     implementation project(':ext')
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"

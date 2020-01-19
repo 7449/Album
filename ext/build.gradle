@@ -9,7 +9,7 @@ android {
     }
 }
 dependencies {
-    compileOnly 'com.ydevelop:gallery.core:0.0.2'
+    compileOnly 'com.ydevelop:gallery.core:0.0.3'
     compileOnly "androidx.fragment:fragment:1.1.0"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -22,8 +22,8 @@ glide:![](https://api.bintray.com/packages/ydevelop/maven/gallery.glide/images/d
             
 #### dependencies
 
-    implementation 'com.ydevelop:gallery.ui:0.0.1'
-    implementation 'com.ydevelop:gallery.glide:0.0.1'
+    implementation 'com.ydevelop:gallery.ui:0.0.2'
+    implementation 'com.ydevelop:gallery.glide:0.0.2'
   
 #### demo
 

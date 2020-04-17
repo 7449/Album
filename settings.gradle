@@ -1,4 +1,6 @@
-include ':scan', ':glide', ':ext'
+include ':scan'
+include ':glide'
+include ':ext'
 include ':core'
 include ':ui'
 include ':app'

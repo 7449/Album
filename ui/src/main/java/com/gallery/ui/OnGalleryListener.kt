@@ -1,4 +1,4 @@
-package com.gallery.core.action
+package com.gallery.ui
 
 import android.net.Uri
 import com.gallery.scan.ScanEntity
@@ -7,6 +7,7 @@ import com.gallery.scan.ScanEntity
  * @author y
  * @create 2019/2/27
  */
+@Deprecated("@see [GalleryActivity] [PreActivity]")
 interface OnGalleryListener {
     /**
      * fragment 依赖的activity或者dialog被销毁

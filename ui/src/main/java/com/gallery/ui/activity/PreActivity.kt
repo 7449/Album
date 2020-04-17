@@ -1,124 +1,135 @@
 package com.gallery.ui.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import com.gallery.core.Gallery
+import android.widget.FrameLayout
 import com.gallery.core.GalleryBundle
-import com.gallery.core.action.GalleryPreAction
-import com.gallery.core.constant.GalleryConst
+import com.gallery.core.callback.IGalleryPrev
+import com.gallery.core.callback.IGalleryPrevCallback
+import com.gallery.core.ext.color
+import com.gallery.core.ext.drawable
 import com.gallery.core.ext.hasL
 import com.gallery.core.ext.statusBarColor
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
+import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
+import com.gallery.ui.UIResult
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
-class PreActivity : GalleryBaseActivity(), GalleryPreAction {
-
-    override val layoutId: Int = R.layout.gallery_activity_preview
+class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGalleryPrevCallback {
 
     companion object {
-        @JvmStatic
-        fun newInstance(galleryBundle: GalleryBundle,
-                        uiBundle: GalleryUiBundle,
-                        selectList: ArrayList<ScanEntity>,
-                        allList: ArrayList<ScanEntity>,
-                        position: Int,
-                        fragment: ScanFragment) {
-            val bundle = Bundle().apply {
-                putParcelableArrayList(GalleryConst.TYPE_PRE_SELECT, selectList)
-                putParcelableArrayList(GalleryConst.TYPE_PRE_ALL, allList)
-                putInt(GalleryConst.TYPE_PRE_POSITION, position)
-                putParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS, galleryBundle)
-                putParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS, uiBundle)
-            }
-            fragment.startActivityForResult(Intent(fragment.activity, PreActivity::class.java).putExtras(bundle), GalleryConst.TYPE_PRE_REQUEST_CODE)
+        fun newInstance(
+                fragment: ScanFragment,
+                allList: ArrayList<ScanEntity>,
+                selectList: ArrayList<ScanEntity> = ArrayList(),
+                galleryBundle: GalleryBundle = GalleryBundle(),
+                uiBundle: GalleryUiBundle = GalleryUiBundle(),
+                position: Int = 0) {
+            val bundle = Bundle()
+            bundle.putParcelableArrayList(IGalleryPrev.PREV_START_ALL, allList)
+            bundle.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectList)
+            bundle.putParcelable(IGalleryPrev.PREV_START_CONFIG, galleryBundle)
+            bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
+            bundle.putInt(IGalleryPrev.PREV_START_POSITION, position)
+            fragment.startActivityForResult(Intent(fragment.activity, PreActivity::class.java).putExtras(bundle), IGalleryPrev.PREV_START_REQUEST_CODE)
         }
     }
 
-    private lateinit var prevFragment: PrevFragment
-    private lateinit var galleryBundle: GalleryBundle
-    private lateinit var uiBundle: GalleryUiBundle
+    private val uiBundle by lazy {
+        intent.extras?.getParcelable(UIResult.UI_CONFIG) ?: GalleryUiBundle()
+    }
+    private val galleryBundle by lazy {
+        intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG) ?: GalleryBundle()
+    }
 
     override fun initView() {
         preBottomViewSelect.setOnClickListener {
-            if (prevFragment.getSelectEntity().isEmpty()) {
+            if (prevFragment().selectEmpty) {
                 Gallery.instance.galleryListener?.onGalleryContainerPreSelectEmpty()
                 return@setOnClickListener
             }
-            Gallery.instance.galleryListener?.onGalleryResources(prevFragment.getSelectEntity())
-            isRefreshGalleryUI(isRefresh = false, isFinish = uiBundle.preSelectOkFinish)
+            Gallery.instance.galleryListener?.onGalleryResources(prevFragment().selectEntities)
+            isRefreshGalleryUI(isRefresh = false)
         }
     }
 
-    @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
-
-        galleryBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS) ?: GalleryBundle()
-        uiBundle = intent.extras?.getParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS) ?: GalleryUiBundle()
-
-        preBottomView.setBackgroundColor(ContextCompat.getColor(this, uiBundle.preBottomViewBackground))
+        preBottomView.setBackgroundColor(color(uiBundle.preBottomViewBackground))
         preBottomViewSelect.setText(uiBundle.preBottomOkText)
         preBottomViewSelect.textSize = uiBundle.preBottomOkTextSize
-        preBottomViewSelect.setTextColor(ContextCompat.getColor(this, uiBundle.preBottomOkTextColor))
+        preBottomViewSelect.setTextColor(color(uiBundle.preBottomOkTextColor))
         preCount.textSize = uiBundle.preBottomCountTextSize
-        preCount.setTextColor(ContextCompat.getColor(this, uiBundle.preBottomCountTextColor))
-        preRootView.setBackgroundColor(ContextCompat.getColor(this, uiBundle.preBackground))
-        window.statusBarColor(ContextCompat.getColor(this, uiBundle.statusBarColor))
-        preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
-        preToolbar.setTitleTextColor(ContextCompat.getColor(this, uiBundle.toolbarTextColor))
-        val drawable = ContextCompat.getDrawable(this, uiBundle.toolbarIcon)
-        drawable?.setColorFilter(ContextCompat.getColor(this, uiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
+        preCount.setTextColor(color(uiBundle.preBottomCountTextColor))
+        preRootView.setBackgroundColor(color(uiBundle.preBackground))
+        window.statusBarColor(color(uiBundle.statusBarColor))
+        preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh) }
+        preToolbar.setTitleTextColor(color(uiBundle.toolbarTextColor))
+        val drawable = drawable(uiBundle.toolbarIcon)
+        drawable?.colorFilter = PorterDuffColorFilter(color(uiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
         preToolbar.navigationIcon = drawable
-        preToolbar.setBackgroundColor(ContextCompat.getColor(this, uiBundle.toolbarBackground))
+        preToolbar.setBackgroundColor(color(uiBundle.toolbarBackground))
+        preCount.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
         if (hasL()) {
             preToolbar.elevation = uiBundle.toolbarElevation
         }
-        val supportFragmentManager = supportFragmentManager
-        val fragment = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)
-        if (fragment != null) {
-            prevFragment = fragment as PrevFragment
-            supportFragmentManager.beginTransaction().show(fragment).commitAllowingStateLoss()
-        } else {
-            prevFragment = PrevFragment.newInstance(
-                    galleryBundle,
-                    intent.extras?.getInt(GalleryConst.TYPE_PRE_POSITION) ?: 0,
-                    intent.extras?.getParcelableArrayList(GalleryConst.TYPE_PRE_SELECT)
-                            ?: ArrayList(),
-                    intent.extras?.getParcelableArrayList(GalleryConst.TYPE_PRE_ALL) ?: ArrayList()
-            )
+        if (supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName) == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.preFragment, prevFragment, PrevFragment::class.java.simpleName)
+                    .add(R.id.preFragment, PrevFragment.newInstance(
+                            intent.extras?.getParcelableArrayList(IGalleryPrev.PREV_START_ALL)
+                                    ?: ArrayList(),
+                            intent.extras?.getParcelableArrayList(IGalleryPrev.PREV_START_SELECT)
+                                    ?: ArrayList(),
+                            intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG)
+                                    ?: GalleryBundle(),
+                            intent.extras?.getInt(IGalleryPrev.PREV_START_POSITION) ?: 0
+                    ), PrevFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
+        } else {
+            supportFragmentManager.beginTransaction().show(prevFragment()).commitAllowingStateLoss()
         }
     }
 
-    override fun onChangedCheckBoxCount(selectCount: Int) {
-        preCount.text = String.format("%s / %s", selectCount.toString(), galleryBundle.multipleMaxCount)
-    }
-
-    override fun onChangedViewPager(currentPos: Int, maxPos: Int) {
-        preToolbar.title = getString(uiBundle.preTitle) + "(" + currentPos + "/" + maxPos + ")"
-    }
-
     override fun onBackPressed() {
-        isRefreshGalleryUI(uiBundle.preBackRefresh, false)
+        isRefreshGalleryUI(uiBundle.preBackRefresh)
         super.onBackPressed()
     }
 
-    private fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean) {
+    private fun isRefreshGalleryUI(isRefresh: Boolean) {
         val intent = Intent()
-        intent.putExtras(prevFragment.resultBundle(isRefresh, isFinish))
+        intent.putExtras(prevFragment().resultBundle(isRefresh))
         setResult(Activity.RESULT_OK, intent)
         finish()
+    }
+
+    override fun onPageSelected(position: Int) {
+        preToolbar.title = getString(uiBundle.preTitle) + "(" + (position + 1) + "/" + prevFragment().itemCount + ")"
+    }
+
+    override fun onDisplayImageView(entity: ScanEntity, container: FrameLayout) {
+        Gallery.instance.galleryImageLoader?.onDisplayGalleryPrev(entity, container)
+    }
+
+    override fun onClickCheckBoxMaxCount() {
+    }
+
+    override fun onClickCheckBoxFileNotExist() {
+    }
+
+    override fun onChangedCreated() {
+        preToolbar.title = getString(uiBundle.preTitle) + "(" + (prevFragment().currentPosition + 1) + "/" + prevFragment().itemCount + ")"
+    }
+
+    override fun onChangedCheckBox() {
+        preCount.text = "%s / %s".format(prevFragment().selectCount.toString(), galleryBundle.multipleMaxCount)
     }
 
 }

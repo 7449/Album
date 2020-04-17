@@ -1,3 +1,14 @@
+
+## Prepare for the next version
+
+1. `UI`某些回调需要处理
+
+2. 图片加载框架需要更新
+
+3. `ext`需要更新
+
+4.  `core`需要再优化
+
 ## version
 
 scan:![](https://api.bintray.com/packages/ydevelop/maven/gallery.scan/images/download.svg)

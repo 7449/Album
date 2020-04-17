@@ -1,30 +1,30 @@
 package com.gallery.core.ui.adapter.vh
 
 import android.view.View
-import android.widget.FrameLayout
-import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.action.GalleryAction
+import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.fileExists
 import com.gallery.core.ext.show
+import com.gallery.core.ext.uriExists
 import com.gallery.scan.ScanEntity
+import com.xadapter.vh.XViewHolder
+import com.xadapter.vh.checkBox
+import com.xadapter.vh.context
+import com.xadapter.vh.frameLayout
 
 class PhotoViewHolder(itemView: View,
                       private val galleryBundle: GalleryBundle,
                       private val display: Int,
-                      private val galleryAction: GalleryAction?) : RecyclerView.ViewHolder(itemView) {
+                      private val galleryCallback: IGalleryCallback) : XViewHolder(itemView) {
 
-    private val container: FrameLayout = itemView.findViewById(R.id.galleryContainer)
-    private val checkBox: AppCompatCheckBox = itemView.findViewById(R.id.galleryCheckBox)
+    private val container = frameLayout(R.id.galleryContainer)
+    private val checkBox = checkBox(R.id.galleryCheckBox)
 
-    fun photo(position: Int, galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
-        Gallery.instance.galleryImageLoader?.displayGallery(display, display, galleryEntity, container)
-        container.setBackgroundColor(ContextCompat.getColor(itemView.context, galleryBundle.photoBackgroundColor))
+    fun photo(galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
+        galleryCallback.onDisplayImageView(display, display, galleryEntity, container)
+        container.setBackgroundColor(ContextCompat.getColor(context, galleryBundle.photoBackgroundColor))
         if (galleryBundle.radio) {
             return
         }
@@ -32,20 +32,17 @@ class PhotoViewHolder(itemView: View,
         checkBox.isChecked = galleryEntity.isCheck
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener {
-            if (!checkBox.context.fileExists(galleryEntity.externalUri())) {
+            if (!checkBox.context.uriExists(galleryEntity.externalUri())) {
                 checkBox.isChecked = false
                 if (multipleList.contains(galleryEntity)) {
                     multipleList.remove(galleryEntity)
                 }
-                Gallery.instance.galleryListener?.onGalleryCheckFileNotExist()
-                return@setOnClickListener
-            }
-            if (galleryAction?.onGalleryCheckBoxFilter(itemView, position, galleryEntity) == true) {
+                galleryCallback.onClickCheckBoxFileNotExist()
                 return@setOnClickListener
             }
             if (!multipleList.contains(galleryEntity) && multipleList.size >= galleryBundle.multipleMaxCount) {
                 checkBox.isChecked = false
-                Gallery.instance.galleryListener?.onGalleryMaxCount()
+                galleryCallback.onClickCheckBoxMaxCount()
                 return@setOnClickListener
             }
             if (!galleryEntity.isCheck) {
@@ -55,8 +52,7 @@ class PhotoViewHolder(itemView: View,
                 multipleList.remove(galleryEntity)
                 galleryEntity.isCheck = false
             }
-            galleryAction?.onChangedCheckBoxCount(itemView, multipleList.size, galleryEntity)
-            Gallery.instance.galleryListener?.onGalleryCheckBox(multipleList.size, galleryBundle.multipleMaxCount)
+            galleryCallback.onChangedCheckBox(galleryEntity.isCheck, galleryEntity)
         }
     }
 }

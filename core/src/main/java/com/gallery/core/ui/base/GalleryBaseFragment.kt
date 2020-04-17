@@ -1,66 +1,45 @@
 package com.gallery.core.ui.base
 
-import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import com.gallery.core.constant.GalleryPermissionConst
+import com.gallery.core.PermissionCode
 import com.gallery.core.ext.orEmpty
 
 /**
  * @author y
  */
-abstract class GalleryBaseFragment : Fragment() {
+abstract class GalleryBaseFragment(layoutId: Int) : Fragment(layoutId) {
 
-    lateinit var bundle: Bundle
-    lateinit var mActivity: FragmentActivity
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bundle = arguments.orEmpty()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mActivity = context as FragmentActivity
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(layoutId, container, false)
+    val bundle by lazy { arguments.orEmpty() }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            GalleryPermissionConst.WRITE_REQUEST_CODE -> {
+            PermissionCode.WRITE.code -> {
                 if (grantResults.isEmpty()) {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(GalleryPermissionConst.GALLERY)
+                    permissionsDenied(PermissionCode.WRITE)
                 } else {
-                    permissionsGranted(GalleryPermissionConst.GALLERY)
+                    permissionsGranted(PermissionCode.WRITE)
                 }
             }
-            GalleryPermissionConst.CAMERA_REQUEST_CODE -> {
+            PermissionCode.READ.code -> {
                 if (grantResults.isEmpty()) {
                     return
                 }
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    permissionsDenied(GalleryPermissionConst.CAMERA)
+                    permissionsDenied(PermissionCode.READ)
                 } else {
-                    permissionsGranted(GalleryPermissionConst.CAMERA)
+                    permissionsGranted(PermissionCode.READ)
                 }
             }
         }
     }
 
-    protected abstract fun permissionsGranted(type: Int)
+    protected abstract fun permissionsGranted(type: PermissionCode)
 
-    protected abstract fun permissionsDenied(type: Int)
-
-    protected abstract val layoutId: Int
+    protected abstract fun permissionsDenied(type: PermissionCode)
 }
 

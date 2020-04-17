@@ -12,17 +12,16 @@ import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.gallery.core.Gallery
+import com.gallery.ui.Gallery
 import com.gallery.core.GalleryBundle
-import com.gallery.core.constant.GalleryCameraConst
-import com.gallery.core.constant.GalleryConst
+import com.gallery.core.callback.IGallery
 import com.gallery.core.ext.galleryPathFile
-import com.gallery.core.ext.getFileUri
+import com.gallery.core.ext.findUriByFile
 import com.gallery.core.ext.openCamera
 import com.gallery.glide.GlideImageLoader
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.ScanType
 import com.gallery.scan.SingleMediaScanner
-import com.gallery.scan.args.ScanConst
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.ui
 import com.yalantis.ucrop.UCrop
@@ -35,16 +34,13 @@ fun MainActivity.dayGallery() {
     Gallery.instance.apply {
         galleryImageLoader = GlideImageLoader()
         galleryListener = GalleryListener(applicationContext, list)
-        selectList = list
-        options = dayOptions
     }.ui(this,
-            GalleryBundle(scanType = ScanConst.IMAGE, checkBoxDrawable = R.drawable.simple_selector_gallery_item_check))
+            GalleryBundle(scanType = ScanType.IMAGE, checkBoxDrawable = R.drawable.simple_selector_gallery_item_check))
 }
 
 fun MainActivity.nightGallery() {
     Gallery.instance.apply {
         galleryListener = GalleryListener(applicationContext, null)
-        options = nightOptions
         galleryImageLoader = GlideImageLoader()
     }.ui(this, GalleryTheme.NightGalleryBundle(), GalleryTheme.NightGalleryUIBundle())
 }
@@ -54,13 +50,13 @@ fun MainActivity.video() {
         galleryImageLoader = GlideImageLoader()
         galleryListener = GalleryListener(applicationContext, null)
     }.ui(this, GalleryBundle(
-            scanType = ScanConst.VIDEO,
+            scanType = ScanType.VIDEO,
             cameraText = R.string.video_tips),
             GalleryUiBundle(toolbarText = R.string.gallery_video_title))
 }
 
 fun MainActivity.startCamera() {
-    imagePath = getFileUri(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
+    imagePath = findUriByFile(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
     val i = openCamera(imagePath, false)
     Log.d(javaClass.simpleName, i.toString())
 }
@@ -130,13 +126,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback
             UCrop.RESULT_ERROR -> {
             }
             Activity.RESULT_OK -> when (requestCode) {
-                GalleryCameraConst.CAMERA_REQUEST_CODE -> {
+                IGallery.CAMERA_REQUEST_CODE -> {
                     SingleMediaScanner(this, imagePath.path
-                            ?: "", GalleryConst.TYPE_RESULT_CAMERA, SimpleSingleScannerListener())
+                            ?: "", 1, SimpleSingleScannerListener())
                 }
                 UCrop.REQUEST_CROP -> {
                     SingleMediaScanner(this, imagePath.path
-                            ?: "", GalleryConst.TYPE_RESULT_CROP, SimpleSingleScannerListener())
+                            ?: "", 2, SimpleSingleScannerListener())
                     Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
                 }
             }

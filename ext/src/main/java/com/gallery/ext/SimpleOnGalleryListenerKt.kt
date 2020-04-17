@@ -1,7 +1,6 @@
 package com.gallery.ext
 
 import android.net.Uri
-import com.gallery.core.action.OnGalleryListener
 import com.gallery.scan.ScanEntity
 
 class SimpleOnGalleryListenerKt {
@@ -117,8 +116,8 @@ class SimpleOnGalleryListenerKt {
         this.onGalleryCheckBox = onGalleryCheckBox
     }
 
-    internal fun build(): OnGalleryListener {
-        return object : OnGalleryListener {
+    internal fun build(): com.gallery.ui.OnGalleryListener {
+        return object : com.gallery.ui.OnGalleryListener {
             override fun onGalleryContainerFinish() {
                 onGalleryContainerFinish?.invoke()
             }

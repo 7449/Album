@@ -3,9 +3,8 @@ package com.gallery.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.gallery.core.Gallery
 import com.gallery.core.GalleryBundle
-import com.gallery.core.constant.GalleryConst
+import com.gallery.core.callback.IGallery
 import com.gallery.ui.activity.GalleryActivity
 
 /**
@@ -20,8 +19,8 @@ fun Gallery.ui(context: Context, galleryBundle: GalleryBundle) = ui(context, gal
 fun Gallery.ui(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle) = apply {
     context.startActivity(Intent(context, GalleryActivity::class.java).apply {
         putExtras(Bundle().apply {
-            putParcelable(GalleryConst.EXTRA_GALLERY_OPTIONS, galleryBundle)
-            putParcelable(GalleryConst.EXTRA_GALLERY_UI_OPTIONS, uiBundle)
+            putParcelable(IGallery.GALLERY_START_CONFIG, galleryBundle)
+            putParcelable(UIResult.UI_CONFIG, uiBundle)
         })
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     })

@@ -2,6 +2,7 @@ package com.gallery.scan.args
 
 import android.net.Uri
 import android.provider.MediaStore
+import com.gallery.scan.ScanType
 
 internal object CursorArgs {
 
@@ -52,10 +53,9 @@ internal object CursorArgs {
     /**
      * 扫描条件
      */
-    fun getSelectionArgs(scanType: Int): Array<String> = when (scanType) {
-        ScanConst.VIDEO -> arrayOf(Columns.VIDEO)
-        ScanConst.IMAGE -> arrayOf(Columns.IMAGE)
-        ScanConst.MIX -> arrayOf(Columns.IMAGE, Columns.VIDEO)
-        else -> throw  KotlinNullPointerException()
+    fun getSelectionArgs(scanType: ScanType): Array<String> = when (scanType) {
+        ScanType.VIDEO -> arrayOf(Columns.VIDEO)
+        ScanType.IMAGE -> arrayOf(Columns.IMAGE)
+        ScanType.MIX -> arrayOf(Columns.IMAGE, Columns.VIDEO)
     }
 }

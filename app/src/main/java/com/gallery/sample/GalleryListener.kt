@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import com.gallery.core.action.OnGalleryListener
+import com.gallery.ui.OnGalleryListener
 import com.gallery.scan.ScanEntity
 
 /**

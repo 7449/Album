@@ -13,7 +13,8 @@ android {
     }
 }
 dependencies {
-    api 'com.ydevelop:gallery.core:0.0.3'
+    compileOnly project(path: ':core')
+    compileOnly "com.github.yalantis:ucrop:$ucropVersion"
     compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

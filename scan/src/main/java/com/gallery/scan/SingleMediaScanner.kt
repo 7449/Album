@@ -28,7 +28,6 @@ class SingleMediaScanner(context: Context, private val path: String, private val
     }
 
     override fun onScanCompleted(path: String?, uri: Uri?) {
-        disconnect()
         listener.onScanCompleted(type, path, uri)
     }
 }

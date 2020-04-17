@@ -1,28 +1,22 @@
 package com.gallery.core.ui.adapter.vh
 
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.View
-import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
+import com.xadapter.vh.*
 
-class CameraViewHolder(itemView: View, private val galleryBundle: GalleryBundle) : RecyclerView.ViewHolder(itemView) {
-
-    private val container: LinearLayout = itemView.findViewById(R.id.gallery_camera_root_view)
-    private val cameraIv: AppCompatImageView = itemView.findViewById(R.id.galleryImageCamera)
-    private val cameraTv: AppCompatTextView = itemView.findViewById(R.id.galleryImageCameraTv)
+class CameraViewHolder(itemView: View, private val galleryBundle: GalleryBundle) : XViewHolder(itemView) {
 
     fun camera() {
-        val drawable = ContextCompat.getDrawable(itemView.context, galleryBundle.cameraDrawable)
-        drawable?.setColorFilter(ContextCompat.getColor(itemView.context, galleryBundle.cameraDrawableColor), PorterDuff.Mode.SRC_ATOP)
-        cameraTv.setText(galleryBundle.cameraText)
-        cameraTv.textSize = galleryBundle.cameraTextSize
-        cameraTv.setTextColor(ContextCompat.getColor(itemView.context, galleryBundle.cameraTextColor))
-        container.setBackgroundColor(ContextCompat.getColor(itemView.context, galleryBundle.cameraBackgroundColor))
-        cameraIv.setImageDrawable(drawable)
+        val drawable = ContextCompat.getDrawable(context, galleryBundle.cameraDrawable)
+        drawable?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(context, galleryBundle.cameraDrawableColor), PorterDuff.Mode.SRC_ATOP)
+        textView(R.id.galleryImageCameraTv).setText(galleryBundle.cameraText)
+        textView(R.id.galleryImageCameraTv).textSize = galleryBundle.cameraTextSize
+        textView(R.id.galleryImageCameraTv).setTextColor(ContextCompat.getColor(context, galleryBundle.cameraTextColor))
+        linearLayout(R.id.gallery_camera_root_view).setBackgroundColor(ContextCompat.getColor(context, galleryBundle.cameraBackgroundColor))
+        imageView(R.id.galleryImageCamera).setImageDrawable(drawable)
     }
 }

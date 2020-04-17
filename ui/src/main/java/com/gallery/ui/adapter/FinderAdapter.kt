@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
-import com.gallery.core.Gallery
+import com.gallery.core.ext.color
 import com.gallery.scan.ScanEntity
+import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 
@@ -32,9 +32,9 @@ class FinderAdapter(private val galleryUiBundle: GalleryUiBundle) : BaseAdapter(
         } else {
             viewHolder = convertView.tag as ViewHolder
         }
-        viewHolder.appCompatTextView.setTextColor(ContextCompat.getColor(parent.context, galleryUiBundle.listPopupItemTextColor))
+        viewHolder.appCompatTextView.setTextColor(parent.context.color(galleryUiBundle.listPopupItemTextColor))
         viewHolder.appCompatTextView.text = String.format("%s(%s)", finderEntity.bucketDisplayName, finderEntity.count.toString())
-        Gallery.instance.galleryImageLoader?.displayGalleryThumbnails(finderEntity, viewHolder.frameLayout)
+        Gallery.instance.galleryImageLoader?.onDisplayGalleryThumbnails(finderEntity, viewHolder.frameLayout)
         return viewHolder.convertView
     }
 

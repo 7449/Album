@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.gallery.sample
 
 import android.os.Environment
@@ -9,7 +11,6 @@ object GalleryTheme {
     fun NightGalleryBundle(): GalleryBundle {
         return GalleryBundle(
                 spanCount = 4,
-                cropFinish = false,
                 checkBoxDrawable = R.drawable.simple_selector_gallery_item_check,
                 radio = true,
                 cameraPath = Environment.getExternalStorageDirectory().path + "/" + "DCIM/Gallery",

@@ -14,25 +14,14 @@ interface ScanView {
     val scanContext: FragmentActivity
 
     /**
-     * 获取已经选择数据
-     */
-    val selectEntity: ArrayList<ScanEntity>
-
-    /**
      * 当前扫描类型
      */
-    val currentScanType: Int
-
-    /**
-     * 刷新数据
-     */
-    fun refreshUI()
+    val currentScanType: ScanType
 
     /**
      * 扫描成功
-     * 扫描文件夹成功
      */
-    fun scanSuccess(arrayList: ArrayList<ScanEntity>, finderList: ArrayList<ScanEntity>)
+    fun scanSuccess(arrayList: ArrayList<ScanEntity>)
 
     /**
      * 拍照扫描成功

@@ -13,7 +13,9 @@ android {
     }
 }
 dependencies {
-    api 'com.ydevelop:gallery.scan:0.0.6'
+    api "com.ydevelop:gallery.scan:$scanVersion"
+    api "com.ydevelop:rv-adapter-viewholder:$viewHolderVersion"
+    compileOnly "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     compileOnly "androidx.viewpager2:viewpager2:$viewpagerVersion"
     compileOnly "com.github.yalantis:ucrop:$ucropVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

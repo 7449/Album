@@ -1,23 +1,32 @@
 package com.gallery.core.ui.adapter
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.Gallery
 import com.gallery.core.R
 import com.gallery.scan.ScanEntity
+import com.xadapter.vh.LayoutViewHolder
+import com.xadapter.vh.XViewHolder
+import com.xadapter.vh.frameLayout
 
-class PrevAdapter : RecyclerView.Adapter<PrevAdapter.PrevViewHolder>() {
+class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) : RecyclerView.Adapter<XViewHolder>() {
 
-    var galleryList: ArrayList<ScanEntity> = ArrayList()
+    private val galleryList: ArrayList<ScanEntity> = ArrayList()
+    private val selectList: ArrayList<ScanEntity> = ArrayList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrevViewHolder = PrevViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_prev, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder = LayoutViewHolder(parent, R.layout.gallery_item_gallery_prev)
 
-    override fun onBindViewHolder(holder: PrevViewHolder, position: Int) = holder.photo(galleryList[position])
+    override fun onBindViewHolder(holder: XViewHolder, position: Int) {
+        displayPreview.invoke(galleryList[position], holder.frameLayout(R.id.galleryPrevContainer))
+    }
 
     override fun getItemCount(): Int = galleryList.size
+
+    fun cleanAll() {
+        galleryList.clear()
+        selectList.clear()
+        notifyDataSetChanged()
+    }
 
     fun addAll(newList: ArrayList<ScanEntity>) {
         galleryList.clear()
@@ -25,13 +34,29 @@ class PrevAdapter : RecyclerView.Adapter<PrevAdapter.PrevViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class PrevViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val container: FrameLayout = itemView.findViewById(R.id.galleryPrevContainer)
-
-        fun photo(galleryEntity: ScanEntity) {
-            Gallery.instance.galleryImageLoader?.displayGalleryPreview(galleryEntity, container)
-        }
+    fun addSelectAll(newList: ArrayList<ScanEntity>) {
+        selectList.clear()
+        selectList.addAll(newList)
+        notifyDataSetChanged()
     }
+
+    fun updateEntity() {
+        galleryList.forEach { it.isCheck = false }
+        selectList.forEach { select -> galleryList.find { it.id == select.id }?.isCheck = true }
+        notifyDataSetChanged()
+    }
+
+    fun isCheck(position: Int) = galleryList[position].isCheck
+
+    fun item(position: Int) = galleryList[position]
+
+    fun containsSelect(selectEntity: ScanEntity) = selectList.contains(selectEntity)
+
+    fun removeSelectEntity(removeEntity: ScanEntity) = selectList.remove(removeEntity)
+
+    fun addSelectEntity(addEntity: ScanEntity) = selectList.add(addEntity)
+
+    val currentSelectList: ArrayList<ScanEntity>
+        get() = selectList
 }
 

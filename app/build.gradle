@@ -20,9 +20,12 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
 
-    implementation 'com.ydevelop:gallery.ui:0.0.2'
-    implementation 'com.ydevelop:gallery.glide:0.0.2'
-    implementation project(':ext')
+    implementation project(path: ':ext')
+    implementation project(path: ':ui')
+    implementation project(path: ':glide')
+    implementation project(path: ':core')
+
+//    implementation "com.ydevelop:gallery.scan:$scanVersion"
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

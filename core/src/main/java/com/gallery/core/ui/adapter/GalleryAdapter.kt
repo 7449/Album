@@ -6,18 +6,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.action.GalleryAction
-import com.gallery.core.constant.GalleryInternalConst
+import com.gallery.core.callback.IGallery
+import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.scan.ScanEntity
+import com.xadapter.vh.XViewHolder
 
 class GalleryAdapter(
         private val display: Int,
         private val galleryBundle: GalleryBundle,
-        private val galleryAction: GalleryAction?,
+        private val galleryCallback: IGalleryCallback,
         private val galleryItemClickListener: OnGalleryItemClickListener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<XViewHolder>() {
 
     interface OnGalleryItemClickListener {
         fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanEntity)
@@ -29,54 +30,86 @@ class GalleryAdapter(
         private const val TYPE_PHOTO = 1
     }
 
-    var galleryList: ArrayList<ScanEntity> = ArrayList()
+    private val galleryList: ArrayList<ScanEntity> = ArrayList()
+    private val selectList: ArrayList<ScanEntity> = ArrayList()
 
-    var multipleList: ArrayList<ScanEntity> = ArrayList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
         return when (viewType) {
             TYPE_CAMERA -> {
-                val cameraView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_camera, parent, false)
+                val cameraView = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_camera, parent, false)
                 val cameraViewHolder = CameraViewHolder(cameraView, galleryBundle)
-                cameraView.setOnClickListener { v -> galleryItemClickListener.onCameraItemClick(v, cameraViewHolder.adapterPosition, galleryList[cameraViewHolder.adapterPosition]) }
+                cameraView.setOnClickListener { v -> galleryItemClickListener.onCameraItemClick(v, cameraViewHolder.bindingAdapterPosition, galleryList[cameraViewHolder.bindingAdapterPosition]) }
                 cameraViewHolder
             }
             else -> {
-                val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryAction)
-                photoView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.adapterPosition, galleryList[photoViewHolder.adapterPosition]) }
+                val photoView = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
+                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryCallback)
+                photoView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
                 photoViewHolder
             }
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is CameraViewHolder) {
-            holder.camera()
-        } else if (holder is PhotoViewHolder) {
-            holder.photo(position, galleryList[position], multipleList)
+    override fun onBindViewHolder(holder: XViewHolder, position: Int) {
+        when (holder) {
+            is CameraViewHolder -> holder.camera()
+            is PhotoViewHolder -> holder.photo(item(position), currentSelectList)
         }
     }
 
     override fun getItemCount(): Int = galleryList.size
 
     override fun getItemViewType(position: Int): Int = when {
-        galleryList.isEmpty() -> TYPE_PHOTO
-        galleryList[position].id == GalleryInternalConst.CAMERA_ID -> TYPE_CAMERA
-        else -> TYPE_PHOTO
+        galleryList.isEmpty() || galleryList[position].id != IGallery.CAMERA_PARENT_ID -> TYPE_PHOTO
+        else -> TYPE_CAMERA
+    }
+
+    fun cleanAll() {
+        galleryList.clear()
+        notifyDataSetChanged()
+    }
+
+    fun cleanSelectAll() {
+        selectList.clear()
+        notifyDataSetChanged()
     }
 
     fun addAll(newList: ArrayList<ScanEntity>) {
+        galleryList.clear()
         galleryList.addAll(newList)
         notifyDataSetChanged()
     }
 
-    fun removeAll() {
-        galleryList.clear()
+    fun addSelectAll(newList: ArrayList<ScanEntity>) {
+        selectList.clear()
+        selectList.addAll(newList)
         notifyDataSetChanged()
     }
+
+    fun updateEntity() {
+        currentList.forEach { it.isCheck = false }
+        selectList.forEach { select -> currentList.find { it.id == select.id }?.isCheck = true }
+        notifyDataSetChanged()
+    }
+
+    fun isCheck(position: Int) = galleryList[position].isCheck
+
+    fun item(position: Int) = galleryList[position]
+
+    fun containsSelect(selectEntity: ScanEntity) = selectList.contains(selectEntity)
+
+    fun removeSelectEntity(removeEntity: ScanEntity) = selectList.remove(removeEntity)
+
+    fun addSelectEntity(addEntity: ScanEntity) = selectList.add(addEntity)
+
+    fun addEntity(position: Int, entity: ScanEntity) = currentList.add(position, entity)
+
+    val isNotEmpty: Boolean
+        get() = galleryList.isNotEmpty()
+
+    val currentSelectList: ArrayList<ScanEntity>
+        get() = selectList
+
+    val currentList: ArrayList<ScanEntity>
+        get() = galleryList
 }

@@ -8,7 +8,6 @@ import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.gallery.scan.args.Columns
 import com.gallery.scan.args.CursorArgs
-import com.gallery.scan.args.ScanConst
 
 /**
  * @author y
@@ -26,10 +25,10 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
         args ?: throw KotlinNullPointerException("args == null")
         val parent = args.getLong(Columns.PARENT)
         val fileId = args.getLong(Columns.ID)
-        val scanType = args.getInt(Columns.SCAN_TYPE)
+        val scanType = args.getSerializable(Columns.SCAN_TYPE) as ScanType
         val selection = when {
             fileId != ID_DEFAULT -> CursorArgs.getResultSelection(fileId)
-            parent == ScanConst.ALL -> CursorArgs.ALL_SELECTION
+            parent == SCAN_ALL -> CursorArgs.ALL_SELECTION
             else -> CursorArgs.getParentSelection(parent)
         }
         return CursorLoader(context,

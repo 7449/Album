@@ -18,10 +18,6 @@ class GalleryUiBundle(
          */
         val preBackRefresh: Boolean = true,
         /**
-         * 预览页选择之后是否销毁上一页面
-         */
-        val preSelectOkFinish: Boolean = true,
-        /**
          * 状态栏颜色
          */
         @ColorRes
@@ -143,11 +139,6 @@ class GalleryUiBundle(
          * 预览页title
          */
         val preTitle: Int = R.string.preview_title,
-        /**
-         * 预览页ViewPager背景色
-         */
-        @ColorRes
-        val preBackground: Int = R.color.colorGalleryPreviewBackground,
         /**
          * 预览页底部提示栏背景色
          */

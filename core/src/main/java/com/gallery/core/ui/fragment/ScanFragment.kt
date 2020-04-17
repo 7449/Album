@@ -2,8 +2,6 @@ package com.gallery.core.ui.fragment
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
@@ -74,9 +72,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         galleryRootView.setBackgroundColor(color(galleryBundle.rootViewBackground))
-        val drawable = drawable(galleryBundle.photoEmptyDrawable)
-        drawable?.colorFilter = PorterDuffColorFilter(color(galleryBundle.photoEmptyDrawableColor), PorterDuff.Mode.SRC_ATOP)
-        galleryEmpty.setImageDrawable(drawable)
+        galleryEmpty.setImageDrawable(drawable(galleryBundle.photoEmptyDrawable))
         galleryEmpty.setOnClickListener { v ->
             if (galleryCallback.onEmptyPhotoClick(v)) {
                 startCamera()

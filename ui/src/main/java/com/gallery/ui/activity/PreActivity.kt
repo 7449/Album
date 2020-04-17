@@ -57,7 +57,7 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
                 return@setOnClickListener
             }
             Gallery.instance.galleryListener?.onGalleryResources(prevFragment().selectEntities)
-            isRefreshGalleryUI(isRefresh = false)
+            isRefreshGalleryUI(isRefresh = false, isFinish = true)
         }
     }
 
@@ -68,9 +68,8 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
         preBottomViewSelect.setTextColor(color(uiBundle.preBottomOkTextColor))
         preCount.textSize = uiBundle.preBottomCountTextSize
         preCount.setTextColor(color(uiBundle.preBottomCountTextColor))
-        preRootView.setBackgroundColor(color(uiBundle.preBackground))
         window.statusBarColor(color(uiBundle.statusBarColor))
-        preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh) }
+        preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
         preToolbar.setTitleTextColor(color(uiBundle.toolbarTextColor))
         val drawable = drawable(uiBundle.toolbarIcon)
         drawable?.colorFilter = PorterDuffColorFilter(color(uiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
@@ -99,13 +98,13 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
     }
 
     override fun onBackPressed() {
-        isRefreshGalleryUI(uiBundle.preBackRefresh)
+        isRefreshGalleryUI(uiBundle.preBackRefresh, false)
         super.onBackPressed()
     }
 
-    private fun isRefreshGalleryUI(isRefresh: Boolean) {
+    private fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean) {
         val intent = Intent()
-        intent.putExtras(prevFragment().resultBundle(isRefresh))
+        intent.putExtras(prevFragment().resultBundle(isRefresh, isFinish))
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

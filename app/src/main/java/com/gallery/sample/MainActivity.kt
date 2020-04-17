@@ -51,7 +51,7 @@ fun MainActivity.video() {
         galleryListener = GalleryListener(applicationContext, null)
     }.ui(this, GalleryBundle(
             scanType = ScanType.VIDEO,
-            cameraText = R.string.video_tips),
+            cameraText = getString(R.string.video_tips)),
             GalleryUiBundle(toolbarText = R.string.gallery_video_title))
 }
 

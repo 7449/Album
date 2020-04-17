@@ -1,7 +1,6 @@
 package com.gallery.core.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PermissionCode
@@ -130,7 +129,6 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         get() = preViewPager.currentItem
 
     override fun setCurrentItem(position: Int) {
-        Log.i("setCurrentItem", position.toString())
         setCurrentItem(position, false)
     }
 
@@ -138,10 +136,11 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preViewPager.setCurrentItem(position, flag)
     }
 
-    override fun resultBundle(isRefresh: Boolean): Bundle {
+    override fun resultBundle(isRefresh: Boolean, isFinish: Boolean): Bundle {
         val bundle = Bundle()
         bundle.putParcelableArrayList(IGalleryPrev.PREV_RESULT_SELECT, selectEntities)
         bundle.putBoolean(IGalleryPrev.PREV_RESULT_REFRESH, isRefresh)
+        bundle.putBoolean(IGalleryPrev.PREV_RESULT_FINISH, isFinish)
         return bundle
     }
 

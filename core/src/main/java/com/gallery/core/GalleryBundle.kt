@@ -31,6 +31,7 @@ data class GalleryBundle(
         val radio: Boolean = false,
         /**
          * 是否裁剪
+         * 只在[radio]true的情况下生效
          */
         val crop: Boolean = true,
         /**
@@ -48,16 +49,21 @@ data class GalleryBundle(
         val cameraPath: String? = null,
         /**
          * 裁剪路径
+         * 只在未拦截自定义裁剪生效,或使用者自定义裁剪使用
          */
         val uCropPath: String? = null,
         /**
          * 根目录名称,有的会出现0所以设置下
          */
-        val sdName: Int = R.string.gallery_sd_name,
+        val sdName: String = "根目录",
         /**
          * 全部图片
          */
-        val allName: Int = R.string.gallery_all_name,
+        val allName: String = "全部",
+        /**
+         * 相机提示文字
+         */
+        val cameraText: String = "",
         /**
          * 每行几张图片
          */
@@ -67,23 +73,19 @@ data class GalleryBundle(
          */
         val dividerWidth: Int = 8,
         /**
-         * 相机提示文字
-         */
-        val cameraText: Int = R.string.gallery_camera_text,
-        /**
          * 相机提示文字大小
          */
-        val cameraTextSize: Float = 18F,
-        /**
-         * 相机提示文字颜色
-         */
-        @ColorRes
-        val cameraTextColor: Int = R.color.colorGalleryContentViewTipsColor,
+        val cameraTextSize: Float = 16F,
         /**
          * 相机图片
          */
         @DrawableRes
         val cameraDrawable: Int = R.drawable.ic_camera_drawable,
+        /**
+         * 相机提示文字颜色
+         */
+        @ColorRes
+        val cameraTextColor: Int = R.color.colorGalleryContentViewTipsColor,
         /**
          * 相机图片背景色
          */
@@ -118,11 +120,6 @@ data class GalleryBundle(
          * 没有图片显示的占位图片
          */
         @DrawableRes
-        val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable,
-        /**
-         * 没有图片显示的占位图片背景色
-         */
-        @ColorRes
-        val photoEmptyDrawableColor: Int = R.color.colorGalleryContentEmptyDrawableColor
+        val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable
 ) : Parcelable
 

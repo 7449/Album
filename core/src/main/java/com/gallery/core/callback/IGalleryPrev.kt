@@ -57,6 +57,13 @@ interface IGalleryPrev {
         const val PREV_RESULT_REFRESH = "prevResultRefresh"
 
         /**
+         * [Boolean] Bundle key
+         * [Bundle.putBoolean]
+         * 预览页返回是否销毁
+         */
+        const val PREV_RESULT_FINISH = "prevResultFinish"
+
+        /**
          * 启动[PrevFragment] 的 request_code
          */
         const val PREV_START_REQUEST_CODE = 462
@@ -106,6 +113,6 @@ interface IGalleryPrev {
     /**
      * 获取预览页销毁时[Activity.setResult]的Bundle
      */
-    fun resultBundle(isRefresh: Boolean): Bundle
+    fun resultBundle(isRefresh: Boolean, isFinish: Boolean): Bundle
 
 }

@@ -1,6 +1,8 @@
 package com.gallery.ui.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
@@ -13,6 +15,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.PermissionCode
 import com.gallery.core.callback.IGallery
 import com.gallery.core.callback.IGalleryCallback
+import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.ext.*
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
@@ -62,7 +65,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
                 ?: ArrayList())
 
         galleryFinderAll.text = savedInstanceState?.getString(UIResult.FINDER_NAME)
-                ?: getString(galleryBundle.allName)
+                ?: galleryBundle.allName
 
         window.statusBarColor(color(galleryUiBundle.statusBarColor))
         galleryPre.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
@@ -155,8 +158,8 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
                 if (galleryFragment().parentId.isScanAll()) {
                     finderList.clear()
                     finderList.addAll(galleryFragment().currentEntities.findFinder(
-                            getString(galleryBundle.sdName),
-                            getString(galleryBundle.allName)
+                            galleryBundle.sdName,
+                            galleryBundle.allName
                     ))
                 }
                 if (finderList.isNotEmpty()) {
@@ -190,6 +193,15 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
     }
 
     override fun onGalleryResource(scanEntities: ArrayList<ScanEntity>) {
+    }
+
+    override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        if (resultCode == Activity.RESULT_OK && requestCode == IGalleryPrev.PREV_START_REQUEST_CODE) {
+            if (data?.extras.orEmpty().getBoolean(IGalleryPrev.PREV_RESULT_FINISH)) {
+                finish()
+            }
+        }
+        return super.onGalleryFragmentResult(requestCode, resultCode, data)
     }
 
     override fun onDisplayImageView(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {

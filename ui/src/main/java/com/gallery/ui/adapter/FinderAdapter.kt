@@ -8,11 +8,10 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import com.gallery.core.ext.color
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 
-class FinderAdapter(private val galleryUiBundle: GalleryUiBundle) : BaseAdapter() {
+class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
 
     var list: ArrayList<ScanEntity> = ArrayList()
         set(value) {
@@ -34,7 +33,7 @@ class FinderAdapter(private val galleryUiBundle: GalleryUiBundle) : BaseAdapter(
         }
         viewHolder.appCompatTextView.setTextColor(parent.context.color(galleryUiBundle.listPopupItemTextColor))
         viewHolder.appCompatTextView.text = String.format("%s(%s)", finderEntity.bucketDisplayName, finderEntity.count.toString())
-        Gallery.instance.galleryImageLoader?.onDisplayGalleryThumbnails(finderEntity, viewHolder.frameLayout)
+        displayFinder.invoke(finderEntity, viewHolder.frameLayout)
         return viewHolder.convertView
     }
 

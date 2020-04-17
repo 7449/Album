@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback {
 
     private val finderAdapter by lazy {
-        FinderAdapter(galleryUiBundle)
+        FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayImageFinder(finderEntity, container) }
     }
     private val listPopupWindow by lazy {
         ListPopupWindow(this)
@@ -206,6 +206,10 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
 
     override fun onDisplayImageView(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
         Gallery.instance.galleryImageLoader?.onDisplayGallery(width, height, galleryEntity, container)
+    }
+
+    open fun onDisplayImageFinder(finderEntity: ScanEntity, container: FrameLayout) {
+        Gallery.instance.galleryImageLoader?.onDisplayGalleryThumbnails(finderEntity, container)
     }
 
     override fun onClickCheckBoxFileNotExist() {

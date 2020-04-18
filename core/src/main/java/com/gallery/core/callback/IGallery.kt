@@ -97,10 +97,9 @@ interface IGallery {
 
     /**
      * 扫描设备
-     * [isFinder] 是否点击文件夹扫描
      * [result] 是否是拍照之后的扫描
      */
-    fun onScanGallery(parent: Long = SCAN_ALL, isFinder: Boolean = false, result: Boolean = false)
+    fun onScanGallery(parent: Long = SCAN_ALL, result: Boolean = false)
 
     /**
      * 刷新预览之后的数据

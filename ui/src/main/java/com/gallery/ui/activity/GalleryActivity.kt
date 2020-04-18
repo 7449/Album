@@ -175,11 +175,12 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
             return
         }
         galleryFinderAll.text = finder.bucketDisplayName
-        galleryFragment().onScanGallery(finder.parent, isFinder = true, result = false)
+        galleryFragment().onScanGallery(finder.parent, result = false)
         listPopupWindow.dismiss()
     }
 
-    override fun onCameraResult(scanEntity: ScanEntity?) {
+    override fun onScanResultSuccess(scanEntity: ScanEntity) {
+        finderList.updateResultFinder(galleryFragment().parentId, scanEntity)
     }
 
     override fun onBackPressed() {

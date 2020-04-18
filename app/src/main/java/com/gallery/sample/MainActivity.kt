@@ -8,17 +8,24 @@ import android.media.MediaScannerConnection.scanFile
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.gallery.core.CameraStatus
 import com.gallery.core.GalleryBundle
+import com.gallery.core.PermissionCode
 import com.gallery.core.callback.IGallery
-import com.gallery.core.ext.findUriByFile
-import com.gallery.core.ext.galleryPathFile
-import com.gallery.core.ext.openCamera
-import com.gallery.core.ext.uriToFilePath
+import com.gallery.core.callback.IGalleryCallback
+import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.ext.*
+import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.core.ui.widget.GalleryImageView
+import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
@@ -42,13 +49,23 @@ enum class Theme {
     PINK,
 }
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader {
 
     private var fileUri = Uri.EMPTY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true)), ScanFragment::class.java.simpleName)
+                    .commitAllowingStateLoss()
+        } else {
+            supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
+        }
+
         openCamera.setOnClickListener {
             fileUri = findUriByFile(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
             openCamera(fileUri, false)
@@ -119,6 +136,65 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         }
+    }
+
+    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
+        container.removeAllViews()
+        val imageView = GalleryImageView(container.context)
+        Glide.with(container.context)
+                .load(galleryEntity.externalUri())
+                .apply(RequestOptions()
+                        .placeholder(R.drawable.ic_gallery_default_loading)
+                        .error(R.drawable.ic_gallery_default_loading)
+                        .centerCrop()
+                        .override(width, height))
+                .into(imageView)
+        container.addView(imageView, FrameLayout.LayoutParams(width, height))
+    }
+
+    override fun onGalleryResource(scanEntities: ArrayList<ScanEntity>) {
+    }
+
+    override fun onClickCheckBoxFileNotExist() {
+    }
+
+    override fun onClickCheckBoxMaxCount() {
+    }
+
+    override fun onClickItemFileNotExist() {
+    }
+
+    override fun onChangedCheckBox(isSelect: Boolean, scanEntity: ScanEntity) {
+    }
+
+    override fun onChangedScreen(selectCount: Int) {
+    }
+
+    override fun onChangedPrevCount(selectCount: Int) {
+    }
+
+    override fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long) {
+    }
+
+    override fun onScanResultSuccess(scanEntity: ScanEntity) {
+    }
+
+    override fun onCameraCanceled() {
+    }
+
+    override fun onCameraResultError() {
+    }
+
+    override fun onCameraOpenStatus(status: CameraStatus) {
+    }
+
+    override fun onScanSuccessEmpty() {
+    }
+
+    override fun onOpenVideoPlayError() {
+    }
+
+    override fun onPermissionsDenied(type: PermissionCode) {
     }
 
 }

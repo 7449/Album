@@ -23,6 +23,7 @@ import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -75,6 +76,10 @@ fun Fragment.color(@ColorRes id: Int) = ContextCompat.getColor(requireActivity()
 
 //获取drawable
 fun Fragment.drawable(@DrawableRes id: Int) = ContextCompat.getDrawable(requireActivity(), id)
+
+//获取某个fragment or callback
+fun <T : Fragment> AppCompatActivity.findFragmentByTag(tag: String, ifNone: (String) -> T): T = supportFragmentManager.findFragmentByTag(tag) as T?
+        ?: ifNone(tag)
 
 //插入ContentValues
 fun Context.insertImage(contentValues: ContentValues) = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {

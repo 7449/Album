@@ -62,7 +62,7 @@ class GalleryAdapter(
     override fun getItemCount(): Int = galleryList.size
 
     override fun getItemViewType(position: Int): Int = when {
-        galleryList.isEmpty() || galleryList[position].id != IGallery.CAMERA_PARENT_ID -> TYPE_PHOTO
+        galleryList.isEmpty() || galleryList[position].parent != IGallery.CAMERA_PARENT_ID -> TYPE_PHOTO
         else -> TYPE_CAMERA
     }
 

@@ -144,7 +144,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         }
         galleryEmpty.hide()
         if (parentId.isScanAll() && !galleryBundle.hideCamera) {
-            arrayList.add(0, ScanEntity(id = IGallery.CAMERA_PARENT_ID))
+            arrayList.add(0, ScanEntity(parent = IGallery.CAMERA_PARENT_ID))
         }
         galleryAdapter.addAll(arrayList)
         galleryAdapter.updateEntity()
@@ -154,9 +154,13 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         if (scanEntity == null) {
             galleryCallback.onCameraResultError()
         } else {
-            galleryAdapter.addEntity(1, scanEntity)
+            if (parentId.isScanAll()) {
+                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, scanEntity)
+            } else if (parentId == scanEntity.parent) {
+                galleryAdapter.addEntity(0, scanEntity)
+            }
             galleryAdapter.notifyDataSetChanged()
-            galleryCallback.onCameraResult(scanEntity)
+            galleryCallback.onScanResultSuccess(scanEntity)
         }
     }
 
@@ -192,28 +196,29 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         galleryCallback.onPhotoItemClick(selectEntities, position, parentId)
     }
 
-    override fun onScanGallery(parent: Long, isFinder: Boolean, result: Boolean) {
+    override fun onScanGallery(parent: Long, result: Boolean) {
         this.parentId = parent
-        if (!permissionStorage()) {
-            return
-        }
+        // 如果本机没有图片,进来拍照直接走扫描全部的方法可以兼容到hideCamera
+        // resultSuccess只有在拍照成功并且之前数据不为空or裁剪成功才会回调
+        // 拍照成功之后不需要特殊处理,因为肯定是SCAN_ALL的情况下,直接更新数据即可
+        // 裁剪成功分为两种情况
+        // 第一种:SCAN_ALL情况下直接更新数据
+        // 第二种:parentId为文件夹ID的时候处理数据,如果 parentId == scan.id
+        // 可以直接插入到当前数据,如果不等于,不能插入,因为裁剪之后的图片属于另一个文件夹的数据
+        // 文件夹数据更新的时候也需要处理这种情况
         if (result && galleryAdapter.isNotEmpty) {
             scan.scanResult(requireActivity().findIdByUri(fileUri))
-            return
+        } else {
+            scan.scanParent(parent)
         }
-        scan.scanParent(parent)
     }
 
     override fun scanFile(type: ResultType, path: String) {
         MediaScannerConnection.scanFile(requireContext(), arrayOf(path), null) { _: String?, uri: Uri? ->
             runOnUiThread {
                 uri?.let {
-                    if (type == ResultType.CROP) {
-                        scan.scanResult(requireActivity().findIdByUri(it))
-                    } else {
-                        fileUri = it
-                        onScanGallery(parentId, isFinder = false, result = true)
-                    }
+                    fileUri = it
+                    onScanGallery(parentId, type == ResultType.CROP)
                 }
             }
         }
@@ -248,7 +253,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun permissionsGranted(type: PermissionCode) {
         when (type) {
-            PermissionCode.WRITE -> onScanGallery(parentId, isFinder = false, result = false)
+            PermissionCode.WRITE -> onScanGallery(parentId, result = false)
             PermissionCode.READ -> startCamera()
         }
     }
@@ -264,7 +269,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         get() = requireActivity()
 
     override val currentEntities: ArrayList<ScanEntity>
-        get() = galleryAdapter.currentList.filter { it.id != IGallery.CAMERA_PARENT_ID } as ArrayList<ScanEntity>
+        get() = galleryAdapter.currentList.filter { it.parent != IGallery.CAMERA_PARENT_ID } as ArrayList<ScanEntity>
 
     override val selectEntities: ArrayList<ScanEntity>
         get() = galleryAdapter.currentSelectList

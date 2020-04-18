@@ -64,9 +64,9 @@ interface IGalleryCallback {
     fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long)
 
     /**
-     * 拍照返回
+     * 拍照or裁剪返回
      */
-    fun onCameraResult(scanEntity: ScanEntity?)
+    fun onScanResultSuccess(scanEntity: ScanEntity)
 
     /**
      * 在[IGalleryInterceptor.onGalleryFragmentResult]为false的情况下会触发

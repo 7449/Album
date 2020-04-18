@@ -34,3 +34,51 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
     }
     return finderList
 }
+
+//裁剪或者拍照之后更新文件夹数据
+fun ArrayList<ScanEntity>.updateResultFinder(parentId: Long, scanEntity: ScanEntity) {
+    if (isEmpty()) {
+        return
+    }
+    val find = this.find { it.parent == scanEntity.parent }
+    if (find == null) {
+        this.add(1, scanEntity.copy(count = 1))
+        this.first().also {
+            it.id = scanEntity.id
+            it.size = scanEntity.size
+            it.duration = scanEntity.duration
+            it.parent = SCAN_ALL
+            it.mimeType = scanEntity.mimeType
+            it.displayName = scanEntity.displayName
+            it.orientation = scanEntity.orientation
+            it.bucketId = scanEntity.bucketId
+            it.bucketDisplayName = scanEntity.bucketDisplayName
+            it.mediaType = scanEntity.mediaType
+            it.width = scanEntity.width
+            it.height = scanEntity.height
+            it.dataModified = scanEntity.dataModified
+            it.count += 1
+            it.isCheck = scanEntity.isCheck
+        }
+    } else {
+        this.forEach {
+            if (it.parent.isScanAll() || it.parent == scanEntity.parent) {
+                it.id = scanEntity.id
+                it.size = scanEntity.size
+                it.duration = scanEntity.duration
+                it.parent = if (it.parent.isScanAll()) SCAN_ALL else scanEntity.parent
+                it.mimeType = scanEntity.mimeType
+                it.displayName = scanEntity.displayName
+                it.orientation = scanEntity.orientation
+                it.bucketId = scanEntity.bucketId
+                it.bucketDisplayName = scanEntity.bucketDisplayName
+                it.mediaType = scanEntity.mediaType
+                it.width = scanEntity.width
+                it.height = scanEntity.height
+                it.dataModified = scanEntity.dataModified
+                it.count += 1
+                it.isCheck = scanEntity.isCheck
+            }
+        }
+    }
+}

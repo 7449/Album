@@ -1,10 +1,10 @@
 package com.gallery.ui
 
+import android.graphics.Color
+import android.os.Bundle
 import android.os.Parcelable
-import android.view.View
-import androidx.annotation.ColorRes
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -18,34 +18,39 @@ class GalleryUiBundle(
          */
         val preBackRefresh: Boolean = true,
         /**
-         * 状态栏颜色
-         */
-        @ColorRes
-        val statusBarColor: Int = R.color.colorGalleryStatusBarColor,
-        /**
-         * toolbar背景色
-         */
-        @ColorRes
-        val toolbarBackground: Int = R.color.colorGalleryToolbarBackground,
-        /**
          * toolbar返回图标
          */
         @DrawableRes
         val toolbarIcon: Int = R.drawable.ic_gallery_ui_toolbar_back,
         /**
+         * 底部文件目录图标
+         */
+        @DrawableRes
+        val bottomFinderTextCompoundDrawable: Int = R.drawable.ic_gallery_ui_finder,
+        /**
+         * 状态栏颜色
+         */
+        @ColorInt
+        val statusBarColor: Int = Color.parseColor("#FF02A5D2"),
+        /**
+         * toolbar背景色
+         */
+        @ColorInt
+        val toolbarBackground: Int = Color.parseColor("#FF04B3E4"),
+        /**
          * toolbar返回图片颜色
          */
-        @ColorRes
-        val toolbarIconColor: Int = R.color.colorGalleryToolbarIconColor,
+        @ColorInt
+        val toolbarIconColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * toolbar title
          */
-        val toolbarText: Int = R.string.gallery_name,
+        val toolbarText: String = "图片选择",
         /**
          * toolbar title颜色
          */
-        @ColorRes
-        val toolbarTextColor: Int = R.color.colorGalleryToolbarTextColor,
+        @ColorInt
+        val toolbarTextColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * toolbar elevation
          */
@@ -53,36 +58,26 @@ class GalleryUiBundle(
         /**
          * 底部背景色
          */
-        @ColorRes
-        val bottomViewBackground: Int = R.color.colorGalleryBottomViewBackground,
+        @ColorInt
+        val bottomViewBackground: Int = Color.parseColor("#FF02A5D2"),
         /**
          * 底部文件目录文字大小
          */
         val bottomFinderTextSize: Float = 16F,
         /**
-         * 底部文件目录View背景色
-         */
-        @ColorRes
-        val bottomFinderTextBackground: Int = View.NO_ID,
-        /**
          * 底部文件目录文字颜色
          */
-        @ColorRes
-        val bottomFinderTextColor: Int = R.color.colorGalleryBottomFinderTextColor,
-        /**
-         * 底部文件目录图标
-         */
-        @DrawableRes
-        val bottomFinderTextCompoundDrawable: Int = R.drawable.ic_gallery_ui_finder,
+        @ColorInt
+        val bottomFinderTextColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * 底部文件目录图标颜色
          */
-        @ColorRes
-        val bottomFinderTextDrawableColor: Int = R.color.colorGalleryBottomFinderTextDrawableColor,
+        @ColorInt
+        val bottomFinderTextDrawableColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * 预览文字
          */
-        val bottomPreViewText: Int = R.string.gallery_preview,
+        val bottomPreViewText: String = "预览",
         /**
          * 预览文字大小
          */
@@ -90,16 +85,12 @@ class GalleryUiBundle(
         /**
          * 预览文字颜色
          */
-        @ColorRes
-        val bottomPreViewTextColor: Int = R.color.colorGalleryBottomPreViewTextColor,
-        /**
-         * 预览文字View背景色
-         */
-        val bottomPreviewTextBackground: Int = -1,
+        @ColorInt
+        val bottomPreViewTextColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * 选择文字
          */
-        val bottomSelectText: Int = R.string.gallery_select,
+        val bottomSelectText: String = "确定",
         /**
          * 选择文字大小
          */
@@ -107,12 +98,8 @@ class GalleryUiBundle(
         /**
          * 选择文字颜色
          */
-        @ColorRes
-        val bottomSelectTextColor: Int = R.color.colorGalleryBottomSelectTextColor,
-        /**
-         * 选择文字View背景色
-         */
-        val bottomSelectTextBackground: Int = -1,
+        @ColorInt
+        val bottomSelectTextColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * 目录View宽度
          */
@@ -128,37 +115,36 @@ class GalleryUiBundle(
         /**
          * 目录View背景色
          */
-        @ColorRes
-        val listPopupBackground: Int = R.color.colorGalleryListPopupBackground,
+        @ColorInt
+        val finderItemBackground: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * 目录View字体颜色
          */
-        @ColorRes
-        val listPopupItemTextColor: Int = R.color.colorGalleryListPopupItemTextColor,
+        @ColorInt
+        val finderItemTextColor: Int = Color.parseColor("#FF3D4040"),
         /**
          * 预览页title
          */
-        val preTitle: Int = R.string.preview_title,
+        val preTitle: String = "选择",
         /**
          * 预览页底部提示栏背景色
          */
-        @ColorRes
-        val preBottomViewBackground: Int = R.color.colorGalleryPreviewBottomViewBackground,
+        @ColorInt
+        val preBottomViewBackground: Int = Color.parseColor("#FF02A5D2"),
         /**
          * 预览页底部提示栏确认文字
          */
-        @StringRes
-        val preBottomOkText: Int = R.string.preview_select,
+        val preBottomOkText: String = "确定",
         /**
          * 预览页底部提示栏确认文字颜色
          */
-        @ColorRes
-        val preBottomOkTextColor: Int = R.color.colorGalleryPreviewBottomViewOkColor,
+        @ColorInt
+        val preBottomOkTextColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
-         * 预览页底部提示栏数字文字
+         * 预览页底部提示栏数字文字颜色
          */
-        @ColorRes
-        val preBottomCountTextColor: Int = R.color.colorGalleryPreviewBottomViewCountColor,
+        @ColorInt
+        val preBottomCountTextColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
          * 预览页底部提示栏确认文字大小
          */
@@ -166,5 +152,9 @@ class GalleryUiBundle(
         /**
          * 预览页底部提示栏数字文字大小
          */
-        val preBottomCountTextSize: Float = 16F
+        val preBottomCountTextSize: Float = 16F,
+        /**
+         * UCrop option
+         */
+        val uCropBundle: Bundle = Bundle.EMPTY
 ) : Parcelable

@@ -7,4 +7,6 @@ object UIResult {
     const val FINDER_LIST = "finderEntities"
 
     const val FINDER_NAME = "finderName"
+
+    const val PREV_RESULT_FINISH = "prevResultFinish"
 }

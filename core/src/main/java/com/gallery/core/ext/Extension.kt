@@ -149,9 +149,9 @@ fun Activity.square(count: Int): Int {
 }
 
 //获取Drawable
-fun Context.drawable(@DrawableRes id: Int, @ColorRes color: Int): Drawable {
+fun Context.drawable(@DrawableRes id: Int, @ColorInt color: Int): Drawable {
     val drawable = drawable(id) ?: throw KotlinNullPointerException()
-    drawable.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, color), PorterDuff.Mode.SRC_ATOP)
+    drawable.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
     return drawable
 }

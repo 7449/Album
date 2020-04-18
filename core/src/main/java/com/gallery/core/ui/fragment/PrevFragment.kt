@@ -5,9 +5,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PermissionCode
 import com.gallery.core.R
+import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.callback.IGalleryPrevCallback
-import com.gallery.core.ext.color
+import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ext.externalUri
 import com.gallery.core.ext.uriExists
 import com.gallery.core.ui.adapter.PrevAdapter
@@ -33,6 +34,20 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         }
     }
 
+    private val galleryPrevInterceptor by lazy {
+        when {
+            parentFragment is IGalleryPrevInterceptor -> parentFragment as IGalleryPrevInterceptor
+            activity is IGalleryPrevInterceptor -> activity as IGalleryPrevInterceptor
+            else -> object : IGalleryPrevInterceptor {}
+        }
+    }
+    private val galleryImageLoader by lazy {
+        when {
+            parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
+            activity is IGalleryImageLoader -> activity as IGalleryImageLoader
+            else -> object : IGalleryImageLoader {}
+        }
+    }
     private val galleryPrevCallback by lazy {
         when {
             parentFragment is IGalleryPrevCallback -> parentFragment as IGalleryPrevCallback
@@ -57,7 +72,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         }
     }
     private val adapter by lazy {
-        PrevAdapter { entity, container -> galleryPrevCallback.onDisplayImageView(entity, container) }
+        PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) }
     }
     private val galleryBundle by lazy {
         bundle.getParcelable(IGalleryPrev.PREV_START_CONFIG) ?: GalleryBundle()
@@ -75,7 +90,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preViewPager.adapter = adapter
         preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         preCheckBox.setOnClickListener { checkBoxClick() }
-        preRootView.setBackgroundColor(color(galleryBundle.prevPhotoBackgroundColor))
+        preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         adapter.cleanAll()
         adapter.addAll(bundle.getParcelableArrayList<ScanEntity>(IGalleryPrev.PREV_START_ALL) as ArrayList<ScanEntity>)
         adapter.addSelectAll((savedInstanceState
@@ -136,11 +151,10 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preViewPager.setCurrentItem(position, flag)
     }
 
-    override fun resultBundle(isRefresh: Boolean, isFinish: Boolean): Bundle {
+    override fun resultBundle(isRefresh: Boolean): Bundle {
         val bundle = Bundle()
         bundle.putParcelableArrayList(IGalleryPrev.PREV_RESULT_SELECT, selectEntities)
         bundle.putBoolean(IGalleryPrev.PREV_RESULT_REFRESH, isRefresh)
-        bundle.putBoolean(IGalleryPrev.PREV_RESULT_FINISH, isFinish)
         return bundle
     }
 

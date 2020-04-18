@@ -1,17 +1,16 @@
 package com.gallery.core.ui.adapter.vh
 
 import android.view.View
-import androidx.core.content.ContextCompat
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
+import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ext.externalUri
 import com.gallery.core.ext.show
 import com.gallery.core.ext.uriExists
 import com.gallery.scan.ScanEntity
 import com.xadapter.vh.XViewHolder
 import com.xadapter.vh.checkBox
-import com.xadapter.vh.context
 import com.xadapter.vh.frameLayout
 
 class PhotoViewHolder(itemView: View,
@@ -22,9 +21,9 @@ class PhotoViewHolder(itemView: View,
     private val container = frameLayout(R.id.galleryContainer)
     private val checkBox = checkBox(R.id.galleryCheckBox)
 
-    fun photo(galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
-        galleryCallback.onDisplayImageView(display, display, galleryEntity, container)
-        container.setBackgroundColor(ContextCompat.getColor(context, galleryBundle.photoBackgroundColor))
+    fun photo(galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
+        imageLoader.onDisplayGallery(display, display, galleryEntity, container)
+        container.setBackgroundColor(galleryBundle.photoBackgroundColor)
         if (galleryBundle.radio) {
             return
         }

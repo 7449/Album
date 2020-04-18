@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.gallery.core.ext
 
 import android.app.Activity
@@ -36,11 +34,18 @@ internal fun openCamera(root: Any, fileUri: Uri, video: Boolean): CameraStatus {
     return CameraStatus.SUCCESS
 }
 
+@Suppress("DEPRECATION")
 fun Context.galleryPathFile(path: String?, name: String, scanType: ScanType = ScanType.IMAGE): File {
     val suffix = if (scanType == ScanType.VIDEO) "mp4" else "jpg"
     val fileName = "${System.currentTimeMillis()}_$name.$suffix"
     if (hasQ()) {
-        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).path, name)
+        //Q不会用到该File,仅是为了不返回Null
+        //具体可见findUriByFile(file)
+        //val contentValues = ContentValues().apply {
+        //    put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+        //    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
+        //}
+        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).path, fileName)
     }
     if (path != null && path.isNotEmpty()) {
         val pathFile = File(path)

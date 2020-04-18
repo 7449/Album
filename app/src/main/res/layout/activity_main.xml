@@ -9,25 +9,25 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_day_gallery"
+            android:id="@+id/selectTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="day theme" />
+            android:text="select theme" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_night_gallery"
+            android:id="@+id/selectCrop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="night theme and customize camera" />
+            android:text="select and crop" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_open_camera"
+            android:id="@+id/openCamera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="open camera" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_video"
+            android:id="@+id/video"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="video" />

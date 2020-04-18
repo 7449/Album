@@ -3,11 +3,7 @@
 
 1. `UI`某些回调需要处理
 
-2. 图片加载框架需要更新
-
-3. `ext`需要更新
-
-4.  `core`需要再优化
+2. `core`需要再优化
 
 ## version
 
@@ -16,8 +12,6 @@ scan:![](https://api.bintray.com/packages/ydevelop/maven/gallery.scan/images/dow
 core:![](https://api.bintray.com/packages/ydevelop/maven/gallery.core/images/download.svg)
 
 ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/download.svg)
-
-glide:![](https://api.bintray.com/packages/ydevelop/maven/gallery.glide/images/download.svg)
 
 #### Manifests.xml
 

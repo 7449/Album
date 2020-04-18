@@ -1,12 +1,10 @@
 package com.gallery.core.callback
 
-import android.widget.FrameLayout
 import androidx.annotation.Px
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ui.fragment.PrevFragment
-import com.gallery.scan.ScanEntity
 
 /**
  *
@@ -27,12 +25,6 @@ interface IGalleryPrevCallback {
      * [ViewPager2.OnPageChangeCallback.onPageScrollStateChanged]
      */
     fun onPageScrollStateChanged(@ScrollState state: Int) {}
-
-    /**
-     * 加载图片
-     * [IGalleryImageLoader.onDisplayGalleryPrev]
-     */
-    fun onDisplayImageView(entity: ScanEntity, container: FrameLayout)
 
     /**
      * 已达到选择最大数

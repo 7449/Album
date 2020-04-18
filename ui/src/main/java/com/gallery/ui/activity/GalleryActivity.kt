@@ -10,27 +10,30 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.FrameLayout
 import androidx.appcompat.widget.ListPopupWindow
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.CameraStatus
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PermissionCode
-import com.gallery.core.callback.IGallery
-import com.gallery.core.callback.IGalleryCallback
-import com.gallery.core.callback.IGalleryPrev
+import com.gallery.core.callback.*
 import com.gallery.core.ext.*
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.adapter.FinderAdapter
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
-class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback {
+class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
+        View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor {
 
     private val finderAdapter by lazy {
-        FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayImageFinder(finderEntity, container) }
+        FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayGalleryThumbnails(finderEntity, container) }
     }
     private val listPopupWindow by lazy {
         ListPopupWindow(this)
@@ -45,6 +48,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
     }
 
     private val finderList = ArrayList<ScanEntity>()
+    private val requestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
 
     override fun initView() {
         galleryPre.setOnClickListener(this)
@@ -67,15 +71,15 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
         galleryFinderAll.text = savedInstanceState?.getString(UIResult.FINDER_NAME)
                 ?: galleryBundle.allName
 
-        window.statusBarColor(color(galleryUiBundle.statusBarColor))
+        window.statusBarColor(galleryUiBundle.statusBarColor)
         galleryPre.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
         gallerySelect.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
-        galleryToolbar.setTitle(galleryUiBundle.toolbarText)
-        galleryToolbar.setTitleTextColor(color(galleryUiBundle.toolbarTextColor))
+        galleryToolbar.title = galleryUiBundle.toolbarText
+        galleryToolbar.setTitleTextColor(galleryUiBundle.toolbarTextColor)
         val drawable = drawable(galleryUiBundle.toolbarIcon)
-        drawable?.setColorFilter(color(galleryUiBundle.toolbarIconColor), PorterDuff.Mode.SRC_ATOP)
+        drawable?.setColorFilter(galleryUiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         galleryToolbar.navigationIcon = drawable
-        galleryToolbar.setBackgroundColor(color(galleryUiBundle.toolbarBackground))
+        galleryToolbar.setBackgroundColor(galleryUiBundle.toolbarBackground)
         if (hasL()) {
             galleryToolbar.elevation = galleryUiBundle.toolbarElevation
         }
@@ -100,25 +104,16 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
     }
 
     private fun initBottomView() {
-        galleryBottomView.setBackgroundColor(color(galleryUiBundle.bottomViewBackground))
+        galleryBottomView.setBackgroundColor(galleryUiBundle.bottomViewBackground)
         galleryFinderAll.textSize = galleryUiBundle.bottomFinderTextSize
-        galleryFinderAll.setTextColor(color(galleryUiBundle.bottomFinderTextColor))
+        galleryFinderAll.setTextColor(galleryUiBundle.bottomFinderTextColor)
         galleryFinderAll.setCompoundDrawables(null, null, drawable(galleryUiBundle.bottomFinderTextCompoundDrawable, galleryUiBundle.bottomFinderTextDrawableColor), null)
-        if (galleryUiBundle.bottomFinderTextBackground != View.NO_ID) {
-            galleryFinderAll.setBackgroundResource(galleryUiBundle.bottomFinderTextBackground)
-        }
-        galleryPre.setText(galleryUiBundle.bottomPreViewText)
+        galleryPre.text = galleryUiBundle.bottomPreViewText
         galleryPre.textSize = galleryUiBundle.bottomPreViewTextSize
-        galleryPre.setTextColor(color(galleryUiBundle.bottomPreViewTextColor))
-        if (galleryUiBundle.bottomPreviewTextBackground != View.NO_ID) {
-            galleryPre.setBackgroundResource(galleryUiBundle.bottomPreviewTextBackground)
-        }
-        gallerySelect.setText(galleryUiBundle.bottomSelectText)
+        galleryPre.setTextColor(galleryUiBundle.bottomPreViewTextColor)
+        gallerySelect.text = galleryUiBundle.bottomSelectText
         gallerySelect.textSize = galleryUiBundle.bottomSelectTextSize
-        gallerySelect.setTextColor(color(galleryUiBundle.bottomSelectTextColor))
-        if (galleryUiBundle.bottomSelectTextBackground != View.NO_ID) {
-            gallerySelect.setBackgroundResource(galleryUiBundle.bottomSelectTextBackground)
-        }
+        gallerySelect.setTextColor(galleryUiBundle.bottomSelectTextColor)
     }
 
     private fun initFinderView() {
@@ -165,7 +160,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
                 if (finderList.isNotEmpty()) {
                     finderAdapter.list = finderList
                     listPopupWindow.show()
-                    listPopupWindow.listView?.setBackgroundColor(color(galleryUiBundle.listPopupBackground))
+                    listPopupWindow.listView?.setBackgroundColor(galleryUiBundle.finderItemBackground)
                     return
                 }
                 Gallery.instance.galleryListener?.onGalleryContainerFinderEmpty()
@@ -184,7 +179,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
         listPopupWindow.dismiss()
     }
 
-    override fun onPhotoResult(scanEntity: ScanEntity?) {
+    override fun onCameraResult(scanEntity: ScanEntity?) {
     }
 
     override fun onBackPressed() {
@@ -197,19 +192,25 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
 
     override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         if (resultCode == Activity.RESULT_OK && requestCode == IGalleryPrev.PREV_START_REQUEST_CODE) {
-            if (data?.extras.orEmpty().getBoolean(IGalleryPrev.PREV_RESULT_FINISH)) {
+            if (data?.extras.orEmpty().getBoolean(UIResult.PREV_RESULT_FINISH)) {
                 finish()
             }
         }
         return super.onGalleryFragmentResult(requestCode, resultCode, data)
     }
 
-    override fun onDisplayImageView(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
-        Gallery.instance.galleryImageLoader?.onDisplayGallery(width, height, galleryEntity, container)
+    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
+        container.removeAllViews()
+        val imageView = GalleryImageView(container.context)
+        Glide.with(container.context).load(galleryEntity.externalUri()).apply(requestOptions.override(width, height)).into(imageView)
+        container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
-    open fun onDisplayImageFinder(finderEntity: ScanEntity, container: FrameLayout) {
-        Gallery.instance.galleryImageLoader?.onDisplayGalleryThumbnails(finderEntity, container)
+    override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
+        container.removeAllViews()
+        val imageView = GalleryImageView(container.context)
+        Glide.with(container.context).load(finderEntity.externalUri()).apply(requestOptions).into(imageView)
+        container.addView(imageView)
     }
 
     override fun onClickCheckBoxFileNotExist() {
@@ -224,7 +225,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
     override fun onChangedCheckBox(isSelect: Boolean, scanEntity: ScanEntity) {
     }
 
-    override fun onScreenChanged(selectCount: Int) {
+    override fun onChangedScreen(selectCount: Int) {
     }
 
     override fun onChangedPrevCount(selectCount: Int) {
@@ -246,7 +247,14 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery), 
     override fun onCameraResultError() {
     }
 
-    override fun onOpenCameraStatus(status: CameraStatus) {
+    override fun onCameraOpenStatus(status: CameraStatus) {
+    }
+
+    override fun onUCropOptions(): UCrop.Options {
+        val uCropBundle = galleryUiBundle.uCropBundle
+        return if (uCropBundle.isEmpty) super.onUCropOptions() else UCrop.Options().apply {
+            this.optionBundle.putAll(uCropBundle)
+        }
     }
 
     override fun onUCropCanceled() {

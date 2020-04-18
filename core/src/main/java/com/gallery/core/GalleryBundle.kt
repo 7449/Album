@@ -1,7 +1,8 @@
 package com.gallery.core
 
+import android.graphics.Color
 import android.os.Parcelable
-import androidx.annotation.ColorRes
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
@@ -82,36 +83,6 @@ data class GalleryBundle(
         @DrawableRes
         val cameraDrawable: Int = R.drawable.ic_camera_drawable,
         /**
-         * 相机提示文字颜色
-         */
-        @ColorRes
-        val cameraTextColor: Int = R.color.colorGalleryContentViewTipsColor,
-        /**
-         * 相机图片背景色
-         */
-        @ColorRes
-        val cameraDrawableColor: Int = R.color.colorGalleryContentViewCameraDrawableColor,
-        /**
-         * 相机背景色
-         */
-        @ColorRes
-        val cameraBackgroundColor: Int = R.color.colorGalleryCameraBackgroundColor,
-        /**
-         * 图片背景色
-         */
-        @ColorRes
-        val photoBackgroundColor: Int = R.color.colorGalleryPhotoBackgroundColor,
-        /**
-         * 预览图片背景色
-         */
-        @ColorRes
-        val prevPhotoBackgroundColor: Int = R.color.colorGalleryPhotoBackgroundColor,
-        /**
-         * RootView背景色
-         */
-        @ColorRes
-        val rootViewBackground: Int = R.color.colorGalleryContentViewBackground,
-        /**
          * 选择框
          */
         @DrawableRes
@@ -120,6 +91,36 @@ data class GalleryBundle(
          * 没有图片显示的占位图片
          */
         @DrawableRes
-        val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable
+        val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable,
+        /**
+         * 相机提示文字颜色
+         */
+        @ColorInt
+        val cameraTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        /**
+         * 相机图片背景色
+         */
+        @ColorInt
+        val cameraDrawableColor: Int = Color.parseColor("#FF02A5D2"),
+        /**
+         * 相机背景色
+         */
+        @ColorInt
+        val cameraBackgroundColor: Int = Color.parseColor("#FFB0C9C9"),
+        /**
+         * 图片背景色
+         */
+        @ColorInt
+        val photoBackgroundColor: Int = Color.parseColor("#FFFFFFFF"),
+        /**
+         * 预览图片背景色
+         */
+        @ColorInt
+        val prevPhotoBackgroundColor: Int = Color.parseColor("#FFFFFFFF"),
+        /**
+         * RootView背景色
+         */
+        @ColorInt
+        val rootViewBackground: Int = Color.parseColor("#FFFFFFFF")
 ) : Parcelable
 

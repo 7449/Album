@@ -12,11 +12,11 @@ class CameraViewHolder(itemView: View, private val galleryBundle: GalleryBundle)
 
     fun camera() {
         val drawable = ContextCompat.getDrawable(context, galleryBundle.cameraDrawable)
-        drawable?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(context, galleryBundle.cameraDrawableColor), PorterDuff.Mode.SRC_ATOP)
+        drawable?.colorFilter = PorterDuffColorFilter(galleryBundle.cameraDrawableColor, PorterDuff.Mode.SRC_ATOP)
         textView(R.id.galleryImageCameraTv).text = galleryBundle.cameraText
         textView(R.id.galleryImageCameraTv).textSize = galleryBundle.cameraTextSize
-        textView(R.id.galleryImageCameraTv).setTextColor(ContextCompat.getColor(context, galleryBundle.cameraTextColor))
-        viewById(R.id.gallery_camera_root_view).setBackgroundColor(ContextCompat.getColor(context, galleryBundle.cameraBackgroundColor))
+        textView(R.id.galleryImageCameraTv).setTextColor(galleryBundle.cameraTextColor)
+        viewById(R.id.gallery_camera_root_view).setBackgroundColor(galleryBundle.cameraBackgroundColor)
         imageView(R.id.galleryImageCamera).setImageDrawable(drawable)
     }
 }

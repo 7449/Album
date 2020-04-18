@@ -3,7 +3,6 @@ package com.gallery.core.ext
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.args.Columns
@@ -28,9 +27,10 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
             finderList.add(item.copy(count = this.count { it.parent == item.parent }))
         }
     }
-    finderList.add(0, finderList.first().copy(parent = SCAN_ALL, count = this.size))
-    finderList.find { it.bucketDisplayName == "0" }?.bucketDisplayName = sdName
-    finderList.find { it.parent.isScanAll() }?.bucketDisplayName = allName
-    Log.i("findFinder", this.size.toString() + "  " + finderList.toString())
+    if (finderList.isNotEmpty()) {
+        finderList.add(0, finderList.first().copy(parent = SCAN_ALL, count = this.size))
+        finderList.find { it.bucketDisplayName == "0" }?.bucketDisplayName = sdName
+        finderList.find { it.parent.isScanAll() }?.bucketDisplayName = allName
+    }
     return finderList
 }

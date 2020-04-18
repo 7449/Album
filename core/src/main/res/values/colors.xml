@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorGalleryCameraBackgroundColor">#FFB0C9C9</color>
-    <color name="colorGalleryPhotoBackgroundColor">#FFFFFFFF</color>
-    <color name="colorGalleryContentViewTipsColor">#FFFFFFFF</color>
-    <color name="colorGalleryContentViewBackground">#FFFFFFFF</color>
-    <color name="colorGalleryContentViewCameraDrawableColor">#FF02A5D2</color>
-</resources>

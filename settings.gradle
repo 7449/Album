@@ -1,5 +1,5 @@
 //include ':scan'
-include ':glide'
+//include ':glide'
 include ':ext'
 include ':core'
 include ':ui'

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,8 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/galleryToolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/gallery_toolbar_height" />
+        android:layout_height="@dimen/gallery_toolbar_height"
+        app:contentInsetStartWithNavigation="0dp" />
 
     <FrameLayout
         android:id="@+id/galleryFrame"
@@ -20,9 +22,7 @@
     <RelativeLayout
         android:id="@+id/galleryBottomView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/gallery_bottom_height"
-        android:background="@color/colorGalleryBottomViewBackground">
-
+        android:layout_height="@dimen/gallery_bottom_height">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/galleryFinderAll"
@@ -34,8 +34,6 @@
             android:drawableRight="@drawable/ic_gallery_ui_finder"
             android:gravity="right|center_vertical"
             android:padding="@dimen/gallery_bottom_padding"
-            android:text="@string/gallery_all"
-            android:textColor="@color/colorGalleryBottomFinderTextColor"
             android:textSize="@dimen/gallery_bottom_text_size"
             tools:ignore="RtlHardcoded" />
 
@@ -50,10 +48,9 @@
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/gallery_bottom_padding"
-            android:text="@string/gallery_preview"
-            android:textColor="@color/colorGalleryBottomPreViewTextColor"
             android:textSize="@dimen/gallery_bottom_text_size"
-            tools:ignore="RelativeOverlap,RtlHardcoded" />
+            tools:ignore="RelativeOverlap,RtlHardcoded"
+            tools:text="预览" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/gallerySelect"
@@ -66,11 +63,9 @@
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/gallery_bottom_padding"
-            android:text="@string/gallery_select"
-            android:textColor="@color/colorGalleryBottomSelectTextColor"
             android:textSize="@dimen/gallery_bottom_text_size"
-            tools:ignore="RtlHardcoded" />
-
+            tools:ignore="RtlHardcoded"
+            tools:text="确定" />
 
     </RelativeLayout>
 

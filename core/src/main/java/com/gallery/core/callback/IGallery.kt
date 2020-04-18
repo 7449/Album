@@ -33,16 +33,17 @@ interface IGallery {
         internal const val GALLERY_START_IMAGE_URL = "galleryStartImageUri"
 
         /**
+         * 横竖屏切换时保存选中的数据
+         * [ArrayList<ScanEntity>] Bundle key
+         * [Bundle.putParcelableArrayList]
+         */
+        internal const val GALLERY_START_SELECT = "galleryStartSelectEntities"
+
+        /**
          * [GalleryBundle] Bundle key
          * [Bundle.putParcelable]
          */
         const val GALLERY_START_CONFIG = "galleryStartConfig"
-
-        /**
-         * [ArrayList<ScanEntity>] Bundle key
-         * [Bundle.putParcelableArrayList]
-         */
-        const val GALLERY_START_SELECT = "galleryStartSelectEntities"
 
         /**
          * 拍照的requestCode
@@ -105,7 +106,6 @@ interface IGallery {
      * 刷新预览之后的数据
      * [Bundle.getParcelableArrayList] 选中的数据
      * [Bundle.getBoolean] 是否刷新数据(合并选中的数据)
-     * 例如:toolbar back 可以不更新数据,back按键返回更新数据
      */
     fun onResultPreview(bundle: Bundle)
 

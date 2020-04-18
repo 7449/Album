@@ -4,138 +4,120 @@ package com.gallery.sample
 
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaScannerConnection.scanFile
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.Toast
+import androidx.annotation.ColorInt
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.gallery.ui.Gallery
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGallery
-import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ext.findUriByFile
+import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ext.openCamera
-import com.gallery.glide.GlideImageLoader
-import com.gallery.scan.ScanEntity
+import com.gallery.core.ext.uriToFilePath
 import com.gallery.scan.ScanType
-import com.gallery.scan.SingleMediaScanner
+import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.ui
 import com.yalantis.ucrop.UCrop
-import com.yalantis.ucrop.UCropFragment
-import com.yalantis.ucrop.UCropFragmentCallback
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
-fun MainActivity.dayGallery() {
-    Gallery.instance.apply {
-        galleryImageLoader = GlideImageLoader()
-        galleryListener = GalleryListener(applicationContext, list)
-    }.ui(this,
-            GalleryBundle(scanType = ScanType.IMAGE, checkBoxDrawable = R.drawable.simple_selector_gallery_item_check))
+fun String.show(activity: Activity) {
+    Toast.makeText(activity, this, Toast.LENGTH_SHORT).show()
 }
 
-fun MainActivity.nightGallery() {
-    Gallery.instance.apply {
-        galleryListener = GalleryListener(applicationContext, null)
-        galleryImageLoader = GlideImageLoader()
-    }.ui(this, GalleryTheme.NightGalleryBundle(), GalleryTheme.NightGalleryUIBundle())
+@ColorInt
+fun Int.color(activity: Activity): Int {
+    return ContextCompat.getColor(activity, this)
 }
 
-fun MainActivity.video() {
-    Gallery.instance.apply {
-        galleryImageLoader = GlideImageLoader()
-        galleryListener = GalleryListener(applicationContext, null)
-    }.ui(this, GalleryBundle(
-            scanType = ScanType.VIDEO,
-            cameraText = getString(R.string.video_tips)),
-            GalleryUiBundle(toolbarText = R.string.gallery_video_title))
+enum class Theme {
+    DEFAULT,
+    BLUE,
+    BLACK,
+    PINK,
 }
 
-fun MainActivity.startCamera() {
-    imagePath = findUriByFile(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
-    val i = openCamera(imagePath, false)
-    Log.d(javaClass.simpleName, i.toString())
-}
+class MainActivity : AppCompatActivity() {
 
-class SimpleSingleScannerListener : SingleMediaScanner.SingleScannerListener {
-    override fun onScanCompleted(type: Int, path: String?, uri: Uri?) {
-    }
-
-    override fun onScanStart() {}
-}
-
-class MainActivity : AppCompatActivity(), OnClickListener, UCropFragmentCallback {
-
-    lateinit var dayOptions: UCrop.Options
-    lateinit var nightOptions: UCrop.Options
-    lateinit var list: ArrayList<ScanEntity>
-    lateinit var imagePath: Uri
+    private var fileUri = Uri.EMPTY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        btn_day_gallery.setOnClickListener(this)
-        btn_night_gallery.setOnClickListener(this)
-        btn_open_camera.setOnClickListener(this)
-        btn_video.setOnClickListener(this)
-
-        dayOptions = UCrop.Options()
-        dayOptions.apply {
-            setToolbarTitle("DayTheme")
-            setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.colorGalleryToolbarBackground))
-            setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.colorGalleryStatusBarColor))
-            setActiveWidgetColor(ContextCompat.getColor(this@MainActivity, R.color.colorGalleryToolbarBackground))
+        openCamera.setOnClickListener {
+            fileUri = findUriByFile(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
+            openCamera(fileUri, false)
         }
-
-        nightOptions = UCrop.Options()
-        nightOptions.setToolbarTitle("NightTheme")
-        nightOptions.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.colorGalleryToolbarTextColorNight))
-        nightOptions.setToolbarColor(ContextCompat.getColor(this, R.color.colorGalleryToolbarBackgroundNight))
-        nightOptions.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorGalleryToolbarBackgroundNight))
-        nightOptions.setStatusBarColor(ContextCompat.getColor(this, R.color.colorGalleryStatusBarColorNight))
-
-        list = ArrayList()
-    }
-
-    override fun onClick(v: View) {
-        Gallery.destroy()
-        when (v.id) {
-            R.id.btn_day_gallery -> dayGallery()
-            R.id.btn_night_gallery -> nightGallery()
-            R.id.btn_open_camera -> startCamera()
-            R.id.btn_video -> video()
+        video.setOnClickListener {
+            Gallery.instance
+                    .apply {
+                        galleryListener = GalleryListener(applicationContext, null)
+                    }
+                    .ui(this,
+                            GalleryBundle(
+                                    scanType = ScanType.VIDEO,
+                                    cameraText = getString(R.string.video_tips)
+                            ),
+                            GalleryUiBundle(
+                                    toolbarText = getString(R.string.gallery_video_title)
+                            ))
         }
-    }
-
-    override fun onCropFinish(result: UCropFragment.UCropResult) {
-    }
-
-    override fun loadingProgress(showLoader: Boolean) {
+        selectCrop.setOnClickListener {
+            Gallery.instance
+                    .apply {
+                        galleryListener = GalleryListener(applicationContext, null)
+                    }
+                    .ui(this,
+                            GalleryTheme.cropThemeGallery(this),
+                            GalleryTheme.cropThemeGalleryUi(this))
+        }
+        selectTheme.setOnClickListener {
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
+                when (which) {
+                    0 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT))
+                    1 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE))
+                    2 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK))
+                    3 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK))
+                }
+                dialog.dismiss()
+            }.show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
-            Activity.RESULT_CANCELED -> {
-            }
-            UCrop.RESULT_ERROR -> {
-            }
-            Activity.RESULT_OK -> when (requestCode) {
-                IGallery.CAMERA_REQUEST_CODE -> {
-                    SingleMediaScanner(this, imagePath.path
-                            ?: "", 1, SimpleSingleScannerListener())
+            Activity.RESULT_CANCELED ->
+                when (requestCode) {
+                    UCrop.REQUEST_CROP -> "取消裁剪".show(this)
+                    IGallery.CAMERA_REQUEST_CODE -> "取消拍照".show(this)
                 }
-                UCrop.REQUEST_CROP -> {
-                    SingleMediaScanner(this, imagePath.path
-                            ?: "", 2, SimpleSingleScannerListener())
-                    Toast.makeText(applicationContext, imagePath.path, Toast.LENGTH_SHORT).show()
+            UCrop.RESULT_ERROR -> "裁剪异常".show(this)
+            Activity.RESULT_OK ->
+                when (requestCode) {
+                    IGallery.CAMERA_REQUEST_CODE -> {
+                        uriToFilePath(fileUri)?.let {
+                            scanFile(this, arrayOf(it), null) { path: String?, _: Uri? ->
+                                runOnUiThread {
+                                    path?.show(this)
+                                }
+                            }
+                        }
+//                        openCrop(fileUri)
+                    }
+                    UCrop.REQUEST_CROP -> {
+                        scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, uri: Uri? ->
+                            runOnUiThread {
+                                data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.show(this)
+                            }
+                        }
+                    }
                 }
-            }
         }
     }
 

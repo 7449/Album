@@ -1,16 +1,11 @@
 package com.gallery.core.callback
 
-import android.content.Intent
-import android.net.Uri
-import android.view.View
-import android.widget.FrameLayout
 import com.gallery.core.CameraStatus
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PermissionCode
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
-import com.yalantis.ucrop.UCrop
 
 /**
  *
@@ -18,28 +13,10 @@ import com.yalantis.ucrop.UCrop
 interface IGalleryCallback {
 
     /**
-     * 是否拦截[ScanFragment.onActivityResult]
-     * true 拦截
-     * 默认不拦截
-     */
-    fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean = false
-
-    /**
-     * 拍照返回
-     */
-    fun onPhotoResult(scanEntity: ScanEntity?)
-
-    /**
      * 单选状态下,点击Item返回的那条数据
      * [ScanFragment.onPhotoItemClick]
      */
     fun onGalleryResource(scanEntities: ArrayList<ScanEntity>)
-
-    /**
-     * 加载图片
-     * [IGalleryImageLoader.onDisplayGallery]
-     */
-    fun onDisplayImageView(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout)
 
     /**
      * 点击CheckBox时该文件已经被删除
@@ -72,7 +49,7 @@ interface IGalleryCallback {
      * 横竖屏切换时触发
      * [ScanFragment.onActivityCreated]
      */
-    fun onScreenChanged(selectCount: Int)
+    fun onChangedScreen(selectCount: Int)
 
     /**
      * 刷新预览页数据之后触发
@@ -87,19 +64,12 @@ interface IGalleryCallback {
     fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long)
 
     /**
-     * 自定义图片裁剪
-     *
-     * true 自定义
+     * 拍照返回
      */
-    fun onCustomPhotoCrop(uri: Uri): Boolean = false
+    fun onCameraResult(scanEntity: ScanEntity?)
 
     /**
-     * 无图片或视频时触发,true会自动打开相机
-     */
-    fun onEmptyPhotoClick(view: View): Boolean = true
-
-    /**
-     * 在[onGalleryFragmentResult]为false的情况下会触发
+     * 在[IGalleryInterceptor.onGalleryFragmentResult]为false的情况下会触发
      * 取消拍照
      */
     fun onCameraCanceled()
@@ -115,31 +85,7 @@ interface IGalleryCallback {
      * [CameraStatus.ERROR] 失败
      * [CameraStatus.PERMISSION] 权限被拒
      */
-    fun onOpenCameraStatus(status: CameraStatus)
-
-    /**
-     * 在[onCustomPhotoCrop]为false的情况下会触发
-     * [UCrop]的配置
-     */
-    fun onUCropOptions() = UCrop.Options()
-
-    /**
-     * 在[onGalleryFragmentResult]和[onCustomPhotoCrop]为false的情况下会触发
-     * 取消裁剪
-     */
-    fun onUCropCanceled()
-
-    /**
-     * 在[onGalleryFragmentResult]和[onCustomPhotoCrop]为false的情况下会触发
-     * 裁剪异常
-     */
-    fun onUCropError(throwable: Throwable?)
-
-    /**
-     * 在[onGalleryFragmentResult]和[onCustomPhotoCrop]为false的情况下会触发
-     * 裁剪成功
-     */
-    fun onUCropResources(uri: Uri)
+    fun onCameraOpenStatus(status: CameraStatus)
 
     /**
      * 没有扫描到任何数据

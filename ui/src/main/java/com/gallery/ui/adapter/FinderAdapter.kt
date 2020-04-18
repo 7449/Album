@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
-import com.gallery.core.ext.color
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
@@ -31,7 +30,7 @@ class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val di
         } else {
             viewHolder = convertView.tag as ViewHolder
         }
-        viewHolder.appCompatTextView.setTextColor(parent.context.color(galleryUiBundle.listPopupItemTextColor))
+        viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
         viewHolder.appCompatTextView.text = String.format("%s(%s)", finderEntity.bucketDisplayName, finderEntity.count.toString())
         displayFinder.invoke(finderEntity, viewHolder.frameLayout)
         return viewHolder.convertView

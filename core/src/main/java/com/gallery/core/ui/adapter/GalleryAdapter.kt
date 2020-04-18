@@ -8,6 +8,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGallery
 import com.gallery.core.callback.IGalleryCallback
+import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.scan.ScanEntity
@@ -17,6 +18,7 @@ class GalleryAdapter(
         private val display: Int,
         private val galleryBundle: GalleryBundle,
         private val galleryCallback: IGalleryCallback,
+        private val imageLoader: IGalleryImageLoader,
         private val galleryItemClickListener: OnGalleryItemClickListener
 ) : RecyclerView.Adapter<XViewHolder>() {
 
@@ -53,7 +55,7 @@ class GalleryAdapter(
     override fun onBindViewHolder(holder: XViewHolder, position: Int) {
         when (holder) {
             is CameraViewHolder -> holder.camera()
-            is PhotoViewHolder -> holder.photo(item(position), currentSelectList)
+            is PhotoViewHolder -> holder.photo(item(position), currentSelectList, imageLoader)
         }
     }
 

@@ -1,6 +1,5 @@
 package com.gallery.ui
 
-import android.net.Uri
 import com.gallery.scan.ScanEntity
 
 /**
@@ -25,14 +24,14 @@ interface OnGalleryListener {
     fun onGalleryContainerFinderEmpty()
 
     /**
-     * fragment 依赖的activity或者dialog 预览页点击确定但是没有选中图片
+     *  预览页点击确定但是没有选中图片
      */
     fun onGalleryContainerPreSelectEmpty()
 
     /**
      * 选择图片
      */
-    fun onGalleryResources(list: List<ScanEntity>)
+    fun onGalleryResources(entities: List<ScanEntity>)
 
     /**
      * 点击预览但是未选择图片
@@ -45,72 +44,8 @@ interface OnGalleryListener {
     fun onGallerySelectEmpty()
 
     /**
-     * 权限被拒
-     */
-    fun onGalleryPermissionsDenied(type: Int)
-
-    /**
      * 预览页滑动但图片不存在
      */
     fun onGalleryPreFileNotExist()
 
-    /**
-     * 点击图片时图片不存在
-     */
-    fun onGalleryFileNotExist()
-
-    /**
-     * 多选图片时图片不存在
-     */
-    fun onGalleryCheckFileNotExist()
-
-    /**
-     * 取消裁剪
-     */
-    fun onGalleryCropCanceled()
-
-    /**
-     * 取消拍照
-     */
-    fun onGalleryCameraCanceled()
-
-    /**
-     * 裁剪错误
-     */
-    fun onGalleryUCropError(data: Throwable?)
-
-    /**
-     * 裁剪成功
-     */
-    fun onGalleryUCropResources(uri: Uri)
-
-    /**
-     * 已达多选最大数
-     */
-    fun onGalleryMaxCount()
-
-    /**
-     * 打开相机错误
-     */
-    fun onGalleryOpenCameraError()
-
-    /**
-     * 没有扫描到图片
-     */
-    fun onGalleryEmpty()
-
-    /**
-     * 拍照返回错误
-     */
-    fun onGalleryResultCameraError()
-
-    /**
-     * 视频播放错误
-     */
-    fun onGalleryVideoPlayError()
-
-    /**
-     * CheckBox选择时调用
-     */
-    fun onGalleryCheckBox(selectCount: Int, maxCount: Int)
 }

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gallery.sample">
-
+    <!--        android:requestLegacyExternalStorage="true"-->
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"

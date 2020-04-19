@@ -32,7 +32,7 @@ object GalleryTheme {
                 return GalleryBundle(
                         cameraDrawableColor = R.color.colorGray.color(activity),
                         cameraBackgroundColor = R.color.colorBlack.color(activity),
-                        rootViewBackground = R.color.colorBlack.color(activity),
+                        galleryRootBackground = R.color.colorBlack.color(activity),
                         prevPhotoBackgroundColor = R.color.colorBlack.color(activity)
                 )
             }
@@ -93,7 +93,7 @@ object GalleryTheme {
                 cameraCrop = true,
                 cameraDrawableColor = R.color.colorGray.color(activity),
                 cameraBackgroundColor = R.color.colorBlack.color(activity),
-                rootViewBackground = R.color.colorBlack.color(activity)
+                galleryRootBackground = R.color.colorBlack.color(activity)
         )
     }
 

@@ -16,6 +16,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.View
@@ -53,6 +54,10 @@ fun View.show() = let { if (!hasVisible()) visibility = View.VISIBLE }
 
 //View隐藏
 fun View.hide() = let { if (hasVisible()) visibility = View.GONE }
+
+//getParcelableArrayList
+inline fun <reified T : Parcelable> Activity.getParcelableArrayList(key: String) = intent.extras?.getParcelableArrayList(key)
+        ?: ArrayList<T>()
 
 //如果Bundle为Null则返回一个空的Bundle
 fun Bundle?.orEmpty() = this ?: Bundle.EMPTY
@@ -199,3 +204,9 @@ fun Context.findUriByFile(file: File) = insertImage(ContentValues().apply {
 fun AppCompatActivity.findFragmentByTag(tag: String, of: (fragment: Fragment?) -> Unit) {
     of.invoke(supportFragmentManager.findFragmentByTag(tag))
 }
+
+//showFragment
+fun AppCompatActivity.showFragment(fragment: Fragment) = supportFragmentManager.beginTransaction().show(fragment).commitAllowingStateLoss()
+
+//addFragment
+fun AppCompatActivity.addFragment(id: Int, fragment: Fragment) = supportFragmentManager.beginTransaction().add(id, fragment, fragment.javaClass.simpleName).commitAllowingStateLoss()

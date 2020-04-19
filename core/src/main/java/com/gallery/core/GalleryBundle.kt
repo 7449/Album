@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import kotlinx.android.parcel.Parcelize
@@ -66,6 +67,10 @@ data class GalleryBundle(
          */
         val cameraText: String = "",
         /**
+         * 相机提示文字大小
+         */
+        val cameraTextSize: Float = 16F,
+        /**
          * 每行几张图片
          */
         val spanCount: Int = 3,
@@ -73,10 +78,6 @@ data class GalleryBundle(
          * 分割线宽度
          */
         val dividerWidth: Int = 8,
-        /**
-         * 相机提示文字大小
-         */
-        val cameraTextSize: Float = 16F,
         /**
          * 相机图片
          */
@@ -118,9 +119,9 @@ data class GalleryBundle(
         @ColorInt
         val prevPhotoBackgroundColor: Int = Color.parseColor("#FFFFFFFF"),
         /**
-         * RootView背景色
+         * [ScanFragment]RootView背景色
          */
         @ColorInt
-        val rootViewBackground: Int = Color.parseColor("#FFFFFFFF")
+        val galleryRootBackground: Int = Color.parseColor("#FFFFFFFF")
 ) : Parcelable
 

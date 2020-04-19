@@ -88,7 +88,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        galleryRootView.setBackgroundColor(galleryBundle.rootViewBackground)
+        galleryRootView.setBackgroundColor(galleryBundle.galleryRootBackground)
         galleryEmpty.setImageDrawable(drawable(galleryBundle.photoEmptyDrawable))
         galleryEmpty.setOnClickListener { v ->
             if (galleryInterceptor.onEmptyPhotoClick(v)) {

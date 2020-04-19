@@ -1,10 +1,7 @@
 package com.gallery.ui.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -24,6 +21,7 @@ import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.adapter.FinderAdapter
+import com.gallery.ui.obtain
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
@@ -35,7 +33,15 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayGalleryThumbnails(finderEntity, container) }
     }
     private val listPopupWindow by lazy {
-        ListPopupWindow(this)
+        ListPopupWindow(this).apply {
+            this.anchorView = galleryFinderAll
+            this.width = galleryUiBundle.listPopupWidth
+            this.horizontalOffset = galleryUiBundle.listPopupHorizontalOffset
+            this.verticalOffset = galleryUiBundle.listPopupVerticalOffset
+            this.isModal = true
+            this.setOnItemClickListener(this@GalleryActivity)
+            this.setAdapter(finderAdapter)
+        }
     }
     private val galleryBundle by lazy {
         intent.extras?.getParcelable(IGallery.GALLERY_START_CONFIG)
@@ -49,21 +55,19 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     private val finderList = ArrayList<ScanEntity>()
     private val requestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
 
-    override fun initView() {
-        galleryPre.setOnClickListener(this)
-        gallerySelect.setOnClickListener(this)
-        galleryFinderAll.setOnClickListener(this)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(UIResult.FINDER_LIST, finderList)
         outState.putString(UIResult.FINDER_NAME, galleryFinderAll.text.toString())
     }
 
-    @SuppressLint("NewApi")
-    override fun initCreate(savedInstanceState: Bundle?) {
-        window.statusBarColor(galleryUiBundle.statusBarColor)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        obtain(galleryUiBundle)
+
+        galleryPre.setOnClickListener(this)
+        gallerySelect.setOnClickListener(this)
+        galleryFinderAll.setOnClickListener(this)
 
         finderList.addAll(savedInstanceState?.getParcelableArrayList(UIResult.FINDER_LIST)
                 ?: ArrayList())
@@ -73,76 +77,40 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
         galleryPre.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
         gallerySelect.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
+
         galleryToolbar.title = galleryUiBundle.toolbarText
-        galleryToolbar.setTitleTextColor(galleryUiBundle.toolbarTextColor)
-        val drawable = drawable(galleryUiBundle.toolbarIcon)
-        drawable?.colorFilter = PorterDuffColorFilter(galleryUiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        galleryToolbar.navigationIcon = drawable
-        galleryToolbar.setBackgroundColor(galleryUiBundle.toolbarBackground)
-        if (hasL()) {
-            galleryToolbar.elevation = galleryUiBundle.toolbarElevation
-        }
         galleryToolbar.setNavigationOnClickListener { finish() }
 
         findFragmentByTag(ScanFragment::class.java.simpleName) {
             if (it == null) {
-                supportFragmentManager
-                        .beginTransaction()
-                        .add(R.id.galleryFrame, ScanFragment.newInstance(galleryBundle), ScanFragment::class.java.simpleName)
-                        .commitAllowingStateLoss()
+                addFragment(R.id.galleryFrame, ScanFragment.newInstance(galleryBundle))
             } else {
-                supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
+                showFragment(it)
             }
         }
-
-        initBottomView()
-        initFinderView()
-    }
-
-    private fun initBottomView() {
-        galleryBottomView.setBackgroundColor(galleryUiBundle.bottomViewBackground)
-        galleryFinderAll.textSize = galleryUiBundle.bottomFinderTextSize
-        galleryFinderAll.setTextColor(galleryUiBundle.bottomFinderTextColor)
-        galleryFinderAll.setCompoundDrawables(null, null, drawable(galleryUiBundle.bottomFinderTextCompoundDrawable, galleryUiBundle.bottomFinderTextDrawableColor), null)
-        galleryPre.text = galleryUiBundle.bottomPreViewText
-        galleryPre.textSize = galleryUiBundle.bottomPreViewTextSize
-        galleryPre.setTextColor(galleryUiBundle.bottomPreViewTextColor)
-        gallerySelect.text = galleryUiBundle.bottomSelectText
-        gallerySelect.textSize = galleryUiBundle.bottomSelectTextSize
-        gallerySelect.setTextColor(galleryUiBundle.bottomSelectTextColor)
-    }
-
-    private fun initFinderView() {
-        listPopupWindow.anchorView = galleryFinderAll
-        listPopupWindow.width = galleryUiBundle.listPopupWidth
-        listPopupWindow.horizontalOffset = galleryUiBundle.listPopupHorizontalOffset
-        listPopupWindow.verticalOffset = galleryUiBundle.listPopupVerticalOffset
-        listPopupWindow.isModal = true
-        listPopupWindow.setOnItemClickListener(this)
-        listPopupWindow.setAdapter(finderAdapter)
     }
 
     override fun onClick(v: View) {
         when (v.id) {
             R.id.galleryPre -> {
-                if (galleryFragment().selectEmpty) {
+                if (galleryFragment.selectEmpty) {
                     onGalleryPreEmpty()
                     return
                 }
                 PreActivity.newInstance(
-                        galleryFragment(),
-                        galleryFragment().selectEntities,
-                        galleryFragment().selectEntities,
+                        galleryFragment,
+                        galleryFragment.selectEntities,
+                        galleryFragment.selectEntities,
                         galleryBundle,
                         galleryUiBundle,
                         0
                 )
             }
-            R.id.gallerySelect -> onGalleryResources(galleryFragment().selectEntities)
+            R.id.gallerySelect -> onGalleryResources(galleryFragment.selectEntities)
             R.id.galleryFinderAll -> {
-                if (galleryFragment().parentId.isScanAll()) {
+                if (galleryFragment.parentId.isScanAll()) {
                     finderList.clear()
-                    finderList.addAll(galleryFragment().currentEntities.findFinder(
+                    finderList.addAll(galleryFragment.currentEntities.findFinder(
                             galleryBundle.sdName,
                             galleryBundle.allName
                     ))
@@ -160,12 +128,12 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val finder = finderAdapter.getItem(position)
-        if (finder.parent == galleryFragment().parentId) {
+        if (finder.parent == galleryFragment.parentId) {
             listPopupWindow.dismiss()
             return
         }
         galleryFinderAll.text = finder.bucketDisplayName
-        galleryFragment().onScanGallery(finder.parent, result = false)
+        galleryFragment.onScanGallery(finder.parent, result = false)
         listPopupWindow.dismiss()
     }
 
@@ -189,8 +157,8 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
     override fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long) {
         PreActivity.newInstance(
-                galleryFragment(),
-                galleryFragment().currentEntities,
+                galleryFragment,
+                galleryFragment.currentEntities,
                 selectEntities,
                 galleryBundle,
                 galleryUiBundle,
@@ -198,7 +166,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onScanResultSuccess(scanEntity: ScanEntity) {
-        finderList.updateResultFinder(galleryFragment().parentId, scanEntity)
+        finderList.updateResultFinder(galleryFragment.parentId, scanEntity)
     }
 
     override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {

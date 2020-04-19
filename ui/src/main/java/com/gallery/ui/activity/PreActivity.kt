@@ -2,8 +2,6 @@ package com.gallery.ui.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
@@ -11,10 +9,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.callback.IGalleryPrevCallback
-import com.gallery.core.ext.drawable
-import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.hasL
-import com.gallery.core.ext.statusBarColor
+import com.gallery.core.ext.*
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
@@ -23,6 +18,7 @@ import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
+import com.gallery.ui.obtain
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader {
@@ -52,48 +48,31 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
         intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG) ?: GalleryBundle()
     }
 
-    override fun initView() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        obtain(uiBundle)
+
         preBottomViewSelect.setOnClickListener {
-            onGalleryResources(prevFragment().selectEntities)
-            if (!prevFragment().selectEmpty) {
+            onGalleryResources(prevFragment.selectEntities)
+            if (!prevFragment.selectEmpty) {
                 isRefreshGalleryUI(isRefresh = false, isFinish = true)
             }
         }
-    }
-
-    override fun initCreate(savedInstanceState: Bundle?) {
-        preBottomView.setBackgroundColor(uiBundle.preBottomViewBackground)
-        preBottomViewSelect.text = uiBundle.preBottomOkText
-        preBottomViewSelect.textSize = uiBundle.preBottomOkTextSize
-        preBottomViewSelect.setTextColor(uiBundle.preBottomOkTextColor)
-        preCount.textSize = uiBundle.preBottomCountTextSize
-        preCount.setTextColor(uiBundle.preBottomCountTextColor)
-        window.statusBarColor(uiBundle.statusBarColor)
         preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
-        preToolbar.setTitleTextColor(uiBundle.toolbarTextColor)
-        val drawable = drawable(uiBundle.toolbarIcon)
-        drawable?.colorFilter = PorterDuffColorFilter(uiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        preToolbar.navigationIcon = drawable
-        preToolbar.setBackgroundColor(uiBundle.toolbarBackground)
         preCount.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
-        if (hasL()) {
-            preToolbar.elevation = uiBundle.toolbarElevation
-        }
-        if (supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.preFragment, PrevFragment.newInstance(
-                            intent.extras?.getParcelableArrayList(IGalleryPrev.PREV_START_ALL)
-                                    ?: ArrayList(),
-                            intent.extras?.getParcelableArrayList(IGalleryPrev.PREV_START_SELECT)
-                                    ?: ArrayList(),
-                            intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG)
-                                    ?: GalleryBundle(),
-                            intent.extras?.getInt(IGalleryPrev.PREV_START_POSITION) ?: 0
-                    ), PrevFragment::class.java.simpleName)
-                    .commitAllowingStateLoss()
-        } else {
-            supportFragmentManager.beginTransaction().show(prevFragment()).commitAllowingStateLoss()
+
+        findFragmentByTag(PrevFragment::class.java.simpleName) {
+            if (it == null) {
+                addFragment(R.id.preFragment, PrevFragment.newInstance(
+                        getParcelableArrayList(IGalleryPrev.PREV_START_ALL),
+                        getParcelableArrayList(IGalleryPrev.PREV_START_SELECT),
+                        intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG)
+                                ?: GalleryBundle(),
+                        intent.extras?.getInt(IGalleryPrev.PREV_START_POSITION) ?: 0
+                ))
+            } else {
+                showFragment(it)
+            }
         }
     }
 
@@ -104,7 +83,7 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
 
     private fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean) {
         val intent = Intent()
-        val resultBundle = prevFragment().resultBundle(isRefresh)
+        val resultBundle = prevFragment.resultBundle(isRefresh)
         resultBundle.putBoolean(UIResult.PREV_RESULT_FINISH, isFinish)
         intent.putExtras(resultBundle)
         setResult(Activity.RESULT_OK, intent)
@@ -119,15 +98,15 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
     }
 
     override fun onPageSelected(position: Int) {
-        preToolbar.title = uiBundle.preTitle + "(" + (position + 1) + "/" + prevFragment().itemCount + ")"
+        preToolbar.title = uiBundle.preTitle + "(" + (position + 1) + "/" + prevFragment.itemCount + ")"
     }
 
     override fun onChangedCreated() {
-        preToolbar.title = uiBundle.preTitle + "(" + (prevFragment().currentPosition + 1) + "/" + prevFragment().itemCount + ")"
+        preToolbar.title = uiBundle.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
     override fun onChangedCheckBox() {
-        preCount.text = "%s / %s".format(prevFragment().selectCount.toString(), galleryBundle.multipleMaxCount)
+        preCount.text = "%s / %s".format(prevFragment.selectCount.toString(), galleryBundle.multipleMaxCount)
     }
 
     /**

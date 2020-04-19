@@ -21,16 +21,17 @@ import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.adapter.FinderAdapter
+import com.gallery.ui.callback.IGalleryRootCallback
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
 class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
-        View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor {
+        View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback,
+        IGalleryImageLoader, IGalleryInterceptor, IGalleryRootCallback {
 
     private val finderAdapter by lazy {
         FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayGalleryThumbnails(finderEntity, container) }
@@ -84,7 +85,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
             galleryToolbar.elevation = galleryUiBundle.toolbarElevation
         }
         galleryToolbar.setNavigationOnClickListener {
-            Gallery.instance.galleryListener?.onGalleryContainerFinish()
+            onGalleryRootFinish()
             finish()
         }
         initFragment()
@@ -130,7 +131,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
         when (v.id) {
             R.id.galleryPre -> {
                 if (galleryFragment().selectEmpty) {
-                    Gallery.instance.galleryListener?.onGalleryPreEmpty()
+                    onGalleryPreEmpty()
                     return
                 }
                 PreActivity.newInstance(
@@ -144,10 +145,10 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
             }
             R.id.gallerySelect -> {
                 if (galleryFragment().selectEmpty) {
-                    Gallery.instance.galleryListener?.onGallerySelectEmpty()
+                    onGallerySelectEmpty()
                     return
                 }
-                Gallery.instance.galleryListener?.onGalleryResources(galleryFragment().selectEntities)
+                onGalleryResources(galleryFragment().selectEntities)
             }
             R.id.galleryFinderAll -> {
                 if (galleryFragment().parentId.isScanAll()) {
@@ -163,7 +164,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
                     listPopupWindow.listView?.setBackgroundColor(galleryUiBundle.finderItemBackground)
                     return
                 }
-                Gallery.instance.galleryListener?.onGalleryContainerFinderEmpty()
+                onGalleryFinderEmpty()
             }
         }
     }
@@ -184,7 +185,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
     }
 
     override fun onBackPressed() {
-        Gallery.instance.galleryListener?.onGalleryContainerBackPressed()
+        onGalleryRootFinish()
         super.onBackPressed()
     }
 
@@ -274,5 +275,23 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
     }
 
     override fun onPermissionsDenied(type: PermissionCode) {
+    }
+
+    override fun onGalleryRootFinish() {
+    }
+
+    override fun onGalleryRootBackPressed() {
+    }
+
+    override fun onGalleryPreEmpty() {
+    }
+
+    override fun onGallerySelectEmpty() {
+    }
+
+    override fun onGalleryFinderEmpty() {
+    }
+
+    override fun onGalleryResources(entities: List<ScanEntity>) {
     }
 }

@@ -20,6 +20,7 @@ import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -64,6 +65,12 @@ fun Uri?.orEmpty() = this ?: Uri.EMPTY
 
 //判断颜色是否为亮色
 fun Int.isLightColor() = ColorUtils.calculateLuminance(this) >= 0.5
+
+//toast
+fun String.show(activity: Activity) = Toast.makeText(activity, this, Toast.LENGTH_SHORT).show()
+
+//ColorInt
+fun Int.color(activity: Activity) = ContextCompat.getColor(activity, this)
 
 //获取color
 fun Context.color(@ColorRes id: Int) = ContextCompat.getColor(this, id)

@@ -20,13 +20,13 @@ import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
+import com.gallery.ui.callback.IGalleryPrevRootCallback
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
-class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGalleryPrevCallback, IGalleryImageLoader {
+class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevRootCallback {
 
     companion object {
         fun newInstance(
@@ -56,10 +56,10 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
     override fun initView() {
         preBottomViewSelect.setOnClickListener {
             if (prevFragment().selectEmpty) {
-                Gallery.instance.galleryListener?.onGalleryContainerPreSelectEmpty()
+                onGalleryPreRootSelectEmpty()
                 return@setOnClickListener
             }
-            Gallery.instance.galleryListener?.onGalleryResources(prevFragment().selectEntities)
+            onGalleryResources(prevFragment().selectEntities)
             isRefreshGalleryUI(isRefresh = false, isFinish = true)
         }
     }
@@ -137,6 +137,12 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
 
     override fun onChangedCheckBox() {
         preCount.text = "%s / %s".format(prevFragment().selectCount.toString(), galleryBundle.multipleMaxCount)
+    }
+
+    override fun onGalleryPreRootSelectEmpty() {
+    }
+
+    override fun onGalleryResources(entities: List<ScanEntity>) {
     }
 
 }

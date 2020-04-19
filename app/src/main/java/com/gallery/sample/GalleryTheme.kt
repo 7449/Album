@@ -5,6 +5,7 @@ package com.gallery.sample
 import android.app.Activity
 import android.os.Bundle
 import com.gallery.core.GalleryBundle
+import com.gallery.core.ext.color
 import com.gallery.ui.GalleryUiBundle
 import com.yalantis.ucrop.UCrop.Options.*
 
@@ -33,6 +34,12 @@ object GalleryTheme {
                         cameraBackgroundColor = R.color.colorBlack.color(activity),
                         rootViewBackground = R.color.colorBlack.color(activity),
                         prevPhotoBackgroundColor = R.color.colorBlack.color(activity)
+                )
+            }
+            Theme.APP -> {
+                return GalleryBundle(
+                        cameraDrawableColor = R.color.colorGray.color(activity),
+                        cameraBackgroundColor = R.color.colorAccent.color(activity)
                 )
             }
         }
@@ -67,6 +74,14 @@ object GalleryTheme {
                         finderItemBackground = R.color.colorBlack.color(activity),
                         finderItemTextColor = R.color.colorWhite.color(activity),
                         preBottomViewBackground = R.color.colorBlack.color(activity)
+                )
+            }
+            Theme.APP -> {
+                return GalleryUiBundle(
+                        statusBarColor = R.color.colorAccent.color(activity),
+                        toolbarBackground = R.color.colorAccent.color(activity),
+                        bottomViewBackground = R.color.colorAccent.color(activity),
+                        preBottomViewBackground = R.color.colorAccent.color(activity)
                 )
             }
         }

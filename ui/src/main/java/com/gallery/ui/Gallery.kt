@@ -1,18 +1,33 @@
 package com.gallery.ui
 
-class Gallery private constructor() {
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import com.gallery.core.GalleryBundle
+import com.gallery.core.callback.IGallery
+import com.gallery.ui.activity.GalleryActivity
 
-    /**
-     * 回调
-     */
-    var galleryListener: OnGalleryListener? = null
+/**
+ * @author y
+ * @create 2019/3/1
+ */
+object Gallery {
 
-    companion object {
+    fun ui(context: Context) = ui(context, GalleryBundle())
 
-        val instance by lazy { Gallery() }
+    fun ui(context: Context, galleryBundle: GalleryBundle) = ui(context, galleryBundle, GalleryUiBundle())
 
-        fun destroy() = instance.apply {
-            galleryListener = null
-        }
+    fun ui(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle) = apply {
+        context.startActivity(Intent(context, GalleryActivity::class.java).apply {
+            putExtras(Bundle().apply {
+                putParcelable(IGallery.GALLERY_START_CONFIG, galleryBundle)
+                putParcelable(UIResult.UI_CONFIG, uiBundle)
+            })
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        })
     }
+
 }
+
+
+

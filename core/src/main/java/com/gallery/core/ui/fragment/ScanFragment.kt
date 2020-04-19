@@ -21,6 +21,7 @@ import com.gallery.scan.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
+
 class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), ScanView, GalleryAdapter.OnGalleryItemClickListener, IGallery {
 
     companion object {
@@ -72,6 +73,10 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             parentId = it.getLong(IGallery.GALLERY_START_PARENT_ID, SCAN_ALL)
             fileUri = it.getParcelable(IGallery.GALLERY_START_IMAGE_URL) ?: Uri.EMPTY
         }
+//        val observer = GalleryChangedObserver()
+//        requireContext().contentResolver.registerContentObserver(MediaStore.Images.Media.INTERNAL_CONTENT_URI, false, observer)
+//        requireContext().contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer)
+//        requireContext().contentResolver.unregisterContentObserver(observer)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

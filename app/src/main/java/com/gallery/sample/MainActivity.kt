@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName")
-
 package com.gallery.sample
 
 import android.app.Activity
@@ -9,11 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.CameraStatus
@@ -29,25 +24,8 @@ import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.ui
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
-
-fun String.show(activity: Activity) {
-    Toast.makeText(activity, this, Toast.LENGTH_SHORT).show()
-}
-
-@ColorInt
-fun Int.color(activity: Activity): Int {
-    return ContextCompat.getColor(activity, this)
-}
-
-enum class Theme {
-    DEFAULT,
-    BLUE,
-    BLACK,
-    PINK,
-}
 
 class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader {
 
@@ -66,40 +44,36 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
         }
 
+        dialog.setOnClickListener {
+            GalleryDialogFragment.newInstance().show(supportFragmentManager, GalleryDialogFragment::class.java.simpleName)
+        }
         openCamera.setOnClickListener {
             fileUri = findUriByFile(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
             openCamera(fileUri, false)
         }
         video.setOnClickListener {
-            Gallery.instance
-                    .apply {
-                        galleryListener = GalleryListener(applicationContext, null)
-                    }
-                    .ui(this,
-                            GalleryBundle(
-                                    scanType = ScanType.VIDEO,
-                                    cameraText = getString(R.string.video_tips)
-                            ),
-                            GalleryUiBundle(
-                                    toolbarText = getString(R.string.gallery_video_title)
-                            ))
+            Gallery.ui(this,
+                    GalleryBundle(
+                            scanType = ScanType.VIDEO,
+                            cameraText = getString(R.string.video_tips)
+                    ),
+                    GalleryUiBundle(
+                            toolbarText = getString(R.string.gallery_video_title)
+                    ))
         }
         selectCrop.setOnClickListener {
-            Gallery.instance
-                    .apply {
-                        galleryListener = GalleryListener(applicationContext, null)
-                    }
-                    .ui(this,
-                            GalleryTheme.cropThemeGallery(this),
-                            GalleryTheme.cropThemeGalleryUi(this))
+            Gallery.ui(this,
+                    GalleryTheme.cropThemeGallery(this),
+                    GalleryTheme.cropThemeGalleryUi(this))
         }
         selectTheme.setOnClickListener {
-            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT))
-                    1 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE))
-                    2 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK))
-                    3 -> Gallery.instance.ui(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK))
+                    0 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT))
+                    1 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.APP), GalleryTheme.themeGalleryUi(this, Theme.APP))
+                    2 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE))
+                    3 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK))
+                    4 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK))
                 }
                 dialog.dismiss()
             }.show()

@@ -1,4 +1,3 @@
-
 ## Prepare for the next version
 
 1. `UI`某些回调需要处理
@@ -32,39 +31,14 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
   
 #### demo
 
-    Gallery
-            .instance
-            .apply {
-            // gallery config
-            }.ui(this)
-            
-## ImageLoader
-
-    class SimpleImageLoader : GalleryImageLoader {
-    
-        override fun displayGallery(view: ImageView, width: Int, height: Int, galleryEntity: ScanEntity) : View{
-    
-        }
-    
-        override fun displayGalleryThumbnails(view: ImageView, finderEntity: FinderEntity) : View{
-    
-        }
-    
-        override fun displayPreview(view: ImageView, galleryEntity: ScanEntity) : View{
-    
-        }
-    }
-
-## MediaScannerConnection Memory leak
-
- * https://issuetracker.google.com/issues/37046656
- * https://github.com/square/leakcanary/issues/26
+    Gallery.open(activity)
 
 ## Screenshot
 
-![](https://github.com/7449/Album/blob/master/screenshot/gallery_multiple.png)
-![](https://github.com/7449/Album/blob/master/screenshot/gallery_radio.png)
-![](https://github.com/7449/Album/blob/master/screenshot/gallery_preview.png)
-![](https://github.com/7449/Album/blob/master/screenshot/gallery_crop.png)
-![](https://github.com/7449/Album/blob/master/screenshot/gallery_sample_ui.png)
-![](https://github.com/7449/Album/blob/master/screenshot/gallery_customize_camera.png)
+| 黑色                                   | 主题色                                | 蓝色                              | 粉色                                  | 默认
+| :----:                                | :----:                                |:----:                             | :----:                               | :----: 
+| ![](./screenshot/gallery_black.png)   | ![](./screenshot/gallery_app.png)    | ![](./screenshot/gallery_blue.png) | ![](./screenshot/gallery_pink.png)   | ![](./screenshot/gallery_default.png)  
+
+| 嵌套                                        | 自定义布局                                | Dialog                                | 预览                                  
+| :----:                                      | :----:                                  |:----:                                 | :----:                               
+| ![](./screenshot/gallery_combination.png)   | ![](./screenshot/gallery_banner.png)    | ![](./screenshot/gallery_dialog.png)  | ![](./screenshot/gallery_preview.png)  

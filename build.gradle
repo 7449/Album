@@ -20,10 +20,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
 ext {
     compileSdkVersion = 29
     minSdkVersion = 19

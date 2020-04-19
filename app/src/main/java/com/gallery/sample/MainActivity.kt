@@ -2,6 +2,7 @@ package com.gallery.sample
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.media.MediaScannerConnection.scanFile
 import android.net.Uri
 import android.os.Bundle
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         if (supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true, crop = false)), ScanFragment::class.java.simpleName)
+                    .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true, crop = false, galleryRootBackground = Color.BLACK)), ScanFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()

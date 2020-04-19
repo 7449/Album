@@ -1,6 +1,4 @@
-//include ':scan'
-//include ':glide'
-//include ':ext'
+include ':scan'
 include ':core'
 include ':ui'
 include ':app'

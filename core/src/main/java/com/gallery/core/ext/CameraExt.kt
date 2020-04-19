@@ -45,7 +45,7 @@ fun Context.galleryPathFile(path: String?, name: String, scanType: ScanType = Sc
         //    put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
         //    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
         //}
-        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).path, fileName)
+        return File("Q")
     }
     if (path != null && path.isNotEmpty()) {
         val pathFile = File(path)

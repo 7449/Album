@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName")
-
 package com.gallery.sample
 
 import android.app.Activity
@@ -14,12 +12,13 @@ object GalleryTheme {
     fun themeGallery(activity: Activity, theme: Theme): GalleryBundle {
         when (theme) {
             Theme.DEFAULT -> {
-                return GalleryBundle()
+                return GalleryBundle(checkBoxDrawable = R.drawable.default_selector_gallery_item_check)
             }
             Theme.BLUE -> {
                 return GalleryBundle(
                         cameraDrawableColor = R.color.colorGray.color(activity),
-                        cameraBackgroundColor = R.color.colorBlue.color(activity)
+                        cameraBackgroundColor = R.color.colorBlue.color(activity),
+                        checkBoxDrawable = R.drawable.blue_selector_gallery_item_check
                 )
             }
             Theme.PINK -> {
@@ -38,6 +37,7 @@ object GalleryTheme {
             }
             Theme.APP -> {
                 return GalleryBundle(
+                        checkBoxDrawable = R.drawable.app_selector_gallery_item_check,
                         cameraDrawableColor = R.color.colorGray.color(activity),
                         cameraBackgroundColor = R.color.colorAccent.color(activity)
                 )

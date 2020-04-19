@@ -41,7 +41,7 @@ class GalleryUiBundle(
          * toolbar返回图片颜色
          */
         @ColorInt
-        val toolbarIconColor: Int = Color.parseColor("#FFFFFFFF"),
+        val toolbarIconColor: Int = Color.WHITE,
         /**
          * toolbar title
          */
@@ -50,7 +50,7 @@ class GalleryUiBundle(
          * toolbar title颜色
          */
         @ColorInt
-        val toolbarTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        val toolbarTextColor: Int = Color.WHITE,
         /**
          * toolbar elevation
          */
@@ -68,12 +68,12 @@ class GalleryUiBundle(
          * 底部文件目录文字颜色
          */
         @ColorInt
-        val bottomFinderTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        val bottomFinderTextColor: Int = Color.WHITE,
         /**
          * 底部文件目录图标颜色
          */
         @ColorInt
-        val bottomFinderTextDrawableColor: Int = Color.parseColor("#FFFFFFFF"),
+        val bottomFinderTextDrawableColor: Int = Color.WHITE,
         /**
          * 预览文字
          */
@@ -86,7 +86,7 @@ class GalleryUiBundle(
          * 预览文字颜色
          */
         @ColorInt
-        val bottomPreViewTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        val bottomPreViewTextColor: Int = Color.WHITE,
         /**
          * 选择文字
          */
@@ -99,7 +99,7 @@ class GalleryUiBundle(
          * 选择文字颜色
          */
         @ColorInt
-        val bottomSelectTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        val bottomSelectTextColor: Int = Color.WHITE,
         /**
          * 目录View宽度
          */
@@ -116,7 +116,7 @@ class GalleryUiBundle(
          * 目录View背景色
          */
         @ColorInt
-        val finderItemBackground: Int = Color.parseColor("#FFFFFFFF"),
+        val finderItemBackground: Int = Color.WHITE,
         /**
          * 目录View字体颜色
          */
@@ -139,12 +139,12 @@ class GalleryUiBundle(
          * 预览页底部提示栏确认文字颜色
          */
         @ColorInt
-        val preBottomOkTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        val preBottomOkTextColor: Int = Color.WHITE,
         /**
          * 预览页底部提示栏数字文字颜色
          */
         @ColorInt
-        val preBottomCountTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        val preBottomCountTextColor: Int = Color.WHITE,
         /**
          * 预览页底部提示栏确认文字大小
          */

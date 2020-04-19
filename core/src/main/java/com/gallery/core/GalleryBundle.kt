@@ -97,7 +97,7 @@ data class GalleryBundle(
          * 相机提示文字颜色
          */
         @ColorInt
-        val cameraTextColor: Int = Color.parseColor("#FFFFFFFF"),
+        val cameraTextColor: Int = Color.WHITE,
         /**
          * 相机图片背景色
          */
@@ -112,16 +112,16 @@ data class GalleryBundle(
          * 图片背景色
          */
         @ColorInt
-        val photoBackgroundColor: Int = Color.parseColor("#FFFFFFFF"),
+        val photoBackgroundColor: Int = Color.WHITE,
         /**
          * 预览图片背景色
          */
         @ColorInt
-        val prevPhotoBackgroundColor: Int = Color.parseColor("#FFFFFFFF"),
+        val prevPhotoBackgroundColor: Int = Color.WHITE,
         /**
          * [ScanFragment]RootView背景色
          */
         @ColorInt
-        val galleryRootBackground: Int = Color.parseColor("#FFFFFFFF")
+        val galleryRootBackground: Int = Color.WHITE
 ) : Parcelable
 

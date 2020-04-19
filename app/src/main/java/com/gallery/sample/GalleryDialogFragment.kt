@@ -7,9 +7,7 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.DialogFragment
-import com.gallery.core.CameraStatus
 import com.gallery.core.GalleryBundle
-import com.gallery.core.PermissionCode
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ext.show
 import com.gallery.core.ui.fragment.ScanFragment
@@ -68,18 +66,9 @@ class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
         })
     }
 
-    override fun onGalleryResource(scanEntities: ArrayList<ScanEntity>) {
-        scanEntities.toString().show(requireActivity())
+    override fun onGalleryResource(scanEntity: ScanEntity) {
+        scanEntity.toString().show(requireActivity())
         dismiss()
-    }
-
-    override fun onClickCheckBoxFileNotExist() {
-    }
-
-    override fun onClickCheckBoxMaxCount() {
-    }
-
-    override fun onClickItemFileNotExist() {
     }
 
     override fun onChangedCheckBox(isSelect: Boolean, scanEntity: ScanEntity) {
@@ -95,24 +84,6 @@ class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
     }
 
     override fun onScanResultSuccess(scanEntity: ScanEntity) {
-    }
-
-    override fun onCameraCanceled() {
-    }
-
-    override fun onCameraResultError() {
-    }
-
-    override fun onCameraOpenStatus(status: CameraStatus) {
-    }
-
-    override fun onScanSuccessEmpty() {
-    }
-
-    override fun onOpenVideoPlayError() {
-    }
-
-    override fun onPermissionsDenied(type: PermissionCode) {
     }
 
 }

@@ -11,6 +11,7 @@ import com.gallery.core.ext.uriExists
 import com.gallery.scan.ScanEntity
 import com.xadapter.vh.XViewHolder
 import com.xadapter.vh.checkBox
+import com.xadapter.vh.context
 import com.xadapter.vh.frameLayout
 
 class PhotoViewHolder(itemView: View,
@@ -36,12 +37,12 @@ class PhotoViewHolder(itemView: View,
                 if (multipleList.contains(galleryEntity)) {
                     multipleList.remove(galleryEntity)
                 }
-                galleryCallback.onClickCheckBoxFileNotExist()
+                galleryCallback.onClickCheckBoxFileNotExist(context)
                 return@setOnClickListener
             }
             if (!multipleList.contains(galleryEntity) && multipleList.size >= galleryBundle.multipleMaxCount) {
                 checkBox.isChecked = false
-                galleryCallback.onClickCheckBoxMaxCount()
+                galleryCallback.onClickCheckBoxMaxCount(context)
                 return@setOnClickListener
             }
             if (!galleryEntity.isCheck) {

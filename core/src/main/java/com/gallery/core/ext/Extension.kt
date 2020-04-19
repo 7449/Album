@@ -67,10 +67,10 @@ fun Uri?.orEmpty() = this ?: Uri.EMPTY
 fun Int.isLightColor() = ColorUtils.calculateLuminance(this) >= 0.5
 
 //toast
-fun String.show(activity: Activity) = Toast.makeText(activity, this, Toast.LENGTH_SHORT).show()
+fun String.show(activity: Context) = Toast.makeText(activity, this, Toast.LENGTH_SHORT).show()
 
 //ColorInt
-fun Int.color(activity: Activity) = ContextCompat.getColor(activity, this)
+fun Int.color(activity: Context) = ContextCompat.getColor(activity, this)
 
 //获取color
 fun Context.color(@ColorRes id: Int) = ContextCompat.getColor(this, id)
@@ -194,3 +194,8 @@ fun Context.findUriByFile(file: File) = insertImage(ContentValues().apply {
         put(MediaStore.MediaColumns.DATA, file.path)
     }
 })
+
+//FragmentByTag
+fun AppCompatActivity.findFragmentByTag(tag: String, of: (fragment: Fragment?) -> Unit) {
+    of.invoke(supportFragmentManager.findFragmentByTag(tag))
+}

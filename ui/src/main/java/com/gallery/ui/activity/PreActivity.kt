@@ -23,10 +23,9 @@ import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
-import com.gallery.ui.callback.IGalleryPrevRootCallback
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
-class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevRootCallback {
+open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader {
 
     companion object {
         fun newInstance(
@@ -55,12 +54,10 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
 
     override fun initView() {
         preBottomViewSelect.setOnClickListener {
-            if (prevFragment().selectEmpty) {
-                onGalleryPreRootSelectEmpty()
-                return@setOnClickListener
-            }
             onGalleryResources(prevFragment().selectEntities)
-            isRefreshGalleryUI(isRefresh = false, isFinish = true)
+            if (!prevFragment().selectEmpty) {
+                isRefreshGalleryUI(isRefresh = false, isFinish = true)
+            }
         }
     }
 
@@ -114,10 +111,6 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
         finish()
     }
 
-    override fun onPageSelected(position: Int) {
-        preToolbar.title = uiBundle.preTitle + "(" + (position + 1) + "/" + prevFragment().itemCount + ")"
-    }
-
     override fun onDisplayGalleryPrev(galleryEntity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
@@ -125,10 +118,8 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
         container.addView(imageView)
     }
 
-    override fun onClickCheckBoxMaxCount() {
-    }
-
-    override fun onClickCheckBoxFileNotExist() {
+    override fun onPageSelected(position: Int) {
+        preToolbar.title = uiBundle.preTitle + "(" + (position + 1) + "/" + prevFragment().itemCount + ")"
     }
 
     override fun onChangedCreated() {
@@ -139,10 +130,9 @@ class PreActivity : GalleryBaseActivity(R.layout.gallery_activity_preview), IGal
         preCount.text = "%s / %s".format(prevFragment().selectCount.toString(), galleryBundle.multipleMaxCount)
     }
 
-    override fun onGalleryPreRootSelectEmpty() {
-    }
-
-    override fun onGalleryResources(entities: List<ScanEntity>) {
-    }
+    /**
+     * 选择图片
+     */
+    open fun onGalleryResources(entities: List<ScanEntity>) {}
 
 }

@@ -11,9 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gallery.core.CameraStatus
 import com.gallery.core.GalleryBundle
-import com.gallery.core.PermissionCode
 import com.gallery.core.callback.IGallery
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
@@ -38,12 +36,15 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         if (supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true)), ScanFragment::class.java.simpleName)
+                    .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true, crop = false)), ScanFragment::class.java.simpleName)
                     .commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
         }
 
+        customActivity.setOnClickListener {
+            Gallery.open(this, GalleryBundle(), GalleryUiBundle(), SimpleGalleryActivity::class.java)
+        }
         dialog.setOnClickListener {
             GalleryDialogFragment.newInstance().show(supportFragmentManager, GalleryDialogFragment::class.java.simpleName)
         }
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             openCamera(fileUri, false)
         }
         video.setOnClickListener {
-            Gallery.ui(this,
+            Gallery.open(this,
                     GalleryBundle(
                             scanType = ScanType.VIDEO,
                             cameraText = getString(R.string.video_tips)
@@ -62,18 +63,18 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     ))
         }
         selectCrop.setOnClickListener {
-            Gallery.ui(this,
+            Gallery.open(this,
                     GalleryTheme.cropThemeGallery(this),
                     GalleryTheme.cropThemeGalleryUi(this))
         }
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT))
-                    1 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.APP), GalleryTheme.themeGalleryUi(this, Theme.APP))
-                    2 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE))
-                    3 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK))
-                    4 -> Gallery.ui(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK))
+                    0 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT))
+                    1 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.APP), GalleryTheme.themeGalleryUi(this, Theme.APP))
+                    2 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE))
+                    3 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK))
+                    4 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK))
                 }
                 dialog.dismiss()
             }.show()
@@ -126,16 +127,8 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
-    override fun onGalleryResource(scanEntities: ArrayList<ScanEntity>) {
-    }
-
-    override fun onClickCheckBoxFileNotExist() {
-    }
-
-    override fun onClickCheckBoxMaxCount() {
-    }
-
-    override fun onClickItemFileNotExist() {
+    override fun onGalleryResource(scanEntity: ScanEntity) {
+        scanEntity.toString().show(this)
     }
 
     override fun onChangedCheckBox(isSelect: Boolean, scanEntity: ScanEntity) {
@@ -152,23 +145,4 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
 
     override fun onScanResultSuccess(scanEntity: ScanEntity) {
     }
-
-    override fun onCameraCanceled() {
-    }
-
-    override fun onCameraResultError() {
-    }
-
-    override fun onCameraOpenStatus(status: CameraStatus) {
-    }
-
-    override fun onScanSuccessEmpty() {
-    }
-
-    override fun onOpenVideoPlayError() {
-    }
-
-    override fun onPermissionsDenied(type: PermissionCode) {
-    }
-
 }

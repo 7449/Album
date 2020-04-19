@@ -20,6 +20,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "com.ydevelop:bannerlayout:$bannerVersion"
 
 //    implementation project(path: ':ext')
     implementation project(path: ':ui')

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -12,9 +13,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.ListPopupWindow
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gallery.core.CameraStatus
 import com.gallery.core.GalleryBundle
-import com.gallery.core.PermissionCode
 import com.gallery.core.callback.*
 import com.gallery.core.ext.*
 import com.gallery.core.ui.base.GalleryBaseActivity
@@ -25,13 +24,12 @@ import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.adapter.FinderAdapter
-import com.gallery.ui.callback.IGalleryRootCallback
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
-class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
+open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
         View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback,
-        IGalleryImageLoader, IGalleryInterceptor, IGalleryRootCallback {
+        IGalleryImageLoader, IGalleryInterceptor {
 
     private val finderAdapter by lazy {
         FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayGalleryThumbnails(finderEntity, container) }
@@ -65,6 +63,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
 
     @SuppressLint("NewApi")
     override fun initCreate(savedInstanceState: Bundle?) {
+        window.statusBarColor(galleryUiBundle.statusBarColor)
 
         finderList.addAll(savedInstanceState?.getParcelableArrayList(UIResult.FINDER_LIST)
                 ?: ArrayList())
@@ -72,36 +71,32 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
         galleryFinderAll.text = savedInstanceState?.getString(UIResult.FINDER_NAME)
                 ?: galleryBundle.allName
 
-        window.statusBarColor(galleryUiBundle.statusBarColor)
         galleryPre.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
         gallerySelect.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
         galleryToolbar.title = galleryUiBundle.toolbarText
         galleryToolbar.setTitleTextColor(galleryUiBundle.toolbarTextColor)
         val drawable = drawable(galleryUiBundle.toolbarIcon)
-        drawable?.setColorFilter(galleryUiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+        drawable?.colorFilter = PorterDuffColorFilter(galleryUiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         galleryToolbar.navigationIcon = drawable
         galleryToolbar.setBackgroundColor(galleryUiBundle.toolbarBackground)
         if (hasL()) {
             galleryToolbar.elevation = galleryUiBundle.toolbarElevation
         }
-        galleryToolbar.setNavigationOnClickListener {
-            onGalleryRootFinish()
-            finish()
+        galleryToolbar.setNavigationOnClickListener { finish() }
+
+        findFragmentByTag(ScanFragment::class.java.simpleName) {
+            if (it == null) {
+                supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.galleryFrame, ScanFragment.newInstance(galleryBundle), ScanFragment::class.java.simpleName)
+                        .commitAllowingStateLoss()
+            } else {
+                supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
+            }
         }
-        initFragment()
+
         initBottomView()
         initFinderView()
-    }
-
-    private fun initFragment() {
-        if (supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.galleryFrame, ScanFragment.newInstance(galleryBundle), ScanFragment::class.java.simpleName)
-                    .commitAllowingStateLoss()
-        } else {
-            supportFragmentManager.beginTransaction().show(galleryFragment()).commitAllowingStateLoss()
-        }
     }
 
     private fun initBottomView() {
@@ -143,13 +138,7 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
                         0
                 )
             }
-            R.id.gallerySelect -> {
-                if (galleryFragment().selectEmpty) {
-                    onGallerySelectEmpty()
-                    return
-                }
-                onGalleryResources(galleryFragment().selectEntities)
-            }
+            R.id.gallerySelect -> onGalleryResources(galleryFragment().selectEntities)
             R.id.galleryFinderAll -> {
                 if (galleryFragment().parentId.isScanAll()) {
                     finderList.clear()
@@ -180,27 +169,6 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
         listPopupWindow.dismiss()
     }
 
-    override fun onScanResultSuccess(scanEntity: ScanEntity) {
-        finderList.updateResultFinder(galleryFragment().parentId, scanEntity)
-    }
-
-    override fun onBackPressed() {
-        onGalleryRootFinish()
-        super.onBackPressed()
-    }
-
-    override fun onGalleryResource(scanEntities: ArrayList<ScanEntity>) {
-    }
-
-    override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-        if (resultCode == Activity.RESULT_OK && requestCode == IGalleryPrev.PREV_START_REQUEST_CODE) {
-            if (data?.extras.orEmpty().getBoolean(UIResult.PREV_RESULT_FINISH)) {
-                finish()
-            }
-        }
-        return super.onGalleryFragmentResult(requestCode, resultCode, data)
-    }
-
     override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
@@ -215,22 +183,8 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
         container.addView(imageView)
     }
 
-    override fun onClickCheckBoxFileNotExist() {
-    }
-
-    override fun onClickCheckBoxMaxCount() {
-    }
-
-    override fun onClickItemFileNotExist() {
-    }
-
-    override fun onChangedCheckBox(isSelect: Boolean, scanEntity: ScanEntity) {
-    }
-
-    override fun onChangedScreen(selectCount: Int) {
-    }
-
-    override fun onChangedPrevCount(selectCount: Int) {
+    override fun onGalleryResource(scanEntity: ScanEntity) {
+        scanEntity.toString().show(this)
     }
 
     override fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long) {
@@ -243,55 +197,41 @@ class GalleryActivity : GalleryBaseActivity(R.layout.gallery_activity_gallery),
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position)
     }
 
-    override fun onCameraCanceled() {
+    override fun onScanResultSuccess(scanEntity: ScanEntity) {
+        finderList.updateResultFinder(galleryFragment().parentId, scanEntity)
     }
 
-    override fun onCameraResultError() {
-    }
-
-    override fun onCameraOpenStatus(status: CameraStatus) {
-    }
-
-    override fun onUCropOptions(): UCrop.Options {
-        val uCropBundle = galleryUiBundle.uCropBundle
-        return if (uCropBundle.isEmpty) super.onUCropOptions() else UCrop.Options().apply {
-            this.optionBundle.putAll(uCropBundle)
+    override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        if (resultCode == Activity.RESULT_OK && requestCode == IGalleryPrev.PREV_START_REQUEST_CODE) {
+            if (data?.extras.orEmpty().getBoolean(UIResult.PREV_RESULT_FINISH)) {
+                finish()
+            }
         }
+        return super.onGalleryFragmentResult(requestCode, resultCode, data)
     }
 
-    override fun onUCropCanceled() {
-    }
-
-    override fun onUCropError(throwable: Throwable?) {
-    }
+    override fun onUCropOptions() = UCrop.Options().apply { this.optionBundle.putAll(galleryUiBundle.uCropBundle) }
 
     override fun onUCropResources(uri: Uri) {
+        uri.toString().show(this)
     }
 
-    override fun onScanSuccessEmpty() {
+    /**
+     * 点击预览但是未选择图片
+     */
+    open fun onGalleryPreEmpty() {
+        "未选择图片".show(this)
     }
 
-    override fun onOpenVideoPlayError() {
+    /**
+     * 扫描到的文件目录为空
+     */
+    open fun onGalleryFinderEmpty() {
+        "文件目录为空".show(this)
     }
 
-    override fun onPermissionsDenied(type: PermissionCode) {
-    }
-
-    override fun onGalleryRootFinish() {
-    }
-
-    override fun onGalleryRootBackPressed() {
-    }
-
-    override fun onGalleryPreEmpty() {
-    }
-
-    override fun onGallerySelectEmpty() {
-    }
-
-    override fun onGalleryFinderEmpty() {
-    }
-
-    override fun onGalleryResources(entities: List<ScanEntity>) {
-    }
+    /**
+     * 选择图片
+     */
+    open fun onGalleryResources(entities: List<ScanEntity>) {}
 }

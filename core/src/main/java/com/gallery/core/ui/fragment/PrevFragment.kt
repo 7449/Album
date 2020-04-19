@@ -107,12 +107,12 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
             if (adapter.containsSelect(currentItem)) {
                 adapter.removeSelectEntity(currentItem)
             }
-            galleryPrevCallback.onClickCheckBoxFileNotExist()
+            galleryPrevCallback.onClickCheckBoxFileNotExist(requireContext())
             return
         }
         if (!adapter.containsSelect(currentItem) && selectEntities.size >= galleryBundle.multipleMaxCount) {
             preCheckBox.isChecked = false
-            galleryPrevCallback.onClickCheckBoxMaxCount()
+            galleryPrevCallback.onClickCheckBoxMaxCount(requireContext())
             return
         }
         if (currentItem.isCheck) {

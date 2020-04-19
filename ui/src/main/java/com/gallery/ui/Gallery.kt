@@ -13,12 +13,14 @@ import com.gallery.ui.activity.GalleryActivity
  */
 object Gallery {
 
-    fun ui(context: Context) = ui(context, GalleryBundle())
+    fun open(context: Context) = open(context, GalleryBundle())
 
-    fun ui(context: Context, galleryBundle: GalleryBundle) = ui(context, galleryBundle, GalleryUiBundle())
+    fun open(context: Context, galleryBundle: GalleryBundle) = open(context, galleryBundle, GalleryUiBundle())
 
-    fun ui(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle) = apply {
-        context.startActivity(Intent(context, GalleryActivity::class.java).apply {
+    fun open(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle) = open(context, galleryBundle, uiBundle, GalleryActivity::class.java)
+
+    fun open(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle, clazz: Class<out GalleryActivity>) {
+        context.startActivity(Intent(context, clazz).apply {
             putExtras(Bundle().apply {
                 putParcelable(IGallery.GALLERY_START_CONFIG, galleryBundle)
                 putParcelable(UIResult.UI_CONFIG, uiBundle)

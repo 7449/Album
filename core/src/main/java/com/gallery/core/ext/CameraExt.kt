@@ -39,13 +39,13 @@ fun Context.galleryPathFile(path: String?, name: String, scanType: ScanType = Sc
     val suffix = if (scanType == ScanType.VIDEO) "mp4" else "jpg"
     val fileName = "${System.currentTimeMillis()}_$name.$suffix"
     if (hasQ()) {
-        //Q不会用到该File,仅是为了不返回Null
+        //Q只用到了File.getName()
         //具体可见findUriByFile(file)
         //val contentValues = ContentValues().apply {
         //    put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
         //    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
         //}
-        return File("Q")
+        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).path, fileName)
     }
     if (path != null && path.isNotEmpty()) {
         val pathFile = File(path)

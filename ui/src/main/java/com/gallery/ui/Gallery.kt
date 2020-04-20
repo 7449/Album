@@ -19,7 +19,7 @@ object Gallery {
 
     fun open(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle) = open(context, galleryBundle, uiBundle, GalleryActivity::class.java)
 
-    fun open(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle, clazz: Class<out GalleryActivity>) {
+    fun open(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle, clazz: Class<out GalleryActivity>) = also {
         context.startActivity(Intent(context, clazz).apply {
             putExtras(Bundle().apply {
                 putParcelable(IGallery.GALLERY_START_CONFIG, galleryBundle)
@@ -27,6 +27,16 @@ object Gallery {
             })
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         })
+    }
+
+    @Deprecated("recommended CustomGallery : GalleryActivity()", replaceWith = ReplaceWith(""))
+    fun callback(callback: GalleryCallback) {
+        GalleryActivity.galleryCallback = callback
+    }
+
+    @Deprecated("recommended CustomGallery : GalleryActivity()", replaceWith = ReplaceWith(""))
+    fun end() {
+        GalleryActivity.galleryCallback = null
     }
 
 }

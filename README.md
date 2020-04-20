@@ -4,6 +4,12 @@
 
 2. `core`需要再优化
 
+## 
+
+    android:requestLegacyExternalStorage="true"
+    为了适配UCrop,暂时使用这个方法,可在下一个版本撤回这个方法
+    https://github.com/Yalantis/uCrop/pull/613
+
 ## version
 
 scan:![](https://api.bintray.com/packages/ydevelop/maven/gallery.scan/images/download.svg)

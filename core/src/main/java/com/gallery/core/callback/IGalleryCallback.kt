@@ -109,7 +109,8 @@ interface IGalleryCallback {
         when (status) {
             CameraStatus.ERROR -> "相机打开失败".toast(context)
             CameraStatus.SUCCESS -> "拍照".toast(context)
-            CameraStatus.PERMISSION -> "缺少权限".toast(context)
+            CameraStatus.PERMISSION -> {
+            }
         }
     }
 

@@ -2,15 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gallery.sample">
-    <!--        android:requestLegacyExternalStorage="true"-->
+    <!--
+
+    android:requestLegacyExternalStorage="true"
+    为了适配UCrop,暂时使用这个方法,可在下一个版本撤回这个方法
+    https://github.com/Yalantis/uCrop/pull/613
+
+    -->
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        tools:replace="android:label"
         tools:targetApi="q">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -21,9 +25,6 @@
         </activity>
         <activity
             android:name=".SimpleGalleryActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".SimpleGalleryPrevActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

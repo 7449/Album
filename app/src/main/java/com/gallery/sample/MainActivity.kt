@@ -64,20 +64,22 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     GalleryUiBundle(
                             toolbarText = getString(R.string.gallery_video_title)
                     ))
+                    .callback(SimpleGalleryCallback())
         }
         selectCrop.setOnClickListener {
             Gallery.open(this,
                     GalleryTheme.cropThemeGallery(this),
                     GalleryTheme.cropThemeGalleryUi(this))
+                    .callback(SimpleGalleryCallback())
         }
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT))
-                    1 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.APP), GalleryTheme.themeGalleryUi(this, Theme.APP))
-                    2 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE))
-                    3 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK))
-                    4 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK))
+                    0 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT)).callback(SimpleGalleryCallback())
+                    1 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.APP), GalleryTheme.themeGalleryUi(this, Theme.APP)).callback(SimpleGalleryCallback())
+                    2 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE)).callback(SimpleGalleryCallback())
+                    3 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK)).callback(SimpleGalleryCallback())
+                    4 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK)).callback(SimpleGalleryCallback())
                 }
                 dialog.dismiss()
             }.show()
@@ -131,7 +133,6 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     }
 
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
-        scanEntity.toString().toast(context)
     }
 
     override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {

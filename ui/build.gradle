@@ -14,6 +14,7 @@ android {
 }
 dependencies {
     compileOnly project(path: ':core')
+//    api "com.ydevelop:gallery.core:$coreVersion"
     compileOnly "com.github.bumptech.glide:glide:$glideVersion"
     compileOnly "com.github.yalantis:ucrop:$ucropVersion"
     compileOnly "androidx.appcompat:appcompat:$appcompatVersion"

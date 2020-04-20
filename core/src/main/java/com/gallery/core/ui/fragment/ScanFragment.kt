@@ -12,10 +12,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.ResultType
 import com.gallery.core.callback.*
-import com.gallery.core.ext.cropPathFile
-import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.galleryPathFile
-import com.gallery.core.ext.isScanAll
+import com.gallery.core.ext.*
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.widget.SimpleGridDivider
@@ -76,10 +73,6 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             parentId = it.getLong(IGallery.GALLERY_START_PARENT_ID, SCAN_ALL)
             fileUri = it.getParcelable(IGallery.GALLERY_START_IMAGE_URL) ?: Uri.EMPTY
         }
-//        val observer = GalleryChangedObserver()
-//        requireContext().contentResolver.registerContentObserver(MediaStore.Images.Media.INTERNAL_CONTENT_URI, false, observer)
-//        requireContext().contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer)
-//        requireContext().contentResolver.unregisterContentObserver(observer)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -132,12 +125,13 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                         }
                     }
                     UCrop.REQUEST_CROP -> {
-                        if (data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI) == null) {
+                        val cropUri = data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)
+                        if (cropUri == null) {
                             galleryInterceptor.onUCropError(requireContext(), null)
                             return
                         }
-                        galleryInterceptor.onUCropResources(data.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI).orEmpty())
-                        data.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.let { scanFile(ResultType.CROP, it) }
+                        galleryInterceptor.onUCropResources(cropUri.orEmpty())
+                        cropUri.path?.let { scanFile(ResultType.CROP, it) }
                     }
                     IGalleryPrev.PREV_START_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
                 }
@@ -174,9 +168,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
-        if (permissionCamera()) {
-            startCamera()
-        }
+        startCamera()
     }
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
@@ -185,11 +177,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             return
         }
         if (galleryBundle.scanType == ScanType.VIDEO) {
-            try {
-                val openVideo = Intent(Intent.ACTION_VIEW)
-                openVideo.setDataAndType(galleryEntity.externalUri(), "video/*")
-                startActivity(openVideo)
-            } catch (e: Exception) {
+            requireContext().openVideo(galleryEntity.externalUri()) {
                 galleryCallback.onOpenVideoPlayError(requireContext(), galleryEntity)
             }
             return
@@ -206,6 +194,9 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onScanGallery(parent: Long, result: Boolean) {
+        if (!permissionStorage()) {
+            return
+        }
         this.parentId = parent
         // 如果本机没有图片,进来拍照直接走扫描全部的方法可以兼容到hideCamera
         // resultSuccess只有在拍照成功并且之前数据不为空or裁剪成功才会回调
@@ -225,10 +216,9 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     override fun scanFile(type: ResultType, path: String) {
         MediaScannerConnection.scanFile(requireContext(), arrayOf(path), null) { _: String?, uri: Uri? ->
             runOnUiThread {
-                uri?.let {
-                    fileUri = it
-                    onScanGallery(parentId, type == ResultType.CROP)
-                }
+                uri ?: return@runOnUiThread
+                fileUri = uri
+                onScanGallery(parentId, type == ResultType.CROP)
             }
         }
     }

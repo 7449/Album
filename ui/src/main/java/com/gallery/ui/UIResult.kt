@@ -9,4 +9,7 @@ object UIResult {
     const val FINDER_NAME = "finderName"
 
     const val PREV_RESULT_FINISH = "prevResultFinish"
+
+    const val PREV_RESULT_SELECT = "prevResultSelect"
+
 }

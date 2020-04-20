@@ -21,11 +21,9 @@ import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.*
 import com.gallery.ui.R
-import com.gallery.ui.UIResult
 import com.gallery.ui.adapter.FinderAdapter
-import com.gallery.ui.obtain
 import com.kotlin.x.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
@@ -33,6 +31,11 @@ import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
         View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback,
         IGalleryImageLoader, IGalleryInterceptor {
+
+    companion object {
+        @Deprecated("recommended CustomGallery : GalleryActivity()")
+        var galleryCallback: GalleryCallback? = null
+    }
 
     private val finderAdapter by lazy {
         FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayGalleryThumbnails(finderEntity, container) }
@@ -83,7 +86,6 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         galleryPre.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
         gallerySelect.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
 
-        galleryToolbar.title = galleryUiBundle.toolbarText
         galleryToolbar.setNavigationOnClickListener { finish() }
 
         findFragmentByTag(ScanFragment::class.java.simpleName) {
@@ -121,7 +123,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     ))
                 }
                 if (finderList.isNotEmpty()) {
-                    finderAdapter.list = finderList
+                    finderAdapter.updateFinder(finderList)
                     listPopupWindow.show()
                     listPopupWindow.listView?.setBackgroundColor(galleryUiBundle.finderItemBackground)
                     return
@@ -157,7 +159,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
-        scanEntity.toString().toast(context)
+        onGalleryResource(scanEntity)
     }
 
     override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
@@ -176,6 +178,11 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
     override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         if (resultCode == Activity.RESULT_OK && requestCode == IGalleryPrev.PREV_START_REQUEST_CODE) {
+            val entities = data?.extras.orEmpty().getParcelableArrayList<ScanEntity>(UIResult.PREV_RESULT_SELECT)
+                    ?: ArrayList()
+            if (entities.isNotEmpty()) {
+                onGalleryResources(entities)
+            }
             if (data?.extras.orEmpty().getBoolean(UIResult.PREV_RESULT_FINISH)) {
                 finish()
             }
@@ -186,7 +193,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     override fun onUCropOptions() = UCrop.Options().apply { this.optionBundle.putAll(galleryUiBundle.uCropBundle) }
 
     override fun onUCropResources(uri: Uri) {
-        uri.toString().toast(this)
+        onGalleryCropResource(uri)
     }
 
     /**
@@ -204,7 +211,23 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     /**
+     * 裁剪成功
+     */
+    open fun onGalleryCropResource(uri: Uri) {
+        galleryCallback?.onGalleryCropResource(this, uri)
+    }
+
+    /**
+     * 单选不裁剪
+     */
+    open fun onGalleryResource(scanEntity: ScanEntity) {
+        galleryCallback?.onGalleryResource(this, scanEntity)
+    }
+
+    /**
      * 选择图片
      */
-    open fun onGalleryResources(entities: List<ScanEntity>) {}
+    open fun onGalleryResources(entities: List<ScanEntity>) {
+        galleryCallback?.onGalleryResources(this, entities)
+    }
 }

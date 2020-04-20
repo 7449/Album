@@ -55,7 +55,7 @@ class GalleryAdapter(
     override fun onBindViewHolder(holder: XViewHolder, position: Int) {
         when (holder) {
             is CameraViewHolder -> holder.camera()
-            is PhotoViewHolder -> holder.photo(item(position), currentSelectList, imageLoader)
+            is PhotoViewHolder -> holder.photo(galleryList[position], currentSelectList, imageLoader)
         }
     }
 
@@ -64,16 +64,6 @@ class GalleryAdapter(
     override fun getItemViewType(position: Int): Int = when {
         galleryList.isEmpty() || galleryList[position].parent != IGallery.CAMERA_PARENT_ID -> TYPE_PHOTO
         else -> TYPE_CAMERA
-    }
-
-    fun cleanAll() {
-        galleryList.clear()
-        notifyDataSetChanged()
-    }
-
-    fun cleanSelectAll() {
-        selectList.clear()
-        notifyDataSetChanged()
     }
 
     fun addAll(newList: ArrayList<ScanEntity>) {
@@ -93,16 +83,6 @@ class GalleryAdapter(
         selectList.forEach { select -> currentList.find { it.id == select.id }?.isCheck = true }
         notifyDataSetChanged()
     }
-
-    fun isCheck(position: Int) = galleryList[position].isCheck
-
-    fun item(position: Int) = galleryList[position]
-
-    fun containsSelect(selectEntity: ScanEntity) = selectList.contains(selectEntity)
-
-    fun removeSelectEntity(removeEntity: ScanEntity) = selectList.remove(removeEntity)
-
-    fun addSelectEntity(addEntity: ScanEntity) = selectList.add(addEntity)
 
     fun addEntity(position: Int, entity: ScanEntity) = currentList.add(position, entity)
 

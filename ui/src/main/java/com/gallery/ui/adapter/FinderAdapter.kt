@@ -12,36 +12,38 @@ import com.gallery.ui.R
 
 class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
 
-    var list: ArrayList<ScanEntity> = ArrayList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    private val list: ArrayList<ScanEntity> = ArrayList()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val finderEntity = getItem(position)
         val viewHolder: ViewHolder
-        if (convertView == null) {
-            viewHolder = ViewHolder()
-            viewHolder.convertView = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder, parent, false)
-            viewHolder.frameLayout = viewHolder.convertView.findViewById(R.id.iv_gallery_finder_icon)
-            viewHolder.appCompatTextView = viewHolder.convertView.findViewById(R.id.tv_gallery_finder_name)
-            viewHolder.convertView.tag = viewHolder
+        val rootView = if (convertView == null) {
+            LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder, parent, false).apply {
+                viewHolder = ViewHolder(this)
+                this.tag = viewHolder
+            }
         } else {
             viewHolder = convertView.tag as ViewHolder
+            convertView
         }
         viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
-        viewHolder.appCompatTextView.text = String.format("%s(%s)", finderEntity.bucketDisplayName, finderEntity.count.toString())
+        viewHolder.appCompatTextView.text = "%s(%s)".format(finderEntity.bucketDisplayName, finderEntity.count.toString())
         displayFinder.invoke(finderEntity, viewHolder.frameLayout)
-        return viewHolder.convertView
+        return rootView
     }
 
     override fun getItem(position: Int): ScanEntity = list[position]
     override fun getItemId(position: Int): Long = position.toLong()
     override fun getCount(): Int = list.size
-    private class ViewHolder {
-        lateinit var convertView: View
-        lateinit var frameLayout: FrameLayout
-        lateinit var appCompatTextView: AppCompatTextView
+
+    fun updateFinder(entities: ArrayList<ScanEntity>) {
+        list.clear()
+        list.addAll(entities)
+        notifyDataSetChanged()
+    }
+
+    private class ViewHolder(view: View) {
+        val frameLayout: FrameLayout = view.findViewById(R.id.iv_gallery_finder_icon)
+        val appCompatTextView: AppCompatTextView = view.findViewById(R.id.tv_gallery_finder_name)
     }
 }

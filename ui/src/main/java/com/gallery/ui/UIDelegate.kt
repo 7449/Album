@@ -11,9 +11,10 @@ import com.kotlin.x.statusBarColor
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
-fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
+internal fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
     window.statusBarColor(galleryUiBundle.statusBarColor)
 
+    galleryToolbar.title = galleryUiBundle.toolbarText
     galleryToolbar.setTitleTextColor(galleryUiBundle.toolbarTextColor)
     val drawable = drawable(galleryUiBundle.toolbarIcon)
     drawable?.colorFilter = PorterDuffColorFilter(galleryUiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
@@ -38,7 +39,7 @@ fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
     galleryBottomView.setBackgroundColor(galleryUiBundle.bottomViewBackground)
 }
 
-fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
+internal fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
     window.statusBarColor(uiBundle.statusBarColor)
 
     preToolbar.setTitleTextColor(uiBundle.toolbarTextColor)

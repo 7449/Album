@@ -29,6 +29,10 @@ class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout) {
         uri.toString().toast(this)
     }
 
+    override fun onGalleryResources(entities: List<ScanEntity>) {
+        entities.toString().toast(this)
+    }
+
 }
 
 class GlideAppSimpleImageManager : ImageLoaderManager<SimpleGallery> {

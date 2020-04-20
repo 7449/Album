@@ -56,12 +56,7 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
         super.onCreate(savedInstanceState)
         obtain(uiBundle)
 
-        preBottomViewSelect.setOnClickListener {
-            onGalleryResources(prevFragment.selectEntities)
-            if (!prevFragment.selectEmpty) {
-                isRefreshGalleryUI(isRefresh = false, isFinish = true)
-            }
-        }
+        preBottomViewSelect.setOnClickListener { onGalleryResources(prevFragment.selectEntities) }
         preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
         preCount.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
 
@@ -85,10 +80,11 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
         super.onBackPressed()
     }
 
-    private fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean) {
+    private fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean, arrayList: ArrayList<ScanEntity> = ArrayList()) {
         val intent = Intent()
         val resultBundle = prevFragment.resultBundle(isRefresh)
         resultBundle.putBoolean(UIResult.PREV_RESULT_FINISH, isFinish)
+        resultBundle.putParcelableArrayList(UIResult.PREV_RESULT_SELECT, arrayList)
         intent.putExtras(resultBundle)
         setResult(Activity.RESULT_OK, intent)
         finish()
@@ -116,6 +112,8 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
     /**
      * 选择图片
      */
-    open fun onGalleryResources(entities: List<ScanEntity>) {}
+    open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
+        isRefreshGalleryUI(isRefresh = true, isFinish = false, arrayList = entities)
+    }
 
 }

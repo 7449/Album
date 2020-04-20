@@ -3,8 +3,8 @@ package com.gallery.sample
 import android.app.Activity
 import android.os.Bundle
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.color
 import com.gallery.ui.GalleryUiBundle
+import com.kotlin.x.color
 import com.yalantis.ucrop.UCrop.Options.*
 
 object GalleryTheme {

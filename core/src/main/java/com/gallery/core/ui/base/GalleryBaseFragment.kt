@@ -2,8 +2,8 @@ package com.gallery.core.ui.base
 
 import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
-import com.gallery.core.PermissionCode
-import com.gallery.core.ext.orEmpty
+import com.kotlin.x.PermissionCode
+import com.kotlin.x.orEmpty
 
 /**
  * @author y

@@ -36,7 +36,7 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
 }
 
 //裁剪或者拍照之后更新文件夹数据
-fun ArrayList<ScanEntity>.updateResultFinder(parentId: Long, scanEntity: ScanEntity) {
+fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity) {
     if (isEmpty()) {
         return
     }

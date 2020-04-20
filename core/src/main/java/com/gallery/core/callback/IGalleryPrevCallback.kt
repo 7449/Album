@@ -5,9 +5,9 @@ import androidx.annotation.Px
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.show
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.scan.ScanEntity
+import com.kotlin.x.toast
 
 /**
  *
@@ -34,7 +34,7 @@ interface IGalleryPrevCallback {
      * [GalleryBundle.multipleMaxCount]
      */
     fun onClickCheckBoxMaxCount(context: Context, scanEntity: ScanEntity) {
-        "不能再选择啦".show(context)
+        "不能再选择啦".toast(context)
     }
 
     /**
@@ -43,7 +43,7 @@ interface IGalleryPrevCallback {
      * [PrevFragment.checkBoxClick]
      */
     fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
-        "文件已被删除".show(context)
+        "文件已被删除".toast(context)
     }
 
     /**

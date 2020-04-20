@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
-import com.gallery.core.ext.show
 import com.gallery.core.ui.fragment.ScanFragment
+import com.kotlin.x.toast
 import com.yalantis.ucrop.UCrop
 
 /**
@@ -44,7 +44,7 @@ interface IGalleryInterceptor {
      * 取消裁剪
      */
     fun onUCropCanceled(context: Context) {
-        "取消裁剪".show(context)
+        "取消裁剪".toast(context)
     }
 
     /**
@@ -52,7 +52,7 @@ interface IGalleryInterceptor {
      * 裁剪异常
      */
     fun onUCropError(context: Context, throwable: Throwable?) {
-        "裁剪异常".show(context)
+        "裁剪异常".toast(context)
     }
 
     /**

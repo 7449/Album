@@ -13,7 +13,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.*
-import com.gallery.core.ext.*
+import com.gallery.core.ext.externalUri
+import com.gallery.core.ext.findFinder
+import com.gallery.core.ext.isScanAll
+import com.gallery.core.ext.updateResultFinder
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
@@ -23,6 +26,7 @@ import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.adapter.FinderAdapter
 import com.gallery.ui.obtain
+import com.kotlin.x.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
@@ -153,7 +157,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
-        scanEntity.toString().show(context)
+        scanEntity.toString().toast(context)
     }
 
     override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
@@ -167,7 +171,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onScanResultSuccess(context: Context, scanEntity: ScanEntity) {
-        finderList.updateResultFinder(galleryFragment.parentId, scanEntity)
+        finderList.updateResultFinder(scanEntity)
     }
 
     override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
@@ -182,21 +186,21 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     override fun onUCropOptions() = UCrop.Options().apply { this.optionBundle.putAll(galleryUiBundle.uCropBundle) }
 
     override fun onUCropResources(uri: Uri) {
-        uri.toString().show(this)
+        uri.toString().toast(this)
     }
 
     /**
      * 点击预览但是未选择图片
      */
     open fun onGalleryPreEmpty() {
-        "未选择图片".show(this)
+        "未选择图片".toast(this)
     }
 
     /**
      * 扫描到的文件目录为空
      */
     open fun onGalleryFinderEmpty() {
-        "文件目录为空".show(this)
+        "文件目录为空".toast(this)
     }
 
     /**

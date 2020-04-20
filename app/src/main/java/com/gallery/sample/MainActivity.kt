@@ -14,16 +14,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
-import com.gallery.core.callback.IGallery
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.ext.*
+import com.gallery.core.ext.externalUri
+import com.gallery.core.ext.galleryPathFile
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
+import com.kotlin.x.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -88,17 +89,17 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         when (resultCode) {
             Activity.RESULT_CANCELED ->
                 when (requestCode) {
-                    UCrop.REQUEST_CROP -> "取消裁剪".show(this)
-                    IGallery.CAMERA_REQUEST_CODE -> "取消拍照".show(this)
+                    UCrop.REQUEST_CROP -> "取消裁剪".toast(this)
+                    CameraX.CAMERA_REQUEST_CODE -> "取消拍照".toast(this)
                 }
-            UCrop.RESULT_ERROR -> "裁剪异常".show(this)
+            UCrop.RESULT_ERROR -> "裁剪异常".toast(this)
             Activity.RESULT_OK ->
                 when (requestCode) {
-                    IGallery.CAMERA_REQUEST_CODE -> {
-                        uriToFilePath(fileUri)?.let {
+                    CameraX.CAMERA_REQUEST_CODE -> {
+                        findFilePathToUri(fileUri)?.let {
                             scanFile(this, arrayOf(it), null) { path: String?, _: Uri? ->
                                 runOnUiThread {
-                                    path?.show(this)
+                                    path?.toast(this)
                                 }
                             }
                         }
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     UCrop.REQUEST_CROP -> {
                         scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, uri: Uri? ->
                             runOnUiThread {
-                                data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.show(this)
+                                data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.toast(this)
                             }
                         }
                     }
@@ -130,10 +131,10 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     }
 
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
-        scanEntity.toString().show(context)
+        scanEntity.toString().toast(context)
     }
 
     override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        scanEntity.toString().show(context)
+        scanEntity.toString().toast(context)
     }
 }

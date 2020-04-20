@@ -9,15 +9,18 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gallery.core.GalleryBundle
-import com.gallery.core.PermissionCode
 import com.gallery.core.R
 import com.gallery.core.ResultType
 import com.gallery.core.callback.*
-import com.gallery.core.ext.*
+import com.gallery.core.ext.cropPathFile
+import com.gallery.core.ext.externalUri
+import com.gallery.core.ext.galleryPathFile
+import com.gallery.core.ext.isScanAll
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.*
+import com.kotlin.x.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
@@ -115,13 +118,13 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                 when (requestCode) {
                     IGalleryPrev.PREV_START_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
                     UCrop.REQUEST_CROP -> galleryInterceptor.onUCropCanceled(requireContext())
-                    IGallery.CAMERA_REQUEST_CODE -> galleryCallback.onCameraCanceled(requireContext())
+                    CameraX.CAMERA_REQUEST_CODE -> galleryCallback.onCameraCanceled(requireContext())
                 }
             UCrop.RESULT_ERROR -> galleryInterceptor.onUCropError(requireContext(), UCrop.getError(data.orEmpty()))
             Activity.RESULT_OK ->
                 when (requestCode) {
-                    IGallery.CAMERA_REQUEST_CODE -> {
-                        requireActivity().uriToFilePath(fileUri)?.let {
+                    CameraX.CAMERA_REQUEST_CODE -> {
+                        requireActivity().findFilePathToUri(fileUri)?.let {
                             scanFile(ResultType.CAMERA, it)
                             if (galleryBundle.cameraCrop) {
                                 openCrop(fileUri)

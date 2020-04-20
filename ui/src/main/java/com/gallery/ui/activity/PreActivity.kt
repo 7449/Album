@@ -9,7 +9,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.callback.IGalleryPrevCallback
-import com.gallery.core.ext.*
+import com.gallery.core.ext.externalUri
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
@@ -19,6 +19,10 @@ import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.obtain
+import com.kotlin.x.addFragment
+import com.kotlin.x.findFragmentByTag
+import com.kotlin.x.getParcelableArrayList
+import com.kotlin.x.showFragment
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader {

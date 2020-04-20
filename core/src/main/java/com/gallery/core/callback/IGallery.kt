@@ -44,11 +44,6 @@ interface IGallery {
          * [Bundle.putParcelable]
          */
         const val GALLERY_START_CONFIG = "galleryStartConfig"
-
-        /**
-         * 拍照的requestCode
-         */
-        const val CAMERA_REQUEST_CODE = 365
     }
 
     /**

@@ -6,9 +6,9 @@ import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.show
-import com.gallery.core.ext.uriExists
 import com.gallery.scan.ScanEntity
+import com.kotlin.x.show
+import com.kotlin.x.uriExists
 import com.xadapter.vh.XViewHolder
 import com.xadapter.vh.checkBox
 import com.xadapter.vh.context

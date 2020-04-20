@@ -3,17 +3,17 @@ package com.gallery.core.ui.fragment
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
-import com.gallery.core.PermissionCode
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.uriExists
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
+import com.kotlin.x.PermissionCode
+import com.kotlin.x.uriExists
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
 class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGalleryPrev {

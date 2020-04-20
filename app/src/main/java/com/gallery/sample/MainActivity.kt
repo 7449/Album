@@ -1,6 +1,7 @@
 package com.gallery.sample
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaScannerConnection.scanFile
@@ -128,22 +129,11 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
-    override fun onGalleryResource(scanEntity: ScanEntity) {
-        scanEntity.toString().show(this)
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+        scanEntity.toString().show(context)
     }
 
-    override fun onChangedCheckBox(isSelect: Boolean, scanEntity: ScanEntity) {
-    }
-
-    override fun onChangedScreen(selectCount: Int) {
-    }
-
-    override fun onChangedPrevCount(selectCount: Int) {
-    }
-
-    override fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long) {
-    }
-
-    override fun onScanResultSuccess(scanEntity: ScanEntity) {
+    override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
+        scanEntity.toString().show(context)
     }
 }

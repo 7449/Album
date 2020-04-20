@@ -166,7 +166,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                 galleryAdapter.addEntity(0, scanEntity)
             }
             galleryAdapter.notifyDataSetChanged()
-            galleryCallback.onScanResultSuccess(scanEntity)
+            galleryCallback.onScanResultSuccess(requireContext(), scanEntity)
         }
     }
 
@@ -178,7 +178,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
         if (!requireActivity().uriExists(galleryEntity.externalUri())) {
-            galleryCallback.onClickItemFileNotExist(requireContext())
+            galleryCallback.onClickItemFileNotExist(requireContext(), galleryEntity)
             return
         }
         if (galleryBundle.scanType == ScanType.VIDEO) {
@@ -187,7 +187,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                 openVideo.setDataAndType(galleryEntity.externalUri(), "video/*")
                 startActivity(openVideo)
             } catch (e: Exception) {
-                galleryCallback.onOpenVideoPlayError(requireContext())
+                galleryCallback.onOpenVideoPlayError(requireContext(), galleryEntity)
             }
             return
         }
@@ -195,11 +195,11 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             if (galleryBundle.crop) {
                 openCrop(galleryEntity.externalUri())
             } else {
-                galleryCallback.onGalleryResource(galleryEntity)
+                galleryCallback.onGalleryResource(requireContext(), galleryEntity)
             }
             return
         }
-        galleryCallback.onPhotoItemClick(selectEntities, position, parentId)
+        galleryCallback.onPhotoItemClick(requireContext(), galleryEntity, position, parentId)
     }
 
     override fun onScanGallery(parent: Long, result: Boolean) {
@@ -287,5 +287,5 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         get() = selectEntities.size
 
     override val itemCount: Int
-        get() = galleryAdapter.itemCount
+        get() = currentEntities.size
 }

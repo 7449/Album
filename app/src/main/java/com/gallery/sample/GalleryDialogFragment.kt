@@ -1,5 +1,6 @@
 package com.gallery.sample
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -66,24 +67,11 @@ class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
         })
     }
 
-    override fun onGalleryResource(scanEntity: ScanEntity) {
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         scanEntity.toString().show(requireActivity())
         dismiss()
     }
 
-    override fun onChangedCheckBox(isSelect: Boolean, scanEntity: ScanEntity) {
+    override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
     }
-
-    override fun onChangedScreen(selectCount: Int) {
-    }
-
-    override fun onChangedPrevCount(selectCount: Int) {
-    }
-
-    override fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long) {
-    }
-
-    override fun onScanResultSuccess(scanEntity: ScanEntity) {
-    }
-
 }

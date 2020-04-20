@@ -1,6 +1,7 @@
 package com.gallery.ui.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -151,21 +152,21 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         container.addView(imageView)
     }
 
-    override fun onGalleryResource(scanEntity: ScanEntity) {
-        scanEntity.toString().show(this)
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+        scanEntity.toString().show(context)
     }
 
-    override fun onPhotoItemClick(selectEntities: ArrayList<ScanEntity>, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
         PreActivity.newInstance(
                 galleryFragment,
                 galleryFragment.currentEntities,
-                selectEntities,
+                galleryFragment.selectEntities,
                 galleryBundle,
                 galleryUiBundle,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position)
     }
 
-    override fun onScanResultSuccess(scanEntity: ScanEntity) {
+    override fun onScanResultSuccess(context: Context, scanEntity: ScanEntity) {
         finderList.updateResultFinder(galleryFragment.parentId, scanEntity)
     }
 

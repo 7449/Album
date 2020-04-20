@@ -15,7 +15,7 @@ interface IGallery {
     companion object {
 
         /**
-         * 相机占位的[ScanEntity.id]
+         * 相机占位的[ScanEntity.parent]
          */
         internal const val CAMERA_PARENT_ID = -11111L
 

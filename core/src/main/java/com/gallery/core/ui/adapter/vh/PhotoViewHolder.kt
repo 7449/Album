@@ -37,12 +37,12 @@ class PhotoViewHolder(itemView: View,
                 if (multipleList.contains(galleryEntity)) {
                     multipleList.remove(galleryEntity)
                 }
-                galleryCallback.onClickCheckBoxFileNotExist(context)
+                galleryCallback.onClickCheckBoxFileNotExist(context, galleryEntity)
                 return@setOnClickListener
             }
             if (!multipleList.contains(galleryEntity) && multipleList.size >= galleryBundle.multipleMaxCount) {
                 checkBox.isChecked = false
-                galleryCallback.onClickCheckBoxMaxCount(context)
+                galleryCallback.onClickCheckBoxMaxCount(context, galleryEntity)
                 return@setOnClickListener
             }
             if (!galleryEntity.isCheck) {

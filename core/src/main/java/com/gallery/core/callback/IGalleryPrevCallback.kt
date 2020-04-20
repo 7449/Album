@@ -7,6 +7,7 @@ import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ext.show
 import com.gallery.core.ui.fragment.PrevFragment
+import com.gallery.scan.ScanEntity
 
 /**
  *
@@ -32,7 +33,7 @@ interface IGalleryPrevCallback {
      * 已达到选择最大数
      * [GalleryBundle.multipleMaxCount]
      */
-    fun onClickCheckBoxMaxCount(context: Context) {
+    fun onClickCheckBoxMaxCount(context: Context, scanEntity: ScanEntity) {
         "不能再选择啦".show(context)
     }
 
@@ -41,7 +42,7 @@ interface IGalleryPrevCallback {
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * [PrevFragment.checkBoxClick]
      */
-    fun onClickCheckBoxFileNotExist(context: Context) {
+    fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
         "文件已被删除".show(context)
     }
 

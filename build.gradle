@@ -8,7 +8,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.2'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -42,7 +42,8 @@ ext {
     viewHolderVersion = "0.0.4@aar"
     bannerVersion = "1.1.9"
     kotlinxVersion = "0.0.0.6"
-    coreVersion = "0.0.4"
+    coreVersion = "0.0.5"
+    uiVersion = "0.0.3"
 
     sampleApplicationId = 'com.gallery.sample'
 }

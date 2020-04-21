@@ -9,13 +9,14 @@ import com.android.banner.imageLoaderManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.ext.externalUri
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.activity.GalleryActivity
 import com.kotlin.x.toast
 import kotlinx.android.synthetic.main.simple_gallery_layout.*
 
-class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout) {
+class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout), IGalleryInterceptor {
 
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         val arrayList = ArrayList<SimpleGallery>()
@@ -33,6 +34,10 @@ class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout) {
         entities.toString().toast(this)
     }
 
+    override fun onCustomPhotoCrop(uri: Uri): Boolean {
+        "custom crop".toast(this)
+        return true
+    }
 }
 
 class GlideAppSimpleImageManager : ImageLoaderManager<SimpleGallery> {

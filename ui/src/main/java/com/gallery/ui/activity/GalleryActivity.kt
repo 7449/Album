@@ -200,34 +200,40 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
      * 点击预览但是未选择图片
      */
     open fun onGalleryPreEmpty() {
-        "未选择图片".toast(this)
+        getString(R.string.gallery_prev_select_empty).toast(this)
     }
 
     /**
      * 扫描到的文件目录为空
      */
     open fun onGalleryFinderEmpty() {
-        "文件目录为空".toast(this)
+        getString(R.string.gallery_finder_empty).toast(this)
     }
 
     /**
      * 裁剪成功
      */
     open fun onGalleryCropResource(uri: Uri) {
-        galleryCallback?.onGalleryCropResource(this, uri)
+        if (galleryCallback?.onGalleryCropResource(this, uri) == true) {
+            finish()
+        }
     }
 
     /**
      * 单选不裁剪
      */
     open fun onGalleryResource(scanEntity: ScanEntity) {
-        galleryCallback?.onGalleryResource(this, scanEntity)
+        if (galleryCallback?.onGalleryResource(this, scanEntity) == true) {
+            finish()
+        }
     }
 
     /**
      * 选择图片
      */
     open fun onGalleryResources(entities: List<ScanEntity>) {
-        galleryCallback?.onGalleryResources(this, entities)
+        if (galleryCallback?.onGalleryResources(this, entities) == true) {
+            finish()
+        }
     }
 }

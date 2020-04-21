@@ -31,11 +31,18 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
 #### dependencies
 
     implementation 'com.ydevelop:gallery.ui:0.0.2'
-    implementation 'com.ydevelop:gallery.glide:0.0.2'
-  
+    implementation "com.github.yalantis:ucrop:$ucropVersion"
+    implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    
 #### demo
 
     Gallery.open(activity)
+    
+    
+#### custom page
+
+  [SimpleGalleryActivity](./app/src/main/java/com/gallery/sample/SimpleGalleryActivity.kt)
 
 ## Screenshot
 

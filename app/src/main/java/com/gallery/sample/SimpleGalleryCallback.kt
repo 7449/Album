@@ -8,16 +8,19 @@ import com.kotlin.x.toast
 
 class SimpleGalleryCallback : GalleryCallback {
 
-    override fun onGalleryCropResource(activity: GalleryActivity, uri: Uri) {
+    override fun onGalleryCropResource(activity: GalleryActivity, uri: Uri): Boolean {
         uri.toString().toast(activity)
+        return true
     }
 
-    override fun onGalleryResource(activity: GalleryActivity, scanEntity: ScanEntity) {
+    override fun onGalleryResource(activity: GalleryActivity, scanEntity: ScanEntity): Boolean {
         scanEntity.toString().toast(activity)
+        return true
     }
 
-    override fun onGalleryResources(activity: GalleryActivity, entities: List<ScanEntity>) {
+    override fun onGalleryResources(activity: GalleryActivity, entities: List<ScanEntity>): Boolean {
         entities.toString().toast(activity)
+        return true
     }
 
 }

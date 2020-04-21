@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/preRootView"
     android:layout_width="match_parent"
@@ -11,8 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/preToolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/gallery_toolbar_height"
-        app:contentInsetStartWithNavigation="0dp" />
+        android:layout_height="@dimen/gallery_toolbar_height" />
 
     <FrameLayout
         android:id="@+id/preFragment"

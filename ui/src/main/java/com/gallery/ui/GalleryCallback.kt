@@ -9,15 +9,15 @@ interface GalleryCallback {
     /**
      * 裁剪成功
      */
-    fun onGalleryCropResource(activity: GalleryActivity, uri: Uri)
+    fun onGalleryCropResource(activity: GalleryActivity, uri: Uri): Boolean = true
 
     /**
      * 单选不裁剪
      */
-    fun onGalleryResource(activity: GalleryActivity, scanEntity: ScanEntity)
+    fun onGalleryResource(activity: GalleryActivity, scanEntity: ScanEntity): Boolean = true
 
     /**
      * 选择图片
      */
-    fun onGalleryResources(activity: GalleryActivity, entities: List<ScanEntity>)
+    fun onGalleryResources(activity: GalleryActivity, entities: List<ScanEntity>): Boolean = true
 }

@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         }
 
         customActivity.setOnClickListener {
-            Gallery.open(this, GalleryBundle(), GalleryUiBundle(), SimpleGalleryActivity::class.java)
+            Gallery.open(this, GalleryBundle(radio = true, crop = true), GalleryUiBundle(), SimpleGalleryActivity::class.java)
         }
         dialog.setOnClickListener {
             GalleryDialogFragment.newInstance().show(supportFragmentManager, GalleryDialogFragment::class.java.simpleName)

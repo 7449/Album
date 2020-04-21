@@ -116,14 +116,14 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
      * 选择图片
      */
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
-        isRefreshGalleryUI(isRefresh = true, isFinish = false, arrayList = entities)
+        isRefreshGalleryUI(isRefresh = true, isFinish = true, arrayList = entities)
     }
 
     /**
      * 选择数据为空
      */
     open fun onGallerySelectEmpty() {
-        "未选择数据".toast(this)
+        getString(R.string.gallery_prev_select_empty_pre).toast(this)
     }
 
 }

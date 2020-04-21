@@ -19,10 +19,7 @@ import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.obtain
-import com.kotlin.x.addFragment
-import com.kotlin.x.findFragmentByTag
-import com.kotlin.x.getParcelableArrayList
-import com.kotlin.x.showFragment
+import com.kotlin.x.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader {
@@ -56,7 +53,13 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
         super.onCreate(savedInstanceState)
         obtain(uiBundle)
 
-        preBottomViewSelect.setOnClickListener { onGalleryResources(prevFragment.selectEntities) }
+        preBottomViewSelect.setOnClickListener {
+            if (prevFragment.selectEmpty) {
+                onGallerySelectEmpty()
+            } else {
+                onGalleryResources(prevFragment.selectEntities)
+            }
+        }
         preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
         preCount.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
 
@@ -114,6 +117,13 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
      */
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         isRefreshGalleryUI(isRefresh = true, isFinish = false, arrayList = entities)
+    }
+
+    /**
+     * 选择数据为空
+     */
+    open fun onGallerySelectEmpty() {
+        "未选择数据".toast(this)
     }
 
 }

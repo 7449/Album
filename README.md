@@ -2,8 +2,6 @@
 
 1. `UI`某些回调需要处理
 
-2. `core`需要再优化
-
 ## 
 
     android:requestLegacyExternalStorage="true"

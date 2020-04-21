@@ -4,6 +4,7 @@ import android.net.Uri
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.activity.GalleryActivity
 
+@Deprecated("recommended CustomGallery : GalleryActivity()")
 interface GalleryCallback {
     /**
      * 裁剪成功

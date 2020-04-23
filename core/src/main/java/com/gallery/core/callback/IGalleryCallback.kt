@@ -63,7 +63,7 @@ interface IGalleryCallback {
 
     /**
      * 刷新预览页数据之后触发
-     * [ScanFragment.onResultPreview]
+     * [ScanFragment.onUpdatePrevResult]
      */
     fun onChangedPrevCount(selectCount: Int) {}
 

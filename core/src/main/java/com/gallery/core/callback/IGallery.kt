@@ -101,6 +101,6 @@ interface IGallery {
      * [Bundle.getParcelableArrayList] 选中的数据
      * [Bundle.getBoolean] 是否刷新数据(合并选中的数据)
      */
-    fun onResultPreview(bundle: Bundle)
+    fun onUpdatePrevResult(bundle: Bundle)
 
 }

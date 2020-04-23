@@ -109,7 +109,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         when (resultCode) {
             Activity.RESULT_CANCELED ->
                 when (requestCode) {
-                    IGalleryPrev.PREV_START_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
+                    IGalleryPrev.PREV_START_REQUEST_CODE -> onUpdatePrevResult(data?.extras.orEmpty())
                     UCrop.REQUEST_CROP -> galleryInterceptor.onUCropCanceled(requireContext())
                     CameraX.CAMERA_REQUEST_CODE -> galleryCallback.onCameraCanceled(requireContext())
                 }
@@ -133,7 +133,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                         galleryInterceptor.onUCropResources(cropUri.orEmpty())
                         cropUri.path?.let { scanFile(ResultType.CROP, it) }
                     }
-                    IGalleryPrev.PREV_START_REQUEST_CODE -> onResultPreview(data?.extras.orEmpty())
+                    IGalleryPrev.PREV_START_REQUEST_CODE -> onUpdatePrevResult(data?.extras.orEmpty())
                 }
         }
     }
@@ -239,7 +239,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                 .start(requireActivity(), this)
     }
 
-    override fun onResultPreview(bundle: Bundle) {
+    override fun onUpdatePrevResult(bundle: Bundle) {
         val previewGalleryEntity = bundle.getParcelableArrayList<ScanEntity>(IGalleryPrev.PREV_RESULT_SELECT)
         val isRefreshUI = bundle.getBoolean(IGalleryPrev.PREV_RESULT_REFRESH, true)
         if (!isRefreshUI || previewGalleryEntity == null || selectEntities == previewGalleryEntity) {

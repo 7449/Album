@@ -1,27 +1,15 @@
 package com.gallery.core.ext
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Environment
 import com.gallery.scan.ScanType
-import com.kotlin.x.hasQ
+import com.kotlin.x.hasQExpand
 import java.io.File
-
-fun Context.openVideo(uri: Uri, error: () -> Unit) {
-    try {
-        val openVideo = Intent(Intent.ACTION_VIEW)
-        openVideo.setDataAndType(uri, "video/*")
-        startActivity(openVideo)
-    } catch (e: Exception) {
-        error.invoke()
-    }
-}
 
 fun Context.galleryPathFile(path: String?, name: String, scanType: ScanType = ScanType.IMAGE): File {
     val suffix = if (scanType == ScanType.VIDEO) "mp4" else "jpg"
     val fileName = "${System.currentTimeMillis()}_$name.$suffix"
-    if (hasQ()) {
+    if (hasQExpand()) {
         //Q只用到了File.getName()
         //具体可见findUriByFile(file)
         //val contentValues = ContentValues().apply {

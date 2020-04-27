@@ -12,7 +12,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
-import com.kotlin.x.toast
+import com.kotlin.x.toastExpand
 
 class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
 
@@ -68,7 +68,7 @@ class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
     }
 
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
-        scanEntity.toString().toast(requireActivity())
+        scanEntity.toString().toastExpand(requireActivity())
         dismiss()
     }
 

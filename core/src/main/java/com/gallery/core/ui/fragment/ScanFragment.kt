@@ -12,7 +12,10 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.ResultType
 import com.gallery.core.callback.*
-import com.gallery.core.ext.*
+import com.gallery.core.ext.cropPathFile
+import com.gallery.core.ext.externalUri
+import com.gallery.core.ext.galleryPathFile
+import com.gallery.core.ext.isScanAll
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.widget.SimpleGridDivider
@@ -59,7 +62,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         bundle.getParcelable(IGallery.GALLERY_START_CONFIG) ?: GalleryBundle()
     }
     private val galleryAdapter by lazy {
-        GalleryAdapter(requireActivity().square(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
+        GalleryAdapter(requireActivity().squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
     }
     private val scan by lazy {
         ScanImpl(this)
@@ -71,7 +74,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         super.onCreate(savedInstanceState)
         savedInstanceState?.let {
             parentId = it.getLong(IGallery.GALLERY_START_PARENT_ID, SCAN_ALL)
-            fileUri = it.getParcelable(IGallery.GALLERY_START_IMAGE_URL) ?: Uri.EMPTY
+            fileUri = it.getParcelableOrDefault(IGallery.GALLERY_START_IMAGE_URL, Uri.EMPTY)
         }
     }
 
@@ -85,7 +88,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         galleryRootView.setBackgroundColor(galleryBundle.galleryRootBackground)
-        galleryEmpty.setImageDrawable(drawable(galleryBundle.photoEmptyDrawable))
+        galleryEmpty.setImageDrawable(drawableExpand(galleryBundle.photoEmptyDrawable))
         galleryEmpty.setOnClickListener { v ->
             if (galleryInterceptor.onEmptyPhotoClick(v)) {
                 startCamera()
@@ -109,15 +112,15 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         when (resultCode) {
             Activity.RESULT_CANCELED ->
                 when (requestCode) {
-                    IGalleryPrev.PREV_START_REQUEST_CODE -> onUpdatePrevResult(data?.extras.orEmpty())
+                    IGalleryPrev.PREV_START_REQUEST_CODE -> onUpdatePrevResult(data?.extras.orEmptyExpand())
                     UCrop.REQUEST_CROP -> galleryInterceptor.onUCropCanceled(requireContext())
                     CameraX.CAMERA_REQUEST_CODE -> galleryCallback.onCameraCanceled(requireContext())
                 }
-            UCrop.RESULT_ERROR -> galleryInterceptor.onUCropError(requireContext(), UCrop.getError(data.orEmpty()))
+            UCrop.RESULT_ERROR -> galleryInterceptor.onUCropError(requireContext(), UCrop.getError(data.orEmptyExpand()))
             Activity.RESULT_OK ->
                 when (requestCode) {
                     CameraX.CAMERA_REQUEST_CODE -> {
-                        requireActivity().findFilePathToUri(fileUri)?.let {
+                        findPathByUriExpand(fileUri)?.let {
                             scanFile(ResultType.CAMERA, it)
                             if (galleryBundle.cameraCrop) {
                                 openCrop(fileUri)
@@ -130,22 +133,22 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                             galleryInterceptor.onUCropError(requireContext(), null)
                             return
                         }
-                        galleryInterceptor.onUCropResources(cropUri.orEmpty())
+                        galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
                         cropUri.path?.let { scanFile(ResultType.CROP, it) }
                     }
-                    IGalleryPrev.PREV_START_REQUEST_CODE -> onUpdatePrevResult(data?.extras.orEmpty())
+                    IGalleryPrev.PREV_START_REQUEST_CODE -> onUpdatePrevResult(data?.extras.orEmptyExpand())
                 }
         }
     }
 
     override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
         if (arrayList.isEmpty() && parentId.isScanAll()) {
-            galleryEmpty.show()
+            galleryEmpty.showExpand()
             galleryCallback.onScanSuccessEmpty(requireContext())
             return
         }
         galleryCallback.onScanSuccess(arrayList)
-        galleryEmpty.hide()
+        galleryEmpty.hideExpand()
         if (parentId.isScanAll() && !galleryBundle.hideCamera) {
             arrayList.add(0, ScanEntity(parent = IGallery.CAMERA_PARENT_ID))
         }
@@ -172,12 +175,12 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
-        if (!requireActivity().uriExists(galleryEntity.externalUri())) {
+        if (!moveToNextToIdExpand(galleryEntity.externalUri())) {
             galleryCallback.onClickItemFileNotExist(requireContext(), galleryEntity)
             return
         }
         if (galleryBundle.scanType == ScanType.VIDEO) {
-            requireContext().openVideo(galleryEntity.externalUri()) {
+            requireContext().openVideoExpand(galleryEntity.externalUri()) {
                 galleryCallback.onOpenVideoPlayError(requireContext(), galleryEntity)
             }
             return
@@ -194,7 +197,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onScanGallery(parent: Long, result: Boolean) {
-        if (!permissionStorage()) {
+        if (!permissionStorageExpand()) {
             return
         }
         this.parentId = parent
@@ -207,7 +210,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         // 可以直接插入到当前数据,如果不等于,不能插入,因为裁剪之后的图片属于另一个文件夹的数据
         // 文件夹数据更新的时候也需要处理这种情况
         if (result && galleryAdapter.isNotEmpty) {
-            scan.scanResult(requireActivity().findIdByUri(fileUri))
+            scan.scanResult(findIdByUriExpand(fileUri))
         } else {
             scan.scanParent(parent)
         }
@@ -215,8 +218,8 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun scanFile(type: ResultType, path: String) {
         MediaScannerConnection.scanFile(requireContext(), arrayOf(path), null) { _: String?, uri: Uri? ->
-            runOnUiThread {
-                uri ?: return@runOnUiThread
+            runOnUiThreadExpand {
+                uri ?: return@runOnUiThreadExpand
                 fileUri = uri
                 onScanGallery(parentId, type == ResultType.CROP)
             }
@@ -225,8 +228,8 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun startCamera() {
 //        val onCustomCamera = galleryInterceptor.onCustomCamera()
-        fileUri = requireActivity().findUriByFile(requireActivity().galleryPathFile(galleryBundle.cameraPath, galleryBundle.cameraName, galleryBundle.scanType))
-        galleryCallback.onCameraOpenStatus(requireContext(), openCamera(fileUri, galleryBundle.scanType == ScanType.VIDEO))
+        fileUri = requireActivity().findUriByFileExpand(requireActivity().galleryPathFile(galleryBundle.cameraPath, galleryBundle.cameraName, galleryBundle.scanType))
+        galleryCallback.onCameraOpenStatus(requireContext(), openCameraExpand(fileUri, galleryBundle.scanType == ScanType.VIDEO))
     }
 
     override fun openCrop(uri: Uri) {

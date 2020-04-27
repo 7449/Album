@@ -12,8 +12,7 @@ import com.gallery.core.ext.externalUri
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
-import com.kotlin.x.PermissionCode
-import com.kotlin.x.uriExists
+import com.kotlin.x.*
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
 class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGalleryPrev {
@@ -75,7 +74,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) }
     }
     private val galleryBundle by lazy {
-        bundle.getParcelable(IGalleryPrev.PREV_START_CONFIG) ?: GalleryBundle()
+        bundle.getParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -92,17 +91,18 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preCheckBox.setOnClickListener { checkBoxClick() }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         adapter.cleanAll()
-        adapter.addAll(bundle.getParcelableArrayList<ScanEntity>(IGalleryPrev.PREV_START_ALL) as ArrayList<ScanEntity>)
+        adapter.addAll(bundle.getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL))
         adapter.addSelectAll((savedInstanceState
-                ?: bundle).getParcelableArrayList(IGalleryPrev.PREV_START_SELECT) ?: ArrayList())
+                ?: bundle).getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT))
         adapter.updateEntity()
-        setCurrentItem((savedInstanceState ?: bundle).getInt(IGalleryPrev.PREV_START_POSITION, 0))
+        setCurrentItem((savedInstanceState
+                ?: bundle).getIntExpand(IGalleryPrev.PREV_START_POSITION))
         preCheckBox.isChecked = adapter.isCheck(currentPosition)
         galleryPrevCallback.onChangedCreated()
     }
 
     private fun checkBoxClick() {
-        if (!requireActivity().uriExists(currentItem.externalUri())) {
+        if (!requireActivity().moveToNextToIdExpand(currentItem.externalUri())) {
             preCheckBox.isChecked = false
             if (adapter.containsSelect(currentItem)) {
                 adapter.removeSelectEntity(currentItem)

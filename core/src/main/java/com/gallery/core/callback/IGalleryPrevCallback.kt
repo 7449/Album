@@ -8,7 +8,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.scan.ScanEntity
-import com.kotlin.x.toast
+import com.kotlin.x.toastExpand
 
 /**
  *
@@ -35,7 +35,7 @@ interface IGalleryPrevCallback {
      * [GalleryBundle.multipleMaxCount]
      */
     fun onClickCheckBoxMaxCount(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_check_max).toast(context)
+        context.getString(R.string.gallery_check_max).toastExpand(context)
     }
 
     /**
@@ -44,7 +44,7 @@ interface IGalleryPrevCallback {
      * [PrevFragment.checkBoxClick]
      */
     fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_prev_check_file_deleted).toast(context)
+        context.getString(R.string.gallery_prev_check_file_deleted).toastExpand(context)
     }
 
     /**

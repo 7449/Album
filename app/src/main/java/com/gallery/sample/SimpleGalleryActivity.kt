@@ -13,7 +13,7 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.ext.externalUri
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.activity.GalleryActivity
-import com.kotlin.x.toast
+import com.kotlin.x.toastExpand
 import kotlinx.android.synthetic.main.simple_gallery_layout.*
 
 class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout), IGalleryInterceptor {
@@ -27,15 +27,15 @@ class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout), I
     }
 
     override fun onUCropResources(uri: Uri) {
-        uri.toString().toast(this)
+        uri.toString().toastExpand(this)
     }
 
     override fun onGalleryResources(entities: List<ScanEntity>) {
-        entities.toString().toast(this)
+        entities.toString().toastExpand(this)
     }
 
     override fun onCustomPhotoCrop(uri: Uri): Boolean {
-        "custom crop".toast(this)
+        "custom crop".toastExpand(this)
         return true
     }
 }

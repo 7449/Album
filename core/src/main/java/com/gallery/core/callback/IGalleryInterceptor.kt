@@ -6,7 +6,7 @@ import android.net.Uri
 import android.view.View
 import com.gallery.core.R
 import com.gallery.core.ui.fragment.ScanFragment
-import com.kotlin.x.toast
+import com.kotlin.x.toastExpand
 import com.yalantis.ucrop.UCrop
 
 /**
@@ -45,7 +45,7 @@ interface IGalleryInterceptor {
      * 取消裁剪
      */
     fun onUCropCanceled(context: Context) {
-        context.getString(R.string.gallery_crop_canceled).toast(context)
+        context.getString(R.string.gallery_crop_canceled).toastExpand(context)
     }
 
     /**
@@ -53,7 +53,7 @@ interface IGalleryInterceptor {
      * 裁剪异常
      */
     fun onUCropError(context: Context, throwable: Throwable?) {
-        context.getString(R.string.gallery_crop_error).toast(context)
+        context.getString(R.string.gallery_crop_error).toastExpand(context)
     }
 
     /**

@@ -88,11 +88,11 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
         galleryToolbar.setNavigationOnClickListener { finish() }
 
-        findFragmentByTag(ScanFragment::class.java.simpleName) {
+        findFragmentByTagExpand(ScanFragment::class.java.simpleName) {
             if (it == null) {
-                addFragment(R.id.galleryFrame, ScanFragment.newInstance(galleryBundle))
+                addFragmentExpand(R.id.galleryFrame, ScanFragment.newInstance(galleryBundle))
             } else {
-                showFragment(it)
+                showFragmentExpand(it)
             }
         }
     }
@@ -178,12 +178,11 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
     override fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         if (resultCode == Activity.RESULT_OK && requestCode == IGalleryPrev.PREV_START_REQUEST_CODE) {
-            val entities = data?.extras.orEmpty().getParcelableArrayList<ScanEntity>(UIResult.PREV_RESULT_SELECT)
-                    ?: ArrayList()
+            val entities = data?.extras.getParcelableArrayListExpand<ScanEntity>(UIResult.PREV_RESULT_SELECT)
             if (entities.isNotEmpty()) {
                 onGalleryResources(entities)
             }
-            if (data?.extras.orEmpty().getBoolean(UIResult.PREV_RESULT_FINISH)) {
+            if (data?.extras.orEmptyExpand().getBoolean(UIResult.PREV_RESULT_FINISH)) {
                 finish()
             }
         }
@@ -200,14 +199,14 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
      * 点击预览但是未选择图片
      */
     open fun onGalleryPreEmpty() {
-        getString(R.string.gallery_prev_select_empty).toast(this)
+        getString(R.string.gallery_prev_select_empty).toastExpand(this)
     }
 
     /**
      * 扫描到的文件目录为空
      */
     open fun onGalleryFinderEmpty() {
-        getString(R.string.gallery_finder_empty).toast(this)
+        getString(R.string.gallery_finder_empty).toastExpand(this)
     }
 
     /**

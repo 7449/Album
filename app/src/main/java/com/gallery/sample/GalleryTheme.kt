@@ -4,7 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.GalleryUiBundle
-import com.kotlin.x.color
+import com.kotlin.x.colorExpand
 import com.yalantis.ucrop.UCrop.Options.*
 
 object GalleryTheme {
@@ -16,30 +16,30 @@ object GalleryTheme {
             }
             Theme.BLUE -> {
                 return GalleryBundle(
-                        cameraDrawableColor = R.color.colorGray.color(activity),
-                        cameraBackgroundColor = R.color.colorBlue.color(activity),
+                        cameraDrawableColor = R.color.colorGray.colorExpand(activity),
+                        cameraBackgroundColor = R.color.colorBlue.colorExpand(activity),
                         checkBoxDrawable = R.drawable.blue_selector_gallery_item_check
                 )
             }
             Theme.PINK -> {
                 return GalleryBundle(
-                        cameraDrawableColor = R.color.colorGray.color(activity),
-                        cameraBackgroundColor = R.color.colorPink.color(activity)
+                        cameraDrawableColor = R.color.colorGray.colorExpand(activity),
+                        cameraBackgroundColor = R.color.colorPink.colorExpand(activity)
                 )
             }
             Theme.BLACK -> {
                 return GalleryBundle(
-                        cameraDrawableColor = R.color.colorGray.color(activity),
-                        cameraBackgroundColor = R.color.colorBlack.color(activity),
-                        galleryRootBackground = R.color.colorBlack.color(activity),
-                        prevPhotoBackgroundColor = R.color.colorBlack.color(activity)
+                        cameraDrawableColor = R.color.colorGray.colorExpand(activity),
+                        cameraBackgroundColor = R.color.colorBlack.colorExpand(activity),
+                        galleryRootBackground = R.color.colorBlack.colorExpand(activity),
+                        prevPhotoBackgroundColor = R.color.colorBlack.colorExpand(activity)
                 )
             }
             Theme.APP -> {
                 return GalleryBundle(
                         checkBoxDrawable = R.drawable.app_selector_gallery_item_check,
-                        cameraDrawableColor = R.color.colorGray.color(activity),
-                        cameraBackgroundColor = R.color.colorAccent.color(activity)
+                        cameraDrawableColor = R.color.colorGray.colorExpand(activity),
+                        cameraBackgroundColor = R.color.colorAccent.colorExpand(activity)
                 )
             }
         }
@@ -52,36 +52,36 @@ object GalleryTheme {
             }
             Theme.BLUE -> {
                 return GalleryUiBundle(
-                        statusBarColor = R.color.colorBlue.color(activity),
-                        toolbarBackground = R.color.colorBlue.color(activity),
-                        bottomViewBackground = R.color.colorBlue.color(activity),
-                        preBottomViewBackground = R.color.colorBlue.color(activity)
+                        statusBarColor = R.color.colorBlue.colorExpand(activity),
+                        toolbarBackground = R.color.colorBlue.colorExpand(activity),
+                        bottomViewBackground = R.color.colorBlue.colorExpand(activity),
+                        preBottomViewBackground = R.color.colorBlue.colorExpand(activity)
                 )
             }
             Theme.PINK -> {
                 return GalleryUiBundle(
-                        statusBarColor = R.color.colorPink.color(activity),
-                        toolbarBackground = R.color.colorPink.color(activity),
-                        bottomViewBackground = R.color.colorPink.color(activity),
-                        preBottomViewBackground = R.color.colorPink.color(activity)
+                        statusBarColor = R.color.colorPink.colorExpand(activity),
+                        toolbarBackground = R.color.colorPink.colorExpand(activity),
+                        bottomViewBackground = R.color.colorPink.colorExpand(activity),
+                        preBottomViewBackground = R.color.colorPink.colorExpand(activity)
                 )
             }
             Theme.BLACK -> {
                 return GalleryUiBundle(
-                        statusBarColor = R.color.colorBlack.color(activity),
-                        toolbarBackground = R.color.colorBlack.color(activity),
-                        bottomViewBackground = R.color.colorBlack.color(activity),
-                        finderItemBackground = R.color.colorBlack.color(activity),
-                        finderItemTextColor = R.color.colorWhite.color(activity),
-                        preBottomViewBackground = R.color.colorBlack.color(activity)
+                        statusBarColor = R.color.colorBlack.colorExpand(activity),
+                        toolbarBackground = R.color.colorBlack.colorExpand(activity),
+                        bottomViewBackground = R.color.colorBlack.colorExpand(activity),
+                        finderItemBackground = R.color.colorBlack.colorExpand(activity),
+                        finderItemTextColor = R.color.colorWhite.colorExpand(activity),
+                        preBottomViewBackground = R.color.colorBlack.colorExpand(activity)
                 )
             }
             Theme.APP -> {
                 return GalleryUiBundle(
-                        statusBarColor = R.color.colorAccent.color(activity),
-                        toolbarBackground = R.color.colorAccent.color(activity),
-                        bottomViewBackground = R.color.colorAccent.color(activity),
-                        preBottomViewBackground = R.color.colorAccent.color(activity)
+                        statusBarColor = R.color.colorAccent.colorExpand(activity),
+                        toolbarBackground = R.color.colorAccent.colorExpand(activity),
+                        bottomViewBackground = R.color.colorAccent.colorExpand(activity),
+                        preBottomViewBackground = R.color.colorAccent.colorExpand(activity)
                 )
             }
         }
@@ -91,25 +91,25 @@ object GalleryTheme {
         return GalleryBundle(
                 radio = true,
                 cameraCrop = true,
-                cameraDrawableColor = R.color.colorGray.color(activity),
-                cameraBackgroundColor = R.color.colorBlack.color(activity),
-                galleryRootBackground = R.color.colorBlack.color(activity)
+                cameraDrawableColor = R.color.colorGray.colorExpand(activity),
+                cameraBackgroundColor = R.color.colorBlack.colorExpand(activity),
+                galleryRootBackground = R.color.colorBlack.colorExpand(activity)
         )
     }
 
     fun cropThemeGalleryUi(activity: Activity): GalleryUiBundle {
         return GalleryUiBundle(
-                statusBarColor = R.color.colorBlack.color(activity),
-                toolbarBackground = R.color.colorBlack.color(activity),
-                bottomViewBackground = R.color.colorBlack.color(activity),
-                finderItemBackground = R.color.colorBlack.color(activity),
-                finderItemTextColor = R.color.colorWhite.color(activity),
+                statusBarColor = R.color.colorBlack.colorExpand(activity),
+                toolbarBackground = R.color.colorBlack.colorExpand(activity),
+                bottomViewBackground = R.color.colorBlack.colorExpand(activity),
+                finderItemBackground = R.color.colorBlack.colorExpand(activity),
+                finderItemTextColor = R.color.colorWhite.colorExpand(activity),
                 uCropBundle = Bundle().apply {
                     putString(EXTRA_UCROP_TITLE_TEXT_TOOLBAR, "UCrop")
-                    putInt(EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, R.color.colorWhite.color(activity))
-                    putInt(EXTRA_TOOL_BAR_COLOR, R.color.colorBlack.color(activity))
-                    putInt(EXTRA_UCROP_COLOR_WIDGET_ACTIVE, R.color.colorBlack.color(activity))
-                    putInt(EXTRA_STATUS_BAR_COLOR, R.color.colorBlack.color(activity))
+                    putInt(EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, R.color.colorWhite.colorExpand(activity))
+                    putInt(EXTRA_TOOL_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
+                    putInt(EXTRA_UCROP_COLOR_WIDGET_ACTIVE, R.color.colorBlack.colorExpand(activity))
+                    putInt(EXTRA_STATUS_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
                     putBoolean(EXTRA_HIDE_BOTTOM_CONTROLS, true)
                 }
         )

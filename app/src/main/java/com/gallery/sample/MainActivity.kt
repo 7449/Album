@@ -52,8 +52,8 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             GalleryDialogFragment.newInstance().show(supportFragmentManager, GalleryDialogFragment::class.java.simpleName)
         }
         openCamera.setOnClickListener {
-            fileUri = findUriByFile(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
-            openCamera(fileUri, false)
+            fileUri = findUriByFileExpand(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
+            openCameraExpand(fileUri, false)
         }
         video.setOnClickListener {
             Gallery.open(this,
@@ -91,17 +91,17 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         when (resultCode) {
             Activity.RESULT_CANCELED ->
                 when (requestCode) {
-                    UCrop.REQUEST_CROP -> "取消裁剪".toast(this)
-                    CameraX.CAMERA_REQUEST_CODE -> "取消拍照".toast(this)
+                    UCrop.REQUEST_CROP -> "取消裁剪".toastExpand(this)
+                    CameraX.CAMERA_REQUEST_CODE -> "取消拍照".toastExpand(this)
                 }
-            UCrop.RESULT_ERROR -> "裁剪异常".toast(this)
+            UCrop.RESULT_ERROR -> "裁剪异常".toastExpand(this)
             Activity.RESULT_OK ->
                 when (requestCode) {
                     CameraX.CAMERA_REQUEST_CODE -> {
-                        findFilePathToUri(fileUri)?.let {
+                        findPathByUriExpand(fileUri)?.let {
                             scanFile(this, arrayOf(it), null) { path: String?, _: Uri? ->
                                 runOnUiThread {
-                                    path?.toast(this)
+                                    path?.toastExpand(this)
                                 }
                             }
                         }
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     UCrop.REQUEST_CROP -> {
                         scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, uri: Uri? ->
                             runOnUiThread {
-                                data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.toast(this)
+                                data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.toastExpand(this)
                             }
                         }
                     }
@@ -136,6 +136,6 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     }
 
     override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        scanEntity.toString().toast(context)
+        scanEntity.toString().toastExpand(context)
     }
 }

@@ -3,14 +3,14 @@ package com.gallery.core.ui.base
 import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
 import com.kotlin.x.PermissionCode
-import com.kotlin.x.orEmpty
+import com.kotlin.x.orEmptyExpand
 
 /**
  * @author y
  */
 abstract class GalleryBaseFragment(layoutId: Int) : Fragment(layoutId) {
 
-    val bundle by lazy { arguments.orEmpty() }
+    val bundle by lazy { arguments.orEmptyExpand() }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

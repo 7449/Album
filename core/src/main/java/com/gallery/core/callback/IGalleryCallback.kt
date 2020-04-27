@@ -9,7 +9,7 @@ import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.kotlin.x.CameraStatus
 import com.kotlin.x.PermissionCode
-import com.kotlin.x.toast
+import com.kotlin.x.toastExpand
 
 /**
  *
@@ -28,7 +28,7 @@ interface IGalleryCallback {
      * [PhotoViewHolder.photo]
      */
     fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_file_deleted).toast(context)
+        context.getString(R.string.gallery_file_deleted).toastExpand(context)
     }
 
     /**
@@ -36,7 +36,7 @@ interface IGalleryCallback {
      * [GalleryBundle.multipleMaxCount]
      */
     fun onClickCheckBoxMaxCount(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_check_max).toast(context)
+        context.getString(R.string.gallery_check_max).toastExpand(context)
     }
 
     /**
@@ -46,7 +46,7 @@ interface IGalleryCallback {
      * [ScanFragment.onPhotoItemClick]
      */
     fun onClickItemFileNotExist(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_item_file_deleted).toast(context)
+        context.getString(R.string.gallery_item_file_deleted).toastExpand(context)
     }
 
     /**
@@ -90,14 +90,14 @@ interface IGalleryCallback {
      * 取消拍照
      */
     fun onCameraCanceled(context: Context) {
-        context.getString(R.string.gallery_camera_canceled).toast(context)
+        context.getString(R.string.gallery_camera_canceled).toastExpand(context)
     }
 
     /**
      * 拍照之后获取数据失败
      */
     fun onCameraResultError(context: Context) {
-        context.getString(R.string.gallery_camera_result_error).toast(context)
+        context.getString(R.string.gallery_camera_result_error).toastExpand(context)
     }
 
     /**
@@ -108,8 +108,8 @@ interface IGalleryCallback {
      */
     fun onCameraOpenStatus(context: Context, status: CameraStatus) {
         when (status) {
-            CameraStatus.ERROR -> context.getString(R.string.gallery_open_camera_error).toast(context)
-            CameraStatus.SUCCESS -> context.getString(R.string.gallery_open_camera_success).toast(context)
+            CameraStatus.ERROR -> context.getString(R.string.gallery_open_camera_error).toastExpand(context)
+            CameraStatus.SUCCESS -> context.getString(R.string.gallery_open_camera_success).toastExpand(context)
             CameraStatus.PERMISSION -> {
             }
         }
@@ -119,14 +119,14 @@ interface IGalleryCallback {
      * 没有扫描到任何数据
      */
     fun onScanSuccessEmpty(context: Context) {
-        context.getString(R.string.gallery_scan_success_empty).toast(context)
+        context.getString(R.string.gallery_scan_success_empty).toastExpand(context)
     }
 
     /**
      * 视频播放异常
      */
     fun onOpenVideoPlayError(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_open_video_error).toast(context)
+        context.getString(R.string.gallery_open_video_error).toastExpand(context)
     }
 
     /**
@@ -135,6 +135,6 @@ interface IGalleryCallback {
      * [PermissionCode.WRITE]
      */
     fun onPermissionsDenied(context: Context, type: PermissionCode) {
-        context.getString(R.string.gallery_permissions_denied).toast(context)
+        context.getString(R.string.gallery_permissions_denied).toastExpand(context)
     }
 }

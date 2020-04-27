@@ -41,7 +41,7 @@ ext {
     scanVersion = "0.0.7"
     viewHolderVersion = "0.0.4@aar"
     bannerVersion = "1.1.9"
-    kotlinxVersion = "0.0.0.6"
+    kotlinxVersion = "0.0.0.8"
     coreVersion = "0.0.5"
     uiVersion = "0.0.3"
 

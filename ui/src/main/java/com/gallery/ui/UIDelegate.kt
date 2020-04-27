@@ -4,8 +4,8 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.activity.PreActivity
-import com.kotlin.x.drawable
-import com.kotlin.x.hasL
+import com.kotlin.x.drawableExpand
+import com.kotlin.x.hasLExpand
 import com.kotlin.x.minimumDrawable
 import com.kotlin.x.statusBarColor
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
@@ -16,11 +16,11 @@ internal fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
 
     galleryToolbar.title = galleryUiBundle.toolbarText
     galleryToolbar.setTitleTextColor(galleryUiBundle.toolbarTextColor)
-    val drawable = drawable(galleryUiBundle.toolbarIcon)
+    val drawable = drawableExpand(galleryUiBundle.toolbarIcon)
     drawable?.colorFilter = PorterDuffColorFilter(galleryUiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
     galleryToolbar.navigationIcon = drawable
     galleryToolbar.setBackgroundColor(galleryUiBundle.toolbarBackground)
-    if (hasL()) {
+    if (hasLExpand()) {
         galleryToolbar.elevation = galleryUiBundle.toolbarElevation
     }
 
@@ -43,11 +43,11 @@ internal fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
     window.statusBarColor(uiBundle.statusBarColor)
 
     preToolbar.setTitleTextColor(uiBundle.toolbarTextColor)
-    val drawable = drawable(uiBundle.toolbarIcon)
+    val drawable = drawableExpand(uiBundle.toolbarIcon)
     drawable?.colorFilter = PorterDuffColorFilter(uiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
     preToolbar.navigationIcon = drawable
     preToolbar.setBackgroundColor(uiBundle.toolbarBackground)
-    if (hasL()) {
+    if (hasLExpand()) {
         preToolbar.elevation = uiBundle.toolbarElevation
     }
 

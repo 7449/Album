@@ -63,17 +63,17 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
         preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
         preCount.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
 
-        findFragmentByTag(PrevFragment::class.java.simpleName) {
+        findFragmentByTagExpand(PrevFragment::class.java.simpleName) {
             if (it == null) {
-                addFragment(R.id.preFragment, PrevFragment.newInstance(
-                        getParcelableArrayList(IGalleryPrev.PREV_START_ALL),
-                        getParcelableArrayList(IGalleryPrev.PREV_START_SELECT),
+                addFragmentExpand(R.id.preFragment, PrevFragment.newInstance(
+                        intent.extras.getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL),
+                        intent.extras.getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT),
                         intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG)
                                 ?: GalleryBundle(),
                         intent.extras?.getInt(IGalleryPrev.PREV_START_POSITION) ?: 0
                 ))
             } else {
-                showFragment(it)
+                showFragmentExpand(it)
             }
         }
     }
@@ -123,7 +123,7 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
      * 选择数据为空
      */
     open fun onGallerySelectEmpty() {
-        getString(R.string.gallery_prev_select_empty_pre).toast(this)
+        getString(R.string.gallery_prev_select_empty_pre).toastExpand(this)
     }
 
 }

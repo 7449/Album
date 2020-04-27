@@ -7,8 +7,8 @@ import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ext.externalUri
 import com.gallery.scan.ScanEntity
-import com.kotlin.x.show
-import com.kotlin.x.uriExists
+import com.kotlin.x.moveToNextToIdExpand
+import com.kotlin.x.showExpand
 import com.xadapter.vh.XViewHolder
 import com.xadapter.vh.checkBox
 import com.xadapter.vh.context
@@ -28,11 +28,11 @@ class PhotoViewHolder(itemView: View,
         if (galleryBundle.radio) {
             return
         }
-        checkBox.show()
+        checkBox.showExpand()
         checkBox.isChecked = galleryEntity.isCheck
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener {
-            if (!checkBox.context.uriExists(galleryEntity.externalUri())) {
+            if (!checkBox.context.moveToNextToIdExpand(galleryEntity.externalUri())) {
                 checkBox.isChecked = false
                 if (multipleList.contains(galleryEntity)) {
                     multipleList.remove(galleryEntity)

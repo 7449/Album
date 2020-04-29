@@ -1,19 +1,23 @@
 package com.gallery.ui
 
+import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import androidx.kotlin.expand.drawableExpand
+import androidx.kotlin.expand.hasLExpand
+import androidx.kotlin.expand.minimumDrawable
+import androidx.kotlin.expand.statusBarColorExpand
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.activity.PreActivity
-import com.kotlin.x.drawableExpand
-import com.kotlin.x.hasLExpand
-import com.kotlin.x.minimumDrawable
-import com.kotlin.x.statusBarColor
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
+@SuppressLint("NewApi")
 internal fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
-    window.statusBarColor(galleryUiBundle.statusBarColor)
-
+    window.statusBarColorExpand(galleryUiBundle.statusBarColor)
+    if (hasLExpand()) {
+        window.statusBarColor = galleryUiBundle.statusBarColor
+    }
     galleryToolbar.title = galleryUiBundle.toolbarText
     galleryToolbar.setTitleTextColor(galleryUiBundle.toolbarTextColor)
     val drawable = drawableExpand(galleryUiBundle.toolbarIcon)
@@ -39,9 +43,12 @@ internal fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
     galleryBottomView.setBackgroundColor(galleryUiBundle.bottomViewBackground)
 }
 
+@SuppressLint("NewApi")
 internal fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
-    window.statusBarColor(uiBundle.statusBarColor)
-
+    window.statusBarColorExpand(uiBundle.statusBarColor)
+    if (hasLExpand()) {
+        window.statusBarColor = uiBundle.statusBarColor
+    }
     preToolbar.setTitleTextColor(uiBundle.toolbarTextColor)
     val drawable = drawableExpand(uiBundle.toolbarIcon)
     drawable?.colorFilter = PorterDuffColorFilter(uiBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)

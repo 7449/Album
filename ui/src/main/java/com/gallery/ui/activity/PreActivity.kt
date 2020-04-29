@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.kotlin.expand.*
 import com.bumptech.glide.Glide
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryImageLoader
@@ -19,7 +20,6 @@ import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 import com.gallery.ui.obtain
-import com.kotlin.x.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader {

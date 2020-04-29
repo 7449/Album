@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import androidx.kotlin.expand.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
@@ -20,7 +21,6 @@ import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.*
-import com.kotlin.x.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 

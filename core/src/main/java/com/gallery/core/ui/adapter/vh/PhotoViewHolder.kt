@@ -1,14 +1,14 @@
 package com.gallery.core.ui.adapter.vh
 
 import android.view.View
+import androidx.kotlin.expand.moveToNextToIdExpand
+import androidx.kotlin.expand.showExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ext.externalUri
 import com.gallery.scan.ScanEntity
-import com.kotlin.x.moveToNextToIdExpand
-import com.kotlin.x.showExpand
 import com.xadapter.vh.XViewHolder
 import com.xadapter.vh.checkBox
 import com.xadapter.vh.context

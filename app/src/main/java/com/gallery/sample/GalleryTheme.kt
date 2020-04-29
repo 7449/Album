@@ -2,9 +2,9 @@ package com.gallery.sample
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.kotlin.expand.colorExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.GalleryUiBundle
-import com.kotlin.x.colorExpand
 import com.yalantis.ucrop.UCrop.Options.*
 
 object GalleryTheme {

@@ -3,6 +3,7 @@ package com.gallery.sample
 import android.net.Uri
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.kotlin.expand.toastExpand
 import com.android.banner.BannerInfo
 import com.android.banner.ImageLoaderManager
 import com.android.banner.imageLoaderManager
@@ -13,7 +14,6 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.ext.externalUri
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.activity.GalleryActivity
-import com.kotlin.x.toastExpand
 import kotlinx.android.synthetic.main.simple_gallery_layout.*
 
 class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout), IGalleryInterceptor {

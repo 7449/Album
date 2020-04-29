@@ -1,6 +1,7 @@
 package com.gallery.core.ui.fragment
 
 import android.os.Bundle
+import androidx.kotlin.expand.*
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
@@ -12,7 +13,6 @@ import com.gallery.core.ext.externalUri
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
-import com.kotlin.x.*
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
 class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGalleryPrev {

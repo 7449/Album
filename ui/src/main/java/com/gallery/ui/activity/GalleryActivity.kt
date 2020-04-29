@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.FrameLayout
 import androidx.appcompat.widget.ListPopupWindow
+import androidx.kotlin.expand.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
@@ -24,7 +25,6 @@ import com.gallery.scan.ScanEntity
 import com.gallery.ui.*
 import com.gallery.ui.R
 import com.gallery.ui.adapter.FinderAdapter
-import com.kotlin.x.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 

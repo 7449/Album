@@ -2,8 +2,8 @@ package com.gallery.core.ext
 
 import android.content.Context
 import android.os.Environment
+import androidx.kotlin.expand.hasQExpand
 import com.gallery.scan.ScanType
-import com.kotlin.x.hasQExpand
 import java.io.File
 
 fun Context.galleryPathFile(path: String?, name: String, scanType: ScanType = ScanType.IMAGE): File {

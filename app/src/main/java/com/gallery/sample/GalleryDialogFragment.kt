@@ -8,11 +8,11 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.DialogFragment
+import androidx.kotlin.expand.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
-import com.kotlin.x.toastExpand
 
 class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
 

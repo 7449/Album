@@ -1,10 +1,10 @@
 package com.gallery.sample
 
 import android.net.Uri
+import androidx.kotlin.expand.toastExpand
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryCallback
 import com.gallery.ui.activity.GalleryActivity
-import com.kotlin.x.toastExpand
 
 class SimpleGalleryCallback : GalleryCallback {
 

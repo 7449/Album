@@ -5,12 +5,14 @@ interface Scan {
     /**
      * 扫描全部
      */
-    fun scanAll()
+    fun scanAll() {
+        scanParent(SCAN_ALL)
+    }
 
     /**
      * 扫描文件夹
      */
-    fun scanParent(parent: Long)
+    fun scanParent(parentId: Long)
 
     /**
      * 扫描拍照

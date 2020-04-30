@@ -1,8 +1,8 @@
 package com.gallery.core.ui.adapter.vh
 
 import android.view.View
-import androidx.kotlin.expand.moveToNextToIdExpand
-import androidx.kotlin.expand.showExpand
+import androidx.kotlin.expand.content.moveToNextToIdExpand
+import androidx.kotlin.expand.view.showExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback

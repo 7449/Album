@@ -7,7 +7,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import androidx.kotlin.expand.*
+import androidx.kotlin.expand.app.*
+import androidx.kotlin.expand.content.findUriByFileExpand
+import androidx.kotlin.expand.content.openVideoExpand
+import androidx.kotlin.expand.net.orEmptyExpand
+import androidx.kotlin.expand.os.camera.CameraX
+import androidx.kotlin.expand.os.getParcelableOrDefault
+import androidx.kotlin.expand.os.orEmptyExpand
+import androidx.kotlin.expand.os.permission.PermissionCode
+import androidx.kotlin.expand.os.permission.permissionStorageExpand
+import androidx.kotlin.expand.view.hideExpand
+import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
@@ -59,7 +69,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         }
     }
     private val galleryBundle by lazy {
-        bundle.getParcelable(IGallery.GALLERY_START_CONFIG) ?: GalleryBundle()
+        getParcelableOrDefault<GalleryBundle>(IGallery.GALLERY_START_CONFIG, GalleryBundle())
     }
     private val galleryAdapter by lazy {
         GalleryAdapter(requireActivity().squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)

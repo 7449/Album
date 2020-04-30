@@ -17,16 +17,12 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
     private val context: Context = scanView.scanContext.applicationContext
     private val scanType: ScanType = scanView.currentScanType
 
-    override fun scanAll() {
-        scanParent(SCAN_ALL)
-    }
-
-    override fun scanParent(parent: Long) {
+    override fun scanParent(parentId: Long) {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
-            putLong(Columns.PARENT, parent)
+            putLong(Columns.PARENT, parentId)
             putSerializable(Columns.SCAN_TYPE, scanType)
         }, ScanTask(context) {
             scanView.scanSuccess(it)

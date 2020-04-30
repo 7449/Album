@@ -30,8 +30,11 @@
             android:layout_margin="@dimen/gallery_button_margin"
             android:background="?android:selectableItemBackground"
             android:drawableRight="@drawable/ic_gallery_ui_finder"
+            android:ellipsize="end"
             android:gravity="right|center_vertical"
+            android:maxLines="1"
             android:padding="@dimen/gallery_bottom_padding"
+            android:singleLine="true"
             android:textSize="@dimen/gallery_bottom_text_size"
             tools:ignore="RtlHardcoded" />
 

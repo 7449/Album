@@ -14,6 +14,7 @@ android {
     }
 }
 dependencies {
+    compileOnly "com.ydevelop:kotlinx:$kotlinxVersion"
     compileOnly "androidx.fragment:fragment:$fragmentVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

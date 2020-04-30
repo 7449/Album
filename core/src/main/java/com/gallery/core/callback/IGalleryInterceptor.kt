@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
-import androidx.kotlin.expand.toastExpand
+import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.R
 import com.gallery.core.ui.fragment.ScanFragment
 import com.yalantis.ucrop.UCrop

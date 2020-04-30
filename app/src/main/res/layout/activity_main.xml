@@ -21,6 +21,12 @@
             android:text="select and crop" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/testActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="test listener" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/openCamera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -3,10 +3,10 @@ package com.gallery.ui
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import androidx.kotlin.expand.drawableExpand
-import androidx.kotlin.expand.hasLExpand
-import androidx.kotlin.expand.minimumDrawable
-import androidx.kotlin.expand.statusBarColorExpand
+import androidx.kotlin.expand.content.drawableExpand
+import androidx.kotlin.expand.content.minimumDrawableExpand
+import androidx.kotlin.expand.version.hasLExpand
+import androidx.kotlin.expand.view.statusBarColorExpand
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.activity.PreActivity
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
@@ -30,7 +30,7 @@ internal fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
 
     galleryFinderAll.textSize = galleryUiBundle.bottomFinderTextSize
     galleryFinderAll.setTextColor(galleryUiBundle.bottomFinderTextColor)
-    galleryFinderAll.setCompoundDrawables(null, null, minimumDrawable(galleryUiBundle.bottomFinderTextCompoundDrawable, galleryUiBundle.bottomFinderTextDrawableColor), null)
+    galleryFinderAll.setCompoundDrawables(null, null, minimumDrawableExpand(galleryUiBundle.bottomFinderTextCompoundDrawable, galleryUiBundle.bottomFinderTextDrawableColor), null)
 
     galleryPre.text = galleryUiBundle.bottomPreViewText
     galleryPre.textSize = galleryUiBundle.bottomPreViewTextSize

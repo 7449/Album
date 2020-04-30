@@ -8,7 +8,7 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.DialogFragment
-import androidx.kotlin.expand.toastExpand
+import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ui.fragment.ScanFragment

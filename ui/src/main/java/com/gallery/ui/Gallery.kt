@@ -30,13 +30,13 @@ object Gallery {
     }
 
     @Deprecated("recommended CustomGallery : GalleryActivity()", replaceWith = ReplaceWith(""))
-    fun callback(callback: GalleryCallback) {
-        GalleryActivity.galleryCallback = callback
+    fun callback(callback: GalleryListener) {
+//        GalleryActivity.galleryCallback = callback
     }
 
     @Deprecated("recommended CustomGallery : GalleryActivity()", replaceWith = ReplaceWith(""))
     fun end() {
-        GalleryActivity.galleryCallback = null
+//        GalleryActivity.galleryCallback = null
     }
 
 }

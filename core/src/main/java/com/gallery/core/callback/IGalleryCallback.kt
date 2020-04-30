@@ -1,9 +1,9 @@
 package com.gallery.core.callback
 
 import android.content.Context
-import androidx.kotlin.expand.CameraStatus
-import androidx.kotlin.expand.PermissionCode
-import androidx.kotlin.expand.toastExpand
+import androidx.kotlin.expand.os.camera.CameraStatus
+import androidx.kotlin.expand.os.permission.PermissionCode
+import androidx.kotlin.expand.text.toastExpand
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R

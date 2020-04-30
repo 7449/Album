@@ -11,7 +11,11 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.kotlin.expand.*
+import androidx.kotlin.expand.app.openCameraExpand
+import androidx.kotlin.expand.content.findPathByUriExpand
+import androidx.kotlin.expand.content.findUriByFileExpand
+import androidx.kotlin.expand.os.camera.CameraX
+import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
@@ -24,6 +28,7 @@ import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.Gallery
+import com.gallery.ui.GalleryPlus
 import com.gallery.ui.GalleryUiBundle
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,6 +50,9 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
         }
 
+        testActivity.setOnClickListener {
+            GalleryPlus(this).setCallback(SimpleGalleryCallback()).start()
+        }
         customActivity.setOnClickListener {
             Gallery.open(this, GalleryBundle(radio = true, crop = true), GalleryUiBundle(), SimpleGalleryActivity::class.java)
         }

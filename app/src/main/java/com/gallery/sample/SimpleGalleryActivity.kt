@@ -3,7 +3,7 @@ package com.gallery.sample
 import android.net.Uri
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.kotlin.expand.toastExpand
+import androidx.kotlin.expand.text.toastExpand
 import com.android.banner.BannerInfo
 import com.android.banner.ImageLoaderManager
 import com.android.banner.imageLoaderManager

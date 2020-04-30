@@ -2,7 +2,7 @@ package com.gallery.sample
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.kotlin.expand.colorExpand
+import androidx.kotlin.expand.graphics.colorExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.GalleryUiBundle
 import com.yalantis.ucrop.UCrop.Options.*

@@ -4,7 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.FrameLayout
-import androidx.kotlin.expand.*
+import androidx.kotlin.expand.app.addFragmentExpand
+import androidx.kotlin.expand.app.findFragmentByTagExpand
+import androidx.kotlin.expand.app.showFragmentExpand
+import androidx.kotlin.expand.os.bundleIntOrDefault
+import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
+import androidx.kotlin.expand.os.bundleParcelableOrDefault
+import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryImageLoader
@@ -43,10 +49,10 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
     }
 
     private val uiBundle by lazy {
-        intent.extras?.getParcelable(UIResult.UI_CONFIG) ?: GalleryUiBundle()
+        bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
     }
     private val galleryBundle by lazy {
-        intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG) ?: GalleryBundle()
+        bundleParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,11 +72,10 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
         findFragmentByTagExpand(PrevFragment::class.java.simpleName) {
             if (it == null) {
                 addFragmentExpand(R.id.preFragment, PrevFragment.newInstance(
-                        intent.extras.getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL),
-                        intent.extras.getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT),
-                        intent.extras?.getParcelable(IGalleryPrev.PREV_START_CONFIG)
-                                ?: GalleryBundle(),
-                        intent.extras?.getInt(IGalleryPrev.PREV_START_POSITION) ?: 0
+                        bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL),
+                        bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT),
+                        galleryBundle,
+                        bundleIntOrDefault(IGalleryPrev.PREV_START_POSITION)
                 ))
             } else {
                 showFragmentExpand(it)

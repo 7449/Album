@@ -2,7 +2,7 @@ package com.gallery.core.callback
 
 import android.content.Context
 import androidx.annotation.Px
-import androidx.kotlin.expand.toastExpand
+import androidx.kotlin.expand.text.toastExpand
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle

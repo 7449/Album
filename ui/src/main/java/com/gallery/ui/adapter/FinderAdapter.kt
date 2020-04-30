@@ -27,7 +27,9 @@ class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val di
             convertView
         }
         viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
-        viewHolder.appCompatTextView.text = "%s(%s)".format(finderEntity.bucketDisplayName, finderEntity.count.toString())
+        viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)
+        viewHolder.appCompatTextViewCount.setTextColor(galleryUiBundle.finderItemTextColor)
+        viewHolder.appCompatTextViewCount.text = "%s".format(finderEntity.count.toString())
         displayFinder.invoke(finderEntity, viewHolder.frameLayout)
         return rootView
     }
@@ -45,5 +47,6 @@ class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val di
     private class ViewHolder(view: View) {
         val frameLayout: FrameLayout = view.findViewById(R.id.iv_gallery_finder_icon)
         val appCompatTextView: AppCompatTextView = view.findViewById(R.id.tv_gallery_finder_name)
+        val appCompatTextViewCount: AppCompatTextView = view.findViewById(R.id.tv_gallery_finder_file_count)
     }
 }

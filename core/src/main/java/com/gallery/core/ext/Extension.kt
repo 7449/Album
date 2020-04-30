@@ -2,7 +2,7 @@ package com.gallery.core.ext
 
 import android.content.Context
 import android.os.Environment
-import androidx.kotlin.expand.hasQExpand
+import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.scan.ScanType
 import java.io.File
 

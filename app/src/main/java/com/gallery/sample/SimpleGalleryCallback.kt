@@ -1,24 +1,24 @@
 package com.gallery.sample
 
 import android.net.Uri
-import androidx.kotlin.expand.toastExpand
+import androidx.fragment.app.FragmentActivity
+import androidx.kotlin.expand.text.toastExpand
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.GalleryCallback
-import com.gallery.ui.activity.GalleryActivity
+import com.gallery.ui.GalleryListener
 
-class SimpleGalleryCallback : GalleryCallback {
+class SimpleGalleryCallback : GalleryListener {
 
-    override fun onGalleryCropResource(activity: GalleryActivity, uri: Uri): Boolean {
+    override fun onGalleryCropResource(activity: FragmentActivity, uri: Uri): Boolean {
         uri.toString().toastExpand(activity)
         return true
     }
 
-    override fun onGalleryResource(activity: GalleryActivity, scanEntity: ScanEntity): Boolean {
+    override fun onGalleryResource(activity: FragmentActivity, scanEntity: ScanEntity): Boolean {
         scanEntity.toString().toastExpand(activity)
         return true
     }
 
-    override fun onGalleryResources(activity: GalleryActivity, entities: List<ScanEntity>): Boolean {
+    override fun onGalleryResources(activity: FragmentActivity, entities: List<ScanEntity>): Boolean {
         entities.toString().toastExpand(activity)
         return true
     }

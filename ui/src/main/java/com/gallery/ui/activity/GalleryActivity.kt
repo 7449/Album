@@ -9,7 +9,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.FrameLayout
 import androidx.appcompat.widget.ListPopupWindow
-import androidx.kotlin.expand.*
+import androidx.kotlin.expand.app.addFragmentExpand
+import androidx.kotlin.expand.app.findFragmentByTagExpand
+import androidx.kotlin.expand.app.showFragmentExpand
+import androidx.kotlin.expand.os.bundleParcelableOrDefault
+import androidx.kotlin.expand.os.getParcelableArrayListExpand
+import androidx.kotlin.expand.os.orEmptyExpand
+import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
@@ -22,20 +28,17 @@ import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.*
+import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
+import com.gallery.ui.UIResult
 import com.gallery.ui.adapter.FinderAdapter
+import com.gallery.ui.obtain
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
         View.OnClickListener, AdapterView.OnItemClickListener, IGalleryCallback,
         IGalleryImageLoader, IGalleryInterceptor {
-
-    companion object {
-        @Deprecated("recommended CustomGallery : GalleryActivity()")
-        var galleryCallback: GalleryCallback? = null
-    }
 
     private val finderAdapter by lazy {
         FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayGalleryThumbnails(finderEntity, container) }
@@ -52,12 +55,10 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         }
     }
     private val galleryBundle by lazy {
-        intent.extras?.getParcelable(IGallery.GALLERY_START_CONFIG)
-                ?: GalleryBundle()
+        bundleParcelableOrDefault<GalleryBundle>(IGallery.GALLERY_START_CONFIG, GalleryBundle())
     }
     private val galleryUiBundle by lazy {
-        intent.extras?.getParcelable(UIResult.UI_CONFIG)
-                ?: GalleryUiBundle()
+        bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
     }
 
     private val finderList = ArrayList<ScanEntity>()
@@ -213,26 +214,38 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
      * 裁剪成功
      */
     open fun onGalleryCropResource(uri: Uri) {
-        if (galleryCallback?.onGalleryCropResource(this, uri) == true) {
-            finish()
-        }
+        val intent = Intent()
+        val bundle = Bundle()
+        bundle.putParcelable(UIResult.FRAGMENT_RESULT_URI, uri)
+        bundle.putInt(UIResult.FRAGMENT_RESULT_TYPE, UIResult.FRAGMENT_RESULT_CROP)
+        intent.putExtras(bundle)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     /**
      * 单选不裁剪
      */
     open fun onGalleryResource(scanEntity: ScanEntity) {
-        if (galleryCallback?.onGalleryResource(this, scanEntity) == true) {
-            finish()
-        }
+        val intent = Intent()
+        val bundle = Bundle()
+        bundle.putParcelable(UIResult.FRAGMENT_RESULT_ENTITY, scanEntity)
+        bundle.putInt(UIResult.FRAGMENT_RESULT_TYPE, UIResult.FRAGMENT_RESULT_RESOURCE)
+        intent.putExtras(bundle)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     /**
      * 选择图片
      */
     open fun onGalleryResources(entities: List<ScanEntity>) {
-        if (galleryCallback?.onGalleryResources(this, entities) == true) {
-            finish()
-        }
+        val intent = Intent()
+        val bundle = Bundle()
+        bundle.putParcelableArrayList(UIResult.FRAGMENT_RESULT_ENTITIES, entities as ArrayList<ScanEntity>)
+        bundle.putInt(UIResult.FRAGMENT_RESULT_TYPE, UIResult.FRAGMENT_RESULT_RESOURCES)
+        intent.putExtras(bundle)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }

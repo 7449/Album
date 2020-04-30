@@ -1,7 +1,12 @@
 package com.gallery.core.ui.fragment
 
 import android.os.Bundle
-import androidx.kotlin.expand.*
+import androidx.kotlin.expand.content.moveToNextToIdExpand
+import androidx.kotlin.expand.os.bundleOrEmptyExpand
+import androidx.kotlin.expand.os.getIntExpand
+import androidx.kotlin.expand.os.getParcelableArrayListExpand
+import androidx.kotlin.expand.os.getParcelableOrDefault
+import androidx.kotlin.expand.os.permission.PermissionCode
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
@@ -74,7 +79,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) }
     }
     private val galleryBundle by lazy {
-        bundle.getParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
+        getParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -91,12 +96,12 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preCheckBox.setOnClickListener { checkBoxClick() }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         adapter.cleanAll()
-        adapter.addAll(bundle.getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL))
+        adapter.addAll(getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL))
         adapter.addSelectAll((savedInstanceState
-                ?: bundle).getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT))
+                ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT))
         adapter.updateEntity()
         setCurrentItem((savedInstanceState
-                ?: bundle).getIntExpand(IGalleryPrev.PREV_START_POSITION))
+                ?: bundleOrEmptyExpand()).getIntExpand(IGalleryPrev.PREV_START_POSITION))
         preCheckBox.isChecked = adapter.isCheck(currentPosition)
         galleryPrevCallback.onChangedCreated()
     }

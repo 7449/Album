@@ -17,6 +17,7 @@ dependencies {
     api "com.ydevelop:gallery.scan:$scanVersion"
     api "com.ydevelop:kotlinx:$kotlinxVersion"
     api "com.ydevelop:rv-adapter-viewholder:$viewHolderVersion"
+    compileOnly "androidx.fragment:fragment:$fragmentVersion"
     compileOnly "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     compileOnly "androidx.viewpager2:viewpager2:$viewpagerVersion"
     compileOnly "com.github.yalantis:ucrop:$ucropVersion"

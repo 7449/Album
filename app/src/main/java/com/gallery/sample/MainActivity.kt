@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.media.MediaScannerConnection.scanFile
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
@@ -28,7 +29,6 @@ import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.Gallery
-import com.gallery.ui.GalleryPlus
 import com.gallery.ui.GalleryUiBundle
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,11 +50,13 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
         }
 
-        testActivity.setOnClickListener {
-            GalleryPlus(this).setCallback(SimpleGalleryCallback()).start()
-        }
         customActivity.setOnClickListener {
-            Gallery.open(this, GalleryBundle(radio = true, crop = true), GalleryUiBundle(), SimpleGalleryActivity::class.java)
+            Gallery(
+                    fragmentManager = supportFragmentManager,
+                    clz = SimpleGalleryActivity::class.java,
+                    galleryBundle = GalleryBundle(radio = true, crop = true),
+                    galleryListener = SimpleGalleryCallback()
+            )
         }
         dialog.setOnClickListener {
             GalleryDialogFragment.newInstance().show(supportFragmentManager, GalleryDialogFragment::class.java.simpleName)
@@ -64,30 +66,27 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             openCameraExpand(fileUri, false)
         }
         video.setOnClickListener {
-            Gallery.open(this,
-                    GalleryBundle(
-                            scanType = ScanType.VIDEO,
-                            cameraText = getString(R.string.video_tips)
-                    ),
-                    GalleryUiBundle(
-                            toolbarText = getString(R.string.gallery_video_title)
-                    ))
-                    .callback(SimpleGalleryCallback())
+            Gallery(fragmentManager = supportFragmentManager,
+                    galleryBundle = GalleryBundle(scanType = ScanType.VIDEO, cameraText = getString(R.string.video_tips)),
+                    galleryUiBundle = GalleryUiBundle(toolbarText = getString(R.string.gallery_video_title)),
+                    galleryListener = SimpleGalleryCallback()
+            )
         }
         selectCrop.setOnClickListener {
-            Gallery.open(this,
-                    GalleryTheme.cropThemeGallery(this),
-                    GalleryTheme.cropThemeGalleryUi(this))
-                    .callback(SimpleGalleryCallback())
+            Gallery(fragmentManager = supportFragmentManager,
+                    galleryBundle = GalleryTheme.cropThemeGallery(this),
+                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
+                    galleryListener = SimpleGalleryCallback()
+            )
         }
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.DEFAULT), GalleryTheme.themeGalleryUi(this, Theme.DEFAULT)).callback(SimpleGalleryCallback())
-                    1 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.APP), GalleryTheme.themeGalleryUi(this, Theme.APP)).callback(SimpleGalleryCallback())
-                    2 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLUE), GalleryTheme.themeGalleryUi(this, Theme.BLUE)).callback(SimpleGalleryCallback())
-                    3 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.BLACK), GalleryTheme.themeGalleryUi(this, Theme.BLACK)).callback(SimpleGalleryCallback())
-                    4 -> Gallery.open(this, GalleryTheme.themeGallery(this, Theme.PINK), GalleryTheme.themeGalleryUi(this, Theme.PINK)).callback(SimpleGalleryCallback())
+                    0 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryListener = SimpleGalleryCallback())
+                    1 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryListener = SimpleGalleryCallback())
+                    2 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryListener = SimpleGalleryCallback())
+                    3 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryListener = SimpleGalleryCallback())
+                    4 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryListener = SimpleGalleryCallback())
                 }
                 dialog.dismiss()
             }.show()
@@ -116,7 +115,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
 //                        openCrop(fileUri)
                     }
                     UCrop.REQUEST_CROP -> {
-                        scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, uri: Uri? ->
+                        scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, _: Uri? ->
                             runOnUiThread {
                                 data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.toastExpand(this)
                             }
@@ -145,5 +144,10 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
 
     override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
         scanEntity.toString().toastExpand(context)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("onDestroy", "onDestroy")
     }
 }

@@ -40,8 +40,8 @@ class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (childFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) == null) {
             childFragmentManager
                     .beginTransaction()

@@ -8,19 +8,20 @@ import com.gallery.ui.GalleryListener
 
 class SimpleGalleryCallback : GalleryListener {
 
-    override fun onGalleryCropResource(activity: FragmentActivity, uri: Uri): Boolean {
+    override fun onGalleryCropResource(activity: FragmentActivity, uri: Uri) {
         uri.toString().toastExpand(activity)
-        return true
     }
 
-    override fun onGalleryResource(activity: FragmentActivity, scanEntity: ScanEntity): Boolean {
+    override fun onGalleryResource(activity: FragmentActivity, scanEntity: ScanEntity) {
         scanEntity.toString().toastExpand(activity)
-        return true
     }
 
-    override fun onGalleryResources(activity: FragmentActivity, entities: List<ScanEntity>): Boolean {
+    override fun onGalleryResources(activity: FragmentActivity, entities: List<ScanEntity>) {
         entities.toString().toastExpand(activity)
-        return true
+    }
+
+    override fun onGalleryCancel(activity: FragmentActivity) {
+        "取消选择".toastExpand(activity)
     }
 
 }

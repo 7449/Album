@@ -19,13 +19,12 @@ android {
 dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.fragment:fragment:$fragmentVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.ydevelop:bannerlayout:$bannerVersion"
 
     implementation project(path: ':ui')
-//    implementation project(path: ':core')
-//    implementation "com.ydevelop:gallery.ui:$uiVersion"
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

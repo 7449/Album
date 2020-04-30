@@ -1,45 +1,69 @@
 package com.gallery.ui
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.kotlin.expand.os.getIntExpand
+import androidx.kotlin.expand.os.getParcelableArrayListExpand
+import androidx.kotlin.expand.os.getParcelableExpand
+import androidx.kotlin.expand.os.orEmptyExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGallery
 import com.gallery.ui.activity.GalleryActivity
 
-/**
- * @author y
- * @create 2019/3/1
- */
-object Gallery {
+class Gallery(
+        private val fragmentManager: FragmentManager,
+        private val galleryBundle: GalleryBundle = GalleryBundle(),
+        private val galleryUiBundle: GalleryUiBundle = GalleryUiBundle(),
+        private val clz: Class<*> = GalleryActivity::class.java,
+        private val galleryListener: GalleryListener
+) {
+    class GalleryFragment : Fragment()
 
-    fun open(context: Context) = open(context, GalleryBundle())
+    companion object {
+        private val TAG = Gallery::class.java.simpleName
+    }
 
-    fun open(context: Context, galleryBundle: GalleryBundle) = open(context, galleryBundle, GalleryUiBundle())
+    init {
+        val galleryFragment = getGalleryFragment(fragmentManager)
+        galleryFragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
+            if (intent.resultCode == Activity.RESULT_OK) {
+                val bundleExpand = intent.data?.extras.orEmptyExpand()
+                when (bundleExpand.getIntExpand(UIResult.FRAGMENT_RESULT_TYPE)) {
+                    UIResult.FRAGMENT_RESULT_CROP -> {
+                        galleryListener.onGalleryCropResource(galleryFragment.requireActivity(), bundleExpand.getParcelableExpand(UIResult.FRAGMENT_RESULT_URI))
+                    }
+                    UIResult.FRAGMENT_RESULT_RESOURCE -> {
+                        galleryListener.onGalleryResource(galleryFragment.requireActivity(), bundleExpand.getParcelableExpand(UIResult.FRAGMENT_RESULT_ENTITY))
+                    }
+                    UIResult.FRAGMENT_RESULT_RESOURCES -> {
+                        galleryListener.onGalleryResources(galleryFragment.requireActivity(), bundleExpand.getParcelableArrayListExpand(UIResult.FRAGMENT_RESULT_ENTITIES))
+                    }
+                }
+            } else if (intent.resultCode == Activity.RESULT_CANCELED) {
+                galleryListener.onGalleryCancel(galleryFragment.requireActivity())
+            }
 
-    fun open(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle) = open(context, galleryBundle, uiBundle, GalleryActivity::class.java)
-
-    fun open(context: Context, galleryBundle: GalleryBundle, uiBundle: GalleryUiBundle, clazz: Class<out GalleryActivity>) = also {
-        context.startActivity(Intent(context, clazz).apply {
+        }.launch(Intent(galleryFragment.context, clz).apply {
             putExtras(Bundle().apply {
                 putParcelable(IGallery.GALLERY_START_CONFIG, galleryBundle)
-                putParcelable(UIResult.UI_CONFIG, uiBundle)
+                putParcelable(UIResult.UI_CONFIG, galleryUiBundle)
             })
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
         })
     }
 
-    @Deprecated("recommended CustomGallery : GalleryActivity()", replaceWith = ReplaceWith(""))
-    fun callback(callback: GalleryListener) {
-//        GalleryActivity.galleryCallback = callback
+    private fun getGalleryFragment(fragmentManager: FragmentManager): GalleryFragment {
+        var galleryFragment = fragmentManager.findFragmentByTag(TAG) as? GalleryFragment
+        if (galleryFragment == null) {
+            galleryFragment = GalleryFragment()
+            fragmentManager
+                    .beginTransaction()
+                    .add(galleryFragment, TAG)
+                    .commitNow()
+        }
+        return galleryFragment
     }
-
-    @Deprecated("recommended CustomGallery : GalleryActivity()", replaceWith = ReplaceWith(""))
-    fun end() {
-//        GalleryActivity.galleryCallback = null
-    }
-
 }
-
-
-

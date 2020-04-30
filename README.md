@@ -1,6 +1,10 @@
 ## Prepare for the next version
 
-1. `UI`某些回调需要处理
+1. `Fragment`升级版本之后一系列回调`api`废弃，需要启用新的`Api`
+
+    都是`ActivityResultContracts`的各种实现,具体可见[Gallery](./ui/src/main/java/com/gallery/ui/Gallery.kt)
+    
+    已经实现了一个
 
 ## 
 

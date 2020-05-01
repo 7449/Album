@@ -75,8 +75,9 @@ class Gallery(
     }
 
     private fun startActivity(activity: FragmentActivity) {
-        activity
+        val registerForActivityResult = activity
                 .registerForActivityResult(startActivityForResult, activityResult)
+        registerForActivityResult
                 .launch(launchIntent(activity))
     }
 

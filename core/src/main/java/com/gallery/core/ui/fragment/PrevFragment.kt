@@ -2,7 +2,7 @@ package com.gallery.core.ui.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.kotlin.expand.content.moveToNextToIdExpand
+import androidx.kotlin.expand.app.moveToNextToIdExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.kotlin.expand.os.getIntExpand
 import androidx.kotlin.expand.os.getParcelableArrayListExpand
@@ -15,6 +15,9 @@ import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ext.externalUri
+import com.gallery.core.ext.galleryImageLoaderExpand
+import com.gallery.core.ext.galleryPrevCallbackExpand
+import com.gallery.core.ext.galleryPrevInterceptorExpand
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
@@ -38,27 +41,9 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         }
     }
 
-    private val galleryPrevInterceptor by lazy {
-        when {
-            parentFragment is IGalleryPrevInterceptor -> parentFragment as IGalleryPrevInterceptor
-            activity is IGalleryPrevInterceptor -> activity as IGalleryPrevInterceptor
-            else -> object : IGalleryPrevInterceptor {}
-        }
-    }
-    private val galleryImageLoader by lazy {
-        when {
-            parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
-            activity is IGalleryImageLoader -> activity as IGalleryImageLoader
-            else -> object : IGalleryImageLoader {}
-        }
-    }
-    private val galleryPrevCallback by lazy {
-        when {
-            parentFragment is IGalleryPrevCallback -> parentFragment as IGalleryPrevCallback
-            activity is IGalleryPrevCallback -> activity as IGalleryPrevCallback
-            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryPrevCallback")
-        }
-    }
+    private val galleryPrevInterceptor: IGalleryPrevInterceptor by lazy { galleryPrevInterceptorExpand }
+    private val galleryImageLoader: IGalleryImageLoader by lazy { galleryImageLoaderExpand }
+    private val galleryPrevCallback: IGalleryPrevCallback by lazy { galleryPrevCallbackExpand }
     private val pageChangeCallback by lazy {
         object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -71,16 +56,12 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
 
             override fun onPageSelected(position: Int) {
                 galleryPrevCallback.onPageSelected(position)
-                preCheckBox.isChecked = adapter.isCheck(position)
+                preCheckBox.isChecked = prevAdapter.isCheck(position)
             }
         }
     }
-    private val adapter by lazy {
-        PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) }
-    }
-    private val galleryBundle by lazy {
-        getParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
-    }
+    private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
+    private val galleryBundle by lazy { getParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle()) }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -90,54 +71,52 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter.cleanAll()
-        adapter.addAll(getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL))
-        adapter.addSelectAll((savedInstanceState
-                ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT))
-        adapter.updateEntity()
+        prevAdapter.cleanAll()
+        prevAdapter.addAll(getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL))
+        prevAdapter.addSelectAll((savedInstanceState ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT))
+        prevAdapter.updateEntity()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         preViewPager.registerOnPageChangeCallback(pageChangeCallback)
-        preViewPager.adapter = adapter
+        preViewPager.adapter = prevAdapter
         preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         preCheckBox.setOnClickListener { checkBoxClick() }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
-        setCurrentItem((savedInstanceState
-                ?: bundleOrEmptyExpand()).getIntExpand(IGalleryPrev.PREV_START_POSITION))
-        preCheckBox.isChecked = adapter.isCheck(currentPosition)
+        setCurrentItem((savedInstanceState ?: bundleOrEmptyExpand()).getIntExpand(IGalleryPrev.PREV_START_POSITION))
+        preCheckBox.isChecked = prevAdapter.isCheck(currentPosition)
         galleryPrevCallback.onChangedCreated()
     }
 
     private fun checkBoxClick() {
-        if (!requireActivity().moveToNextToIdExpand(currentItem.externalUri())) {
+        if (!moveToNextToIdExpand(currentItem.externalUri())) {
             preCheckBox.isChecked = false
-            if (adapter.containsSelect(currentItem)) {
-                adapter.removeSelectEntity(currentItem)
+            if (prevAdapter.containsSelect(currentItem)) {
+                prevAdapter.removeSelectEntity(currentItem)
             }
             galleryPrevCallback.onClickCheckBoxFileNotExist(requireContext(), galleryBundle, currentItem)
             return
         }
-        if (!adapter.containsSelect(currentItem) && selectEntities.size >= galleryBundle.multipleMaxCount) {
+        if (!prevAdapter.containsSelect(currentItem) && selectEntities.size >= galleryBundle.multipleMaxCount) {
             preCheckBox.isChecked = false
             galleryPrevCallback.onClickCheckBoxMaxCount(requireContext(), galleryBundle, currentItem)
             return
         }
         if (currentItem.isCheck) {
-            adapter.removeSelectEntity(currentItem)
+            prevAdapter.removeSelectEntity(currentItem)
             currentItem.isCheck = false
         } else {
             currentItem.isCheck = true
-            adapter.addSelectEntity(currentItem)
+            prevAdapter.addSelectEntity(currentItem)
         }
         galleryPrevCallback.onChangedCheckBox()
     }
 
     override val currentItem: ScanEntity
-        get() = adapter.item(currentPosition)
+        get() = prevAdapter.item(currentPosition)
 
     override val selectEntities: ArrayList<ScanEntity>
-        get() = adapter.currentSelectList
+        get() = prevAdapter.currentSelectList
 
     override val selectEmpty: Boolean
         get() = selectEntities.isEmpty()
@@ -146,7 +125,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         get() = selectEntities.size
 
     override val itemCount: Int
-        get() = adapter.itemCount
+        get() = prevAdapter.itemCount
 
     override val currentPosition: Int
         get() = preViewPager.currentItem

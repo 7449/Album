@@ -31,13 +31,11 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
     fun addAll(newList: ArrayList<ScanEntity>) {
         galleryList.clear()
         galleryList.addAll(newList)
-        notifyDataSetChanged()
     }
 
     fun addSelectAll(newList: ArrayList<ScanEntity>) {
         selectList.clear()
         selectList.addAll(newList)
-        notifyDataSetChanged()
     }
 
     fun updateEntity() {

@@ -8,8 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.FrameLayout
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.kotlin.expand.app.addFragmentExpand
@@ -68,10 +67,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
     private val finderList = ArrayList<ScanEntity>()
     private val requestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
-
-    private val startActivityForResult: ActivityResultContracts.StartActivityForResult = ActivityResultContracts.StartActivityForResult()
-
-    private val activityResult: ActivityResultCallback<ActivityResult> = ActivityResultCallback<ActivityResult> { intent ->
+    private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand = intent?.data?.extras.orEmptyExpand()
         if (intent.resultCode == Activity.RESULT_OK) {
             galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
@@ -128,15 +124,14 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     onGalleryPreEmpty()
                     return
                 }
-                val newInstance = PreActivity.newInstance(
+                prevLauncher.launch(PreActivity.newInstance(
                         galleryFragment,
                         galleryFragment.selectEntities,
                         galleryFragment.selectEntities,
                         galleryBundle,
                         galleryUiBundle,
                         0
-                )
-                registerForActivityResult(startActivityForResult, activityResult).launch(newInstance)
+                ))
             }
             R.id.gallerySelect -> onGalleryResources(galleryFragment.selectEntities)
             R.id.galleryFinderAll -> {
@@ -188,14 +183,13 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        val newInstance = PreActivity.newInstance(
+        prevLauncher.launch(PreActivity.newInstance(
                 galleryFragment,
                 galleryFragment.currentEntities,
                 galleryFragment.selectEntities,
                 galleryBundle,
                 galleryUiBundle,
-                if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position)
-        registerForActivityResult(startActivityForResult, activityResult).launch(newInstance)
+                if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position))
     }
 
     override fun onScanResultSuccess(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {

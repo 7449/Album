@@ -6,8 +6,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.*
@@ -46,46 +45,22 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         }
     }
 
-    private val galleryInterceptor by lazy {
-        when {
-            parentFragment is IGalleryInterceptor -> parentFragment as IGalleryInterceptor
-            activity is IGalleryInterceptor -> activity as IGalleryInterceptor
-            else -> object : IGalleryInterceptor {}
-        }
-    }
-    private val galleryImageLoader by lazy {
-        when {
-            parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
-            activity is IGalleryImageLoader -> activity as IGalleryImageLoader
-            else -> object : IGalleryImageLoader {}
-        }
-    }
-    private val galleryCallback by lazy {
-        when {
-            parentFragment is IGalleryCallback -> parentFragment as IGalleryCallback
-            activity is IGalleryCallback -> activity as IGalleryCallback
-            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryCallback")
-        }
-    }
-    private val galleryBundle by lazy {
-        getParcelableOrDefault<GalleryBundle>(IGallery.GALLERY_START_CONFIG, GalleryBundle())
-    }
-    private val galleryAdapter by lazy {
+    private val galleryInterceptor: IGalleryInterceptor by lazy { galleryInterceptorExpand }
+    private val galleryImageLoader: IGalleryImageLoader by lazy { galleryImageLoaderExpand }
+    private val galleryCallback: IGalleryCallback by lazy { galleryCallbackExpand }
+    private val galleryBundle by lazy { getParcelableOrDefault<GalleryBundle>(IGallery.GALLERY_START_CONFIG, GalleryBundle()) }
+    private val scan: ScanImpl by lazy { ScanImpl(this) }
+    private val galleryAdapter: GalleryAdapter by lazy {
         GalleryAdapter(requireActivity().squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
     }
-    private val scan by lazy {
-        ScanImpl(this)
-    }
-    private val startActivityForResult: ActivityResultContracts.StartActivityForResult = ActivityResultContracts.StartActivityForResult()
-
-    private val activityResult: ActivityResultCallback<ActivityResult> = ActivityResultCallback<ActivityResult> { intent ->
+    private val cropLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand = intent?.data?.extras.orEmptyExpand()
         when (intent.resultCode) {
             Activity.RESULT_OK -> {
                 val cropUri = bundleExpand.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)
                 if (cropUri == null) {
                     galleryInterceptor.onUCropError(requireContext(), null)
-                    return@ActivityResultCallback
+                    return@registerForActivityResult
                 }
                 galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
                 cropUri.path?.let { scanFile(ResultType.CROP, it) }
@@ -98,7 +73,6 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             }
         }
     }
-
     private var fileUri: Uri = Uri.EMPTY
     var parentId: Long = SCAN_ALL
 
@@ -192,7 +166,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onScanGallery(parent: Long, result: Boolean) {
-        if (!checkPermissionAndRequestWrite()) {
+        if (!checkPermissionAndRequestWriteExpand(writePermissionLauncher)) {
             return
         }
         this.parentId = parent
@@ -222,7 +196,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun startCamera() {
-        if (!checkPermissionAndRequestCamera()) {
+        if (!checkPermissionAndRequestCameraExpand(cameraPermissionLauncher)) {
             galleryCallback.onCameraOpenStatus(requireContext(), CameraStatus.PERMISSION, galleryBundle)
             return
         }
@@ -251,7 +225,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         val intent: Intent = UCrop.of(uri, Uri.fromFile(requireActivity().cropPathFile(galleryBundle.uCropPath, galleryBundle.cameraName, galleryBundle.scanType)))
                 .withOptions(galleryInterceptor.onUCropOptions())
                 .getIntent(requireContext())
-        registerForActivityResult(startActivityForResult, activityResult).launch(intent)
+        cropLauncher.launch(intent)
     }
 
     override fun onUpdatePrevResult(bundle: Bundle) {

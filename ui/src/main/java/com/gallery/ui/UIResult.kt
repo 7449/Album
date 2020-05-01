@@ -12,13 +12,13 @@ object UIResult {
 
     const val PREV_RESULT_SELECT = "prevResultSelect"
 
-    const val FRAGMENT_RESULT_TYPE = "fragmentResultType"
-
     const val FRAGMENT_RESULT_CROP = 0
 
     const val FRAGMENT_RESULT_RESOURCE = 1
 
     const val FRAGMENT_RESULT_RESOURCES = 2
+
+    const val FRAGMENT_RESULT_TYPE = "fragmentResultType"
 
     const val FRAGMENT_RESULT_URI = "fragmentResultUri"
 

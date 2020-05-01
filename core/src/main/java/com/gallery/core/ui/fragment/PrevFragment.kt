@@ -1,12 +1,12 @@
 package com.gallery.core.ui.fragment
 
 import android.os.Bundle
+import android.view.View
 import androidx.kotlin.expand.content.moveToNextToIdExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.kotlin.expand.os.getIntExpand
 import androidx.kotlin.expand.os.getParcelableArrayListExpand
 import androidx.kotlin.expand.os.getParcelableOrDefault
-import androidx.kotlin.expand.os.permission.PermissionCode
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
@@ -88,18 +88,21 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         outState.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectEntities)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        preViewPager.registerOnPageChangeCallback(pageChangeCallback)
-        preViewPager.adapter = adapter
-        preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
-        preCheckBox.setOnClickListener { checkBoxClick() }
-        preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         adapter.cleanAll()
         adapter.addAll(getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL))
         adapter.addSelectAll((savedInstanceState
                 ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT))
         adapter.updateEntity()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        preViewPager.registerOnPageChangeCallback(pageChangeCallback)
+        preViewPager.adapter = adapter
+        preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
+        preCheckBox.setOnClickListener { checkBoxClick() }
+        preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         setCurrentItem((savedInstanceState
                 ?: bundleOrEmptyExpand()).getIntExpand(IGalleryPrev.PREV_START_POSITION))
         preCheckBox.isChecked = adapter.isCheck(currentPosition)
@@ -112,12 +115,12 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
             if (adapter.containsSelect(currentItem)) {
                 adapter.removeSelectEntity(currentItem)
             }
-            galleryPrevCallback.onClickCheckBoxFileNotExist(requireContext(), currentItem)
+            galleryPrevCallback.onClickCheckBoxFileNotExist(requireContext(), galleryBundle, currentItem)
             return
         }
         if (!adapter.containsSelect(currentItem) && selectEntities.size >= galleryBundle.multipleMaxCount) {
             preCheckBox.isChecked = false
-            galleryPrevCallback.onClickCheckBoxMaxCount(requireContext(), currentItem)
+            galleryPrevCallback.onClickCheckBoxMaxCount(requireContext(), galleryBundle, currentItem)
             return
         }
         if (currentItem.isCheck) {
@@ -162,10 +165,6 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         bundle.putBoolean(IGalleryPrev.PREV_RESULT_REFRESH, isRefresh)
         return bundle
     }
-
-    override fun permissionsGranted(type: PermissionCode) = Unit
-
-    override fun permissionsDenied(type: PermissionCode) = Unit
 
     override fun onDestroyView() {
         preViewPager.unregisterOnPageChangeCallback(pageChangeCallback)

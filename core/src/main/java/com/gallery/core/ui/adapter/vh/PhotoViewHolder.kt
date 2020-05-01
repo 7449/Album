@@ -37,12 +37,12 @@ class PhotoViewHolder(itemView: View,
                 if (multipleList.contains(galleryEntity)) {
                     multipleList.remove(galleryEntity)
                 }
-                galleryCallback.onClickCheckBoxFileNotExist(context, galleryEntity)
+                galleryCallback.onClickCheckBoxFileNotExist(context, galleryBundle, galleryEntity)
                 return@setOnClickListener
             }
             if (!multipleList.contains(galleryEntity) && multipleList.size >= galleryBundle.multipleMaxCount) {
                 checkBox.isChecked = false
-                galleryCallback.onClickCheckBoxMaxCount(context, galleryEntity)
+                galleryCallback.onClickCheckBoxMaxCount(context, galleryBundle, galleryEntity)
                 return@setOnClickListener
             }
             if (!galleryEntity.isCheck) {
@@ -52,7 +52,7 @@ class PhotoViewHolder(itemView: View,
                 multipleList.remove(galleryEntity)
                 galleryEntity.isCheck = false
             }
-            galleryCallback.onChangedCheckBox(galleryEntity.isCheck, galleryEntity)
+            galleryCallback.onChangedCheckBox(galleryEntity.isCheck, galleryBundle, galleryEntity)
         }
     }
 }

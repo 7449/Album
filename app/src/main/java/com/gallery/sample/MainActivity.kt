@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.media.MediaScannerConnection.scanFile
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
 
         customActivity.setOnClickListener {
             Gallery(
-                    fragmentManager = supportFragmentManager,
+                    activity = this,
                     clz = SimpleGalleryActivity::class.java,
                     galleryBundle = GalleryBundle(radio = true, crop = true),
                     galleryListener = SimpleGalleryCallback()
@@ -66,14 +65,16 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             openCameraExpand(fileUri, false)
         }
         video.setOnClickListener {
-            Gallery(fragmentManager = supportFragmentManager,
+            Gallery(
+                    activity = this,
                     galleryBundle = GalleryBundle(scanType = ScanType.VIDEO, cameraText = getString(R.string.video_tips)),
                     galleryUiBundle = GalleryUiBundle(toolbarText = getString(R.string.gallery_video_title)),
                     galleryListener = SimpleGalleryCallback()
             )
         }
         selectCrop.setOnClickListener {
-            Gallery(fragmentManager = supportFragmentManager,
+            Gallery(
+                    activity = this,
                     galleryBundle = GalleryTheme.cropThemeGallery(this),
                     galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
                     galleryListener = SimpleGalleryCallback()
@@ -82,11 +83,11 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryListener = SimpleGalleryCallback())
-                    1 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryListener = SimpleGalleryCallback())
-                    2 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryListener = SimpleGalleryCallback())
-                    3 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryListener = SimpleGalleryCallback())
-                    4 -> Gallery(this.supportFragmentManager, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryListener = SimpleGalleryCallback())
+                    0 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryListener = SimpleGalleryCallback())
+                    1 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryListener = SimpleGalleryCallback())
+                    2 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryListener = SimpleGalleryCallback())
+                    3 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryListener = SimpleGalleryCallback())
+                    4 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryListener = SimpleGalleryCallback())
                 }
                 dialog.dismiss()
             }.show()
@@ -115,7 +116,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
 //                        openCrop(fileUri)
                     }
                     UCrop.REQUEST_CROP -> {
-                        scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, _: Uri? ->
+                        scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, uri: Uri? ->
                             runOnUiThread {
                                 data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.toastExpand(this)
                             }
@@ -142,12 +143,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
     }
 
-    override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         scanEntity.toString().toastExpand(context)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("onDestroy", "onDestroy")
     }
 }

@@ -37,14 +37,14 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
                 selectList: ArrayList<ScanEntity> = ArrayList(),
                 galleryBundle: GalleryBundle = GalleryBundle(),
                 uiBundle: GalleryUiBundle = GalleryUiBundle(),
-                position: Int = 0) {
+                position: Int = 0): Intent {
             val bundle = Bundle()
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_ALL, allList)
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectList)
             bundle.putParcelable(IGalleryPrev.PREV_START_CONFIG, galleryBundle)
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
             bundle.putInt(IGalleryPrev.PREV_START_POSITION, position)
-            fragment.startActivityForResult(Intent(fragment.activity, PreActivity::class.java).putExtras(bundle), IGalleryPrev.PREV_START_REQUEST_CODE)
+            return Intent(fragment.activity, PreActivity::class.java).putExtras(bundle)
         }
     }
 

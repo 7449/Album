@@ -72,6 +72,6 @@ class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
         dismiss()
     }
 
-    override fun onPhotoItemClick(context: Context, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
     }
 }

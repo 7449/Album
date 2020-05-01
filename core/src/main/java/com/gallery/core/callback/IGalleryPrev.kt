@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.scan.ScanEntity
 
 /**
@@ -55,11 +54,6 @@ interface IGalleryPrev {
          * 预览页返回是否刷新
          */
         const val PREV_RESULT_REFRESH = "prevResultRefresh"
-
-        /**
-         * 启动[PrevFragment] 的 request_code
-         */
-        const val PREV_START_REQUEST_CODE = 462
     }
 
     /**

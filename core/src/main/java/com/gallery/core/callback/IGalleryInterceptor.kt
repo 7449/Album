@@ -1,7 +1,6 @@
 package com.gallery.core.callback
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.kotlin.expand.text.toastExpand
@@ -13,13 +12,6 @@ import com.yalantis.ucrop.UCrop
  * [ScanFragment] 拦截器
  */
 interface IGalleryInterceptor {
-
-    /**
-     * 是否拦截[ScanFragment.onActivityResult]
-     * true 拦截
-     * 默认不拦截
-     */
-    fun onGalleryFragmentResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean = false
 
     /**
      * 自定义相机

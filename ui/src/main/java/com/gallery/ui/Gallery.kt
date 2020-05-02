@@ -1,17 +1,10 @@
 package com.gallery.ui
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.kotlin.expand.os.getParcelableArrayListExpand
-import androidx.kotlin.expand.os.getParcelableExpand
-import androidx.kotlin.expand.os.orEmptyExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGallery
 import com.gallery.ui.activity.GalleryActivity
@@ -19,11 +12,10 @@ import com.gallery.ui.activity.GalleryActivity
 class Gallery(
         activity: FragmentActivity? = null,
         fragment: Fragment? = null,
+        private val galleryLauncher: ActivityResultLauncher<Intent>,
         private val galleryBundle: GalleryBundle = GalleryBundle(),
         private val galleryUiBundle: GalleryUiBundle = GalleryUiBundle(),
-        private val clz: Class<*> = GalleryActivity::class.java,
-        private val galleryListener: GalleryListener
-) {
+        private val clz: Class<*> = GalleryActivity::class.java) {
 
     private val fragmentActivity: FragmentActivity
 
@@ -31,40 +23,18 @@ class Gallery(
         when {
             fragment != null -> {
                 fragmentActivity = fragment.requireActivity()
-                startFragment(fragment)
+                startFragment()
             }
             activity != null -> {
                 fragmentActivity = activity
-                startActivity(activity)
+                startActivity()
             }
             else -> throw NullPointerException("fragment and activity == null")
         }
     }
 
-    private val startActivityForResult: ActivityResultContracts.StartActivityForResult
-        get() = ActivityResultContracts.StartActivityForResult()
-
-    private val activityResult: ActivityResultCallback<ActivityResult>
-        get() = ActivityResultCallback<ActivityResult> { intent ->
-            val bundleExpand: Bundle = intent.data?.extras.orEmptyExpand()
-            when (intent.resultCode) {
-                UIResult.GALLERY_RESULT_CROP -> {
-                    galleryListener.onGalleryCropResource(fragmentActivity, bundleExpand.getParcelableExpand(UIResult.GALLERY_RESULT_URI))
-                }
-                UIResult.GALLERY_RESULT_RESOURCE -> {
-                    galleryListener.onGalleryResource(fragmentActivity, bundleExpand.getParcelableExpand(UIResult.GALLERY_RESULT_ENTITY))
-                }
-                UIResult.GALLERY_RESULT_RESOURCES -> {
-                    galleryListener.onGalleryResources(fragmentActivity, bundleExpand.getParcelableArrayListExpand(UIResult.GALLERY_RESULT_ENTITIES))
-                }
-                Activity.RESULT_CANCELED -> {
-                    galleryListener.onGalleryCancel(fragmentActivity)
-                }
-            }
-        }
-
-    private fun launchIntent(context: Context): Intent {
-        return Intent(context, clz).apply {
+    private fun launchIntent(): Intent {
+        return Intent(fragmentActivity, clz).apply {
             putExtras(Bundle().apply {
                 putParcelable(IGallery.GALLERY_START_CONFIG, galleryBundle)
                 putParcelable(UIResult.UI_CONFIG, galleryUiBundle)
@@ -72,16 +42,11 @@ class Gallery(
         }
     }
 
-    private fun startActivity(activity: FragmentActivity) {
-        val registerForActivityResult = activity
-                .registerForActivityResult(startActivityForResult, activityResult)
-        registerForActivityResult
-                .launch(launchIntent(activity))
+    private fun startActivity() {
+        galleryLauncher.launch(launchIntent())
     }
 
-    private fun startFragment(fragment: Fragment) {
-        fragment
-                .registerForActivityResult(startActivityForResult, activityResult)
-                .launch(launchIntent(fragment.requireContext()))
+    private fun startFragment() {
+        galleryLauncher.launch(launchIntent())
     }
 }

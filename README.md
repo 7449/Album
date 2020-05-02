@@ -1,10 +1,6 @@
 ## Prepare for the next version
 
-1. `Fragment`升级版本之后一系列回调`api`废弃，需要启用新的`Api`
-
-    都是`ActivityResultContracts`的各种实现,具体可见[Gallery](./ui/src/main/java/com/gallery/ui/Gallery.kt)
-    
-    已经实现了一个
+1. custom camera
 
 ## 
 
@@ -41,7 +37,20 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
     
 #### demo
 
-    Gallery.open(activity)
+    private val galleryLauncher: ActivityResultLauncher<Intent> =
+            registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult(), 
+                    GalleryResultCallback(this, SimpleGalleryCallback())
+            )
+
+    Gallery(
+            activity = FragmentActivity,
+            galleryLauncher = galleryLauncher,
+            // 可选，自定义UI
+            clz = SimpleGalleryActivity::class.java,
+            galleryBundle = GalleryBundle(),
+            galleryUiBundle = GalleryUiBundle()
+    )
     
     
 #### custom page

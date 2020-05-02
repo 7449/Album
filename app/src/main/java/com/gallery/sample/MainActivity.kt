@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.kotlin.expand.app.openCameraExpand
@@ -28,6 +30,7 @@ import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.Gallery
+import com.gallery.ui.GalleryResultCallback
 import com.gallery.ui.GalleryUiBundle
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
@@ -35,6 +38,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader {
 
     private var fileUri = Uri.EMPTY
+    private val galleryLauncher: ActivityResultLauncher<Intent> =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(this, SimpleGalleryCallback()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +57,9 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         customActivity.setOnClickListener {
             Gallery(
                     activity = this,
+                    galleryLauncher = galleryLauncher,
                     clz = SimpleGalleryActivity::class.java,
-                    galleryBundle = GalleryBundle(radio = true, crop = true),
-                    galleryListener = SimpleGalleryCallback()
+                    galleryBundle = GalleryBundle(radio = true, crop = true)
             )
         }
         dialog.setOnClickListener {
@@ -69,7 +74,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     activity = this,
                     galleryBundle = GalleryBundle(scanType = ScanType.VIDEO, cameraText = getString(R.string.video_tips)),
                     galleryUiBundle = GalleryUiBundle(toolbarText = getString(R.string.gallery_video_title)),
-                    galleryListener = SimpleGalleryCallback()
+                    galleryLauncher = galleryLauncher
             )
         }
         selectCrop.setOnClickListener {
@@ -77,17 +82,17 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     activity = this,
                     galleryBundle = GalleryTheme.cropThemeGallery(this),
                     galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
-                    galleryListener = SimpleGalleryCallback()
+                    galleryLauncher = galleryLauncher
             )
         }
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryListener = SimpleGalleryCallback())
-                    1 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryListener = SimpleGalleryCallback())
-                    2 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryListener = SimpleGalleryCallback())
-                    3 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryListener = SimpleGalleryCallback())
-                    4 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryListener = SimpleGalleryCallback())
+                    0 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryLauncher = galleryLauncher)
+                    1 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryLauncher = galleryLauncher)
+                    2 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryLauncher = galleryLauncher)
+                    3 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryLauncher = galleryLauncher)
+                    4 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryLauncher = galleryLauncher)
                 }
                 dialog.dismiss()
             }.show()
@@ -100,7 +105,10 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             Activity.RESULT_CANCELED ->
                 when (requestCode) {
                     UCrop.REQUEST_CROP -> "取消裁剪".toastExpand(this)
-                    CameraX.CAMERA_REQUEST_CODE -> "取消拍照".toastExpand(this)
+                    CameraX.CAMERA_REQUEST_CODE -> {
+                        "取消拍照".toastExpand(this)
+                        contentResolver.delete(fileUri, null, null)
+                    }
                 }
             UCrop.RESULT_ERROR -> "裁剪异常".toastExpand(this)
             Activity.RESULT_OK ->

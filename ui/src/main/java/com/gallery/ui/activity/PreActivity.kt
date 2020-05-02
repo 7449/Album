@@ -1,6 +1,6 @@
 package com.gallery.ui.activity
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.FrameLayout
@@ -19,7 +19,6 @@ import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.ext.externalUri
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.PrevFragment
-import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
@@ -32,19 +31,20 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
 
     companion object {
         fun newInstance(
-                fragment: ScanFragment,
+                context: Context,
                 allList: ArrayList<ScanEntity>,
                 selectList: ArrayList<ScanEntity> = ArrayList(),
                 galleryBundle: GalleryBundle = GalleryBundle(),
                 uiBundle: GalleryUiBundle = GalleryUiBundle(),
-                position: Int = 0): Intent {
+                position: Int = 0,
+                cla: Class<*> = PreActivity::class.java): Intent {
             val bundle = Bundle()
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_ALL, allList)
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectList)
             bundle.putParcelable(IGalleryPrev.PREV_START_CONFIG, galleryBundle)
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
             bundle.putInt(IGalleryPrev.PREV_START_POSITION, position)
-            return Intent(fragment.activity, PreActivity::class.java).putExtras(bundle)
+            return Intent(context, cla).putExtras(bundle)
         }
     }
 
@@ -58,15 +58,22 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         obtain(uiBundle)
-
         preBottomViewSelect.setOnClickListener {
             if (prevFragment.selectEmpty) {
                 onGallerySelectEmpty()
             } else {
-                onGalleryResources(prevFragment.selectEntities)
+                val intent = Intent()
+                intent.putExtras(prevFragment.resultBundle(true))
+                setResult(UIResult.PREV_OK_FINISH_RESULT_CODE, intent)
+                finish()
             }
         }
-        preToolbar.setNavigationOnClickListener { isRefreshGalleryUI(uiBundle.preFinishRefresh, false) }
+        preToolbar.setNavigationOnClickListener {
+            val intent = Intent()
+            intent.putExtras(prevFragment.resultBundle(uiBundle.preFinishRefresh))
+            setResult(UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE, intent)
+            finish()
+        }
         preCount.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
 
         findFragmentByTagExpand(PrevFragment::class.java.simpleName) {
@@ -84,18 +91,10 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
     }
 
     override fun onBackPressed() {
-        isRefreshGalleryUI(uiBundle.preBackRefresh, false)
-        super.onBackPressed()
-    }
-
-    private fun isRefreshGalleryUI(isRefresh: Boolean, isFinish: Boolean, arrayList: ArrayList<ScanEntity> = ArrayList()) {
         val intent = Intent()
-        val resultBundle = prevFragment.resultBundle(isRefresh)
-        resultBundle.putBoolean(UIResult.PREV_RESULT_FINISH, isFinish)
-        resultBundle.putParcelableArrayList(UIResult.PREV_RESULT_SELECT, arrayList)
-        intent.putExtras(resultBundle)
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+        intent.putExtras(prevFragment.resultBundle(uiBundle.preBackRefresh))
+        setResult(UIResult.PREV_BACk_FINISH_RESULT_CODE, intent)
+        super.onBackPressed()
     }
 
     override fun onDisplayGalleryPrev(galleryEntity: ScanEntity, container: FrameLayout) {
@@ -118,17 +117,9 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Gall
     }
 
     /**
-     * 选择图片
-     */
-    open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
-        isRefreshGalleryUI(isRefresh = true, isFinish = true, arrayList = entities)
-    }
-
-    /**
      * 选择数据为空
      */
-    open fun onGallerySelectEmpty() {
+    private fun onGallerySelectEmpty() {
         getString(R.string.gallery_prev_select_empty_pre).toastExpand(this)
     }
-
 }

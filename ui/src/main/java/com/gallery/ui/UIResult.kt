@@ -8,21 +8,23 @@ object UIResult {
 
     const val FINDER_NAME = "finderName"
 
-    const val PREV_RESULT_FINISH = "prevResultFinish"
+    const val GALLERY_FINISH_RESULT_CODE = -11
 
-    const val PREV_RESULT_SELECT = "prevResultSelect"
+    const val GALLERY_RESULT_CROP = -12
 
-    const val FRAGMENT_RESULT_CROP = 0
+    const val GALLERY_RESULT_RESOURCE = -13
 
-    const val FRAGMENT_RESULT_RESOURCE = 1
+    const val GALLERY_RESULT_RESOURCES = -14
 
-    const val FRAGMENT_RESULT_RESOURCES = 2
+    const val GALLERY_RESULT_URI = "galleryResultCropUri"
 
-    const val FRAGMENT_RESULT_TYPE = "fragmentResultType"
+    const val GALLERY_RESULT_ENTITY = "galleryResultEntity"
 
-    const val FRAGMENT_RESULT_URI = "fragmentResultUri"
+    const val GALLERY_RESULT_ENTITIES = "galleryResultEntities"
 
-    const val FRAGMENT_RESULT_ENTITY = "fragmentResultEntity"
+    const val PREV_TOOLBAR_FINISH_RESULT_CODE = -15
 
-    const val FRAGMENT_RESULT_ENTITIES = "fragmentResultEntities"
+    const val PREV_BACk_FINISH_RESULT_CODE = -16
+
+    const val PREV_OK_FINISH_RESULT_CODE = -17
 }

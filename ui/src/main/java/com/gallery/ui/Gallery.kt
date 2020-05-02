@@ -9,7 +9,6 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.kotlin.expand.os.getIntExpand
 import androidx.kotlin.expand.os.getParcelableArrayListExpand
 import androidx.kotlin.expand.os.getParcelableExpand
 import androidx.kotlin.expand.os.orEmptyExpand
@@ -47,21 +46,20 @@ class Gallery(
 
     private val activityResult: ActivityResultCallback<ActivityResult>
         get() = ActivityResultCallback<ActivityResult> { intent ->
-            if (intent.resultCode == Activity.RESULT_OK) {
-                val bundleExpand = intent.data?.extras.orEmptyExpand()
-                when (bundleExpand.getIntExpand(UIResult.FRAGMENT_RESULT_TYPE)) {
-                    UIResult.FRAGMENT_RESULT_CROP -> {
-                        galleryListener.onGalleryCropResource(fragmentActivity, bundleExpand.getParcelableExpand(UIResult.FRAGMENT_RESULT_URI))
-                    }
-                    UIResult.FRAGMENT_RESULT_RESOURCE -> {
-                        galleryListener.onGalleryResource(fragmentActivity, bundleExpand.getParcelableExpand(UIResult.FRAGMENT_RESULT_ENTITY))
-                    }
-                    UIResult.FRAGMENT_RESULT_RESOURCES -> {
-                        galleryListener.onGalleryResources(fragmentActivity, bundleExpand.getParcelableArrayListExpand(UIResult.FRAGMENT_RESULT_ENTITIES))
-                    }
+            val bundleExpand: Bundle = intent.data?.extras.orEmptyExpand()
+            when (intent.resultCode) {
+                UIResult.GALLERY_RESULT_CROP -> {
+                    galleryListener.onGalleryCropResource(fragmentActivity, bundleExpand.getParcelableExpand(UIResult.GALLERY_RESULT_URI))
                 }
-            } else if (intent.resultCode == Activity.RESULT_CANCELED) {
-                galleryListener.onGalleryCancel(fragmentActivity)
+                UIResult.GALLERY_RESULT_RESOURCE -> {
+                    galleryListener.onGalleryResource(fragmentActivity, bundleExpand.getParcelableExpand(UIResult.GALLERY_RESULT_ENTITY))
+                }
+                UIResult.GALLERY_RESULT_RESOURCES -> {
+                    galleryListener.onGalleryResources(fragmentActivity, bundleExpand.getParcelableArrayListExpand(UIResult.GALLERY_RESULT_ENTITIES))
+                }
+                Activity.RESULT_CANCELED -> {
+                    galleryListener.onGalleryCancel(fragmentActivity)
+                }
             }
         }
 

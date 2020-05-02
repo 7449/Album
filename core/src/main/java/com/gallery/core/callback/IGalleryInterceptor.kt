@@ -33,7 +33,7 @@ interface IGalleryInterceptor {
     fun onUCropOptions() = UCrop.Options()
 
     /**
-     * 在[onGalleryFragmentResult]和[onCustomPhotoCrop]为false的情况下会触发
+     * 在[onCustomPhotoCrop]为false的情况下会触发
      * 取消裁剪
      */
     fun onUCropCanceled(context: Context) {
@@ -41,7 +41,7 @@ interface IGalleryInterceptor {
     }
 
     /**
-     * 在[onGalleryFragmentResult]和[onCustomPhotoCrop]为false的情况下会触发
+     * 在[onCustomPhotoCrop]为false的情况下会触发
      * 裁剪异常
      */
     fun onUCropError(context: Context, throwable: Throwable?) {
@@ -49,7 +49,7 @@ interface IGalleryInterceptor {
     }
 
     /**
-     * 在[onGalleryFragmentResult]和[onCustomPhotoCrop]为false的情况下会触发
+     * 在[onCustomPhotoCrop]为false的情况下会触发
      * 裁剪成功
      */
     fun onUCropResources(uri: Uri) {

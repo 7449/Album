@@ -14,6 +14,8 @@ import androidx.kotlin.expand.content.findUriByFileExpand
 import androidx.kotlin.expand.content.openVideoExpand
 import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.camera.CameraStatus
+import androidx.kotlin.expand.os.getLongOrDefault
+import androidx.kotlin.expand.os.getParcelableArrayListOrDefault
 import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.kotlin.expand.os.orEmptyExpand
 import androidx.kotlin.expand.os.permission.PermissionCode
@@ -53,23 +55,21 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     private val galleryAdapter: GalleryAdapter by lazy {
         GalleryAdapter(requireActivity().squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
     }
-    private val cropLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
-        val bundleExpand = intent?.data?.extras.orEmptyExpand()
-        when (intent.resultCode) {
-            Activity.RESULT_OK -> {
-                val cropUri = bundleExpand.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)
-                if (cropUri == null) {
-                    galleryInterceptor.onUCropError(requireContext(), null)
-                    return@registerForActivityResult
+    private val cropLauncher: ActivityResultLauncher<Intent> by lazy {
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
+            val bundleExpand = intent?.data?.extras.orEmptyExpand()
+            when (intent.resultCode) {
+                Activity.RESULT_OK -> {
+                    val cropUri = bundleExpand.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)
+                    if (cropUri == null) {
+                        galleryInterceptor.onUCropError(requireContext(), null)
+                        return@registerForActivityResult
+                    }
+                    galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
+                    cropUri.path?.let { scanFile(ResultType.CROP, it) }
                 }
-                galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
-                cropUri.path?.let { scanFile(ResultType.CROP, it) }
-            }
-            Activity.RESULT_CANCELED -> {
-                galleryInterceptor.onUCropCanceled(requireContext())
-            }
-            UCrop.RESULT_ERROR -> {
-                galleryInterceptor.onUCropError(requireContext(), UCrop.getError(intent?.data.orEmptyExpand()))
+                Activity.RESULT_CANCELED -> galleryInterceptor.onUCropCanceled(requireContext())
+                UCrop.RESULT_ERROR -> galleryInterceptor.onUCropError(requireContext(), UCrop.getError(intent?.data.orEmptyExpand()))
             }
         }
     }
@@ -86,7 +86,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         savedInstanceState?.let {
-            parentId = it.getLong(IGallery.GALLERY_START_PARENT_ID, SCAN_ALL)
+            parentId = it.getLongOrDefault(IGallery.GALLERY_START_PARENT_ID, SCAN_ALL)
             fileUri = it.getParcelableOrDefault(IGallery.GALLERY_START_IMAGE_URL, Uri.EMPTY)
         }
     }
@@ -100,8 +100,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                 startCamera()
             }
         }
-        galleryAdapter.addSelectAll(savedInstanceState?.getParcelableArrayList(IGallery.GALLERY_START_SELECT)
-                ?: galleryBundle.selectEntities)
+        galleryAdapter.addSelectAll(savedInstanceState.getParcelableArrayListOrDefault(IGallery.GALLERY_START_SELECT, galleryBundle.selectEntities))
         galleryRecyclerView.setHasFixedSize(true)
         galleryRecyclerView.layoutManager = GridLayoutManager(requireActivity(), galleryBundle.spanCount)
         galleryRecyclerView.addItemDecoration(SimpleGridDivider(galleryBundle.dividerWidth))
@@ -113,7 +112,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
         if (arrayList.isEmpty() && parentId.isScanAll()) {
             galleryEmpty.showExpand()
-            galleryCallback.onScanSuccessEmpty(requireContext())
+            galleryCallback.onScanSuccessEmpty(requireContext(), galleryBundle)
             return
         }
         galleryCallback.onScanSuccess(arrayList)
@@ -175,7 +174,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         // 拍照成功之后不需要特殊处理,因为肯定是SCAN_ALL的情况下,直接更新数据即可
         // 裁剪成功分为两种情况
         // 第一种:SCAN_ALL情况下直接更新数据
-        // 第二种:parentId为文件夹ID的时候处理数据,如果 parentId == scan.id
+        // 第二种:parentId为文件夹ID的时候处理数据,如果 parentId == scan.parent
         // 可以直接插入到当前数据,如果不等于,不能插入,因为裁剪之后的图片属于另一个文件夹的数据
         // 文件夹数据更新的时候也需要处理这种情况
         if (result && galleryAdapter.isNotEmpty) {
@@ -205,6 +204,8 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onCameraResultCanceled() {
+        requireContext().contentResolver.delete(fileUri, null, null)
+        fileUri = Uri.EMPTY
         galleryCallback.onCameraCanceled(requireContext(), galleryBundle)
     }
 
@@ -222,10 +223,9 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         if (onGalleryCustomCrop) {
             return
         }
-        val intent: Intent = UCrop.of(uri, Uri.fromFile(requireActivity().cropPathFile(galleryBundle.uCropPath, galleryBundle.cameraName, galleryBundle.scanType)))
+        cropLauncher.launch(UCrop.of(uri, Uri.fromFile(requireActivity().cropPathFile(galleryBundle.uCropPath, galleryBundle.cameraName, galleryBundle.scanType)))
                 .withOptions(galleryInterceptor.onUCropOptions())
-                .getIntent(requireContext())
-        cropLauncher.launch(intent)
+                .getIntent(requireContext()))
     }
 
     override fun onUpdatePrevResult(bundle: Bundle) {

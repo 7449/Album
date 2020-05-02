@@ -30,7 +30,7 @@ class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout), I
         uri.toString().toastExpand(this)
     }
 
-    override fun onGalleryResources(entities: List<ScanEntity>) {
+    override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         entities.toString().toastExpand(this)
     }
 

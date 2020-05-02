@@ -76,7 +76,7 @@ interface IGalleryCallback {
     fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long)
 
     /**
-     * 每次扫描之后数据非空触犯
+     * 每次扫描之后数据非空触发
      * [ScanFragment.scanSuccess]
      */
     fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {}
@@ -87,7 +87,6 @@ interface IGalleryCallback {
     fun onScanResultSuccess(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
 
     /**
-     * 在[IGalleryInterceptor.onGalleryFragmentResult]为false的情况下会触发
      * 取消拍照
      */
     fun onCameraCanceled(context: Context, galleryBundle: GalleryBundle) {
@@ -127,7 +126,7 @@ interface IGalleryCallback {
     /**
      * 没有扫描到任何数据
      */
-    fun onScanSuccessEmpty(context: Context) {
+    fun onScanSuccessEmpty(context: Context, galleryBundle: GalleryBundle) {
         context.getString(R.string.gallery_scan_success_empty).toastExpand(context)
     }
 

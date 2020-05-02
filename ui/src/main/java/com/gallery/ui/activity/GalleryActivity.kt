@@ -1,6 +1,5 @@
 package com.gallery.ui.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -16,15 +15,13 @@ import androidx.kotlin.expand.app.findFragmentByTagExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.bundleParcelableOrDefault
 import androidx.kotlin.expand.os.getParcelableArrayListExpand
+import androidx.kotlin.expand.os.getStringOrDefault
 import androidx.kotlin.expand.os.orEmptyExpand
 import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
-import com.gallery.core.callback.IGallery
-import com.gallery.core.callback.IGalleryCallback
-import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.callback.IGalleryInterceptor
+import com.gallery.core.callback.*
 import com.gallery.core.ext.externalUri
 import com.gallery.core.ext.findFinder
 import com.gallery.core.ext.isScanAll
@@ -69,17 +66,18 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     private val requestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
     private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand = intent?.data?.extras.orEmptyExpand()
-        if (intent.resultCode == Activity.RESULT_OK) {
-            galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
-            val entities = bundleExpand.getParcelableArrayListExpand<ScanEntity>(UIResult.PREV_RESULT_SELECT)
-            if (entities.isNotEmpty()) {
-                onGalleryResources(entities)
-            }
-            if (bundleExpand.getBoolean(UIResult.PREV_RESULT_FINISH)) {
+        when (intent.resultCode) {
+            UIResult.PREV_OK_FINISH_RESULT_CODE -> {
+                galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
+                onGalleryResources(bundleExpand.getParcelableArrayListExpand(IGalleryPrev.PREV_RESULT_SELECT))
                 finish()
             }
-        } else if (intent.resultCode == Activity.RESULT_CANCELED) {
-            galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
+            UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE -> {
+                galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
+            }
+            UIResult.PREV_BACk_FINISH_RESULT_CODE -> {
+                galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
+            }
         }
     }
 
@@ -97,16 +95,16 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         gallerySelect.setOnClickListener(this)
         galleryFinderAll.setOnClickListener(this)
 
-        finderList.addAll(savedInstanceState?.getParcelableArrayList(UIResult.FINDER_LIST)
-                ?: ArrayList())
-
-        galleryFinderAll.text = savedInstanceState?.getString(UIResult.FINDER_NAME)
-                ?: galleryBundle.allName
+        finderList.addAll(savedInstanceState.getParcelableArrayListExpand(UIResult.FINDER_LIST))
+        galleryFinderAll.text = savedInstanceState.getStringOrDefault(UIResult.FINDER_NAME, galleryBundle.allName)
 
         galleryPre.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
         gallerySelect.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
 
-        galleryToolbar.setNavigationOnClickListener { finish() }
+        galleryToolbar.setNavigationOnClickListener {
+            setResult(UIResult.GALLERY_FINISH_RESULT_CODE)
+            finish()
+        }
 
         findFragmentByTagExpand(ScanFragment::class.java.simpleName) {
             if (it == null) {
@@ -125,7 +123,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     return
                 }
                 prevLauncher.launch(PreActivity.newInstance(
-                        galleryFragment,
+                        this,
                         galleryFragment.selectEntities,
                         galleryFragment.selectEntities,
                         galleryBundle,
@@ -133,7 +131,13 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                         0
                 ))
             }
-            R.id.gallerySelect -> onGalleryResources(galleryFragment.selectEntities)
+            R.id.gallerySelect -> {
+                if (galleryFragment.selectEmpty) {
+                    onGalleryOkEmpty()
+                    return
+                }
+                onGalleryResources(galleryFragment.selectEntities)
+            }
             R.id.galleryFinderAll -> {
                 if (galleryFragment.parentId.isScanAll()) {
                     finderList.clear()
@@ -184,7 +188,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         prevLauncher.launch(PreActivity.newInstance(
-                galleryFragment,
+                this,
                 galleryFragment.currentEntities,
                 galleryFragment.selectEntities,
                 galleryBundle,
@@ -210,6 +214,13 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     /**
+     * 点击确定但是未选择图片
+     */
+    open fun onGalleryOkEmpty() {
+        getString(R.string.gallery_ok_select_empty).toastExpand(this)
+    }
+
+    /**
      * 扫描到的文件目录为空
      */
     open fun onGalleryFinderEmpty() {
@@ -222,10 +233,9 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     open fun onGalleryCropResource(uri: Uri) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.FRAGMENT_RESULT_URI, uri)
-        bundle.putInt(UIResult.FRAGMENT_RESULT_TYPE, UIResult.FRAGMENT_RESULT_CROP)
+        bundle.putParcelable(UIResult.GALLERY_RESULT_URI, uri)
         intent.putExtras(bundle)
-        setResult(Activity.RESULT_OK, intent)
+        setResult(UIResult.GALLERY_RESULT_CROP, intent)
         finish()
     }
 
@@ -235,23 +245,21 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     open fun onGalleryResource(scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.FRAGMENT_RESULT_ENTITY, scanEntity)
-        bundle.putInt(UIResult.FRAGMENT_RESULT_TYPE, UIResult.FRAGMENT_RESULT_RESOURCE)
+        bundle.putParcelable(UIResult.GALLERY_RESULT_ENTITY, scanEntity)
         intent.putExtras(bundle)
-        setResult(Activity.RESULT_OK, intent)
+        setResult(UIResult.GALLERY_RESULT_RESOURCE, intent)
         finish()
     }
 
     /**
      * 选择图片
      */
-    open fun onGalleryResources(entities: List<ScanEntity>) {
+    open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(UIResult.FRAGMENT_RESULT_ENTITIES, entities as ArrayList<ScanEntity>)
-        bundle.putInt(UIResult.FRAGMENT_RESULT_TYPE, UIResult.FRAGMENT_RESULT_RESOURCES)
+        bundle.putParcelableArrayList(UIResult.GALLERY_RESULT_ENTITIES, entities)
         intent.putExtras(bundle)
-        setResult(Activity.RESULT_OK, intent)
+        setResult(UIResult.GALLERY_RESULT_RESOURCES, intent)
         finish()
     }
 }

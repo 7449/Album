@@ -3,9 +3,7 @@ package com.gallery.ui.activity
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import android.widget.FrameLayout
-import androidx.appcompat.widget.ListPopupWindow
 import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -15,29 +13,29 @@ import com.gallery.core.ext.findFinder
 import com.gallery.core.ext.isScanAll
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
+import com.gallery.ui.FinderType
+import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
-import com.gallery.ui.adapter.FinderAdapter
+import com.gallery.ui.adapter.BottomFinderAdapter
+import com.gallery.ui.adapter.GalleryFinderAdapter
+import com.gallery.ui.adapter.PopupFinderAdapter
 import com.gallery.ui.obtain
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
-        View.OnClickListener, AdapterView.OnItemClickListener {
+        View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
 
-    private val finderAdapter by lazy {
-        FinderAdapter(galleryUiBundle) { finderEntity, container -> onDisplayGalleryThumbnails(finderEntity, container) }
-    }
-    private val listPopupWindow by lazy {
-        ListPopupWindow(this).apply {
-            this.anchorView = galleryFinderAll
-            this.width = galleryUiBundle.listPopupWidth
-            this.horizontalOffset = galleryUiBundle.listPopupHorizontalOffset
-            this.verticalOffset = galleryUiBundle.listPopupVerticalOffset
-            this.isModal = true
-            this.setOnItemClickListener(this@GalleryActivity)
-            this.setAdapter(finderAdapter)
+    private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
+    private val newFinderAdapter: GalleryFinderAdapter by lazy {
+        if (galleryUiBundle.finderType == FinderType.POPUP) {
+            return@lazy PopupFinderAdapter()
+        } else {
+            return@lazy BottomFinderAdapter()
         }
     }
-    private val requestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
+
+    override val adapterGalleryUiBundle: GalleryUiBundle
+        get() = galleryUiBundle
 
     override val currentFinderName: String
         get() = galleryFinderAll.text.toString()
@@ -48,7 +46,8 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         obtain(galleryUiBundle)
-
+        newFinderAdapter.setOnAdapterFinderListener(this)
+        newFinderAdapter.onGalleryFinderInit(this, galleryFinderAll)
         galleryPre.setOnClickListener(this)
         gallerySelect.setOnClickListener(this)
         galleryFinderAll.setOnClickListener(this)
@@ -89,9 +88,8 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     ))
                 }
                 if (finderList.isNotEmpty()) {
-                    finderAdapter.updateFinder(finderList)
-                    listPopupWindow.show()
-                    listPopupWindow.listView?.setBackgroundColor(galleryUiBundle.finderItemBackground)
+                    newFinderAdapter.onGalleryFinderUpdate(finderList)
+                    newFinderAdapter.onGalleryFinderShow()
                     return
                 }
                 onGalleryFinderEmpty()
@@ -99,15 +97,18 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         }
     }
 
-    override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val finder = finderAdapter.getItem(position)
-        if (finder.parent == galleryFragment.parentId) {
-            listPopupWindow.dismiss()
+    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
+        if (item.parent == galleryFragment.parentId) {
+            newFinderAdapter.onGalleryFinderHide()
             return
         }
-        galleryFinderAll.text = finder.bucketDisplayName
-        galleryFragment.onScanGallery(finder.parent, result = false)
-        listPopupWindow.dismiss()
+        galleryFinderAll.text = item.bucketDisplayName
+        galleryFragment.onScanGallery(item.parent, result = false)
+        newFinderAdapter.onGalleryFinderHide()
+    }
+
+    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
+        onDisplayGalleryThumbnails(finderEntity, container)
     }
 
     override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {

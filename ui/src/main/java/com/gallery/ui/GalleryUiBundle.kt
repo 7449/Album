@@ -18,6 +18,10 @@ class GalleryUiBundle(
          */
         val preBackRefresh: Boolean = true,
         /**
+         * 文件夹样式
+         */
+        val finderType: FinderType = FinderType.POPUP,
+        /**
          * toolbar返回图标
          */
         @DrawableRes

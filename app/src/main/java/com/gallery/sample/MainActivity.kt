@@ -29,6 +29,7 @@ import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
+import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback
 import com.gallery.ui.GalleryUiBundle
@@ -84,6 +85,15 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
                     galleryLauncher = galleryLauncher
             )
+        }
+        selectFinderStyle.setOnClickListener {
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("popup", "bottom"), View.NO_ID) { dialog, which ->
+                when (which) {
+                    0 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.POPUP), galleryLauncher = galleryLauncher)
+                    1 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.BOTTOM), galleryLauncher = galleryLauncher)
+                }
+                dialog.dismiss()
+            }.show()
         }
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->

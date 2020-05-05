@@ -7,13 +7,14 @@ import androidx.kotlin.expand.content.drawableExpand
 import androidx.kotlin.expand.content.minimumDrawableExpand
 import androidx.kotlin.expand.version.hasLExpand
 import androidx.kotlin.expand.view.statusBarColorExpand
-import com.gallery.ui.activity.GalleryActivity
-import com.gallery.ui.activity.PreActivity
+import com.gallery.ui.page.simple.GalleryActivity
+import com.gallery.ui.page.simple.PreActivity
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
+@Suppress("NOTHING_TO_INLINE")
 @SuppressLint("NewApi")
-internal fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
+internal inline fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
     window.statusBarColorExpand(galleryUiBundle.statusBarColor)
     if (hasLExpand()) {
         window.statusBarColor = galleryUiBundle.statusBarColor
@@ -28,23 +29,24 @@ internal fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
         galleryToolbar.elevation = galleryUiBundle.toolbarElevation
     }
 
-    galleryFinderAll.textSize = galleryUiBundle.bottomFinderTextSize
-    galleryFinderAll.setTextColor(galleryUiBundle.bottomFinderTextColor)
-    galleryFinderAll.setCompoundDrawables(null, null, minimumDrawableExpand(galleryUiBundle.bottomFinderTextCompoundDrawable, galleryUiBundle.bottomFinderTextDrawableColor), null)
+    galleryFinderAll.textSize = galleryUiBundle.finderTextSize
+    galleryFinderAll.setTextColor(galleryUiBundle.finderTextColor)
+    galleryFinderAll.setCompoundDrawables(null, null, minimumDrawableExpand(galleryUiBundle.finderTextCompoundDrawable, galleryUiBundle.finderTextDrawableColor), null)
 
-    galleryPre.text = galleryUiBundle.bottomPreViewText
-    galleryPre.textSize = galleryUiBundle.bottomPreViewTextSize
-    galleryPre.setTextColor(galleryUiBundle.bottomPreViewTextColor)
+    galleryPre.text = galleryUiBundle.preViewText
+    galleryPre.textSize = galleryUiBundle.preViewTextSize
+    galleryPre.setTextColor(galleryUiBundle.preViewTextColor)
 
-    gallerySelect.text = galleryUiBundle.bottomSelectText
-    gallerySelect.textSize = galleryUiBundle.bottomSelectTextSize
-    gallerySelect.setTextColor(galleryUiBundle.bottomSelectTextColor)
+    gallerySelect.text = galleryUiBundle.selectText
+    gallerySelect.textSize = galleryUiBundle.selectTextSize
+    gallerySelect.setTextColor(galleryUiBundle.selectTextColor)
 
     galleryBottomView.setBackgroundColor(galleryUiBundle.bottomViewBackground)
 }
 
+@Suppress("NOTHING_TO_INLINE")
 @SuppressLint("NewApi")
-internal fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
+internal inline fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
     window.statusBarColorExpand(uiBundle.statusBarColor)
     if (hasLExpand()) {
         window.statusBarColor = uiBundle.statusBarColor

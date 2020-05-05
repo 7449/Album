@@ -75,7 +75,7 @@ class PopupFinderAdapter : GalleryFinderAdapter, AdapterView.OnItemClickListener
             }
             viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
             viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)
-            viewHolder.appCompatTextViewCount.setTextColor(galleryUiBundle.finderItemTextColor)
+            viewHolder.appCompatTextViewCount.setTextColor(galleryUiBundle.finderItemTextCountColor)
             viewHolder.appCompatTextViewCount.text = "%s".format(finderEntity.count.toString())
             displayFinder.invoke(finderEntity, viewHolder.frameLayout)
             return rootView

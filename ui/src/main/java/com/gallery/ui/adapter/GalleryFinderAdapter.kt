@@ -27,6 +27,11 @@ interface GalleryFinderAdapter {
     }
 
     /**
+     * 注册Adapter回调
+     */
+    fun setOnAdapterFinderListener(adapterFinderListener: AdapterFinderListener)
+
+    /**
      * 初始化Adapter
      */
     fun onGalleryFinderInit(context: GalleryBaseActivity, anchor: View?)
@@ -45,10 +50,5 @@ interface GalleryFinderAdapter {
      * 更新文件夹数据
      */
     fun onGalleryFinderUpdate(finderList: ArrayList<ScanEntity>)
-
-    /**
-     * 注册Adapter回调
-     */
-    fun setOnAdapterFinderListener(adapterFinderListener: AdapterFinderListener)
 
 }

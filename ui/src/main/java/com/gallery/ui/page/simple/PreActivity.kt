@@ -1,4 +1,4 @@
-package com.gallery.ui.activity
+package com.gallery.ui.page.simple
 
 import android.os.Bundle
 import android.widget.FrameLayout
@@ -9,6 +9,7 @@ import com.gallery.core.ext.externalUri
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R
+import com.gallery.ui.activity.PrevBaseActivity
 import com.gallery.ui.obtain
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 

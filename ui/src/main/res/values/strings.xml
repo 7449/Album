@@ -4,4 +4,5 @@
     <string name="gallery_prev_select_empty">未选择图片</string>
     <string name="gallery_finder_empty">文件目录为空</string>
     <string name="gallery_ok_select_empty">未选择图片</string>
+    <string name="gallery_wechat_full_image">原图</string>
 </resources>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:id="@+id/iv_gallery_finder_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerVertical="true" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_gallery_finder_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/item_list_popup_margin_left"
+        android:layout_toEndOf="@+id/iv_gallery_finder_icon"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        tools:ignore="RtlHardcoded" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_gallery_finder_file_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/tv_gallery_finder_name"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        tools:ignore="RtlHardcoded"
+        tools:text="(3)" />
+
+    <ImageView
+        android:id="@+id/iv_gallery_finder_file_check"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_wechat_gallery_finder_check"
+        android:visibility="gone" />
+
+</RelativeLayout>

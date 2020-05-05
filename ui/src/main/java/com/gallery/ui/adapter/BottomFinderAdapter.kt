@@ -86,7 +86,7 @@ class BottomFinderAdapter : GalleryFinderAdapter {
                     holder.setText(R.id.tv_gallery_finder_name, "%s".format(finderEntity.bucketDisplayName))
                     holder.textView(R.id.tv_gallery_finder_name).setTextColor(galleryUiBundle.finderItemTextColor)
                     holder.setText(R.id.tv_gallery_finder_file_count, "%s".format(finderEntity.count.toString()))
-                    holder.textView(R.id.tv_gallery_finder_file_count).setTextColor(galleryUiBundle.finderItemTextColor)
+                    holder.textView(R.id.tv_gallery_finder_file_count).setTextColor(galleryUiBundle.finderItemTextCountColor)
                     adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.frameLayout(R.id.iv_gallery_finder_icon))
                 }
             }

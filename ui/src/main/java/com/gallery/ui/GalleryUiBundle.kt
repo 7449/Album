@@ -27,11 +27,6 @@ class GalleryUiBundle(
         @DrawableRes
         val toolbarIcon: Int = R.drawable.ic_gallery_ui_toolbar_back,
         /**
-         * 底部文件目录图标
-         */
-        @DrawableRes
-        val bottomFinderTextCompoundDrawable: Int = R.drawable.ic_gallery_ui_finder,
-        /**
          * 状态栏颜色
          */
         @ColorInt
@@ -60,50 +55,55 @@ class GalleryUiBundle(
          */
         val toolbarElevation: Float = 4F,
         /**
-         * 底部背景色
+         * 文件目录文字大小
+         */
+        val finderTextSize: Float = 16F,
+        /**
+         * 文件目录文字颜色
          */
         @ColorInt
-        val bottomViewBackground: Int = Color.parseColor("#FF02A5D2"),
+        val finderTextColor: Int = Color.WHITE,
         /**
-         * 底部文件目录文字大小
+         * 文件目录图标
          */
-        val bottomFinderTextSize: Float = 16F,
+        @DrawableRes
+        val finderTextCompoundDrawable: Int = R.drawable.ic_gallery_ui_finder,
         /**
-         * 底部文件目录文字颜色
-         */
-        @ColorInt
-        val bottomFinderTextColor: Int = Color.WHITE,
-        /**
-         * 底部文件目录图标颜色
+         * 文件目录图标颜色
          */
         @ColorInt
-        val bottomFinderTextDrawableColor: Int = Color.WHITE,
+        val finderTextDrawableColor: Int = Color.WHITE,
         /**
          * 预览文字
          */
-        val bottomPreViewText: String = "预览",
+        val preViewText: String = "预览",
         /**
          * 预览文字大小
          */
-        val bottomPreViewTextSize: Float = 16F,
+        val preViewTextSize: Float = 16F,
         /**
          * 预览文字颜色
          */
         @ColorInt
-        val bottomPreViewTextColor: Int = Color.WHITE,
+        val preViewTextColor: Int = Color.WHITE,
         /**
          * 选择文字
          */
-        val bottomSelectText: String = "确定",
+        val selectText: String = "确定",
         /**
          * 选择文字大小
          */
-        val bottomSelectTextSize: Float = 16F,
+        val selectTextSize: Float = 16F,
         /**
          * 选择文字颜色
          */
         @ColorInt
-        val bottomSelectTextColor: Int = Color.WHITE,
+        val selectTextColor: Int = Color.WHITE,
+        /**
+         * 底部背景色
+         */
+        @ColorInt
+        val bottomViewBackground: Int = Color.parseColor("#FF02A5D2"),
         /**
          * 目录View宽度
          */
@@ -126,6 +126,11 @@ class GalleryUiBundle(
          */
         @ColorInt
         val finderItemTextColor: Int = Color.parseColor("#FF3D4040"),
+        /**
+         * 目录View字体个数颜色
+         */
+        @ColorInt
+        val finderItemTextCountColor: Int = Color.parseColor("#FF3D4040"),
         /**
          * 预览页title
          */

@@ -1,4 +1,4 @@
-package com.gallery.ui.activity
+package com.gallery.ui.page.simple
 
 import android.content.Context
 import android.os.Bundle
@@ -16,6 +16,7 @@ import com.gallery.scan.ScanEntity
 import com.gallery.ui.FinderType
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
+import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.BottomFinderAdapter
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.adapter.PopupFinderAdapter

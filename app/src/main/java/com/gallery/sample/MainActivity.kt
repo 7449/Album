@@ -29,10 +29,7 @@ import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
-import com.gallery.ui.FinderType
-import com.gallery.ui.Gallery
-import com.gallery.ui.GalleryResultCallback
-import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -96,13 +93,14 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             }.show()
         }
         selectTheme.setOnClickListener {
-            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色"), View.NO_ID) { dialog, which ->
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色", "WeChat"), View.NO_ID) { dialog, which ->
                 when (which) {
                     0 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryLauncher = galleryLauncher)
                     1 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryLauncher = galleryLauncher)
                     2 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryLauncher = galleryLauncher)
                     3 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryLauncher = galleryLauncher)
                     4 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryLauncher = galleryLauncher)
+                    5 -> weChatUiGallery(galleryLauncher)
                 }
                 dialog.dismiss()
             }.show()

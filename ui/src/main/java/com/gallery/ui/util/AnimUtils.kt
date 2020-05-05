@@ -1,4 +1,4 @@
-package com.gallery.ui
+package com.gallery.ui.util
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -38,7 +38,7 @@ class AnimUtils(private val height: Int) {
 
     private fun createDropAnimator(v: View, start: Int, end: Int): ValueAnimator {
         val animator = ValueAnimator.ofInt(start, end)
-        animator.duration = 500
+        animator.duration = 300
         animator.addUpdateListener { animation ->
             val value = animation.animatedValue as Int
             val layoutParams = v.layoutParams

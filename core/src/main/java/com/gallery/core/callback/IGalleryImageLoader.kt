@@ -1,6 +1,7 @@
 package com.gallery.core.callback
 
 import android.widget.FrameLayout
+import android.widget.TextView
 import com.gallery.scan.ScanEntity
 
 /**
@@ -11,7 +12,7 @@ interface IGalleryImageLoader {
     /**
      * 首页图片加载
      */
-    fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {}
+    fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout, selectView: TextView) {}
 
     /**
      * 目录图片加载

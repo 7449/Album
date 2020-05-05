@@ -1,7 +1,9 @@
-package com.gallery.ui
+package com.gallery.ui.util
 
 import android.content.Intent
 import android.graphics.Color
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
@@ -9,6 +11,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.gallery.core.GalleryBundle
 import com.gallery.scan.ScanType
+import com.gallery.ui.Gallery
+import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.R
 import com.gallery.ui.page.wechat.GalleryWeChatActivity
 
 fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Intent>) {
@@ -19,8 +24,9 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
             GalleryBundle(
                     allName = "图片/视频",
                     hideCamera = true,
+                    spanCount = 4,
                     scanType = ScanType.MIX,
-                    checkBoxDrawable = R.drawable.wechat_selector_gallery_full_image_item_check,
+                    checkBoxDrawable = R.drawable.wechat_selector_gallery_item_check,
                     galleryRootBackground = Color.rgb(38, 38, 38)
             ),
             GalleryUiBundle(
@@ -55,4 +61,28 @@ val GalleryWeChatActivity.rotateAnimationResult: RotateAnimation by lazy {
         duration = 300
         fillAfter = true
     }
+}
+
+internal fun RotateAnimation.doOnAnimationEnd(action: (animation: Animation) -> Unit) {
+    setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationRepeat(animation: Animation) {
+        }
+
+        override fun onAnimationEnd(animation: Animation) {
+            action.invoke(animation)
+        }
+
+        override fun onAnimationStart(animation: Animation) {
+        }
+    })
+}
+
+fun View.addOnPreDrawListener(action: () -> Unit) {
+    viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        override fun onPreDraw(): Boolean {
+            viewTreeObserver.removeOnPreDrawListener(this)
+            action.invoke()
+            return true
+        }
+    })
 }

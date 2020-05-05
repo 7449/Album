@@ -7,52 +7,59 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.ext.externalUri
 import com.gallery.scan.ScanEntity
 import com.xadapter.vh.XViewHolder
-import com.xadapter.vh.checkBox
 import com.xadapter.vh.context
 import com.xadapter.vh.frameLayout
+import com.xadapter.vh.textView
 
 class PhotoViewHolder(itemView: View,
                       private val galleryBundle: GalleryBundle,
                       private val display: Int,
+                      private val galleryInterceptor: IGalleryInterceptor,
                       private val galleryCallback: IGalleryCallback) : XViewHolder(itemView) {
 
     private val container = frameLayout(R.id.galleryContainer)
-    private val checkBox = checkBox(R.id.galleryCheckBox)
+    private val checkBox = textView(R.id.galleryCheckBox)
 
-    fun photo(galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
-        imageLoader.onDisplayGallery(display, display, galleryEntity, container)
+    fun photo(position: Int, galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
+        imageLoader.onDisplayGallery(display, display, galleryEntity, container, checkBox)
         container.setBackgroundColor(galleryBundle.photoBackgroundColor)
         if (galleryBundle.radio) {
             return
         }
         checkBox.showExpand()
-        checkBox.isChecked = galleryEntity.isCheck
+        checkBox.isSelected = galleryEntity.isCheck
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener {
-            if (!checkBox.context.moveToNextToIdExpand(galleryEntity.externalUri())) {
-                checkBox.isChecked = false
-                if (multipleList.contains(galleryEntity)) {
-                    multipleList.remove(galleryEntity)
-                }
-                galleryCallback.onClickCheckBoxFileNotExist(context, galleryBundle, galleryEntity)
-                return@setOnClickListener
-            }
-            if (!multipleList.contains(galleryEntity) && multipleList.size >= galleryBundle.multipleMaxCount) {
-                checkBox.isChecked = false
-                galleryCallback.onClickCheckBoxMaxCount(context, galleryBundle, galleryEntity)
-                return@setOnClickListener
-            }
-            if (!galleryEntity.isCheck) {
-                galleryEntity.isCheck = true
-                multipleList.add(galleryEntity)
-            } else {
-                multipleList.remove(galleryEntity)
-                galleryEntity.isCheck = false
-            }
-            galleryCallback.onChangedCheckBox(galleryEntity.isCheck, galleryBundle, galleryEntity)
+            clickCheckBox(position, galleryEntity, multipleList)
         }
+    }
+
+    private fun clickCheckBox(position: Int, galleryEntity: ScanEntity, multipleList: ArrayList<ScanEntity>) {
+        if (!checkBox.context.moveToNextToIdExpand(galleryEntity.externalUri())) {
+            checkBox.isSelected = false
+            if (multipleList.contains(galleryEntity)) {
+                multipleList.remove(galleryEntity)
+            }
+            galleryCallback.onClickCheckBoxFileNotExist(context, galleryBundle, galleryEntity)
+            return
+        }
+        if (!multipleList.contains(galleryEntity) && multipleList.size >= galleryBundle.multipleMaxCount) {
+            galleryCallback.onClickCheckBoxMaxCount(context, galleryBundle, galleryEntity)
+            return
+        }
+        if (!galleryEntity.isCheck) {
+            galleryEntity.isCheck = true
+            checkBox.isSelected = true
+            multipleList.add(galleryEntity)
+        } else {
+            multipleList.remove(galleryEntity)
+            galleryEntity.isCheck = false
+            checkBox.isSelected = false
+        }
+        galleryCallback.onChangedCheckBox(position, galleryEntity.isCheck, galleryBundle, galleryEntity)
     }
 }

@@ -103,4 +103,14 @@ interface IGallery {
      */
     fun onUpdatePrevResult(bundle: Bundle)
 
+    /**
+     * 用于刷新单个Item
+     */
+    fun notifyItemChanged(position: Int)
+
+    /**
+     * 刷新全部数据
+     */
+    fun notifyDataSetChanged()
+
 }

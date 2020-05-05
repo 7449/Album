@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/viewWeChatImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/viewWeChatBottomView"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:layout_gravity="bottom"
+        android:background="@color/color_B3000000"
+        android:paddingStart="4dp"
+        tools:ignore="RtlSymmetry">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/viewWeChatGif"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_gallery_wechat_item_gif"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewWeChatVideo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:drawableStart="@drawable/ic_gallery_wechat_item_video"
+            android:drawablePadding="4dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            tools:text="10:2020"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/viewWeChatBackSelect"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_B3000000"
+        android:visibility="gone" />
+
+</FrameLayout>

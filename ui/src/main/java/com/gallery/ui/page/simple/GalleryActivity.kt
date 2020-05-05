@@ -4,14 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.externalUri
 import com.gallery.core.ext.findFinder
 import com.gallery.core.ext.isScanAll
-import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.FinderType
 import com.gallery.ui.GalleryUiBundle
@@ -21,12 +18,13 @@ import com.gallery.ui.adapter.BottomFinderAdapter
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.adapter.PopupFinderAdapter
 import com.gallery.ui.obtain
+import com.gallery.ui.util.displayGallery
+import com.gallery.ui.util.displayGalleryThumbnails
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
         View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
 
-    private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
     private val newFinderAdapter: GalleryFinderAdapter by lazy {
         if (galleryUiBundle.finderType == FinderType.POPUP) {
             return@lazy PopupFinderAdapter()
@@ -112,18 +110,12 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
-        container.removeAllViews()
-        val imageView = GalleryImageView(container.context)
-        Glide.with(container.context).load(galleryEntity.externalUri()).apply(requestOptions.override(width, height)).into(imageView)
-        container.addView(imageView, FrameLayout.LayoutParams(width, height))
+    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout, selectView: TextView) {
+        container.displayGallery(width, height, galleryEntity)
     }
 
     override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
-        container.removeAllViews()
-        val imageView = GalleryImageView(container.context)
-        Glide.with(container.context).load(finderEntity.externalUri()).apply(requestOptions).into(imageView)
-        container.addView(imageView)
+        container.displayGalleryThumbnails(finderEntity)
     }
 
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {

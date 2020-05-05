@@ -56,7 +56,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
 
             override fun onPageSelected(position: Int) {
                 galleryPrevCallback.onPageSelected(position)
-                preCheckBox.isChecked = prevAdapter.isCheck(position)
+                preCheckBox.isSelected = prevAdapter.isCheck(position)
             }
         }
     }
@@ -84,13 +84,13 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preCheckBox.setOnClickListener { checkBoxClick() }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         setCurrentItem((savedInstanceState ?: bundleOrEmptyExpand()).getIntExpand(IGalleryPrev.PREV_START_POSITION))
-        preCheckBox.isChecked = prevAdapter.isCheck(currentPosition)
+        preCheckBox.isSelected = prevAdapter.isCheck(currentPosition)
         galleryPrevCallback.onChangedCreated()
     }
 
     private fun checkBoxClick() {
         if (!moveToNextToIdExpand(currentItem.externalUri())) {
-            preCheckBox.isChecked = false
+            preCheckBox.isSelected = false
             if (prevAdapter.containsSelect(currentItem)) {
                 prevAdapter.removeSelectEntity(currentItem)
             }
@@ -98,16 +98,17 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
             return
         }
         if (!prevAdapter.containsSelect(currentItem) && selectEntities.size >= galleryBundle.multipleMaxCount) {
-            preCheckBox.isChecked = false
             galleryPrevCallback.onClickCheckBoxMaxCount(requireContext(), galleryBundle, currentItem)
             return
         }
         if (currentItem.isCheck) {
             prevAdapter.removeSelectEntity(currentItem)
             currentItem.isCheck = false
+            preCheckBox.isSelected = false
         } else {
-            currentItem.isCheck = true
             prevAdapter.addSelectEntity(currentItem)
+            currentItem.isCheck = true
+            preCheckBox.isSelected = true
         }
         galleryPrevCallback.onChangedCheckBox()
     }

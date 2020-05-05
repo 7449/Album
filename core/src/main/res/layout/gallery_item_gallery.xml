@@ -8,13 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/galleryCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_margin="@dimen/item_gallery_check_margin"
-        android:button="@null"
         android:visibility="gone" />
 
 </FrameLayout>

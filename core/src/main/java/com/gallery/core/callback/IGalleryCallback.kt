@@ -54,7 +54,7 @@ interface IGalleryCallback {
      * 点击CheckBox时会触发
      * [PhotoViewHolder.photo]
      */
-    fun onChangedCheckBox(isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
+    fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
 
     /**
      * 横竖屏切换时触发

@@ -22,6 +22,7 @@ import androidx.kotlin.expand.os.permission.PermissionCode
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.ResultType
@@ -33,7 +34,6 @@ import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
-
 
 class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), ScanView, GalleryAdapter.OnGalleryItemClickListener, IGallery {
 
@@ -53,7 +53,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     private val galleryBundle by lazy { getParcelableOrDefault<GalleryBundle>(IGallery.GALLERY_START_CONFIG, GalleryBundle()) }
     private val scan: ScanImpl by lazy { ScanImpl(this) }
     private val galleryAdapter: GalleryAdapter by lazy {
-        GalleryAdapter(requireActivity().squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
+        GalleryAdapter(requireActivity().squareExpand(galleryBundle.spanCount), galleryBundle, galleryInterceptor, galleryCallback, galleryImageLoader, this)
     }
     private val cropLauncher: ActivityResultLauncher<Intent> by lazy {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
@@ -104,6 +104,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         galleryRecyclerView.setHasFixedSize(true)
         galleryRecyclerView.layoutManager = GridLayoutManager(requireActivity(), galleryBundle.spanCount)
         galleryRecyclerView.addItemDecoration(SimpleGridDivider(galleryBundle.dividerWidth))
+        (galleryRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         galleryRecyclerView.adapter = galleryAdapter
         savedInstanceState?.let { galleryCallback.onChangedScreen(selectEntities.size) }
         onScanGallery(parentId)
@@ -237,6 +238,14 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         galleryAdapter.addSelectAll(previewGalleryEntity)
         galleryAdapter.updateEntity()
         galleryCallback.onChangedPrevCount(selectCount)
+    }
+
+    override fun notifyItemChanged(position: Int) {
+        galleryAdapter.notifyItemChanged(position)
+    }
+
+    override fun notifyDataSetChanged() {
+        galleryAdapter.notifyDataSetChanged()
     }
 
     override fun permissionsGranted(type: PermissionCode) {

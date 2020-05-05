@@ -21,7 +21,7 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
         val layoutViewHolder = LayoutViewHolder(parent, R.layout.gallery_item_finder_wechat)
         layoutViewHolder.itemView.setOnClickListener {
-            adapterFinderListener.onGalleryAdapterItemClick(it, layoutViewHolder.adapterPosition, list[layoutViewHolder.adapterPosition])
+            adapterFinderListener.onGalleryAdapterItemClick(it, layoutViewHolder.bindingAdapterPosition, list[layoutViewHolder.bindingAdapterPosition])
         }
         return layoutViewHolder
     }
@@ -42,5 +42,9 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
         list.clear()
         list.addAll(entities)
         notifyDataSetChanged()
+    }
+
+    fun findItemIndex(entity: ScanEntity): Int {
+        return list.indexOf(entity)
     }
 }

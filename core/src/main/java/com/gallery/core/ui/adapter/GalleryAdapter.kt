@@ -9,6 +9,7 @@ import com.gallery.core.R
 import com.gallery.core.callback.IGallery
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.scan.ScanEntity
@@ -17,6 +18,7 @@ import com.xadapter.vh.XViewHolder
 class GalleryAdapter(
         private val display: Int,
         private val galleryBundle: GalleryBundle,
+        private val galleryInterceptor: IGalleryInterceptor,
         private val galleryCallback: IGalleryCallback,
         private val imageLoader: IGalleryImageLoader,
         private val galleryItemClickListener: OnGalleryItemClickListener
@@ -45,7 +47,7 @@ class GalleryAdapter(
             }
             else -> {
                 val photoView = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryCallback)
+                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryInterceptor, galleryCallback)
                 photoView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
                 photoViewHolder
             }
@@ -55,7 +57,7 @@ class GalleryAdapter(
     override fun onBindViewHolder(holder: XViewHolder, position: Int) {
         when (holder) {
             is CameraViewHolder -> holder.camera()
-            is PhotoViewHolder -> holder.photo(galleryList[position], currentSelectList, imageLoader)
+            is PhotoViewHolder -> holder.photo(position, galleryList[position], currentSelectList, imageLoader)
         }
     }
 

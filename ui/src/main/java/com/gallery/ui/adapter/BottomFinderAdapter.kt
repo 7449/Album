@@ -76,7 +76,7 @@ class BottomFinderAdapter : GalleryFinderAdapter {
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
                     return LayoutViewHolder(parent, R.layout.gallery_finder_bottom_item).apply {
                         this.itemView.setOnClickListener {
-                            adapterFinderListener.onGalleryAdapterItemClick(it, this.adapterPosition, list[this.adapterPosition])
+                            adapterFinderListener.onGalleryAdapterItemClick(it, this.bindingAdapterPosition, list[this.bindingAdapterPosition])
                         }
                     }
                 }

@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -29,7 +30,11 @@ import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
-import com.gallery.ui.*
+import com.gallery.ui.FinderType
+import com.gallery.ui.Gallery
+import com.gallery.ui.GalleryResultCallback
+import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.util.weChatUiGallery
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -142,7 +147,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         }
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout) {
+    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout, selectView: TextView) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)

@@ -1,4 +1,4 @@
-package com.gallery.ui.page.simple
+package com.gallery.ui.page
 
 import android.content.Context
 import android.os.Bundle

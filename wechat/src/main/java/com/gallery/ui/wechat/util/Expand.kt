@@ -1,4 +1,4 @@
-package com.gallery.ui.util
+package com.gallery.ui.wechat.util
 
 import android.annotation.SuppressLint
 import android.view.View

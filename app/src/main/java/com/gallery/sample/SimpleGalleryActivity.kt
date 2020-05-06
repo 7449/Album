@@ -13,7 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.ext.externalUri
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.page.simple.GalleryActivity
+import com.gallery.ui.page.GalleryActivity
 import kotlinx.android.synthetic.main.simple_gallery_layout.*
 
 class SimpleGalleryActivity : GalleryActivity(R.layout.simple_gallery_layout), IGalleryInterceptor {

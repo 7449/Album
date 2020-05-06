@@ -7,15 +7,10 @@ import androidx.kotlin.expand.content.drawableExpand
 import androidx.kotlin.expand.content.minimumDrawableExpand
 import androidx.kotlin.expand.version.hasLExpand
 import androidx.kotlin.expand.view.statusBarColorExpand
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.gallery.ui.page.simple.GalleryActivity
-import com.gallery.ui.page.simple.PreActivity
-import com.gallery.ui.page.wechat.GalleryWeChatActivity
+import com.gallery.ui.page.GalleryActivity
+import com.gallery.ui.page.PreActivity
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
-import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
 @Suppress("NOTHING_TO_INLINE")
 @SuppressLint("NewApi")
@@ -72,33 +67,5 @@ internal inline fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
     preBottomViewSelect.text = uiBundle.preBottomOkText
     preBottomViewSelect.textSize = uiBundle.preBottomOkTextSize
     preBottomViewSelect.setTextColor(uiBundle.preBottomOkTextColor)
-}
-
-@Suppress("NOTHING_TO_INLINE")
-@SuppressLint("NewApi")
-internal inline fun GalleryWeChatActivity.obtain(uiBundle: GalleryUiBundle) {
-    window.statusBarColorExpand(uiBundle.statusBarColor)
-    if (hasLExpand()) {
-        window.statusBarColor = uiBundle.statusBarColor
-    }
-    galleryWeChatToolbar.setBackgroundColor(uiBundle.toolbarBackground)
-
-    galleryWeChatFinder.layoutManager = LinearLayoutManager(this)
-    galleryWeChatFinder.setBackgroundColor(uiBundle.finderItemBackground)
-    galleryWeChatFinder.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
-
-    galleryWeChatBottomView.setBackgroundColor(uiBundle.bottomViewBackground)
-
-    galleryWeChatPrev.text = uiBundle.preViewText
-    galleryWeChatPrev.textSize = uiBundle.preViewTextSize
-
-    galleryWeChatToolbarSend.textSize = uiBundle.selectTextSize
-    galleryWeChatToolbarSend.text = uiBundle.selectText
-    galleryWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
-
-    galleryWeChatToolbarFinderText.textSize = uiBundle.finderTextSize
-    galleryWeChatToolbarFinderText.setTextColor(uiBundle.finderTextColor)
-    galleryWeChatToolbarFinderIcon.setImageResource(uiBundle.finderTextCompoundDrawable)
-    galleryWeChatToolbarFinderText.text = finderName
 }
 

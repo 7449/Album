@@ -1,9 +1,7 @@
-package com.gallery.ui.page.simple
+package com.gallery.ui.page
 
 import android.os.Bundle
 import android.widget.FrameLayout
-import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R
 import com.gallery.ui.activity.PrevBaseActivity
@@ -11,7 +9,7 @@ import com.gallery.ui.obtain
 import com.gallery.ui.util.displayGalleryPrev
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
-open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader {
+open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevBaseActivity(layoutId) {
 
     override val galleryFragmentId: Int
         get() = R.id.preFragment

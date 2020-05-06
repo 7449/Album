@@ -30,16 +30,16 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.gallery.ui.page.simple.GalleryActivity"
+            android:name="com.gallery.ui.page.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.gallery.ui.page.simple.PreActivity"
+            android:name="com.gallery.ui.page.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.gallery.ui.page.wechat.GalleryWeChatActivity"
+            android:name="com.gallery.ui.wechat.activity.GalleryWeChatActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.gallery.ui.page.wechat.GalleryWeChatPrevActivity"
+            android:name="com.gallery.ui.wechat.activity.GalleryWeChatPrevActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

@@ -1,10 +1,11 @@
-package com.gallery.ui.adapter
+package com.gallery.ui.wechat.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.R
+import com.gallery.ui.adapter.GalleryFinderAdapter
+import com.gallery.ui.wechat.R
 import com.xadapter.vh.*
 
 class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,

@@ -34,7 +34,8 @@ import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.util.weChatUiGallery
+import com.gallery.ui.wechat.WeChatGalleryResultCallback
+import com.gallery.ui.wechat.weChatUiGallery
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     private var fileUri = Uri.EMPTY
     private val galleryLauncher: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(this, SimpleGalleryCallback()))
+    private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(this, SimpleWeChatGalleryCallback()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +108,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     2 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryLauncher = galleryLauncher)
                     3 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryLauncher = galleryLauncher)
                     4 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryLauncher = galleryLauncher)
-                    5 -> weChatUiGallery(galleryLauncher)
+                    5 -> weChatUiGallery(galleryWeChatLauncher)
                 }
                 dialog.dismiss()
             }.show()

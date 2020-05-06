@@ -11,7 +11,10 @@ import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.bundleParcelableOrDefault
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
+import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrev
+import com.gallery.core.callback.IGalleryPrevCallback
+import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.scan.ScanEntity
@@ -19,7 +22,7 @@ import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
 
-abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId) {
+abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
 
     companion object {
         fun newInstance(

@@ -11,5 +11,4 @@
     <dimen name="item_list_popup_iv_height">40dp</dimen>
     <dimen name="gallery_bottom_button_width">70dp</dimen>
     <dimen name="gallery_button_margin">3dp</dimen>
-    <dimen name="gallery_wechat_full_image">14sp</dimen>
 </resources>

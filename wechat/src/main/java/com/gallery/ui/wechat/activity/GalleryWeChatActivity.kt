@@ -1,7 +1,8 @@
-package com.gallery.ui.page.wechat
+package com.gallery.ui.wechat.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -12,12 +13,12 @@ import com.gallery.core.ext.findFinder
 import com.gallery.core.ext.isScanAll
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.R
+import com.gallery.ui.UIResult
 import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
-import com.gallery.ui.adapter.WeChatFinderAdapter
-import com.gallery.ui.obtain
-import com.gallery.ui.util.*
+import com.gallery.ui.wechat.*
+import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
+import com.gallery.ui.wechat.util.*
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
 class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener, WeChatFinderAdapter.WeChatAdapterListener {
@@ -47,9 +48,13 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         galleryWeChatFinderRoot.setOnClickListener { hideFinderActionView() }
         galleryWeChatFinder.adapter = newFinderAdapter
         galleryWeChatPrev.setOnClickListener {
+            onStartPrevPage(
+                    galleryFragment.selectEntities,
+                    0,
+                    GalleryWeChatPrevActivity::class.java
+            )
         }
-        galleryWeChatToolbarSend.setOnClickListener {
-        }
+        galleryWeChatToolbarSend.setOnClickListener { onGalleryResources(galleryFragment.selectEntities) }
         galleryWeChatToolbarFinder.setOnClickListener {
             if (galleryFragment.parentId.isScanAll()) {
                 finderList.clear()
@@ -105,6 +110,9 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     }
 
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
+        onStartPrevPage(galleryFragment.currentEntities,
+                if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
+                GalleryWeChatPrevActivity::class.java)
     }
 
     override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
@@ -149,6 +157,16 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     private fun hideFinderActionView() {
         galleryWeChatToolbarFinderIcon.clearAnimation()
         galleryWeChatToolbarFinderIcon.startAnimation(rotateAnimationResult)
+    }
+
+    override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
+        val intent = Intent()
+        val bundle = Bundle()
+        bundle.putParcelableArrayList(UIResult.GALLERY_RESULT_ENTITIES, entities)
+        bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
+        intent.putExtras(bundle)
+        setResult(UIResult.GALLERY_RESULT_RESOURCES, intent)
+        finish()
     }
 
     /**

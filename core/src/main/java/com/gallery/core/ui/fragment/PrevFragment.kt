@@ -56,7 +56,9 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
 
             override fun onPageSelected(position: Int) {
                 galleryPrevCallback.onPageSelected(position)
-                preCheckBox.isSelected = prevAdapter.isCheck(position)
+                if (!galleryPrevInterceptor.hideCheckBox) {
+                    preCheckBox.isSelected = prevAdapter.isCheck(position)
+                }
             }
         }
     }
@@ -81,14 +83,15 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preViewPager.registerOnPageChangeCallback(pageChangeCallback)
         preViewPager.adapter = prevAdapter
         preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
-        preCheckBox.setOnClickListener { checkBoxClick() }
+        preCheckBox.setOnClickListener { checkBoxClick(preCheckBox) }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         setCurrentItem((savedInstanceState ?: bundleOrEmptyExpand()).getIntExpand(IGalleryPrev.PREV_START_POSITION))
         preCheckBox.isSelected = prevAdapter.isCheck(currentPosition)
         galleryPrevCallback.onChangedCreated()
+        preCheckBox.visibility = if (galleryPrevInterceptor.hideCheckBox) View.GONE else View.VISIBLE
     }
 
-    private fun checkBoxClick() {
+    fun checkBoxClick(preCheckBox: View) {
         if (!moveToNextToIdExpand(currentItem.externalUri())) {
             preCheckBox.isSelected = false
             if (prevAdapter.containsSelect(currentItem)) {

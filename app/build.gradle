@@ -25,6 +25,7 @@ dependencies {
     implementation "com.ydevelop:bannerlayout:$bannerVersion"
 
     implementation project(path: ':ui')
+    implementation project(path: ':wechat')
 
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -44,6 +44,12 @@ interface IGallery {
          * [Bundle.putParcelable]
          */
         const val GALLERY_START_CONFIG = "galleryStartConfig"
+
+        /**
+         * 启动携带的其他数据
+         * default [Bundle.EMPTY]
+         */
+        const val GALLERY_START_BUNDLE = "galleryStartBundle"
     }
 
     /**

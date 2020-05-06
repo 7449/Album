@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGallery
+import com.gallery.core.callback.IGalleryPrev
 import com.gallery.ui.page.GalleryActivity
 
 class Gallery(
@@ -15,6 +16,8 @@ class Gallery(
         private val galleryLauncher: ActivityResultLauncher<Intent>,
         private val galleryBundle: GalleryBundle = GalleryBundle(),
         private val galleryUiBundle: GalleryUiBundle = GalleryUiBundle(),
+        private val galleryOption: Bundle = Bundle.EMPTY,
+        private val galleryPrevOption: Bundle = Bundle.EMPTY,
         private val clz: Class<*> = GalleryActivity::class.java) {
 
     private val fragmentActivity: FragmentActivity
@@ -38,6 +41,8 @@ class Gallery(
             putExtras(Bundle().apply {
                 putParcelable(IGallery.GALLERY_START_CONFIG, galleryBundle)
                 putParcelable(UIResult.UI_CONFIG, galleryUiBundle)
+                putBundle(IGallery.GALLERY_START_BUNDLE, galleryOption)
+                putBundle(IGalleryPrev.PREV_START_BUNDLE, galleryPrevOption)
             })
         }
     }

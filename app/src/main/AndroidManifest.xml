@@ -15,6 +15,7 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="android:label"
         tools:targetApi="q">
         <activity android:name=".MainActivity">
             <intent-filter>

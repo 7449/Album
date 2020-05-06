@@ -9,10 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.findFragmentByTagExpand
 import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.os.bundleParcelableOrDefault
-import androidx.kotlin.expand.os.getParcelableArrayListExpand
-import androidx.kotlin.expand.os.getStringOrDefault
-import androidx.kotlin.expand.os.orEmptyExpand
+import androidx.kotlin.expand.os.*
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.*
 import com.gallery.core.ext.updateResultFinder
@@ -35,6 +32,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     }
     val galleryUiBundle by lazy {
         bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
+    }
+    val galleryOption by lazy {
+        bundleBundleExpand(IGallery.GALLERY_START_BUNDLE)
     }
     val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
@@ -95,6 +95,17 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
             allList: ArrayList<ScanEntity>,
             position: Int = 0,
             cla: Class<out PrevBaseActivity>) {
+        onStartPrevPage(allList, position, bundleBundleExpand(IGalleryPrev.PREV_START_BUNDLE), cla)
+    }
+
+    /**
+     * 启动预览
+     */
+    open fun onStartPrevPage(
+            allList: ArrayList<ScanEntity>,
+            position: Int = 0,
+            option: Bundle = Bundle.EMPTY,
+            cla: Class<out PrevBaseActivity>) {
         prevLauncher.launch(PrevBaseActivity.newInstance(
                 this,
                 allList,
@@ -102,6 +113,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
                 galleryBundle,
                 galleryUiBundle,
                 position,
+                option,
                 cla))
     }
 

@@ -51,6 +51,9 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
             onStartPrevPage(
                     galleryFragment.selectEntities,
                     0,
+                    Bundle().apply {
+                        putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
+                    },
                     GalleryWeChatPrevActivity::class.java
             )
         }
@@ -112,6 +115,9 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         onStartPrevPage(galleryFragment.currentEntities,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
+                Bundle().apply {
+                    putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
+                },
                 GalleryWeChatPrevActivity::class.java)
     }
 

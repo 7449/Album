@@ -54,7 +54,7 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
                     finderTextCompoundDrawable = R.drawable.ic_wechat_gallery_finder_action,
                     finderTextSize = 14.toFloat()
             ),
-            GalleryWeChatActivity::class.java
+            clz = GalleryWeChatActivity::class.java
     )
 }
 

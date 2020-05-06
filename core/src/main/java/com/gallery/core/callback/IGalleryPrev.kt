@@ -42,6 +42,12 @@ interface IGalleryPrev {
         const val PREV_START_POSITION = "prevStartPosition"
 
         /**
+         * 预览页携带的Bundle
+         * default = [Bundle.EMPTY]
+         */
+        const val PREV_START_BUNDLE = "prevStartBundle"
+
+        /**
          * [ArrayList<ScanEntity>] Bundle key
          * [Bundle.putParcelableArrayList]
          * 预览页返回选中的数据

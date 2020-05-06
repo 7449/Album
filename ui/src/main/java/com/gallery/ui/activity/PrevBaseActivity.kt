@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.findFragmentByTagExpand
 import androidx.kotlin.expand.app.showFragmentExpand
+import androidx.kotlin.expand.os.bundleBundleExpand
 import androidx.kotlin.expand.os.bundleIntOrDefault
 import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.bundleParcelableOrDefault
@@ -32,10 +33,12 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
                 galleryBundle: GalleryBundle = GalleryBundle(),
                 uiBundle: GalleryUiBundle = GalleryUiBundle(),
                 position: Int = 0,
+                option: Bundle = Bundle.EMPTY,
                 cla: Class<out PrevBaseActivity>): Intent {
             val bundle = Bundle()
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_ALL, allList)
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectList)
+            bundle.putBundle(IGalleryPrev.PREV_START_BUNDLE, option)
             bundle.putParcelable(IGalleryPrev.PREV_START_CONFIG, galleryBundle)
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
             bundle.putInt(IGalleryPrev.PREV_START_POSITION, position)
@@ -50,6 +53,9 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
     }
     val galleryBundle by lazy {
         bundleParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
+    }
+    val prevOption by lazy {
+        bundleBundleExpand(IGalleryPrev.PREV_START_BUNDLE)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -14,11 +14,21 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/prevWeChatToolbarBack"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:src="@drawable/ic_gallery_wechat_ui_toolbar_back" />
+            android:src="@drawable/ic_gallery_ui_toolbar_back" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/prevWeChatToolbarText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/prevWeChatToolbarBack"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/prevWeChatToolbarSend"

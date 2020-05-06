@@ -14,10 +14,10 @@ android {
 }
 dependencies {
     api project(path: ':ui')
+    compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
+    compileOnly "com.google.android.material:material:$materialVersion"
     compileOnly "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     compileOnly "androidx.fragment:fragment:$fragmentVersion"
     compileOnly "com.github.bumptech.glide:glide:$glideVersion"
-    compileOnly "com.github.yalantis:ucrop:$ucropVersion"
-    compileOnly "com.google.android.material:material:$materialVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

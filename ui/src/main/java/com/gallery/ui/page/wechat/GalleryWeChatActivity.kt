@@ -107,15 +107,21 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
     }
 
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        // 文件被删后主动更新了选中文件,应更新checkBox count
+        galleryFragment.notifyDataSetChanged()
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        val selectEntities = galleryFragment.selectEntities
         if (scanEntity.isVideo() && scanEntity.duration > 300000) {
             scanEntity.isCheck = false
-            galleryFragment.selectEntities.remove(scanEntity)
+            selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_max_length).toastExpand(this)
         } else if (scanEntity.isVideo() && scanEntity.duration <= 0) {
             scanEntity.isCheck = false
-            galleryFragment.selectEntities.remove(scanEntity)
+            selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_error).toastExpand(this)
         } else {
             galleryWeChatToolbarSend.isEnabled = !galleryFragment.selectEmpty
@@ -123,8 +129,16 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
             galleryWeChatToolbarSend.text = galleryUiBundle.selectText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount}/${galleryBundle.multipleMaxCount})"
             galleryWeChatPrev.text = galleryUiBundle.preViewText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount})"
         }
-        //这里可以进行优化,找到选中item对应adapter的position,刷新局部即可
-        galleryFragment.notifyDataSetChanged()
+        galleryFragment.notifyItemChanged(position)
+        if (!scanEntity.isCheck) {
+            selectEntities.forEach { it ->
+                galleryFragment.currentEntities.indexOf(it).let {
+                    if (it != -1) {
+                        galleryFragment.notifyItemChanged(it)
+                    }
+                }
+            }
+        }
     }
 
     private fun showFinderActionView() {

@@ -2,8 +2,6 @@ package com.gallery.ui.util
 
 import android.content.Intent
 import android.graphics.Color
-import android.view.View
-import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
@@ -50,7 +48,7 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
 val GalleryWeChatActivity.rotateAnimation: RotateAnimation by lazy {
     RotateAnimation(0.toFloat(), 180.toFloat(), Animation.RELATIVE_TO_SELF, 0.5.toFloat(), Animation.RELATIVE_TO_SELF, 0.5.toFloat()).apply {
         interpolator = LinearInterpolator()
-        duration = 300
+        duration = 200
         fillAfter = true
     }
 }
@@ -58,31 +56,7 @@ val GalleryWeChatActivity.rotateAnimation: RotateAnimation by lazy {
 val GalleryWeChatActivity.rotateAnimationResult: RotateAnimation by lazy {
     RotateAnimation(180.toFloat(), 360.toFloat(), Animation.RELATIVE_TO_SELF, 0.5.toFloat(), Animation.RELATIVE_TO_SELF, 0.5.toFloat()).apply {
         interpolator = LinearInterpolator()
-        duration = 300
+        duration = 200
         fillAfter = true
     }
-}
-
-internal fun RotateAnimation.doOnAnimationEnd(action: (animation: Animation) -> Unit) {
-    setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationRepeat(animation: Animation) {
-        }
-
-        override fun onAnimationEnd(animation: Animation) {
-            action.invoke(animation)
-        }
-
-        override fun onAnimationStart(animation: Animation) {
-        }
-    })
-}
-
-fun View.addOnPreDrawListener(action: () -> Unit) {
-    viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-        override fun onPreDraw(): Boolean {
-            viewTreeObserver.removeOnPreDrawListener(this)
-            action.invoke()
-            return true
-        }
-    })
 }

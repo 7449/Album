@@ -31,7 +31,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         prevWeChatToolbarBack.setOnClickListener { onPrevFinish() }
         prevWeChatToolbarText.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
         val selectList: ArrayList<ScanEntity> = bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT)
-        val fullImageSelect: Boolean = bundleBundleExpand(IGalleryPrev.PREV_START_BUNDLE).getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
+        val fullImageSelect: Boolean = prevOption.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
         prevWeChatFullImage.isChecked = fullImageSelect
         prevWeChatToolbarSend.isEnabled = selectList.isNotEmpty()
         prevWeChatToolbarSend.text = uiBundle.selectText + if (selectList.isEmpty()) "" else "(${selectList.count()}/${galleryBundle.multipleMaxCount})"

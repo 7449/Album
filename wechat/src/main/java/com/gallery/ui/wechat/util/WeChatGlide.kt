@@ -3,6 +3,7 @@ package com.gallery.ui.wechat.util
 import android.graphics.Color
 import android.view.Gravity
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -11,6 +12,7 @@ import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R
 import com.gallery.ui.wechat.widget.WeChatGalleryItem
+import com.gallery.ui.wechat.widget.WeChatPrevItem
 
 private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
 
@@ -38,7 +40,16 @@ internal fun FrameLayout.displayGalleryThumbnails(finderEntity: ScanEntity) {
 
 internal fun FrameLayout.displayGalleryPrev(scanEntity: ScanEntity) {
     removeAllViews()
+    val weChatPrevItem = WeChatPrevItem(context)
+    weChatPrevItem.update(scanEntity)
+    Glide.with(context).load(scanEntity.externalUri()).into(weChatPrevItem.imageView)
+    addView(weChatPrevItem)
+}
+
+internal fun FrameLayout.displayGalleryPrevSelect(scanEntity: ScanEntity) {
+    removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).load(scanEntity.externalUri()).into(imageView)
+    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+    Glide.with(context).asBitmap().load(scanEntity.externalUri()).into(imageView)
     addView(imageView)
 }

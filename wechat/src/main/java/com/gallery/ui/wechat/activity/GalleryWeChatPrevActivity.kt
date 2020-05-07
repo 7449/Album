@@ -2,28 +2,40 @@ package com.gallery.ui.wechat.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
-import androidx.kotlin.expand.os.bundleBundleExpand
 import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.getBooleanExpand
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.core.callback.IGalleryPrev
 import com.gallery.scan.ScanEntity
+import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.activity.PrevBaseActivity
+import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatUiResult
+import com.gallery.ui.wechat.adapter.WeChatPrevSelectAdapter
 import com.gallery.ui.wechat.obtain
 import com.gallery.ui.wechat.util.displayGalleryPrev
+import com.gallery.ui.wechat.util.displayGalleryPrevSelect
+import com.gallery.ui.wechat.util.isGif
+import com.gallery.ui.wechat.util.isVideo
 import kotlinx.android.synthetic.main.gallery_activity_wechat_prev.*
 import java.util.*
 
 @SuppressLint("SetTextI18n")
-class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wechat_prev) {
+class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wechat_prev), GalleryFinderAdapter.AdapterFinderListener {
 
     override val hideCheckBox: Boolean
         get() = true
 
     override val galleryFragmentId: Int
         get() = R.id.preWeChatFragment
+
+    override val adapterGalleryUiBundle: GalleryUiBundle
+        get() = uiBundle
+
+    private val selectAdapter: WeChatPrevSelectAdapter = WeChatPrevSelectAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +45,31 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         val selectList: ArrayList<ScanEntity> = bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT)
         val fullImageSelect: Boolean = prevOption.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
         prevWeChatFullImage.isChecked = fullImageSelect
-        prevWeChatToolbarSend.isEnabled = selectList.isNotEmpty()
+        prevWeChatToolbarSend.isEnabled = true
         prevWeChatToolbarSend.text = uiBundle.selectText + if (selectList.isEmpty()) "" else "(${selectList.count()}/${galleryBundle.multipleMaxCount})"
+        prevWeChatToolbarSend.setOnClickListener {
+            if (prevFragment.selectEmpty) {
+                prevFragment.selectEntities.add(prevFragment.currentItem)
+            }
+            onPrevSelectEntities()
+        }
+        prevWeChatSelect.setOnClickListener { prevFragment.checkBoxClick(it) }
+
+        galleryPrevList.layoutManager = LinearLayoutManager(this).apply {
+            this.orientation = LinearLayoutManager.HORIZONTAL
+        }
+        galleryPrevList.adapter = selectAdapter
+        galleryPrevList.visibility = if (selectList.isEmpty()) View.GONE else View.VISIBLE
+        galleryPrevListLine.visibility = if (selectList.isEmpty()) View.GONE else View.VISIBLE
+        selectAdapter.updateFinder(selectList)
+    }
+
+    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
+        prevFragment.setCurrentItem(prevFragment.allItem.indexOf(item))
+    }
+
+    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
+        container.displayGalleryPrevSelect(finderEntity)
     }
 
     override fun onDisplayGalleryPrev(galleryEntity: ScanEntity, container: FrameLayout) {
@@ -43,6 +78,8 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     override fun onPageSelected(position: Int) {
         prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
+        prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
+        prevWeChatFullImage.visibility = if (prevFragment.currentItem.isGif() || prevFragment.currentItem.isVideo()) View.GONE else View.VISIBLE
     }
 
     override fun onChangedCreated() {
@@ -51,6 +88,16 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     override fun onChangedCheckBox() {
         prevWeChatToolbarSend.text = uiBundle.selectText + if (prevFragment.selectEmpty) "" else "(${prevFragment.selectCount}/${galleryBundle.multipleMaxCount})"
-        prevWeChatToolbarText.text = "%s / %s".format(prevFragment.selectCount.toString(), galleryBundle.multipleMaxCount)
+        galleryPrevList.visibility = if (prevFragment.selectEmpty) View.GONE else View.VISIBLE
+        galleryPrevListLine.visibility = if (prevFragment.selectEmpty) View.GONE else View.VISIBLE
+        selectAdapter.updateFinder(prevFragment.selectEntities)
+    }
+
+    override fun onKeyBackResult(bundle: Bundle) {
+        bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
+    }
+
+    override fun onToolbarFinishResult(bundle: Bundle) {
+        bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
     }
 }

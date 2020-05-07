@@ -42,12 +42,6 @@ interface IGalleryPrev {
         const val PREV_START_POSITION = "prevStartPosition"
 
         /**
-         * 预览页携带的Bundle
-         * default = [Bundle.EMPTY]
-         */
-        const val PREV_START_BUNDLE = "prevStartBundle"
-
-        /**
          * [ArrayList<ScanEntity>] Bundle key
          * [Bundle.putParcelableArrayList]
          * 预览页返回选中的数据
@@ -66,6 +60,11 @@ interface IGalleryPrev {
      * [ViewPager2.getCurrentItem]
      */
     val currentItem: ScanEntity
+
+    /**
+     * 获取全部预览数据
+     */
+    val allItem: ArrayList<ScanEntity>
 
     /**
      * 预览页选中的数据
@@ -92,6 +91,11 @@ interface IGalleryPrev {
      * [ViewPager2.getCurrentItem]
      */
     val currentPosition: Int
+
+    /**
+     * 当前item是否是选中状态
+     */
+    fun isCheckBox(position: Int): Boolean
 
     /**
      * [ViewPager2]跳转到某个页面

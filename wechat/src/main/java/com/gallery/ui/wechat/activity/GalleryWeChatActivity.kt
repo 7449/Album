@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ext.findFinder
@@ -95,6 +96,16 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         }
     }
 
+    override fun onPrevKeyBack(bundle: Bundle) {
+        galleryWeChatFullImage.isChecked = bundle.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
+        updateView()
+    }
+
+    override fun onPrevToolbarFinish(bundle: Bundle) {
+        galleryWeChatFullImage.isChecked = bundle.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
+        updateView()
+    }
+
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
         this.selectScanEntity = item
         hideFinderActionView()
@@ -126,7 +137,6 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         galleryFragment.notifyDataSetChanged()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         val selectEntities = galleryFragment.selectEntities
         if (scanEntity.isVideo() && scanEntity.duration > 300000) {
@@ -138,10 +148,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
             selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_error).toastExpand(this)
         } else {
-            galleryWeChatToolbarSend.isEnabled = !galleryFragment.selectEmpty
-            galleryWeChatPrev.isEnabled = !galleryFragment.selectEmpty
-            galleryWeChatToolbarSend.text = galleryUiBundle.selectText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount}/${galleryBundle.multipleMaxCount})"
-            galleryWeChatPrev.text = galleryUiBundle.preViewText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount})"
+            updateView()
         }
         galleryFragment.notifyItemChanged(position)
         if (!scanEntity.isCheck) {
@@ -153,6 +160,14 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 }
             }
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateView() {
+        galleryWeChatToolbarSend.isEnabled = !galleryFragment.selectEmpty
+        galleryWeChatPrev.isEnabled = !galleryFragment.selectEmpty
+        galleryWeChatToolbarSend.text = galleryUiBundle.selectText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount}/${galleryBundle.multipleMaxCount})"
+        galleryWeChatPrev.text = galleryUiBundle.preViewText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount})"
     }
 
     private fun showFinderActionView() {

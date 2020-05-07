@@ -27,4 +27,8 @@ object UIResult {
     const val PREV_BACk_FINISH_RESULT_CODE = -16
 
     const val PREV_OK_FINISH_RESULT_CODE = -17
+
+    const val GALLERY_START_BUNDLE = "galleryStartBundle"
+
+    const val PREV_START_BUNDLE = "prevStartBundle"
 }

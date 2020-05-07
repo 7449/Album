@@ -7,11 +7,7 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/preViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/gallery_padding_top"
-        android:paddingBottom="@dimen/gallery_padding_bottom" />
+        android:layout_height="match_parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/preCheckBox"

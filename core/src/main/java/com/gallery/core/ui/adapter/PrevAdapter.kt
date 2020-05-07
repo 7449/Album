@@ -56,5 +56,8 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
 
     val currentSelectList: ArrayList<ScanEntity>
         get() = selectList
+
+    val allItem: ArrayList<ScanEntity>
+        get() = galleryList
 }
 

@@ -57,7 +57,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
             override fun onPageSelected(position: Int) {
                 galleryPrevCallback.onPageSelected(position)
                 if (!galleryPrevInterceptor.hideCheckBox) {
-                    preCheckBox.isSelected = prevAdapter.isCheck(position)
+                    preCheckBox.isSelected = isCheckBox(position)
                 }
             }
         }
@@ -119,6 +119,9 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
     override val currentItem: ScanEntity
         get() = prevAdapter.item(currentPosition)
 
+    override val allItem: ArrayList<ScanEntity>
+        get() = prevAdapter.allItem
+
     override val selectEntities: ArrayList<ScanEntity>
         get() = prevAdapter.currentSelectList
 
@@ -133,6 +136,10 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
 
     override val currentPosition: Int
         get() = preViewPager.currentItem
+
+    override fun isCheckBox(position: Int): Boolean {
+        return prevAdapter.isCheck(position)
+    }
 
     override fun setCurrentItem(position: Int) {
         setCurrentItem(position, false)

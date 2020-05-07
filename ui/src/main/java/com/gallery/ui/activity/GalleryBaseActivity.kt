@@ -34,7 +34,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
     }
     val galleryOption by lazy {
-        bundleBundleExpand(IGallery.GALLERY_START_BUNDLE)
+        bundleBundleExpand(UIResult.GALLERY_START_BUNDLE)
     }
     val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
@@ -45,9 +45,11 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
             }
             UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE -> {
                 galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
+                onPrevToolbarFinish(bundleExpand.orEmptyExpand())
             }
             UIResult.PREV_BACk_FINISH_RESULT_CODE -> {
                 galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
+                onPrevKeyBack(bundleExpand.orEmptyExpand())
             }
         }
     }
@@ -89,13 +91,25 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     }
 
     /**
+     * 预览页toolbar返回
+     */
+    open fun onPrevToolbarFinish(bundle: Bundle) {
+    }
+
+    /**
+     * 预览页back返回
+     */
+    open fun onPrevKeyBack(bundle: Bundle) {
+    }
+
+    /**
      * 启动预览
      */
     open fun onStartPrevPage(
             allList: ArrayList<ScanEntity>,
             position: Int = 0,
             cla: Class<out PrevBaseActivity>) {
-        onStartPrevPage(allList, position, bundleBundleExpand(IGalleryPrev.PREV_START_BUNDLE), cla)
+        onStartPrevPage(allList, position, bundleBundleExpand(UIResult.PREV_START_BUNDLE), cla)
     }
 
     /**

@@ -112,12 +112,13 @@ internal inline fun GalleryWeChatPrevActivity.obtain(uiBundle: GalleryUiBundle) 
     prevWeChatToolbar.setBackgroundColor(uiBundle.toolbarBackground)
 
     prevWeChatBottomView.setBackgroundColor(uiBundle.preBottomViewBackground)
+    galleryPrevList.setBackgroundColor(uiBundle.preBottomViewBackground)
     prevWeChatSelect.text = uiBundle.preBottomOkText
     prevWeChatSelect.textSize = uiBundle.preBottomOkTextSize
     prevWeChatSelect.setTextColor(uiBundle.preBottomOkTextColor)
 
-//    prevWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
-//    prevWeChatSelect.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
+    prevWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
+    prevWeChatSelect.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
 
     prevWeChatToolbarSend.textSize = uiBundle.selectTextSize
     prevWeChatToolbarSend.text = uiBundle.selectText

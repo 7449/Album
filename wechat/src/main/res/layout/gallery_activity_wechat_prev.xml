@@ -56,6 +56,19 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/galleryPrevList"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/galleryPrevListLine"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@android:color/darker_gray" />
+
     <RelativeLayout
         android:id="@+id/prevWeChatBottomView"
         android:layout_width="match_parent"
@@ -66,12 +79,13 @@
             android:layout_width="@dimen/gallery_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:layout_marginStart="6dp"
             android:layout_marginEnd="10dp"
             android:gravity="center"
             android:text="@string/gallery_wechat_select"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/gallery_wechat_full_image" />
+            android:textSize="@dimen/gallery_wechat_full_image"
+            tools:ignore="RelativeOverlap" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/prevWeChatFullImage"

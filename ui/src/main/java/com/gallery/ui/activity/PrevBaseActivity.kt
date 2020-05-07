@@ -38,7 +38,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
             val bundle = Bundle()
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_ALL, allList)
             bundle.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectList)
-            bundle.putBundle(IGalleryPrev.PREV_START_BUNDLE, option)
+            bundle.putBundle(UIResult.PREV_START_BUNDLE, option)
             bundle.putParcelable(IGalleryPrev.PREV_START_CONFIG, galleryBundle)
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
             bundle.putInt(IGalleryPrev.PREV_START_POSITION, position)
@@ -55,7 +55,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         bundleParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
     }
     val prevOption by lazy {
-        bundleBundleExpand(IGalleryPrev.PREV_START_BUNDLE)
+        bundleBundleExpand(UIResult.PREV_START_BUNDLE)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,9 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
 
     override fun onBackPressed() {
         val intent = Intent()
-        intent.putExtras(prevFragment.resultBundle(uiBundle.preBackRefresh))
+        val resultBundle: Bundle = prevFragment.resultBundle(uiBundle.preBackRefresh)
+        onKeyBackResult(resultBundle)
+        intent.putExtras(resultBundle)
         setResult(UIResult.PREV_BACk_FINISH_RESULT_CODE, intent)
         super.onBackPressed()
     }
@@ -86,9 +88,23 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
      */
     open fun onPrevFinish() {
         val intent = Intent()
-        intent.putExtras(prevFragment.resultBundle(uiBundle.preFinishRefresh))
+        val resultBundle: Bundle = prevFragment.resultBundle(uiBundle.preFinishRefresh)
+        onToolbarFinishResult(resultBundle)
+        intent.putExtras(resultBundle)
         setResult(UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE, intent)
         finish()
+    }
+
+    /**
+     * back返回,可为Bundle插入需要的数据
+     */
+    open fun onKeyBackResult(bundle: Bundle) {
+    }
+
+    /**
+     * toolbar返回,可为Bundle插入需要的数据
+     */
+    open fun onToolbarFinishResult(bundle: Bundle) {
     }
 
     /**
@@ -99,7 +115,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
     }
 
     /**
-     * prev select select data
+     * prev select data
      */
     open fun onPrevSelectEntities() {
         val intent = Intent()

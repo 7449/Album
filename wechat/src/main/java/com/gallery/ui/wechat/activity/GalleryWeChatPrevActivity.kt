@@ -65,7 +65,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
-        prevFragment.setCurrentItem(prevFragment.allItem.indexOf(item))
+        prevFragment.setCurrentItem(prevFragment.allItem.indexOfFirst { it.id == item.id })
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
@@ -77,9 +77,11 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     }
 
     override fun onPageSelected(position: Int) {
+        val currentItem: ScanEntity = prevFragment.currentItem
         prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
         prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
-        prevWeChatFullImage.visibility = if (prevFragment.currentItem.isGif() || prevFragment.currentItem.isVideo()) View.GONE else View.VISIBLE
+        prevWeChatFullImage.visibility = if (currentItem.isGif() || currentItem.isVideo()) View.GONE else View.VISIBLE
+        selectAdapter.refreshItem(currentItem)
     }
 
     override fun onChangedCreated() {

@@ -1,6 +1,7 @@
 package com.gallery.ui.wechat.adapter
 
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.adapter.GalleryFinderAdapter
@@ -27,17 +28,19 @@ class WeChatPrevSelectAdapter(
 
     override fun onBindViewHolder(holder: XViewHolder, position: Int) {
         val finderEntity: ScanEntity = list[position]
-        adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.frameLayout(R.id.prevSelectFrame))
+        val frameLayout: FrameLayout = holder.frameLayout(R.id.prevSelectFrame)
+        frameLayout.setBackgroundResource(if (finderEntity.isCheck) R.drawable.wechat_selector_gallery_select else 0)
+        adapterFinderListener.onGalleryFinderThumbnails(finderEntity, frameLayout)
     }
 
     fun updateFinder(entities: ArrayList<ScanEntity>) {
         list.clear()
-        list.addAll(entities)
+        entities.forEach { list.add(it.copy(isCheck = false)) }
         notifyDataSetChanged()
     }
 
-    fun findItemIndex(entity: ScanEntity): Int {
-        return list.indexOf(entity)
+    fun refreshItem(scanEntity: ScanEntity) {
+        list.forEach { it.isCheck = it.id == scanEntity.id }
+        notifyDataSetChanged()
     }
-
 }

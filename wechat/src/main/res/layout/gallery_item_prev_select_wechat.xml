@@ -9,6 +9,7 @@
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
         android:layout_margin="8dp"
+        android:background="@drawable/ic_shape_wechat_select_prev"
         android:padding="2dp" />
 
 </FrameLayout>

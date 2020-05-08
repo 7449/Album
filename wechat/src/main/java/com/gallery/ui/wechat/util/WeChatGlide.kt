@@ -50,6 +50,6 @@ internal fun FrameLayout.displayGalleryPrevSelect(scanEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
     imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-    Glide.with(context).asBitmap().load(scanEntity.externalUri()).into(imageView)
+    Glide.with(context).asBitmap().load(scanEntity.externalUri()).apply(requestOptions.centerCrop()).into(imageView)
     addView(imageView)
 }

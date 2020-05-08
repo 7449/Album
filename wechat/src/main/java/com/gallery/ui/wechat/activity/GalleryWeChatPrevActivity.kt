@@ -8,6 +8,8 @@ import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.core.callback.IGalleryPrev
+import com.gallery.core.ext.isGif
+import com.gallery.core.ext.isVideo
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.activity.PrevBaseActivity
@@ -18,8 +20,6 @@ import com.gallery.ui.wechat.adapter.WeChatPrevSelectAdapter
 import com.gallery.ui.wechat.obtain
 import com.gallery.ui.wechat.util.displayGalleryPrev
 import com.gallery.ui.wechat.util.displayGalleryPrevSelect
-import com.gallery.ui.wechat.util.isGif
-import com.gallery.ui.wechat.util.isVideo
 import kotlinx.android.synthetic.main.gallery_activity_wechat_prev.*
 import java.util.*
 

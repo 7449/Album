@@ -69,9 +69,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         finderName = savedInstanceState.getStringOrDefault(UIResult.FINDER_NAME, galleryBundle.allName)
         findFragmentByTagExpand(ScanFragment::class.java.simpleName) {
             if (it == null) {
-                addFragmentExpand(galleryFragmentId, ScanFragment.newInstance(galleryBundle))
+                addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
             } else {
-                showFragmentExpand(it)
+                showFragmentExpand(fragment = it)
             }
         }
     }

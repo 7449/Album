@@ -9,9 +9,11 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.text.toastExpand
+import androidx.kotlin.expand.view.addOnPreDrawListenerExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ext.findFinder
 import com.gallery.core.ext.isScanAll
+import com.gallery.core.ext.isVideo
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
@@ -19,7 +21,10 @@ import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
-import com.gallery.ui.wechat.util.*
+import com.gallery.ui.wechat.util.AnimUtils
+import com.gallery.ui.wechat.util.displayGalleryThumbnails
+import com.gallery.ui.wechat.util.displayGalleryWeChat
+import com.gallery.ui.wechat.util.doOnAnimationEnd
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
 class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener, WeChatFinderAdapter.WeChatAdapterListener {
@@ -44,7 +49,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         obtain(galleryUiBundle)
-        galleryWeChatRoot.addOnPreDrawListener { rootViewHeight = galleryWeChatRoot.height }
+        galleryWeChatRoot.addOnPreDrawListenerExpand { rootViewHeight = galleryWeChatRoot.height }
         galleryWeChatToolbarBack.setOnClickListener { onGalleryFinish() }
         galleryWeChatFinderRoot.setOnClickListener { hideFinderActionView() }
         galleryWeChatFinder.adapter = newFinderAdapter

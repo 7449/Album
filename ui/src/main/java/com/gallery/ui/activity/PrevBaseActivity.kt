@@ -62,14 +62,14 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         super.onCreate(savedInstanceState)
         findFragmentByTagExpand(PrevFragment::class.java.simpleName) {
             if (it == null) {
-                addFragmentExpand(galleryFragmentId, PrevFragment.newInstance(
+                addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
                         bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL),
                         bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT),
                         galleryBundle,
                         bundleIntOrDefault(IGalleryPrev.PREV_START_POSITION)
                 ))
             } else {
-                showFragmentExpand(it)
+                showFragmentExpand(fragment = it)
             }
         }
     }

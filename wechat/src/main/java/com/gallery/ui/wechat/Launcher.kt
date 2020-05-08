@@ -113,6 +113,7 @@ internal inline fun GalleryWeChatPrevActivity.obtain(uiBundle: GalleryUiBundle) 
 
     prevWeChatBottomView.setBackgroundColor(uiBundle.preBottomViewBackground)
     galleryPrevList.setBackgroundColor(uiBundle.preBottomViewBackground)
+    galleryPrevList.alpha = 0.9.toFloat()
     prevWeChatSelect.text = uiBundle.preBottomOkText
     prevWeChatSelect.textSize = uiBundle.preBottomOkTextSize
     prevWeChatSelect.setTextColor(uiBundle.preBottomOkTextColor)

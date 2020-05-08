@@ -1,11 +1,11 @@
 buildscript {
     ext.kotlin_version = '1.3.72'
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-//        jcenter()
-//        google()
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+//        maven { url 'https://maven.aliyun.com/repository/public/' }
+        jcenter()
+        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.3'
@@ -16,11 +16,11 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/public/' }
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url "https://jitpack.io" }
-//        jcenter()
-//        google()
+        jcenter()
+        google()
     }
 }
 
@@ -41,9 +41,9 @@ ext {
     scanVersion = "0.0.8"
     viewHolderVersion = "0.0.4@aar"
     bannerVersion = "1.1.9"
-    kotlinxVersion = "0.0.2"
-    coreVersion = "0.0.7"
-    uiVersion = "0.0.3"
+    kotlinxVersion = "0.0.3"
+    coreVersion = "0.0.8"
+    uiVersion = "0.0.4"
 
     sampleApplicationId = 'com.gallery.sample'
 }

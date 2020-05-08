@@ -6,11 +6,11 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import com.gallery.core.ext.isGif
+import com.gallery.core.ext.isVideo
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.util.formatTime
-import com.gallery.ui.wechat.util.isGif
-import com.gallery.ui.wechat.util.isVideo
 import kotlinx.android.synthetic.main.layout_gallery_wechat_item.view.*
 
 class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {

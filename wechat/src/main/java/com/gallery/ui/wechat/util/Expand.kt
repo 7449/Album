@@ -1,11 +1,8 @@
 package com.gallery.ui.wechat.util
 
 import android.annotation.SuppressLint
-import android.view.View
-import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import com.gallery.scan.ScanEntity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -36,20 +33,6 @@ internal fun RotateAnimation.doOnAnimationEnd(action: (animation: Animation) -> 
         }
     })
 }
-
-internal fun View.addOnPreDrawListener(action: () -> Unit) {
-    viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-        override fun onPreDraw(): Boolean {
-            viewTreeObserver.removeOnPreDrawListener(this)
-            action.invoke()
-            return true
-        }
-    })
-}
-
-internal fun ScanEntity.isGif() = mimeType.contains("gif")
-
-internal fun ScanEntity.isVideo() = mediaType == "3"
 
 internal fun Long.toFileSize(): String {
     val df = DecimalFormat()

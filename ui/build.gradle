@@ -13,8 +13,8 @@ android {
     }
 }
 dependencies {
-    api project(path: ':core')
-//    api "com.ydevelop:gallery.core:$coreVersion"
+//    api project(path: ':core')
+    api "com.ydevelop:gallery.core:$coreVersion"
     compileOnly "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     compileOnly "androidx.fragment:fragment:$fragmentVersion"
     compileOnly "com.github.bumptech.glide:glide:$glideVersion"

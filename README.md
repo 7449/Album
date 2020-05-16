@@ -2,15 +2,7 @@
 
 1. custom camera
 
-## 
-
-    android:requestLegacyExternalStorage="true"
-    为了适配UCrop,暂时使用这个方法,可在下一个版本撤回这个方法
-    https://github.com/Yalantis/uCrop/pull/613
-
 ## version
-
-scan:![](https://api.bintray.com/packages/ydevelop/maven/gallery.scan/images/download.svg)
 
 core:![](https://api.bintray.com/packages/ydevelop/maven/gallery.core/images/download.svg)
 
@@ -18,9 +10,6 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
 
 #### Manifests.xml
 
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.gallery.ui.activity.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

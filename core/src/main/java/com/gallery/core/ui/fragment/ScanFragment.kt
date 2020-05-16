@@ -10,7 +10,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.*
-import androidx.kotlin.expand.content.findUriByFileExpand
 import androidx.kotlin.expand.content.openVideoExpand
 import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.camera.CameraStatus
@@ -19,6 +18,7 @@ import androidx.kotlin.expand.os.getParcelableArrayListOrDefault
 import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.kotlin.expand.os.orEmptyExpand
 import androidx.kotlin.expand.os.permission.PermissionCode
+import androidx.kotlin.expand.version.hasQExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,6 +34,7 @@ import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.*
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
+import java.io.File
 
 class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), ScanView, GalleryAdapter.OnGalleryItemClickListener, IGallery {
 
@@ -60,13 +61,24 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             val bundleExpand = intent?.data?.extras.orEmptyExpand()
             when (intent.resultCode) {
                 Activity.RESULT_OK -> {
-                    val cropUri = bundleExpand.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)
-                    if (cropUri == null) {
+                    val cropUri: Uri? = bundleExpand.getParcelable(UCrop.EXTRA_OUTPUT_URI)
+                    if (cropUri == null || cropUri.path == null) {
                         galleryInterceptor.onUCropError(requireContext(), null)
                         return@registerForActivityResult
                     }
-                    galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
-                    cropUri.path?.let { scanFile(ResultType.CROP, it) }
+                    if (!galleryBundle.uCropSuccessSave || !hasQExpand()) {
+                        galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
+                        scanFile(ResultType.CROP, cropUri.path.toString())
+                        return@registerForActivityResult
+                    }
+                    val cropUriAndroidQ: Uri? = requireContext().saveCropToGalleryLegacy(cropUri, galleryBundle.uCropName, galleryBundle.uCropNameSuffix, galleryBundle.relativePath)
+                    if (cropUriAndroidQ == null) {
+                        galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
+                    } else {
+                        galleryInterceptor.onUCropResources(cropUriAndroidQ.orEmptyExpand())
+                        scanFile(ResultType.CROP, findPathByUriExpand(cropUriAndroidQ).toString())
+                        File(cropUri.path.toString()).delete()
+                    }
                 }
                 Activity.RESULT_CANCELED -> galleryInterceptor.onUCropCanceled(requireContext())
                 UCrop.RESULT_ERROR -> galleryInterceptor.onUCropError(requireContext(), UCrop.getError(intent?.data.orEmptyExpand()))
@@ -200,7 +212,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             galleryCallback.onCameraOpenStatus(requireContext(), CameraStatus.PERMISSION, galleryBundle)
             return
         }
-        fileUri = requireActivity().findUriByFileExpand(requireActivity().galleryPathFile(galleryBundle.cameraPath, galleryBundle.cameraName, galleryBundle.scanType))
+        fileUri = requireActivity().galleryPathToUri(galleryBundle.cameraPath, galleryBundle.cameraName, galleryBundle.cameraNameSuffix, galleryBundle.relativePath)
         galleryCallback.onCameraOpenStatus(requireContext(), openCamera(CameraUri(galleryBundle.scanType, fileUri)), galleryBundle)
     }
 
@@ -224,7 +236,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         if (onGalleryCustomCrop) {
             return
         }
-        cropLauncher.launch(UCrop.of(uri, Uri.fromFile(requireActivity().cropPathFile(galleryBundle.uCropPath, galleryBundle.cameraName, galleryBundle.scanType)))
+        cropLauncher.launch(UCrop.of(uri, requireActivity().uCropPathToUri(galleryBundle.uCropPath, galleryBundle.uCropName, galleryBundle.uCropNameSuffix, galleryBundle.relativePath))
                 .withOptions(galleryInterceptor.onUCropOptions())
                 .getIntent(requireContext()))
     }

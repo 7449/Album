@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.media.MediaScannerConnection.scanFile
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -16,7 +17,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.kotlin.expand.app.openCameraExpand
 import androidx.kotlin.expand.content.findPathByUriExpand
-import androidx.kotlin.expand.content.findUriByFileExpand
 import androidx.kotlin.expand.os.camera.CameraX
 import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
@@ -25,7 +25,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.galleryPathFile
+import com.gallery.core.ext.galleryPathToUri
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             GalleryDialogFragment.newInstance().show(supportFragmentManager, GalleryDialogFragment::class.java.simpleName)
         }
         openCamera.setOnClickListener {
-            fileUri = findUriByFileExpand(applicationContext.galleryPathFile(null, System.currentTimeMillis().toString()))
+            fileUri = applicationContext.galleryPathToUri(null, System.currentTimeMillis().toString(), "jpg", Environment.DIRECTORY_DCIM)
             openCameraExpand(fileUri, false)
         }
         video.setOnClickListener {

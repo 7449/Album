@@ -1,6 +1,7 @@
 package com.gallery.core
 
 import android.graphics.Color
+import android.os.Environment
 import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
@@ -17,12 +18,11 @@ data class GalleryBundle(
         val selectEntities: ArrayList<ScanEntity> = ArrayList(),
         /**
          * 扫描类型
+         * [ScanType.IMAGE]
+         * [ScanType.VIDEO]
+         * [ScanType.MIX]
          */
         val scanType: ScanType = ScanType.IMAGE,
-        /**
-         * 摄像或拍照文件名称
-         */
-        val cameraName: String = System.currentTimeMillis().toString(),
         /**
          * 隐藏相机
          */
@@ -45,15 +45,48 @@ data class GalleryBundle(
          */
         val multipleMaxCount: Int = 9,
         /**
+         * 文件输出路径
+         * [Environment.DIRECTORY_DCIM]
+         * [Environment.DIRECTORY_PICTURES]
+         */
+        val relativePath: String = Environment.DIRECTORY_DCIM,
+        /**
          * 拍照路径
          * 支持在Android10版本以下
          */
         val cameraPath: String? = null,
         /**
+         * 摄像或拍照文件名称
+         */
+        val cameraName: String = System.currentTimeMillis().toString(),
+        /**
+         * 摄像或拍照文件名称后缀
+         * cameraName.cameraNameSuffix
+         * simple: photo.jpg
+         */
+        val cameraNameSuffix: String = if (scanType == ScanType.VIDEO) "mp4" else "jpg",
+        /**
          * 裁剪路径
          * 只在未拦截自定义裁剪生效,或使用者自定义裁剪使用
+         * 支持在Android10版本以下
          */
         val uCropPath: String? = null,
+        /**
+         * 最低支持Android10
+         * Android10下uCrop输出路径默认为
+         * externalCacheDir
+         * 如果需要保存可设置
+         * relativePath
+         */
+        val uCropSuccessSave: Boolean = true,
+        /**
+         * 裁剪文件名称
+         */
+        val uCropName: String = System.currentTimeMillis().toString(),
+        /**
+         * 裁剪文件后缀
+         */
+        val uCropNameSuffix: String = "jpg",
         /**
          * 根目录名称,有的会出现0所以设置下
          */

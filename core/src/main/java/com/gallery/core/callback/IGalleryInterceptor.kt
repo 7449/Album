@@ -2,6 +2,7 @@ package com.gallery.core.callback
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.R
@@ -45,12 +46,31 @@ interface IGalleryInterceptor {
      * 裁剪异常
      */
     fun onUCropError(context: Context, throwable: Throwable?) {
+        Log.i("onUCropError", throwable?.message.toString())
         context.getString(R.string.gallery_crop_error).toastExpand(context)
     }
 
     /**
      * 在[onCustomPhotoCrop]为false的情况下会触发
      * 裁剪成功
+     *
+     * 需要注意的是Uri分为两种情况
+     * Android 10
+     *
+     *   content://media/external/images/media/id
+     *
+     * Android 9 及以下
+     *
+     *   file:///storage/emulated/0/Android/data/packageName/cache/xxxxx.jpg
+     *
+     * 在Android10如果图片转移成功的话,文件名称,路径则依旧和Android10拍照命名规则一样
+     *
+     * val file: File = when {
+     *    hasQExpand() -> File(externalCacheDir, fileName)
+     *    uCropPath.isNullOrEmpty() -> lowerVersionFile(fileName, relativePath)
+     *    else -> galleryPathFile(uCropPath, fileName)
+     * }
+     *
      */
     fun onUCropResources(uri: Uri) {
         //crop rewrite this method

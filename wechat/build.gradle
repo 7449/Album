@@ -13,8 +13,8 @@ android {
     }
 }
 dependencies {
-//    api project(path: ':ui')
-    api "com.ydevelop:gallery.ui:$uiVersion"
+    api project(path: ':ui')
+//    api "com.ydevelop:gallery.ui:$uiVersion"
     compileOnly "androidx.appcompat:appcompat:$appcompatVersion"
     compileOnly "com.google.android.material:material:$materialVersion"
     compileOnly "androidx.recyclerview:recyclerview:$recyclerViewVersion"

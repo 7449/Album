@@ -108,7 +108,6 @@ object GalleryTheme {
                     putString(EXTRA_UCROP_TITLE_TEXT_TOOLBAR, "UCrop")
                     putInt(EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, R.color.colorWhite.colorExpand(activity))
                     putInt(EXTRA_TOOL_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
-                    putInt(EXTRA_UCROP_COLOR_WIDGET_ACTIVE, R.color.colorBlack.colorExpand(activity))
                     putInt(EXTRA_STATUS_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
                     putBoolean(EXTRA_HIDE_BOTTOM_CONTROLS, true)
                 }

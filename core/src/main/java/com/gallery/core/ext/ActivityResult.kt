@@ -16,12 +16,6 @@ import com.gallery.scan.ScanType
 fun Context.checkSelfPermissionExpand(name: String) =
         ContextCompat.checkSelfPermission(this, name) == PackageManager.PERMISSION_GRANTED
 
-fun Context.checkCameraPermissionExpand() =
-        checkSelfPermissionExpand(Manifest.permission.CAMERA)
-
-fun Context.checkWritePermissionExpand() =
-        checkSelfPermissionExpand(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
 fun Fragment.checkCameraPermissionExpand() =
         requireContext().checkSelfPermissionExpand(Manifest.permission.CAMERA)
 

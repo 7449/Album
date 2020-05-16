@@ -2,21 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gallery.sample">
-    <!--
 
-    android:requestLegacyExternalStorage="true"
-    为了适配UCrop,暂时使用这个方法,可在下一个版本撤回这个方法
-    https://github.com/Yalantis/uCrop/pull/613
-
-    -->
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
-        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label"
-        tools:targetApi="q">
+        tools:replace="android:label">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

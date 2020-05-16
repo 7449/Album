@@ -74,6 +74,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                     val cropUriAndroidQ: Uri? = requireContext().saveCropToGalleryLegacy(cropUri, galleryBundle.uCropName, galleryBundle.uCropNameSuffix, galleryBundle.relativePath)
                     if (cropUriAndroidQ == null) {
                         galleryInterceptor.onUCropResources(cropUri.orEmptyExpand())
+                        scanFile(ResultType.CROP, cropUri.path.toString())
                     } else {
                         galleryInterceptor.onUCropResources(cropUriAndroidQ.orEmptyExpand())
                         scanFile(ResultType.CROP, findPathByUriExpand(cropUriAndroidQ).toString())

@@ -158,13 +158,15 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         galleryCallback.onPhotoItemClick(requireContext(), galleryBundle, galleryEntity, position, parentId)
     }
 
-    override fun onCameraResultCanceled() {
-        requireContext().contentResolver.delete(fileUri, null, null)
+    public override fun onCameraResultCanceled() {
+        if (!fileUri.path.isNullOrEmpty()) {
+            requireContext().contentResolver.delete(fileUri, null, null)
+        }
         fileUri = Uri.EMPTY
         galleryCallback.onCameraCanceled(requireContext(), galleryBundle)
     }
 
-    override fun onCameraResultOk() {
+    public override fun onCameraResultOk() {
         findPathByUriExpand(fileUri)?.let {
             scanFile(ResultType.CAMERA, it)
             if (galleryBundle.cameraCrop) {
@@ -190,6 +192,10 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             return
         }
         fileUri = requireActivity().galleryPathToUri(galleryBundle.cameraPath, galleryBundle.cameraName, galleryBundle.cameraNameSuffix, galleryBundle.relativePath)
+        val onCustomCamera: Boolean = galleryInterceptor.onCustomCamera(fileUri)
+        if (onCustomCamera) {
+            return
+        }
         val cameraUri = CameraUri(galleryBundle.scanType, fileUri)
         galleryCallback.onCameraOpenStatus(requireContext(), openCameraExpand(cameraUri) { openCameraLauncher.launch(cameraUri) }, galleryBundle)
     }

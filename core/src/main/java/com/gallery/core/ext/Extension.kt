@@ -58,10 +58,27 @@ fun Context.saveCropToGalleryLegacy(
     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$cropName.$cropNameSuffix")
     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
     val uri: Uri = insertImageUriExpand(contentValues)
-    val outStream: OutputStream = contentResolver.openOutputStream(uri) ?: return null
+    return saveToGalleryLegacy(cropUri, uri, cropName, cropNameSuffix, relativePath)
+}
+
+@SuppressLint("InlinedApi")
+fun Context.saveToGalleryLegacy(
+        cropUri: Uri,
+        outPutUri: Uri,
+        cropName: String,
+        cropNameSuffix: String,
+        relativePath: String
+): Uri? {
+    if (!hasQExpand()) {
+        return null
+    }
+    val contentValues = ContentValues()
+    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$cropName.$cropNameSuffix")
+    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+    val outStream: OutputStream = contentResolver.openOutputStream(outPutUri) ?: return null
     val inStream: InputStream = contentResolver.openInputStream(cropUri) ?: return null
     outStream.use { out -> inStream.use { input -> input.copyTo(out) } }
-    return uri
+    return outPutUri
 }
 
 internal fun galleryPathFile(path: String, child: String): File {

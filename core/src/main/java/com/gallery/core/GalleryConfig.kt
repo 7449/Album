@@ -51,4 +51,9 @@ object GalleryConfig {
      * 预览页返回是否刷新
      */
     const val PREV_RESULT_REFRESH = "prevResultRefresh"
+
+    /**
+     * 自定义相机路径
+     */
+    const val CUSTOM_CAMERA_OUT_PUT_URI = "customCameraOutPutUri"
 }

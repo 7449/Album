@@ -86,8 +86,6 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         customCamera.setOnClickListener {
             Gallery(
                     activity = this,
-                    galleryBundle = GalleryTheme.cropThemeGallery(this),
-                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
                     galleryLauncher = galleryLauncher,
                     clz = CustomCameraActivity::class.java
             )

@@ -21,8 +21,8 @@ interface IGalleryInterceptor {
     /**
      * 自定义相机
      */
-    @Deprecated("this feature will be implemented in the next version", ReplaceWith("false"))
-    fun onCustomCamera(): Boolean = false
+//    @Deprecated("this feature will be implemented in the next version", ReplaceWith("false"))
+    fun onCustomCamera(uri: Uri): Boolean = false
 
     /**
      * 图片裁剪

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gallery.sample">
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
@@ -16,6 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".camera.CameraActivity"
+            android:configChanges="screenLayout|keyboardHidden"
+            android:hardwareAccelerated="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

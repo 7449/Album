@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gallery.core.GalleryConfig
 import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.ext.isGif
 import com.gallery.core.ext.isVideo
@@ -42,7 +43,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         obtain(uiBundle)
         prevWeChatToolbarBack.setOnClickListener { onPrevFinish() }
         prevWeChatToolbarText.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
-        val selectList: ArrayList<ScanEntity> = bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT)
+        val selectList: ArrayList<ScanEntity> = bundleParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT)
         val fullImageSelect: Boolean = prevOption.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
         prevWeChatFullImage.isChecked = fullImageSelect
         prevWeChatToolbarSend.isEnabled = true

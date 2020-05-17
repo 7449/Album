@@ -12,8 +12,8 @@ import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.bundleParcelableOrDefault
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfig
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ui.base.GalleryBaseActivity
@@ -36,12 +36,12 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
                 option: Bundle = Bundle.EMPTY,
                 cla: Class<out PrevBaseActivity>): Intent {
             val bundle = Bundle()
-            bundle.putParcelableArrayList(IGalleryPrev.PREV_START_ALL, allList)
-            bundle.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectList)
+            bundle.putParcelableArrayList(GalleryConfig.PREV_START_ALL, allList)
+            bundle.putParcelableArrayList(GalleryConfig.PREV_START_SELECT, selectList)
             bundle.putBundle(UIResult.PREV_START_BUNDLE, option)
-            bundle.putParcelable(IGalleryPrev.PREV_START_CONFIG, galleryBundle)
+            bundle.putParcelable(GalleryConfig.PREV_CONFIG, galleryBundle)
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
-            bundle.putInt(IGalleryPrev.PREV_START_POSITION, position)
+            bundle.putInt(GalleryConfig.PREV_START_POSITION, position)
             return Intent(context, cla).putExtras(bundle)
         }
     }
@@ -52,7 +52,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
     }
     val galleryBundle by lazy {
-        bundleParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle())
+        bundleParcelableOrDefault<GalleryBundle>(GalleryConfig.PREV_CONFIG, GalleryBundle())
     }
     val prevOption by lazy {
         bundleBundleExpand(UIResult.PREV_START_BUNDLE)
@@ -63,10 +63,10 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         findFragmentByTagExpand(PrevFragment::class.java.simpleName) {
             if (it == null) {
                 addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
-                        bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL),
-                        bundleParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT),
+                        bundleParcelableArrayListExpand(GalleryConfig.PREV_START_ALL),
+                        bundleParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT),
                         galleryBundle,
-                        bundleIntOrDefault(IGalleryPrev.PREV_START_POSITION)
+                        bundleIntOrDefault(GalleryConfig.PREV_START_POSITION)
                 ))
             } else {
                 showFragmentExpand(fragment = it)

@@ -21,16 +21,22 @@
             android:text="select and crop" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/customCrop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="custom crop" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/customCamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="custom camera" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/selectFinderStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="finder type" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/openCamera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="open camera" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/video"

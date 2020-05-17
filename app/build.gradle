@@ -26,6 +26,8 @@ dependencies {
 
     implementation project(path: ':wechat')
 
+    implementation "com.otaliastudios:cameraview:$cameraVersion"
+    implementation "com.theartofdev.edmodo:android-image-cropper:$cropVersion"
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

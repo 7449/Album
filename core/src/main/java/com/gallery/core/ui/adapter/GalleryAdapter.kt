@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.callback.IGallery
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
+import com.gallery.core.callback.InternalConfig
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.scan.ScanEntity
@@ -64,7 +64,7 @@ class GalleryAdapter(
     override fun getItemCount(): Int = galleryList.size
 
     override fun getItemViewType(position: Int): Int = when {
-        galleryList.isEmpty() || galleryList[position].parent != IGallery.CAMERA_PARENT_ID -> TYPE_PHOTO
+        galleryList.isEmpty() || galleryList[position].parent != InternalConfig.CAMERA_PARENT_ID -> TYPE_PHOTO
         else -> TYPE_CAMERA
     }
 

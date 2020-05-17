@@ -1,9 +1,12 @@
 package com.gallery.core.ext
 
+import android.net.Uri
+import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.callback.*
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
+import java.io.File
 
 val GalleryBaseFragment.galleryImageLoaderExpand: IGalleryImageLoader
     get() = when {
@@ -39,3 +42,28 @@ val PrevFragment.galleryPrevCallbackExpand: IGalleryPrevCallback
         activity is IGalleryPrevCallback -> activity as IGalleryPrevCallback
         else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryPrevCallback")
     }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun ScanFragment.cropResultOk(
+        cropUri: Uri?,
+        cropSuccessSave: Boolean,
+        cropName: String,
+        cropNameSuffix: String,
+        relativePath: String
+) {
+    if (cropUri == null || cropUri.path == null) {
+        onCropError(null)
+        return
+    }
+    if (!hasQExpand() || !cropSuccessSave) {
+        onCropSuccess(cropUri)
+        return
+    }
+    val cropUriAndroidQ: Uri? = requireActivity().saveCropToGalleryLegacy(cropUri, cropName, cropNameSuffix, relativePath)
+    if (cropUriAndroidQ == null) {
+        onCropSuccess(cropUri)
+    } else {
+        onCropSuccess(cropUriAndroidQ)
+        File(cropUri.path.toString()).delete()
+    }
+}

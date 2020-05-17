@@ -70,23 +70,23 @@ data class GalleryBundle(
          * 只在未拦截自定义裁剪生效,或使用者自定义裁剪使用
          * 支持在Android10版本以下
          */
-        val uCropPath: String? = null,
+        val cropPath: String? = null,
         /**
          * 最低支持Android10
-         * Android10下uCrop输出路径默认为
+         * Android10及以上Crop输出路径默认为
          * externalCacheDir
          * 如果需要保存可设置
          * relativePath
          */
-        val uCropSuccessSave: Boolean = true,
+        val cropSuccessSave: Boolean = true,
         /**
          * 裁剪文件名称
          */
-        val uCropName: String = System.currentTimeMillis().toString(),
+        val cropName: String = System.currentTimeMillis().toString(),
         /**
          * 裁剪文件后缀
          */
-        val uCropNameSuffix: String = "jpg",
+        val cropNameSuffix: String = "jpg",
         /**
          * 根目录名称,有的会出现0所以设置下
          */
@@ -106,7 +106,7 @@ data class GalleryBundle(
         /**
          * 每行几张图片
          */
-        val spanCount: Int = 3,
+        val spanCount: Int = 4,
         /**
          * 分割线宽度
          */

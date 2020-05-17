@@ -1,13 +1,9 @@
 package com.gallery.sample
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.media.MediaScannerConnection.scanFile
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -15,9 +11,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.kotlin.expand.app.openCameraExpand
-import androidx.kotlin.expand.content.findPathByUriExpand
-import androidx.kotlin.expand.os.camera.CameraX
 import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -25,9 +18,14 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.galleryPathToUri
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
+import com.gallery.sample.callback.GalleryCallback
+import com.gallery.sample.callback.WeChatGalleryCallback
+import com.gallery.sample.custom.CustomCameraActivity
+import com.gallery.sample.custom.CustomCropActivity
+import com.gallery.sample.custom.CustomDialog
+import com.gallery.sample.custom.CustomPageActivity
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.FinderType
@@ -36,16 +34,14 @@ import com.gallery.ui.GalleryResultCallback
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
-import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader {
 
-    private var fileUri = Uri.EMPTY
     private val galleryLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(this, SimpleGalleryCallback()))
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(this, GalleryCallback()))
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(this, SimpleWeChatGalleryCallback()))
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(this, WeChatGalleryCallback()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,46 +56,6 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
         }
 
-        customActivity.setOnClickListener {
-            Gallery(
-                    activity = this,
-                    galleryLauncher = galleryLauncher,
-                    clz = SimpleGalleryActivity::class.java,
-                    galleryBundle = GalleryBundle(radio = true, crop = true)
-            )
-        }
-        dialog.setOnClickListener {
-            GalleryDialogFragment.newInstance().show(supportFragmentManager, GalleryDialogFragment::class.java.simpleName)
-        }
-        openCamera.setOnClickListener {
-            fileUri = applicationContext.galleryPathToUri(null, System.currentTimeMillis().toString(), "jpg", Environment.DIRECTORY_DCIM)
-            openCameraExpand(fileUri, false)
-        }
-        video.setOnClickListener {
-            Gallery(
-                    activity = this,
-                    galleryBundle = GalleryBundle(scanType = ScanType.VIDEO, cameraText = getString(R.string.video_tips)),
-                    galleryUiBundle = GalleryUiBundle(toolbarText = getString(R.string.gallery_video_title)),
-                    galleryLauncher = galleryLauncher
-            )
-        }
-        selectCrop.setOnClickListener {
-            Gallery(
-                    activity = this,
-                    galleryBundle = GalleryTheme.cropThemeGallery(this),
-                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
-                    galleryLauncher = galleryLauncher
-            )
-        }
-        selectFinderStyle.setOnClickListener {
-            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("popup", "bottom"), View.NO_ID) { dialog, which ->
-                when (which) {
-                    0 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.POPUP), galleryLauncher = galleryLauncher)
-                    1 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.BOTTOM), galleryLauncher = galleryLauncher)
-                }
-                dialog.dismiss()
-            }.show()
-        }
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色", "WeChat"), View.NO_ID) { dialog, which ->
                 when (which) {
@@ -113,40 +69,59 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                 dialog.dismiss()
             }.show()
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (resultCode) {
-            Activity.RESULT_CANCELED ->
-                when (requestCode) {
-                    UCrop.REQUEST_CROP -> "取消裁剪".toastExpand(this)
-                    CameraX.CAMERA_REQUEST_CODE -> {
-                        "取消拍照".toastExpand(this)
-                        contentResolver.delete(fileUri, null, null)
-                    }
+        selectCrop.setOnClickListener {
+            Gallery(
+                    activity = this,
+                    galleryBundle = GalleryTheme.cropThemeGallery(this),
+                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
+                    galleryLauncher = galleryLauncher
+            )
+        }
+        customCrop.setOnClickListener {
+            Gallery(
+                    activity = this,
+                    galleryBundle = GalleryTheme.cropThemeGallery(this),
+                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
+                    galleryLauncher = galleryLauncher,
+                    clz = CustomCropActivity::class.java
+            )
+        }
+        customCamera.setOnClickListener {
+            Gallery(
+                    activity = this,
+                    galleryBundle = GalleryTheme.cropThemeGallery(this),
+                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
+                    galleryLauncher = galleryLauncher,
+                    clz = CustomCameraActivity::class.java
+            )
+        }
+        selectFinderStyle.setOnClickListener {
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("popup", "bottom"), View.NO_ID) { dialog, which ->
+                when (which) {
+                    0 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.POPUP), galleryLauncher = galleryLauncher)
+                    1 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.BOTTOM), galleryLauncher = galleryLauncher)
                 }
-            UCrop.RESULT_ERROR -> "裁剪异常".toastExpand(this)
-            Activity.RESULT_OK ->
-                when (requestCode) {
-                    CameraX.CAMERA_REQUEST_CODE -> {
-                        findPathByUriExpand(fileUri)?.let {
-                            scanFile(this, arrayOf(it), null) { path: String?, _: Uri? ->
-                                runOnUiThread {
-                                    path?.toastExpand(this)
-                                }
-                            }
-                        }
-//                        openCrop(fileUri)
-                    }
-                    UCrop.REQUEST_CROP -> {
-                        scanFile(this, arrayOf(data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path), null) { _: String?, uri: Uri? ->
-                            runOnUiThread {
-                                data?.extras?.getParcelable<Uri>(UCrop.EXTRA_OUTPUT_URI)?.path?.toastExpand(this)
-                            }
-                        }
-                    }
-                }
+                dialog.dismiss()
+            }.show()
+        }
+        video.setOnClickListener {
+            Gallery(
+                    activity = this,
+                    galleryBundle = GalleryBundle(scanType = ScanType.VIDEO, cameraText = getString(R.string.video_tips)),
+                    galleryUiBundle = GalleryUiBundle(toolbarText = getString(R.string.gallery_video_title)),
+                    galleryLauncher = galleryLauncher
+            )
+        }
+        dialog.setOnClickListener {
+            CustomDialog.newInstance().show(supportFragmentManager, CustomDialog::class.java.simpleName)
+        }
+        customActivity.setOnClickListener {
+            Gallery(
+                    activity = this,
+                    galleryLauncher = galleryLauncher,
+                    clz = CustomPageActivity::class.java,
+                    galleryBundle = GalleryBundle(radio = true, crop = true)
+            )
         }
     }
 

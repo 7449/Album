@@ -1,12 +1,12 @@
-package com.gallery.sample
+package com.gallery.sample.callback
 
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.wechat.WeChatGalleryCallback
+import com.gallery.ui.GalleryListener
 
-class SimpleWeChatGalleryCallback : WeChatGalleryCallback {
+class GalleryCallback : GalleryListener {
 
     override fun onGalleryCropResource(activity: FragmentActivity, uri: Uri) {
         uri.toString().toastExpand(activity)
@@ -16,8 +16,8 @@ class SimpleWeChatGalleryCallback : WeChatGalleryCallback {
         scanEntity.toString().toastExpand(activity)
     }
 
-    override fun onWeChatGalleryResources(activity: FragmentActivity, entities: List<ScanEntity>, fullImage: Boolean) {
-        ("$entities,fullImage:$fullImage").toastExpand(activity)
+    override fun onGalleryResources(activity: FragmentActivity, entities: List<ScanEntity>) {
+        entities.toString().toastExpand(activity)
     }
 
     override fun onGalleryCancel(activity: FragmentActivity) {

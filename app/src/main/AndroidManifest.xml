@@ -17,16 +17,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SimpleGalleryActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
             android:name="com.gallery.ui.page.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.gallery.ui.page.PreActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".custom.CustomPageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".custom.CustomCropActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".custom.CustomCameraActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.gallery.ui.wechat.activity.GalleryWeChatActivity"

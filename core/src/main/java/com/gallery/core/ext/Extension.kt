@@ -29,17 +29,17 @@ fun Context.galleryPathToUri(
     return findUriByFileExpand(file, relativePath)
 }
 
-fun Context.uCropPathToUri(
-        uCropPath: String?,
-        uCropName: String,
-        uCropNameSuffix: String,
+fun Context.cropPathToUri(
+        cropPath: String?,
+        cropName: String,
+        cropNameSuffix: String,
         relativePath: String
 ): Uri {
-    val fileName = "$uCropName.$uCropNameSuffix"
+    val fileName = "$cropName.$cropNameSuffix"
     val file: File = when {
         hasQExpand() -> File(externalCacheDir, fileName)
-        uCropPath.isNullOrEmpty() -> lowerVersionFile(fileName, relativePath)
-        else -> galleryPathFile(uCropPath, fileName)
+        cropPath.isNullOrEmpty() -> lowerVersionFile(fileName, relativePath)
+        else -> galleryPathFile(cropPath, fileName)
     }
     return Uri.fromFile(file)
 }
@@ -47,15 +47,15 @@ fun Context.uCropPathToUri(
 @SuppressLint("InlinedApi")
 fun Context.saveCropToGalleryLegacy(
         cropUri: Uri,
-        uCropName: String,
-        uCropNameSuffix: String,
+        cropName: String,
+        cropNameSuffix: String,
         relativePath: String
 ): Uri? {
     if (!hasQExpand()) {
         return null
     }
     val contentValues = ContentValues()
-    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$uCropName.$uCropNameSuffix")
+    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$cropName.$cropNameSuffix")
     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
     val uri: Uri = insertImageUriExpand(contentValues)
     val outStream: OutputStream = contentResolver.openOutputStream(uri) ?: return null

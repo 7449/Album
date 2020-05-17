@@ -37,6 +37,8 @@ ext {
     materialVersion = '1.2.0-alpha06'
     fragmentVersion = "1.3.0-alpha04"
     ucropVersion = '2.2.5'
+    cropVersion = "2.8.0"
+    cameraVersion = "2.6.2"
     glideVersion = "4.11.0"
     scanVersion = "0.0.8"
     viewHolderVersion = "0.0.4@aar"

@@ -11,14 +11,16 @@ import androidx.kotlin.expand.app.findFragmentByTagExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.*
 import com.gallery.core.GalleryBundle
-import com.gallery.core.callback.*
+import com.gallery.core.GalleryConfig
+import com.gallery.core.callback.IGalleryCallback
+import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.ext.updateResultFinder
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
-import com.yalantis.ucrop.UCrop
 
 @Suppress("MemberVisibilityCanBePrivate")
 abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor {
@@ -28,7 +30,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     protected abstract val galleryFragmentId: Int
 
     val galleryBundle by lazy {
-        bundleParcelableOrDefault<GalleryBundle>(IGallery.GALLERY_START_CONFIG, GalleryBundle())
+        bundleParcelableOrDefault<GalleryBundle>(GalleryConfig.GALLERY_CONFIG, GalleryBundle())
     }
     val galleryUiBundle by lazy {
         bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
@@ -41,7 +43,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         when (intent.resultCode) {
             UIResult.PREV_OK_FINISH_RESULT_CODE -> {
                 galleryFragment.onUpdatePrevResult(bundleExpand)
-                onPrevSelectEntities(bundleExpand.getParcelableArrayListExpand(IGalleryPrev.PREV_RESULT_SELECT))
+                onPrevSelectEntities(bundleExpand.getParcelableArrayListExpand(GalleryConfig.PREV_RESULT_SELECT))
             }
             UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE -> {
                 galleryFragment.onUpdatePrevResult(bundleExpand.orEmptyExpand())
@@ -84,9 +86,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         onGalleryResource(scanEntity)
     }
 
-    override fun onUCropOptions() = UCrop.Options().apply { this.optionBundle.putAll(galleryUiBundle.uCropBundle) }
+    override fun onUCropOptions() = galleryUiBundle.uCropBundle
 
-    override fun onUCropResources(uri: Uri) {
+    override fun onCropResources(uri: Uri) {
         onGalleryCropResource(uri)
     }
 

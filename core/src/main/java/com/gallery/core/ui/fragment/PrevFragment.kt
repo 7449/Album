@@ -9,6 +9,7 @@ import androidx.kotlin.expand.os.getParcelableArrayListExpand
 import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfig
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrev
@@ -32,10 +33,10 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
                         position: Int = 0): PrevFragment {
             val prevFragment = PrevFragment()
             val bundle = Bundle()
-            bundle.putParcelable(IGalleryPrev.PREV_START_CONFIG, config)
-            bundle.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectList)
-            bundle.putParcelableArrayList(IGalleryPrev.PREV_START_ALL, allList)
-            bundle.putInt(IGalleryPrev.PREV_START_POSITION, position)
+            bundle.putParcelable(GalleryConfig.PREV_CONFIG, config)
+            bundle.putParcelableArrayList(GalleryConfig.PREV_START_SELECT, selectList)
+            bundle.putParcelableArrayList(GalleryConfig.PREV_START_ALL, allList)
+            bundle.putInt(GalleryConfig.PREV_START_POSITION, position)
             prevFragment.arguments = bundle
             return prevFragment
         }
@@ -63,19 +64,19 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         }
     }
     private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
-    private val galleryBundle by lazy { getParcelableOrDefault<GalleryBundle>(IGalleryPrev.PREV_START_CONFIG, GalleryBundle()) }
+    private val galleryBundle by lazy { getParcelableOrDefault<GalleryBundle>(GalleryConfig.PREV_CONFIG, GalleryBundle()) }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(IGalleryPrev.PREV_START_POSITION, currentPosition)
-        outState.putParcelableArrayList(IGalleryPrev.PREV_START_SELECT, selectEntities)
+        outState.putInt(GalleryConfig.PREV_START_POSITION, currentPosition)
+        outState.putParcelableArrayList(GalleryConfig.PREV_START_SELECT, selectEntities)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prevAdapter.cleanAll()
-        prevAdapter.addAll(getParcelableArrayListExpand(IGalleryPrev.PREV_START_ALL))
-        prevAdapter.addSelectAll((savedInstanceState ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(IGalleryPrev.PREV_START_SELECT))
+        prevAdapter.addAll(getParcelableArrayListExpand(GalleryConfig.PREV_START_ALL))
+        prevAdapter.addSelectAll((savedInstanceState ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT))
         prevAdapter.updateEntity()
     }
 
@@ -85,7 +86,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         preCheckBox.setOnClickListener { checkBoxClick(preCheckBox) }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
-        setCurrentItem((savedInstanceState ?: bundleOrEmptyExpand()).getIntExpand(IGalleryPrev.PREV_START_POSITION))
+        setCurrentItem((savedInstanceState ?: bundleOrEmptyExpand()).getIntExpand(GalleryConfig.PREV_START_POSITION))
         preCheckBox.isSelected = prevAdapter.isCheck(currentPosition)
         galleryPrevCallback.onChangedCreated()
         preCheckBox.visibility = if (galleryPrevInterceptor.hideCheckBox) View.GONE else View.VISIBLE
@@ -151,8 +152,8 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
 
     override fun resultBundle(isRefresh: Boolean): Bundle {
         val bundle = Bundle()
-        bundle.putParcelableArrayList(IGalleryPrev.PREV_RESULT_SELECT, selectEntities)
-        bundle.putBoolean(IGalleryPrev.PREV_RESULT_REFRESH, isRefresh)
+        bundle.putParcelableArrayList(GalleryConfig.PREV_RESULT_SELECT, selectEntities)
+        bundle.putBoolean(GalleryConfig.PREV_RESULT_REFRESH, isRefresh)
         return bundle
     }
 

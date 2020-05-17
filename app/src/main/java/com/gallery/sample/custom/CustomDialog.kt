@@ -1,4 +1,4 @@
-package com.gallery.sample
+package com.gallery.sample.custom
 
 import android.content.Context
 import android.graphics.Color
@@ -12,13 +12,14 @@ import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.sample.R
 import com.gallery.scan.ScanEntity
 
-class GalleryDialogFragment : DialogFragment(), IGalleryCallback {
+class CustomDialog : DialogFragment(), IGalleryCallback {
 
     companion object {
-        fun newInstance(): GalleryDialogFragment {
-            return GalleryDialogFragment()
+        fun newInstance(): CustomDialog {
+            return CustomDialog()
         }
     }
 

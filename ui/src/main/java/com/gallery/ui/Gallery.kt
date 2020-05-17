@@ -31,7 +31,7 @@ class Gallery(
                 fragmentActivity = activity
                 startActivity()
             }
-            else -> throw NullPointerException("fragment and activity == null")
+            else -> throw KotlinNullPointerException("fragment and activity == null")
         }
     }
 

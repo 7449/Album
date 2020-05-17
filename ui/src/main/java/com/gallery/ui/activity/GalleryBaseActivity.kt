@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.kotlin.expand.app.addFragmentExpand
-import androidx.kotlin.expand.app.findFragmentByTagExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.*
 import com.gallery.core.GalleryBundle
@@ -69,13 +68,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         finderList.clear()
         finderList.addAll(savedInstanceState.getParcelableArrayListExpand(UIResult.FINDER_LIST))
         finderName = savedInstanceState.getStringOrDefault(UIResult.FINDER_NAME, galleryBundle.allName)
-        findFragmentByTagExpand(ScanFragment::class.java.simpleName) {
-            if (it == null) {
-                addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
-            } else {
-                showFragmentExpand(fragment = it)
-            }
-        }
+        supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
+            showFragmentExpand(fragment = it)
+        } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
     }
 
     override fun onScanResultSuccess(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {

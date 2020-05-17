@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.kotlin.expand.app.addFragmentExpand
-import androidx.kotlin.expand.app.findFragmentByTagExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.bundleBundleExpand
 import androidx.kotlin.expand.os.bundleIntOrDefault
@@ -60,18 +59,14 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        findFragmentByTagExpand(PrevFragment::class.java.simpleName) {
-            if (it == null) {
-                addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
-                        bundleParcelableArrayListExpand(GalleryConfig.PREV_START_ALL),
-                        bundleParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT),
-                        galleryBundle,
-                        bundleIntOrDefault(GalleryConfig.PREV_START_POSITION)
-                ))
-            } else {
-                showFragmentExpand(fragment = it)
-            }
-        }
+        supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
+            showFragmentExpand(fragment = it)
+        } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
+                bundleParcelableArrayListExpand(GalleryConfig.PREV_START_ALL),
+                bundleParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT),
+                galleryBundle,
+                bundleIntOrDefault(GalleryConfig.PREV_START_POSITION)
+        ))
     }
 
     override fun onBackPressed() {

@@ -62,17 +62,11 @@ class PopupFinderAdapter : GalleryFinderAdapter, AdapterView.OnItemClickListener
         private val list: ArrayList<ScanEntity> = ArrayList()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val finderEntity = getItem(position)
-            val viewHolder: ViewHolder
-            val rootView = if (convertView == null) {
-                LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder, parent, false).apply {
-                    viewHolder = ViewHolder(this)
-                    this.tag = viewHolder
-                }
-            } else {
-                viewHolder = convertView.tag as ViewHolder
-                convertView
+            val finderEntity: ScanEntity = getItem(position)
+            val rootView: View = convertView ?: LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder, parent, false).apply {
+                this.tag = ViewHolder(this)
             }
+            val viewHolder: ViewHolder = rootView.tag as ViewHolder
             viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
             viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)
             viewHolder.appCompatTextViewCount.setTextColor(galleryUiBundle.finderItemTextCountColor)

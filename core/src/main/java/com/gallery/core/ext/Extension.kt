@@ -77,7 +77,7 @@ internal fun Context.lowerVersionFile(fileName: String, relativePath: String = E
         @Suppress("DEPRECATION")
         Environment.getExternalStoragePublicDirectory(relativePath).path
     } else {
-        cacheDir.path
+        externalCacheDir?.path ?: cacheDir.path
     }
     return File(path, fileName)
 }

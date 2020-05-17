@@ -43,14 +43,12 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (childFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) == null) {
-            childFragmentManager
-                    .beginTransaction()
-                    .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, crop = false, hideCamera = true)), ScanFragment::class.java.simpleName)
-                    .commitAllowingStateLoss()
-        } else {
-            childFragmentManager.beginTransaction().show(childFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
-        }
+        childFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
+            childFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
+        } ?: childFragmentManager
+                .beginTransaction()
+                .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, crop = false, hideCamera = true)), ScanFragment::class.java.simpleName)
+                .commitAllowingStateLoss()
     }
 
     private fun slideToUp(view: View) {

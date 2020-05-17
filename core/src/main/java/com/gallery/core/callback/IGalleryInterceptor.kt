@@ -39,7 +39,7 @@ interface IGalleryInterceptor {
      * 裁剪成功返回正确的Uri
      */
     fun onCropSuccessUriRule(intent: Intent?): Uri? {
-        return if (intent == null) null else UCrop.getOutput(intent)
+        return intent?.let { UCrop.getOutput(it) }
     }
 
     /**
@@ -51,7 +51,7 @@ interface IGalleryInterceptor {
      * 裁剪错误的Throwable
      */
     fun onCropErrorThrowable(intent: Intent?): Throwable? {
-        return if (intent == null) null else UCrop.getError(intent)
+        return intent?.let { UCrop.getError(it) }
     }
 
     /**

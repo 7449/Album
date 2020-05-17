@@ -55,10 +55,9 @@ fun Fragment.checkPermissionAndRequestCameraExpand(launcher: ActivityResultLaunc
 
 fun Fragment.openCameraExpand(uri: CameraUri, action: (uri: CameraUri) -> Unit): CameraStatus {
     val intent: Intent = if (uri.type == ScanType.VIDEO) Intent(MediaStore.ACTION_VIDEO_CAPTURE) else Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    if (intent.resolveActivity(requireActivity().packageManager) == null) {
-        return CameraStatus.ERROR
-    }
-    action.invoke(uri)
-    return CameraStatus.SUCCESS
+    return intent.resolveActivity(requireActivity().packageManager)?.let {
+        action.invoke(uri)
+        CameraStatus.SUCCESS
+    } ?: CameraStatus.ERROR
 }
 

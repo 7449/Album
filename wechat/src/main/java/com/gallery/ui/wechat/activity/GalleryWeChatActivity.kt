@@ -77,11 +77,13 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 return@setOnClickListener
             }
             newFinderAdapter.updateFinder(finderList)
-            if (galleryWeChatToolbarFinderIcon.animation == null || galleryWeChatToolbarFinderIcon.animation == rotateAnimationResult) {
-                showFinderActionView()
-            } else {
-                hideFinderActionView()
-            }
+            galleryWeChatToolbarFinderIcon.animation?.let {
+                if (it == rotateAnimationResult) {
+                    showFinderActionView()
+                } else {
+                    hideFinderActionView()
+                }
+            } ?: showFinderActionView()
         }
         rotateAnimation.doOnAnimationEnd {
             AnimUtils.newInstance(rootViewHeight).openAnim(galleryWeChatFinderRoot) {}

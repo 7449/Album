@@ -121,17 +121,15 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun resultSuccess(scanEntity: ScanEntity?) {
-        if (scanEntity == null) {
-            galleryCallback.onCameraResultError(requireContext(), galleryBundle)
-        } else {
+        scanEntity?.let {
             if (parentId.isScanAll()) {
-                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, scanEntity)
-            } else if (parentId == scanEntity.parent) {
-                galleryAdapter.addEntity(0, scanEntity)
+                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, it)
+            } else if (parentId == it.parent) {
+                galleryAdapter.addEntity(0, it)
             }
             galleryAdapter.notifyDataSetChanged()
-            galleryCallback.onScanResultSuccess(requireContext(), galleryBundle, scanEntity)
-        }
+            galleryCallback.onScanResultSuccess(requireContext(), galleryBundle, it)
+        } ?: galleryCallback.onCameraResultError(requireContext(), galleryBundle)
     }
 
     override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
@@ -231,9 +229,10 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onUpdatePrevResult(bundle: Bundle) {
-        val previewGalleryEntity = bundle.getParcelableArrayList<ScanEntity>(GalleryConfig.PREV_RESULT_SELECT)
-        val isRefreshUI = bundle.getBoolean(GalleryConfig.PREV_RESULT_REFRESH, true)
-        if (!isRefreshUI || previewGalleryEntity == null || selectEntities == previewGalleryEntity) {
+        val previewGalleryEntity: ArrayList<ScanEntity>? = bundle.getParcelableArrayList(GalleryConfig.PREV_RESULT_SELECT)
+        val isRefreshUI: Boolean = bundle.getBoolean(GalleryConfig.PREV_RESULT_REFRESH, true)
+        previewGalleryEntity ?: return
+        if (!isRefreshUI || selectEntities == previewGalleryEntity) {
             return
         }
         galleryAdapter.addSelectAll(previewGalleryEntity)

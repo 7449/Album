@@ -51,19 +51,14 @@ inline fun ScanFragment.cropResultOk(
         cropNameSuffix: String,
         relativePath: String
 ) {
-    if (cropUri == null || cropUri.path == null) {
-        onCropError(null)
-        return
-    }
-    if (!hasQExpand() || !cropSuccessSave) {
-        onCropSuccess(cropUri)
-        return
-    }
-    val cropUriAndroidQ: Uri? = requireActivity().saveCropToGalleryLegacy(cropUri, cropName, cropNameSuffix, relativePath)
-    if (cropUriAndroidQ == null) {
-        onCropSuccess(cropUri)
-    } else {
-        onCropSuccess(cropUriAndroidQ)
-        File(cropUri.path.toString()).delete()
-    }
+    cropUri?.let {
+        if (!hasQExpand() || !cropSuccessSave) {
+            onCropSuccess(it)
+            return
+        }
+        requireActivity().saveCropToGalleryLegacy(it, cropName, cropNameSuffix, relativePath)?.let { androidQUri ->
+            onCropSuccess(androidQUri)
+            File(it.path.toString()).delete()
+        } ?: onCropSuccess(it)
+    } ?: onCropError(null)
 }

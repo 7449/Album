@@ -46,15 +46,12 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if (supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true, crop = false, galleryRootBackground = Color.BLACK)), ScanFragment::class.java.simpleName)
-                    .commitAllowingStateLoss()
-        } else {
-            supportFragmentManager.beginTransaction().show(supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment).commitAllowingStateLoss()
-        }
+        supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
+            supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
+        } ?: supportFragmentManager
+                .beginTransaction()
+                .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true, crop = false, galleryRootBackground = Color.BLACK)), ScanFragment::class.java.simpleName)
+                .commitAllowingStateLoss()
 
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色", "WeChat"), View.NO_ID) { dialog, which ->

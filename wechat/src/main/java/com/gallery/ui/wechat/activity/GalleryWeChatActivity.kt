@@ -11,11 +11,9 @@ import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.text.toastExpand
 import androidx.kotlin.expand.view.addOnPreDrawListenerExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.findFinder
 import com.gallery.core.ext.isScanAll
 import com.gallery.core.ext.isVideo
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
@@ -36,9 +34,6 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
 
     override val currentFinderId: Long
         get() = galleryFragment.parentId
-
-    override val adapterGalleryUiBundle: GalleryUiBundle
-        get() = galleryUiBundle
 
     override val currentFinderName: String
         get() = galleryWeChatToolbarFinderText.text.toString()
@@ -65,13 +60,6 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         }
         galleryWeChatToolbarSend.setOnClickListener { onGalleryResources(galleryFragment.selectEntities) }
         galleryWeChatToolbarFinder.setOnClickListener {
-            if (galleryFragment.parentId.isScanAll()) {
-                finderList.clear()
-                finderList.addAll(galleryFragment.currentEntities.findFinder(
-                        galleryBundle.sdName,
-                        galleryBundle.allName
-                ))
-            }
             if (finderList.isNullOrEmpty()) {
                 onGalleryFinderEmpty()
                 return@setOnClickListener

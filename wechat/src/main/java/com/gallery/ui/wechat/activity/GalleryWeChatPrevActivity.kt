@@ -8,11 +8,9 @@ import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.core.GalleryConfig
-import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.ext.isGif
 import com.gallery.core.ext.isVideo
 import com.gallery.scan.ScanEntity
-import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.activity.PrevBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
@@ -32,9 +30,6 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     override val galleryFragmentId: Int
         get() = R.id.preWeChatFragment
-
-    override val adapterGalleryUiBundle: GalleryUiBundle
-        get() = uiBundle
 
     private val selectAdapter: WeChatPrevSelectAdapter = WeChatPrevSelectAdapter(this)
 

@@ -9,46 +9,26 @@ import com.gallery.ui.activity.GalleryBaseActivity
 interface GalleryFinderAdapter {
 
     interface AdapterFinderListener {
-
-        /**
-         * ui数据
-         */
-        val adapterGalleryUiBundle: GalleryUiBundle
-
-        /**
-         * 文件夹图片加载
-         */
+        /** 文件夹图片加载 */
         fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout)
 
-        /**
-         * item点击
-         */
+        /** item点击 */
         fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity)
     }
 
-    /**
-     * 注册Adapter回调
-     */
-    fun setOnAdapterFinderListener(adapterFinderListener: AdapterFinderListener)
+    /** adapter 初始化 */
+    fun adapterInit(activity: GalleryBaseActivity, uiBundle: GalleryUiBundle, anchorView: View?)
 
-    /**
-     * 初始化Adapter
-     */
-    fun onGalleryFinderInit(context: GalleryBaseActivity, anchor: View?)
+    /** 注册Adapter回调 */
+    fun setOnAdapterFinderListener(listener: AdapterFinderListener)
 
-    /**
-     * 显示Adapter
-     */
-    fun onGalleryFinderShow()
+    /** 更新文件夹数据 */
+    fun finderUpdate(finderList: ArrayList<ScanEntity>)
 
-    /**
-     * 隐藏Adapter
-     */
-    fun onGalleryFinderHide()
+    /** 显示Adapter */
+    fun show()
 
-    /**
-     * 更新文件夹数据
-     */
-    fun onGalleryFinderUpdate(finderList: ArrayList<ScanEntity>)
+    /** 隐藏Adapter  */
+    fun hide()
 
 }

@@ -11,50 +11,41 @@ import androidx.appcompat.widget.ListPopupWindow
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
-import com.gallery.ui.activity.GalleryBaseActivity
 
-class PopupFinderAdapter : GalleryFinderAdapter, AdapterView.OnItemClickListener {
+class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener {
 
-    private lateinit var popupWindow: ListPopupWindow
-    private lateinit var adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener
-    private val galleryUiBundle: GalleryUiBundle by lazy { adapterFinderListener.adapterGalleryUiBundle }
-    private val finderAdapter: FinderAdapter by lazy {
-        FinderAdapter(galleryUiBundle) { finderEntity, container ->
-            adapterFinderListener.onGalleryFinderThumbnails(finderEntity, container)
-        }
-    }
-
-    override fun onGalleryFinderInit(context: GalleryBaseActivity, anchor: View?) {
-        popupWindow = ListPopupWindow(context).apply {
-            this.anchorView = anchor
-            this.width = galleryUiBundle.listPopupWidth
-            this.horizontalOffset = galleryUiBundle.listPopupHorizontalOffset
-            this.verticalOffset = galleryUiBundle.listPopupVerticalOffset
+    private val popupWindow: ListPopupWindow by lazy {
+        ListPopupWindow(activity).apply {
+            this.anchorView = viewAnchor
+            this.width = uiBundle.listPopupWidth
+            this.horizontalOffset = uiBundle.listPopupHorizontalOffset
+            this.verticalOffset = uiBundle.listPopupVerticalOffset
             this.isModal = true
             this.setOnItemClickListener(this@PopupFinderAdapter)
             this.setAdapter(finderAdapter)
         }
     }
-
-    override fun onGalleryFinderShow() {
-        popupWindow.show()
-        popupWindow.listView?.setBackgroundColor(galleryUiBundle.finderItemBackground)
+    private val finderAdapter: FinderAdapter by lazy {
+        FinderAdapter(uiBundle) { finderEntity, container ->
+            listener.onGalleryFinderThumbnails(finderEntity, container)
+        }
     }
 
-    override fun onGalleryFinderHide() {
+    override fun show() {
+        popupWindow.show()
+        popupWindow.listView?.setBackgroundColor(uiBundle.finderItemBackground)
+    }
+
+    override fun hide() {
         popupWindow.dismiss()
     }
 
-    override fun onGalleryFinderUpdate(finderList: ArrayList<ScanEntity>) {
+    override fun finderUpdate(finderList: ArrayList<ScanEntity>) {
         finderAdapter.updateFinder(finderList)
     }
 
-    override fun setOnAdapterFinderListener(adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener) {
-        this.adapterFinderListener = adapterFinderListener
-    }
-
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        adapterFinderListener.onGalleryAdapterItemClick(view, position, finderAdapter.getItem(position))
+        listener.onGalleryAdapterItemClick(view, position, finderAdapter.getItem(position))
     }
 
     private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit) : BaseAdapter() {

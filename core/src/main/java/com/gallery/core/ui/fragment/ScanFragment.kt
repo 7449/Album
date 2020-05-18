@@ -127,7 +127,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             } else if (parentId == it.parent) {
                 galleryAdapter.addEntity(0, it)
             }
-            galleryAdapter.notifyDataSetChanged()
+            notifyDataSetChanged()
             galleryCallback.onScanResultSuccess(requireContext(), galleryBundle, it)
         } ?: galleryCallback.onCameraResultError(requireContext(), galleryBundle)
     }
@@ -196,8 +196,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         if (onCustomCamera) {
             return
         }
-        val cameraUri = CameraUri(galleryBundle.scanType, fileUri)
-        galleryCallback.onCameraOpenStatus(requireContext(), openCameraExpand(cameraUri) { openCameraLauncher.launch(cameraUri) }, galleryBundle)
+        galleryCallback.onCameraOpenStatus(requireContext(), openCameraExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) }, galleryBundle)
     }
 
     override fun openCrop(uri: Uri) {

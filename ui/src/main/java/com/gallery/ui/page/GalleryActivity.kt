@@ -7,11 +7,9 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.findFinder
 import com.gallery.core.ext.isScanAll
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.FinderType
-import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.BottomFinderAdapter
@@ -33,9 +31,6 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         }
     }
 
-    override val adapterGalleryUiBundle: GalleryUiBundle
-        get() = galleryUiBundle
-
     override val currentFinderName: String
         get() = galleryFinderAll.text.toString()
 
@@ -45,8 +40,8 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         obtain(galleryUiBundle)
+        newFinderAdapter.adapterInit(this, galleryUiBundle, galleryFinderAll)
         newFinderAdapter.setOnAdapterFinderListener(this)
-        newFinderAdapter.onGalleryFinderInit(this, galleryFinderAll)
         galleryPre.setOnClickListener(this)
         gallerySelect.setOnClickListener(this)
         galleryFinderAll.setOnClickListener(this)
@@ -79,16 +74,9 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                 onGalleryResources(galleryFragment.selectEntities)
             }
             R.id.galleryFinderAll -> {
-                if (galleryFragment.parentId.isScanAll()) {
-                    finderList.clear()
-                    finderList.addAll(galleryFragment.currentEntities.findFinder(
-                            galleryBundle.sdName,
-                            galleryBundle.allName
-                    ))
-                }
                 if (finderList.isNotEmpty()) {
-                    newFinderAdapter.onGalleryFinderUpdate(finderList)
-                    newFinderAdapter.onGalleryFinderShow()
+                    newFinderAdapter.finderUpdate(finderList)
+                    newFinderAdapter.show()
                     return
                 }
                 onGalleryFinderEmpty()
@@ -98,12 +86,12 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
         if (item.parent == galleryFragment.parentId) {
-            newFinderAdapter.onGalleryFinderHide()
+            newFinderAdapter.hide()
             return
         }
         galleryFinderAll.text = item.bucketDisplayName
         galleryFragment.onScanGallery(item.parent, result = false)
-        newFinderAdapter.onGalleryFinderHide()
+        newFinderAdapter.hide()
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
@@ -124,23 +112,17 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                 PreActivity::class.java)
     }
 
-    /**
-     * 点击预览但是未选择图片
-     */
+    /** 点击预览但是未选择图片 */
     open fun onGalleryPreEmpty() {
         getString(R.string.gallery_prev_select_empty).toastExpand(this)
     }
 
-    /**
-     * 点击确定但是未选择图片
-     */
+    /** 点击确定但是未选择图片 */
     open fun onGalleryOkEmpty() {
         getString(R.string.gallery_ok_select_empty).toastExpand(this)
     }
 
-    /**
-     * 扫描到的文件目录为空
-     */
+    /** 扫描到的文件目录为空 */
     open fun onGalleryFinderEmpty() {
         getString(R.string.gallery_finder_empty).toastExpand(this)
     }

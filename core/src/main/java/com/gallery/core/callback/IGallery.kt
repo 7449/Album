@@ -18,7 +18,7 @@ interface IGallery {
     val currentEntities: ArrayList<ScanEntity>
 
     /**
-     * 当前选中的数据,单选无效
+     * 当前选中的数据
      */
     val selectEntities: ArrayList<ScanEntity>
 
@@ -70,7 +70,7 @@ interface IGallery {
     fun onUpdatePrevResult(bundle: Bundle)
 
     /**
-     * 用于刷新单个Item
+     * 刷新单个Item
      */
     fun notifyItemChanged(position: Int)
 

@@ -62,7 +62,7 @@ data class GalleryBundle(
         /**
          * 摄像或拍照文件名称后缀
          * cameraName.cameraNameSuffix
-         * simple: photo.jpg
+         * sample: photo.jpg
          */
         val cameraNameSuffix: String = if (scanType == ScanType.VIDEO) "mp4" else "jpg",
         /**

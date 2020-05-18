@@ -11,35 +11,24 @@ import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIResult
-import com.gallery.ui.activity.GalleryBaseActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xadapter.vh.*
 import kotlinx.android.synthetic.main.gallery_finder_bottom.*
 
-class BottomFinderAdapter : GalleryFinderAdapter {
+class BottomFinderAdapter : BaseFinderAdapter() {
 
-    private lateinit var activity: GalleryBaseActivity
-    private lateinit var adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener
-    private val bottomFragment: BottomFragment by lazy { BottomFragment.newInstance(adapterFinderListener.adapterGalleryUiBundle) }
+    private val bottomFragment: BottomFragment by lazy { BottomFragment.newInstance(uiBundle) }
 
-    override fun onGalleryFinderInit(context: GalleryBaseActivity, anchor: View?) {
-        this.activity = context
-    }
-
-    override fun onGalleryFinderShow() {
+    override fun show() {
         bottomFragment.show(activity.supportFragmentManager, BottomFragment::class.java.simpleName)
     }
 
-    override fun onGalleryFinderHide() {
+    override fun hide() {
         bottomFragment.dismiss()
     }
 
-    override fun onGalleryFinderUpdate(finderList: ArrayList<ScanEntity>) {
+    override fun finderUpdate(finderList: ArrayList<ScanEntity>) {
         bottomFragment.updateFinder(finderList)
-    }
-
-    override fun setOnAdapterFinderListener(adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener) {
-        this.adapterFinderListener = adapterFinderListener
     }
 
     class BottomFragment : BottomSheetDialogFragment() {

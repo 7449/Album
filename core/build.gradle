@@ -13,8 +13,8 @@ android {
     }
 }
 dependencies {
-//    api project(path: ':scan')
-    api "com.ydevelop:gallery.scan:$scanVersion"
+    api project(path: ':scan')
+//    api "com.ydevelop:gallery.scan:$scanVersion"
     api "com.ydevelop:kotlinx:$kotlinxVersion"
     api "com.ydevelop:rv-adapter-viewholder:$viewHolderVersion"
     compileOnly "androidx.fragment:fragment:$fragmentVersion"

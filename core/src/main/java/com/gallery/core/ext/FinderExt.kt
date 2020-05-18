@@ -29,8 +29,12 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
     }
     if (finderList.isNotEmpty()) {
         finderList.add(0, finderList.first().copy(parent = SCAN_ALL, count = this.size))
-        finderList.find { it.bucketDisplayName == "0" }?.bucketDisplayName = sdName
-        finderList.find { it.parent.isScanAll() }?.bucketDisplayName = allName
+        finderList.find { it.bucketDisplayName == "0" }?.let {
+            finderList[finderList.indexOf(it)] = it.copy(bucketDisplayName = sdName)
+        }
+        finderList.find { it.parent.isScanAll() }?.let {
+            finderList[finderList.indexOf(it)] = it.copy(bucketDisplayName = allName)
+        }
     }
     return finderList
 }
@@ -40,45 +44,37 @@ fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity) {
     if (isEmpty()) {
         return
     }
-    val find = this.find { it.parent == scanEntity.parent }
+    val find: ScanEntity? = find { it.parent == scanEntity.parent }
     if (find == null) {
         this.add(1, scanEntity.copy(count = 1))
-        this.first().also {
-            it.id = scanEntity.id
-            it.size = scanEntity.size
-            it.duration = scanEntity.duration
-            it.parent = SCAN_ALL
-            it.mimeType = scanEntity.mimeType
-            it.displayName = scanEntity.displayName
-            it.orientation = scanEntity.orientation
-            it.bucketId = scanEntity.bucketId
-            it.bucketDisplayName = scanEntity.bucketDisplayName
-            it.mediaType = scanEntity.mediaType
-            it.width = scanEntity.width
-            it.height = scanEntity.height
-            it.dataModified = scanEntity.dataModified
-            it.count += 1
-            it.isCheck = scanEntity.isCheck
-        }
+        val first: ScanEntity = first()
+        this[indexOf(first)] = first.copy(scanEntity, SCAN_ALL, first.count + 1)
     } else {
-        this.forEach {
-            if (it.parent.isScanAll() || it.parent == scanEntity.parent) {
-                it.id = scanEntity.id
-                it.size = scanEntity.size
-                it.duration = scanEntity.duration
-                it.parent = if (it.parent.isScanAll()) SCAN_ALL else scanEntity.parent
-                it.mimeType = scanEntity.mimeType
-                it.displayName = scanEntity.displayName
-                it.orientation = scanEntity.orientation
-                it.bucketId = scanEntity.bucketId
-                it.bucketDisplayName = scanEntity.bucketDisplayName
-                it.mediaType = scanEntity.mediaType
-                it.width = scanEntity.width
-                it.height = scanEntity.height
-                it.dataModified = scanEntity.dataModified
-                it.count += 1
-                it.isCheck = scanEntity.isCheck
-            }
+        find { it.parent.isScanAll() }?.let {
+            this[indexOf(it)] = it.copy(scanEntity, SCAN_ALL, count = it.count + 1)
+        }
+        find { it.parent == scanEntity.parent }?.let {
+            this[indexOf(it)] = it.copy(scanEntity, scanEntity.parent, count = it.count + 1)
         }
     }
+}
+
+internal fun ScanEntity.copy(source: ScanEntity, parent: Long, count: Int): ScanEntity {
+    return copy(
+            id = source.id,
+            size = source.size,
+            duration = source.duration,
+            mimeType = source.mimeType,
+            displayName = source.displayName,
+            orientation = source.orientation,
+            bucketId = source.bucketId,
+            bucketDisplayName = source.bucketDisplayName,
+            mediaType = source.mediaType,
+            width = source.width,
+            height = source.height,
+            dataModified = source.dataModified,
+            isCheck = source.isCheck,
+            parent = parent,
+            count = count
+    )
 }

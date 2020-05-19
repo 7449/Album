@@ -2,26 +2,16 @@ package com.gallery.core.ext
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.camera.CameraStatus
+import androidx.kotlin.expand.os.permission.checkCameraPermissionExpand
+import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
 import com.gallery.core.ui.widget.CameraResultContract
 import com.gallery.scan.ScanType
-
-fun Context.checkSelfPermissionExpand(name: String) =
-        ContextCompat.checkSelfPermission(this, name) == PackageManager.PERMISSION_GRANTED
-
-fun Fragment.checkCameraPermissionExpand() =
-        requireContext().checkSelfPermissionExpand(Manifest.permission.CAMERA)
-
-fun Fragment.checkWritePermissionExpand() =
-        requireContext().checkSelfPermissionExpand(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 fun Fragment.requestCameraResultLauncherExpand(cancel: () -> Unit, ok: () -> Unit): ActivityResultLauncher<CameraUri> =
         registerForActivityResult(CameraResultContract()) {

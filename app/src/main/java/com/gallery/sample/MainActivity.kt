@@ -11,7 +11,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.kotlin.expand.text.toastExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
@@ -134,10 +133,9 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
-    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+    override fun onGalleryResource(context: Context?, scanEntity: ScanEntity) {
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        scanEntity.toString().toastExpand(context)
+    override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
     }
 }

@@ -26,10 +26,10 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         args ?: throw KotlinNullPointerException("args == null")
-        val parent = args.getLong(Columns.PARENT)
-        val fileId = args.getLong(Columns.ID)
-        val scanType = args.getSerializable(Columns.SCAN_TYPE) as ScanType
-        val selection = when {
+        val parent: Long = args.getLong(Columns.PARENT)
+        val fileId: Long = args.getLong(Columns.ID)
+        val scanType: ScanType = args.getSerializable(Columns.SCAN_TYPE) as ScanType
+        val selection: String = when {
             fileId != ID_DEFAULT -> CursorArgs.getResultSelection(fileId)
             parent == SCAN_ALL -> CursorArgs.ALL_SELECTION
             else -> CursorArgs.getParentSelection(parent)
@@ -43,7 +43,7 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
-        val cursor = data ?: return
+        val cursor: Cursor = data ?: return
         val arrayList = ArrayList<ScanEntity>()
         while (cursor.moveToNext()) {
             arrayList.add(ScanEntity(

@@ -10,7 +10,7 @@ internal object CursorArgs {
     val FILE_URI: Uri = MediaStore.Files.getContentUri("external")
 
     /** 图片信息字段 */
-    val ALL_COLUMNS = arrayOf(
+    val ALL_COLUMNS: Array<String> = arrayOf(
             Columns.ID,
             Columns.SIZE,
             Columns.DURATION,
@@ -27,10 +27,10 @@ internal object CursorArgs {
     )
 
     /** 排序条件 */
-    const val ORDER_BY = Columns.DATE_MODIFIED + " DESC"
+    const val ORDER_BY: String = Columns.DATE_MODIFIED + " DESC"
 
     /** 图片信息条件 */
-    const val ALL_SELECTION = Columns.SIZE + " > 0 AND " + Columns.MEDIA_TYPE + "=? or " + Columns.MEDIA_TYPE + "=? "
+    const val ALL_SELECTION: String = Columns.SIZE + " > 0 AND " + Columns.MEDIA_TYPE + "=? or " + Columns.MEDIA_TYPE + "=? "
 
     /** 图片信息条件 */
     fun getParentSelection(parent: Long) = Columns.PARENT + "=" + parent + " and (" + ALL_SELECTION + ")"

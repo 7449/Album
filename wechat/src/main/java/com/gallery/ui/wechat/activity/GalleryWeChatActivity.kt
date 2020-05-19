@@ -118,7 +118,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         onStartPrevPage(galleryFragment.currentEntities,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
                 Bundle().apply {
@@ -127,7 +127,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 GalleryWeChatPrevActivity::class.java)
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onClickCheckBoxFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         // 文件被删后主动更新了选中文件,应更新checkBox count
         galleryFragment.notifyDataSetChanged()
     }

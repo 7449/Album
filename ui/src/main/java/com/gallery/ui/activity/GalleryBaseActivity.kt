@@ -23,6 +23,7 @@ import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 
+
 abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
@@ -88,7 +89,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     }
 
     /** 数据扫描成功之后刷新文件夹数据 */
-    override fun onScanResultSuccess(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onScanResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         finderList.updateResultFinder(scanEntity)
     }
 
@@ -107,7 +108,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     override fun onUCropOptions() = galleryUiBundle.uCropBundle
 
     /** 点击选中,针对单选 */
-    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+    override fun onGalleryResource(context: Context?, scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelable(UIResult.GALLERY_RESULT_ENTITY, scanEntity)

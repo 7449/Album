@@ -8,49 +8,49 @@ import android.provider.MediaStore
  */
 object Columns {
 
-    const val IMAGE = MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
+    const val IMAGE: String = MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
 
-    const val VIDEO = MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
+    const val VIDEO: String = MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
 
     /** 扫描type */
     const val SCAN_TYPE = "scan_type"
 
     /** id */
-    const val ID = MediaStore.Files.FileColumns._ID
+    const val ID: String = MediaStore.Files.FileColumns._ID
 
     /** 大小 */
-    const val SIZE = MediaStore.Files.FileColumns.SIZE
+    const val SIZE: String = MediaStore.Files.FileColumns.SIZE
 
     /** 父级文件夹 parent */
-    const val PARENT = MediaStore.Files.FileColumns.PARENT
+    const val PARENT: String = MediaStore.Files.FileColumns.PARENT
 
     /** 文件类型 */
-    const val MIME_TYPE = MediaStore.Files.FileColumns.MIME_TYPE
+    const val MIME_TYPE: String = MediaStore.Files.FileColumns.MIME_TYPE
 
     /** 文件名称 */
-    const val DISPLAY_NAME = MediaStore.Files.FileColumns.DISPLAY_NAME
+    const val DISPLAY_NAME: String = MediaStore.Files.FileColumns.DISPLAY_NAME
 
     /** 文件类型Type */
-    const val MEDIA_TYPE = MediaStore.Files.FileColumns.MEDIA_TYPE
+    const val MEDIA_TYPE: String = MediaStore.Files.FileColumns.MEDIA_TYPE
 
     /** 宽度 */
-    const val WIDTH = MediaStore.Files.FileColumns.WIDTH
+    const val WIDTH: String = MediaStore.Files.FileColumns.WIDTH
 
     /** 高度 */
-    const val HEIGHT = MediaStore.Files.FileColumns.HEIGHT
+    const val HEIGHT: String = MediaStore.Files.FileColumns.HEIGHT
 
     /** 时间 */
-    const val DATE_MODIFIED = MediaStore.Files.FileColumns.DATE_MODIFIED
+    const val DATE_MODIFIED: String = MediaStore.Files.FileColumns.DATE_MODIFIED
 
     /** 视频时长 */
-    const val DURATION = MediaStore.Video.VideoColumns.DURATION
+    const val DURATION: String = MediaStore.Video.VideoColumns.DURATION
 
     /** 方向 */
-    const val ORIENTATION = MediaStore.Images.ImageColumns.ORIENTATION
+    const val ORIENTATION: String = MediaStore.Images.ImageColumns.ORIENTATION
 
     /** bucket_id */
-    const val BUCKET_ID = MediaStore.Images.ImageColumns.BUCKET_ID
+    const val BUCKET_ID: String = MediaStore.Images.ImageColumns.BUCKET_ID
 
     /** 文件夹名称 */
-    const val BUCKET_DISPLAY_NAME = MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME
+    const val BUCKET_DISPLAY_NAME: String = MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME
 }

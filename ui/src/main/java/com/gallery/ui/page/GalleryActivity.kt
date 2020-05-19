@@ -106,7 +106,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         onStartPrevPage(galleryFragment.currentEntities,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
                 PreActivity::class.java)

@@ -7,10 +7,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
+import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.ext.cropPathToUri
+import com.gallery.core.ext.cropUriExpand
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.yalantis.ucrop.UCrop
@@ -37,6 +38,8 @@ interface IGalleryInterceptor {
      * [uri]的格式一直都是
      *
      * content://media/external/images/media/id
+     *
+     * [uri]只是插入了路径,没有插入其他数据
      *
      * 这里的resultCode可自定义,但是回调自行调用
      * [ScanFragment.onCameraResultCanceled]
@@ -112,28 +115,32 @@ interface IGalleryInterceptor {
     /**
      * 自定义图片裁剪
      *
-     * 需要注意的是[cropPathToUri]返回的格式为
+     * [uri]的格式一直都是
      *
      * file:///path/xxxxx.jpg
      *
-     * 在低版本中图库的文件如果存储正常或者设置自定义目录,那么裁剪的文件会出现在该目录中
-     * 在q中默认的路径为[Context.getExternalCacheDir],如果希望裁剪的文件出现在图库中
-     * 设置[GalleryBundle.cropSuccessSave]为true即可,那么裁剪成功后会主动将缓存的裁剪文件
-     * 重新设置到对应的裁剪路径,详见[GalleryBundle.cropPath]
+     * Android10则直接返回 file:///storage/emulated/0/Android/data/packageName/cache/xxxxx.jpg
      *
-     * 库里自带uCrop,如果不喜欢则可以替换为自己喜欢的裁剪库,自定义裁剪和相机有点不同,
      * 裁剪这里使用预设好的[ActivityResultLauncher]只需要裁剪提供裁剪的[Uri]和裁剪错误
      * 的 resultCode 和 异常信息[Throwable](可为空)
      *
-     * 已经为uCrop设置好了各种参数
+     * Android 10 如果需要裁剪的文件显示在图库中在[onCropResources]调用
+     *
+     * if (hasQExpand()) {
+     *   copyImageExpand(uri, galleryBundle.cameraNameExpand)?.let{ uri ->
+     *      // copy success
+     *   }
+     * }
+     *
+     * 即可
+     *
+     * 如果没有强制要求，建议在copy成功之后删除掉源文件，在自己的app缓存目录中直接用file.delete操作即可,不需要权限
      *
      * [onCropSuccessUriRule]
      * [onCropErrorResultCode]
      * [onCropErrorThrowable]
      *
      * 这里以 com.theartofdev.edmodo:android-image-cropper 为例
-     *
-     * 至于裁剪的OutputUri则使用 [cropPathToUri] 即可获取到正确的[Uri]
      *
      * override fun onCustomPhotoCrop(activity: FragmentActivity, uri: Uri, galleryBundle: GalleryBundle): Intent {
      *     return CropImage
@@ -156,7 +163,7 @@ interface IGalleryInterceptor {
      *
      */
     fun onCustomPhotoCrop(activity: FragmentActivity, uri: Uri, galleryBundle: GalleryBundle): Intent {
-        return UCrop.of(uri, activity.cropPathToUri(galleryBundle))
+        return UCrop.of(uri, activity.cropUriExpand(galleryBundle).orEmptyExpand())
                 .withOptions(UCrop.Options().apply {
                     optionBundle.putAll(onUCropOptions())
                 })
@@ -191,7 +198,8 @@ interface IGalleryInterceptor {
      * 在[onCustomPhotoCrop]为false的情况下会触发
      * 取消裁剪
      */
-    fun onCropCanceled(context: Context) {
+    fun onCropCanceled(context: Context?) {
+        context ?: return
         context.getString(R.string.gallery_crop_canceled).toastExpand(context)
     }
 
@@ -199,25 +207,13 @@ interface IGalleryInterceptor {
      * 在[onCustomPhotoCrop]为false的情况下会触发
      * 裁剪异常
      */
-    fun onCropError(context: Context, throwable: Throwable?) {
+    fun onCropError(context: Context?, throwable: Throwable?) {
+        context ?: return
         context.getString(R.string.gallery_crop_error).toastExpand(context)
     }
 
     /**
      * 裁剪成功
-     *
-     * 需要注意的是Uri分为两种情况
-     * Android 10
-     *
-     *   content://media/external/images/media/id
-     *
-     *   如果获取的 content uri 为null,则返回
-     *   file:///storage/emulated/0/Android/data/packageName/cache/xxxxx.jpg
-     *
-     * Android 9 及以下
-     *
-     *   file:///path/xxxxx.jpg
-     *
      */
     fun onCropResources(uri: Uri) {
         //crop rewrite this method

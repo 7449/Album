@@ -21,7 +21,7 @@ internal object InternalConfig {
      * 有一种情况为横竖屏切换,横屏点进去,然后竖屏拍照返回之后,切换之后会重走生命周期,
      * 所以这里需要保存下当时拍照时的[Uri]
      */
-    internal const val IMAGE_URL = "galleryStartImageUri"
+    internal const val IMAGE_URI = "galleryStartImageUri"
 
     /**
      * 横竖屏切换时保存选中的数据

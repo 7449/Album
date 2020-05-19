@@ -5,7 +5,6 @@ import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,10 +58,9 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     private val cropLauncher: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
                 when (intent.resultCode) {
-                    Activity.RESULT_OK -> cropResultOk(
-                            galleryInterceptor.onCropSuccessUriRule(intent.data),
-                            galleryBundle
-                    )
+                    Activity.RESULT_OK -> galleryInterceptor.onCropSuccessUriRule(intent.data)?.let {
+                        onCropSuccess(it)
+                    } ?: onCropError(null)
                     Activity.RESULT_CANCELED -> onCropCanceled()
                     galleryInterceptor.onCropErrorResultCode() -> onCropError(galleryInterceptor.onCropErrorThrowable(intent?.data))
                 }
@@ -74,14 +72,14 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(InternalConfig.SELECT, selectEntities)
         outState.putLong(InternalConfig.PARENT_ID, parentId)
-        outState.putParcelable(InternalConfig.IMAGE_URL, fileUri)
+        outState.putParcelable(InternalConfig.IMAGE_URI, fileUri)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         savedInstanceState?.let {
             parentId = it.getLongOrDefault(InternalConfig.PARENT_ID, SCAN_ALL)
-            fileUri = it.getParcelableOrDefault(InternalConfig.IMAGE_URL, Uri.EMPTY)
+            fileUri = it.getParcelableOrDefault(InternalConfig.IMAGE_URI, Uri.EMPTY)
         }
     }
 
@@ -107,7 +105,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
         if (arrayList.isEmpty() && parentId.isScanAll()) {
             galleryEmpty.showExpand()
-            galleryCallback.onScanSuccessEmpty(requireContext(), galleryBundle)
+            galleryCallback.onScanSuccessEmpty(context, galleryBundle)
             return
         }
         galleryCallback.onScanSuccess(arrayList)
@@ -128,7 +126,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             }
             notifyDataSetChanged()
             galleryCallback.onScanResultSuccess(requireContext(), galleryBundle, it)
-        } ?: galleryCallback.onCameraResultError(requireContext(), galleryBundle)
+        } ?: galleryCallback.onCameraResultError(context, galleryBundle)
     }
 
     override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
@@ -137,12 +135,12 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
         if (!moveToNextToIdExpand(galleryEntity.externalUri())) {
-            galleryCallback.onClickItemFileNotExist(requireContext(), galleryBundle, galleryEntity)
+            galleryCallback.onClickItemFileNotExist(context, galleryBundle, galleryEntity)
             return
         }
         if (galleryBundle.scanType == ScanType.VIDEO) {
             requireContext().openVideoExpand(galleryEntity.externalUri()) {
-                galleryCallback.onOpenVideoPlayError(requireContext(), galleryEntity)
+                galleryCallback.onOpenVideoPlayError(context, galleryEntity)
             }
             return
         }
@@ -150,7 +148,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             if (galleryBundle.crop) {
                 openCrop(galleryEntity.externalUri())
             } else {
-                galleryCallback.onGalleryResource(requireContext(), galleryEntity)
+                galleryCallback.onGalleryResource(context, galleryEntity)
             }
             return
         }
@@ -158,15 +156,12 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     public override fun onCameraResultCanceled() {
-        if (!fileUri.path.isNullOrEmpty()) {
-            requireContext().contentResolver.delete(fileUri, null, null)
-        }
+        fileUri.reset(requireContext())
         fileUri = Uri.EMPTY
-        galleryCallback.onCameraCanceled(requireContext(), galleryBundle)
+        galleryCallback.onCameraCanceled(context, galleryBundle)
     }
 
     public override fun onCameraResultOk() {
-        Log.i("onCameraResultOk", fileUri.toString() + "  " + findPathByUriExpand(fileUri).toString())
         findPathByUriExpand(fileUri)?.let {
             scanFile(ResultType.CAMERA, it)
             if (galleryBundle.cameraCrop) {
@@ -183,21 +178,21 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun permissionsDenied(type: PermissionCode) {
-        galleryCallback.onPermissionsDenied(requireContext(), type)
+        galleryCallback.onPermissionsDenied(context, type)
     }
 
     override fun openCamera() {
         if (!checkPermissionAndRequestCameraExpand(cameraPermissionLauncher)) {
-            galleryCallback.onCameraOpenStatus(requireContext(), CameraStatus.PERMISSION, galleryBundle)
+            galleryCallback.onCameraOpenStatus(context, CameraStatus.PERMISSION, galleryBundle)
             return
         }
         //这里需要处理,如果为null应该响应报错的回调
-        fileUri = requireActivity().galleryPathToUri(galleryBundle).orEmptyExpand()
+        fileUri = requireActivity().cameraUriExpand(galleryBundle).orEmptyExpand()
         val onCustomCamera: Boolean = galleryInterceptor.onCustomCamera(fileUri)
         if (onCustomCamera) {
             return
         }
-        galleryCallback.onCameraOpenStatus(requireContext(), openCameraExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) }, galleryBundle)
+        galleryCallback.onCameraOpenStatus(context, openCameraExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) }, galleryBundle)
     }
 
     override fun openCrop(uri: Uri) {
@@ -208,7 +203,6 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         MediaScannerConnection.scanFile(requireContext(), arrayOf(path), null) { _: String?, uri: Uri? ->
             runOnUiThreadExpand {
                 uri ?: return@runOnUiThreadExpand
-                fileUri = uri
                 onScanGallery(parentId, type == ResultType.CROP)
             }
         }
@@ -255,11 +249,11 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onCropCanceled() {
-        galleryInterceptor.onCropCanceled(requireContext())
+        galleryInterceptor.onCropCanceled(context)
     }
 
     override fun onCropError(throwable: Throwable?) {
-        galleryInterceptor.onCropError(requireContext(), throwable)
+        galleryInterceptor.onCropError(context, throwable)
     }
 
     override fun onCropSuccess(uri: Uri) {

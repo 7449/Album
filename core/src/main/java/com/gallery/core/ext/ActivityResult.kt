@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.camera.CameraStatus
+import com.gallery.core.ui.widget.CameraResultContract
 import com.gallery.scan.ScanType
 
 fun Context.checkSelfPermissionExpand(name: String) =

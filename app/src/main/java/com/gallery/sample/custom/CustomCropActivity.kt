@@ -13,7 +13,7 @@ class CustomCropActivity : GalleryActivity() {
     override fun onCustomPhotoCrop(activity: FragmentActivity, uri: Uri, galleryBundle: GalleryBundle): Intent {
         return CropImage
                 .activity(uri)
-                .setOutputUri(cropPathToUri(galleryBundle.cropPath, galleryBundle.cropName, galleryBundle.cropNameSuffix, galleryBundle.relativePath))
+                .setOutputUri(cropPathToUri(galleryBundle))
                 .getIntent(this)
     }
 

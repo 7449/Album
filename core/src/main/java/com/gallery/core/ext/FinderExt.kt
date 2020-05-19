@@ -7,8 +7,6 @@ import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.args.Columns
 
-//是否是扫描全部的Id
-fun Long.isScanAll(): Boolean = this == SCAN_ALL
 
 //获取文件的Uri
 fun ScanEntity.externalUri(): Uri {

@@ -50,7 +50,6 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
                     cursor.getLongOrDefault(Columns.ID),
                     cursor.getLongOrDefault(Columns.SIZE),
                     cursor.getLongOrDefault(Columns.DURATION),
-                    cursor.getLongOrDefault(Columns.PARENT),
                     cursor.getStringOrDefault(Columns.MIME_TYPE),
                     cursor.getStringOrDefault(Columns.DISPLAY_NAME),
                     cursor.getIntOrDefault(Columns.ORIENTATION),
@@ -60,6 +59,7 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
                     cursor.getIntOrDefault(Columns.WIDTH),
                     cursor.getIntOrDefault(Columns.HEIGHT),
                     cursor.getLongOrDefault(Columns.DATE_MODIFIED),
+                    cursor.getLongOrDefault(Columns.PARENT),
                     0,
                     false)
             )

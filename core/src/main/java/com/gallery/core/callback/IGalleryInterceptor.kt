@@ -29,15 +29,18 @@ interface IGalleryInterceptor {
      *
      * 简单示例
      *
-     * [uri]返回的是相机数据的预创建Uri,如果自定义相机这里需要处理两种情况
+     * [uri]返回预创建Uri,如果自定义相机这里需要处理两种情况
      *
      * [FragmentActivity.RESULT_OK]
      * [FragmentActivity.RESULT_CANCELED]
      *
+     * [uri]的格式一直都是
+     *
+     * content://media/external/images/media/id
+     *
      * 这里的resultCode可自定义,但是回调自行调用
      * [ScanFragment.onCameraResultCanceled]
      * [ScanFragment.onCameraResultOk]
-     * 即可
      *
      * 这里需要注意的是[ScanFragment.onCameraResultOk]不需要任何参数,只需要拍照成功之后
      * 手动调用刷新图库即可，因此自定义返回的[Uri]则在自定义的时候非常重要,需要传递过去之后
@@ -109,6 +112,15 @@ interface IGalleryInterceptor {
     /**
      * 自定义图片裁剪
      *
+     * 需要注意的是[cropPathToUri]返回的格式为
+     *
+     * file:///path/xxxxx.jpg
+     *
+     * 在低版本中图库的文件如果存储正常或者设置自定义目录,那么裁剪的文件会出现在该目录中
+     * 在q中默认的路径为[Context.getExternalCacheDir],如果希望裁剪的文件出现在图库中
+     * 设置[GalleryBundle.cropSuccessSave]为true即可,那么裁剪成功后会主动将缓存的裁剪文件
+     * 重新设置到对应的裁剪路径,详见[GalleryBundle.cropPath]
+     *
      * 库里自带uCrop,如果不喜欢则可以替换为自己喜欢的裁剪库,自定义裁剪和相机有点不同,
      * 裁剪这里使用预设好的[ActivityResultLauncher]只需要裁剪提供裁剪的[Uri]和裁剪错误
      * 的 resultCode 和 异常信息[Throwable](可为空)
@@ -121,7 +133,7 @@ interface IGalleryInterceptor {
      *
      * 这里以 com.theartofdev.edmodo:android-image-cropper 为例
      *
-     * 至于裁剪的OutputUri则使用 cropPathToUri 即可获取到正确的[Uri]
+     * 至于裁剪的OutputUri则使用 [cropPathToUri] 即可获取到正确的[Uri]
      *
      * override fun onCustomPhotoCrop(activity: FragmentActivity, uri: Uri, galleryBundle: GalleryBundle): Intent {
      *     return CropImage
@@ -144,7 +156,7 @@ interface IGalleryInterceptor {
      *
      */
     fun onCustomPhotoCrop(activity: FragmentActivity, uri: Uri, galleryBundle: GalleryBundle): Intent {
-        return UCrop.of(uri, activity.cropPathToUri(galleryBundle.cropPath, galleryBundle.cropName, galleryBundle.cropNameSuffix, galleryBundle.relativePath))
+        return UCrop.of(uri, activity.cropPathToUri(galleryBundle))
                 .withOptions(UCrop.Options().apply {
                     optionBundle.putAll(onUCropOptions())
                 })
@@ -205,14 +217,6 @@ interface IGalleryInterceptor {
      * Android 9 及以下
      *
      *   file:///path/xxxxx.jpg
-     *
-     * 在Android10如果图片转移成功的话,文件名称,路径则依旧和Android10拍照命名规则一样
-     *
-     * val file: File = when {
-     *    hasQExpand() -> File(externalCacheDir, fileName)
-     *    uCropPath.isNullOrEmpty() -> lowerVersionFile(fileName, relativePath)
-     *    else -> galleryPathFile(uCropPath, fileName)
-     * }
      *
      */
     fun onCropResources(uri: Uri) {

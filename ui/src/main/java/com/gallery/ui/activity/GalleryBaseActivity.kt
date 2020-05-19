@@ -92,7 +92,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         finderList.updateResultFinder(scanEntity)
     }
 
-    /** 数据扫描成功之后刷新文件夹数据 */
+    /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         if (galleryFragment.parentId.isScanAll()) {
             finderList.clear()

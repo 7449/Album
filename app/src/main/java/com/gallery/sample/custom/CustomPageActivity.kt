@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.simple_gallery_layout.*
 class CustomPageActivity : GalleryActivity(R.layout.simple_gallery_layout), IGalleryInterceptor {
 
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
+        super.onScanSuccess(scanEntities)
         val arrayList = ArrayList<SimpleGallery>()
         scanEntities.forEach { arrayList.add(SimpleGallery(it.externalUri())) }
         banner

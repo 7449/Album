@@ -3,14 +3,13 @@ package com.gallery.sample.camera
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.kotlin.expand.content.findPathByUriExpand
 import androidx.kotlin.expand.net.orEmptyExpand
+import androidx.kotlin.expand.util.copyFileExpand
 import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.GalleryConfig
-import com.gallery.core.ext.saveToGalleryLegacy
 import com.gallery.sample.R
 import com.otaliastudios.cameraview.CameraException
 import com.otaliastudios.cameraview.CameraListener
@@ -65,12 +64,9 @@ class CameraActivity : AppCompatActivity() {
             val fileUri: Uri = intent.extras?.getParcelable<Uri>(GalleryConfig.CUSTOM_CAMERA_OUT_PUT_URI).orEmptyExpand()
             if (hasQExpand()) {
                 result.toFile(File(externalCacheDir, "${System.currentTimeMillis()}.jpg")) {
-                    val saveCropToGalleryLegacy = saveToGalleryLegacy(
+                    val saveCropToGalleryLegacy = copyFileExpand(
                             Uri.fromFile(it),
-                            fileUri,
-                            it?.name.toString(),
-                            "jpg",
-                            Environment.DIRECTORY_DCIM
+                            fileUri
                     )
                     message(saveCropToGalleryLegacy?.path ?: it?.path.toString(), false)
                     it?.delete()

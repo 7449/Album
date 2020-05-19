@@ -1,13 +1,11 @@
-package com.gallery.core.ext
+package com.gallery.core.ui.widget
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
+import com.gallery.core.ext.CameraUri
 import com.gallery.scan.ScanType
-
-class CameraUri(val type: ScanType, val uri: Uri)
 
 class CameraResultContract : ActivityResultContract<CameraUri, Int>() {
     override fun createIntent(context: Context, input: CameraUri): Intent =

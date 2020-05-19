@@ -5,12 +5,14 @@ import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.*
 import androidx.kotlin.expand.content.openVideoExpand
+import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.camera.CameraStatus
 import androidx.kotlin.expand.os.getLongOrDefault
 import androidx.kotlin.expand.os.getParcelableArrayListOrDefault
@@ -59,10 +61,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                 when (intent.resultCode) {
                     Activity.RESULT_OK -> cropResultOk(
                             galleryInterceptor.onCropSuccessUriRule(intent.data),
-                            galleryBundle.cropSuccessSave,
-                            galleryBundle.cropName,
-                            galleryBundle.cropNameSuffix,
-                            galleryBundle.relativePath
+                            galleryBundle
                     )
                     Activity.RESULT_CANCELED -> onCropCanceled()
                     galleryInterceptor.onCropErrorResultCode() -> onCropError(galleryInterceptor.onCropErrorThrowable(intent?.data))
@@ -167,6 +166,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     public override fun onCameraResultOk() {
+        Log.i("onCameraResultOk", fileUri.toString() + "  " + findPathByUriExpand(fileUri).toString())
         findPathByUriExpand(fileUri)?.let {
             scanFile(ResultType.CAMERA, it)
             if (galleryBundle.cameraCrop) {
@@ -191,7 +191,8 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             galleryCallback.onCameraOpenStatus(requireContext(), CameraStatus.PERMISSION, galleryBundle)
             return
         }
-        fileUri = requireActivity().galleryPathToUri(galleryBundle.cameraPath, galleryBundle.cameraName, galleryBundle.cameraNameSuffix, galleryBundle.relativePath)
+        //这里需要处理,如果为null应该响应报错的回调
+        fileUri = requireActivity().galleryPathToUri(galleryBundle).orEmptyExpand()
         val onCustomCamera: Boolean = galleryInterceptor.onCustomCamera(fileUri)
         if (onCustomCamera) {
             return

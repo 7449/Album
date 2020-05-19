@@ -66,12 +66,6 @@ data class GalleryBundle(
          */
         val cameraNameSuffix: String = if (scanType == ScanType.VIDEO) "mp4" else "jpg",
         /**
-         * 裁剪路径
-         * 只在未拦截自定义裁剪生效,或使用者自定义裁剪使用
-         * 支持在Android10版本以下
-         */
-        val cropPath: String? = null,
-        /**
          * 最低支持Android10
          * Android10及以上Crop输出路径默认为
          * externalCacheDir
@@ -79,6 +73,11 @@ data class GalleryBundle(
          * relativePath
          */
         val cropSuccessSave: Boolean = true,
+        /**
+         * 裁剪路径
+         * 只在未拦截自定义裁剪生效,或使用者自定义裁剪使用
+         */
+        val cropPath: String? = null,
         /**
          * 裁剪文件名称
          */

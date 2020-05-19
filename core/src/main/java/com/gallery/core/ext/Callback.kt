@@ -1,13 +1,11 @@
 package com.gallery.core.ext
 
-import android.net.Uri
-import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.callback.*
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
-import java.io.File
 
+/** 图片加载框架 */
 val GalleryBaseFragment.galleryImageLoaderExpand: IGalleryImageLoader
     get() = when {
         parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
@@ -15,6 +13,7 @@ val GalleryBaseFragment.galleryImageLoaderExpand: IGalleryImageLoader
         else -> object : IGalleryImageLoader {}
     }
 
+/** [ScanFragment]拦截器 */
 val ScanFragment.galleryInterceptorExpand: IGalleryInterceptor
     get() = when {
         parentFragment is IGalleryInterceptor -> parentFragment as IGalleryInterceptor
@@ -22,6 +21,7 @@ val ScanFragment.galleryInterceptorExpand: IGalleryInterceptor
         else -> object : IGalleryInterceptor {}
     }
 
+/** [ScanFragment]回调,可在Activity继承重写该方法  */
 val ScanFragment.galleryCallbackExpand: IGalleryCallback
     get() = when {
         parentFragment is IGalleryCallback -> parentFragment as IGalleryCallback
@@ -29,6 +29,7 @@ val ScanFragment.galleryCallbackExpand: IGalleryCallback
         else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryCallback")
     }
 
+/** [PrevFragment]拦截器 */
 val PrevFragment.galleryPrevInterceptorExpand: IGalleryPrevInterceptor
     get() = when {
         parentFragment is IGalleryPrevInterceptor -> parentFragment as IGalleryPrevInterceptor
@@ -36,29 +37,10 @@ val PrevFragment.galleryPrevInterceptorExpand: IGalleryPrevInterceptor
         else -> object : IGalleryPrevInterceptor {}
     }
 
+/** [PrevFragment]回调,可在Activity继承重写该方法  */
 val PrevFragment.galleryPrevCallbackExpand: IGalleryPrevCallback
     get() = when {
         parentFragment is IGalleryPrevCallback -> parentFragment as IGalleryPrevCallback
         activity is IGalleryPrevCallback -> activity as IGalleryPrevCallback
         else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryPrevCallback")
     }
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun ScanFragment.cropResultOk(
-        cropUri: Uri?,
-        cropSuccessSave: Boolean,
-        cropName: String,
-        cropNameSuffix: String,
-        relativePath: String
-) {
-    cropUri?.let {
-        if (!hasQExpand() || !cropSuccessSave) {
-            onCropSuccess(it)
-            return
-        }
-        requireActivity().saveCropToGalleryLegacy(it, cropName, cropNameSuffix, relativePath)?.let { androidQUri ->
-            onCropSuccess(androidQUri)
-            File(it.path.toString()).delete()
-        } ?: onCropSuccess(it)
-    } ?: onCropError(null)
-}

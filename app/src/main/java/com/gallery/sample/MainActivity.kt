@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.ext.externalUri
+import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.sample.callback.GalleryCallback

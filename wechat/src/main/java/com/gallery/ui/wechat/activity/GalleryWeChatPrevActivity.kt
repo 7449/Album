@@ -8,8 +8,8 @@ import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.core.GalleryConfig
-import com.gallery.core.ext.isGif
-import com.gallery.core.ext.isVideo
+import com.gallery.core.expand.isGif
+import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.activity.PrevBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
@@ -80,7 +80,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         selectAdapter.refreshItem(currentItem)
     }
 
-    override fun onChangedCreated() {
+    override fun onPrevViewCreated(savedInstanceState: Bundle?) {
         prevWeChatToolbarText.text = (prevFragment.currentPosition + 1).toString() + "/" + prevFragment.itemCount
     }
 

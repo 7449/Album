@@ -1,4 +1,4 @@
-package com.gallery.core.ext
+package com.gallery.core.expand
 
 import android.content.ContentUris
 import android.net.Uri

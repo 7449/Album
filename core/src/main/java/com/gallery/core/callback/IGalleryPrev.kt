@@ -52,14 +52,14 @@ interface IGalleryPrev {
     fun isCheckBox(position: Int): Boolean
 
     /**
-     * [ViewPager2]跳转到某个页面
+     * [ViewPager2]跳转到指定页面
      */
     fun setCurrentItem(position: Int)
 
     /**
-     * [ViewPager2]跳转到某个页面
+     * [ViewPager2]跳转到指定页面
      */
-    fun setCurrentItem(position: Int, flag: Boolean)
+    fun setCurrentItem(position: Int, smoothScroll: Boolean)
 
     /**
      * 获取预览页销毁时[Activity.setResult]的Bundle

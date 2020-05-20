@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.isScanAll
+import com.gallery.core.expand.isScanAll
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
@@ -90,7 +90,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
             return
         }
         galleryFinderAll.text = item.bucketDisplayName
-        galleryFragment.onScanGallery(item.parent, result = false)
+        galleryFragment.onScanGallery(item.parent)
         newFinderAdapter.hide()
     }
 

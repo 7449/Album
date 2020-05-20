@@ -22,12 +22,6 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
 
     override fun getItemCount(): Int = galleryList.size
 
-    fun cleanAll() {
-        galleryList.clear()
-        selectList.clear()
-        notifyDataSetChanged()
-    }
-
     fun addAll(newList: ArrayList<ScanEntity>) {
         galleryList.clear()
         galleryList.addAll(newList)

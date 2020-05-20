@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.cropUriExpand
+import com.gallery.core.expand.cropUriExpand
 import com.gallery.ui.page.GalleryActivity
 import com.theartofdev.edmodo.cropper.CropImage
 

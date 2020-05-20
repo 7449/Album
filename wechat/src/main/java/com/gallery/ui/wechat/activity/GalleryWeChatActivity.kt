@@ -11,8 +11,8 @@ import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.text.toastExpand
 import androidx.kotlin.expand.view.addOnPreDrawListenerExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ext.isScanAll
-import com.gallery.core.ext.isVideo
+import com.gallery.core.expand.isScanAll
+import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.UIResult
 import com.gallery.ui.activity.GalleryBaseActivity
@@ -83,7 +83,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                         return@closeAnimate
                     }
                     galleryWeChatToolbarFinderText.text = it.bucketDisplayName
-                    galleryFragment.onScanGallery(it.parent, result = false)
+                    galleryFragment.onScanGallery(it.parent)
                     galleryWeChatFinderRoot.visibility = View.GONE
                     selectScanEntity = null
                 }
@@ -127,7 +127,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 GalleryWeChatPrevActivity::class.java)
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         // 文件被删后主动更新了选中文件,应更新checkBox count
         galleryFragment.notifyDataSetChanged()
     }

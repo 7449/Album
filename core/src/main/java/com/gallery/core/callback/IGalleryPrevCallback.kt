@@ -1,6 +1,7 @@
 package com.gallery.core.callback
 
 import android.content.Context
+import android.os.Bundle
 import androidx.annotation.Px
 import androidx.kotlin.expand.text.toastExpand
 import androidx.viewpager2.widget.ViewPager2
@@ -14,6 +15,11 @@ import com.gallery.scan.ScanEntity
  *
  */
 interface IGalleryPrevCallback {
+
+    /**
+     * [PrevFragment.onViewCreated]触发
+     */
+    fun onPrevViewCreated(savedInstanceState: Bundle?) {}
 
     /**
      * [ViewPager2.OnPageChangeCallback.onPageScrolled]
@@ -31,15 +37,6 @@ interface IGalleryPrevCallback {
     fun onPageScrollStateChanged(@ScrollState state: Int) {}
 
     /**
-     * 已达到选择最大数
-     * [GalleryBundle.multipleMaxCount]
-     */
-    fun onClickCheckBoxMaxCount(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        context ?: return
-        context.getString(R.string.gallery_check_max).toastExpand(context)
-    }
-
-    /**
      * 点击图片时该文件已被删除
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * [PrevFragment.checkBoxClick]
@@ -50,9 +47,13 @@ interface IGalleryPrevCallback {
     }
 
     /**
-     * [PrevFragment.onActivityCreated]
+     * 已达到选择最大数
+     * [GalleryBundle.multipleMaxCount]
      */
-    fun onChangedCreated() {}
+    fun onClickCheckBoxMaxCount(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        context ?: return
+        context.getString(R.string.gallery_check_max).toastExpand(context)
+    }
 
     /**
      * [PrevFragment.checkBoxClick]

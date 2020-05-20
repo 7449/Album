@@ -7,9 +7,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.openVideoExpand
-import com.gallery.core.ext.externalUri
-import com.gallery.core.ext.isGif
-import com.gallery.core.ext.isVideo
+import com.gallery.core.expand.externalUri
+import com.gallery.core.expand.isGif
+import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.util.toFileSize

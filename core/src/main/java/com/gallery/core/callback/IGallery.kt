@@ -2,7 +2,6 @@ package com.gallery.core.callback
 
 import android.net.Uri
 import android.os.Bundle
-import com.gallery.core.ResultType
 import com.gallery.core.callback.InternalConfig.CAMERA_PARENT_ID
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
@@ -50,17 +49,14 @@ interface IGallery {
     fun openCrop(uri: Uri)
 
     /**
-     * 刷新图库
-     * [ResultType.CROP]
-     * [ResultType.CAMERA]
+     * 扫描设备
      */
-    fun scanFile(type: ResultType, path: String)
+    fun onScanGallery(parent: Long = SCAN_ALL, isCamera: Boolean = false)
 
     /**
-     * 扫描设备
-     * [result] 是否是拍照或者裁剪之后的扫描
+     * 扫描裁剪成功之后的数据
      */
-    fun onScanGallery(parent: Long = SCAN_ALL, result: Boolean = false)
+    fun onScanCrop(uri: Uri)
 
     /**
      * 刷新预览之后的数据

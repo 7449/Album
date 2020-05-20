@@ -2,7 +2,6 @@ package com.gallery.core.ui.fragment
 
 import android.app.Activity
 import android.content.Intent
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.*
 import androidx.kotlin.expand.content.openVideoExpand
-import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.camera.CameraStatus
 import androidx.kotlin.expand.os.getLongOrDefault
 import androidx.kotlin.expand.os.getParcelableArrayListOrDefault
@@ -24,9 +22,8 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
 import com.gallery.core.R
-import com.gallery.core.ResultType
 import com.gallery.core.callback.*
-import com.gallery.core.ext.*
+import com.gallery.core.expand.*
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.widget.SimpleGridDivider
@@ -84,7 +81,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        galleryCallback.onGalleryViewCreated(savedInstanceState)
         galleryRootView.setBackgroundColor(galleryBundle.galleryRootBackground)
         galleryEmpty.setImageDrawable(drawableExpand(galleryBundle.photoEmptyDrawable))
         galleryEmpty.setOnClickListener { v ->
@@ -98,7 +95,6 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         galleryRecyclerView.addItemDecoration(SimpleGridDivider(galleryBundle.dividerWidth))
         (galleryRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         galleryRecyclerView.adapter = galleryAdapter
-        savedInstanceState?.let { galleryCallback.onChangedScreen(selectEntities.size) }
         onScanGallery(parentId)
     }
 
@@ -125,7 +121,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
                 galleryAdapter.addEntity(0, it)
             }
             notifyDataSetChanged()
-            galleryCallback.onScanResultSuccess(requireContext(), galleryBundle, it)
+            galleryCallback.onResultSuccess(context, galleryBundle, it)
         } ?: galleryCallback.onCameraResultError(context, galleryBundle)
     }
 
@@ -138,7 +134,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             galleryCallback.onClickItemFileNotExist(context, galleryBundle, galleryEntity)
             return
         }
-        if (galleryBundle.scanType == ScanType.VIDEO) {
+        if (galleryBundle.isVideoScan) {
             requireContext().openVideoExpand(galleryEntity.externalUri()) {
                 galleryCallback.onOpenVideoPlayError(context, galleryEntity)
             }
@@ -152,7 +148,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             }
             return
         }
-        galleryCallback.onPhotoItemClick(requireContext(), galleryBundle, galleryEntity, position, parentId)
+        galleryCallback.onPhotoItemClick(context, galleryBundle, galleryEntity, position, parentId)
     }
 
     public override fun onCameraResultCanceled() {
@@ -163,7 +159,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     public override fun onCameraResultOk() {
         findPathByUriExpand(fileUri)?.let {
-            scanFile(ResultType.CAMERA, it)
+            scanFile(it) { onScanGallery(parentId, true) }
             if (galleryBundle.cameraCrop) {
                 openCrop(fileUri)
             }
@@ -172,7 +168,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun permissionsGranted(type: PermissionCode) {
         when (type) {
-            PermissionCode.WRITE -> onScanGallery(parentId, result = false)
+            PermissionCode.WRITE -> onScanGallery(parentId)
             PermissionCode.READ -> openCamera()
         }
     }
@@ -186,10 +182,12 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
             galleryCallback.onCameraOpenStatus(context, CameraStatus.PERMISSION, galleryBundle)
             return
         }
-        //这里需要处理,如果为null应该响应报错的回调
-        fileUri = requireActivity().cameraUriExpand(galleryBundle).orEmptyExpand()
+        val cameraUriExpand: Uri? = requireActivity().cameraUriExpand(galleryBundle)
+        cameraUriExpand?.let {
+            fileUri = it
+        } ?: galleryCallback.onCameraOpenStatus(context, CameraStatus.ERROR, galleryBundle)
         val onCustomCamera: Boolean = galleryInterceptor.onCustomCamera(fileUri)
-        if (onCustomCamera) {
+        if (onCustomCamera || cameraUriExpand == null) {
             return
         }
         galleryCallback.onCameraOpenStatus(context, openCameraExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) }, galleryBundle)
@@ -199,16 +197,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         cropLauncher.launch(galleryInterceptor.onCustomPhotoCrop(requireActivity(), uri, galleryBundle))
     }
 
-    override fun scanFile(type: ResultType, path: String) {
-        MediaScannerConnection.scanFile(requireContext(), arrayOf(path), null) { _: String?, uri: Uri? ->
-            runOnUiThreadExpand {
-                uri ?: return@runOnUiThreadExpand
-                onScanGallery(parentId, type == ResultType.CROP)
-            }
-        }
-    }
-
-    override fun onScanGallery(parent: Long, result: Boolean) {
+    override fun onScanGallery(parent: Long, isCamera: Boolean) {
         if (!checkPermissionAndRequestWriteExpand(writePermissionLauncher)) {
             return
         }
@@ -221,11 +210,15 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         // 第二种:parentId为文件夹ID的时候处理数据,如果 parentId == scan.parent
         // 可以直接插入到当前数据,如果不等于,不能插入,因为裁剪之后的图片属于另一个文件夹的数据
         // 文件夹数据更新的时候也需要处理这种情况
-        if (result && galleryAdapter.isNotEmpty) {
+        if (isCamera && galleryAdapter.isNotEmpty) {
             scan.scanResult(findIdByUriExpand(fileUri))
         } else {
             scan.scanParent(parent)
         }
+    }
+
+    override fun onScanCrop(uri: Uri) {
+        scan.scanResult(findIdByUriExpand(uri))
     }
 
     override fun onUpdatePrevResult(bundle: Bundle) {
@@ -258,7 +251,6 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun onCropSuccess(uri: Uri) {
         galleryInterceptor.onCropResources(uri)
-        scanFile(ResultType.CROP, uri.path.toString())
     }
 
     override val currentEntities: ArrayList<ScanEntity>

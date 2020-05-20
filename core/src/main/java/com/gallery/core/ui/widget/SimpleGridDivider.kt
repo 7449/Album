@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 class SimpleGridDivider(private val divider: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
-        val position = parent.getChildAdapterPosition(view)
-        val layoutManager = parent.layoutManager as GridLayoutManager
-        val spanCount = layoutManager.spanCount
-        val i = position % spanCount
-        val first = position / spanCount + 1 == 1
-        val top = if (first) divider / 2 else 0
-        val left = if (i + 1 == 1) divider else divider / 2
-        val right = if (i + 1 == spanCount) divider else divider / 2
+        val position: Int = parent.getChildAdapterPosition(view)
+        val layoutManager: GridLayoutManager = parent.layoutManager as GridLayoutManager
+        val spanCount: Int = layoutManager.spanCount
+        val i: Int = position % spanCount
+        val first: Boolean = position / spanCount + 1 == 1
+        val top: Int = if (first) divider / 2 else 0
+        val left: Int = if (i + 1 == 1) divider else divider / 2
+        val right: Int = if (i + 1 == spanCount) divider else divider / 2
         outRect.set(left, top, right, divider)
     }
 }

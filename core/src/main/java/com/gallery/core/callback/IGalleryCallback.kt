@@ -1,16 +1,17 @@
 package com.gallery.core.callback
 
 import android.content.Context
+import android.os.Bundle
 import androidx.kotlin.expand.os.camera.CameraStatus
 import androidx.kotlin.expand.os.permission.PermissionCode
 import androidx.kotlin.expand.text.toastExpand
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
+import com.gallery.core.expand.isVideoScan
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.ScanType
 
 /**
  *
@@ -18,7 +19,12 @@ import com.gallery.scan.ScanType
 interface IGalleryCallback {
 
     /**
-     * 单选状态下,点击[Adapter]返回的那条数据
+     * [ScanFragment.onViewCreated]触发
+     */
+    fun onGalleryViewCreated(savedInstanceState: Bundle?) {}
+
+    /**
+     * 单选状态下,点击[Adapter]item返回的那条数据
      * [ScanFragment.onPhotoItemClick]
      */
     fun onGalleryResource(context: Context?, scanEntity: ScanEntity)
@@ -28,8 +34,7 @@ interface IGalleryCallback {
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * [PhotoViewHolder.photo]
      */
-    fun onClickCheckBoxFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        context ?: return
+    fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_file_deleted).toastExpand(context)
     }
 
@@ -37,8 +42,7 @@ interface IGalleryCallback {
      * 已达到选择最大数
      * [GalleryBundle.multipleMaxCount]
      */
-    fun onClickCheckBoxMaxCount(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        context ?: return
+    fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_check_max).toastExpand(context)
     }
 
@@ -58,12 +62,6 @@ interface IGalleryCallback {
      * [PhotoViewHolder.photo]
      */
     fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
-
-    /**
-     * 横竖屏切换时触发
-     * [ScanFragment.onActivityCreated]
-     */
-    fun onChangedScreen(selectCount: Int) {}
 
     /**
      * 刷新预览页数据之后触发
@@ -87,14 +85,14 @@ interface IGalleryCallback {
     /**
      * 拍照or裁剪返回
      */
-    fun onScanResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
+    fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
 
     /**
      * 取消拍照
      */
     fun onCameraCanceled(context: Context?, galleryBundle: GalleryBundle) {
         context ?: return
-        if (galleryBundle.scanType == ScanType.VIDEO) {
+        if (galleryBundle.isVideoScan) {
             context.getString(R.string.gallery_video_canceled).toastExpand(context)
         } else {
             context.getString(R.string.gallery_camera_canceled).toastExpand(context)
@@ -106,7 +104,7 @@ interface IGalleryCallback {
      */
     fun onCameraResultError(context: Context?, galleryBundle: GalleryBundle) {
         context ?: return
-        if (galleryBundle.scanType == ScanType.VIDEO) {
+        if (galleryBundle.isVideoScan) {
             context.getString(R.string.gallery_video_result_error).toastExpand(context)
         } else {
             context.getString(R.string.gallery_camera_result_error).toastExpand(context)

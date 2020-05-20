@@ -1,4 +1,4 @@
-package com.gallery.core.ext
+package com.gallery.core.expand
 
 import com.gallery.core.callback.*
 import com.gallery.core.ui.base.GalleryBaseFragment

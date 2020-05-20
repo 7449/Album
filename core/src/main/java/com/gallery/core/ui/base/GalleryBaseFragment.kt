@@ -3,7 +3,7 @@ package com.gallery.core.ui.base
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.permission.PermissionCode
-import com.gallery.core.ext.requestPermissionResultLauncherExpand
+import com.gallery.core.expand.requestPermissionResultLauncherExpand
 
 /**
  * @author y

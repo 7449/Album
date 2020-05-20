@@ -2,6 +2,7 @@ package com.gallery.core.callback
 
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -11,7 +12,7 @@ import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.ext.cropUriExpand
+import com.gallery.core.expand.cropUriExpand
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.yalantis.ucrop.UCrop
@@ -46,7 +47,7 @@ interface IGalleryInterceptor {
      * [ScanFragment.onCameraResultOk]
      *
      * 这里需要注意的是[ScanFragment.onCameraResultOk]不需要任何参数,只需要拍照成功之后
-     * 手动调用刷新图库即可，因此自定义返回的[Uri]则在自定义的时候非常重要,需要传递过去之后
+     * 手动调用刷新图库即可，因此自定义返回的[Uri]则在自定义相机的时候非常重要,需要传递过去之后
      * 把拍照的数据写入到这个[uri]中
      *
      * class CustomCameraActivity : GalleryActivity() {
@@ -122,25 +123,32 @@ interface IGalleryInterceptor {
      * Android10则直接返回 file:///storage/emulated/0/Android/data/packageName/cache/xxxxx.jpg
      *
      * 裁剪这里使用预设好的[ActivityResultLauncher]只需要裁剪提供裁剪的[Uri]和裁剪错误
-     * 的 resultCode 和 异常信息[Throwable](可为空)
+     * 的 resultCode 和 异常信息[Throwable](可为null)
      *
-     * Android 10 如果需要裁剪的文件显示在图库中在[onCropResources]调用
+     * [UCrop]目前不支持 content 的 outputUri 所以Android10返回的路径为缓存路径，[MediaScannerConnection.scanFile]扫到的[Uri]为空
+     * 所以裁剪成功之后不判断Android版本不对裁剪文件进行扫描,
+     * 如果裁剪之后需要停留在图片选择页显示裁剪的文件并进行下一步操作,在低版本裁剪使用[ScanFragment.onScanCrop]即可
      *
-     * if (hasQExpand()) {
-     *   copyImageExpand(uri, galleryBundle.cameraNameExpand)?.let{ uri ->
-     *      // copy success
-     *   }
+     * if (!hasQExpand() && uri.scheme == ContentResolver.SCHEME_FILE) {
+     *    galleryFragment.scanFile(uri.path.orEmpty()) { galleryFragment.onScanCrop(it) }
      * }
      *
-     * 即可
+     * 高版本 copy 源文件至图库即可
      *
-     * 如果没有强制要求，建议在copy成功之后删除掉源文件，在自己的app缓存目录中直接用file.delete操作即可,不需要权限
+     * copyImageExpand(uri, galleryBundle.cropNameExpand)?.let { cropUri ->
+     *       galleryFragment.scanFile(findPathByUriExpand(cropUri).orEmpty()) {
+     *       galleryFragment.onScanCrop(it)
+     *       File(uri.path.orEmpty()).delete()
+     *    }
+     * }
      *
      * [onCropSuccessUriRule]
      * [onCropErrorResultCode]
      * [onCropErrorThrowable]
      *
      * 这里以 com.theartofdev.edmodo:android-image-cropper 为例
+     *
+     * android-image-cropper 支持 content 的 outputUri
      *
      * override fun onCustomPhotoCrop(activity: FragmentActivity, uri: Uri, galleryBundle: GalleryBundle): Intent {
      *     return CropImage
@@ -171,6 +179,11 @@ interface IGalleryInterceptor {
     }
 
     /**
+     * [onCustomPhotoCrop]默认uCrop会触发
+     */
+    fun onUCropOptions() = Bundle()
+
+    /**
      * 裁剪成功返回正确的Uri
      */
     fun onCropSuccessUriRule(intent: Intent?): Uri? {
@@ -188,11 +201,6 @@ interface IGalleryInterceptor {
     fun onCropErrorThrowable(intent: Intent?): Throwable? {
         return intent?.let { UCrop.getError(it) }
     }
-
-    /**
-     * [onCustomPhotoCrop]默认uCrop会触发
-     */
-    fun onUCropOptions() = Bundle()
 
     /**
      * 在[onCustomPhotoCrop]为false的情况下会触发

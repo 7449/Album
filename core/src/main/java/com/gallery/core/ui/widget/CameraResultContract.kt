@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
-import com.gallery.core.ext.CameraUri
+import com.gallery.core.expand.CameraUri
 import com.gallery.scan.ScanType
 
 class CameraResultContract : ActivityResultContract<CameraUri, Int>() {

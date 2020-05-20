@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gallery.core.ext.externalUri
+import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R

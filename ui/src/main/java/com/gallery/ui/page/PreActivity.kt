@@ -1,7 +1,9 @@
 package com.gallery.ui.page
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.FrameLayout
+import com.gallery.core.GalleryBundle
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R
 import com.gallery.ui.activity.PrevBaseActivity
@@ -25,7 +27,16 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
             }
         }
         preToolbar.setNavigationOnClickListener { onPrevFinish() }
-        preCount.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
+    }
+
+    override fun onPrevViewCreated(savedInstanceState: Bundle?) {
+        preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
+        preToolbar.title = uiBundle.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
+    }
+
+    override fun onClickCheckBoxFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
+        preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
     }
 
     override fun onDisplayGalleryPrev(galleryEntity: ScanEntity, container: FrameLayout) {
@@ -34,10 +45,6 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
 
     override fun onPageSelected(position: Int) {
         preToolbar.title = uiBundle.preTitle + "(" + (position + 1) + "/" + prevFragment.itemCount + ")"
-    }
-
-    override fun onChangedCreated() {
-        preToolbar.title = uiBundle.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
     override fun onChangedCheckBox() {

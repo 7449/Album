@@ -40,13 +40,13 @@ class GalleryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
         return when (viewType) {
             TYPE_CAMERA -> {
-                val cameraView = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_camera, parent, false)
+                val cameraView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_camera, parent, false)
                 val cameraViewHolder = CameraViewHolder(cameraView, galleryBundle)
                 cameraView.setOnClickListener { v -> galleryItemClickListener.onCameraItemClick(v, cameraViewHolder.bindingAdapterPosition, galleryList[cameraViewHolder.bindingAdapterPosition]) }
                 cameraViewHolder
             }
             else -> {
-                val photoView = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
+                val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
                 val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryInterceptor, galleryCallback)
                 photoView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
                 photoViewHolder

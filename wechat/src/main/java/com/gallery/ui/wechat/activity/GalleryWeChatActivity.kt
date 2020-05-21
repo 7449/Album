@@ -9,7 +9,10 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.text.toastExpand
-import androidx.kotlin.expand.view.addOnPreDrawListenerExpand
+import androidx.kotlin.expand.view.hideExpand
+import androidx.kotlin.expand.view.showExpand
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideo
@@ -19,17 +22,13 @@ import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
-import com.gallery.ui.wechat.util.AnimUtils
-import com.gallery.ui.wechat.util.displayGalleryThumbnails
-import com.gallery.ui.wechat.util.displayGalleryWeChat
-import com.gallery.ui.wechat.util.doOnAnimationEnd
+import com.gallery.ui.wechat.util.*
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
 class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener, WeChatFinderAdapter.WeChatAdapterListener {
 
     private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(galleryUiBundle, this, this) }
 
-    private var rootViewHeight: Int = 0
     private var selectScanEntity: ScanEntity? = null
 
     override val currentFinderId: Long
@@ -44,7 +43,6 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         obtain(galleryUiBundle)
-        galleryWeChatRoot.addOnPreDrawListenerExpand { rootViewHeight = galleryWeChatRoot.height }
         galleryWeChatToolbarBack.setOnClickListener { onGalleryFinish() }
         galleryWeChatFinderRoot.setOnClickListener { hideFinderActionView() }
         galleryWeChatFinder.adapter = newFinderAdapter
@@ -74,21 +72,43 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
             } ?: showFinderActionView()
         }
         rotateAnimation.doOnAnimationEnd {
-            AnimUtils.newInstance(rootViewHeight).openAnim(galleryWeChatFinderRoot) {}
+            AnimUtils.newInstance(galleryWeChatRoot.height).openAnim(galleryWeChatFinderRoot) {}
         }
         rotateAnimationResult.doOnAnimationEnd {
-            AnimUtils.newInstance(rootViewHeight).closeAnimate(galleryWeChatFinderRoot) {
+            AnimUtils.newInstance(galleryWeChatRoot.height).closeAnimate(galleryWeChatFinderRoot) {
                 selectScanEntity?.let {
                     if (it.parent == galleryFragment.parentId) {
                         return@closeAnimate
                     }
                     galleryWeChatToolbarFinderText.text = it.bucketDisplayName
                     galleryFragment.onScanGallery(it.parent)
-                    galleryWeChatFinderRoot.visibility = View.GONE
                     selectScanEntity = null
                 }
             }
         }
+    }
+
+    override fun onGalleryViewCreated(savedInstanceState: Bundle?) {
+        galleryFragment.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                recyclerView.layoutManager ?: return
+                val layoutManager: GridLayoutManager = recyclerView.layoutManager as GridLayoutManager
+                val position: Int = layoutManager.findFirstCompletelyVisibleItemPosition()
+                if (dx == 0 && dy == 0) {
+                    galleryWeChatTime.hideExpand()
+                } else {
+                    galleryWeChatTime.showExpand()
+                }
+                galleryFragment.currentEntities[position].let {
+                    galleryWeChatTime.text = it.dataModified.formatTime()
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                galleryWeChatTime.postDelayed({ galleryWeChatTime.hideExpand() }, 1000)
+            }
+        })
     }
 
     override fun onPrevKeyBack(bundle: Bundle) {
@@ -128,7 +148,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     }
 
     override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        // 文件被删后主动更新了选中文件,应更新checkBox count
+        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
         galleryFragment.notifyDataSetChanged()
     }
 

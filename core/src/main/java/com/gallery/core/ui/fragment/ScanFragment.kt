@@ -18,6 +18,7 @@ import androidx.kotlin.expand.os.permission.PermissionCode
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
@@ -239,6 +240,10 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
 
     override fun notifyDataSetChanged() {
         galleryAdapter.notifyDataSetChanged()
+    }
+
+    override fun addOnScrollListener(onScrollListener: RecyclerView.OnScrollListener) {
+        galleryRecyclerView.addOnScrollListener(onScrollListener)
     }
 
     override fun onCropCanceled() {

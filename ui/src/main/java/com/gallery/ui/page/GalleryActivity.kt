@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.expand.isScanAll
+import com.gallery.core.expand.isVideoScan
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
@@ -47,7 +48,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         galleryFinderAll.setOnClickListener(this)
 
         galleryFinderAll.text = finderName
-        galleryPre.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
+        galleryPre.visibility = if (galleryBundle.radio || galleryBundle.isVideoScan) View.GONE else View.VISIBLE
         gallerySelect.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
 
         galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }
@@ -74,12 +75,12 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                 onGalleryResources(galleryFragment.selectEntities)
             }
             R.id.galleryFinderAll -> {
-                if (finderList.isNotEmpty()) {
-                    newFinderAdapter.finderUpdate(finderList)
-                    newFinderAdapter.show()
+                if (finderList.isEmpty()) {
+                    onGalleryFinderEmpty()
                     return
                 }
-                onGalleryFinderEmpty()
+                newFinderAdapter.finderUpdate(finderList)
+                newFinderAdapter.show()
             }
         }
     }

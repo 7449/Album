@@ -2,6 +2,7 @@ package com.gallery.core.callback
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.callback.InternalConfig.CAMERA_PARENT_ID
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
@@ -74,6 +75,11 @@ interface IGallery {
      * 刷新全部数据
      */
     fun notifyDataSetChanged()
+
+    /**
+     * 监听滑动
+     */
+    fun addOnScrollListener(onScrollListener: RecyclerView.OnScrollListener)
 
     /**
      * 取消裁剪

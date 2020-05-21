@@ -10,7 +10,7 @@ import com.gallery.core.expand.isGif
 import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.wechat.R
-import com.gallery.ui.wechat.util.formatTime
+import com.gallery.ui.wechat.util.formatTimeVideo
 import kotlinx.android.synthetic.main.layout_gallery_wechat_item.view.*
 
 class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
@@ -39,6 +39,6 @@ class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: Attri
         gifView.visibility = if (galleryEntity.isGif()) View.VISIBLE else View.GONE
         videoView.visibility = if (galleryEntity.isVideo()) View.VISIBLE else View.GONE
         bottomView.visibility = if (galleryEntity.isGif() || galleryEntity.isVideo()) View.VISIBLE else View.GONE
-        videoView.text = if (galleryEntity.isVideo()) galleryEntity.duration.formatTime() else ""
+        videoView.text = if (galleryEntity.isVideo()) galleryEntity.duration.formatTimeVideo() else ""
     }
 }

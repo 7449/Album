@@ -33,7 +33,7 @@ class WeChatPrevSelectAdapter(
         adapterFinderListener.onGalleryFinderThumbnails(finderEntity, frameLayout)
     }
 
-    fun updateFinder(entities: ArrayList<ScanEntity>) {
+    fun updateFinder(entities: List<ScanEntity>) {
         list.clear()
         entities.forEach { list.add(it.copy(isCheck = false)) }
         notifyDataSetChanged()

@@ -157,7 +157,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     }
 
     /** 启动预览 */
-    open fun onStartPrevPage(
+    fun onStartPrevPage(
             allList: ArrayList<ScanEntity>,
             position: Int = 0,
             cla: Class<out PrevBaseActivity>) {
@@ -165,7 +165,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     }
 
     /** 启动预览 */
-    open fun onStartPrevPage(
+    fun onStartPrevPage(
             allList: ArrayList<ScanEntity>,
             position: Int = 0,
             option: Bundle = Bundle.EMPTY,

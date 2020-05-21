@@ -83,27 +83,10 @@ interface IGalleryInterceptor {
      * override fun onPictureTaken(result: PictureResult) {
      *     super.onPictureTaken(result)
      *     val fileUri: Uri = intent.extras?.getParcelable<Uri>(GalleryConfig.CUSTOM_CAMERA_OUT_PUT_URI).orEmptyExpand()
-     *     if (hasQExpand()) {
-     *         result.toFile(File(externalCacheDir, "${System.currentTimeMillis()}.jpg")) {
-     *             val saveCropToGalleryLegacy = saveToGalleryLegacy(
-     *                     Uri.fromFile(it),
-     *                     fileUri,
-     *                     it?.name.toString(),
-     *                     "jpg",
-     *                     Environment.DIRECTORY_DCIM
-     *             )
-     *             message(saveCropToGalleryLegacy?.path ?: it?.path.toString(), false)
-     *             it?.delete()
-     *             setResult(Activity.RESULT_OK)
-     *             finish()
-     *         }
-     *     } else {
-     *         result.toFile(File(findPathByUriExpand(fileUri).toString())) {
-     *             message(it?.path.toString(), false)
-     *             setResult(Activity.RESULT_OK)
-     *             finish()
-     *         }
-     *     }
+     *     Log.i("Camera", fileUri.toString())
+     *     contentResolver.openOutputStream(fileUri)?.use { it.write(result.data) }
+     *     setResult(Activity.RESULT_OK)
+     *     finish()
      * }
      *
      * Android 10 的读写操作具体可以看下这篇文章

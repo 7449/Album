@@ -134,6 +134,19 @@
                 android:layout_height="wrap_content" />
         </FrameLayout>
 
+        <TextView
+            android:id="@+id/galleryWeChatTime"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/color_B3000000"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry"
+            tools:text="2020.20.20"
+            tools:visibility="visible" />
     </FrameLayout>
 
 </LinearLayout>

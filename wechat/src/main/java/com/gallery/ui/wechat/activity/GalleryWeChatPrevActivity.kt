@@ -88,7 +88,6 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         prevWeChatToolbarSend.text = uiBundle.selectText + if (prevFragment.selectEmpty) "" else "(${prevFragment.selectCount}/${galleryBundle.multipleMaxCount})"
         galleryPrevList.visibility = if (prevFragment.selectEmpty) View.GONE else View.VISIBLE
         galleryPrevListLine.visibility = if (prevFragment.selectEmpty) View.GONE else View.VISIBLE
-        selectAdapter.updateFinder(prevFragment.selectEntities)
     }
 
     override fun onKeyBackResult(bundle: Bundle) {

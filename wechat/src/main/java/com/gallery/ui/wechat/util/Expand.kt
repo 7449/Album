@@ -7,17 +7,27 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 @SuppressLint("SimpleDateFormat")
-private val formatter = SimpleDateFormat("mm:ss")
+private val formatterVideo = SimpleDateFormat("mm:ss")
 
-internal fun Long.formatTime(): String {
+@SuppressLint("SimpleDateFormat")
+private val formatter = SimpleDateFormat("YYYY/MM")
+
+internal fun Long.formatTimeVideo(): String {
     if (toInt() == 0) {
         return "--:--"
     }
-    val format: String = formatter.format(this)
+    val format: String = formatterVideo.format(this)
     if (!format.startsWith("0")) {
         return format
     }
     return format.substring(1)
+}
+
+internal fun Long.formatTime(): String {
+    if (toInt() == 0) {
+        return "--/--"
+    }
+    return formatter.format(this * 1000)
 }
 
 internal fun RotateAnimation.doOnAnimationEnd(action: (animation: Animation) -> Unit) {

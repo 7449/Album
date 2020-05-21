@@ -33,9 +33,21 @@ class WeChatPrevSelectAdapter(
         adapterFinderListener.onGalleryFinderThumbnails(finderEntity, frameLayout)
     }
 
-    fun updateFinder(entities: List<ScanEntity>) {
+    fun updateSelect(entities: List<ScanEntity>) {
         list.clear()
         entities.forEach { list.add(it.copy(isCheck = false)) }
+        notifyDataSetChanged()
+    }
+
+    fun findPosition(scanEntity: ScanEntity): Int {
+        return list.indexOfFirst { it.id == scanEntity.id }
+    }
+
+    fun addSelect(entity: ScanEntity) {
+        list.forEach { it.isCheck = false }
+        list.find { it.id == entity.id }?.let {
+            it.isCheck = true
+        } ?: list.add(entity.copy(isCheck = true))
         notifyDataSetChanged()
     }
 

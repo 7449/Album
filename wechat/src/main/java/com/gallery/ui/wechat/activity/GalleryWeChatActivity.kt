@@ -52,6 +52,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                     0,
                     Bundle().apply {
                         putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
+                        putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_PREV_IMAGE, true)
                     },
                     GalleryWeChatPrevActivity::class.java
             )
@@ -143,6 +144,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
                 Bundle().apply {
                     putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
+                    putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_PREV_IMAGE, false)
                 },
                 GalleryWeChatPrevActivity::class.java)
     }

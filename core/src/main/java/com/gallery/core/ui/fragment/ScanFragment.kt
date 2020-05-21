@@ -246,6 +246,10 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Sca
         galleryRecyclerView.addOnScrollListener(onScrollListener)
     }
 
+    override fun scrollToPosition(position: Int) {
+        galleryRecyclerView.scrollToPosition(position)
+    }
+
     override fun onCropCanceled() {
         galleryInterceptor.onCropCanceled(context)
     }

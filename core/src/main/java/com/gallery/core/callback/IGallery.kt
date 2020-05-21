@@ -82,6 +82,11 @@ interface IGallery {
     fun addOnScrollListener(onScrollListener: RecyclerView.OnScrollListener)
 
     /**
+     * 滑动到某个位置
+     */
+    fun scrollToPosition(position: Int)
+
+    /**
      * 取消裁剪
      */
     fun onCropCanceled()

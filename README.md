@@ -1,7 +1,3 @@
-## Prepare for the next version
-
-1. custom camera
-
 ## version
 
 core:![](https://api.bintray.com/packages/ydevelop/maven/gallery.core/images/download.svg)
@@ -11,10 +7,10 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
 #### Manifests.xml
 
         <activity
-            android:name="com.gallery.ui.activity.GalleryActivity"
+            android:name="com.gallery.ui.page.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.gallery.ui.activity.PreActivity"
+            android:name="com.gallery.ui.page.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
             
 #### dependencies
@@ -44,7 +40,15 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
     
 #### custom page
 
-  [SimpleGalleryActivity](./app/src/main/java/com/gallery/sample/SimpleGalleryActivity.kt)
+  [SimpleGalleryActivity](./app/src/main/java/com/gallery/sample/custom/CustomPageActivity.kt)
+  
+#### custom crop
+
+  [CustomCropActivity](./app/src/main/java/com/gallery/sample/custom/CustomCropActivity.kt)
+
+#### custom camera
+
+  [CustomCameraActivity](./app/src/main/java/com/gallery/sample/custom/CustomCameraActivity.kt)
 
 ## Screenshot
 

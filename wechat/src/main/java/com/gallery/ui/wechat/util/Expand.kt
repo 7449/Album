@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 private val formatterVideo = SimpleDateFormat("mm:ss")
 
 @SuppressLint("SimpleDateFormat")
-private val formatter = SimpleDateFormat("YYYY/MM")
+private val formatter = SimpleDateFormat("yyyy/MM")
 
 internal fun Long.formatTimeVideo(): String {
     if (toInt() == 0) {

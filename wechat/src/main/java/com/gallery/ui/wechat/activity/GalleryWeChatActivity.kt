@@ -14,6 +14,7 @@ import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
+import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
@@ -25,9 +26,11 @@ import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
 import com.gallery.ui.wechat.util.*
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
-class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener, WeChatFinderAdapter.WeChatAdapterListener {
+class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener,
+        WeChatFinderAdapter.WeChatAdapterListener {
 
     private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(galleryUiBundle, this, this) }
+    private val videoList: ArrayList<ScanEntity> = ArrayList()
 
     private var selectScanEntity: ScanEntity? = null
 
@@ -82,7 +85,11 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                         return@closeAnimate
                     }
                     galleryWeChatToolbarFinderText.text = it.bucketDisplayName
-                    galleryFragment.onScanGallery(it.parent)
+                    if (it.parent == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) {
+                        galleryFragment.scanSuccess(videoList)
+                    } else {
+                        galleryFragment.onScanGallery(it.parent)
+                    }
                     selectScanEntity = null
                 }
             }
@@ -112,6 +119,20 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         })
     }
 
+    override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
+        if (galleryFragment.parentId.isScanAll() && scanEntities.isNotEmpty() && selectScanEntity?.parent != WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) {
+            videoList.clear()
+            videoList.addAll(scanEntities.filter { it.isVideo() })
+            finderList.clear()
+            finderList.addAll(scanEntities.findFinder(
+                    galleryBundle.sdName,
+                    galleryBundle.allName
+            ))
+            scanEntities.find { it.isVideo() }?.let { it -> finderList.add(1, it.copy(parent = WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT, bucketDisplayName = "全部视频", count = scanEntities.count { it.isVideo() })) }
+            finderList[0].isCheck = true
+        }
+    }
+
     override fun onPrevKeyBack(bundle: Bundle) {
         galleryWeChatFullImage.isChecked = bundle.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
         updateView()
@@ -125,6 +146,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
         this.selectScanEntity = item
         hideFinderActionView()
+        finderList.forEach { it.isCheck = it.parent == item.parent }
+        newFinderAdapter.notifyDataSetChanged()
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {

@@ -36,7 +36,7 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
         holder.textView(R.id.tv_gallery_finder_name).setTextColor(galleryUiBundle.finderItemTextColor)
         holder.setText(R.id.tv_gallery_finder_file_count, "(%s)".format(finderEntity.count.toString()))
         holder.textView(R.id.tv_gallery_finder_file_count).setTextColor(galleryUiBundle.finderItemTextCountColor)
-        holder.setGone(R.id.iv_gallery_finder_file_check, finderEntity.parent != weChatAdapterListener.currentFinderId)
+        holder.setVisibility(R.id.iv_gallery_finder_file_check, finderEntity.isCheck)
     }
 
     fun updateFinder(entities: ArrayList<ScanEntity>) {

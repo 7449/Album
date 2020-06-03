@@ -28,7 +28,7 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
             null,
             galleryLauncher,
             GalleryBundle(
-                    allName = "图片/视频",
+                    allName = "图片和视频",
                     hideCamera = true,
                     spanCount = 4,
                     scanType = ScanType.MIX,

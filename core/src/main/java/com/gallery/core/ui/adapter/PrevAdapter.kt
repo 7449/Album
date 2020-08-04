@@ -7,7 +7,6 @@ import com.gallery.core.R
 import com.gallery.scan.ScanEntity
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder
-import com.xadapter.vh.frameLayout
 
 class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) : RecyclerView.Adapter<XViewHolder>() {
 

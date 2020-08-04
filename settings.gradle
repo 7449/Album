@@ -1,5 +1,0 @@
-//include ':scan'
-include ':core'
-include ':ui'
-include ':app'
-include ':wechat'

@@ -8,7 +8,6 @@ import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder
-import com.xadapter.vh.frameLayout
 
 class WeChatPrevSelectAdapter(
         private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener

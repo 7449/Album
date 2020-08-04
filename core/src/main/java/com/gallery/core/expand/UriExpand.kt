@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.kotlin.expand.content.insertImageUriExpand
 import androidx.kotlin.expand.content.insertVideoUriExpand
-import androidx.kotlin.expand.os.tryCatchOrDefault
 import androidx.kotlin.expand.util.lowerVersionFileExpand
 import androidx.kotlin.expand.util.mkdirsFileExpand
 import androidx.kotlin.expand.version.hasQExpand
@@ -35,9 +34,8 @@ fun Context.cropUriExpand(galleryBundle: GalleryBundle): Uri? {
 /** 删除Uri */
 fun Uri.reset(context: Context) {
     if (!path.isNullOrEmpty() && scheme == ContentResolver.SCHEME_CONTENT) {
-        tryCatchOrDefault({
+        runCatching {
             context.contentResolver.delete(this, null, null)
-            Unit
-        }) { /** delete uri error */ }
+        }.onSuccess { /** delete uri success */ }.onFailure { /** delete uri failure */ }
     }
 }

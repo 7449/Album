@@ -13,9 +13,6 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.expand.externalUri
 import com.gallery.scan.ScanEntity
 import com.xadapter.vh.XViewHolder
-import com.xadapter.vh.context
-import com.xadapter.vh.frameLayout
-import com.xadapter.vh.textView
 
 class PhotoViewHolder(itemView: View,
                       private val galleryBundle: GalleryBundle,

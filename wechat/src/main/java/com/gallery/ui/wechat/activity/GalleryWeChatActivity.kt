@@ -14,6 +14,7 @@ import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfig
 import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideo
@@ -51,7 +52,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         galleryWeChatFinder.adapter = newFinderAdapter
         galleryWeChatPrev.setOnClickListener {
             onStartPrevPage(
-                    galleryFragment.selectEntities,
+                    GalleryConfig.PREV_SELECT_PARENT_ID,
                     0,
                     Bundle().apply {
                         putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
@@ -163,7 +164,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     }
 
     override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(galleryFragment.currentEntities,
+        onStartPrevPage(scanEntity.parent,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
                 Bundle().apply {
                     putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)

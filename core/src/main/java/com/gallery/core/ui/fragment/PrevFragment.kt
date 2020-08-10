@@ -2,15 +2,12 @@ package com.gallery.core.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.moveToNextToIdExpand
-import androidx.kotlin.expand.os.bundleOrEmptyExpand
-import androidx.kotlin.expand.os.getIntExpand
-import androidx.kotlin.expand.os.getParcelableArrayListExpand
-import androidx.kotlin.expand.os.getParcelableOrDefault
+import androidx.kotlin.expand.os.*
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
-import com.gallery.core.R
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrev
 import com.gallery.core.callback.IGalleryPrevCallback
@@ -22,12 +19,15 @@ import com.gallery.core.expand.galleryPrevInterceptorExpand
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.ScanImpl
+import com.gallery.scan.ScanType
+import com.gallery.scan.ScanView
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
-class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGalleryPrev {
+class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragment_preview), IGalleryPrev {
 
     companion object {
-        fun newInstance(allList: ArrayList<ScanEntity>,
+        fun newInstance(parentId: Long,
                         selectList: ArrayList<ScanEntity> = ArrayList(),
                         config: GalleryBundle = GalleryBundle(),
                         position: Int = 0): PrevFragment {
@@ -35,7 +35,7 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
             val bundle = Bundle()
             bundle.putParcelable(GalleryConfig.PREV_CONFIG, config)
             bundle.putParcelableArrayList(GalleryConfig.PREV_START_SELECT, selectList)
-            bundle.putParcelableArrayList(GalleryConfig.PREV_START_ALL, allList)
+            bundle.putLong(GalleryConfig.PREV_PARENT_ID, parentId)
             bundle.putInt(GalleryConfig.PREV_START_POSITION, position)
             prevFragment.arguments = bundle
             return prevFragment
@@ -72,23 +72,47 @@ class PrevFragment : GalleryBaseFragment(R.layout.gallery_fragment_preview), IGa
         outState.putParcelableArrayList(GalleryConfig.PREV_START_SELECT, selectEntities)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        prevAdapter.addAll(getParcelableArrayListExpand(GalleryConfig.PREV_START_ALL))
-        prevAdapter.addSelectAll((savedInstanceState ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT))
+    private fun updateEntity(arrayList: ArrayList<ScanEntity>, savedInstanceState: Bundle?) {
+        prevAdapter.addAll(arrayList)
+        prevAdapter.addSelectAll((savedInstanceState
+                ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT))
         prevAdapter.updateEntity()
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         galleryPrevCallback.onPrevViewCreated(savedInstanceState)
         preViewPager.adapter = prevAdapter
         preViewPager.registerOnPageChangeCallback(pageChangeCallback)
         preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         preCheckBox.setOnClickListener { checkBoxClick(preCheckBox) }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
-        setCurrentItem((savedInstanceState ?: bundleOrEmptyExpand()).getIntExpand(GalleryConfig.PREV_START_POSITION))
+        setCurrentItem((savedInstanceState
+                ?: bundleOrEmptyExpand()).getIntExpand(GalleryConfig.PREV_START_POSITION))
         preCheckBox.isSelected = isCheckBox(currentPosition)
         preCheckBox.visibility = if (galleryPrevInterceptor.hideCheckBox) View.GONE else View.VISIBLE
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val parentId: Long = getLongExpand(GalleryConfig.PREV_PARENT_ID)
+        if (parentId == GalleryConfig.PREV_SELECT_PARENT_ID) {
+            //如果是点击预览这里认为未选中数据和选中数据应该一致
+            updateEntity(getParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT), savedInstanceState)
+        } else {
+            //https://issuetracker.google.com/issues/127692541
+            //这个问题应该已经在ViewPager2上已经修复
+            ScanImpl(object : ScanView {
+                override val currentScanType: ScanType
+                    get() = galleryBundle.scanType
+                override val scanContext: FragmentActivity
+                    get() = requireActivity()
+
+                override fun resultSuccess(scanEntity: ScanEntity?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
+                    updateEntity(arrayList, savedInstanceState)
+                }
+            }).scanParent(parentId)
+        }
     }
 
     fun checkBoxClick(preCheckBox: View) {

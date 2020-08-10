@@ -89,7 +89,8 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         finderName = savedInstanceState.getStringOrDefault(UIResult.FINDER_NAME, galleryBundle.allName)
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
-        } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
+        }
+                ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
     }
 
     /** 数据扫描成功之后刷新文件夹数据 */
@@ -158,21 +159,21 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
 
     /** 启动预览 */
     fun onStartPrevPage(
-            allList: ArrayList<ScanEntity>,
+            parentId: Long,
             position: Int = 0,
             cla: Class<out PrevBaseActivity>) {
-        onStartPrevPage(allList, position, bundleBundleExpand(UIResult.PREV_START_BUNDLE), cla)
+        onStartPrevPage(parentId, position, bundleBundleExpand(UIResult.PREV_START_BUNDLE), cla)
     }
 
     /** 启动预览 */
     fun onStartPrevPage(
-            allList: ArrayList<ScanEntity>,
+            parentId: Long,
             position: Int = 0,
             option: Bundle = Bundle.EMPTY,
             cla: Class<out PrevBaseActivity>) {
         prevLauncher.launch(PrevBaseActivity.newInstance(
                 this,
-                allList,
+                parentId,
                 galleryFragment.selectEntities,
                 galleryBundle,
                 galleryUiBundle,

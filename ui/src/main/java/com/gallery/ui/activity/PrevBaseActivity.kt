@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.os.bundleBundleExpand
-import androidx.kotlin.expand.os.bundleIntOrDefault
-import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
-import androidx.kotlin.expand.os.bundleParcelableOrDefault
+import androidx.kotlin.expand.os.*
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
@@ -19,7 +16,6 @@ import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.R
 import com.gallery.ui.UIResult
 
 abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
@@ -27,7 +23,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
     companion object {
         fun newInstance(
                 context: Context,
-                allList: ArrayList<ScanEntity>,
+                parentId: Long,
                 selectList: ArrayList<ScanEntity> = ArrayList(),
                 galleryBundle: GalleryBundle = GalleryBundle(),
                 uiBundle: GalleryUiBundle = GalleryUiBundle(),
@@ -35,12 +31,12 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
                 option: Bundle = Bundle.EMPTY,
                 cla: Class<out PrevBaseActivity>): Intent {
             val bundle = Bundle()
-            bundle.putParcelableArrayList(GalleryConfig.PREV_START_ALL, allList)
             bundle.putParcelableArrayList(GalleryConfig.PREV_START_SELECT, selectList)
             bundle.putBundle(UIResult.PREV_START_BUNDLE, option)
             bundle.putParcelable(GalleryConfig.PREV_CONFIG, galleryBundle)
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
             bundle.putInt(GalleryConfig.PREV_START_POSITION, position)
+            bundle.putLong(GalleryConfig.PREV_PARENT_ID, parentId)
             return Intent(context, cla).putExtras(bundle)
         }
     }
@@ -68,7 +64,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
         } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
-                bundleParcelableArrayListExpand(GalleryConfig.PREV_START_ALL),
+                bundleLongOrDefault(GalleryConfig.PREV_PARENT_ID, GalleryConfig.PREV_SELECT_PARENT_ID),
                 bundleParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT),
                 galleryBundle,
                 bundleIntOrDefault(GalleryConfig.PREV_START_POSITION)
@@ -102,7 +98,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
 
     /** 选择数据为空 */
     open fun onGallerySelectEmpty() {
-        getString(R.string.gallery_prev_select_empty_pre).toastExpand(this)
+        getString(com.gallery.ui.R.string.gallery_prev_select_empty_pre).toastExpand(this)
     }
 
     /**  prev select data */

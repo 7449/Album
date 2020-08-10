@@ -1,5 +1,6 @@
-include(":core",
-        ":scan",
+include(
+        ":core",
+//        ":scan",
         ":ui",
         ":app",
         ":wechat")

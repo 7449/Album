@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfig
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideoScan
 import com.gallery.scan.ScanEntity
@@ -62,7 +63,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     return
                 }
                 onStartPrevPage(
-                        galleryFragment.selectEntities,
+                        GalleryConfig.PREV_SELECT_PARENT_ID,
                         0,
                         PreActivity::class.java
                 )
@@ -108,7 +109,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(galleryFragment.currentEntities,
+        onStartPrevPage(scanEntity.parent,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
                 PreActivity::class.java)
     }

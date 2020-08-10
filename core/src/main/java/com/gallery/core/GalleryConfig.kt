@@ -18,11 +18,10 @@ object GalleryConfig {
     const val PREV_CONFIG = "prevStartConfig"
 
     /**
-     * [ArrayList<ScanEntity>] Bundle key
+     * 文件夹扫描Id,如果是预览进入为[]
      * [Bundle.putParcelableArrayList]
-     * 全部数据
      */
-    const val PREV_START_ALL = "prevStartAllEntity"
+    const val PREV_PARENT_ID = "prevParentId"
 
     /**
      * [ArrayList<ScanEntity>] Bundle key
@@ -56,4 +55,10 @@ object GalleryConfig {
      * 自定义相机路径
      */
     const val CUSTOM_CAMERA_OUT_PUT_URI = "customCameraOutPutUri"
+
+    /**
+     * 点击预览携带的parentId
+     * 点击图片进入预览应该是当前文件的parentId
+     */
+    const val PREV_SELECT_PARENT_ID = -1111L
 }

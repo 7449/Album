@@ -140,8 +140,13 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     }
 
     override fun onPrevToolbarFinish(bundle: Bundle) {
+        onPrevKeyBack(bundle)
+    }
+
+    override fun onPrevSelectBack(bundle: Bundle) {
+        //https://github.com/7449/Album/issues/3
         galleryWeChatFullImage.isChecked = bundle.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
-        updateView()
+        super.onPrevSelectBack(bundle)
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {

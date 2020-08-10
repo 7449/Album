@@ -18,7 +18,7 @@ object GalleryConfig {
     const val PREV_CONFIG = "prevStartConfig"
 
     /**
-     * 文件夹扫描Id,如果是预览进入为[]
+     * 文件夹扫描Id,如果是预览进入为[PREV_SELECT_PARENT_ID]
      * [Bundle.putParcelableArrayList]
      */
     const val PREV_PARENT_ID = "prevParentId"

@@ -96,6 +96,10 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
     /** toolbar返回,可为Bundle插入需要的数据 */
     open fun onToolbarFinishResult(bundle: Bundle) {}
 
+    /** 预览页选中数据的Bundle,可插入需要的数据 */
+    open val onSelectEntitiesResult: Bundle
+        get() = prevFragment.resultBundle(true)
+
     /** 选择数据为空 */
     open fun onGallerySelectEmpty() {
         getString(com.gallery.ui.R.string.gallery_prev_select_empty_pre).toastExpand(this)
@@ -104,7 +108,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
     /**  prev select data */
     open fun onPrevSelectEntities() {
         val intent = Intent()
-        intent.putExtras(prevFragment.resultBundle(true))
+        intent.putExtras(onSelectEntitiesResult)
         setResult(UIResult.PREV_OK_FINISH_RESULT_CODE, intent)
         finish()
     }

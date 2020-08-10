@@ -133,4 +133,11 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     override fun onToolbarFinishResult(bundle: Bundle) {
         bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
     }
+
+    override val onSelectEntitiesResult: Bundle
+        get() {
+            val defaultBundle = super.onSelectEntitiesResult
+            defaultBundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
+            return defaultBundle
+        }
 }

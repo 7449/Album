@@ -57,7 +57,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         when (intent.resultCode) {
             UIResult.PREV_OK_FINISH_RESULT_CODE -> {
                 galleryFragment.onUpdatePrevResult(bundleExpand)
-                onPrevSelectEntities(bundleExpand.getParcelableArrayListExpand(GalleryConfig.PREV_RESULT_SELECT))
+                onPrevSelectBack(bundleExpand)
             }
             UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE -> {
                 galleryFragment.onUpdatePrevResult(bundleExpand)
@@ -157,6 +157,11 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     open fun onPrevKeyBack(bundle: Bundle) {
     }
 
+    /**  预览页点击确定选择 */
+    open fun onPrevSelectBack(bundle: Bundle) {
+        onGalleryResources(bundle.getParcelableArrayListExpand(GalleryConfig.PREV_RESULT_SELECT))
+    }
+
     /** 启动预览 */
     fun onStartPrevPage(
             parentId: Long,
@@ -180,11 +185,6 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
                 position,
                 option,
                 cla))
-    }
-
-    /**  预览页点击确定选择 */
-    open fun onPrevSelectEntities(entities: ArrayList<ScanEntity>) {
-        onGalleryResources(entities)
     }
 
     /** 用于 toolbar 返回 finish */

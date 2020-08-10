@@ -97,7 +97,7 @@ class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragm
             updateEntity(getParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT), savedInstanceState)
         } else {
             //https://issuetracker.google.com/issues/127692541
-            //这个问题应该已经在ViewPager2上已经修复
+            //这个问题应该已经在ViewPager2上修复
             ScanImpl(object : ScanView {
                 override val currentScanType: ScanType
                     get() = galleryBundle.scanType

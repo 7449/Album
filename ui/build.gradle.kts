@@ -11,9 +11,11 @@ android {
         targetSdkVersion(Version.targetSdk)
     }
     androidExtensions { isExperimental = true }
+    compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.ui") }
 }
 dependencies {
-    api(project(":core"))
+//    api(project(":core"))
+    api(Dep.core)
     compileOnly(Dep.recyclerView)
     compileOnly(Dep.fragment)
     compileOnly(Dep.uCrop)

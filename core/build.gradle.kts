@@ -11,6 +11,7 @@ android {
         targetSdkVersion(Version.targetSdk)
     }
     androidExtensions { isExperimental = true }
+    compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.core") }
 }
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))

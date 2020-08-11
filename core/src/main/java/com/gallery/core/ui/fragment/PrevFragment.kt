@@ -81,13 +81,18 @@ class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragm
         galleryPrevCallback.onPrevViewCreated(savedInstanceState)
         preViewPager.adapter = prevAdapter
         preViewPager.registerOnPageChangeCallback(pageChangeCallback)
-        preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
-        preCheckBox.setOnClickListener { checkBoxClick(preCheckBox) }
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         setCurrentItem((savedInstanceState
                 ?: bundleOrEmptyExpand()).getIntExpand(GalleryConfig.PREV_START_POSITION))
-        preCheckBox.isSelected = isCheckBox(currentPosition)
-        preCheckBox.visibility = if (galleryPrevInterceptor.hideCheckBox) View.GONE else View.VISIBLE
+
+        if (!galleryPrevInterceptor.hideCheckBox) {
+            preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
+            preCheckBox.setOnClickListener { checkBoxClick(preCheckBox) }
+            preCheckBox.isSelected = isCheckBox(currentPosition)
+            preCheckBox.visibility = View.VISIBLE
+        } else {
+            preCheckBox.visibility = View.GONE
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,7 +102,7 @@ class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragm
             updateEntity(getParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT), savedInstanceState)
         } else {
             //https://issuetracker.google.com/issues/127692541
-            //这个问题应该已经在ViewPager2上修复
+            //这个问题已经在ViewPager2上修复
             ScanImpl(object : ScanView {
                 override val currentScanType: ScanType
                     get() = galleryBundle.scanType

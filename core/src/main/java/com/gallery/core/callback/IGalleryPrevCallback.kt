@@ -18,6 +18,8 @@ interface IGalleryPrevCallback {
 
     /**
      * [PrevFragment.onViewCreated]触发
+     * 预览涉及到了扫描图库数据库,所以这个方法在
+     * 点击item进入预览的情况下不会及时触发
      */
     fun onPrevViewCreated(savedInstanceState: Bundle?) {}
 

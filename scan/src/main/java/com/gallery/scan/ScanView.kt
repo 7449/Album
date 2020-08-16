@@ -59,5 +59,5 @@ interface ScanView {
     /**
      * 拍照扫描成功
      */
-    fun resultSuccess(scanEntity: ScanEntity?)
+    fun resultSuccess(scanEntity: ScanEntity?) {}
 }

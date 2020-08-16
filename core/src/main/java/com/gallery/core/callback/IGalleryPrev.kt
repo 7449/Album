@@ -3,6 +3,7 @@ package com.gallery.core.callback
 import android.app.Activity
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
+import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 
 internal interface IGalleryPrev {
@@ -60,6 +61,8 @@ internal interface IGalleryPrev {
 
     /**
      * 获取预览页销毁时[Activity.setResult]的Bundle
+     * 可作为参数传递给[ScanFragment.onUpdateResult]
+     * 用于合并预览页改变的数据
      */
     fun resultBundle(isRefresh: Boolean): Bundle
 

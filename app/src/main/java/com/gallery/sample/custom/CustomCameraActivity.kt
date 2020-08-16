@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.gallery.core.GalleryConfig
 import com.gallery.sample.camera.CameraActivity
 import com.gallery.ui.page.GalleryActivity
 
@@ -22,7 +21,7 @@ class CustomCameraActivity : GalleryActivity() {
     override fun onCustomCamera(uri: Uri): Boolean {
         cameraLauncher.launch(Intent(this, CameraActivity::class.java).apply {
             putExtras(Bundle().apply {
-                this.putParcelable(GalleryConfig.CUSTOM_CAMERA_OUT_PUT_URI, uri)
+                this.putParcelable(CameraActivity.CUSTOM_CAMERA_OUT_PUT_URI, uri)
             })
         })
         return true

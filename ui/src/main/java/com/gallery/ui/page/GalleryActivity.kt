@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
+import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideoScan
 import com.gallery.scan.ScanEntity
@@ -17,6 +18,7 @@ import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.BottomFinderAdapter
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.adapter.PopupFinderAdapter
+import com.gallery.ui.crop.CropperImpl
 import com.gallery.ui.obtain
 import com.gallery.ui.util.displayGallery
 import com.gallery.ui.util.displayGalleryThumbnails
@@ -26,7 +28,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
 
     private val newFinderAdapter: GalleryFinderAdapter by lazy {
-        if (galleryUiBundle.finderType == FinderType.POPUP) {
+        if (uiConfig.finderType == FinderType.POPUP) {
             return@lazy PopupFinderAdapter()
         } else {
             return@lazy BottomFinderAdapter()
@@ -39,10 +41,13 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     override val galleryFragmentId: Int
         get() = R.id.galleryFrame
 
+    override val cropImpl: ICrop?
+        get() = CropperImpl(galleryFragment)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        obtain(galleryUiBundle)
-        newFinderAdapter.adapterInit(this, galleryUiBundle, galleryFinderAll)
+        obtain(uiConfig)
+        newFinderAdapter.adapterInit(this, uiConfig, galleryFinderAll)
         newFinderAdapter.setOnAdapterFinderListener(this)
         galleryPre.setOnClickListener(this)
         gallerySelect.setOnClickListener(this)
@@ -62,11 +67,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     onGalleryPreEmpty()
                     return
                 }
-                onStartPrevPage(
-                        GalleryConfig.PREV_SELECT_PARENT_ID,
-                        0,
-                        PreActivity::class.java
-                )
+                onStartPrevPage(GalleryConfig.DEFAULT_PARENT_ID, 0, PreActivity::class.java)
             }
             R.id.gallerySelect -> {
                 if (galleryFragment.selectEmpty) {
@@ -109,9 +110,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(scanEntity.parent,
-                if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
-                PreActivity::class.java)
+        onStartPrevPage(parentId, if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position, PreActivity::class.java)
     }
 
     /** 点击预览但是未选择图片 */

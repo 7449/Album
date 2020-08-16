@@ -22,7 +22,7 @@ internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll
     weChatGalleryItem.update(galleryEntity)
     selectView.gravity = Gravity.CENTER
     selectView.setTextColor(Color.WHITE)
-    if (galleryEntity.isCheck) {
+    if (galleryEntity.isSelected) {
         selectView.text = (selectAll.indexOf(galleryEntity) + 1).toString()
     } else {
         selectView.text = ""

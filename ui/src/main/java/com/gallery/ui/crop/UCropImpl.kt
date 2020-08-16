@@ -27,10 +27,7 @@ open class UCropImpl(
         private val galleryUiBundle: GalleryUiBundle
 ) : ICrop {
 
-    override val cropImpl: ICrop?
-        get() = null
-
-    override fun cropCallback(intent: ActivityResult) {
+    override fun onCropResult(intent: ActivityResult) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> intent.data?.let {
                 UCrop.getOutput(it)?.let { uri ->
@@ -73,9 +70,9 @@ open class UCropImpl(
         }
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_RESULT_URI, currentUri)
+        bundle.putParcelable(UIResult.GALLERY_RESULT_CROP, currentUri)
         intent.putExtras(bundle)
-        galleryFragment.requireActivity().setResult(UIResult.GALLERY_RESULT_CROP, intent)
+        galleryFragment.requireActivity().setResult(UIResult.GALLERY_CROP_RESULT_CODE, intent)
         galleryFragment.requireActivity().finish()
     }
 
@@ -84,6 +81,5 @@ open class UCropImpl(
 
     open fun onCropError(let: Throwable?) {
     }
-
 
 }

@@ -32,12 +32,12 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
     }
 
     fun updateEntity() {
-        galleryList.forEach { it.isCheck = false }
-        selectList.forEach { select -> galleryList.find { it.id == select.id }?.isCheck = true }
+        galleryList.forEach { it.isSelected = false }
+        selectList.forEach { select -> galleryList.find { it.id == select.id }?.isSelected = true }
         notifyDataSetChanged()
     }
 
-    fun isCheck(position: Int) = galleryList[position].isCheck
+    fun isCheck(position: Int) = galleryList[position].isSelected
 
     fun item(position: Int) = galleryList[position]
 

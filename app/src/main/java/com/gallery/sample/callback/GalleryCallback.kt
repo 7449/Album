@@ -6,21 +6,21 @@ import androidx.kotlin.expand.text.toastExpand
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryListener
 
-class GalleryCallback : GalleryListener {
+class GalleryCallback(private val activity: FragmentActivity) : GalleryListener {
 
-    override fun onGalleryCropResource(activity: FragmentActivity, uri: Uri) {
+    override fun onGalleryCropResource(uri: Uri) {
         uri.toString().toastExpand(activity)
     }
 
-    override fun onGalleryResource(activity: FragmentActivity, scanEntity: ScanEntity) {
+    override fun onGalleryResource(scanEntity: ScanEntity) {
         scanEntity.toString().toastExpand(activity)
     }
 
-    override fun onGalleryResources(activity: FragmentActivity, entities: List<ScanEntity>) {
+    override fun onGalleryResources(entities: List<ScanEntity>) {
         entities.toString().toastExpand(activity)
     }
 
-    override fun onGalleryCancel(activity: FragmentActivity) {
+    override fun onGalleryCancel() {
         "取消选择".toastExpand(activity)
     }
 

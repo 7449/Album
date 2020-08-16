@@ -28,13 +28,13 @@ class WeChatPrevSelectAdapter(
     override fun onBindViewHolder(holder: XViewHolder, position: Int) {
         val finderEntity: ScanEntity = list[position]
         val frameLayout: FrameLayout = holder.frameLayout(R.id.prevSelectFrame)
-        frameLayout.setBackgroundResource(if (finderEntity.isCheck) R.drawable.wechat_selector_gallery_select else 0)
+        frameLayout.setBackgroundResource(if (finderEntity.isSelected) R.drawable.wechat_selector_gallery_select else 0)
         adapterFinderListener.onGalleryFinderThumbnails(finderEntity, frameLayout)
     }
 
     fun updateSelect(entities: List<ScanEntity>) {
         list.clear()
-        entities.forEach { list.add(it.copy(isCheck = false)) }
+        entities.forEach { list.add(it.copy(isSelected = false)) }
         notifyDataSetChanged()
     }
 
@@ -43,15 +43,15 @@ class WeChatPrevSelectAdapter(
     }
 
     fun addSelect(entity: ScanEntity) {
-        list.forEach { it.isCheck = false }
+        list.forEach { it.isSelected = false }
         list.find { it.id == entity.id }?.let {
-            it.isCheck = true
-        } ?: list.add(entity.copy(isCheck = true))
+            it.isSelected = true
+        } ?: list.add(entity.copy(isSelected = true))
         notifyDataSetChanged()
     }
 
     fun refreshItem(scanEntity: ScanEntity) {
-        list.forEach { it.isCheck = it.id == scanEntity.id }
+        list.forEach { it.isSelected = it.id == scanEntity.id }
         notifyDataSetChanged()
     }
 }

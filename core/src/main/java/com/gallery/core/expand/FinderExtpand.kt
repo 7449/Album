@@ -71,7 +71,7 @@ internal fun ScanEntity.copy(source: ScanEntity, bucketDisplayName: String, pare
             width = source.width,
             height = source.height,
             dataModified = source.dataModified,
-            isCheck = source.isCheck,
+            isSelected = source.isSelected,
             parent = parent,
             count = count
     )

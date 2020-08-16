@@ -9,7 +9,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.expand.externalUri
 import com.gallery.scan.ScanEntity
 import com.xadapter.vh.XViewHolder
@@ -17,7 +16,6 @@ import com.xadapter.vh.XViewHolder
 class PhotoViewHolder(itemView: View,
                       private val galleryBundle: GalleryBundle,
                       private val display: Int,
-                      private val galleryInterceptor: IGalleryInterceptor,
                       private val galleryCallback: IGalleryCallback) : XViewHolder(itemView) {
 
     private val container: FrameLayout = frameLayout(R.id.galleryContainer)
@@ -30,7 +28,7 @@ class PhotoViewHolder(itemView: View,
             return
         }
         checkBox.showExpand()
-        checkBox.isSelected = galleryEntity.isCheck
+        checkBox.isSelected = galleryEntity.isSelected
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener { clickCheckBox(position, galleryEntity, selectList) }
     }
@@ -41,7 +39,7 @@ class PhotoViewHolder(itemView: View,
                 selectList.remove(galleryEntity)
             }
             checkBox.isSelected = false
-            galleryEntity.isCheck = false
+            galleryEntity.isSelected = false
             galleryCallback.onClickCheckBoxFileNotExist(context, galleryBundle, galleryEntity)
             return
         }
@@ -49,15 +47,15 @@ class PhotoViewHolder(itemView: View,
             galleryCallback.onClickCheckBoxMaxCount(context, galleryBundle, galleryEntity)
             return
         }
-        if (!galleryEntity.isCheck) {
-            galleryEntity.isCheck = true
+        if (!galleryEntity.isSelected) {
+            galleryEntity.isSelected = true
             checkBox.isSelected = true
             selectList.add(galleryEntity)
         } else {
             selectList.remove(galleryEntity)
-            galleryEntity.isCheck = false
+            galleryEntity.isSelected = false
             checkBox.isSelected = false
         }
-        galleryCallback.onChangedCheckBox(position, galleryEntity.isCheck, galleryBundle, galleryEntity)
+        galleryCallback.onChangedCheckBox(position, galleryEntity.isSelected, galleryBundle, galleryEntity)
     }
 }

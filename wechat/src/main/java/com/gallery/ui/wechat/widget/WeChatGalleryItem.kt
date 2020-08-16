@@ -37,7 +37,7 @@ class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: Attri
         get() = viewWeChatBackSelect
 
     fun update(galleryEntity: ScanEntity) {
-        selectView.visibility = if (galleryEntity.isCheck) View.VISIBLE else View.GONE
+        selectView.visibility = if (galleryEntity.isSelected) View.VISIBLE else View.GONE
         gifView.visibility = if (galleryEntity.isGif()) View.VISIBLE else View.GONE
         videoView.visibility = if (galleryEntity.isVideo()) View.VISIBLE else View.GONE
         bottomView.visibility = if (galleryEntity.isVideo()) View.VISIBLE else View.GONE

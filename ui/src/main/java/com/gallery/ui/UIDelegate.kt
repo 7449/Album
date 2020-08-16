@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.gallery.ui
 
 import android.annotation.SuppressLint
@@ -12,7 +14,6 @@ import com.gallery.ui.page.PreActivity
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
-@Suppress("NOTHING_TO_INLINE")
 @SuppressLint("NewApi")
 internal inline fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
     window.statusBarColorExpand(galleryUiBundle.statusBarColor)
@@ -44,7 +45,6 @@ internal inline fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {
     galleryBottomView.setBackgroundColor(galleryUiBundle.bottomViewBackground)
 }
 
-@Suppress("NOTHING_TO_INLINE")
 @SuppressLint("NewApi")
 internal inline fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
     window.statusBarColorExpand(uiBundle.statusBarColor)

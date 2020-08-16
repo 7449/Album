@@ -40,8 +40,8 @@ class Gallery(
             putExtras(Bundle().apply {
                 putParcelable(GalleryConfig.GALLERY_CONFIG, galleryBundle)
                 putParcelable(UIResult.UI_CONFIG, galleryUiBundle)
-                putBundle(UIResult.GALLERY_START_BUNDLE, galleryOption)
-                putBundle(UIResult.PREV_START_BUNDLE, galleryPrevOption)
+                putBundle(UIResult.UI_GALLERY_CONFIG, galleryOption)
+                putBundle(UIResult.UI_RESULT_CONFIG, galleryPrevOption)
             })
         }
     }

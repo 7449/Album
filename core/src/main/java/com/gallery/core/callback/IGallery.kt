@@ -3,14 +3,13 @@ package com.gallery.core.callback
 import android.net.Uri
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.callback.InternalConfig.CAMERA_PARENT_ID
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 
 internal interface IGallery {
     /**
      * 当前扫描的数据
-     * 数据已经过滤了[CAMERA_PARENT_ID]
+     * 已经过滤了CAMERA
      */
     val currentEntities: ArrayList<ScanEntity>
 
@@ -54,7 +53,7 @@ internal interface IGallery {
      * [Bundle.getParcelableArrayList] 选中的数据
      * [Bundle.getBoolean] 是否刷新数据(合并选中的数据)
      */
-    fun onUpdatePrevResult(bundle: Bundle)
+    fun onUpdateResult(bundle: Bundle)
 
     /**
      * 刷新单个Item

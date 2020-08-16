@@ -24,19 +24,21 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         fun newInstance(
                 context: Context,
                 parentId: Long,
-                selectList: ArrayList<ScanEntity> = ArrayList(),
-                galleryBundle: GalleryBundle = GalleryBundle(),
-                uiBundle: GalleryUiBundle = GalleryUiBundle(),
-                position: Int = 0,
-                option: Bundle = Bundle.EMPTY,
+                selectList: ArrayList<ScanEntity>,
+                galleryBundle: GalleryBundle,
+                uiBundle: GalleryUiBundle,
+                position: Int,
+                option: Bundle,
                 cla: Class<out PrevBaseActivity>): Intent {
             val bundle = Bundle()
-            bundle.putParcelableArrayList(GalleryConfig.PREV_START_SELECT, selectList)
-            bundle.putBundle(UIResult.PREV_START_BUNDLE, option)
-            bundle.putParcelable(GalleryConfig.PREV_CONFIG, galleryBundle)
+            /** ui library 数据 */
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
-            bundle.putInt(GalleryConfig.PREV_START_POSITION, position)
-            bundle.putLong(GalleryConfig.PREV_PARENT_ID, parentId)
+            bundle.putBundle(UIResult.UI_RESULT_CONFIG, option)
+            /** core library 数据 */
+            bundle.putParcelableArrayList(GalleryConfig.GALLERY_SELECT, selectList)
+            bundle.putInt(GalleryConfig.GALLERY_POSITION, position)
+            bundle.putLong(GalleryConfig.GALLERY_PARENT_ID, parentId)
+            bundle.putParcelable(GalleryConfig.GALLERY_CONFIG, galleryBundle)
             return Intent(context, cla).putExtras(bundle)
         }
     }
@@ -45,71 +47,63 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
     protected abstract val galleryFragmentId: Int
 
     /** ui 配置 */
-    val uiBundle by lazy {
-        bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
-    }
-
-    /** 初始配置 */
-    val galleryBundle by lazy {
-        bundleParcelableOrDefault<GalleryBundle>(GalleryConfig.PREV_CONFIG, GalleryBundle())
-    }
+    val uiConfig by lazy { bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle()) }
 
     /** 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
-    val prevOption by lazy {
-        bundleBundleExpand(UIResult.PREV_START_BUNDLE)
-    }
+    val uiResultConfig by lazy { bundleBundleExpand(UIResult.UI_RESULT_CONFIG) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
         } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
-                bundleLongOrDefault(GalleryConfig.PREV_PARENT_ID, GalleryConfig.PREV_SELECT_PARENT_ID),
-                bundleParcelableArrayListExpand(GalleryConfig.PREV_START_SELECT),
+                bundleLongOrDefault(GalleryConfig.GALLERY_PARENT_ID),
+                bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT),
                 galleryBundle,
-                bundleIntOrDefault(GalleryConfig.PREV_START_POSITION)
+                bundleIntOrDefault(GalleryConfig.GALLERY_POSITION)
         ))
+    }
+
+    /** back返回,可为Bundle插入需要的数据 */
+    open fun onKeyBackResult(bundle: Bundle): Bundle {
+        return bundle
+    }
+
+    /** toolbar返回,可为Bundle插入需要的数据 */
+    open fun onToolbarFinishResult(bundle: Bundle): Bundle {
+        return bundle
+    }
+
+    /** 预览页点击选择返回,可为Bundle插入需要的数据 */
+    open fun onSelectEntitiesResult(bundle: Bundle): Bundle {
+        return bundle
     }
 
     override fun onBackPressed() {
         val intent = Intent()
-        val resultBundle: Bundle = prevFragment.resultBundle(uiBundle.preBackRefresh)
-        onKeyBackResult(resultBundle)
-        intent.putExtras(resultBundle)
-        setResult(UIResult.PREV_BACk_FINISH_RESULT_CODE, intent)
+        intent.putExtras(onKeyBackResult(prevFragment.resultBundle(uiConfig.preBackRefresh)))
+        setResult(UIResult.PREV_BACK_RESULT_CODE, intent)
         super.onBackPressed()
     }
 
     /** finish */
-    open fun onPrevFinish() {
+    open fun onGalleryFinish() {
         val intent = Intent()
-        val resultBundle: Bundle = prevFragment.resultBundle(uiBundle.preFinishRefresh)
-        onToolbarFinishResult(resultBundle)
-        intent.putExtras(resultBundle)
-        setResult(UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE, intent)
+        intent.putExtras(onToolbarFinishResult(prevFragment.resultBundle(uiConfig.preFinishRefresh)))
+        setResult(UIResult.PREV_TOOLBAR_BACK_RESULT_CODE, intent)
         finish()
     }
 
-    /** back返回,可为Bundle插入需要的数据 */
-    open fun onKeyBackResult(bundle: Bundle) {}
-
-    /** toolbar返回,可为Bundle插入需要的数据 */
-    open fun onToolbarFinishResult(bundle: Bundle) {}
-
-    /** 预览页选中数据的Bundle,可插入需要的数据 */
-    open val onSelectEntitiesResult: Bundle
-        get() = prevFragment.resultBundle(true)
+    /**  prev select data */
+    open fun onGallerySelectEntities() {
+        val intent = Intent()
+        intent.putExtras(onSelectEntitiesResult(prevFragment.resultBundle(true)))
+        setResult(UIResult.PREV_OK_RESULT_CODE, intent)
+        finish()
+    }
 
     /** 选择数据为空 */
     open fun onGallerySelectEmpty() {
         getString(com.gallery.ui.R.string.gallery_prev_select_empty_pre).toastExpand(this)
-    }
-
-    /**  prev select data */
-    open fun onPrevSelectEntities() {
-        val intent = Intent()
-        intent.putExtras(onSelectEntitiesResult)
-        setResult(UIResult.PREV_OK_FINISH_RESULT_CODE, intent)
-        finish()
     }
 }

@@ -8,8 +8,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.callback.IGalleryInterceptor
-import com.gallery.core.callback.InternalConfig
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.scan.ScanEntity
@@ -18,7 +16,6 @@ import com.xadapter.vh.XViewHolder
 class GalleryAdapter(
         private val display: Int,
         private val galleryBundle: GalleryBundle,
-        private val galleryInterceptor: IGalleryInterceptor,
         private val galleryCallback: IGalleryCallback,
         private val imageLoader: IGalleryImageLoader,
         private val galleryItemClickListener: OnGalleryItemClickListener
@@ -30,6 +27,7 @@ class GalleryAdapter(
     }
 
     companion object {
+        const val CAMERA: Long = (-1).toLong()
         private const val TYPE_CAMERA = 0
         private const val TYPE_PHOTO = 1
     }
@@ -47,7 +45,7 @@ class GalleryAdapter(
             }
             else -> {
                 val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryInterceptor, galleryCallback)
+                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryCallback)
                 photoView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
                 photoViewHolder
             }
@@ -64,7 +62,7 @@ class GalleryAdapter(
     override fun getItemCount(): Int = galleryList.size
 
     override fun getItemViewType(position: Int): Int = when {
-        galleryList.isEmpty() || galleryList[position].parent != InternalConfig.CAMERA_PARENT_ID -> TYPE_PHOTO
+        galleryList.isEmpty() || galleryList[position].parent != CAMERA -> TYPE_PHOTO
         else -> TYPE_CAMERA
     }
 
@@ -81,8 +79,8 @@ class GalleryAdapter(
     }
 
     fun updateEntity() {
-        currentList.forEach { it.isCheck = false }
-        selectList.forEach { select -> currentList.find { it.id == select.id }?.isCheck = true }
+        currentList.forEach { it.isSelected = false }
+        selectList.forEach { select -> currentList.find { it.id == select.id }?.isSelected = true }
         notifyDataSetChanged()
     }
 

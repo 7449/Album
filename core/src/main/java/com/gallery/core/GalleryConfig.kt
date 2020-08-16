@@ -1,5 +1,6 @@
 package com.gallery.core
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 
@@ -8,57 +9,44 @@ object GalleryConfig {
      * [GalleryBundle] Bundle key
      * [Bundle.putParcelable]
      */
-    const val GALLERY_CONFIG = "galleryStartConfig"
+    const val GALLERY_CONFIG = "galleryConfig"
 
     /**
-     * [GalleryBundle] Bundle key
-     * [Bundle.putParcelable]
-     * 配置文件
-     */
-    const val PREV_CONFIG = "prevStartConfig"
-
-    /**
-     * 文件夹扫描Id,如果是预览进入为[PREV_SELECT_PARENT_ID]
-     * [Bundle.putParcelableArrayList]
-     */
-    const val PREV_PARENT_ID = "prevParentId"
-
-    /**
+     * 图库选中的文件
      * [ArrayList<ScanEntity>] Bundle key
-     * [Bundle.putParcelableArrayList]
-     * 选中的数据
      */
-    const val PREV_START_SELECT = "prevStartSelectEntities"
+    const val GALLERY_SELECT = "gallerySelect"
+
+    /**
+     *  parentId Bundle key,如果是预览进入为[DEFAULT_PARENT_ID]
+     * [Bundle.putParcelableArrayList]
+     */
+    const val GALLERY_PARENT_ID = "galleryParentId"
 
     /**
      * [ArrayList<ScanEntity>] Bundle key
      * [Bundle.putInt]
      * 默认的position,[ViewPager2.setCurrentItem]
      */
-    const val PREV_START_POSITION = "prevStartPosition"
-
-    /**
-     * [ArrayList<ScanEntity>] Bundle key
-     * [Bundle.putParcelableArrayList]
-     * 预览页返回选中的数据
-     */
-    const val PREV_RESULT_SELECT = "prevResultSelectEntities"
+    const val GALLERY_POSITION = "galleryInitPosition"
 
     /**
      * [ArrayList<ScanEntity>] Bundle key
      * [Bundle.putBoolean]
      * 预览页返回是否刷新
      */
-    const val PREV_RESULT_REFRESH = "prevResultRefresh"
+    internal const val GALLERY_RESULT_REFRESH = "galleryPrevResultRefresh"
 
     /**
-     * 自定义相机路径
+     * 当前拍照之后的[Uri]
+     * 有一种情况为横竖屏切换,横屏点进去,然后竖屏拍照返回之后,切换之后会重走生命周期,
+     * 所以这里需要保存下当时拍照时的[Uri]
      */
-    const val CUSTOM_CAMERA_OUT_PUT_URI = "customCameraOutPutUri"
+    const val GALLERY_CAMERA_URI = "galleryCameraUri"
 
     /**
      * 点击预览携带的parentId
      * 点击图片进入预览应该是当前文件的parentId
      */
-    const val PREV_SELECT_PARENT_ID = -1111L
+    const val DEFAULT_PARENT_ID = -1111L
 }

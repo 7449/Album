@@ -18,20 +18,20 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        obtain(uiBundle)
+        obtain(uiConfig)
         preBottomViewSelect.setOnClickListener {
             if (prevFragment.selectEmpty) {
                 onGallerySelectEmpty()
             } else {
-                onPrevSelectEntities()
+                onGallerySelectEntities()
             }
         }
-        preToolbar.setNavigationOnClickListener { onPrevFinish() }
+        preToolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
     override fun onPrevViewCreated(savedInstanceState: Bundle?) {
         preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
-        preToolbar.title = uiBundle.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
+        preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
     override fun onClickCheckBoxFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
@@ -44,7 +44,7 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
     }
 
     override fun onPageSelected(position: Int) {
-        preToolbar.title = uiBundle.preTitle + "(" + (position + 1) + "/" + prevFragment.itemCount + ")"
+        preToolbar.title = uiConfig.preTitle + "(" + (position + 1) + "/" + prevFragment.itemCount + ")"
     }
 
     override fun onChangedCheckBox() {

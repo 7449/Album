@@ -6,21 +6,21 @@ import androidx.kotlin.expand.text.toastExpand
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.wechat.WeChatGalleryCallback
 
-class WeChatGalleryCallback : WeChatGalleryCallback {
+class WeChatGalleryCallback(private val activity: FragmentActivity) : WeChatGalleryCallback {
 
-    override fun onGalleryCropResource(activity: FragmentActivity, uri: Uri) {
+    override fun onGalleryCropResource(uri: Uri) {
         uri.toString().toastExpand(activity)
     }
 
-    override fun onGalleryResource(activity: FragmentActivity, scanEntity: ScanEntity) {
+    override fun onGalleryResource(scanEntity: ScanEntity) {
         scanEntity.toString().toastExpand(activity)
     }
 
-    override fun onWeChatGalleryResources(activity: FragmentActivity, entities: List<ScanEntity>, fullImage: Boolean) {
+    override fun onWeChatGalleryResources(entities: List<ScanEntity>, fullImage: Boolean) {
         ("$entities,fullImage:$fullImage").toastExpand(activity)
     }
 
-    override fun onGalleryCancel(activity: FragmentActivity) {
+    override fun onGalleryCancel() {
         "取消选择".toastExpand(activity)
     }
 

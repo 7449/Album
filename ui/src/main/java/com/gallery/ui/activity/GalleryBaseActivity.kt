@@ -22,7 +22,6 @@ import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
-import com.gallery.ui.crop.UCropImpl
 
 
 abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
@@ -33,36 +32,27 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     /** 当前Fragment 文件Id,用于初始化[ScanFragment] */
     protected abstract val galleryFragmentId: Int
 
-    /** 初始配置 */
-    protected val galleryBundle by lazy {
-        bundleParcelableOrDefault<GalleryBundle>(GalleryConfig.GALLERY_CONFIG, GalleryBundle())
-    }
-
     /** ui 配置 */
-    protected val galleryUiBundle by lazy {
-        bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
-    }
+    protected val uiConfig by lazy { bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle()) }
 
     /** 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
-    protected val galleryOption by lazy {
-        bundleBundleExpand(UIResult.GALLERY_START_BUNDLE)
-    }
+    protected val uiGalleryConfig by lazy { bundleBundleExpand(UIResult.UI_GALLERY_CONFIG) }
 
     /** 预览页启动[ActivityResultLauncher],暂不对实现类开放  */
     private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
         when (intent.resultCode) {
-            UIResult.PREV_OK_FINISH_RESULT_CODE -> {
-                galleryFragment.onUpdatePrevResult(bundleExpand)
-                onPrevSelectBack(bundleExpand)
+            UIResult.PREV_OK_RESULT_CODE -> {
+                galleryFragment.onUpdateResult(bundleExpand)
+                onResultSelect(bundleExpand)
             }
-            UIResult.PREV_TOOLBAR_FINISH_RESULT_CODE -> {
-                galleryFragment.onUpdatePrevResult(bundleExpand)
-                onPrevToolbarFinish(bundleExpand)
+            UIResult.PREV_TOOLBAR_BACK_RESULT_CODE -> {
+                galleryFragment.onUpdateResult(bundleExpand)
+                onResultToolbar(bundleExpand)
             }
-            UIResult.PREV_BACk_FINISH_RESULT_CODE -> {
-                galleryFragment.onUpdatePrevResult(bundleExpand)
-                onPrevKeyBack(bundleExpand)
+            UIResult.PREV_BACK_RESULT_CODE -> {
+                galleryFragment.onUpdateResult(bundleExpand)
+                onResultBack(bundleExpand)
             }
         }
     }
@@ -73,27 +63,23 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     /** 当前选中文件夹名称 */
     var finderName = ""
 
-    override val cropImpl: ICrop?
-        get() = UCropImpl(galleryFragment, galleryBundle, galleryUiBundle)
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(UIResult.FINDER_LIST, finderList)
-        outState.putString(UIResult.FINDER_NAME, currentFinderName)
+        outState.putParcelableArrayList(UIResult.UI_FINDER_LIST, finderList)
+        outState.putString(UIResult.UI_FINDER_NAME, currentFinderName)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         finderList.clear()
-        finderList.addAll(savedInstanceState.getParcelableArrayListExpand(UIResult.FINDER_LIST))
-        finderName = savedInstanceState.getStringOrDefault(UIResult.FINDER_NAME, galleryBundle.allName)
+        finderList.addAll(savedInstanceState.getParcelableArrayListExpand(UIResult.UI_FINDER_LIST))
+        finderName = savedInstanceState.getStringOrDefault(UIResult.UI_FINDER_NAME, galleryBundle.allName)
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
-        }
-                ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
+        } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
     }
 
-    /** 数据扫描成功之后刷新文件夹数据 */
+    /** 单个数据扫描成功之后刷新文件夹数据 */
     override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         finderList.updateResultFinder(scanEntity)
     }
@@ -102,10 +88,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         if (galleryFragment.parentId.isScanAll() && scanEntities.isNotEmpty()) {
             finderList.clear()
-            finderList.addAll(scanEntities.findFinder(
-                    galleryBundle.sdName,
-                    galleryBundle.allName
-            ))
+            finderList.addAll(scanEntities.findFinder(galleryBundle.sdName, galleryBundle.allName))
         }
     }
 
@@ -113,45 +96,38 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     override fun onGalleryResource(context: Context?, scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_RESULT_ENTITY, scanEntity)
+        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanEntity)
         intent.putExtras(bundle)
-        setResult(UIResult.GALLERY_RESULT_RESOURCE, intent)
+        setResult(UIResult.GALLERY_SINGLE_RESULT_CODE, intent)
         finish()
     }
 
     /** 预览页toolbar返回 */
-    open fun onPrevToolbarFinish(bundle: Bundle) {
+    open fun onResultToolbar(bundle: Bundle) {
     }
 
     /** 预览页back返回 */
-    open fun onPrevKeyBack(bundle: Bundle) {
+    open fun onResultBack(bundle: Bundle) {
     }
 
     /**  预览页点击确定选择 */
-    open fun onPrevSelectBack(bundle: Bundle) {
-        onGalleryResources(bundle.getParcelableArrayListExpand(GalleryConfig.PREV_RESULT_SELECT))
+    open fun onResultSelect(bundle: Bundle) {
+        onGalleryResources(bundle.getParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT))
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(
-            parentId: Long,
-            position: Int = 0,
-            cla: Class<out PrevBaseActivity>) {
-        onStartPrevPage(parentId, position, bundleBundleExpand(UIResult.PREV_START_BUNDLE), cla)
+    fun onStartPrevPage(parentId: Long, position: Int = 0, cla: Class<out PrevBaseActivity>) {
+        onStartPrevPage(parentId, position, bundleBundleExpand(UIResult.UI_RESULT_CONFIG), cla)
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(
-            parentId: Long,
-            position: Int = 0,
-            option: Bundle = Bundle.EMPTY,
-            cla: Class<out PrevBaseActivity>) {
+    fun onStartPrevPage(parentId: Long, position: Int = 0, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
         prevLauncher.launch(PrevBaseActivity.newInstance(
                 this,
                 parentId,
                 galleryFragment.selectEntities,
                 galleryBundle,
-                galleryUiBundle,
+                uiConfig,
                 position,
                 option,
                 cla))
@@ -159,7 +135,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
 
     /** 用于 toolbar 返回 finish */
     open fun onGalleryFinish() {
-        setResult(UIResult.GALLERY_FINISH_RESULT_CODE)
+        setResult(UIResult.UI_TOOLBAR_BACK_RESULT_CODE)
         finish()
     }
 
@@ -167,9 +143,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(UIResult.GALLERY_RESULT_ENTITIES, entities)
+        bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
         intent.putExtras(bundle)
-        setResult(UIResult.GALLERY_RESULT_RESOURCES, intent)
+        setResult(UIResult.GALLERY_MULTIPLE_RESULT_CODE, intent)
         finish()
     }
 }

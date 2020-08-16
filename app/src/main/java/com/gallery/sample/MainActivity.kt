@@ -39,9 +39,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader {
 
     private val galleryLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(this, GalleryCallback()))
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(GalleryCallback(this)))
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(this, WeChatGalleryCallback()))
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(WeChatGalleryCallback(this)))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

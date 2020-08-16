@@ -20,4 +20,4 @@ data class ScanEntity(
         val dataModified: Long = 0,
         val parent: Long = 0,
         val count: Int = 0,
-        var isCheck: Boolean = false) : Parcelable
+        var isSelected: Boolean = false) : Parcelable

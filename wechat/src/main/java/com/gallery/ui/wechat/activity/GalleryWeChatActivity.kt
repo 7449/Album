@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener,
         WeChatFinderAdapter.WeChatAdapterListener {
 
-    private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(galleryUiBundle, this, this) }
+    private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(uiConfig, this, this) }
     private val videoList: ArrayList<ScanEntity> = ArrayList()
 
     private var selectScanEntity: ScanEntity? = null
@@ -46,13 +46,13 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        obtain(galleryUiBundle)
+        obtain(uiConfig)
         galleryWeChatToolbarBack.setOnClickListener { onGalleryFinish() }
         galleryWeChatFinderRoot.setOnClickListener { hideFinderActionView() }
         galleryWeChatFinder.adapter = newFinderAdapter
         galleryWeChatPrev.setOnClickListener {
             onStartPrevPage(
-                    GalleryConfig.PREV_SELECT_PARENT_ID,
+                    GalleryConfig.DEFAULT_PARENT_ID,
                     0,
                     Bundle().apply {
                         putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
@@ -130,29 +130,29 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                     galleryBundle.allName
             ))
             scanEntities.find { it.isVideo() }?.let { it -> finderList.add(1, it.copy(parent = WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT, bucketDisplayName = "全部视频", count = scanEntities.count { it.isVideo() })) }
-            finderList[0].isCheck = true
+            finderList[0].isSelected = true
         }
     }
 
-    override fun onPrevKeyBack(bundle: Bundle) {
+    override fun onResultBack(bundle: Bundle) {
         galleryWeChatFullImage.isChecked = bundle.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
         updateView()
     }
 
-    override fun onPrevToolbarFinish(bundle: Bundle) {
-        onPrevKeyBack(bundle)
+    override fun onResultToolbar(bundle: Bundle) {
+        onResultBack(bundle)
     }
 
-    override fun onPrevSelectBack(bundle: Bundle) {
+    override fun onResultSelect(bundle: Bundle) {
         //https://github.com/7449/Album/issues/3
         galleryWeChatFullImage.isChecked = bundle.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
-        super.onPrevSelectBack(bundle)
+        super.onResultSelect(bundle)
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
         this.selectScanEntity = item
         hideFinderActionView()
-        finderList.forEach { it.isCheck = it.parent == item.parent }
+        finderList.forEach { it.isSelected = it.parent == item.parent }
         newFinderAdapter.notifyDataSetChanged()
     }
 
@@ -169,7 +169,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     }
 
     override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(scanEntity.parent,
+        onStartPrevPage(parentId,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
                 Bundle().apply {
                     putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
@@ -186,18 +186,18 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         val selectEntities = galleryFragment.selectEntities
         if (scanEntity.isVideo() && scanEntity.duration > 300000) {
-            scanEntity.isCheck = false
+            scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_max_length).toastExpand(this)
         } else if (scanEntity.isVideo() && scanEntity.duration <= 0) {
-            scanEntity.isCheck = false
+            scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_error).toastExpand(this)
         } else {
             updateView()
         }
         galleryFragment.notifyItemChanged(position)
-        if (!scanEntity.isCheck) {
+        if (!scanEntity.isSelected) {
             selectEntities.forEach { it ->
                 galleryFragment.currentEntities.indexOf(it).let {
                     if (it != -1) {
@@ -212,8 +212,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     private fun updateView() {
         galleryWeChatToolbarSend.isEnabled = !galleryFragment.selectEmpty
         galleryWeChatPrev.isEnabled = !galleryFragment.selectEmpty
-        galleryWeChatToolbarSend.text = galleryUiBundle.selectText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount}/${galleryBundle.multipleMaxCount})"
-        galleryWeChatPrev.text = galleryUiBundle.preViewText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount})"
+        galleryWeChatToolbarSend.text = uiConfig.selectText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount}/${galleryBundle.multipleMaxCount})"
+        galleryWeChatPrev.text = uiConfig.preViewText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount})"
     }
 
     private fun showFinderActionView() {
@@ -229,11 +229,11 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(UIResult.GALLERY_RESULT_ENTITIES, entities)
+        bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
         bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
         intent.putExtras(bundle)
-        setResult(UIResult.GALLERY_RESULT_RESOURCES, intent)
-        finish()
+//        setResult(UIResult.GALLERY_RESULT_RESOURCES, intent)
+//        finish()
     }
 
     /**

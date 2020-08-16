@@ -62,9 +62,9 @@ interface IGalleryCallback {
 
     /**
      * 刷新预览页数据之后触发
-     * [ScanFragment.onUpdatePrevResult]
+     * [ScanFragment.onUpdateResult]
      */
-    fun onChangedPrevCount(selectCount: Int) {}
+    fun onChangedResultCount(selectCount: Int) {}
 
     /**
      * 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法

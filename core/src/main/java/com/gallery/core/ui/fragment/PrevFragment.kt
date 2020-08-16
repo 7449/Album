@@ -20,7 +20,6 @@ import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
-import com.gallery.scan.ScanType
 import com.gallery.scan.ScanView
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
@@ -104,10 +103,12 @@ class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragm
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
             ScanImpl(object : ScanView {
-                override val currentScanType: ScanType
-                    get() = galleryBundle.scanType
                 override val scanContext: FragmentActivity
                     get() = requireActivity()
+
+                override fun scanType(): Int {
+                    return galleryBundle.scanType
+                }
 
                 override fun resultSuccess(scanEntity: ScanEntity?) {
                     TODO("Not yet implemented")

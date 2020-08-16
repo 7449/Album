@@ -15,7 +15,7 @@ android {
 }
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    compileOnly(Dep.kotlinx)
+    api(Dep.kotlinx)
     compileOnly(Dep.fragment)
     compileOnly(Dep.kotlin)
 }

@@ -33,7 +33,7 @@ fun ScanEntity.isVideo(): Boolean = mediaType == "3"
 fun Long.isScanAll(): Boolean = this == SCAN_ALL
 
 /** 打开相机的自定义数据携带体 */
-class CameraUri(val type: ScanType, val uri: Uri)
+class CameraUri(val type: Int, val uri: Uri)
 
 /** 扫描数据库 */
 fun ScanFragment.scanFile(path: String, action: (uri: Uri) -> Unit) {

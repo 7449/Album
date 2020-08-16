@@ -8,6 +8,11 @@ import androidx.annotation.DrawableRes
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
+import com.gallery.scan.Sort
+import com.gallery.scan.annotation.ScanTypeDef
+import com.gallery.scan.annotation.SortDef
+import com.gallery.scan.annotation.SortFieldDef
+import com.gallery.scan.args.Columns
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -22,7 +27,17 @@ data class GalleryBundle(
          * [ScanType.VIDEO]
          * [ScanType.MIX]
          */
-        val scanType: ScanType = ScanType.IMAGE,
+        @ScanTypeDef
+        val scanType: Int = ScanType.IMAGE,
+        /**
+         * 排序方式
+         * [Sort.DESC]
+         * [Sort.ASC]
+         */
+        @SortDef
+        val scanSort: String = Sort.DESC,
+        @SortFieldDef
+        val scanSortField: String = Columns.DATE_MODIFIED,
         /**
          * 隐藏相机
          */

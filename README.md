@@ -4,6 +4,8 @@ core:![](https://api.bintray.com/packages/ydevelop/maven/gallery.core/images/dow
 
 ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/download.svg)
 
+[Library更新日志](./CHANGELOG.md)
+
 #### Manifests.xml
 
         <activity

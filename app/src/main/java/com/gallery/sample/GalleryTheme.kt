@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.kotlin.expand.graphics.colorExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.GalleryUiBundle
-import com.yalantis.ucrop.UCrop.Options.*
+import com.yalantis.ucrop.UCrop
 
 object GalleryTheme {
 
@@ -104,12 +104,12 @@ object GalleryTheme {
                 bottomViewBackground = R.color.colorBlack.colorExpand(activity),
                 finderItemBackground = R.color.colorBlack.colorExpand(activity),
                 finderItemTextColor = R.color.colorWhite.colorExpand(activity),
-                uCropBundle = Bundle().apply {
-                    putString(EXTRA_UCROP_TITLE_TEXT_TOOLBAR, "UCrop")
-                    putInt(EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, R.color.colorWhite.colorExpand(activity))
-                    putInt(EXTRA_TOOL_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
-                    putInt(EXTRA_STATUS_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
-                    putBoolean(EXTRA_HIDE_BOTTOM_CONTROLS, true)
+                args = Bundle().apply {
+                    putString(UCrop.Options.EXTRA_UCROP_TITLE_TEXT_TOOLBAR, "UCrop")
+                    putInt(UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, R.color.colorWhite.colorExpand(activity))
+                    putInt(UCrop.Options.EXTRA_TOOL_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
+                    putInt(UCrop.Options.EXTRA_STATUS_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
+                    putBoolean(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, true)
                 }
         )
     }

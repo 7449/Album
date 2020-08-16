@@ -3,6 +3,7 @@ package com.gallery.scan.args
 import android.net.Uri
 import android.provider.MediaStore
 import com.gallery.scan.ScanType
+import com.gallery.scan.annotation.ScanTypeDef
 
 internal object CursorArgs {
 
@@ -26,22 +27,20 @@ internal object CursorArgs {
             Columns.DATE_MODIFIED
     )
 
-    /** 排序条件 */
-    const val ORDER_BY: String = Columns.DATE_MODIFIED + " DESC"
+    /** 图片信息条件 */
+    const val ALL_SELECTION: String = "${Columns.SIZE} > 0 AND ${Columns.MEDIA_TYPE}=? OR ${Columns.MEDIA_TYPE}=?"
 
     /** 图片信息条件 */
-    const val ALL_SELECTION: String = Columns.SIZE + " > 0 AND " + Columns.MEDIA_TYPE + "=? or " + Columns.MEDIA_TYPE + "=? "
+    fun getParentSelection(parent: Long) = "${Columns.PARENT}=$parent AND ($ALL_SELECTION)"
 
     /** 图片信息条件 */
-    fun getParentSelection(parent: Long) = Columns.PARENT + "=" + parent + " and (" + ALL_SELECTION + ")"
-
-    /** 图片信息条件 */
-    fun getResultSelection(id: Long) = Columns.ID + "=\"" + id + "\" and (" + ALL_SELECTION + ")"
+    fun getResultSelection(id: Long) = "${Columns.ID}=$id AND ($ALL_SELECTION)"
 
     /** 扫描条件 */
-    fun getSelectionArgs(scanType: ScanType): Array<String> = when (scanType) {
+    fun getSelectionArgs(@ScanTypeDef scanType: Int): Array<String> = when (scanType) {
         ScanType.VIDEO -> arrayOf(Columns.VIDEO)
         ScanType.IMAGE -> arrayOf(Columns.IMAGE)
         ScanType.MIX -> arrayOf(Columns.IMAGE, Columns.VIDEO)
+        else -> arrayOf(Columns.IMAGE)
     }
 }

@@ -7,7 +7,6 @@ import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.args.Columns
 
-
 //获取文件的Uri
 fun ScanEntity.externalUri(): Uri {
     return if (mediaType == Columns.IMAGE) {
@@ -18,6 +17,7 @@ fun ScanEntity.externalUri(): Uri {
 }
 
 //获取当前页的文件夹数据
+//目标List为扫描成功之后的数据，返回Finder数据
 fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList<ScanEntity> {
     val finderList = ArrayList<ScanEntity>()
     this.forEach { item ->
@@ -26,18 +26,18 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
         }
     }
     if (finderList.isNotEmpty()) {
-        finderList.add(0, finderList.first().copy(parent = SCAN_ALL, count = this.size))
+        finderList.add(0, finderList.first().copy(parent = SCAN_ALL, bucketDisplayName = allName, count = this.size))
         finderList.find { it.bucketDisplayName == "0" }?.let {
             finderList[finderList.indexOf(it)] = it.copy(bucketDisplayName = sdName)
-        }
-        finderList.find { it.parent.isScanAll() }?.let {
-            finderList[finderList.indexOf(it)] = it.copy(bucketDisplayName = allName)
         }
     }
     return finderList
 }
 
 //裁剪或者拍照之后更新文件夹数据
+//如果现有的文件夹数据找找不到parent相同的数据则是一个新的文件夹
+//添加数据并更新第一条数据
+//否则更新第一条数据和文件夹数据
 fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity) {
     if (isEmpty()) {
         return
@@ -46,18 +46,18 @@ fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity) {
     if (find == null) {
         this.add(1, scanEntity.copy(count = 1))
         val first: ScanEntity = first()
-        this[indexOf(first)] = first.copy(scanEntity, SCAN_ALL, first.count + 1)
+        this[indexOf(first)] = first.copy(scanEntity, first.bucketDisplayName, first.parent, first.count + 1)
     } else {
         find { it.parent.isScanAll() }?.let {
-            this[indexOf(it)] = it.copy(scanEntity, SCAN_ALL, count = it.count + 1)
+            this[indexOf(it)] = it.copy(scanEntity, it.bucketDisplayName, it.parent, count = it.count + 1)
         }
         find { it.parent == scanEntity.parent }?.let {
-            this[indexOf(it)] = it.copy(scanEntity, scanEntity.parent, count = it.count + 1)
+            this[indexOf(it)] = it.copy(scanEntity, scanEntity.bucketDisplayName, scanEntity.parent, count = it.count + 1)
         }
     }
 }
 
-internal fun ScanEntity.copy(source: ScanEntity, parent: Long, count: Int): ScanEntity {
+internal fun ScanEntity.copy(source: ScanEntity, bucketDisplayName: String, parent: Long, count: Int): ScanEntity {
     return copy(
             id = source.id,
             size = source.size,
@@ -66,7 +66,7 @@ internal fun ScanEntity.copy(source: ScanEntity, parent: Long, count: Int): Scan
             displayName = source.displayName,
             orientation = source.orientation,
             bucketId = source.bucketId,
-            bucketDisplayName = source.bucketDisplayName,
+            bucketDisplayName = bucketDisplayName,
             mediaType = source.mediaType,
             width = source.width,
             height = source.height,

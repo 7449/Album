@@ -5,10 +5,7 @@ import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.scan.ScanEntity
 
-/**
- *
- */
-interface IGalleryPrev {
+internal interface IGalleryPrev {
 
     /**
      * [ViewPager2.getCurrentItem]

@@ -28,7 +28,8 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
         args ?: throw KotlinNullPointerException("args == null")
         val parent: Long = args.getLong(Columns.PARENT)
         val fileId: Long = args.getLong(Columns.ID)
-        val scanType: ScanType = args.getSerializable(Columns.SCAN_TYPE) as ScanType
+        val orderBy = "${args.getString(Columns.SORT_FIELD)} ${args.getString(Columns.SORT)}"
+        val scanType: Int = args.getInt(Columns.SCAN_TYPE)
         val selection: String = when {
             fileId != ID_DEFAULT -> CursorArgs.getResultSelection(fileId)
             parent == SCAN_ALL -> CursorArgs.ALL_SELECTION
@@ -39,7 +40,7 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
                 CursorArgs.ALL_COLUMNS,
                 selection,
                 CursorArgs.getSelectionArgs(scanType),
-                CursorArgs.ORDER_BY)
+                orderBy)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {

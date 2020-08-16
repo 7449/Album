@@ -21,19 +21,19 @@ object ClassPath {
 }
 
 object Dep {
-    const val viewHolder = "com.ydevelop:rv-adapter-viewholder:0.0.5@aar"
-    const val kotlinx = "com.ydevelop:kotlinx:0.0.5"
     const val banner = "com.ydevelop:bannerlayout:1.2.0"
-    const val scan = "com.ydevelop:gallery.scan:0.1.0"
-    const val core = "com.ydevelop:gallery.core:0.1.1"
-    const val ui = "com.ydevelop:gallery.ui:0.0.6"
+    const val viewHolder = "com.ydevelop:rv-adapter-viewholder:0.0.6"
+    const val kotlinx = "com.ydevelop:kotlinx:0.0.6"
+    const val scan = "com.ydevelop:gallery.scan:0.1.1"
+    const val core = "com.ydevelop:gallery.core:0.1.2"
+    const val ui = "com.ydevelop:gallery.ui:0.0.7"
 
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
 
-    const val appcompat = "androidx.appcompat:appcompat:1.1.0"
+    const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
     const val fragment = "androidx.fragment:fragment:1.3.0-alpha07"
-    const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha05"
     const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+    const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha05"
 
     const val material = "com.google.android.material:material:1.3.0-alpha02"
     const val cameraview = "com.otaliastudios:cameraview:2.6.3"

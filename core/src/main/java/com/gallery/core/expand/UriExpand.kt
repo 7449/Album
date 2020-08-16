@@ -3,6 +3,7 @@ package com.gallery.core.expand
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.kotlin.expand.content.insertImageUriExpand
 import androidx.kotlin.expand.content.insertVideoUriExpand
 import androidx.kotlin.expand.util.lowerVersionFileExpand
@@ -21,8 +22,19 @@ fun Context.cameraUriExpand(galleryBundle: GalleryBundle): Uri? {
     return if (galleryBundle.isVideoScan) insertVideoUriExpand(file) else insertImageUriExpand(file)
 }
 
-/** file:///path/xxxxx.jpg */
+/** content://media/external/images/media/id */
 fun Context.cropUriExpand(galleryBundle: GalleryBundle): Uri? {
+    val file: File = when {
+        hasQExpand() -> File("", galleryBundle.cropNameExpand)
+        galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(galleryBundle.cropNameExpand, galleryBundle.relativePath)
+        else -> galleryBundle.cropPath.mkdirsFileExpand(galleryBundle.cropNameExpand)
+    }
+    return insertImageUriExpand(file)
+}
+
+/** file:///path/xxxxx.jpg */
+@Deprecated("no support for higher version, annoying version support")
+fun Context.cropUriExpand2(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
         hasQExpand() -> File(externalCacheDir, galleryBundle.cropNameExpand)
         galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(galleryBundle.cropNameExpand, galleryBundle.relativePath)
@@ -36,6 +48,6 @@ fun Uri.reset(context: Context) {
     if (!path.isNullOrEmpty() && scheme == ContentResolver.SCHEME_CONTENT) {
         runCatching {
             context.contentResolver.delete(this, null, null)
-        }.onSuccess { /** delete uri success */ }.onFailure { /** delete uri failure */ }
+        }.onSuccess { Log.i("gallery", "delete uri success") }.onFailure { Log.i("gallery", "delete uri failure") }
     }
 }

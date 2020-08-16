@@ -1,34 +1,31 @@
 package com.gallery.ui.activity
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.content.findPathByUriExpand
-import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.*
-import androidx.kotlin.expand.util.copyImageExpand
-import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
-import com.gallery.core.expand.*
+import com.gallery.core.crop.ICrop
+import com.gallery.core.expand.findFinder
+import com.gallery.core.expand.isScanAll
+import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
-import java.io.File
+import com.gallery.ui.crop.UCropImpl
 
 
-abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor {
+abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
     protected abstract val currentFinderName: String
@@ -76,6 +73,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     /** 当前选中文件夹名称 */
     var finderName = ""
 
+    override val cropImpl: ICrop?
+        get() = UCropImpl(galleryFragment, galleryBundle, galleryUiBundle)
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(UIResult.FINDER_LIST, finderList)
@@ -109,9 +109,6 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         }
     }
 
-    /** uCrop配置 */
-    override fun onUCropOptions() = galleryUiBundle.uCropBundle
-
     /** 点击选中,针对单选 */
     override fun onGalleryResource(context: Context?, scanEntity: ScanEntity) {
         val intent = Intent()
@@ -119,33 +116,6 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         bundle.putParcelable(UIResult.GALLERY_RESULT_ENTITY, scanEntity)
         intent.putExtras(bundle)
         setResult(UIResult.GALLERY_RESULT_RESOURCE, intent)
-        finish()
-    }
-
-    /** 裁剪成功 */
-    override fun onCropResources(uri: Uri) {
-        val currentUri: Uri = if (!hasQExpand() && uri.scheme == ContentResolver.SCHEME_FILE) {
-            galleryFragment.scanFile(uri.path.orEmpty()) { galleryFragment.onScanCrop(it) }
-            uri
-        } else if (hasQExpand() && uri.scheme == ContentResolver.SCHEME_FILE && uri.path.orEmpty().contains(packageName)) {
-            val filePath: String? = findPathByUriExpand(copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand())
-            if (filePath.isNullOrEmpty()) {
-                uri
-            } else {
-                galleryFragment.scanFile(filePath) {
-                    galleryFragment.onScanCrop(it)
-                    File(uri.path.orEmpty()).delete()
-                }
-                Uri.fromFile(File(filePath))
-            }
-        } else {
-            uri
-        }
-        val intent = Intent()
-        val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_RESULT_URI, currentUri)
-        intent.putExtras(bundle)
-        setResult(UIResult.GALLERY_RESULT_CROP, intent)
         finish()
     }
 

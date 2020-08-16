@@ -15,7 +15,9 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
 
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext.applicationContext
-    private val scanType: ScanType = scanView.currentScanType
+    private val scanType: Int = scanView.scanType()
+    private val scanField: String = scanView.scanSortField()
+    private val scanSort: String = scanView.scanSort()
 
     override fun scanParent(parentId: Long) {
         if (loaderManager.hasRunningLoaders()) {
@@ -23,7 +25,9 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
             putLong(Columns.PARENT, parentId)
-            putSerializable(Columns.SCAN_TYPE, scanType)
+            putString(Columns.SORT, scanSort)
+            putString(Columns.SORT_FIELD, scanField)
+            putInt(Columns.SCAN_TYPE, scanType)
         }, ScanTask(context) {
             scanView.scanSuccess(it)
             onCleared()
@@ -33,7 +37,9 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
     override fun scanResult(id: Long) {
         loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
             putLong(Columns.ID, id)
-            putSerializable(Columns.SCAN_TYPE, scanType)
+            putString(Columns.SORT, scanSort)
+            putString(Columns.SORT_FIELD, scanField)
+            putInt(Columns.SCAN_TYPE, scanType)
         }, ScanTask(context) {
             scanView.resultSuccess(if (it.isEmpty()) null else it[0])
             onCleared()

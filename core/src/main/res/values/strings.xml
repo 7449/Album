@@ -10,8 +10,6 @@
     <string name="gallery_scan_success_empty">没有扫描到数据</string>
     <string name="gallery_open_video_error">视频播放异常</string>
     <string name="gallery_permissions_denied">获取权限异常</string>
-    <string name="gallery_crop_canceled">取消裁剪</string>
-    <string name="gallery_crop_error">裁剪异常</string>
     <string name="gallery_prev_check_file_deleted">文件已被删除</string>
     <string name="gallery_video_canceled">取消摄像</string>
     <string name="gallery_video_result_error">摄像异常</string>

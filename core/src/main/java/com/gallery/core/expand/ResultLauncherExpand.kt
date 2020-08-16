@@ -7,7 +7,6 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.os.camera.CameraStatus
 import androidx.kotlin.expand.os.permission.checkCameraPermissionExpand
 import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
 import com.gallery.core.ui.widget.CameraResultContract

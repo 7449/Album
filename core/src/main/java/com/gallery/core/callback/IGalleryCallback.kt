@@ -2,20 +2,17 @@ package com.gallery.core.callback
 
 import android.content.Context
 import android.os.Bundle
-import androidx.kotlin.expand.os.camera.CameraStatus
-import androidx.kotlin.expand.os.permission.PermissionCode
 import androidx.kotlin.expand.text.toastExpand
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
+import com.gallery.core.expand.CameraStatus
+import com.gallery.core.expand.PermissionCode
 import com.gallery.core.expand.isVideoScan
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 
-/**
- *
- */
 interface IGalleryCallback {
 
     /**
@@ -83,7 +80,7 @@ interface IGalleryCallback {
     fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {}
 
     /**
-     * 拍照or裁剪返回
+     * 单个文件扫描成功
      */
     fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
 

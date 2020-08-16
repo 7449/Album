@@ -28,10 +28,6 @@ class CustomPageActivity : GalleryActivity(R.layout.simple_gallery_layout), IGal
                 .resource(arrayList)
     }
 
-    override fun onCropResources(uri: Uri) {
-        uri.toString().toastExpand(this)
-    }
-
     override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         entities.toString().toastExpand(this)
     }

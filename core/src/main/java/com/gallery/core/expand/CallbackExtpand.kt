@@ -1,6 +1,7 @@
 package com.gallery.core.expand
 
 import com.gallery.core.callback.*
+import com.gallery.core.crop.ICrop
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
@@ -11,6 +12,17 @@ val GalleryBaseFragment.galleryImageLoaderExpand: IGalleryImageLoader
         parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
         activity is IGalleryImageLoader -> activity as IGalleryImageLoader
         else -> object : IGalleryImageLoader {}
+    }
+
+/** [ICrop] */
+val ScanFragment.galleryCropExpand: ICrop
+    get() = when {
+        parentFragment is ICrop -> (parentFragment as ICrop).cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
+        activity is ICrop -> (activity as ICrop).cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
+        else -> object : ICrop {
+            override val cropImpl: ICrop?
+                get() = null
+        }.cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
     }
 
 /** [ScanFragment]拦截器 */

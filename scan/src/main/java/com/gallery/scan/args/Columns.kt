@@ -15,6 +15,9 @@ object Columns {
     /** 扫描type */
     const val SCAN_TYPE = "scan_type"
 
+    const val SORT = "sort"
+    const val SORT_FIELD = "sort_field"
+
     /** id */
     const val ID: String = MediaStore.Files.FileColumns._ID
 

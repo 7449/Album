@@ -15,13 +15,11 @@ android {
 }
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-//    api(project(":scan"))
-    api(Dep.scan)
-    api(Dep.kotlinx)
+    api(project(":scan"))
+//    api(Dep.scan)
     api(Dep.viewHolder)
+    compileOnly(Dep.appcompat)
     compileOnly(Dep.fragment)
     compileOnly(Dep.kotlin)
-    compileOnly(Dep.recyclerView)
     compileOnly(Dep.viewPager2)
-    compileOnly(Dep.uCrop)
 }

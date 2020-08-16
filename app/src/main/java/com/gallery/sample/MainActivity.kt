@@ -27,6 +27,7 @@ import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.CustomPageActivity
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
+import com.gallery.scan.Sort
 import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback
@@ -61,6 +62,15 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     3 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryLauncher = galleryLauncher)
                     4 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryLauncher = galleryLauncher)
                     5 -> weChatUiGallery(galleryWeChatLauncher)
+                }
+                dialog.dismiss()
+            }.show()
+        }
+        selectSort.setOnClickListener {
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("DESC", "ASC"), View.NO_ID) { dialog, which ->
+                when (which) {
+                    0 -> Gallery(activity = this, galleryBundle = GalleryBundle(scanSort = Sort.DESC), galleryLauncher = galleryLauncher)
+                    1 -> Gallery(activity = this, galleryBundle = GalleryBundle(scanSort = Sort.ASC), galleryLauncher = galleryLauncher)
                 }
                 dialog.dismiss()
             }.show()

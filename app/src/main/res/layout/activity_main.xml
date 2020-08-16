@@ -17,6 +17,12 @@
             android:text="select theme" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/selectSort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="select sort" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/selectCrop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

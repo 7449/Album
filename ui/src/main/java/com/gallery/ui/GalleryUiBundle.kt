@@ -163,7 +163,7 @@ class GalleryUiBundle(
          */
         val preBottomCountTextSize: Float = 16F,
         /**
-         * UCrop option
+         * 携带的参数
          */
-        val uCropBundle: Bundle = Bundle.EMPTY
+        val args: Bundle = Bundle.EMPTY
 ) : Parcelable

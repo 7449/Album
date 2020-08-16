@@ -7,10 +7,7 @@ import com.gallery.core.callback.InternalConfig.CAMERA_PARENT_ID
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 
-/**
- *
- */
-interface IGallery {
+internal interface IGallery {
     /**
      * 当前扫描的数据
      * 数据已经过滤了[CAMERA_PARENT_ID]
@@ -40,24 +37,17 @@ interface IGallery {
     val itemCount: Int
 
     /**
-     * 打开相机
-     */
-    fun openCamera()
-
-    /**
-     * 打开裁剪
-     */
-    fun openCrop(uri: Uri)
-
-    /**
      * 扫描设备
      */
     fun onScanGallery(parent: Long = SCAN_ALL, isCamera: Boolean = false)
 
     /**
-     * 扫描裁剪成功之后的数据
+     * 扫描单个数据
+     *
+     * 仅支持content开头的uri
+     * 不支持file开头的uri
      */
-    fun onScanCrop(uri: Uri)
+    fun onScanResult(uri: Uri)
 
     /**
      * 刷新预览之后的数据
@@ -87,18 +77,7 @@ interface IGallery {
     fun scrollToPosition(position: Int)
 
     /**
-     * 取消裁剪
+     * 打开相机
      */
-    fun onCropCanceled()
-
-    /**
-     * 裁剪异常
-     */
-    fun onCropError(throwable: Throwable?)
-
-    /**
-     * 裁剪成功
-     */
-    fun onCropSuccess(uri: Uri)
-
+    fun openCamera()
 }

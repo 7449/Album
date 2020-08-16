@@ -232,8 +232,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
         bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
         intent.putExtras(bundle)
-//        setResult(UIResult.GALLERY_RESULT_RESOURCES, intent)
-//        finish()
+        setResult(UIResult.GALLERY_MULTIPLE_RESULT_CODE, intent)
+        finish()
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.gallery.ui.crop
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -51,10 +50,10 @@ open class UCropImpl(
     }
 
     open fun onCropSuccess(uri: Uri) {
-        val currentUri: Uri = if (!hasQExpand() && uri.scheme == ContentResolver.SCHEME_FILE) {
+        val currentUri: Uri = if (!hasQExpand()) {
             galleryFragment.scanFile(uri.path.orEmpty()) { galleryFragment.onScanResult(it) }
             uri
-        } else if (hasQExpand() && uri.scheme == ContentResolver.SCHEME_FILE && uri.path.orEmpty().contains(galleryFragment.requireActivity().packageName)) {
+        } else {
             val filePath: String? = galleryFragment.findPathByUriExpand(galleryFragment.requireActivity().copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand())
             if (filePath.isNullOrEmpty()) {
                 uri
@@ -65,8 +64,6 @@ open class UCropImpl(
                 }
                 Uri.fromFile(File(filePath))
             }
-        } else {
-            uri
         }
         val intent = Intent()
         val bundle = Bundle()

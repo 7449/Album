@@ -6,11 +6,15 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import com.gallery.core.crop.ICrop
+import com.gallery.core.expand.reset
+import com.gallery.core.expand.scanFile
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.ui.UIResult
 import com.theartofdev.edmodo.cropper.CropImage
 
 open class CropperImpl(private val galleryFragment: ScanFragment) : ICrop {
+
+    private var cropUri: Uri? = null
 
     override fun onCropResult(intent: ActivityResult) {
         when (intent.resultCode) {
@@ -25,6 +29,7 @@ open class CropperImpl(private val galleryFragment: ScanFragment) : ICrop {
     }
 
     override fun openCrop(inputUri: Uri, outPutUri: Uri, outPutUri2: Uri): Intent {
+        this.cropUri = outPutUri
         return CropImage
                 .activity(inputUri)
                 .setOutputUri(outPutUri)
@@ -32,7 +37,7 @@ open class CropperImpl(private val galleryFragment: ScanFragment) : ICrop {
     }
 
     open fun onCropSuccess(uri: Uri) {
-        galleryFragment.onScanResult(uri)
+        galleryFragment.scanFile(uri) { galleryFragment.onScanResult(it) }
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelable(UIResult.GALLERY_RESULT_CROP, uri)
@@ -42,9 +47,11 @@ open class CropperImpl(private val galleryFragment: ScanFragment) : ICrop {
     }
 
     open fun onCropCanceled() {
+        cropUri?.reset(galleryFragment.requireContext())
     }
 
     open fun onCropError(let: Throwable?) {
+        cropUri?.reset(galleryFragment.requireContext())
     }
 
 }

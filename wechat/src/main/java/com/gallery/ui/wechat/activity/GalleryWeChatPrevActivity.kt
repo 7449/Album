@@ -58,6 +58,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         prevWeChatToolbarSend.setOnClickListener {
             if (prevFragment.selectEmpty) {
                 prevFragment.selectEntities.add(prevFragment.currentItem)
+                prevFragment.selectEntities.forEach { it.isSelected = true }
             }
             onGallerySelectEntities()
         }

@@ -97,15 +97,11 @@ interface IGalleryCallback {
     }
 
     /**
-     * 拍照之后获取数据失败
+     * 拍照或者摄像或者扫描单个数据失败
      */
-    fun onCameraResultError(context: Context?, galleryBundle: GalleryBundle) {
+    fun onResultError(context: Context?, galleryBundle: GalleryBundle) {
         context ?: return
-        if (galleryBundle.isVideoScan) {
-            context.getString(R.string.gallery_video_result_error).toastExpand(context)
-        } else {
-            context.getString(R.string.gallery_camera_result_error).toastExpand(context)
-        }
+        context.getString(R.string.gallery_error).toastExpand(context)
     }
 
     /**

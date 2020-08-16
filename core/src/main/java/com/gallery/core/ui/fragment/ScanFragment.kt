@@ -8,7 +8,10 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
-import androidx.kotlin.expand.app.*
+import androidx.kotlin.expand.app.drawableExpand
+import androidx.kotlin.expand.app.findIdByUriExpand
+import androidx.kotlin.expand.app.moveToNextToIdExpand
+import androidx.kotlin.expand.app.squareExpand
 import androidx.kotlin.expand.content.openVideoExpand
 import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.getLongOrDefault
@@ -99,6 +102,8 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
         }
         galleryAdapter.addAll(arrayList)
         galleryAdapter.updateEntity()
+        //每次切换之后滚动到顶部
+        scrollToPosition(0)
     }
 
     override fun resultSuccess(scanEntity: ScanEntity?) {
@@ -120,7 +125,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
             }
             notifyDataSetChanged()
             galleryCallback.onResultSuccess(context, galleryBundle, it)
-        } ?: galleryCallback.onCameraResultError(context, galleryBundle)
+        } ?: galleryCallback.onResultError(context, galleryBundle)
     }
 
     override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
@@ -160,15 +165,13 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
     }
 
     public override fun onCameraResultOk() {
-        findPathByUriExpand(fileUri)?.let {
-            scanFile(it) { onScanGallery(parentId, true) }
-            if (galleryBundle.cameraCrop) {
-                cropLauncher.launch(
-                        galleryCrop.openCrop(fileUri,
-                                requireActivity().cropUriExpand(galleryBundle).orEmptyExpand(),
-                                requireActivity().cropUriExpand2(galleryBundle).orEmptyExpand())
-                )
-            }
+        scanFile(fileUri) { onScanGallery(parentId, true) }
+        if (galleryBundle.cameraCrop) {
+            cropLauncher.launch(
+                    galleryCrop.openCrop(fileUri,
+                            requireActivity().cropUriExpand(galleryBundle).orEmptyExpand(),
+                            requireActivity().cropUriExpand2(galleryBundle).orEmptyExpand())
+            )
         }
     }
 

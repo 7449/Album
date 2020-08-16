@@ -2,9 +2,11 @@
 
 package com.gallery.core.expand
 
+import android.content.ContentResolver
 import android.media.MediaScannerConnection
 import android.net.Uri
 import androidx.kotlin.expand.app.runOnUiThreadExpand
+import androidx.kotlin.expand.content.findPathByUriExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.SCAN_ALL
@@ -41,6 +43,21 @@ fun ScanFragment.scanFile(path: String, action: (uri: Uri) -> Unit) {
         runOnUiThreadExpand {
             uri ?: return@runOnUiThreadExpand
             action.invoke(uri)
+        }
+    }
+}
+
+/** 扫描数据库 */
+fun ScanFragment.scanFile(uri: Uri, action: (uri: Uri) -> Unit) {
+    val path = if (uri.scheme == ContentResolver.SCHEME_FILE) {
+        uri.path
+    } else {
+        requireActivity().findPathByUriExpand(uri)
+    }
+    MediaScannerConnection.scanFile(requireContext(), arrayOf(path), null) { _: String?, done: Uri? ->
+        runOnUiThreadExpand {
+            done ?: return@runOnUiThreadExpand
+            action.invoke(done)
         }
     }
 }

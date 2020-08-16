@@ -4,7 +4,6 @@
     <string name="gallery_check_max">不能再选择啦</string>
     <string name="gallery_item_file_deleted">文件已被删除</string>
     <string name="gallery_camera_canceled">取消拍照</string>
-    <string name="gallery_camera_result_error">拍照异常</string>
     <string name="gallery_open_camera_error">相机打开失败</string>
     <string name="gallery_open_camera_success">打开相机</string>
     <string name="gallery_scan_success_empty">没有扫描到数据</string>
@@ -12,5 +11,5 @@
     <string name="gallery_permissions_denied">获取权限异常</string>
     <string name="gallery_prev_check_file_deleted">文件已被删除</string>
     <string name="gallery_video_canceled">取消摄像</string>
-    <string name="gallery_video_result_error">摄像异常</string>
+    <string name="gallery_error">出现异常</string>
 </resources>

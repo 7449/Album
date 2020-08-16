@@ -15,8 +15,8 @@ android {
 }
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    api(project(":scan"))
-//    api(Dep.scan)
+//    api(project(":scan"))
+    api(Dep.scan)
     api(Dep.viewHolder)
     compileOnly(Dep.appcompat)
     compileOnly(Dep.fragment)

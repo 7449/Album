@@ -14,7 +14,6 @@ import androidx.kotlin.expand.app.findIdByUriExpand
 import androidx.kotlin.expand.app.moveToNextToIdExpand
 import androidx.kotlin.expand.app.squareExpand
 import androidx.kotlin.expand.content.openVideoExpand
-import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.getLongOrDefault
 import androidx.kotlin.expand.os.getParcelableArrayListOrDefault
 import androidx.kotlin.expand.os.getParcelableOrDefault
@@ -53,7 +52,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
     private val openCameraLauncher: ActivityResultLauncher<CameraUri> = requestCameraResultLauncherExpand({ onCameraResultCanceled() }) { onCameraResultOk() }
     private val cropLauncher: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { intent -> galleryCrop.onCropResult(intent) }
+            { intent -> galleryCrop.onCropResult(this, galleryBundle, intent) }
     private var fileUri: Uri = Uri.EMPTY
     var parentId: Long = SCAN_ALL
 
@@ -145,11 +144,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                cropLauncher.launch(
-                        galleryCrop.openCrop(galleryEntity.externalUri,
-                                requireActivity().cropUriExpand(galleryBundle).orEmptyExpand(),
-                                requireActivity().cropUriExpand2(galleryBundle).orEmptyExpand())
-                )
+                cropLauncher.launch(galleryCrop.openCrop(this, galleryBundle, galleryEntity.externalUri))
             } else {
                 galleryCallback.onGalleryResource(requireActivity(), galleryEntity)
             }
@@ -167,11 +162,7 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
     public override fun onCameraResultOk() {
         scanFile(fileUri) { onScanGallery(parentId, true) }
         if (galleryBundle.cameraCrop) {
-            cropLauncher.launch(
-                    galleryCrop.openCrop(fileUri,
-                            requireActivity().cropUriExpand(galleryBundle).orEmptyExpand(),
-                            requireActivity().cropUriExpand2(galleryBundle).orEmptyExpand())
-            )
+            cropLauncher.launch(galleryCrop.openCrop(this, galleryBundle, fileUri))
         }
     }
 

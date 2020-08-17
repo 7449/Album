@@ -42,7 +42,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         get() = R.id.galleryFrame
 
     override val cropImpl: ICrop?
-        get() = UCropImpl(galleryFragment, galleryBundle, uiConfig)
+        get() = UCropImpl(uiConfig)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,24 +12,19 @@ import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.cropNameExpand
-import com.gallery.core.expand.reset
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
-open class UCropImpl(
-        private val galleryFragment: ScanFragment,
-        private val galleryBundle: GalleryBundle,
-        private val galleryUiBundle: GalleryUiBundle
-) : ICrop {
+open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
-    override fun onCropResult(intent: ActivityResult) {
+    override fun onCropResult(scanFragment: ScanFragment, galleryBundle: GalleryBundle, intent: ActivityResult) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> intent.data?.let {
                 UCrop.getOutput(it)?.let { uri ->
-                    onCropSuccess(uri)
+                    onCropSuccess(scanFragment, galleryBundle, uri)
                 } ?: onCropError(null)
             } ?: onCropError(null)
             Activity.RESULT_CANCELED -> onCropCanceled()
@@ -37,23 +32,22 @@ open class UCropImpl(
         }
     }
 
-    override fun openCrop(inputUri: Uri, outPutUri: Uri, outPutUri2: Uri): Intent {
-        outPutUri.reset(galleryFragment.requireActivity())
-        return UCrop.of(inputUri, outPutUri2)
+    override fun openCrop(scanFragment: ScanFragment, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
+        return UCrop.of(inputUri, cropOutPutUri2(scanFragment.requireContext(), galleryBundle))
                 .withOptions(UCrop.Options().apply { optionBundle.putAll(onUCropOptions()) })
-                .getIntent(galleryFragment.requireActivity())
+                .getIntent(scanFragment.requireActivity())
     }
 
     open fun onUCropOptions(): Bundle {
         return galleryUiBundle.args
     }
 
-    open fun onCropSuccess(uri: Uri) {
+    open fun onCropSuccess(scanFragment: ScanFragment, galleryBundle: GalleryBundle, uri: Uri) {
         val currentUri: Uri = if (!hasQExpand()) {
             uri
         } else {
-            val contentUri = galleryFragment.requireActivity().copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand()
-            val filePath: String? = galleryFragment.findPathByUriExpand(contentUri)
+            val contentUri = scanFragment.requireActivity().copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand()
+            val filePath: String? = scanFragment.findPathByUriExpand(contentUri)
             if (filePath.isNullOrEmpty()) {
                 uri
             } else {
@@ -61,13 +55,13 @@ open class UCropImpl(
                 Uri.fromFile(File(filePath))
             }
         }
-        galleryFragment.onScanResult(currentUri)
+        scanFragment.onScanResult(currentUri)
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelable(UIResult.GALLERY_RESULT_CROP, currentUri)
         intent.putExtras(bundle)
-        galleryFragment.requireActivity().setResult(UIResult.GALLERY_CROP_RESULT_CODE, intent)
-        galleryFragment.requireActivity().finish()
+        scanFragment.requireActivity().setResult(UIResult.GALLERY_CROP_RESULT_CODE, intent)
+        scanFragment.requireActivity().finish()
     }
 
     open fun onCropCanceled() {

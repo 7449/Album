@@ -6,5 +6,5 @@ import com.gallery.ui.page.GalleryActivity
 
 class CustomCropActivity : GalleryActivity() {
     override val cropImpl: ICrop?
-        get() = CropperImpl(galleryFragment)
+        get() = CropperImpl()
 }

@@ -26,13 +26,7 @@
             android:id="@+id/selectCrop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="select and crop" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/customCrop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="custom crop" />
+            android:text="cropper" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/customCamera"

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import com.gallery.ui.crop.CropType
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -21,6 +22,10 @@ class GalleryUiBundle(
          * 文件夹样式
          */
         val finderType: FinderType = FinderType.POPUP,
+        /**
+         * 裁剪
+         */
+        val cropType: CropType = CropType.UCROP,
         /**
          * toolbar返回图标
          */

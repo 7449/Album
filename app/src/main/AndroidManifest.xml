@@ -37,9 +37,6 @@
             android:name=".custom.CustomPageActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".custom.CustomCropActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
             android:name=".custom.CustomCameraActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity

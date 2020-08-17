@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.kotlin.expand.app.findPathByUriExpand
 import androidx.kotlin.expand.net.orEmptyExpand
+import androidx.kotlin.expand.os.orEmptyExpand
 import androidx.kotlin.expand.util.copyImageExpand
 import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.GalleryBundle
@@ -18,6 +19,7 @@ import com.gallery.ui.UIResult
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
+@Deprecated("annoying version support", replaceWith = ReplaceWith("CropperImpl(galleryUiBundle)"))
 open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     override fun onCropResult(scanFragment: ScanFragment, galleryBundle: GalleryBundle, intent: ActivityResult) {
@@ -34,12 +36,8 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     override fun openCrop(scanFragment: ScanFragment, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
         return UCrop.of(inputUri, cropOutPutUri2(scanFragment.requireContext(), galleryBundle))
-                .withOptions(UCrop.Options().apply { optionBundle.putAll(onUCropOptions()) })
+                .withOptions(UCrop.Options().apply { optionBundle.putAll(galleryUiBundle.args.getBundle(UIResult.UI_CROP_ARGS).orEmptyExpand()) })
                 .getIntent(scanFragment.requireActivity())
-    }
-
-    open fun onUCropOptions(): Bundle {
-        return galleryUiBundle.args
     }
 
     open fun onCropSuccess(scanFragment: ScanFragment, galleryBundle: GalleryBundle, uri: Uri) {

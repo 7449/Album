@@ -23,7 +23,6 @@ import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback
 import com.gallery.sample.custom.CustomCameraActivity
-import com.gallery.sample.custom.CustomCropActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.CustomPageActivity
 import com.gallery.sample.viewmodel.ScanViewModelTest
@@ -34,6 +33,7 @@ import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback
 import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.crop.CropType
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
 import kotlinx.android.synthetic.main.activity_main.*
@@ -79,21 +79,23 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             }.show()
         }
         selectCrop.setOnClickListener {
-            Gallery(
-                    activity = this,
-                    galleryBundle = GalleryTheme.cropThemeGallery(this),
-                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
-                    galleryLauncher = galleryLauncher
-            )
-        }
-        customCrop.setOnClickListener {
-            Gallery(
-                    activity = this,
-                    galleryBundle = GalleryTheme.cropThemeGallery(this),
-                    galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this),
-                    galleryLauncher = galleryLauncher,
-                    clz = CustomCropActivity::class.java
-            )
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("CROPPER", "UCROP"), View.NO_ID) { dialog, which ->
+                when (which) {
+                    0 -> Gallery(
+                            activity = this,
+                            galleryBundle = GalleryTheme.cropThemeGallery(this),
+                            galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this, CropType.CROPPER),
+                            galleryLauncher = galleryLauncher
+                    )
+                    1 -> Gallery(
+                            activity = this,
+                            galleryBundle = GalleryTheme.cropThemeGallery(this),
+                            galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this, CropType.UCROP),
+                            galleryLauncher = galleryLauncher
+                    )
+                }
+                dialog.dismiss()
+            }.show()
         }
         customCamera.setOnClickListener {
             Gallery(

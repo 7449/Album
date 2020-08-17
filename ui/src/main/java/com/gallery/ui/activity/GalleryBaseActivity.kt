@@ -76,8 +76,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         finderName = savedInstanceState.getStringOrDefault(UIResult.UI_FINDER_NAME, galleryBundle.allName)
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
-        }
-                ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
+        } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
     }
 
     /** 单个数据扫描成功之后刷新文件夹数据 */

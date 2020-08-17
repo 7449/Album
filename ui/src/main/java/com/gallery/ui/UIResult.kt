@@ -3,6 +3,12 @@ package com.gallery.ui
 object UIResult {
 
     /**
+     * 裁剪携带的参数
+     * 从[GalleryUiBundle.args]里面获取
+     */
+    const val UI_CROP_ARGS = "uiCropArgs"
+
+    /**
      * UI 参数
      * [GalleryUiBundle]
      */

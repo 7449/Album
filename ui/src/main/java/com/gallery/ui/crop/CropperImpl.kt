@@ -9,10 +9,13 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.reset
 import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageActivity
+import com.theartofdev.edmodo.cropper.CropImageOptions
 
-open class CropperImpl : ICrop {
+open class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     private var cropUri: Uri? = null
 
@@ -29,10 +32,18 @@ open class CropperImpl : ICrop {
 
     override fun openCrop(scanFragment: ScanFragment, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
         this.cropUri = cropOutPutUri(scanFragment.requireContext(), galleryBundle)
-        return CropImage
-                .activity(inputUri)
-                .setOutputUri(cropUri)
-                .getIntent(scanFragment.requireActivity())
+        val options = runCatching {
+            val args = galleryUiBundle.args
+            args.classLoader = CropImageOptions::class.java.classLoader
+            args.getParcelable<CropImageOptions>(UIResult.UI_CROP_ARGS)
+        }.getOrElse { CropImageOptions() }
+        val intent = Intent()
+        intent.setClass(scanFragment.requireContext(), CropImageActivity::class.java)
+        val bundle = Bundle()
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, options)
+        intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
+        return intent
     }
 
     open fun onCropSuccess(scanFragment: ScanFragment, uri: Uri) {

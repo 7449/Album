@@ -18,6 +18,8 @@ import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.BottomFinderAdapter
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.adapter.PopupFinderAdapter
+import com.gallery.ui.crop.CropType
+import com.gallery.ui.crop.CropperImpl
 import com.gallery.ui.crop.UCropImpl
 import com.gallery.ui.obtain
 import com.gallery.ui.util.displayGallery
@@ -42,7 +44,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         get() = R.id.galleryFrame
 
     override val cropImpl: ICrop?
-        get() = UCropImpl(uiConfig)
+        get() = if (uiConfig.cropType == CropType.CROPPER) CropperImpl(uiConfig) else UCropImpl(uiConfig)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

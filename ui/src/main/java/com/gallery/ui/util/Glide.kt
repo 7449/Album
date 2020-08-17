@@ -25,7 +25,7 @@ internal fun FrameLayout.displayGallery(width: Int, height: Int, galleryEntity: 
 internal fun FrameLayout.displayGalleryThumbnails(finderEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).asBitmap().load(finderEntity.externalUri).apply(requestOptions).into(imageView)
+    Glide.with(context).load(finderEntity.externalUri).apply(requestOptions).into(imageView)
     addView(imageView)
 }
 

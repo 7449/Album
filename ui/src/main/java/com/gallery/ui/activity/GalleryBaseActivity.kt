@@ -76,7 +76,8 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         finderName = savedInstanceState.getStringOrDefault(UIResult.UI_FINDER_NAME, galleryBundle.allName)
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
-        } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
+        }
+                ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
     }
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
@@ -90,29 +91,6 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryBundle.sdName, galleryBundle.allName))
         }
-    }
-
-    /** 点击选中,针对单选 */
-    override fun onGalleryResource(context: Context?, scanEntity: ScanEntity) {
-        val intent = Intent()
-        val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanEntity)
-        intent.putExtras(bundle)
-        setResult(UIResult.GALLERY_SINGLE_RESULT_CODE, intent)
-        finish()
-    }
-
-    /** 预览页toolbar返回 */
-    open fun onResultToolbar(bundle: Bundle) {
-    }
-
-    /** 预览页back返回 */
-    open fun onResultBack(bundle: Bundle) {
-    }
-
-    /**  预览页点击确定选择 */
-    open fun onResultSelect(bundle: Bundle) {
-        onGalleryResources(bundle.getParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT))
     }
 
     /** 启动预览 */
@@ -133,19 +111,42 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
                 cla))
     }
 
+    /** 预览页toolbar返回 */
+    open fun onResultToolbar(bundle: Bundle) {
+    }
+
+    /** 预览页back返回 */
+    open fun onResultBack(bundle: Bundle) {
+    }
+
+    /** 预览页确定选择 */
+    open fun onResultSelect(bundle: Bundle) {
+        onGalleryResources(bundle.getParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT))
+    }
+
     /** 用于 toolbar 返回 finish */
     open fun onGalleryFinish() {
         setResult(UIResult.UI_TOOLBAR_BACK_RESULT_CODE)
         finish()
     }
 
-    /** 选择图片 */
+    /** 选择图片,针对多选 */
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
         intent.putExtras(bundle)
         setResult(UIResult.GALLERY_MULTIPLE_RESULT_CODE, intent)
+        finish()
+    }
+
+    /** 点击选中,针对单选 */
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+        val intent = Intent()
+        val bundle = Bundle()
+        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanEntity)
+        intent.putExtras(bundle)
+        setResult(UIResult.GALLERY_SINGLE_RESULT_CODE, intent)
         finish()
     }
 }

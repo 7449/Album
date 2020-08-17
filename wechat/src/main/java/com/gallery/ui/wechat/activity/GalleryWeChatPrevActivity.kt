@@ -35,6 +35,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     private val selectAdapter: WeChatPrevSelectAdapter = WeChatPrevSelectAdapter(this)
     private val isPrev: Boolean by lazy { uiResultConfig.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_PREV_IMAGE) }
+    private val fullImageSelect: Boolean by lazy { uiResultConfig.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE) }
     private val idList: ArrayList<Long> = ArrayList()
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -51,7 +52,6 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         prevWeChatToolbarBack.setOnClickListener { onGalleryFinish() }
         prevWeChatToolbarText.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
         val selectList: ArrayList<ScanEntity> = bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT)
-        val fullImageSelect: Boolean = uiResultConfig.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE)
         prevWeChatFullImage.isChecked = fullImageSelect
         prevWeChatToolbarSend.isEnabled = true
         prevWeChatToolbarSend.text = uiConfig.selectText + if (selectList.isEmpty()) "" else "(${selectList.count()}/${galleryBundle.multipleMaxCount})"
@@ -88,7 +88,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         val currentItem: ScanEntity = prevFragment.currentItem
         prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
         prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
-        prevWeChatFullImage.visibility = if (currentItem.isGif() || currentItem.isVideo()) View.GONE else View.VISIBLE
+        prevWeChatFullImage.visibility = if (currentItem.isGif || currentItem.isVideo) View.GONE else View.VISIBLE
         selectAdapter.refreshItem(currentItem)
         galleryPrevList.scrollToPosition(selectAdapter.findPosition(currentItem))
     }
@@ -117,12 +117,12 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         }
     }
 
-    override fun onClickCheckBoxMaxCount(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         super.onClickCheckBoxMaxCount(context, galleryBundle, scanEntity)
         prevWeChatSelect.isChecked = false
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
         prevWeChatSelect.isChecked = false
     }

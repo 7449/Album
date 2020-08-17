@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -102,7 +103,6 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
         }
         galleryAdapter.addAll(arrayList)
         galleryAdapter.updateEntity()
-        //每次切换之后滚动到顶部
         scrollToPosition(0)
     }
 
@@ -133,29 +133,29 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
     }
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
-        if (!moveToNextToIdExpand(galleryEntity.externalUri())) {
-            galleryCallback.onClickItemFileNotExist(context, galleryBundle, galleryEntity)
+        if (!moveToNextToIdExpand(galleryEntity.externalUri)) {
+            galleryCallback.onClickItemFileNotExist(requireActivity(), galleryBundle, galleryEntity)
             return
         }
         if (galleryBundle.isVideoScan) {
-            requireContext().openVideoExpand(galleryEntity.externalUri()) {
-                galleryCallback.onOpenVideoPlayError(context, galleryEntity)
+            requireContext().openVideoExpand(galleryEntity.externalUri) {
+                galleryCallback.onOpenVideoPlayError(requireActivity(), galleryEntity)
             }
             return
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
                 cropLauncher.launch(
-                        galleryCrop.openCrop(galleryEntity.externalUri(),
+                        galleryCrop.openCrop(galleryEntity.externalUri,
                                 requireActivity().cropUriExpand(galleryBundle).orEmptyExpand(),
                                 requireActivity().cropUriExpand2(galleryBundle).orEmptyExpand())
                 )
             } else {
-                galleryCallback.onGalleryResource(context, galleryEntity)
+                galleryCallback.onGalleryResource(requireActivity(), galleryEntity)
             }
             return
         }
-        galleryCallback.onPhotoItemClick(context, galleryBundle, galleryEntity, position, parentId)
+        galleryCallback.onPhotoItemClick(requireActivity(), galleryBundle, galleryEntity, position, parentId)
     }
 
     public override fun onCameraResultCanceled() {
@@ -223,10 +223,11 @@ class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), Gal
     }
 
     override fun onScanResult(uri: Uri) {
-        if (uri.scheme != ContentResolver.SCHEME_CONTENT) {
-            throw RuntimeException("unsupported uri")
+        when (uri.scheme) {
+            ContentResolver.SCHEME_CONTENT -> scanFile(uri) { scan.scanResult(findIdByUriExpand(it)) }
+            ContentResolver.SCHEME_FILE -> scanFile(uri.path.orEmpty()) { scan.scanResult(findIdByUriExpand(it)) }
+            else -> Log.e("gallery", "unsupported uri")
         }
-        scan.scanResult(findIdByUriExpand(uri))
     }
 
     override fun onUpdateResult(bundle: Bundle) {

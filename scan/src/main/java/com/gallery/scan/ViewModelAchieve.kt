@@ -20,6 +20,7 @@ fun FragmentActivity.scanViewModel(@ScanTypeDef scanType: Int): ScanImpl {
 
 class ScanViewModelFactory(
         private val fragmentActivity: FragmentActivity,
+        @ScanTypeDef
         private val scanType: Int
 ) : ViewModelProvider.Factory {
 

@@ -66,11 +66,11 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
         })
     }
 
-    override fun onGalleryResource(context: Context?, scanEntity: ScanEntity) {
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         scanEntity.toString().toastExpand(requireActivity())
         dismiss()
     }
 
-    override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
     }
 }

@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)
-                .load(galleryEntity.externalUri())
+                .load(galleryEntity.externalUri)
                 .apply(RequestOptions()
                         .placeholder(R.drawable.ic_gallery_default_loading)
                         .error(R.drawable.ic_gallery_default_loading)
@@ -146,9 +146,9 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
-    override fun onGalleryResource(context: Context?, scanEntity: ScanEntity) {
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
     }
 
-    override fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
     }
 }

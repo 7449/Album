@@ -13,7 +13,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.cropNameExpand
 import com.gallery.core.expand.reset
-import com.gallery.core.expand.scanFile
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
@@ -51,20 +50,18 @@ open class UCropImpl(
 
     open fun onCropSuccess(uri: Uri) {
         val currentUri: Uri = if (!hasQExpand()) {
-            galleryFragment.scanFile(uri.path.orEmpty()) { galleryFragment.onScanResult(it) }
             uri
         } else {
-            val filePath: String? = galleryFragment.findPathByUriExpand(galleryFragment.requireActivity().copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand())
+            val contentUri = galleryFragment.requireActivity().copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand()
+            val filePath: String? = galleryFragment.findPathByUriExpand(contentUri)
             if (filePath.isNullOrEmpty()) {
                 uri
             } else {
-                galleryFragment.scanFile(filePath) {
-                    galleryFragment.onScanResult(it)
-                    File(uri.path.orEmpty()).delete()
-                }
+                File(uri.path.orEmpty()).delete()
                 Uri.fromFile(File(filePath))
             }
         }
+        galleryFragment.onScanResult(currentUri)
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelable(UIResult.GALLERY_RESULT_CROP, currentUri)

@@ -2,12 +2,12 @@ package com.gallery.core.ui.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.moveToNextToIdExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.kotlin.expand.os.getIntExpand
 import androidx.kotlin.expand.os.getLongExpand
 import androidx.kotlin.expand.os.getParcelableArrayListExpand
+import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
@@ -16,8 +16,6 @@ import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.ScanImpl
-import com.gallery.scan.ScanView
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
 class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragment_preview), IGalleryPrev {
@@ -66,14 +64,16 @@ class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragm
 
     private fun updateEntity(arrayList: ArrayList<ScanEntity>, savedInstanceState: Bundle?) {
         prevAdapter.addAll(arrayList)
-        prevAdapter.addSelectAll((savedInstanceState ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT))
+        prevAdapter.addSelectAll((savedInstanceState
+                ?: bundleOrEmptyExpand()).getParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT))
         prevAdapter.updateEntity()
 
         galleryPrevCallback.onPrevViewCreated(savedInstanceState)
         preViewPager.adapter = prevAdapter
         preViewPager.registerOnPageChangeCallback(pageChangeCallback)
         preRootView.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
-        setCurrentItem((savedInstanceState ?: bundleOrEmptyExpand()).getIntExpand(GalleryConfig.GALLERY_POSITION))
+        setCurrentItem((savedInstanceState
+                ?: bundleOrEmptyExpand()).getIntExpand(GalleryConfig.GALLERY_POSITION))
 
         if (!galleryPrevInterceptor.hideCheckBox) {
             preCheckBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
@@ -93,33 +93,23 @@ class PrevFragment : GalleryBaseFragment(com.gallery.core.R.layout.gallery_fragm
         } else {
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
-            ScanImpl(object : ScanView {
-                override val scanContext: FragmentActivity
-                    get() = requireActivity()
-
-                override fun scanType(): Int {
-                    return galleryBundle.scanType
-                }
-
-                override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
-                    updateEntity(arrayList, savedInstanceState)
-                }
-            }).scanParent(parentId)
+            scanViewModel.scanLiveData.observe(requireActivity(), Observer { updateEntity(it.entities, savedInstanceState) })
+            scanViewModel.scanParent(parentId)
         }
     }
 
     fun checkBoxClick(preCheckBox: View) {
-        if (!moveToNextToIdExpand(currentItem.externalUri())) {
+        if (!moveToNextToIdExpand(currentItem.externalUri)) {
             if (prevAdapter.containsSelect(currentItem)) {
                 prevAdapter.removeSelectEntity(currentItem)
             }
             preCheckBox.isSelected = false
             currentItem.isSelected = false
-            galleryPrevCallback.onClickCheckBoxFileNotExist(context, galleryBundle, currentItem)
+            galleryPrevCallback.onClickCheckBoxFileNotExist(requireActivity(), galleryBundle, currentItem)
             return
         }
         if (!prevAdapter.containsSelect(currentItem) && selectEntities.size >= galleryBundle.multipleMaxCount) {
-            galleryPrevCallback.onClickCheckBoxMaxCount(context, galleryBundle, currentItem)
+            galleryPrevCallback.onClickCheckBoxMaxCount(requireActivity(), galleryBundle, currentItem)
             return
         }
         if (currentItem.isSelected) {

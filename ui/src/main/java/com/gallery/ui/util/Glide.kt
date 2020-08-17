@@ -18,14 +18,14 @@ private val defaultLayoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutPa
 internal fun FrameLayout.displayGallery(width: Int, height: Int, galleryEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).load(galleryEntity.externalUri()).apply(requestOptions.override(width, height)).into(imageView)
+    Glide.with(context).load(galleryEntity.externalUri).apply(requestOptions.override(width, height)).into(imageView)
     addView(imageView, FrameLayout.LayoutParams(width, height))
 }
 
 internal fun FrameLayout.displayGalleryThumbnails(finderEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).asBitmap().load(finderEntity.externalUri()).apply(requestOptions).into(imageView)
+    Glide.with(context).asBitmap().load(finderEntity.externalUri).apply(requestOptions).into(imageView)
     addView(imageView)
 }
 
@@ -34,6 +34,6 @@ internal fun FrameLayout.displayGalleryPrev(scanEntity: ScanEntity) {
     val imageView: GalleryImageView = GalleryImageView(context).apply {
         layoutParams = defaultLayoutParams
     }
-    Glide.with(context).load(scanEntity.externalUri()).into(imageView)
+    Glide.with(context).load(scanEntity.externalUri).into(imageView)
     addView(imageView)
 }

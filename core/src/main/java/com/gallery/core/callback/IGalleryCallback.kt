@@ -24,7 +24,15 @@ interface IGalleryCallback {
      * 单选状态下,点击[Adapter]item返回的那条数据
      * [ScanFragment.onPhotoItemClick]
      */
-    fun onGalleryResource(context: Context?, scanEntity: ScanEntity)
+    fun onGalleryResource(context: Context, scanEntity: ScanEntity)
+
+    /**
+     * 已达到选择最大数
+     * [GalleryBundle.multipleMaxCount]
+     */
+    fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        context.getString(R.string.gallery_check_max).toastExpand(context)
+    }
 
     /**
      * 点击CheckBox时该文件已经被删除
@@ -36,21 +44,12 @@ interface IGalleryCallback {
     }
 
     /**
-     * 已达到选择最大数
-     * [GalleryBundle.multipleMaxCount]
-     */
-    fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_check_max).toastExpand(context)
-    }
-
-    /**
      * 点击图片时该文件已被删除
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * 这个方法优先级高于单选和视频播放，裁剪等功能
      * [ScanFragment.onPhotoItemClick]
      */
-    fun onClickItemFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        context ?: return
+    fun onClickItemFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_item_file_deleted).toastExpand(context)
     }
 
@@ -71,7 +70,7 @@ interface IGalleryCallback {
      * 可以跳转到预览页
      * [ScanFragment.onPhotoItemClick]
      */
-    fun onPhotoItemClick(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long)
+    fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long)
 
     /**
      * 每次扫描之后数据非空触发
@@ -131,8 +130,7 @@ interface IGalleryCallback {
     /**
      * 视频播放异常
      */
-    fun onOpenVideoPlayError(context: Context?, scanEntity: ScanEntity) {
-        context ?: return
+    fun onOpenVideoPlayError(context: Context, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_open_video_error).toastExpand(context)
     }
 

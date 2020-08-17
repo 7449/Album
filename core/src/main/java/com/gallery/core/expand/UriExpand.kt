@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.kotlin.expand.content.findPathByUriExpand
 import androidx.kotlin.expand.content.insertImageUriExpand
 import androidx.kotlin.expand.content.insertVideoUriExpand
 import androidx.kotlin.expand.util.lowerVersionFileExpand
@@ -12,7 +13,7 @@ import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.GalleryBundle
 import java.io.File
 
-/** content://media/external/images/media/id */
+/** content://media/external/images/media/id or content://media/external/video/media/id */
 fun Context.cameraUriExpand(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
         hasQExpand() -> File("", galleryBundle.cameraNameExpand)
@@ -43,11 +44,18 @@ fun Context.cropUriExpand2(galleryBundle: GalleryBundle): Uri? {
     return Uri.fromFile(file)
 }
 
+/** Uri id */
+fun Uri.filePath(context: Context): String {
+    return when (scheme) {
+        ContentResolver.SCHEME_CONTENT -> context.findPathByUriExpand(this).orEmpty()
+        ContentResolver.SCHEME_FILE -> path.orEmpty()
+        else -> throw RuntimeException("unsupported uri")
+    }
+}
+
 /** 删除Uri */
 fun Uri.reset(context: Context) {
-    if (!path.isNullOrEmpty() && scheme == ContentResolver.SCHEME_CONTENT) {
-        runCatching {
-            context.contentResolver.delete(this, null, null)
-        }.onSuccess { Log.i("gallery", "delete uri success") }.onFailure { Log.i("gallery", "delete uri failure") }
-    }
+    runCatching {
+        context.contentResolver.delete(this, null, null)
+    }.onSuccess { Log.i("gallery", "delete uri success") }.onFailure { Log.i("gallery", "delete uri failure:$this") }
 }

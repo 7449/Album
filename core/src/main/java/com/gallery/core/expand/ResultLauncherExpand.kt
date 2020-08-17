@@ -23,9 +23,7 @@ fun Fragment.requestCameraResultLauncherExpand(cancel: () -> Unit, ok: () -> Uni
 
 /** permission launcher */
 fun Fragment.requestPermissionResultLauncherExpand(action: (isGranted: Boolean) -> Unit): ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            action.invoke(it)
-        }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { action.invoke(it) }
 
 /** check permission */
 fun Fragment.checkPermissionAndRequestWriteExpand(launcher: ActivityResultLauncher<String>): Boolean {
@@ -55,4 +53,3 @@ fun Fragment.openCameraExpand(uri: CameraUri, action: (uri: CameraUri) -> Unit):
         CameraStatus.SUCCESS
     } ?: CameraStatus.ERROR
 }
-

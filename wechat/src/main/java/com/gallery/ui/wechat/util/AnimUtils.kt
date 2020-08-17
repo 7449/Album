@@ -13,7 +13,7 @@ class AnimUtils(private val height: Int) {
         }
     }
 
-    fun openAnim(v: View, action: () -> Unit) {
+    fun openAnim(v: View, action: () -> Unit = {}) {
         v.visibility = View.VISIBLE
         val animator = createDropAnimator(v, 0, height)
         animator.addListener(object : AnimatorListenerAdapter() {
@@ -24,7 +24,7 @@ class AnimUtils(private val height: Int) {
         animator.start()
     }
 
-    fun closeAnimate(view: View, action: () -> Unit) {
+    fun closeAnimate(view: View, action: () -> Unit = {}) {
         val origWidth = view.width
         val animator = createDropAnimator(view, origWidth, 0)
         animator.addListener(object : AnimatorListenerAdapter() {

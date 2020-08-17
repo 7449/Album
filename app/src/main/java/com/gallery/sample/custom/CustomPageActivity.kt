@@ -1,5 +1,6 @@
 package com.gallery.sample.custom
 
+import android.content.Context
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.android.banner.OnBannerImageLoader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.expand.externalUri
 import com.gallery.sample.R
@@ -22,7 +24,7 @@ class CustomPageActivity : GalleryActivity(R.layout.simple_gallery_layout), IGal
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         super.onScanSuccess(scanEntities)
         val arrayList = ArrayList<SimpleGallery>()
-        scanEntities.forEach { arrayList.add(SimpleGallery(it.externalUri())) }
+        scanEntities.forEach { arrayList.add(SimpleGallery(it.externalUri)) }
         banner
                 .setOnBannerImageLoader(GlideAppSimpleImageManager())
                 .resource(arrayList)

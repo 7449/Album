@@ -34,7 +34,7 @@ class PhotoViewHolder(itemView: View,
     }
 
     private fun clickCheckBox(position: Int, galleryEntity: ScanEntity, selectList: ArrayList<ScanEntity>) {
-        if (!checkBox.context.moveToNextToIdExpand(galleryEntity.externalUri())) {
+        if (!context.moveToNextToIdExpand(galleryEntity.externalUri)) {
             if (selectList.contains(galleryEntity)) {
                 selectList.remove(galleryEntity)
             }

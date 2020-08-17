@@ -1,20 +1,7 @@
 package com.gallery.core.expand
 
-import android.content.ContentUris
-import android.net.Uri
-import android.provider.MediaStore
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.args.Columns
-
-//获取文件的Uri
-fun ScanEntity.externalUri(): Uri {
-    return if (mediaType == Columns.IMAGE) {
-        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-    } else {
-        ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
-    }
-}
 
 //获取当前页的文件夹数据
 //目标List为扫描成功之后的数据，返回Finder数据

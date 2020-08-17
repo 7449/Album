@@ -34,7 +34,7 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
         preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
         preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
     }

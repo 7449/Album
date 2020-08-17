@@ -54,7 +54,7 @@ interface ScanView {
     /**
      * 扫描成功
      */
-    fun scanSuccess(arrayList: ArrayList<ScanEntity>)
+    fun scanSuccess(arrayList: ArrayList<ScanEntity>) {}
 
     /**
      * 拍照扫描成功

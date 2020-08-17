@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -25,6 +26,7 @@ import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomCropActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.CustomPageActivity
+import com.gallery.sample.viewmodel.ScanViewModelTest
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.scan.Sort
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Handler().postDelayed({ ScanViewModelTest.test(this) }, 2000)
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
         } ?: supportFragmentManager

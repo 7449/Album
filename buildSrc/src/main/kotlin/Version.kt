@@ -24,7 +24,7 @@ object Dep {
     const val banner = "com.ydevelop:bannerlayout:1.2.0"
     const val viewHolder = "com.ydevelop:rv-adapter-viewholder:0.0.6"
     const val kotlinx = "com.ydevelop:kotlinx:0.0.6"
-    const val scan = "com.ydevelop:gallery.scan:0.1.1"
+    const val scan = "com.ydevelop:gallery.scan:0.1.2"
     const val core = "com.ydevelop:gallery.core:0.1.2"
     const val ui = "com.ydevelop:gallery.ui:0.0.7"
 

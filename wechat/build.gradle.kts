@@ -12,8 +12,8 @@ android {
     androidExtensions { isExperimental = true }
 }
 dependencies {
-    api(project(":ui"))
-//    api(Dep.ui)
+//    api(project(":ui"))
+    api(Dep.ui)
     compileOnly(Dep.appcompat)
     compileOnly(Dep.material)
     compileOnly(Dep.recyclerView)

@@ -21,12 +21,10 @@ open class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     override fun onCropResult(scanFragment: ScanFragment, galleryBundle: GalleryBundle, intent: ActivityResult) {
         when (intent.resultCode) {
-            Activity.RESULT_OK -> intent.data?.let {
-                CropImage.getActivityResult(it).uri?.let { uri -> onCropSuccess(scanFragment, uri) }
-                        ?: onCropError(scanFragment, null)
-            } ?: onCropError(scanFragment, null)
+            Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri -> onCropSuccess(scanFragment, uri) }
+                    ?: onCropError(scanFragment, null)
             Activity.RESULT_CANCELED -> onCropCanceled(scanFragment)
-            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> onCropError(scanFragment, intent.data?.let { CropImage.getActivityResult(it).error })
+            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> onCropError(scanFragment, CropImage.getActivityResult(intent.data)?.error)
         }
     }
 

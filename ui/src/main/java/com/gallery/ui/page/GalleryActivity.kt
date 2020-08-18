@@ -37,14 +37,14 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         }
     }
 
+    override val cropImpl: ICrop?
+        get() = if (uiConfig.cropType == CropType.CROPPER) CropperImpl(uiConfig) else UCropImpl(uiConfig)
+
     override val currentFinderName: String
         get() = galleryFinderAll.text.toString()
 
     override val galleryFragmentId: Int
         get() = R.id.galleryFrame
-
-    override val cropImpl: ICrop?
-        get() = if (uiConfig.cropType == CropType.CROPPER) CropperImpl(uiConfig) else UCropImpl(uiConfig)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

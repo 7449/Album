@@ -25,7 +25,7 @@ class GalleryUiBundle(
         /**
          * 裁剪
          */
-        val cropType: CropType = CropType.UCROP,
+        val cropType: CropType = CropType.CROPPER,
         /**
          * toolbar返回图标
          */

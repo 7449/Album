@@ -68,4 +68,3 @@ internal inline fun PreActivity.obtain(uiBundle: GalleryUiBundle) {
     preBottomViewSelect.textSize = uiBundle.preBottomOkTextSize
     preBottomViewSelect.setTextColor(uiBundle.preBottomOkTextColor)
 }
-

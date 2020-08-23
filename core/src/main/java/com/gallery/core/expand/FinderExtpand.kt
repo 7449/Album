@@ -22,10 +22,10 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
 }
 
 //裁剪或者拍照之后更新文件夹数据
-//如果现有的文件夹数据找找不到parent相同的数据则是一个新的文件夹
+//如果现有的文件夹数据找不到parent相同的数据则是一个新的文件夹
 //添加数据并更新第一条数据
 //否则更新第一条数据和文件夹数据
-fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity) {
+fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity, sortDesc: Boolean) {
     if (isEmpty()) {
         return
     }
@@ -33,20 +33,20 @@ fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity) {
     if (find == null) {
         this.add(1, scanEntity.copy(count = 1))
         val first: ScanEntity = first()
-        this[indexOf(first)] = first.copy(scanEntity, first.bucketDisplayName, first.parent, first.count + 1)
+        this[indexOf(first)] = first.copy(scanEntity, if (sortDesc) scanEntity.id else first.id, first.bucketDisplayName, first.parent, first.count + 1)
     } else {
         find { it.parent.isScanAll() }?.let {
-            this[indexOf(it)] = it.copy(scanEntity, it.bucketDisplayName, it.parent, count = it.count + 1)
+            this[indexOf(it)] = it.copy(scanEntity, if (sortDesc) scanEntity.id else it.id, it.bucketDisplayName, it.parent, count = it.count + 1)
         }
         find { it.parent == scanEntity.parent }?.let {
-            this[indexOf(it)] = it.copy(scanEntity, scanEntity.bucketDisplayName, scanEntity.parent, count = it.count + 1)
+            this[indexOf(it)] = it.copy(scanEntity, if (sortDesc) scanEntity.id else it.id, scanEntity.bucketDisplayName, scanEntity.parent, count = it.count + 1)
         }
     }
 }
 
-internal fun ScanEntity.copy(source: ScanEntity, bucketDisplayName: String, parent: Long, count: Int): ScanEntity {
+internal fun ScanEntity.copy(source: ScanEntity, id: Long, bucketDisplayName: String, parent: Long, count: Int): ScanEntity {
     return copy(
-            id = source.id,
+            id = id,
             size = source.size,
             duration = source.duration,
             mimeType = source.mimeType,

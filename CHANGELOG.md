@@ -1,20 +1,8 @@
-# scan 
-
-## 0.1.3
-
-* 更新viewModel参数
-
-## 0.1.2
-
-* 增加ViewModel实现类
-
-## 0.1.1
-
-* kotlinx版本提升至0.0.6
-* kotlinx依赖改为api
-* 新增对排序条件的支持
-
 # core
+
+## next version
+
+* 修复 ASC 排序finder数据显示问题(这个问题可通过重写 onResultSuccess 方法自动修复，所以暂时不发版本)
 
 ## 0.1.3
 
@@ -36,6 +24,10 @@
 
 # ui
 
+## next version
+
+* 修复 ASC 排序finder数据显示问题(这个问题可通过重写 onResultSuccess 方法自动修复，所以暂时不发版本)
+
 ## 0.0.8
 
 * 提供对Fragment替换api
@@ -45,3 +37,19 @@
 
 * 提高core版本
 * 优化裁剪逻辑
+
+# scan 
+
+## 0.1.3
+
+* 更新viewModel参数
+
+## 0.1.2
+
+* 增加ViewModel实现类
+
+## 0.1.1
+
+* kotlinx版本提升至0.0.6
+* kotlinx依赖改为api
+* 新增对排序条件的支持

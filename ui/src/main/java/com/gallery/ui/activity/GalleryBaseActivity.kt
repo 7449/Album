@@ -20,6 +20,7 @@ import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.Sort
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 
@@ -86,7 +87,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
     override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        finderList.updateResultFinder(scanEntity)
+        finderList.updateResultFinder(scanEntity, galleryBundle.scanSort == Sort.DESC)
     }
 
     /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */

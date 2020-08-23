@@ -39,7 +39,7 @@ open class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         intent.setClass(scanFragment.requireContext(), CropImageActivity::class.java)
         val bundle = Bundle()
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
-        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, options)
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, options ?: CropImageOptions())
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
         return intent
     }

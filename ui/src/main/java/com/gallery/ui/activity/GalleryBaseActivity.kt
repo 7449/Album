@@ -74,10 +74,15 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
         finderList.clear()
         finderList.addAll(savedInstanceState.getParcelableArrayListExpand(UIResult.UI_FINDER_LIST))
         finderName = savedInstanceState.getStringOrDefault(UIResult.UI_FINDER_NAME, galleryBundle.allName)
-        supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
-            showFragmentExpand(fragment = it)
-        } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
+        if (onInitDefaultFragment()) {
+            supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
+                showFragmentExpand(fragment = it)
+            } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
+        }
     }
+
+    /** 是否初始化默认的Fragment */
+    open fun onInitDefaultFragment(): Boolean = true
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
     override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
@@ -93,19 +98,32 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int = 0, cla: Class<out PrevBaseActivity>) {
-        onStartPrevPage(parentId, position, bundleBundleExpand(UIResult.UI_RESULT_CONFIG), cla)
+    fun onStartPrevPage(parentId: Long, position: Int, cla: Class<out PrevBaseActivity>) {
+        onStartPrevPage(parentId = parentId, position = position, option = bundleBundleExpand(UIResult.UI_RESULT_CONFIG), cla = cla)
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int = 0, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
+    fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = GalleryConfig.DEFAULT_SCAN_ALONE_TYPE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
+        onStartPrevPage(parentId, galleryFragment.selectEntities, galleryBundle, uiConfig, position, scanAlone, option, cla)
+    }
+
+    /** 启动预览 */
+    open fun onStartPrevPage(parentId: Long,
+                             selectEntities: ArrayList<ScanEntity>,
+                             galleryBundle: GalleryBundle,
+                             uiBundle: GalleryUiBundle,
+                             position: Int,
+                             scanAlone: Int,
+                             option: Bundle,
+                             cla: Class<out PrevBaseActivity>) {
         prevLauncher.launch(PrevBaseActivity.newInstance(
                 this,
                 parentId,
-                galleryFragment.selectEntities,
+                selectEntities,
                 galleryBundle,
-                uiConfig,
+                uiBundle,
                 position,
+                scanAlone,
                 option,
                 cla))
     }

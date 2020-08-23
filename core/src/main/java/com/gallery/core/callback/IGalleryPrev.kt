@@ -60,6 +60,16 @@ internal interface IGalleryPrev {
     fun setCurrentItem(position: Int, smoothScroll: Boolean)
 
     /**
+     * 刷新单个Item
+     */
+    fun notifyItemChanged(position: Int)
+
+    /**
+     * 刷新全部数据
+     */
+    fun notifyDataSetChanged()
+
+    /**
      * 获取预览页销毁时[Activity.setResult]的Bundle
      * 可作为参数传递给[ScanFragment.onUpdateResult]
      * 用于合并预览页改变的数据

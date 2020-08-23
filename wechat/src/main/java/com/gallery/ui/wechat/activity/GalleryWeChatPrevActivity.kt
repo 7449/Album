@@ -5,12 +5,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import androidx.kotlin.expand.os.bundleParcelableArrayListExpand
+import androidx.core.content.ContextCompat
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.os.getSerializableOrDefault
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
 import com.gallery.core.expand.isGif
 import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
@@ -35,8 +33,32 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     private val selectAdapter: WeChatPrevSelectAdapter = WeChatPrevSelectAdapter(this)
     private val isPrev: Boolean by lazy { uiResultConfig.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_PREV_IMAGE) }
+    private val videoDuration: Int by lazy { uiResultConfig.getInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION) }
     private val fullImageSelect: Boolean by lazy { uiResultConfig.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE) }
     private val idList: ArrayList<Long> = ArrayList()
+
+    private fun onUpdateVideoTip(scanEntity: ScanEntity) {
+        if (!scanEntity.isVideo) {
+            galleryPrevVideoTip.visibility = View.GONE
+            prevWeChatToolbarSend.isEnabled = true
+            prevWeChatSelect.isEnabled = true
+            prevWeChatSelect.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+            return
+        }
+        if (scanEntity.duration > videoDuration) {
+            galleryPrevVideoTip.visibility = View.VISIBLE
+            galleryPrevVideoTip.text = getString(R.string.gallery_select_video_prev_error).format(videoDuration / 1000 / 60)
+            prevWeChatSelect.setTextColor(ContextCompat.getColor(this, R.color.color_999999))
+            prevWeChatToolbarSend.isEnabled = false
+            prevWeChatSelect.isEnabled = false
+        } else {
+            prevWeChatSelect.isEnabled = true
+            prevWeChatToolbarSend.isEnabled = true
+            prevWeChatSelect.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+            galleryPrevVideoTip.visibility = View.GONE
+            galleryPrevVideoTip.text = ""
+        }
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -51,10 +73,9 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         idList.addAll(savedInstanceState.getSerializableOrDefault(WeChatUiResult.GALLERY_WE_CHAT_RESULT_PREV_IDS, ArrayList<Long>()) as ArrayList<Long>)
         prevWeChatToolbarBack.setOnClickListener { onGalleryFinish() }
         prevWeChatToolbarText.text = "%s / %s".format(0, galleryBundle.multipleMaxCount)
-        val selectList: ArrayList<ScanEntity> = bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT)
         prevWeChatFullImage.isChecked = fullImageSelect
+        galleryPrevList.adapter = selectAdapter
         prevWeChatToolbarSend.isEnabled = true
-        prevWeChatToolbarSend.text = uiConfig.selectText + if (selectList.isEmpty()) "" else "(${selectList.count()}/${galleryBundle.multipleMaxCount})"
         prevWeChatToolbarSend.setOnClickListener {
             if (prevFragment.selectEmpty) {
                 prevFragment.selectEntities.add(prevFragment.currentItem)
@@ -62,14 +83,6 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
             }
             onGallerySelectEntities()
         }
-        prevWeChatSelect.setOnClickListener { prevFragment.checkBoxClick(it) }
-        galleryPrevList.layoutManager = LinearLayoutManager(this).apply {
-            this.orientation = LinearLayoutManager.HORIZONTAL
-        }
-        galleryPrevList.adapter = selectAdapter
-        galleryPrevList.visibility = if (selectList.isEmpty()) View.GONE else View.VISIBLE
-        galleryPrevListLine.visibility = if (selectList.isEmpty()) View.GONE else View.VISIBLE
-        selectAdapter.updateSelect(selectList)
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
@@ -86,6 +99,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     override fun onPageSelected(position: Int) {
         val currentItem: ScanEntity = prevFragment.currentItem
+        onUpdateVideoTip(prevFragment.currentItem)
         prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
         prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
         prevWeChatFullImage.visibility = if (currentItem.isGif || currentItem.isVideo) View.GONE else View.VISIBLE
@@ -95,6 +109,12 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     override fun onPrevViewCreated(savedInstanceState: Bundle?) {
         prevWeChatToolbarText.text = (prevFragment.currentPosition + 1).toString() + "/" + prevFragment.itemCount
+        prevWeChatToolbarSend.text = uiConfig.selectText + if (prevFragment.selectEmpty) "" else "(${prevFragment.selectCount}/${galleryBundle.multipleMaxCount})"
+        prevWeChatSelect.setOnClickListener { prevFragment.checkBoxClick(it) }
+        galleryPrevList.visibility = if (prevFragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
+        galleryPrevListLine.visibility = if (prevFragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
+        selectAdapter.updateSelect(prevFragment.selectEntities)
+        onUpdateVideoTip(prevFragment.currentItem)
     }
 
     override fun onChangedCheckBox() {

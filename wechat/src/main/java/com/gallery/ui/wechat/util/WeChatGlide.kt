@@ -14,8 +14,6 @@ import com.gallery.ui.wechat.widget.WeChatGalleryItem
 import com.gallery.ui.wechat.widget.WeChatPrevItem
 import com.gallery.ui.wechat.widget.WeChatSelectItem
 
-private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
-
 internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll: ArrayList<ScanEntity>, galleryEntity: ScanEntity, selectView: TextView) {
     removeAllViews()
     val weChatGalleryItem = WeChatGalleryItem(context)
@@ -27,14 +25,14 @@ internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll
     } else {
         selectView.text = ""
     }
-    Glide.with(context).load(galleryEntity.externalUri).apply(requestOptions.override(width, height)).into(weChatGalleryItem.imageView)
+    Glide.with(context).load(galleryEntity.externalUri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(weChatGalleryItem.imageView)
     addView(weChatGalleryItem, FrameLayout.LayoutParams(width, height))
 }
 
 internal fun FrameLayout.displayGalleryThumbnails(finderEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).load(finderEntity.externalUri).apply(requestOptions).into(imageView)
+    Glide.with(context).load(finderEntity.externalUri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()).into(imageView)
     addView(imageView)
 }
 
@@ -50,6 +48,6 @@ internal fun FrameLayout.displayGalleryPrevSelect(scanEntity: ScanEntity, idList
     removeAllViews()
     val weChatSelectItem = WeChatSelectItem(context)
     weChatSelectItem.update(scanEntity, idList, isPrev)
-    Glide.with(context).load(scanEntity.externalUri).apply(requestOptions.fitCenter()).into(weChatSelectItem.imageView)
+    Glide.with(context).load(scanEntity.externalUri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).fitCenter()).into(weChatSelectItem.imageView)
     addView(weChatSelectItem)
 }

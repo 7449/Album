@@ -3,6 +3,7 @@ package com.gallery.ui.wechat
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
@@ -54,6 +55,10 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
                     finderTextCompoundDrawable = R.drawable.ic_wechat_gallery_finder_action,
                     finderTextSize = 14.toFloat()
             ),
+            galleryOption = Bundle().apply {
+                putInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, 500000)
+                putString(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DES, "全部视频")
+            },
             clz = GalleryWeChatActivity::class.java
     )
 }

@@ -3,15 +3,12 @@ package com.gallery.core.ui.base
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.getParcelableOrDefault
-import androidx.lifecycle.ViewModelProvider
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
 import com.gallery.core.callback.*
 import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.PermissionCode
 import com.gallery.core.expand.requestPermissionResultLauncherExpand
-import com.gallery.scan.ScanImpl
-import com.gallery.scan.ScanViewModelFactory
 
 /**
  * @author y
@@ -99,9 +96,6 @@ abstract class GalleryBaseFragment(layoutId: Int) : Fragment(layoutId) {
 
     /** 参数 */
     protected val galleryBundle by lazy { getParcelableOrDefault<GalleryBundle>(GalleryConfig.GALLERY_CONFIG, GalleryBundle()) }
-
-    /** 扫描 ViewModel */
-    protected val scanViewModel: ScanImpl by lazy { ViewModelProvider(requireActivity(), ScanViewModelFactory(requireActivity(), galleryBundle.scanType)).get(ScanImpl::class.java) }
 
     protected open fun onCameraResultCanceled() {}
 

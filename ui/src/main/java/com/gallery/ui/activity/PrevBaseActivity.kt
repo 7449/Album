@@ -28,6 +28,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
                 galleryBundle: GalleryBundle,
                 uiBundle: GalleryUiBundle,
                 position: Int,
+                scanAlone: Int,
                 option: Bundle,
                 cla: Class<out PrevBaseActivity>): Intent {
             val bundle = Bundle()
@@ -37,6 +38,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
             /** core library 数据 */
             bundle.putParcelableArrayList(GalleryConfig.GALLERY_SELECT, selectList)
             bundle.putInt(GalleryConfig.GALLERY_POSITION, position)
+            bundle.putInt(GalleryConfig.GALLERY_RESULT_SCAN_ALONE, scanAlone)
             bundle.putLong(GalleryConfig.GALLERY_PARENT_ID, parentId)
             bundle.putParcelable(GalleryConfig.GALLERY_CONFIG, galleryBundle)
             return Intent(context, cla).putExtras(bundle)
@@ -54,15 +56,21 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
-            showFragmentExpand(fragment = it)
-        } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
-                bundleLongOrDefault(GalleryConfig.GALLERY_PARENT_ID),
-                bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT),
-                galleryBundle,
-                bundleIntOrDefault(GalleryConfig.GALLERY_POSITION)
-        ))
+        if (onInitDefaultFragment()) {
+            supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
+                showFragmentExpand(fragment = it)
+            } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
+                    bundleLongOrDefault(GalleryConfig.GALLERY_PARENT_ID),
+                    bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT),
+                    galleryBundle,
+                    bundleIntOrDefault(GalleryConfig.GALLERY_POSITION),
+                    bundleIntOrDefault(GalleryConfig.GALLERY_RESULT_SCAN_ALONE, GalleryConfig.DEFAULT_SCAN_ALONE_TYPE)
+            ))
+        }
     }
+
+    /** 是否初始化默认的Fragment */
+    open fun onInitDefaultFragment(): Boolean = true
 
     /** back返回,可为Bundle插入需要的数据 */
     open fun onKeyBackResult(bundle: Bundle): Bundle {

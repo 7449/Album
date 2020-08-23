@@ -3,6 +3,7 @@
     <string name="gallery_wechat_full_image">原图</string>
     <string name="gallery_select_video_max_length">视频过长</string>
     <string name="gallery_select_video_error">不能分享这种格式的视频</string>
+    <string name="gallery_select_video_prev_error">不能分享超过%s分钟的视频</string>
     <string name="gallery_wechat_select">选择</string>
     <string name="gallery_wechat_prev_gif_format">GIF size：%s</string>
 </resources>

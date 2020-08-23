@@ -5,9 +5,7 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-
-@SuppressLint("SimpleDateFormat")
-private val formatterVideo = SimpleDateFormat("mm:ss")
+import java.util.concurrent.TimeUnit
 
 @SuppressLint("SimpleDateFormat")
 private val formatter = SimpleDateFormat("yyyy/MM")
@@ -16,7 +14,9 @@ internal fun Long.formatTimeVideo(): String {
     if (toInt() == 0) {
         return "--:--"
     }
-    val format: String = formatterVideo.format(this)
+    val format: String = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(this),
+            TimeUnit.MILLISECONDS.toSeconds(this) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(this)))
     if (!format.startsWith("0")) {
         return format
     }

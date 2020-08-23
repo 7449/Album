@@ -33,7 +33,7 @@ import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.*
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
-class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), GalleryAdapter.OnGalleryItemClickListener, ScanView, IGallery {
+open class ScanFragment : GalleryBaseFragment(R.layout.gallery_fragment_gallery), GalleryAdapter.OnGalleryItemClickListener, ScanView, IGallery {
 
     companion object {
         fun newInstance(galleryBundle: GalleryBundle): ScanFragment {

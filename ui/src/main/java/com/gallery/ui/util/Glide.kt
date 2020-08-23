@@ -10,7 +10,6 @@ import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R
 
-private val requestOptions: RequestOptions = RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()
 private val defaultLayoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT).apply {
     gravity = Gravity.CENTER
 }
@@ -18,14 +17,14 @@ private val defaultLayoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutPa
 internal fun FrameLayout.displayGallery(width: Int, height: Int, galleryEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).load(galleryEntity.externalUri).apply(requestOptions.override(width, height)).into(imageView)
+    Glide.with(context).load(galleryEntity.externalUri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(imageView)
     addView(imageView, FrameLayout.LayoutParams(width, height))
 }
 
 internal fun FrameLayout.displayGalleryThumbnails(finderEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).load(finderEntity.externalUri).apply(requestOptions).into(imageView)
+    Glide.with(context).load(finderEntity.externalUri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()).into(imageView)
     addView(imageView)
 }
 

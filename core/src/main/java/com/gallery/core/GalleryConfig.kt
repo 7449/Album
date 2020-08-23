@@ -18,6 +18,11 @@ object GalleryConfig {
     const val GALLERY_SELECT = "gallerySelect"
 
     /**
+     * 预览页单独扫描
+     */
+    const val GALLERY_RESULT_SCAN_ALONE = "galleryPrevScanAlone"
+
+    /**
      *  parentId Bundle key,如果是预览进入为[DEFAULT_PARENT_ID]
      * [Bundle.putParcelableArrayList]
      */
@@ -49,4 +54,9 @@ object GalleryConfig {
      * 点击图片进入预览应该是当前文件的parentId
      */
     const val DEFAULT_PARENT_ID = -1111L
+
+    /**
+     * 预览页单独扫描默认值
+     */
+    const val DEFAULT_SCAN_ALONE_TYPE = -1
 }

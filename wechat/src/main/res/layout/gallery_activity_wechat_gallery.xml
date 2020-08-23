@@ -39,7 +39,8 @@
                 android:id="@+id/galleryWeChatToolbarFinderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 tools:text="Finder" />
 
             <androidx.appcompat.widget.AppCompatImageView

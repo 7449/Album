@@ -7,9 +7,9 @@ object Plugin {
 
 object Version {
     const val applicationId = "com.gallery.sample"
-    const val compileSdk = 29
+    const val compileSdk = 30
     const val minSdk = 19
-    const val targetSdk = 29
+    const val targetSdk = 30
     const val versionCode = 1
     const val versionName = "1.0"
 }

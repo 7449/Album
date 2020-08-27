@@ -2,7 +2,6 @@ package com.gallery.sample.viewmodel
 
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanImpl
@@ -16,10 +15,10 @@ object ScanViewModelTest {
 //                .onSuccess { Log.i("ViewModelProvider", "ViewModelProvider success") }
 //                .onFailure { Log.e("ViewModelProvider", "ViewModelProvider failure:${it.message}") }
         val viewModel = ViewModelProvider(fragmentActivity, ScanViewModelFactory(fragmentActivity, ScanType.IMAGE)).get(ScanImpl::class.java)
-        viewModel.scanLiveData.observe(fragmentActivity, Observer {
+        viewModel.scanLiveData.observe(fragmentActivity, {
             Log.i("ViewModelProvider", "ViewModelProvider success:${it.entities}")
         })
-        viewModel.resultLiveData.observe(fragmentActivity, Observer {
+        viewModel.resultLiveData.observe(fragmentActivity, {
             Log.i("ViewModelProvider", "ViewModelProvider success:${it.entity}")
         })
         viewModel.scanParent(SCAN_ALL)

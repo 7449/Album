@@ -46,7 +46,11 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
   
 #### custom crop
 
-  [CustomCropActivity](./app/src/main/java/com/gallery/sample/custom/CustomCropActivity.kt)
+  [ICrop](./core/src/main/java/com/gallery/core/crop/ICrop.kt)
+  
+  [CropperImpl](./ui/src/main/java/com/gallery/ui/crop/CropperImpl.kt)
+  
+  [UCropImpl](./ui/src/main/java/com/gallery/ui/crop/UCropImpl.kt)
 
 #### custom camera
 

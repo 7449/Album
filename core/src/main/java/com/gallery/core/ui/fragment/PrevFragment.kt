@@ -2,15 +2,15 @@ package com.gallery.core.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.putArgs
 import com.gallery.core.R
 import com.gallery.core.delegate.PrevDelegate
-import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
-open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : GalleryBaseFragment(layoutId) {
+open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
 
     companion object {
         fun newInstance(prevArgs: PrevArgs): PrevFragment {

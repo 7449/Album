@@ -112,6 +112,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         galleryPrevListLine.visibility = if (prevFragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
         selectAdapter.updateSelect(prevFragment.selectEntities)
         onUpdateVideoTip(prevFragment.currentItem)
+        prevFragment.view?.findViewById<View>(R.id.preCheckBox)?.visibility = View.GONE
     }
 
     override fun onChangedCheckBox() {

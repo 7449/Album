@@ -2,6 +2,7 @@ package com.gallery.core.delegate
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.app.moveToNextToIdExpand
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -11,12 +12,12 @@ import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.PrevArgs.Companion.prevArgs
 import com.gallery.core.PrevArgs.Companion.putArgs
+import com.gallery.core.ScanArgs
+import com.gallery.core.ScanArgs.Companion.putArgs
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
-import com.gallery.core.callback.IPrevDelegate
 import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.adapter.PrevAdapter
-import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanViewModelFactory
@@ -25,7 +26,7 @@ import com.gallery.scan.ScanViewModelFactory
  * 预览代理
  */
 class PrevDelegate(
-        private val fragment: GalleryBaseFragment,
+        private val fragment: Fragment,
         private val viewPager2: ViewPager2,
         private val checkBox: View
 ) : IPrevDelegate {
@@ -44,15 +45,12 @@ class PrevDelegate(
             checkBox.isSelected = isCheckBox(position)
         }
     }
-    private val prevAdapter: PrevAdapter = PrevAdapter { entity, container -> fragment.galleryImageLoader.onDisplayGalleryPrev(entity, container) }
-    private val galleryBundle: GalleryBundle = prevArgs.configOrDefault
+    private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> fragment.galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
+    private val prevArgs: PrevArgs by lazy { fragment.prevArgs }
+    private val galleryBundle: GalleryBundle by lazy { prevArgs.configOrDefault }
+    private val galleryPrevCallback: IGalleryPrevCallback by lazy { fragment.galleryPrevCallback }
+    private val galleryPrevInterceptor: IGalleryPrevInterceptor by lazy { fragment.galleryPrevInterceptor }
 
-    private val galleryPrevCallback: IGalleryPrevCallback
-        get() = fragment.galleryPrevCallback
-    private val galleryPrevInterceptor: IGalleryPrevInterceptor
-        get() = fragment.galleryPrevInterceptor
-    private val prevArgs: PrevArgs
-        get() = fragment.prevArgs
     override val currentItem: ScanEntity
         get() = prevAdapter.item(currentPosition)
     override val allItem: ArrayList<ScanEntity>
@@ -108,7 +106,6 @@ class PrevDelegate(
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener { checkBoxClick(checkBox) }
         checkBox.isSelected = isCheckBox(currentPosition)
-        checkBox.visibility = View.VISIBLE
     }
 
     override fun checkBoxClick(checkBox: View) {
@@ -158,10 +155,7 @@ class PrevDelegate(
     }
 
     override fun resultBundle(isRefresh: Boolean): Bundle {
-        val bundle = Bundle()
-        bundle.putParcelableArrayList(GalleryConfig.GALLERY_SELECT, selectEntities)
-        bundle.putBoolean(GalleryConfig.GALLERY_RESULT_REFRESH, isRefresh)
-        return bundle
+        return ScanArgs.newResultInstance(selectEntities, isRefresh).putArgs()
     }
 
     override fun onDestroy() {

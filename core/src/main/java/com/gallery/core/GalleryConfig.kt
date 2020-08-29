@@ -1,6 +1,5 @@
 package com.gallery.core
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 
@@ -34,20 +33,6 @@ object GalleryConfig {
      * 默认的position,[ViewPager2.setCurrentItem]
      */
     const val GALLERY_POSITION = "galleryInitPosition"
-
-    /**
-     * [ArrayList<ScanEntity>] Bundle key
-     * [Bundle.putBoolean]
-     * 预览页返回是否刷新
-     */
-    internal const val GALLERY_RESULT_REFRESH = "galleryPrevResultRefresh"
-
-    /**
-     * 当前拍照之后的[Uri]
-     * 有一种情况为横竖屏切换,横屏点进去,然后竖屏拍照返回之后,切换之后会重走生命周期,
-     * 所以这里需要保存下当时拍照时的[Uri]
-     */
-    const val GALLERY_CAMERA_URI = "galleryCameraUri"
 
     /**
      * 点击预览携带的parentId

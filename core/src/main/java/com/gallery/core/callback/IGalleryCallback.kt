@@ -22,7 +22,6 @@ interface IGalleryCallback {
 
     /**
      * 单选状态下,点击[Adapter]item返回的那条数据
-     * [ScanFragment.onPhotoItemClick]
      */
     fun onGalleryResource(context: Context, scanEntity: ScanEntity)
 
@@ -47,7 +46,6 @@ interface IGalleryCallback {
      * 点击图片时该文件已被删除
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * 这个方法优先级高于单选和视频播放，裁剪等功能
-     * [ScanFragment.onPhotoItemClick]
      */
     fun onClickItemFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_item_file_deleted).toastExpand(context)
@@ -61,20 +59,17 @@ interface IGalleryCallback {
 
     /**
      * 刷新预览页数据之后触发
-     * [ScanFragment.onUpdateResult]
      */
     fun onChangedResultCount(selectCount: Int) {}
 
     /**
      * 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法
      * 可以跳转到预览页
-     * [ScanFragment.onPhotoItemClick]
      */
     fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long)
 
     /**
      * 每次扫描之后数据非空触发
-     * [ScanFragment.scanSuccess]
      */
     fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {}
 

@@ -1,5 +1,6 @@
 package com.gallery.core
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import com.gallery.scan.SCAN_ALL
@@ -7,6 +8,34 @@ import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.scan.annotation.ScanTypeDef
 import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class ScanArgs(
+        val parentId: Long,
+        val fileUri: Uri,
+        val isRefresh: Boolean,
+        val selectList: ArrayList<ScanEntity>
+) : Parcelable {
+    companion object {
+        private const val Key = "scanArgs"
+
+        internal fun newSaveInstance(parentId: Long, fileUri: Uri, selectList: ArrayList<ScanEntity>): ScanArgs {
+            return ScanArgs(parentId, fileUri, false, selectList)
+        }
+
+        internal fun newResultInstance(selectList: ArrayList<ScanEntity>, isRefresh: Boolean): ScanArgs {
+            return ScanArgs(SCAN_ALL, Uri.EMPTY, isRefresh, selectList)
+        }
+
+        fun ScanArgs.putArgs(bundle: Bundle = Bundle()): Bundle {
+            bundle.putParcelable(Key, this)
+            return bundle
+        }
+
+        val Bundle.scanArgs
+            get() = getParcelable<ScanArgs>(Key)
+    }
+}
 
 @Parcelize
 data class PrevArgs(

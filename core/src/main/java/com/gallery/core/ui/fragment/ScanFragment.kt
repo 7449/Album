@@ -2,17 +2,17 @@ package com.gallery.core.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
 import com.gallery.core.R
 import com.gallery.core.delegate.ScanDelegate
-import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
-open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : GalleryBaseFragment(layoutId) {
+open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
 
     companion object {
         fun newInstance(galleryBundle: GalleryBundle): ScanFragment {

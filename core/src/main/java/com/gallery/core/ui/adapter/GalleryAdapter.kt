@@ -84,7 +84,17 @@ class GalleryAdapter(
         notifyDataSetChanged()
     }
 
-    fun addEntity(position: Int, entity: ScanEntity) = currentList.add(position, entity)
+    fun addEntity(position: Int, entity: ScanEntity) {
+        if (!currentList.contains(entity)) {
+            currentList.add(position, entity)
+        }
+    }
+
+    fun addEntity(entity: ScanEntity) {
+        if (!currentList.contains(entity)) {
+            currentList.add(entity)
+        }
+    }
 
     val isNotEmpty: Boolean
         get() = galleryList.isNotEmpty()

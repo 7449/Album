@@ -1,4 +1,4 @@
-package com.gallery.core.callback
+package com.gallery.core.delegate
 
 import android.app.Activity
 import android.os.Bundle

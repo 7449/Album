@@ -1,4 +1,4 @@
-package com.gallery.core.callback
+package com.gallery.core.delegate
 
 import android.net.Uri
 import android.os.Bundle
@@ -124,4 +124,5 @@ internal interface IScanDelegate {
      * 权限被拒
      */
     fun permissionsDenied(type: PermissionCode)
+
 }

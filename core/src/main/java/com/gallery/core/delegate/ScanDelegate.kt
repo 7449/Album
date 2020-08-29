@@ -9,30 +9,28 @@ import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.squareExpand
 import androidx.kotlin.expand.content.drawableExpand
 import androidx.kotlin.expand.content.findIdByUriExpand
 import androidx.kotlin.expand.content.moveToNextToIdExpand
 import androidx.kotlin.expand.content.openVideoExpand
-import androidx.kotlin.expand.os.getLongOrDefault
-import androidx.kotlin.expand.os.getParcelableArrayListOrDefault
-import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
+import com.gallery.core.ScanArgs
+import com.gallery.core.ScanArgs.Companion.putArgs
+import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
-import com.gallery.core.callback.IScanDelegate
 import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.*
 import com.gallery.core.ui.adapter.GalleryAdapter
-import com.gallery.core.ui.base.GalleryBaseFragment
 import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.*
 
@@ -40,7 +38,7 @@ import com.gallery.scan.*
  * 图库代理
  */
 class ScanDelegate(
-        private val fragment: GalleryBaseFragment,
+        private val fragment: Fragment,
         private val recyclerView: RecyclerView,
         private val emptyView: ImageView
 ) : IScanDelegate, ScanView, GalleryAdapter.OnGalleryItemClickListener {
@@ -70,22 +68,14 @@ class ScanDelegate(
                 }
             }
 
-    private val scan: ScanImpl by lazy {
-        ScanImpl(this)
-    }
-    private val galleryAdapter: GalleryAdapter by lazy {
-        GalleryAdapter(fragment.requireActivity().squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
-    }
-    private val galleryBundle: GalleryBundle
-        get() = fragment.galleryBundle
-    private val galleryImageLoader: IGalleryImageLoader
-        get() = fragment.galleryImageLoader
-    private val galleryCallback: IGalleryCallback
-        get() = fragment.galleryCallback
-    private val galleryInterceptor: IGalleryInterceptor
-        get() = fragment.galleryInterceptor
-    private val galleryICrop: ICrop
-        get() = fragment.galleryCrop
+    private val scan: ScanImpl by lazy { ScanImpl(this) }
+    private val galleryBundle: GalleryBundle by lazy { fragment.galleryBundle }
+    private val galleryImageLoader: IGalleryImageLoader by lazy { fragment.galleryImageLoader }
+    private val galleryCallback: IGalleryCallback by lazy { fragment.galleryCallback }
+    private val galleryInterceptor: IGalleryInterceptor by lazy { fragment.galleryInterceptor }
+    private val galleryICrop: ICrop by lazy { fragment.galleryCrop }
+    private val galleryAdapter: GalleryAdapter by lazy { GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this) }
+
     override val activity: FragmentActivity?
         get() = fragment.activity
     override val activityNotNull: FragmentActivity
@@ -104,15 +94,14 @@ class ScanDelegate(
         get() = activityNotNull
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(GalleryConfig.GALLERY_SELECT, selectEntities)
-        outState.putLong(GalleryConfig.GALLERY_PARENT_ID, parentId)
-        outState.putParcelable(GalleryConfig.GALLERY_CAMERA_URI, fileUri)
+        ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putArgs(outState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
-            parentId = it.getLongOrDefault(GalleryConfig.GALLERY_PARENT_ID, SCAN_ALL)
-            fileUri = it.getParcelableOrDefault(GalleryConfig.GALLERY_CAMERA_URI, Uri.EMPTY)
+        val selectList = savedInstanceState?.scanArgs?.let {
+            parentId = it.parentId
+            fileUri = it.fileUri
+            it.selectList
         }
         galleryCallback.onGalleryViewCreated(savedInstanceState)
         fragment.view?.setBackgroundColor(galleryBundle.galleryRootBackground)
@@ -122,7 +111,7 @@ class ScanDelegate(
                 cameraOpen()
             }
         }
-        galleryAdapter.addSelectAll(savedInstanceState.getParcelableArrayListOrDefault(GalleryConfig.GALLERY_SELECT, galleryBundle.selectEntities))
+        galleryAdapter.addSelectAll(selectList ?: galleryBundle.selectEntities)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = GridLayoutManager(recyclerView.context, galleryBundle.spanCount)
         recyclerView.addItemDecoration(SimpleGridDivider(galleryBundle.dividerWidth))
@@ -160,14 +149,14 @@ class ScanDelegate(
             if (galleryBundle.scanSort == Sort.DESC) {
                 galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, scanEntity)
             } else {
-                galleryAdapter.currentList.add(scanEntity)
+                galleryAdapter.addEntity(scanEntity)
                 scrollToPosition(galleryAdapter.currentList.size - 1)
             }
         } else if (parentId == scanEntity.parent) {
             if (galleryBundle.scanSort == Sort.DESC) {
                 galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, scanEntity)
             } else {
-                galleryAdapter.currentList.add(scanEntity)
+                galleryAdapter.addEntity(scanEntity)
                 scrollToPosition(galleryAdapter.currentList.size - 1)
             }
         }
@@ -270,13 +259,12 @@ class ScanDelegate(
     }
 
     override fun onUpdateResult(bundle: Bundle) {
-        val previewGalleryEntity: ArrayList<ScanEntity>? = bundle.getParcelableArrayList(GalleryConfig.GALLERY_SELECT)
-        val isRefreshUI: Boolean = bundle.getBoolean(GalleryConfig.GALLERY_RESULT_REFRESH, true)
-        previewGalleryEntity ?: return
-        if (!isRefreshUI || selectEntities == previewGalleryEntity) {
+        val scanArgs = bundle.scanArgs
+        scanArgs ?: return
+        if (!scanArgs.isRefresh || selectEntities == scanArgs.selectList) {
             return
         }
-        galleryAdapter.addSelectAll(previewGalleryEntity)
+        galleryAdapter.addSelectAll(scanArgs.selectList)
         galleryAdapter.updateEntity()
         galleryCallback.onChangedResultCount(selectCount)
     }

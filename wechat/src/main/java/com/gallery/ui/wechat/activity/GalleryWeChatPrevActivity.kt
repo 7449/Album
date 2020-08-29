@@ -25,9 +25,6 @@ import kotlinx.android.synthetic.main.gallery_activity_wechat_prev.*
 @SuppressLint("SetTextI18n")
 class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wechat_prev), GalleryFinderAdapter.AdapterFinderListener {
 
-    override val hideCheckBox: Boolean
-        get() = true
-
     override val galleryFragmentId: Int
         get() = R.id.preWeChatFragment
 

@@ -2,11 +2,12 @@ package com.gallery.core.callback
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 
-internal interface IGalleryPrev {
+internal interface IPrevDelegate {
 
     /**
      * [ViewPager2.getCurrentItem]
@@ -45,6 +46,26 @@ internal interface IGalleryPrev {
     val currentPosition: Int
 
     /**
+     * 横竖屏保存数据
+     */
+    fun onSaveInstanceState(outState: Bundle)
+
+    /**
+     * 初始化
+     */
+    fun onCreate(savedInstanceState: Bundle?)
+
+    /**
+     * 更新数据
+     */
+    fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanEntity>)
+
+    /**
+     * 如果自定义checkBox调用这个方法是比较简单的方法
+     */
+    fun checkBoxClick(checkBox: View)
+
+    /**
      * 当前item是否是选中状态
      */
     fun isCheckBox(position: Int): Boolean
@@ -76,4 +97,8 @@ internal interface IGalleryPrev {
      */
     fun resultBundle(isRefresh: Boolean): Bundle
 
+    /**
+     * 销毁
+     */
+    fun onDestroy()
 }

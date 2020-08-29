@@ -2,7 +2,8 @@
 
 ## next version
 
-* 修复 ASC 排序finder数据显示问题(这个问题可通过重写 onResultSuccess 方法自动修复，所以暂时不发版本)
+* 修复 ASC 排序finder数据显示问题
+* 剥离Fragment
 
 ## 0.1.3
 
@@ -26,7 +27,7 @@
 
 ## next version
 
-* 修复 ASC 排序finder数据显示问题(这个问题可通过重写 onResultSuccess 方法自动修复，所以暂时不发版本)
+* 修复 ASC 排序finder数据显示问题
 
 ## 0.0.8
 

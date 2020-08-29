@@ -6,9 +6,8 @@ import android.content.ContentUris
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.kotlin.expand.app.runOnUiThreadExpand
+import androidx.fragment.app.FragmentActivity
 import com.gallery.core.GalleryBundle
-import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
@@ -49,15 +48,15 @@ fun Long.isScanAll(): Boolean = this == SCAN_ALL
 class CameraUri(val type: Int, val uri: Uri)
 
 /** 扫描数据库 */
-fun ScanFragment.scanFile(uri: Uri, action: (uri: Uri) -> Unit) {
-    scanFile(uri.filePath(requireContext()), action)
+fun FragmentActivity.scanFile(uri: Uri, action: (uri: Uri) -> Unit) {
+    scanFile(uri.filePath(this), action)
 }
 
 /** 扫描数据库 */
-fun ScanFragment.scanFile(path: String, action: (uri: Uri) -> Unit) {
-    MediaScannerConnection.scanFile(requireContext(), arrayOf(path), null) { _: String?, uri: Uri? ->
-        runOnUiThreadExpand {
-            uri ?: return@runOnUiThreadExpand
+fun FragmentActivity.scanFile(path: String, action: (uri: Uri) -> Unit) {
+    MediaScannerConnection.scanFile(this, arrayOf(path), null) { _: String?, uri: Uri? ->
+        runOnUiThread {
+            uri ?: return@runOnUiThread
             action.invoke(uri)
         }
     }

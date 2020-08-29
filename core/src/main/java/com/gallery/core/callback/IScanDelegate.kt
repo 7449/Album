@@ -2,11 +2,24 @@ package com.gallery.core.callback
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.core.expand.PermissionCode
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
 
-internal interface IGallery {
+internal interface IScanDelegate {
+
+    /**
+     * 当前Activity
+     */
+    val activity: FragmentActivity?
+
+    /**
+     * 当前Activity
+     */
+    val activityNotNull: FragmentActivity
+
     /**
      * 当前扫描的数据
      * 已经过滤了CAMERA
@@ -34,6 +47,21 @@ internal interface IGallery {
      * 已经过滤了CAMERA
      */
     val itemCount: Int
+
+    /**
+     * 横竖屏切换
+     */
+    fun onSaveInstanceState(outState: Bundle)
+
+    /**
+     * 初始化
+     */
+    fun onCreate(savedInstanceState: Bundle?)
+
+    /**
+     * 销毁
+     */
+    fun onDestroy()
 
     /**
      * 扫描设备
@@ -75,5 +103,25 @@ internal interface IGallery {
     /**
      * 打开相机
      */
-    fun openCamera()
+    fun cameraOpen()
+
+    /**
+     * 拍照成功
+     */
+    fun cameraSuccess()
+
+    /**
+     * 取消相机
+     */
+    fun cameraCanceled()
+
+    /**
+     * 允许权限
+     */
+    fun permissionsGranted(type: PermissionCode)
+
+    /**
+     * 权限被拒
+     */
+    fun permissionsDenied(type: PermissionCode)
 }

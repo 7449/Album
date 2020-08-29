@@ -9,6 +9,7 @@ import androidx.kotlin.expand.os.*
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryConfig
+import com.gallery.core.PrevArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
@@ -60,11 +61,13 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
             supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
                 showFragmentExpand(fragment = it)
             } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
-                    bundleLongOrDefault(GalleryConfig.GALLERY_PARENT_ID),
-                    bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT),
-                    galleryBundle,
-                    bundleIntOrDefault(GalleryConfig.GALLERY_POSITION),
-                    bundleIntOrDefault(GalleryConfig.GALLERY_RESULT_SCAN_ALONE, GalleryConfig.DEFAULT_SCAN_ALONE_TYPE)
+                    PrevArgs(
+                            bundleLongOrDefault(GalleryConfig.GALLERY_PARENT_ID),
+                            bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT),
+                            galleryBundle,
+                            bundleIntOrDefault(GalleryConfig.GALLERY_POSITION),
+                            bundleIntOrDefault(GalleryConfig.GALLERY_RESULT_SCAN_ALONE, GalleryConfig.DEFAULT_SCAN_ALONE_TYPE)
+                    )
             ))
         }
     }

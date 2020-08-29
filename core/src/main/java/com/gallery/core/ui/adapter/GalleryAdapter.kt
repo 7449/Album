@@ -32,8 +32,8 @@ class GalleryAdapter(
         private const val TYPE_PHOTO = 1
     }
 
-    private val galleryList: ArrayList<ScanEntity> = ArrayList()
-    private val selectList: ArrayList<ScanEntity> = ArrayList()
+    private val galleryList: ArrayList<ScanEntity> = arrayListOf()
+    private val selectList: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
         return when (viewType) {

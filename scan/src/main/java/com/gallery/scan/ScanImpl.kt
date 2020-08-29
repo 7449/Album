@@ -51,11 +51,11 @@ import com.gallery.scan.args.Columns
  *  val viewModel = ViewModelProvider(fragmentActivity, ScanViewModelFactory(fragmentActivity, ScanType.IMAGE))
  *                  .get(ScanImpl::class.java)
  *
- *  viewModel.scanLiveData.observe(fragmentActivity, Observer {
+ *  viewModel.scanLiveData.observe(fragmentActivity, {
  *      Log.i("ViewModelProvider", "ViewModelProvider success:${it.entities}")
  *  })
  *
- *  viewModel.resultLiveData.observe(fragmentActivity, Observer {
+ *  viewModel.resultLiveData.observe(fragmentActivity, {
  *      Log.i("ViewModelProvider", "ViewModelProvider success:${it.entity}")
  *  })
  *
@@ -66,6 +66,7 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
 
     val scanLiveData = MutableLiveData<ScanResult>()
     val resultLiveData = MutableLiveData<ValueResult>()
+    val errorLiveData = MutableLiveData<ScanError>()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext.applicationContext
     private val scanType: Int = scanView.scanType()
@@ -81,7 +82,10 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
             putInt(Columns.SCAN_TYPE, scanType)
-        }, ScanTask(context) {
+        }, ScanTask(context, {
+            scanView.scanError()
+            errorLiveData.postValue(ScanError(Error.SCAN))
+        }) {
             scanView.scanSuccess(it)
             scanLiveData.postValue(ScanResult(parentId, it))
             onCleared()
@@ -94,7 +98,10 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
             putInt(Columns.SCAN_TYPE, scanType)
-        }, ScanTask(context) {
+        }, ScanTask(context, {
+            scanView.resultError()
+            errorLiveData.postValue(ScanError(Error.RESULT))
+        }) {
             scanView.resultSuccess(if (it.isEmpty()) null else it[0])
             resultLiveData.postValue(ValueResult(id, if (it.isEmpty()) null else it[0]))
             onCleared()

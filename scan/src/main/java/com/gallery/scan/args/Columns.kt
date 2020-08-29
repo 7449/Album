@@ -42,7 +42,10 @@ object Columns {
     /** 高度 */
     const val HEIGHT: String = MediaStore.Files.FileColumns.HEIGHT
 
-    /** 时间 */
+    /** 添加文件的时间 */
+    const val DATE_ADDED: String = MediaStore.Files.FileColumns.DATE_ADDED
+
+    /** 文件上次修改时间 */
     const val DATE_MODIFIED: String = MediaStore.Files.FileColumns.DATE_MODIFIED
 
     /** 视频时长 */

@@ -8,6 +8,13 @@ import com.gallery.scan.annotation.SortDef
 import com.gallery.scan.annotation.SortFieldDef
 import com.gallery.scan.args.Columns
 
+enum class Error {
+    SCAN,
+    RESULT
+}
+
+class ScanError(val type: Error)
+
 class ScanResult(val parentId: Long, val entities: ArrayList<ScanEntity>)
 
 class ValueResult(val id: Long, val entity: ScanEntity?)

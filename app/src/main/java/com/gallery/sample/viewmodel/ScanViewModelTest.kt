@@ -21,6 +21,9 @@ object ScanViewModelTest {
         viewModel.resultLiveData.observe(fragmentActivity, {
             Log.i("ViewModelProvider", "ViewModelProvider success:${it.entity}")
         })
+        viewModel.errorLiveData.observe(fragmentActivity, {
+            Log.i("ViewModelProvider", "ViewModelProvider error${it.type}")
+        })
         viewModel.scanParent(SCAN_ALL)
     }
 }

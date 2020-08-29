@@ -42,9 +42,6 @@ internal interface IGallery {
 
     /**
      * 扫描单个数据
-     *
-     * 仅支持content开头的uri
-     * 不支持file开头的uri
      */
     fun onScanResult(uri: Uri)
 

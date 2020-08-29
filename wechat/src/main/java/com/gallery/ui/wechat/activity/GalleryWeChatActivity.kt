@@ -108,7 +108,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 } else {
                     galleryWeChatTime.showExpand()
                 }
-                galleryFragment.currentEntities[if (position < 0) 0 else position].let { galleryWeChatTime.text = it.dataModified.formatTime() }
+                galleryFragment.currentEntities[if (position < 0) 0 else position].let { galleryWeChatTime.text = it.dateModified.formatTime() }
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

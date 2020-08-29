@@ -57,7 +57,17 @@ interface ScanView {
     fun scanSuccess(arrayList: ArrayList<ScanEntity>) {}
 
     /**
-     * 拍照扫描成功
+     * 扫描异常
+     */
+    fun scanError() {}
+
+    /**
+     * 单个文件扫描成功
      */
     fun resultSuccess(scanEntity: ScanEntity?) {}
+
+    /**
+     * 单个文件扫描失败
+     */
+    fun resultError() {}
 }

@@ -18,7 +18,7 @@ import com.gallery.scan.args.CursorArgs
  *
  * 图片扫描
  */
-internal class ScanTask(private val context: Context, private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
+internal class ScanTask(private val context: Context, private val loaderError: () -> Unit, private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
 
     companion object {
         private const val ID_DEFAULT = 0L
@@ -28,7 +28,6 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
         args ?: throw KotlinNullPointerException("args == null")
         val parent: Long = args.getLong(Columns.PARENT)
         val fileId: Long = args.getLong(Columns.ID)
-        val orderBy = "${args.getString(Columns.SORT_FIELD)} ${args.getString(Columns.SORT)}"
         val scanType: Int = args.getInt(Columns.SCAN_TYPE)
         val selection: String = when {
             fileId != ID_DEFAULT -> CursorArgs.getResultSelection(fileId)
@@ -40,11 +39,15 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
                 CursorArgs.ALL_COLUMNS,
                 selection,
                 CursorArgs.getSelectionArgs(scanType),
-                orderBy)
+                "${args.getString(Columns.SORT_FIELD)} ${args.getString(Columns.SORT)}")
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
-        val cursor: Cursor = data ?: return
+        if (data == null) {
+            loaderError.invoke()
+            return
+        }
+        val cursor: Cursor = data
         val arrayList = ArrayList<ScanEntity>()
         while (cursor.moveToNext()) {
             arrayList.add(ScanEntity(
@@ -59,6 +62,7 @@ internal class ScanTask(private val context: Context, private val loaderSuccess:
                     cursor.getStringOrDefault(Columns.MEDIA_TYPE),
                     cursor.getIntOrDefault(Columns.WIDTH),
                     cursor.getIntOrDefault(Columns.HEIGHT),
+                    cursor.getLongOrDefault(Columns.DATE_ADDED),
                     cursor.getLongOrDefault(Columns.DATE_MODIFIED),
                     cursor.getLongOrDefault(Columns.PARENT),
                     0,

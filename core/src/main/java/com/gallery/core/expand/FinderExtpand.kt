@@ -57,7 +57,8 @@ internal fun ScanEntity.copy(source: ScanEntity, id: Long, bucketDisplayName: St
             mediaType = source.mediaType,
             width = source.width,
             height = source.height,
-            dataModified = source.dataModified,
+            dateAdded = source.dateAdded,
+            dateModified = source.dateModified,
             isSelected = source.isSelected,
             parent = parent,
             count = count

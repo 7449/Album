@@ -17,7 +17,8 @@ data class ScanEntity(
         val mediaType: String = Columns.IMAGE,
         val width: Int = 0,
         val height: Int = 0,
-        val dataModified: Long = 0,
+        val dateAdded: Long = 0,
+        val dateModified: Long = 0,
         val parent: Long = 0,
         val count: Int = 0,
         var isSelected: Boolean = false) : Parcelable

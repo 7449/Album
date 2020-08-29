@@ -40,6 +40,12 @@
 
 # scan 
 
+## next version
+
+* 新增 date_added 字段
+* 将 dataModified 修改为 dateModified
+* 新增扫描异常回调
+
 ## 0.1.3
 
 * 更新viewModel参数

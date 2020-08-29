@@ -24,7 +24,8 @@ internal object CursorArgs {
             Columns.MEDIA_TYPE,
             Columns.WIDTH,
             Columns.HEIGHT,
-            Columns.DATE_MODIFIED
+            Columns.DATE_MODIFIED,
+            Columns.DATE_ADDED
     )
 
     /** 图片信息条件 */

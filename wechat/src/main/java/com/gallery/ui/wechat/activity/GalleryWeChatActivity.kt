@@ -14,11 +14,11 @@ import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
 import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideo
 import com.gallery.scan.SCAN_ALL
+import com.gallery.scan.SCAN_NONE
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.ui.UIResult
@@ -53,7 +53,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         galleryWeChatFinderRoot.setOnClickListener { hideFinderActionView() }
         galleryWeChatFinder.adapter = newFinderAdapter
         galleryWeChatPrev.setOnClickListener {
-            onStartPrevPage(GalleryConfig.DEFAULT_PARENT_ID, 0,
+            onStartPrevPage(SCAN_NONE, 0,
                     option = Bundle().apply {
                         putInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, videoDuration)
                         putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
@@ -168,7 +168,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         onStartPrevPage(if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) SCAN_ALL else parentId,
                 if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
-                if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) ScanType.VIDEO else GalleryConfig.DEFAULT_SCAN_ALONE_TYPE,
+                if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) ScanType.VIDEO else ScanType.NONE,
                 Bundle().apply {
                     putInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, videoDuration)
                     putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)

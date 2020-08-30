@@ -1,11 +1,9 @@
 package com.gallery.core.delegate
 
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.os.bundleExpand
-import androidx.kotlin.expand.os.getParcelableOrDefault
-import androidx.kotlin.expand.os.orEmptyExpand
+import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
+import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
 import com.gallery.core.PrevArgs.Companion.prevArgs
 import com.gallery.core.callback.*
 import com.gallery.core.crop.ICrop
@@ -31,9 +29,7 @@ val Fragment.galleryCrop: ICrop
     get() = when {
         parentFragment is ICrop -> (parentFragment as ICrop).cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
         activity is ICrop -> (activity as ICrop).cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
-        else -> object : ICrop {
-            override val cropImpl: ICrop? get() = null
-        }.cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
+        else -> throw KotlinNullPointerException("cropImpl == null or crop == null")
     }
 
 /** 预览页拦截器 */
@@ -57,11 +53,11 @@ val Fragment.galleryImageLoader: IGalleryImageLoader
     get() = when {
         parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
         activity is IGalleryImageLoader -> activity as IGalleryImageLoader
-        else -> object : IGalleryImageLoader {}
+        else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
     }
 
-/** 参数 */
-val Fragment.galleryBundle get() = getParcelableOrDefault<GalleryBundle>(GalleryConfig.GALLERY_CONFIG, GalleryBundle())
+/** Fragment获取[GalleryBundle],建议初始化的时候赋值给对应的数据，这个每次调用都会重新获取数据 */
+val Fragment.galleryBundle get() = bundleOrEmptyExpand().galleryBundleOrDefault
 
-/** 预览页参数 */
-val Fragment.prevArgs get() = bundleExpand.orEmptyExpand().prevArgs ?: throw KotlinNullPointerException("prevArgs == null")
+/** 预览页参数，建议初始化的时候赋值给对应的数据，这个每次调用都会重新获取数据 */
+val Fragment.prevArgs get() = bundleOrEmptyExpand().prevArgs ?: throw KotlinNullPointerException("prevArgs == null")

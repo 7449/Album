@@ -7,10 +7,10 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
 import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideoScan
+import com.gallery.scan.SCAN_NONE
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
@@ -69,7 +69,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     onGalleryPreEmpty()
                     return
                 }
-                onStartPrevPage(GalleryConfig.DEFAULT_PARENT_ID, 0, PreActivity::class.java)
+                onStartPrevPage(SCAN_NONE, 0, PreActivity::class.java)
             }
             R.id.gallerySelect -> {
                 if (galleryFragment.selectEmpty) {

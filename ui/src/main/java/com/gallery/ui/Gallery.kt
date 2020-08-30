@@ -6,7 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
+import com.gallery.core.GalleryBundle.Companion.putGalleryBundle
 import com.gallery.ui.page.GalleryActivity
 
 class Gallery(
@@ -38,7 +38,7 @@ class Gallery(
     private fun launchIntent(): Intent {
         return Intent(fragmentActivity, clz).apply {
             putExtras(Bundle().apply {
-                putParcelable(GalleryConfig.GALLERY_CONFIG, galleryBundle)
+                putGalleryBundle(galleryBundle)
                 putParcelable(UIResult.UI_CONFIG, galleryUiBundle)
                 putBundle(UIResult.UI_GALLERY_CONFIG, galleryOption)
                 putBundle(UIResult.UI_RESULT_CONFIG, galleryPrevOption)

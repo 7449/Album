@@ -42,6 +42,7 @@ internal object CursorArgs {
         ScanType.VIDEO -> arrayOf(Columns.VIDEO)
         ScanType.IMAGE -> arrayOf(Columns.IMAGE)
         ScanType.MIX -> arrayOf(Columns.IMAGE, Columns.VIDEO)
+        ScanType.NONE -> emptyArray()
         else -> arrayOf(Columns.IMAGE)
     }
 }

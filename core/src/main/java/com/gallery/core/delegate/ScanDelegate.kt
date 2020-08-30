@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ScanArgs
-import com.gallery.core.ScanArgs.Companion.putArgs
+import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
@@ -94,7 +94,7 @@ class ScanDelegate(
         get() = activityNotNull
 
     override fun onSaveInstanceState(outState: Bundle) {
-        ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putArgs(outState)
+        ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putScanArgs(outState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

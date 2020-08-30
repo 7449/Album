@@ -5,11 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.os.*
+import androidx.kotlin.expand.os.bundleBundleExpand
+import androidx.kotlin.expand.os.bundleOrEmptyExpand
+import androidx.kotlin.expand.os.bundleParcelableOrDefault
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
+import com.gallery.core.GalleryBundle.Companion.putGalleryBundle
 import com.gallery.core.PrevArgs
+import com.gallery.core.PrevArgs.Companion.prevArgsOrDefault
+import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
@@ -37,11 +41,8 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
             bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
             bundle.putBundle(UIResult.UI_RESULT_CONFIG, option)
             /** core library 数据 */
-            bundle.putParcelableArrayList(GalleryConfig.GALLERY_SELECT, selectList)
-            bundle.putInt(GalleryConfig.GALLERY_POSITION, position)
-            bundle.putInt(GalleryConfig.GALLERY_RESULT_SCAN_ALONE, scanAlone)
-            bundle.putLong(GalleryConfig.GALLERY_PARENT_ID, parentId)
-            bundle.putParcelable(GalleryConfig.GALLERY_CONFIG, galleryBundle)
+            bundle.putPrevArgs(PrevArgs(parentId, selectList, galleryBundle, position, scanAlone))
+            bundle.putGalleryBundle(galleryBundle)
             return Intent(context, cla).putExtras(bundle)
         }
     }
@@ -60,15 +61,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         if (onInitDefaultFragment()) {
             supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
                 showFragmentExpand(fragment = it)
-            } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(
-                    PrevArgs(
-                            bundleLongOrDefault(GalleryConfig.GALLERY_PARENT_ID),
-                            bundleParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT),
-                            galleryBundle,
-                            bundleIntOrDefault(GalleryConfig.GALLERY_POSITION),
-                            bundleIntOrDefault(GalleryConfig.GALLERY_RESULT_SCAN_ALONE, GalleryConfig.DEFAULT_SCAN_ALONE_TYPE)
-                    )
-            ))
+            } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(bundleOrEmptyExpand().prevArgsOrDefault))
         }
     }
 

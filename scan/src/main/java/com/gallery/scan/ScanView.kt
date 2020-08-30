@@ -25,6 +25,7 @@ interface ScanView {
      * [ScanType.IMAGE]
      * [ScanType.VIDEO]
      * [ScanType.MIX]
+     * [ScanType.NONE]
      */
     @ScanTypeDef
     fun scanType(): Int

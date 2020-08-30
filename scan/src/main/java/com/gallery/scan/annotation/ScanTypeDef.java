@@ -8,6 +8,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
-@IntDef({ScanType.IMAGE, ScanType.VIDEO, ScanType.MIX})
+@IntDef({ScanType.IMAGE, ScanType.VIDEO, ScanType.MIX, ScanType.NONE})
 public @interface ScanTypeDef {
 }

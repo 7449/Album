@@ -3,7 +3,6 @@ package com.gallery.core.callback
 import android.net.Uri
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 
 /**
@@ -15,8 +14,6 @@ interface IGalleryInterceptor {
      * 自定义相机
      *
      * true 自定义相机，否则打开系统相机
-     *
-     * 如果自定义相机继承[GalleryBaseActivity]是比较简单的一种方法
      *
      * 简单示例
      *

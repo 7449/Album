@@ -7,20 +7,17 @@ import androidx.kotlin.expand.app.moveToNextToIdExpand
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
 import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.PrevArgs.Companion.prevArgs
-import com.gallery.core.PrevArgs.Companion.putArgs
+import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.ScanArgs
-import com.gallery.core.ScanArgs.Companion.putArgs
+import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.adapter.PrevAdapter
-import com.gallery.scan.ScanEntity
-import com.gallery.scan.ScanImpl
-import com.gallery.scan.ScanViewModelFactory
+import com.gallery.scan.*
 
 /**
  * 预览代理
@@ -70,21 +67,21 @@ class PrevDelegate(
      * 保存当前position和选中的文件数据
      */
     override fun onSaveInstanceState(outState: Bundle) {
-        PrevArgs.newSaveInstance(currentPosition, selectEntities).putArgs(outState)
+        PrevArgs.newSaveInstance(currentPosition, selectEntities).putPrevArgs(outState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //https://github.com/7449/Album/issues/4
         //新增对单独扫描的支持，获取scanAlone和parentId
-        val scanAlone = prevArgs.aloneScan
+        val scanAlone = prevArgs.scanAlone
         val parentId: Long = prevArgs.parentId
-        if (parentId == GalleryConfig.DEFAULT_PARENT_ID) {
+        if (parentId == SCAN_NONE) {
             updateEntity(savedInstanceState, prevArgs.selectList)
         } else {
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
             val scanViewModel = ViewModelProvider(fragment.requireActivity(), ScanViewModelFactory(fragment.requireActivity(),
-                    if (scanAlone == GalleryConfig.DEFAULT_SCAN_ALONE_TYPE) galleryBundle.scanType else scanAlone,
+                    if (scanAlone == ScanType.NONE) galleryBundle.scanType else scanAlone,
                     galleryBundle.scanSort,
                     galleryBundle.scanSortField))
                     .get(ScanImpl::class.java)
@@ -155,7 +152,7 @@ class PrevDelegate(
     }
 
     override fun resultBundle(isRefresh: Boolean): Bundle {
-        return ScanArgs.newResultInstance(selectEntities, isRefresh).putArgs()
+        return ScanArgs.newResultInstance(selectEntities, isRefresh).putScanArgs()
     }
 
     override fun onDestroy() {

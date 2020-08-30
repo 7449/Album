@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.gallery.core.PrevArgs
-import com.gallery.core.PrevArgs.Companion.putArgs
+import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.R
 import com.gallery.core.delegate.PrevDelegate
 import com.gallery.scan.ScanEntity
@@ -15,7 +15,7 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
     companion object {
         fun newInstance(prevArgs: PrevArgs): PrevFragment {
             val prevFragment = PrevFragment()
-            prevFragment.arguments = prevArgs.putArgs()
+            prevFragment.arguments = prevArgs.putPrevArgs()
             return prevFragment
         }
     }

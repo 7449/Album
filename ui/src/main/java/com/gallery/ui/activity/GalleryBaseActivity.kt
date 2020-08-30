@@ -9,7 +9,7 @@ import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.*
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryConfig
+import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
@@ -20,6 +20,7 @@ import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.ScanType
 import com.gallery.scan.Sort
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
@@ -104,7 +105,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = GalleryConfig.DEFAULT_SCAN_ALONE_TYPE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
+    fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = ScanType.NONE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
         onStartPrevPage(parentId, galleryFragment.selectEntities, galleryBundle, uiConfig, position, scanAlone, option, cla)
     }
 
@@ -139,7 +140,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
 
     /** 预览页确定选择 */
     open fun onResultSelect(bundle: Bundle) {
-        onGalleryResources(bundle.getParcelableArrayListExpand(GalleryConfig.GALLERY_SELECT))
+        onGalleryResources(bundle.scanArgs?.selectList ?: arrayListOf())
     }
 
     /** 用于 toolbar 返回 finish */

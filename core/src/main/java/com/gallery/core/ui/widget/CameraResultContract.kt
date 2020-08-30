@@ -5,7 +5,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
 import com.gallery.core.expand.CameraUri
-import com.gallery.scan.ScanType
+import com.gallery.scan.types.ScanType
 
 class CameraResultContract : ActivityResultContract<CameraUri, Int>() {
     override fun createIntent(context: Context, input: CameraUri): Intent =

@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.externalUri
 import com.gallery.ui.R
 
 private val defaultLayoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT).apply {

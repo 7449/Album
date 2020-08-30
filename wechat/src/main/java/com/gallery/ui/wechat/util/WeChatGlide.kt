@@ -6,9 +6,9 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.externalUri
 import com.gallery.ui.R
 import com.gallery.ui.wechat.widget.WeChatGalleryItem
 import com.gallery.ui.wechat.widget.WeChatPrevItem

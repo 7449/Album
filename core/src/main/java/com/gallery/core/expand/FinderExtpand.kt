@@ -1,7 +1,7 @@
 package com.gallery.core.expand
 
-import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.SCAN_ALL
 
 //获取当前页的文件夹数据
 //目标List为扫描成功之后的数据，返回Finder数据

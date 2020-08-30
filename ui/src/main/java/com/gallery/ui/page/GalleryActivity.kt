@@ -11,8 +11,8 @@ import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideoScan
-import com.gallery.scan.SCAN_NONE
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.SCAN_NONE
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
 import com.gallery.ui.activity.GalleryBaseActivity

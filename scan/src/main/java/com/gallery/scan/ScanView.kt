@@ -6,6 +6,8 @@ import com.gallery.scan.annotation.ScanTypeDef
 import com.gallery.scan.annotation.SortDef
 import com.gallery.scan.annotation.SortFieldDef
 import com.gallery.scan.args.Columns
+import com.gallery.scan.types.ScanType
+import com.gallery.scan.types.Sort
 
 /**
  * @author y
@@ -19,6 +21,11 @@ interface ScanView {
      *  [LoaderManager.getInstance]
      */
     val scanContext: FragmentActivity
+
+    /**
+     * 是否强制过滤掉数据库中存在数据但文件实际不存在的数据
+     */
+    val forceFilterFile: Boolean
 
     /**
      * 扫描类型
@@ -45,6 +52,7 @@ interface ScanView {
      * [Columns.MIME_TYPE]
      * [Columns.DISPLAY_NAME]
      * [Columns.MEDIA_TYPE]
+     * [Columns.DATE_ADDED]
      * [Columns.DATE_MODIFIED]
      * [Columns.BUCKET_ID]
      * [Columns.BUCKET_DISPLAY_NAME]
@@ -60,7 +68,9 @@ interface ScanView {
     /**
      * 扫描异常
      */
-    fun scanError() {}
+    fun scanError() {
+        scanSuccess(arrayListOf())
+    }
 
     /**
      * 单个文件扫描成功
@@ -70,5 +80,7 @@ interface ScanView {
     /**
      * 单个文件扫描失败
      */
-    fun resultError() {}
+    fun resultError() {
+        resultSuccess(null)
+    }
 }

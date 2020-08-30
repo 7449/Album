@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.permission.checkCameraPermissionExpand
 import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
 import com.gallery.core.ui.widget.CameraResultContract
-import com.gallery.scan.ScanType
+import com.gallery.scan.types.ScanType
 
 /** camera launcher */
 fun Fragment.requestCameraResultLauncherExpand(cancel: () -> Unit, ok: () -> Unit): ActivityResultLauncher<CameraUri> =

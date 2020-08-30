@@ -24,8 +24,8 @@ import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.ScanType
-import com.gallery.scan.Sort
+import com.gallery.scan.types.ScanType
+import com.gallery.scan.types.Sort
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
 import com.gallery.ui.UIGallerySaveArgs

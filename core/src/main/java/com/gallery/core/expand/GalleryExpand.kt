@@ -2,16 +2,13 @@
 
 package com.gallery.core.expand
 
-import android.content.ContentUris
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.provider.MediaStore
 import androidx.fragment.app.FragmentActivity
 import com.gallery.core.GalleryBundle
-import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.ScanType
-import com.gallery.scan.args.Columns
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.ScanType
 
 /** 返回拍照文件名称 为了防止重复前缀加时间戳 */
 val GalleryBundle.cameraNameExpand: String
@@ -32,14 +29,6 @@ val ScanEntity.isGif: Boolean
 /** 文件是否是视频 */
 val ScanEntity.isVideo: Boolean
     get() = mediaType == "3"
-
-/** 获取文件的Uri */
-val ScanEntity.externalUri: Uri
-    get() = if (mediaType == Columns.IMAGE) {
-        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-    } else {
-        ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
-    }
 
 /** 是否是扫描全部的Id */
 fun Long.isScanAll(): Boolean = this == SCAN_ALL

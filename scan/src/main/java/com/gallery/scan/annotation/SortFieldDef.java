@@ -14,6 +14,7 @@ import java.lang.annotation.RetentionPolicy;
         Columns.MIME_TYPE,
         Columns.DISPLAY_NAME,
         Columns.MEDIA_TYPE,
+        Columns.DATE_ADDED,
         Columns.DATE_MODIFIED,
         Columns.BUCKET_ID,
         Columns.BUCKET_DISPLAY_NAME

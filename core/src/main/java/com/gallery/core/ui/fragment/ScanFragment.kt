@@ -9,8 +9,8 @@ import com.gallery.core.GalleryBundle.Companion.putGalleryBundle
 import com.gallery.core.R
 import com.gallery.core.ScanArgs
 import com.gallery.core.delegate.ScanDelegate
-import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.SCAN_ALL
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
 open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {

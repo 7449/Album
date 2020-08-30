@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.loader.app.LoaderManager
 import com.gallery.scan.args.Columns
+import com.gallery.scan.types.Result
 
 /**
  * @author y
  * @create 2019/2/27
- * 图库扫描工具类
+ * 文件扫描工具类
  *
  *
  *   class ScanViewModelFactory(private val scanView: ScanView) : ViewModelProvider.Factory {
@@ -64,11 +65,16 @@ import com.gallery.scan.args.Columns
  */
 class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
 
+    companion object {
+        private const val SCAN_LOADER_ID = 111
+    }
+
     val scanLiveData = MutableLiveData<ScanResult>()
     val resultLiveData = MutableLiveData<ValueResult>()
     val errorLiveData = MutableLiveData<ScanError>()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext.applicationContext
+    private val forceFilterFile: Boolean = scanView.forceFilterFile
     private val scanType: Int = scanView.scanType()
     private val scanField: String = scanView.scanSortField()
     private val scanSort: String = scanView.scanSort()
@@ -79,15 +85,20 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
             putLong(Columns.PARENT, parentId)
+            putSerializable(Columns.SCAN_RESULT, Result.MULTIPLE)
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
             putInt(Columns.SCAN_TYPE, scanType)
-        }, ScanTask(context, {
+        }, ScanTask(context, forceFilterFile, {
             scanView.scanError()
-            errorLiveData.postValue(ScanError(Error.SCAN))
+            if (errorLiveData.hasActiveObservers()) {
+                errorLiveData.postValue(ScanError(Result.MULTIPLE))
+            }
         }) {
             scanView.scanSuccess(it)
-            scanLiveData.postValue(ScanResult(parentId, it))
+            if (scanLiveData.hasObservers()) {
+                scanLiveData.postValue(ScanResult(parentId, it))
+            }
             onCleared()
         })
     }
@@ -95,15 +106,20 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
     override fun scanResult(id: Long) {
         loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
             putLong(Columns.ID, id)
+            putSerializable(Columns.SCAN_RESULT, Result.SINGLE)
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
             putInt(Columns.SCAN_TYPE, scanType)
-        }, ScanTask(context, {
+        }, ScanTask(context, forceFilterFile, {
             scanView.resultError()
-            errorLiveData.postValue(ScanError(Error.RESULT))
+            if (errorLiveData.hasObservers()) {
+                errorLiveData.postValue(ScanError(Result.SINGLE))
+            }
         }) {
             scanView.resultSuccess(if (it.isEmpty()) null else it[0])
-            resultLiveData.postValue(ValueResult(id, if (it.isEmpty()) null else it[0]))
+            if (resultLiveData.hasObservers()) {
+                resultLiveData.postValue(ValueResult(id, if (it.isEmpty()) null else it[0]))
+            }
             onCleared()
         })
     }

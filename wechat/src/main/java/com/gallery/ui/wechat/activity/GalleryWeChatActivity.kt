@@ -18,10 +18,10 @@ import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideo
-import com.gallery.scan.SCAN_ALL
-import com.gallery.scan.SCAN_NONE
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.ScanType
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.SCAN_NONE
+import com.gallery.scan.types.ScanType
 import com.gallery.ui.UIResult
 import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter

@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.ScanArgs
 import com.gallery.core.expand.PermissionCode
-import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.SCAN_ALL
 
 internal interface IScanDelegate {
 

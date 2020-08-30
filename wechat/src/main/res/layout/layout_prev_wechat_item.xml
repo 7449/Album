@@ -19,8 +19,8 @@
         android:padding="2dp"
         android:textColor="@android:color/white"
         android:textSize="11sp"
-        tools:text="GIF size：1.5mb"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        tools:text="GIF size：1.5mb" />
 
     <FrameLayout
         android:id="@+id/prevWeChatVideo"

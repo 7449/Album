@@ -41,11 +41,12 @@
 
 # scan 
 
-## next version
+## 0.1.4
 
 * 新增 date_added 字段
 * 将 dataModified 修改为 dateModified
 * 新增扫描异常回调
+* 新增过滤损坏文件
 
 ## 0.1.3
 

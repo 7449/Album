@@ -11,9 +11,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.callback.IGalleryInterceptor
-import com.gallery.core.expand.externalUri
 import com.gallery.sample.R
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.externalUri
 import com.gallery.ui.page.GalleryActivity
 import kotlinx.android.synthetic.main.simple_gallery_layout.*
 

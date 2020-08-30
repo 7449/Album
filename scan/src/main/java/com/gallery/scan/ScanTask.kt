@@ -11,34 +11,34 @@ import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.gallery.scan.args.Columns
 import com.gallery.scan.args.CursorArgs
+import com.gallery.scan.types.Result
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.isFileExists
 
 /**
  * @author y
  * @create 2019/3/4
  *
- * 图片扫描
+ * 扫描
  */
-internal class ScanTask(private val context: Context, private val loaderError: () -> Unit, private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
-
-    companion object {
-        private const val ID_DEFAULT = 0L
-    }
+internal class ScanTask(private val context: Context,
+                        private val forceFilterFile: Boolean,
+                        private val loaderError: () -> Unit,
+                        private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         args ?: throw KotlinNullPointerException("args == null")
         val parent: Long = args.getLong(Columns.PARENT)
-        val fileId: Long = args.getLong(Columns.ID)
-        val scanType: Int = args.getInt(Columns.SCAN_TYPE)
-        val selection: String = when {
-            fileId != ID_DEFAULT -> CursorArgs.getResultSelection(fileId)
-            parent == SCAN_ALL -> CursorArgs.ALL_SELECTION
-            else -> CursorArgs.getParentSelection(parent)
+        val selection: String = when (args.getSerializable(Columns.SCAN_RESULT) as Result) {
+            Result.SINGLE -> CursorArgs.getResultSelection(args.getLong(Columns.ID))
+            Result.MULTIPLE -> if (parent == SCAN_ALL) CursorArgs.ALL_SELECTION
+            else CursorArgs.getParentSelection(parent)
         }
         return CursorLoader(context,
                 CursorArgs.FILE_URI,
                 CursorArgs.ALL_COLUMNS,
                 selection,
-                CursorArgs.getSelectionArgs(scanType),
+                CursorArgs.getSelectionArgs(args.getInt(Columns.SCAN_TYPE)),
                 "${args.getString(Columns.SORT_FIELD)} ${args.getString(Columns.SORT)}")
     }
 
@@ -50,7 +50,7 @@ internal class ScanTask(private val context: Context, private val loaderError: (
         val cursor: Cursor = data
         val arrayList = ArrayList<ScanEntity>()
         while (cursor.moveToNext()) {
-            arrayList.add(ScanEntity(
+            val scanEntity = ScanEntity(
                     cursor.getLongOrDefault(Columns.ID),
                     cursor.getLongOrDefault(Columns.SIZE),
                     cursor.getLongOrDefault(Columns.DURATION),
@@ -67,7 +67,13 @@ internal class ScanTask(private val context: Context, private val loaderError: (
                     cursor.getLongOrDefault(Columns.PARENT),
                     0,
                     false)
-            )
+            if (forceFilterFile) {
+                if (scanEntity.isFileExists(context)) {
+                    arrayList.add(scanEntity)
+                }
+            } else {
+                arrayList.add(scanEntity)
+            }
         }
         loaderSuccess(arrayList)
     }

@@ -15,9 +15,13 @@ import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
-import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.adapter.PrevAdapter
-import com.gallery.scan.*
+import com.gallery.scan.ScanEntity
+import com.gallery.scan.ScanImpl
+import com.gallery.scan.ScanViewModelFactory
+import com.gallery.scan.types.SCAN_NONE
+import com.gallery.scan.types.ScanType
+import com.gallery.scan.types.externalUri
 
 /**
  * 预览代理
@@ -81,6 +85,7 @@ class PrevDelegate(
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
             val scanViewModel = ViewModelProvider(fragment.requireActivity(), ScanViewModelFactory(fragment.requireActivity(),
+                    galleryBundle.forceFilter,
                     if (scanAlone == ScanType.NONE) galleryBundle.scanType else scanAlone,
                     galleryBundle.scanSort,
                     galleryBundle.scanSortField))

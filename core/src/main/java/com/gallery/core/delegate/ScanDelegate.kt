@@ -32,7 +32,12 @@ import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.*
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.widget.SimpleGridDivider
-import com.gallery.scan.*
+import com.gallery.scan.ScanEntity
+import com.gallery.scan.ScanImpl
+import com.gallery.scan.ScanView
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.Sort
+import com.gallery.scan.types.externalUri
 
 /**
  * 图库代理
@@ -92,6 +97,8 @@ class ScanDelegate(
         get() = currentEntities.size
     override val scanContext: FragmentActivity
         get() = activityNotNull
+    override val forceFilterFile: Boolean
+        get() = galleryBundle.forceFilter
 
     override fun onSaveInstanceState(outState: Bundle) {
         ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putScanArgs(outState)

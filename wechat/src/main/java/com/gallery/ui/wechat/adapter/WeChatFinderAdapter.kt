@@ -6,7 +6,8 @@ import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
-import com.xadapter.vh.*
+import com.xadapter.vh.LayoutViewHolder
+import com.xadapter.vh.XViewHolder
 
 class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
                           private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener,

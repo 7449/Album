@@ -7,10 +7,10 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.openVideoExpand
-import com.gallery.core.expand.externalUri
 import com.gallery.core.expand.isGif
 import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.externalUri
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.util.toFileSize
 import kotlinx.android.synthetic.main.layout_prev_wechat_item.view.*

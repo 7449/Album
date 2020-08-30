@@ -7,7 +7,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.xadapter.vh.*
+import com.xadapter.vh.XViewHolder
 
 class CameraViewHolder(itemView: View, private val galleryBundle: GalleryBundle) : XViewHolder(itemView) {
 

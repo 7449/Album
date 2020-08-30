@@ -9,8 +9,8 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.expand.externalUri
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.externalUri
 import com.xadapter.vh.XViewHolder
 
 class PhotoViewHolder(itemView: View,

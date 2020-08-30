@@ -10,11 +10,15 @@ import androidx.annotation.DrawableRes
 import com.gallery.core.delegate.PrevDelegate
 import com.gallery.core.delegate.ScanDelegate
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.*
+import com.gallery.scan.ScanEntity
 import com.gallery.scan.annotation.ScanTypeDef
 import com.gallery.scan.annotation.SortDef
 import com.gallery.scan.annotation.SortFieldDef
 import com.gallery.scan.args.Columns
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.SCAN_NONE
+import com.gallery.scan.types.ScanType
+import com.gallery.scan.types.Sort
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -146,6 +150,10 @@ data class GalleryBundle(
         val scanSort: String = Sort.DESC,
         @SortFieldDef
         val scanSortField: String = Columns.DATE_MODIFIED,
+        /**
+         * 是否开启强制过滤
+         */
+        internal val forceFilter: Boolean = false,
         /**
          * 隐藏相机
          */

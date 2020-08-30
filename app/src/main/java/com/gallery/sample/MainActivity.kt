@@ -17,7 +17,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.expand.externalUri
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.sample.callback.GalleryCallback
@@ -27,8 +26,9 @@ import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.CustomPageActivity
 import com.gallery.sample.viewmodel.ScanViewModelTest
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.ScanType
-import com.gallery.scan.Sort
+import com.gallery.scan.types.ScanType
+import com.gallery.scan.types.Sort
+import com.gallery.scan.types.externalUri
 import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback

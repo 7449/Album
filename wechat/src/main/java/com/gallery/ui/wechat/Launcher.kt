@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 import kotlinx.android.synthetic.main.gallery_activity_wechat_prev.*
 
 fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Intent>) {
-    Gallery(
+    Gallery.newInstance(
             this,
             null,
             galleryLauncher,

@@ -3,70 +3,58 @@ package com.gallery.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.os.bundleBundleExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
-import androidx.kotlin.expand.os.bundleParcelableOrDefault
 import androidx.kotlin.expand.text.toastExpand
-import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryBundle.Companion.putGalleryBundle
-import com.gallery.core.PrevArgs
-import com.gallery.core.PrevArgs.Companion.prevArgsOrDefault
-import com.gallery.core.PrevArgs.Companion.putPrevArgs
+import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
-import com.gallery.core.ui.base.GalleryBaseActivity
+import com.gallery.core.delegate.prevFragment
 import com.gallery.core.ui.fragment.PrevFragment
-import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.UIPrevArgs
+import com.gallery.ui.UIPrevArgs.Companion.putPrevArgs
+import com.gallery.ui.UIPrevArgs.Companion.uiPrevArgs
 import com.gallery.ui.UIResult
 
-abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
+abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
 
     companion object {
-        fun newInstance(
-                context: Context,
-                parentId: Long,
-                selectList: ArrayList<ScanEntity>,
-                galleryBundle: GalleryBundle,
-                uiBundle: GalleryUiBundle,
-                position: Int,
-                scanAlone: Int,
-                option: Bundle,
-                cla: Class<out PrevBaseActivity>): Intent {
-            val bundle = Bundle()
-            /** ui library 数据 */
-            bundle.putParcelable(UIResult.UI_CONFIG, uiBundle)
-            bundle.putBundle(UIResult.UI_RESULT_CONFIG, option)
-            /** core library 数据 */
-            bundle.putPrevArgs(PrevArgs(parentId, selectList, galleryBundle, position, scanAlone))
-            bundle.putGalleryBundle(galleryBundle)
-            return Intent(context, cla).putExtras(bundle)
+        fun newInstance(context: Context, uiPrevArgs: UIPrevArgs, cla: Class<out PrevBaseActivity>): Intent {
+            return Intent(context, cla).putExtras(uiPrevArgs.putPrevArgs())
         }
     }
 
     /** 当前Fragment 文件Id,用于初始化[PrevFragment] */
     protected abstract val galleryFragmentId: Int
 
-    /** ui 配置 */
-    val uiConfig by lazy { bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle()) }
+    /** [UIPrevArgs] */
+    protected val uiPrevArgs by lazy { bundleOrEmptyExpand().uiPrevArgs ?: throw KotlinNullPointerException("uiPrevArgs == null") }
 
-    /** 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
-    val uiResultConfig by lazy { bundleBundleExpand(UIResult.UI_RESULT_CONFIG) }
+    /** 初始配置 */
+    protected val galleryBundle by lazy { uiPrevArgs.prevArgs.configOrDefault }
+
+    /** ui 配置 */
+    val uiConfig by lazy { uiPrevArgs.uiBundle }
+
+    /**  暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
+    val uiResultConfig by lazy { uiPrevArgs.option }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (onInitDefaultFragment()) {
-            supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
-                showFragmentExpand(fragment = it)
-            } ?: addFragmentExpand(galleryFragmentId, fragment = PrevFragment.newInstance(bundleOrEmptyExpand().prevArgsOrDefault))
-        }
+        supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
+            showFragmentExpand(fragment = it)
+        } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
 
-    /** 是否初始化默认的Fragment */
-    open fun onInitDefaultFragment(): Boolean = true
+    /** 自定义Fragment */
+    open fun createFragment(): Fragment {
+        return PrevFragment.newInstance(uiPrevArgs.prevArgs)
+    }
 
     /** back返回,可为Bundle插入需要的数据 */
     open fun onKeyBackResult(bundle: Bundle): Bundle {
@@ -83,6 +71,7 @@ abstract class PrevBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), 
         return bundle
     }
 
+    /** onBackPressed */
     override fun onBackPressed() {
         val intent = Intent()
         intent.putExtras(onKeyBackResult(prevFragment.resultBundle(uiConfig.preBackRefresh)))

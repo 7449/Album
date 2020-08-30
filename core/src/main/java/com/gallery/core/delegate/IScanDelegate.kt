@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.core.ScanArgs
 import com.gallery.core.expand.PermissionCode
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
@@ -75,10 +76,10 @@ internal interface IScanDelegate {
 
     /**
      * 刷新预览之后的数据
-     * [Bundle.getParcelableArrayList] 选中的数据
-     * [Bundle.getBoolean] 是否刷新数据(合并选中的数据)
+     * [ScanArgs.selectList] 选中的数据
+     * [ScanArgs.isRefresh] 是否刷新数据(合并选中的数据)
      */
-    fun onUpdateResult(bundle: Bundle)
+    fun onUpdateResult(scanArgs: ScanArgs?)
 
     /**
      * 刷新单个Item

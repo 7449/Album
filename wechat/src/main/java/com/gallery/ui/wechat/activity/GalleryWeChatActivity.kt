@@ -14,6 +14,7 @@ import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
+import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideo

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.putGalleryBundle
 import com.gallery.core.R
+import com.gallery.core.ScanArgs
 import com.gallery.core.delegate.ScanDelegate
 import com.gallery.scan.SCAN_ALL
 import com.gallery.scan.ScanEntity
@@ -40,8 +41,8 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
         delegate.onScanGallery(parent, isCamera)
     }
 
-    fun onUpdateResult(bundle: Bundle) {
-        delegate.onUpdateResult(bundle)
+    fun onUpdateResult(scanArgs: ScanArgs?) {
+        delegate.onUpdateResult(scanArgs)
     }
 
     fun notifyItemChanged(position: Int) {

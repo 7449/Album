@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.FrameLayout
 import com.gallery.core.GalleryBundle
+import com.gallery.core.delegate.prevFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R
 import com.gallery.ui.activity.PrevBaseActivity

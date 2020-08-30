@@ -10,12 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
-import com.gallery.ui.UIResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.xadapter.vh.*
+import com.xadapter.vh.LayoutViewHolder
+import com.xadapter.vh.XViewHolder
 import kotlinx.android.synthetic.main.gallery_finder_bottom.*
 
 class BottomFinderAdapter : BaseFinderAdapter() {
+
+    companion object {
+        internal const val Key = "uiFinderArgs"
+    }
 
     private val bottomFragment: BottomFragment by lazy { BottomFragment.newInstance(uiBundle) }
 
@@ -36,7 +40,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
         companion object {
             fun newInstance(galleryUiBundle: GalleryUiBundle): BottomFragment {
                 val bundle = Bundle()
-                bundle.putParcelable(UIResult.UI_CONFIG, galleryUiBundle)
+                bundle.putParcelable(Key, galleryUiBundle)
                 return BottomFragment().apply {
                     arguments = bundle
                 }
@@ -45,7 +49,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
 
         private val list: ArrayList<ScanEntity> = ArrayList()
         private val galleryUiBundle by lazy {
-            getParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle())
+            getParcelableOrDefault<GalleryUiBundle>(Key, GalleryUiBundle())
         }
         private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener by lazy {
             requireActivity() as GalleryFinderAdapter.AdapterFinderListener

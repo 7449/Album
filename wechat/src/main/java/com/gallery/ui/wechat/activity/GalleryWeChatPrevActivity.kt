@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.os.getSerializableOrDefault
 import com.gallery.core.GalleryBundle
+import com.gallery.core.delegate.prevFragment
 import com.gallery.core.expand.isGif
 import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity

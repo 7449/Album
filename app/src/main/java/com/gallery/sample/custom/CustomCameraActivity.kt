@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.gallery.core.delegate.galleryFragment
 import com.gallery.sample.camera.CameraActivity
 import com.gallery.ui.page.GalleryActivity
 

@@ -258,8 +258,7 @@ class ScanDelegate(
         }
     }
 
-    override fun onUpdateResult(bundle: Bundle) {
-        val scanArgs = bundle.scanArgs
+    override fun onUpdateResult(scanArgs: ScanArgs?) {
         scanArgs ?: return
         if (!scanArgs.isRefresh || selectEntities == scanArgs.selectList) {
             return

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideoScan
 import com.gallery.scan.SCAN_NONE

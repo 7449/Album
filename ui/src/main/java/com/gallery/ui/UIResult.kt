@@ -9,34 +9,6 @@ object UIResult {
     const val UI_CROP_ARGS = "uiCropArgs"
 
     /**
-     * UI 参数
-     * [GalleryUiBundle]
-     */
-    const val UI_CONFIG = "uiConfig"
-
-    /**
-     * UI 参数
-     * [Any]
-     */
-    const val UI_GALLERY_CONFIG = "uiGalleryConfig"
-
-    /**
-     * UI 预览 参数
-     * [Any]
-     */
-    const val UI_RESULT_CONFIG = "uiResultConfig"
-
-    /**
-     * 横竖屏切换保存文件夹数据
-     */
-    const val UI_FINDER_LIST = "uiFinderList"
-
-    /**
-     * 横竖屏切换保存当前文件夹名称
-     */
-    const val UI_FINDER_NAME = "uiFinderName"
-
-    /**
      * 图库页toolbar返回 result_code
      */
     const val UI_TOOLBAR_BACK_RESULT_CODE = -11

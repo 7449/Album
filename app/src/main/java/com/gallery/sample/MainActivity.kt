@@ -59,11 +59,11 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色", "WeChat"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryLauncher = galleryLauncher)
-                    1 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryLauncher = galleryLauncher)
-                    2 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryLauncher = galleryLauncher)
-                    3 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryLauncher = galleryLauncher)
-                    4 -> Gallery(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryLauncher = galleryLauncher)
+                    0 -> Gallery.newInstance(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT), galleryLauncher = galleryLauncher)
+                    1 -> Gallery.newInstance(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.APP), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.APP), galleryLauncher = galleryLauncher)
+                    2 -> Gallery.newInstance(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLUE), galleryLauncher = galleryLauncher)
+                    3 -> Gallery.newInstance(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.BLACK), galleryLauncher = galleryLauncher)
+                    4 -> Gallery.newInstance(this, galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK), galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.PINK), galleryLauncher = galleryLauncher)
                     5 -> weChatUiGallery(galleryWeChatLauncher)
                 }
                 dialog.dismiss()
@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         selectSort.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("DESC", "ASC"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery(activity = this, galleryBundle = GalleryBundle(scanSort = Sort.DESC), galleryLauncher = galleryLauncher)
-                    1 -> Gallery(activity = this, galleryBundle = GalleryBundle(scanSort = Sort.ASC), galleryLauncher = galleryLauncher)
+                    0 -> Gallery.newInstance(activity = this, galleryBundle = GalleryBundle(scanSort = Sort.DESC), galleryLauncher = galleryLauncher)
+                    1 -> Gallery.newInstance(activity = this, galleryBundle = GalleryBundle(scanSort = Sort.ASC), galleryLauncher = galleryLauncher)
                 }
                 dialog.dismiss()
             }.show()
@@ -81,13 +81,13 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         selectCrop.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("CROPPER", "UCROP"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery(
+                    0 -> Gallery.newInstance(
                             activity = this,
                             galleryBundle = GalleryTheme.cropThemeGallery(this),
                             galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this, CropType.CROPPER),
                             galleryLauncher = galleryLauncher
                     )
-                    1 -> Gallery(
+                    1 -> Gallery.newInstance(
                             activity = this,
                             galleryBundle = GalleryTheme.cropThemeGallery(this),
                             galleryUiBundle = GalleryTheme.cropThemeGalleryUi(this, CropType.UCROP),
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             }.show()
         }
         customCamera.setOnClickListener {
-            Gallery(
+            Gallery.newInstance(
                     activity = this,
                     galleryLauncher = galleryLauncher,
                     clz = CustomCameraActivity::class.java
@@ -107,14 +107,14 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         selectFinderStyle.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("popup", "bottom"), View.NO_ID) { dialog, which ->
                 when (which) {
-                    0 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.POPUP), galleryLauncher = galleryLauncher)
-                    1 -> Gallery(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.BOTTOM), galleryLauncher = galleryLauncher)
+                    0 -> Gallery.newInstance(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.POPUP), galleryLauncher = galleryLauncher)
+                    1 -> Gallery.newInstance(this, galleryUiBundle = GalleryUiBundle(finderType = FinderType.BOTTOM), galleryLauncher = galleryLauncher)
                 }
                 dialog.dismiss()
             }.show()
         }
         video.setOnClickListener {
-            Gallery(
+            Gallery.newInstance(
                     activity = this,
                     galleryBundle = GalleryBundle(scanType = ScanType.VIDEO, cameraText = getString(R.string.video_tips)),
                     galleryUiBundle = GalleryUiBundle(toolbarText = getString(R.string.gallery_video_title)),
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             CustomDialog.newInstance().show(supportFragmentManager, CustomDialog::class.java.simpleName)
         }
         customActivity.setOnClickListener {
-            Gallery(
+            Gallery.newInstance(
                     activity = this,
                     galleryLauncher = galleryLauncher,
                     clz = CustomPageActivity::class.java,

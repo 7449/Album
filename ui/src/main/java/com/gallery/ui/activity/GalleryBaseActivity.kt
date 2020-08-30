@@ -5,28 +5,36 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.os.*
+import androidx.kotlin.expand.os.bundleOrEmptyExpand
+import androidx.kotlin.expand.os.orEmptyExpand
 import com.gallery.core.GalleryBundle
+import com.gallery.core.PrevArgs
 import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.updateResultFinder
-import com.gallery.core.ui.base.GalleryBaseActivity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanType
 import com.gallery.scan.Sort
 import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
+import com.gallery.ui.UIGallerySaveArgs
+import com.gallery.ui.UIGallerySaveArgs.Companion.putArgs
+import com.gallery.ui.UIGallerySaveArgs.Companion.uiGallerySaveArgs
+import com.gallery.ui.UIPrevArgs
 import com.gallery.ui.UIResult
 
-
-abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
+abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
     protected abstract val currentFinderName: String
@@ -34,26 +42,32 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
     /** 当前Fragment 文件Id,用于初始化[ScanFragment] */
     protected abstract val galleryFragmentId: Int
 
+    /** 初始参数 */
+    protected val galleryArgs by lazy { bundleOrEmptyExpand().uiGalleryArgsOrDefault }
+
+    /** 初始配置 */
+    protected val galleryBundle by lazy { galleryArgs.galleryBundle }
+
     /** ui 配置 */
-    protected val uiConfig by lazy { bundleParcelableOrDefault<GalleryUiBundle>(UIResult.UI_CONFIG, GalleryUiBundle()) }
+    protected val uiConfig by lazy { galleryArgs.galleryUiBundle }
 
     /** 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
-    protected val uiGalleryConfig by lazy { bundleBundleExpand(UIResult.UI_GALLERY_CONFIG) }
+    protected val uiGalleryConfig by lazy { galleryArgs.galleryOption }
 
     /** 预览页启动[ActivityResultLauncher],暂不对实现类开放  */
     private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
         when (intent.resultCode) {
             UIResult.PREV_OK_RESULT_CODE -> {
-                galleryFragment.onUpdateResult(bundleExpand)
+                galleryFragment.onUpdateResult(bundleExpand.scanArgs)
                 onResultSelect(bundleExpand)
             }
             UIResult.PREV_TOOLBAR_BACK_RESULT_CODE -> {
-                galleryFragment.onUpdateResult(bundleExpand)
+                galleryFragment.onUpdateResult(bundleExpand.scanArgs)
                 onResultToolbar(bundleExpand)
             }
             UIResult.PREV_BACK_RESULT_CODE -> {
-                galleryFragment.onUpdateResult(bundleExpand)
+                galleryFragment.onUpdateResult(bundleExpand.scanArgs)
                 onResultBack(bundleExpand)
             }
         }
@@ -67,24 +81,19 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(UIResult.UI_FINDER_LIST, finderList)
-        outState.putString(UIResult.UI_FINDER_NAME, currentFinderName)
+        UIGallerySaveArgs.newSaveInstance(currentFinderName, finderList).putArgs(outState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val saveArgs = savedInstanceState?.uiGallerySaveArgs
         finderList.clear()
-        finderList.addAll(savedInstanceState.getParcelableArrayListExpand(UIResult.UI_FINDER_LIST))
-        finderName = savedInstanceState.getStringOrDefault(UIResult.UI_FINDER_NAME, galleryBundle.allName)
-        if (onInitDefaultFragment()) {
-            supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
-                showFragmentExpand(fragment = it)
-            } ?: addFragmentExpand(galleryFragmentId, fragment = ScanFragment.newInstance(galleryBundle))
-        }
+        finderList.addAll(saveArgs?.finderList ?: arrayListOf())
+        finderName = saveArgs?.finderName ?: galleryBundle.allName
+        supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
+            showFragmentExpand(fragment = it)
+        } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
-
-    /** 是否初始化默认的Fragment */
-    open fun onInitDefaultFragment(): Boolean = true
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
     override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
@@ -101,33 +110,22 @@ abstract class GalleryBaseActivity(layoutId: Int) : GalleryBaseActivity(layoutId
 
     /** 启动预览 */
     fun onStartPrevPage(parentId: Long, position: Int, cla: Class<out PrevBaseActivity>) {
-        onStartPrevPage(parentId = parentId, position = position, option = bundleBundleExpand(UIResult.UI_RESULT_CONFIG), cla = cla)
+        onStartPrevPage(parentId = parentId, position = position, option = galleryArgs.galleryPrevOption, cla = cla)
     }
 
     /** 启动预览 */
     fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = ScanType.NONE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
-        onStartPrevPage(parentId, galleryFragment.selectEntities, galleryBundle, uiConfig, position, scanAlone, option, cla)
+        onStartPrevPage(UIPrevArgs(uiConfig, PrevArgs(parentId, galleryFragment.selectEntities, galleryBundle, position, scanAlone), option), cla)
+    }
+
+    /** 自定义Fragment */
+    open fun createFragment(): Fragment {
+        return ScanFragment.newInstance(galleryBundle)
     }
 
     /** 启动预览 */
-    open fun onStartPrevPage(parentId: Long,
-                             selectEntities: ArrayList<ScanEntity>,
-                             galleryBundle: GalleryBundle,
-                             uiBundle: GalleryUiBundle,
-                             position: Int,
-                             scanAlone: Int,
-                             option: Bundle,
-                             cla: Class<out PrevBaseActivity>) {
-        prevLauncher.launch(PrevBaseActivity.newInstance(
-                this,
-                parentId,
-                selectEntities,
-                galleryBundle,
-                uiBundle,
-                position,
-                scanAlone,
-                option,
-                cla))
+    open fun onStartPrevPage(uiPrevArgs: UIPrevArgs, cla: Class<out PrevBaseActivity>) {
+        prevLauncher.launch(PrevBaseActivity.newInstance(this, uiPrevArgs, cla))
     }
 
     /** 预览页toolbar返回 */

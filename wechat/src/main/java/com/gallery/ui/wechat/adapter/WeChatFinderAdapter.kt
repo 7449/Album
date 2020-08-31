@@ -10,13 +10,8 @@ import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder
 
 class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
-                          private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener,
-                          private val weChatAdapterListener: WeChatAdapterListener
+                          private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener
 ) : RecyclerView.Adapter<XViewHolder>() {
-
-    interface WeChatAdapterListener {
-        val currentFinderId: Long
-    }
 
     private val list: ArrayList<ScanEntity> = ArrayList()
 
@@ -44,9 +39,5 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
         list.clear()
         list.addAll(entities)
         notifyDataSetChanged()
-    }
-
-    fun findItemIndex(entity: ScanEntity): Int {
-        return list.indexOf(entity)
     }
 }

@@ -1,3 +1,7 @@
+# next version
+
+* 通过weChat Library bug测试得出core需要添加部分开放api
+
 # core
 
 ## 0.1.4

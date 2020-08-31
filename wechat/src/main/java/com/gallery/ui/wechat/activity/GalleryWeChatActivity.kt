@@ -30,8 +30,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         WeChatFinderAdapter.WeChatAdapterListener {
 
     private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(uiConfig, this, this) }
-    private val videoDuration: Int by lazy { uiGalleryConfig.getInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, 300000) }
-    private val videoDes: String by lazy { uiGalleryConfig.getString(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DES, "全部视频") }
+    private val videoDuration: Int by lazy { uiGapConfig.getInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, 300000) }
+    private val videoDes: String by lazy { uiGapConfig.getString(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DES, "全部视频") }
     private val videoList: ArrayList<ScanEntity> = ArrayList()
 
     override val currentFinderId: Long
@@ -122,7 +122,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
             videoList.clear()
             videoList.addAll(scanEntities.filter { it.isVideoExpand })
             finderList.clear()
-            finderList.addAll(scanEntities.findFinder(galleryBundle.sdName, galleryBundle.allName))
+            finderList.addAll(scanEntities.findFinder(galleryConfig.sdName, galleryConfig.allName))
             scanEntities.find { it.isVideoExpand }?.let { it ->
                 finderList.add(1, it.copy(parent = WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT, bucketDisplayName = videoDes, count = videoList.size))
             }
@@ -204,7 +204,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     private fun updateView() {
         galleryWeChatToolbarSend.isEnabled = !galleryFragment.selectEmpty
         galleryWeChatPrev.isEnabled = !galleryFragment.selectEmpty
-        galleryWeChatToolbarSend.text = uiConfig.selectText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount}/${galleryBundle.multipleMaxCount})"
+        galleryWeChatToolbarSend.text = uiConfig.selectText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount}/${galleryConfig.multipleMaxCount})"
         galleryWeChatPrev.text = uiConfig.preViewText + if (galleryFragment.selectEmpty) "" else "(${galleryFragment.selectCount})"
     }
 
@@ -224,7 +224,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
         bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
         intent.putExtras(bundle)
-        setResult(UIResult.GALLERY_MULTIPLE_RESULT_CODE, intent)
+        setResult(UIResult.RESULT_CODE_MULTIPLE_DATA, intent)
         finish()
     }
 

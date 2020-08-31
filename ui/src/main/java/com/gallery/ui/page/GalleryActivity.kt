@@ -22,9 +22,9 @@ import com.gallery.ui.adapter.PopupFinderAdapter
 import com.gallery.ui.crop.CropType
 import com.gallery.ui.crop.CropperImpl
 import com.gallery.ui.crop.UCropImpl
+import com.gallery.ui.engine.displayGallery
+import com.gallery.ui.engine.displayGalleryThumbnails
 import com.gallery.ui.obtain
-import com.gallery.ui.util.displayGallery
-import com.gallery.ui.util.displayGalleryThumbnails
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
@@ -57,8 +57,8 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         galleryFinderAll.setOnClickListener(this)
 
         galleryFinderAll.text = finderName
-        galleryPre.visibility = if (galleryBundle.radio || galleryBundle.isVideoScan) View.GONE else View.VISIBLE
-        gallerySelect.visibility = if (galleryBundle.radio) View.GONE else View.VISIBLE
+        galleryPre.visibility = if (galleryConfig.radio || galleryConfig.isVideoScan) View.GONE else View.VISIBLE
+        gallerySelect.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
 
         galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }
     }

@@ -8,8 +8,8 @@ import com.gallery.core.delegate.prevFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.R
 import com.gallery.ui.activity.PrevBaseActivity
+import com.gallery.ui.engine.displayGalleryPrev
 import com.gallery.ui.obtain
-import com.gallery.ui.util.displayGalleryPrev
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevBaseActivity(layoutId) {
@@ -31,7 +31,7 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
     }
 
     override fun onPrevViewCreated(savedInstanceState: Bundle?) {
-        preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
+        preCount.text = "%s / %s".format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
         preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
@@ -49,6 +49,6 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
     }
 
     override fun onChangedCheckBox() {
-        preCount.text = "%s / %s".format(prevFragment.selectCount.toString(), galleryBundle.multipleMaxCount)
+        preCount.text = "%s / %s".format(prevFragment.selectCount.toString(), galleryConfig.multipleMaxCount)
     }
 }

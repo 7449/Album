@@ -30,8 +30,10 @@ val Fragment.galleryCallback: IGalleryCallback
 /** 裁剪回调 */
 val Fragment.galleryCrop: ICrop
     get() = when {
-        parentFragment is ICrop -> (parentFragment as ICrop).cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
-        activity is ICrop -> (activity as ICrop).cropImpl ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
+        parentFragment is ICrop -> (parentFragment as ICrop).cropImpl
+                ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
+        activity is ICrop -> (activity as ICrop).cropImpl
+                ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
         else -> throw KotlinNullPointerException("cropImpl == null or crop == null")
     }
 

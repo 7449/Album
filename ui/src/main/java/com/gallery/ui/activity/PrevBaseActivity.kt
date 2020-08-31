@@ -20,11 +20,19 @@ import com.gallery.ui.R
 import com.gallery.ui.UIPrevArgs
 import com.gallery.ui.UIPrevArgs.Companion.putPrevArgs
 import com.gallery.ui.UIPrevArgs.Companion.uiPrevArgs
-import com.gallery.ui.UIResult
 
 abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
 
     companion object {
+        /** 预览页toolbar返回 result_code */
+        internal const val RESULT_CODE_TOOLBAR = -15
+
+        /** 预览页back返回 result_code */
+        internal const val RESULT_CODE_BACK = -16
+
+        /** 预览页选中数据返回 result_code */
+        internal const val RESULT_CODE_SELECT = -17
+
         fun newInstance(context: Context, uiPrevArgs: UIPrevArgs, cla: Class<out PrevBaseActivity>): Intent {
             return Intent(context, cla).putExtras(uiPrevArgs.putPrevArgs())
         }
@@ -39,13 +47,13 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     }
 
     /** 初始配置 */
-    protected val galleryBundle by lazy { uiPrevArgs.prevArgs.configOrDefault }
+    protected val galleryConfig by lazy { uiPrevArgs.prevArgs.configOrDefault }
 
     /** ui 配置 */
     val uiConfig by lazy { uiPrevArgs.uiBundle }
 
     /**  暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
-    val uiResultConfig by lazy { uiPrevArgs.option }
+    val uiGapConfig by lazy { uiPrevArgs.option }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +86,7 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     override fun onBackPressed() {
         val intent = Intent()
         intent.putExtras(onKeyBackResult(prevFragment.resultBundle(uiConfig.preBackRefresh)))
-        setResult(UIResult.PREV_BACK_RESULT_CODE, intent)
+        setResult(RESULT_CODE_BACK, intent)
         super.onBackPressed()
     }
 
@@ -86,7 +94,7 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     open fun onGalleryFinish() {
         val intent = Intent()
         intent.putExtras(onToolbarFinishResult(prevFragment.resultBundle(uiConfig.preFinishRefresh)))
-        setResult(UIResult.PREV_TOOLBAR_BACK_RESULT_CODE, intent)
+        setResult(RESULT_CODE_TOOLBAR, intent)
         finish()
     }
 
@@ -94,7 +102,7 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     open fun onGallerySelectEntities() {
         val intent = Intent()
         intent.putExtras(onSelectEntitiesResult(prevFragment.resultBundle(true)))
-        setResult(UIResult.PREV_OK_RESULT_CODE, intent)
+        setResult(RESULT_CODE_SELECT, intent)
         finish()
     }
 

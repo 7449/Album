@@ -110,7 +110,7 @@ object GalleryTheme {
                 finderItemTextColor = R.color.colorWhite.colorExpand(activity),
                 args = Bundle().apply {
                     if (cropType == CropType.CROPPER) {
-                        putParcelable(UIResult.UI_CROP_ARGS, CropImageOptions().apply {
+                        putParcelable(UIResult.CROP_ARGS, CropImageOptions().apply {
 //                            backgroundColor = R.color.colorBlack.colorExpand(activity)
 //                            borderCornerColor = R.color.colorBlack.colorExpand(activity)
 //                            guidelinesColor = R.color.colorBlack.colorExpand(activity)
@@ -118,7 +118,7 @@ object GalleryTheme {
                             activityTitle = "Cropper"
                         })
                     } else {
-                        putBundle(UIResult.UI_CROP_ARGS, Bundle().apply {
+                        putBundle(UIResult.CROP_ARGS, Bundle().apply {
                             putString(UCrop.Options.EXTRA_UCROP_TITLE_TEXT_TOOLBAR, "UCrop")
                             putInt(UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, R.color.colorWhite.colorExpand(activity))
                             putInt(UCrop.Options.EXTRA_TOOL_BAR_COLOR, R.color.colorBlack.colorExpand(activity))

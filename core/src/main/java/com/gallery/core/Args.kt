@@ -122,7 +122,8 @@ data class PrevArgs(
             get() = getParcelable<PrevArgs>(Key)
 
         val Bundle.prevArgsOrDefault
-            get() = prevArgs ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, ScanType.IMAGE)
+            get() = prevArgs
+                    ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, ScanType.IMAGE)
 
         val PrevArgs.configOrDefault
             get() = config ?: GalleryBundle()

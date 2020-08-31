@@ -42,7 +42,7 @@ interface ICrop {
     /**
      * 打开裁剪
      */
-    fun openCrop(scanFragment: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
+    fun openCrop(delegate: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
         TODO("cropping has not been initialized")
     }
 
@@ -51,7 +51,7 @@ interface ICrop {
      * [ActivityResult.mResultCode]
      * [ActivityResult.mData]
      */
-    fun onCropResult(scanFragment: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
+    fun onCropResult(delegate: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
         TODO("need to handle crop callback")
     }
 }

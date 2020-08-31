@@ -13,16 +13,16 @@ class GalleryResultCallback(private val galleryListener: GalleryListener) : Acti
     override fun onActivityResult(intent: ActivityResult) {
         val bundleExpand: Bundle = intent.data?.extras.orEmptyExpand()
         when (intent.resultCode) {
-            UIResult.GALLERY_CROP_RESULT_CODE -> {
+            UIResult.RESULT_CODE_CROP -> {
                 galleryListener.onGalleryCropResource(bundleExpand.getParcelableExpand(UIResult.GALLERY_RESULT_CROP))
             }
-            UIResult.GALLERY_SINGLE_RESULT_CODE -> {
+            UIResult.RESULT_CODE_SINGLE_DATA -> {
                 galleryListener.onGalleryResource(bundleExpand.getParcelableExpand(UIResult.GALLERY_SINGLE_DATA))
             }
-            UIResult.GALLERY_MULTIPLE_RESULT_CODE -> {
+            UIResult.RESULT_CODE_MULTIPLE_DATA -> {
                 galleryListener.onGalleryResources(bundleExpand.getParcelableArrayListExpand(UIResult.GALLERY_MULTIPLE_DATA))
             }
-            UIResult.UI_TOOLBAR_BACK_RESULT_CODE -> {
+            UIResult.RESULT_CODE_TOOLBAR_BACK -> {
                 galleryListener.onGalleryCancel()
             }
             Activity.RESULT_CANCELED -> {

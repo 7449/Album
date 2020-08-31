@@ -6,45 +6,30 @@ object UIResult {
      * 裁剪携带的参数
      * 从[GalleryUiBundle.args]里面获取
      */
-    const val UI_CROP_ARGS = "uiCropArgs"
+    const val CROP_ARGS = "cropArgs"
 
     /**
      * 图库页toolbar返回 result_code
      */
-    const val UI_TOOLBAR_BACK_RESULT_CODE = -11
+    const val RESULT_CODE_TOOLBAR_BACK = -11
 
     /**
      * 裁剪返回
      * 与之对应的是[GALLERY_RESULT_CROP]
      */
-    const val GALLERY_CROP_RESULT_CODE = -12
+    const val RESULT_CODE_CROP = -12
 
     /**
      * 单选下返回
      * 与之对应的是[GALLERY_SINGLE_DATA]
      */
-    const val GALLERY_SINGLE_RESULT_CODE = -13
+    const val RESULT_CODE_SINGLE_DATA = -13
 
     /**
      * 多选下返回
      * 与之对应的是[GALLERY_MULTIPLE_DATA]
      */
-    const val GALLERY_MULTIPLE_RESULT_CODE = -14
-
-    /**
-     * 预览页toolbar返回 result_code
-     */
-    const val PREV_TOOLBAR_BACK_RESULT_CODE = -15
-
-    /**
-     * 预览页back返回 result_code
-     */
-    const val PREV_BACK_RESULT_CODE = -16
-
-    /**
-     * 预览页选中数据返回 result_code
-     */
-    const val PREV_OK_RESULT_CODE = -17
+    const val RESULT_CODE_MULTIPLE_DATA = -14
 
     /**
      * 获取裁剪数据

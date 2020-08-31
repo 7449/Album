@@ -15,51 +15,40 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
 
-open class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
+class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     private var cropUri: Uri? = null
 
-    override fun onCropResult(scanFragment: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
+    override fun onCropResult(delegate: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
         when (intent.resultCode) {
-            Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri -> onCropSuccess(scanFragment, uri) }
-                    ?: onCropError(scanFragment, null)
-            Activity.RESULT_CANCELED -> onCropCanceled(scanFragment)
-            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> onCropError(scanFragment, CropImage.getActivityResult(intent.data)?.error)
+            Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri -> onCropSuccess(delegate, uri) }
+                    ?: cropUri?.deleteExpand(delegate.activityNotNull)
+            Activity.RESULT_CANCELED -> cropUri?.deleteExpand(delegate.activityNotNull)
+            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> cropUri?.deleteExpand(delegate.activityNotNull)
         }
     }
 
-    override fun openCrop(scanFragment: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
-        this.cropUri = cropOutPutUri(scanFragment.activityNotNull, galleryBundle)
-        val options = runCatching {
-            val args = galleryUiBundle.args
-            args.classLoader = CropImageOptions::class.java.classLoader
-            args.getParcelable<CropImageOptions>(UIResult.UI_CROP_ARGS)
-        }.getOrElse { CropImageOptions() }
-        val intent = Intent()
-        intent.setClass(scanFragment.activityNotNull, CropImageActivity::class.java)
+    override fun openCrop(delegate: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
+        this.cropUri = cropOutPutUri(delegate.activityNotNull, galleryBundle)
+        val intent = Intent().setClass(delegate.activityNotNull, CropImageActivity::class.java)
         val bundle = Bundle()
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
-        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, options ?: CropImageOptions())
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
+            val args = galleryUiBundle.args
+            args.classLoader = CropImageOptions::class.java.classLoader
+            args.getParcelable<CropImageOptions>(UIResult.CROP_ARGS)
+        }.getOrElse { CropImageOptions() } ?: CropImageOptions())
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
         return intent
     }
 
-    open fun onCropSuccess(scanFragment: ScanDelegate, uri: Uri) {
-        scanFragment.onScanResult(uri)
+    private fun onCropSuccess(delegate: ScanDelegate, uri: Uri) {
+        delegate.onScanResult(uri)
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelable(UIResult.GALLERY_RESULT_CROP, uri)
         intent.putExtras(bundle)
-        scanFragment.activityNotNull.setResult(UIResult.GALLERY_CROP_RESULT_CODE, intent)
-        scanFragment.activityNotNull.finish()
+        delegate.activityNotNull.setResult(UIResult.RESULT_CODE_CROP, intent)
+        delegate.activityNotNull.finish()
     }
-
-    open fun onCropCanceled(scanFragment: ScanDelegate) {
-        cropUri?.deleteExpand(scanFragment.activityNotNull)
-    }
-
-    open fun onCropError(scanFragment: ScanDelegate, throwable: Throwable?) {
-        cropUri?.deleteExpand(scanFragment.activityNotNull)
-    }
-
 }

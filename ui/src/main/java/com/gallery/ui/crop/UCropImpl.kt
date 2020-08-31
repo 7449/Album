@@ -22,30 +22,32 @@ import java.io.File
 @Deprecated("annoying version support", replaceWith = ReplaceWith("CropperImpl(galleryUiBundle)"))
 open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
-    override fun onCropResult(scanFragment: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
+    override fun onCropResult(delegate: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> intent.data?.let {
                 UCrop.getOutput(it)?.let { uri ->
-                    onCropSuccess(scanFragment, galleryBundle, uri)
-                } ?: onCropError(null)
-            } ?: onCropError(null)
-            Activity.RESULT_CANCELED -> onCropCanceled()
-            UCrop.RESULT_ERROR -> onCropError(intent.data?.let { UCrop.getError(it) })
+                    onCropSuccess(delegate, galleryBundle, uri)
+                }
+            }
+            Activity.RESULT_CANCELED -> {
+            }
+            UCrop.RESULT_ERROR -> {
+            }
         }
     }
 
-    override fun openCrop(scanFragment: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
-        return UCrop.of(inputUri, cropOutPutUri2(scanFragment.activityNotNull, galleryBundle))
-                .withOptions(UCrop.Options().apply { optionBundle.putAll(galleryUiBundle.args.getBundle(UIResult.UI_CROP_ARGS).orEmptyExpand()) })
-                .getIntent(scanFragment.activityNotNull)
+    override fun openCrop(delegate: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
+        return UCrop.of(inputUri, cropOutPutUri2(delegate.activityNotNull, galleryBundle))
+                .withOptions(UCrop.Options().apply { optionBundle.putAll(galleryUiBundle.args.getBundle(UIResult.CROP_ARGS).orEmptyExpand()) })
+                .getIntent(delegate.activityNotNull)
     }
 
-    open fun onCropSuccess(scanFragment: ScanDelegate, galleryBundle: GalleryBundle, uri: Uri) {
+    private fun onCropSuccess(delegate: ScanDelegate, galleryBundle: GalleryBundle, uri: Uri) {
         val currentUri: Uri = if (!hasQExpand()) {
             uri
         } else {
-            val contentUri = scanFragment.activityNotNull.copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand()
-            val filePath: String? = scanFragment.activityNotNull.findPathByUriExpand(contentUri)
+            val contentUri = delegate.activityNotNull.copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand()
+            val filePath: String? = delegate.activityNotNull.findPathByUriExpand(contentUri)
             if (filePath.isNullOrEmpty()) {
                 uri
             } else {
@@ -53,19 +55,12 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
                 Uri.fromFile(File(filePath))
             }
         }
-        scanFragment.onScanResult(currentUri)
+        delegate.onScanResult(currentUri)
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelable(UIResult.GALLERY_RESULT_CROP, currentUri)
         intent.putExtras(bundle)
-        scanFragment.activityNotNull.setResult(UIResult.GALLERY_CROP_RESULT_CODE, intent)
-        scanFragment.activityNotNull.finish()
+        delegate.activityNotNull.setResult(UIResult.RESULT_CODE_CROP, intent)
+        delegate.activityNotNull.finish()
     }
-
-    open fun onCropCanceled() {
-    }
-
-    open fun onCropError(let: Throwable?) {
-    }
-
 }

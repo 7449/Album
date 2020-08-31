@@ -9,7 +9,7 @@ import com.gallery.scan.ScanEntity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-internal data class UIGallerySaveArgs(
+data class UIGallerySaveArgs(
         val finderName: String,
         val finderList: ArrayList<ScanEntity>
 ) : Parcelable {
@@ -53,7 +53,8 @@ data class UIGalleryArgs(
             get() = getParcelable<UIGalleryArgs>(Key)
 
         val Bundle.uiGalleryArgsOrDefault
-            get() = uiGalleryArgs ?: UIGalleryArgs(GalleryBundle(), GalleryUiBundle(), Bundle(), Bundle())
+            get() = uiGalleryArgs
+                    ?: UIGalleryArgs(GalleryBundle(), GalleryUiBundle(), Bundle(), Bundle())
     }
 }
 

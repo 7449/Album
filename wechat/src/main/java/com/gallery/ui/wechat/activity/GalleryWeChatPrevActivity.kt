@@ -18,9 +18,9 @@ import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatUiResult
 import com.gallery.ui.wechat.adapter.WeChatPrevSelectAdapter
+import com.gallery.ui.wechat.engine.displayGalleryPrev
+import com.gallery.ui.wechat.engine.displayGalleryPrevSelect
 import com.gallery.ui.wechat.obtain
-import com.gallery.ui.wechat.util.displayGalleryPrev
-import com.gallery.ui.wechat.util.displayGalleryPrevSelect
 import kotlinx.android.synthetic.main.gallery_activity_wechat_prev.*
 
 @SuppressLint("SetTextI18n")

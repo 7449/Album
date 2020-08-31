@@ -1,4 +1,4 @@
-package com.gallery.ui.wechat.util
+package com.gallery.ui.wechat.engine
 
 import android.graphics.Color
 import android.view.Gravity
@@ -48,6 +48,6 @@ internal fun FrameLayout.displayGalleryPrevSelect(scanEntity: ScanEntity, idList
     removeAllViews()
     val weChatSelectItem = WeChatSelectItem(context)
     weChatSelectItem.update(scanEntity, idList, isPrev)
-    Glide.with(context).load(scanEntity.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).fitCenter()).into(weChatSelectItem.imageView)
+    Glide.with(context).asBitmap().load(scanEntity.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).fitCenter()).into(weChatSelectItem.imageView)
     addView(weChatSelectItem)
 }

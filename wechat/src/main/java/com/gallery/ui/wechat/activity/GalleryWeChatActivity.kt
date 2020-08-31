@@ -23,7 +23,7 @@ import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
-import com.gallery.ui.wechat.util.*
+import com.gallery.ui.wechat.engine.*
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
 class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener,
@@ -74,9 +74,9 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 }
             } ?: showFinderActionView()
         }
-        rotateAnimation.doOnAnimationEnd { AnimUtils.newInstance(galleryWeChatRoot.height).openAnim(galleryWeChatFinderRoot) }
+        rotateAnimation.doOnAnimationEnd { AnimEngine.newInstance(galleryWeChatRoot.height).openAnim(galleryWeChatFinderRoot) }
         rotateAnimationResult.doOnAnimationEnd {
-            AnimUtils.newInstance(galleryWeChatRoot.height).closeAnimate(galleryWeChatFinderRoot) {
+            AnimEngine.newInstance(galleryWeChatRoot.height).closeAnimate(galleryWeChatFinderRoot) {
                 if (finderList.find { it.isSelected }?.parent == galleryFragment.parentId) {
                     return@closeAnimate
                 }

@@ -17,21 +17,11 @@ class WeChatGalleryResultCallback(
     override fun onActivityResult(intent: ActivityResult) {
         val bundleExpand: Bundle = intent.data?.extras.orEmptyExpand()
         when (intent.resultCode) {
-            UIResult.RESULT_CODE_CROP -> {
-                galleryListener.onGalleryCropResource(bundleExpand.getParcelableExpand(UIResult.GALLERY_RESULT_CROP))
-            }
-            UIResult.RESULT_CODE_SINGLE_DATA -> {
-                galleryListener.onGalleryResource(bundleExpand.getParcelableExpand(UIResult.GALLERY_SINGLE_DATA))
-            }
-            UIResult.RESULT_CODE_MULTIPLE_DATA -> {
-                galleryListener.onWeChatGalleryResources(bundleExpand.getParcelableArrayListExpand(UIResult.GALLERY_MULTIPLE_DATA), bundleExpand.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE))
-            }
-            UIResult.RESULT_CODE_TOOLBAR_BACK -> {
-                galleryListener.onGalleryCancel()
-            }
-            Activity.RESULT_CANCELED -> {
-                galleryListener.onGalleryCancel()
-            }
+            UIResult.RESULT_CODE_CROP -> galleryListener.onGalleryCropResource(bundleExpand.getParcelableExpand(UIResult.GALLERY_RESULT_CROP))
+            UIResult.RESULT_CODE_SINGLE_DATA -> galleryListener.onGalleryResource(bundleExpand.getParcelableExpand(UIResult.GALLERY_SINGLE_DATA))
+            UIResult.RESULT_CODE_MULTIPLE_DATA -> galleryListener.onWeChatGalleryResources(bundleExpand.getParcelableArrayListExpand(UIResult.GALLERY_MULTIPLE_DATA), bundleExpand.getBooleanExpand(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE))
+            UIResult.RESULT_CODE_TOOLBAR_BACK -> galleryListener.onGalleryCancel()
+            Activity.RESULT_CANCELED -> galleryListener.onGalleryCancel()
         }
     }
 }

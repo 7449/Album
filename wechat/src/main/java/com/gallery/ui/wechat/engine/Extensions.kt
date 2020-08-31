@@ -1,4 +1,4 @@
-package com.gallery.ui.wechat.util
+package com.gallery.ui.wechat.engine
 
 import android.annotation.SuppressLint
 import android.view.animation.Animation
@@ -45,19 +45,10 @@ internal fun RotateAnimation.doOnAnimationEnd(action: (animation: Animation) -> 
 }
 
 internal fun Long.toFileSize(): String {
-    val df = DecimalFormat()
     return when {
-        this < 1024 -> {
-            df.format(this) + " B"
-        }
-        this < 1048576 -> {
-            df.format(this / 1024) + " KB"
-        }
-        this < 1073741824 -> {
-            df.format(this / 1048576) + " MB"
-        }
-        else -> {
-            df.format(this / 1073741824) + " GB"
-        }
+        this < 1024 -> DecimalFormat().format(this) + " B"
+        this < 1048576 -> DecimalFormat().format(this / 1024) + " KB"
+        this < 1073741824 -> DecimalFormat().format(this / 1048576) + " MB"
+        else -> DecimalFormat().format(this / 1073741824) + " GB"
     }
 }

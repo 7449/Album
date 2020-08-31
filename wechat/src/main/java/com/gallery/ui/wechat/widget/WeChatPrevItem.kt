@@ -12,7 +12,7 @@ import com.gallery.scan.types.externalUriExpand
 import com.gallery.scan.types.isGifExpand
 import com.gallery.scan.types.isVideoExpand
 import com.gallery.ui.wechat.R
-import com.gallery.ui.wechat.util.toFileSize
+import com.gallery.ui.wechat.engine.toFileSize
 import kotlinx.android.synthetic.main.layout_prev_wechat_item.view.*
 
 class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {

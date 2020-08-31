@@ -13,7 +13,7 @@ import com.gallery.ui.R
 internal fun FrameLayout.displayGallery(width: Int, height: Int, galleryEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).asDrawable().load(galleryEntity.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(imageView)
+    Glide.with(context).load(galleryEntity.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(imageView)
     addView(imageView, FrameLayout.LayoutParams(width, height))
 }
 

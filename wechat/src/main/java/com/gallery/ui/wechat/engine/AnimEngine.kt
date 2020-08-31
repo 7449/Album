@@ -1,15 +1,15 @@
-package com.gallery.ui.wechat.util
+package com.gallery.ui.wechat.engine
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.view.View
 
-class AnimUtils(private val height: Int) {
+class AnimEngine(private val height: Int) {
 
     companion object {
-        fun newInstance(height: Int): AnimUtils {
-            return AnimUtils(height)
+        fun newInstance(height: Int): AnimEngine {
+            return AnimEngine(height)
         }
     }
 

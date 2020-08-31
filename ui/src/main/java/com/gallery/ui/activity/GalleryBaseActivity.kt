@@ -20,12 +20,12 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
-import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
+import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
 import com.gallery.ui.UIGallerySaveArgs
@@ -102,7 +102,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
 
     /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
-        if (galleryFragment.parentId.isScanAll() && scanEntities.isNotEmpty()) {
+        if (galleryFragment.parentId.isScanAllExpand() && scanEntities.isNotEmpty()) {
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryBundle.sdName, galleryBundle.allName))
         }

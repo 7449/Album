@@ -23,11 +23,6 @@ interface ScanView {
     val scanContext: FragmentActivity
 
     /**
-     * 是否强制过滤掉数据库中存在数据但文件实际不存在的数据
-     */
-    val forceFilterFile: Boolean
-
-    /**
      * 扫描类型
      * [ScanType.IMAGE]
      * [ScanType.VIDEO]

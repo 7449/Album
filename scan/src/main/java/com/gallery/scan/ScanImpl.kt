@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.loader.app.LoaderManager
 import com.gallery.scan.args.Columns
 import com.gallery.scan.types.Result
+import com.gallery.scan.types.postValueExpand
 
 /**
  * @author y
@@ -74,52 +75,54 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
     val errorLiveData = MutableLiveData<ScanError>()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext.applicationContext
-    private val forceFilterFile: Boolean = scanView.forceFilterFile
     private val scanType: Int = scanView.scanType()
     private val scanField: String = scanView.scanSortField()
     private val scanSort: String = scanView.scanSort()
 
-    override fun scanParent(parentId: Long) {
-        if (loaderManager.hasRunningLoaders()) {
-            return
-        }
-        loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
+    private fun createScanParentArgs(parentId: Long): Bundle {
+        return Bundle().apply {
             putLong(Columns.PARENT, parentId)
             putSerializable(Columns.SCAN_RESULT, Result.MULTIPLE)
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
             putInt(Columns.SCAN_TYPE, scanType)
-        }, ScanTask(context, forceFilterFile, {
-            scanView.scanError()
-            if (errorLiveData.hasActiveObservers()) {
-                errorLiveData.postValue(ScanError(Result.MULTIPLE))
-            }
-        }) {
-            scanView.scanSuccess(it)
-            if (scanLiveData.hasObservers()) {
-                scanLiveData.postValue(ScanResult(parentId, it))
-            }
-            onCleared()
-        })
+        }
     }
 
-    override fun scanResult(id: Long) {
-        loaderManager.restartLoader(SCAN_LOADER_ID, Bundle().apply {
+    private fun createScanResultArgs(id: Long): Bundle {
+        return Bundle().apply {
             putLong(Columns.ID, id)
             putSerializable(Columns.SCAN_RESULT, Result.SINGLE)
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
             putInt(Columns.SCAN_TYPE, scanType)
-        }, ScanTask(context, forceFilterFile, {
+        }
+    }
+
+    override fun scanParent(parentId: Long) {
+        if (loaderManager.hasRunningLoaders()) {
+            return
+        }
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanParentArgs(parentId), ScanTask(context, {
+            scanView.scanError()
+            errorLiveData.postValueExpand(ScanError(Result.MULTIPLE))
+        }) {
+            scanView.scanSuccess(it)
+            scanLiveData.postValueExpand(ScanResult(parentId, it))
+            onCleared()
+        })
+    }
+
+    override fun scanResult(id: Long) {
+        if (loaderManager.hasRunningLoaders()) {
+            return
+        }
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanResultArgs(id), ScanTask(context, {
             scanView.resultError()
-            if (errorLiveData.hasObservers()) {
-                errorLiveData.postValue(ScanError(Result.SINGLE))
-            }
+            errorLiveData.postValueExpand(ScanError(Result.SINGLE))
         }) {
             scanView.resultSuccess(if (it.isEmpty()) null else it[0])
-            if (resultLiveData.hasObservers()) {
-                resultLiveData.postValue(ValueResult(id, if (it.isEmpty()) null else it[0]))
-            }
+            resultLiveData.postValueExpand(ValueResult(id, if (it.isEmpty()) null else it[0]))
             onCleared()
         })
     }

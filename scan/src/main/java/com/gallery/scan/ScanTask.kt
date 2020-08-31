@@ -13,7 +13,6 @@ import com.gallery.scan.args.Columns
 import com.gallery.scan.args.CursorArgs
 import com.gallery.scan.types.Result
 import com.gallery.scan.types.SCAN_ALL
-import com.gallery.scan.types.isFileExists
 
 /**
  * @author y
@@ -22,7 +21,6 @@ import com.gallery.scan.types.isFileExists
  * 扫描
  */
 internal class ScanTask(private val context: Context,
-                        private val forceFilterFile: Boolean,
                         private val loaderError: () -> Unit,
                         private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -50,7 +48,7 @@ internal class ScanTask(private val context: Context,
         val cursor: Cursor = data
         val arrayList = ArrayList<ScanEntity>()
         while (cursor.moveToNext()) {
-            val scanEntity = ScanEntity(
+            arrayList.add(ScanEntity(
                     cursor.getLongOrDefault(Columns.ID),
                     cursor.getLongOrDefault(Columns.SIZE),
                     cursor.getLongOrDefault(Columns.DURATION),
@@ -66,14 +64,7 @@ internal class ScanTask(private val context: Context,
                     cursor.getLongOrDefault(Columns.DATE_MODIFIED),
                     cursor.getLongOrDefault(Columns.PARENT),
                     0,
-                    false)
-            if (forceFilterFile) {
-                if (scanEntity.isFileExists(context)) {
-                    arrayList.add(scanEntity)
-                }
-            } else {
-                arrayList.add(scanEntity)
-            }
+                    false))
         }
         loaderSuccess(arrayList)
     }

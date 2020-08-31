@@ -2,6 +2,7 @@ package com.gallery.core.expand
 
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.isScanAllExpand
 
 //获取当前页的文件夹数据
 //目标List为扫描成功之后的数据，返回Finder数据
@@ -35,7 +36,7 @@ fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity, sortDesc: B
         val first: ScanEntity = first()
         this[indexOf(first)] = first.copy(scanEntity, if (sortDesc) scanEntity.id else first.id, first.bucketDisplayName, first.parent, first.count + 1)
     } else {
-        find { it.parent.isScanAll() }?.let {
+        find { it.parent.isScanAllExpand() }?.let {
             this[indexOf(it)] = it.copy(scanEntity, if (sortDesc) scanEntity.id else it.id, it.bucketDisplayName, it.parent, count = it.count + 1)
         }
         find { it.parent == scanEntity.parent }?.let {

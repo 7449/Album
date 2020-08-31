@@ -1,9 +1,10 @@
 # core
 
-## next version
+## 0.1.4
 
 * 修复 ASC 排序finder数据显示问题
 * 剥离Fragment
+* 支持屏蔽内置toast
 
 ## 0.1.3
 
@@ -46,7 +47,6 @@
 * 新增 date_added 字段
 * 将 dataModified 修改为 dateModified
 * 新增扫描异常回调
-* 新增过滤损坏文件
 
 ## 0.1.3
 

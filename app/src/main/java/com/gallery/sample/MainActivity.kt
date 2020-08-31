@@ -28,7 +28,7 @@ import com.gallery.sample.viewmodel.ScanViewModelTest
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
-import com.gallery.scan.types.externalUri
+import com.gallery.scan.types.externalUriExpand
 import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)
-                .load(galleryEntity.externalUri)
+                .load(galleryEntity.externalUriExpand)
                 .apply(RequestOptions()
                         .placeholder(R.drawable.ic_gallery_default_loading)
                         .error(R.drawable.ic_gallery_default_loading)

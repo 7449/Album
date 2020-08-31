@@ -8,14 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
-import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.prevFragment
+import com.gallery.core.expand.safeToastExpand
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.R
 import com.gallery.ui.UIPrevArgs
 import com.gallery.ui.UIPrevArgs.Companion.putPrevArgs
 import com.gallery.ui.UIPrevArgs.Companion.uiPrevArgs
@@ -33,7 +34,9 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     protected abstract val galleryFragmentId: Int
 
     /** [UIPrevArgs] */
-    protected val uiPrevArgs by lazy { bundleOrEmptyExpand().uiPrevArgs ?: throw KotlinNullPointerException("uiPrevArgs == null") }
+    protected val uiPrevArgs by lazy {
+        bundleOrEmptyExpand().uiPrevArgs ?: throw KotlinNullPointerException("uiPrevArgs == null")
+    }
 
     /** 初始配置 */
     protected val galleryBundle by lazy { uiPrevArgs.prevArgs.configOrDefault }
@@ -97,6 +100,6 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
 
     /** 选择数据为空 */
     open fun onGallerySelectEmpty() {
-        getString(com.gallery.ui.R.string.gallery_prev_select_empty_pre).toastExpand(this)
+        getString(R.string.gallery_prev_select_empty_pre).safeToastExpand(this)
     }
 }

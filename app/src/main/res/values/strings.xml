@@ -3,4 +3,5 @@
     <string name="video_tips">摄像</string>
     <string name="gallery_video_title">视频选择</string>
     <string name="camera">camera</string>
+    <string name="gallery_camera_canceled" />
 </resources>

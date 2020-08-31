@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.kotlin.expand.text.toastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.galleryFragment
-import com.gallery.core.expand.isScanAll
 import com.gallery.core.expand.isVideoScan
+import com.gallery.core.expand.safeToastExpand
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.types.SCAN_NONE
+import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
 import com.gallery.ui.activity.GalleryBaseActivity
@@ -113,21 +113,21 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(parentId, if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position, PreActivity::class.java)
+        onStartPrevPage(parentId, if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position, PreActivity::class.java)
     }
 
     /** 点击预览但是未选择图片 */
     open fun onGalleryPreEmpty() {
-        getString(R.string.gallery_prev_select_empty).toastExpand(this)
+        getString(R.string.gallery_prev_select_empty).safeToastExpand(this)
     }
 
     /** 点击确定但是未选择图片 */
     open fun onGalleryOkEmpty() {
-        getString(R.string.gallery_ok_select_empty).toastExpand(this)
+        getString(R.string.gallery_ok_select_empty).safeToastExpand(this)
     }
 
     /** 扫描到的文件目录为空 */
     open fun onGalleryFinderEmpty() {
-        getString(R.string.gallery_finder_empty).toastExpand(this)
+        getString(R.string.gallery_finder_empty).safeToastExpand(this)
     }
 }

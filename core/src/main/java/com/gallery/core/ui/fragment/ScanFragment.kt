@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryBundle.Companion.putGalleryBundle
+import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
 import com.gallery.core.R
 import com.gallery.core.ScanArgs
 import com.gallery.core.delegate.ScanDelegate
@@ -18,7 +18,7 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
     companion object {
         fun newInstance(galleryBundle: GalleryBundle): ScanFragment {
             val scanFragment = ScanFragment()
-            scanFragment.arguments = galleryBundle.putGalleryBundle()
+            scanFragment.arguments = galleryBundle.putGalleryArgs()
             return scanFragment
         }
     }

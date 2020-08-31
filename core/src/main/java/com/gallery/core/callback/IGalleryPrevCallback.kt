@@ -3,11 +3,11 @@ package com.gallery.core.callback
 import android.content.Context
 import android.os.Bundle
 import androidx.annotation.Px
-import androidx.kotlin.expand.text.toastExpand
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
+import com.gallery.core.expand.safeToastExpand
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.scan.ScanEntity
 
@@ -44,7 +44,7 @@ interface IGalleryPrevCallback {
      * [PrevFragment.checkBoxClick]
      */
     fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_prev_check_file_deleted).toastExpand(context)
+        context.getString(R.string.gallery_prev_check_file_deleted).safeToastExpand(context)
     }
 
     /**
@@ -52,7 +52,7 @@ interface IGalleryPrevCallback {
      * [GalleryBundle.multipleMaxCount]
      */
     fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_check_max).toastExpand(context)
+        context.getString(R.string.gallery_check_max).safeToastExpand(context)
     }
 
     /**

@@ -10,9 +10,9 @@ import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.os.getSerializableOrDefault
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.prevFragment
-import com.gallery.core.expand.isGif
-import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.isGifExpand
+import com.gallery.scan.types.isVideoExpand
 import com.gallery.ui.activity.PrevBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
@@ -36,7 +36,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     private val idList: ArrayList<Long> = ArrayList()
 
     private fun onUpdateVideoTip(scanEntity: ScanEntity) {
-        if (!scanEntity.isVideo) {
+        if (!scanEntity.isVideoExpand) {
             galleryPrevVideoTip.visibility = View.GONE
             prevWeChatToolbarSend.isEnabled = true
             prevWeChatSelect.isEnabled = true
@@ -100,7 +100,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         onUpdateVideoTip(prevFragment.currentItem)
         prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
         prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
-        prevWeChatFullImage.visibility = if (currentItem.isGif || currentItem.isVideo) View.GONE else View.VISIBLE
+        prevWeChatFullImage.visibility = if (currentItem.isGifExpand || currentItem.isVideoExpand) View.GONE else View.VISIBLE
         selectAdapter.refreshItem(currentItem)
         galleryPrevList.scrollToPosition(selectAdapter.findPosition(currentItem))
     }

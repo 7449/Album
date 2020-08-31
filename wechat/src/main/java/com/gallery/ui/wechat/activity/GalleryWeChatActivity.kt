@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.os.getBooleanExpand
-import androidx.kotlin.expand.text.toastExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,12 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
-import com.gallery.core.expand.isScanAll
-import com.gallery.core.expand.isVideo
+import com.gallery.core.expand.safeToastExpand
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.types.SCAN_ALL
-import com.gallery.scan.types.SCAN_NONE
-import com.gallery.scan.types.ScanType
+import com.gallery.scan.types.*
 import com.gallery.ui.UIResult
 import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
@@ -122,12 +118,12 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     }
 
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
-        if (galleryFragment.parentId.isScanAll() && scanEntities.isNotEmpty()) {
+        if (galleryFragment.parentId.isScanAllExpand() && scanEntities.isNotEmpty()) {
             videoList.clear()
-            videoList.addAll(scanEntities.filter { it.isVideo })
+            videoList.addAll(scanEntities.filter { it.isVideoExpand })
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryBundle.sdName, galleryBundle.allName))
-            scanEntities.find { it.isVideo }?.let { it ->
+            scanEntities.find { it.isVideoExpand }?.let { it ->
                 finderList.add(1, it.copy(parent = WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT, bucketDisplayName = videoDes, count = videoList.size))
             }
             finderList.firstOrNull()?.isSelected = true
@@ -168,7 +164,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
 
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         onStartPrevPage(if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) SCAN_ALL else parentId,
-                if (parentId.isScanAll() && !galleryBundle.hideCamera) position - 1 else position,
+                if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position,
                 if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) ScanType.VIDEO else ScanType.NONE,
                 Bundle().apply {
                     putInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, videoDuration)
@@ -185,14 +181,14 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
 
     override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         val selectEntities = galleryFragment.selectEntities
-        if (scanEntity.isVideo && scanEntity.duration > videoDuration) {
+        if (scanEntity.isVideoExpand && scanEntity.duration > videoDuration) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
-            getString(R.string.gallery_select_video_max_length).toastExpand(this)
-        } else if (scanEntity.isVideo && scanEntity.duration <= 0) {
+            getString(R.string.gallery_select_video_max_length).safeToastExpand(this)
+        } else if (scanEntity.isVideoExpand && scanEntity.duration <= 0) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
-            getString(R.string.gallery_select_video_error).toastExpand(this)
+            getString(R.string.gallery_select_video_error).safeToastExpand(this)
         } else {
             updateView()
         }
@@ -236,7 +232,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
      * 扫描到的文件目录为空
      */
     private fun onGalleryFinderEmpty() {
-        getString(R.string.gallery_finder_empty).toastExpand(this)
+        getString(R.string.gallery_finder_empty).safeToastExpand(this)
     }
 
 }

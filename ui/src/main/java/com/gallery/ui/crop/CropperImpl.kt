@@ -8,7 +8,7 @@ import androidx.activity.result.ActivityResult
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.ScanDelegate
-import com.gallery.core.expand.reset
+import com.gallery.scan.types.deleteExpand
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 import com.theartofdev.edmodo.cropper.CropImage
@@ -55,11 +55,11 @@ open class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
     }
 
     open fun onCropCanceled(scanFragment: ScanDelegate) {
-        cropUri?.reset(scanFragment.activityNotNull)
+        cropUri?.deleteExpand(scanFragment.activityNotNull)
     }
 
     open fun onCropError(scanFragment: ScanDelegate, throwable: Throwable?) {
-        cropUri?.reset(scanFragment.activityNotNull)
+        cropUri?.deleteExpand(scanFragment.activityNotNull)
     }
 
 }

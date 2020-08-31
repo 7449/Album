@@ -3,7 +3,6 @@ package com.gallery.core.delegate
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.app.moveToNextToIdExpand
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
@@ -19,9 +18,9 @@ import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanViewModelFactory
-import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.ScanType
-import com.gallery.scan.types.externalUri
+import com.gallery.scan.types.isFileExistsExpand
+import com.gallery.scan.types.isScanNoNeExpand
 
 /**
  * 预览代理
@@ -79,13 +78,12 @@ class PrevDelegate(
         //新增对单独扫描的支持，获取scanAlone和parentId
         val scanAlone = prevArgs.scanAlone
         val parentId: Long = prevArgs.parentId
-        if (parentId == SCAN_NONE) {
+        if (parentId.isScanNoNeExpand()) {
             updateEntity(savedInstanceState, prevArgs.selectList)
         } else {
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
             val scanViewModel = ViewModelProvider(fragment.requireActivity(), ScanViewModelFactory(fragment.requireActivity(),
-                    galleryBundle.forceFilter,
                     if (scanAlone == ScanType.NONE) galleryBundle.scanType else scanAlone,
                     galleryBundle.scanSort,
                     galleryBundle.scanSortField))
@@ -111,7 +109,7 @@ class PrevDelegate(
     }
 
     override fun checkBoxClick(checkBox: View) {
-        if (!fragment.moveToNextToIdExpand(currentItem.externalUri)) {
+        if (!currentItem.isFileExistsExpand(fragment.requireActivity())) {
             if (prevAdapter.containsSelect(currentItem)) {
                 prevAdapter.removeSelectEntity(currentItem)
             }

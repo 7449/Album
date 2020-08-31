@@ -49,11 +49,11 @@ data class ScanArgs(
     companion object {
         private const val Key = "scanArgs"
 
-        internal fun newSaveInstance(parentId: Long, fileUri: Uri, selectList: ArrayList<ScanEntity>): ScanArgs {
+        fun newSaveInstance(parentId: Long, fileUri: Uri, selectList: ArrayList<ScanEntity>): ScanArgs {
             return ScanArgs(parentId, fileUri, false, selectList)
         }
 
-        internal fun newResultInstance(selectList: ArrayList<ScanEntity>, isRefresh: Boolean): ScanArgs {
+        fun newResultInstance(selectList: ArrayList<ScanEntity>, isRefresh: Boolean): ScanArgs {
             return ScanArgs(SCAN_ALL, Uri.EMPTY, isRefresh, selectList)
         }
 
@@ -68,13 +68,16 @@ data class ScanArgs(
 
         val Bundle.scanArgs
             get() = getParcelable<ScanArgs>(Key)
+
+        val Bundle.scanArgsOrDefault
+            get() = scanArgs ?: ScanArgs(SCAN_NONE, Uri.EMPTY, false, arrayListOf())
     }
 }
 
 @Parcelize
 data class PrevArgs(
         /**
-         * 当前文件件的parentId,用于扫描数据库获取对应的数 如果是预览进入的话可传[SCAN_NONE]
+         * 当前文件的parentId,用于扫描数据库获取对应的数 如果是预览进入的话可传[SCAN_NONE]
          */
         val parentId: Long,
         /**
@@ -102,7 +105,7 @@ data class PrevArgs(
 
         private const val Key = "prevArgs"
 
-        internal fun newSaveInstance(position: Int, selectList: ArrayList<ScanEntity>): PrevArgs {
+        fun newSaveInstance(position: Int, selectList: ArrayList<ScanEntity>): PrevArgs {
             return PrevArgs(SCAN_ALL, selectList, null, position, ScanType.IMAGE)
         }
 
@@ -150,10 +153,6 @@ data class GalleryBundle(
         val scanSort: String = Sort.DESC,
         @SortFieldDef
         val scanSortField: String = Columns.DATE_MODIFIED,
-        /**
-         * 是否开启强制过滤
-         */
-        internal val forceFilter: Boolean = false,
         /**
          * 隐藏相机
          */
@@ -282,12 +281,12 @@ data class GalleryBundle(
     companion object {
         private const val Key = "galleryBundle"
 
-        fun GalleryBundle.putGalleryBundle(bundle: Bundle = Bundle()): Bundle {
+        fun GalleryBundle.putGalleryArgs(bundle: Bundle = Bundle()): Bundle {
             bundle.putParcelable(Key, this)
             return bundle
         }
 
-        fun Bundle.putGalleryBundle(galleryBundle: GalleryBundle) {
+        fun Bundle.putGalleryArgs(galleryBundle: GalleryBundle) {
             putParcelable(Key, galleryBundle)
         }
 

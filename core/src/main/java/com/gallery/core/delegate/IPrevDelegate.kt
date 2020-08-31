@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
 
-internal interface IPrevDelegate {
+interface IPrevDelegate {
 
     /**
      * [ViewPager2.getCurrentItem]

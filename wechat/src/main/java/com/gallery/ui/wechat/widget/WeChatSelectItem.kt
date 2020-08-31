@@ -8,9 +8,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
-import com.gallery.core.expand.isGif
-import com.gallery.core.expand.isVideo
 import com.gallery.scan.ScanEntity
+import com.gallery.scan.types.isGifExpand
+import com.gallery.scan.types.isVideoExpand
 import com.gallery.ui.wechat.R
 import kotlinx.android.synthetic.main.layout_select_wechat_item.view.*
 
@@ -34,8 +34,8 @@ class WeChatSelectItem @JvmOverloads constructor(context: Context, attrs: Attrib
         get() = selectWeChatView
 
     fun update(galleryEntity: ScanEntity, idList: List<Long>, isPrev: Boolean) {
-        gifView.visibility = if (galleryEntity.isGif) View.VISIBLE else View.GONE
-        videoView.visibility = if (galleryEntity.isVideo) View.VISIBLE else View.GONE
+        gifView.visibility = if (galleryEntity.isGifExpand) View.VISIBLE else View.GONE
+        videoView.visibility = if (galleryEntity.isVideoExpand) View.VISIBLE else View.GONE
         if (!isPrev) {
             view.hideExpand()
             return

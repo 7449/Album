@@ -9,7 +9,7 @@ import com.gallery.core.expand.PermissionCode
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.types.SCAN_ALL
 
-internal interface IScanDelegate {
+interface IScanDelegate {
 
     /**
      * 当前Activity

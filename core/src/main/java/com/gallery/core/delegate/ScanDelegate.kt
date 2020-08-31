@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.app.squareExpand
 import androidx.kotlin.expand.content.drawableExpand
 import androidx.kotlin.expand.content.findIdByUriExpand
-import androidx.kotlin.expand.content.moveToNextToIdExpand
 import androidx.kotlin.expand.content.openVideoExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
@@ -35,9 +34,7 @@ import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanView
-import com.gallery.scan.types.SCAN_ALL
-import com.gallery.scan.types.Sort
-import com.gallery.scan.types.externalUri
+import com.gallery.scan.types.*
 
 /**
  * 图库代理
@@ -74,7 +71,7 @@ class ScanDelegate(
             }
 
     private val scan: ScanImpl by lazy { ScanImpl(this) }
-    private val galleryBundle: GalleryBundle by lazy { fragment.galleryBundle }
+    private val galleryBundle: GalleryBundle by lazy { fragment.galleryArgs }
     private val galleryImageLoader: IGalleryImageLoader by lazy { fragment.galleryImageLoader }
     private val galleryCallback: IGalleryCallback by lazy { fragment.galleryCallback }
     private val galleryInterceptor: IGalleryInterceptor by lazy { fragment.galleryInterceptor }
@@ -97,8 +94,6 @@ class ScanDelegate(
         get() = currentEntities.size
     override val scanContext: FragmentActivity
         get() = activityNotNull
-    override val forceFilterFile: Boolean
-        get() = galleryBundle.forceFilter
 
     override fun onSaveInstanceState(outState: Bundle) {
         ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putScanArgs(outState)
@@ -133,16 +128,16 @@ class ScanDelegate(
     }
 
     override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
-        if (arrayList.isEmpty() && parentId.isScanAll()) {
+        if (arrayList.isEmpty() && parentId.isScanAllExpand()) {
             emptyView.showExpand()
             recyclerView.hideExpand()
             galleryCallback.onScanSuccessEmpty(activity, galleryBundle)
             return
         }
-        galleryCallback.onScanSuccess(arrayList)
         emptyView.hideExpand()
         recyclerView.showExpand()
-        if (parentId.isScanAll() && !galleryBundle.hideCamera) {
+        galleryCallback.onScanSuccess(arrayList)
+        if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
             arrayList.add(0, ScanEntity(parent = GalleryAdapter.CAMERA))
         }
         galleryAdapter.addAll(arrayList)
@@ -152,7 +147,7 @@ class ScanDelegate(
 
     override fun resultSuccess(scanEntity: ScanEntity?) {
         scanEntity ?: return galleryCallback.onResultError(activity, galleryBundle)
-        if (parentId.isScanAll()) {
+        if (parentId.isScanAllExpand()) {
             if (galleryBundle.scanSort == Sort.DESC) {
                 galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, scanEntity)
             } else {
@@ -176,19 +171,19 @@ class ScanDelegate(
     }
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
-        if (!activityNotNull.moveToNextToIdExpand(galleryEntity.externalUri)) {
+        if (!galleryEntity.isFileExistsExpand(activityNotNull)) {
             galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, galleryEntity)
             return
         }
         if (galleryBundle.isVideoScan) {
-            activityNotNull.openVideoExpand(galleryEntity.externalUri) {
+            activityNotNull.openVideoExpand(galleryEntity.externalUriExpand) {
                 galleryCallback.onOpenVideoPlayError(activityNotNull, galleryEntity)
             }
             return
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, galleryEntity.externalUri))
+                cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, galleryEntity.externalUriExpand))
             } else {
                 galleryCallback.onGalleryResource(activityNotNull, galleryEntity)
             }
@@ -210,18 +205,18 @@ class ScanDelegate(
         if (onCustomCamera || cameraUriExpand == null) {
             return
         }
-        galleryCallback.onCameraOpenStatus(activity, fragment.openCameraExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) }, galleryBundle)
+        galleryCallback.onCameraOpenStatus(activity, fragment.checkCameraStatusExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) }, galleryBundle)
     }
 
     override fun cameraSuccess() {
-        activityNotNull.scanFile(fileUri) { onScanGallery(parentId, true) }
+        activityNotNull.scanFileExpand(fileUri) { onScanGallery(parentId, true) }
         if (galleryBundle.cameraCrop) {
             cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, fileUri))
         }
     }
 
     override fun cameraCanceled() {
-        fileUri.reset(activityNotNull)
+        fileUri.deleteExpand(activityNotNull)
         fileUri = Uri.EMPTY
         galleryCallback.onCameraCanceled(activity, galleryBundle)
     }
@@ -259,8 +254,8 @@ class ScanDelegate(
 
     override fun onScanResult(uri: Uri) {
         when (uri.scheme) {
-            ContentResolver.SCHEME_CONTENT -> activityNotNull.scanFile(uri) { scan.scanResult(activityNotNull.findIdByUriExpand(it)) }
-            ContentResolver.SCHEME_FILE -> activityNotNull.scanFile(uri.path.orEmpty()) { scan.scanResult(activityNotNull.findIdByUriExpand(it)) }
+            ContentResolver.SCHEME_CONTENT -> activityNotNull.scanFileExpand(uri) { scan.scanResult(activityNotNull.findIdByUriExpand(it)) }
+            ContentResolver.SCHEME_FILE -> activityNotNull.scanFileExpand(uri.path.orEmpty()) { scan.scanResult(activityNotNull.findIdByUriExpand(it)) }
             else -> Log.e("gallery", "unsupported uri")
         }
     }

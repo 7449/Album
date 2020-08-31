@@ -8,5 +8,5 @@ object ScanType {
     const val MIX: Int = -1
     const val IMAGE: Int = 1
     const val VIDEO: Int = 2
-    internal const val AUDIO: Int = 3
+    const val AUDIO: Int = 3
 }

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
-import com.gallery.core.PrevArgs.Companion.prevArgs
+import com.gallery.core.PrevArgs.Companion.prevArgsOrDefault
 import com.gallery.core.callback.*
 import com.gallery.core.crop.ICrop
 import com.gallery.core.ui.fragment.PrevFragment
@@ -60,13 +60,19 @@ val Fragment.galleryImageLoader: IGalleryImageLoader
     }
 
 /** Fragment获取[GalleryBundle],建议初始化的时候赋值给对应的数据，这个每次调用都会重新获取数据 */
-val Fragment.galleryBundle get() = bundleOrEmptyExpand().galleryBundleOrDefault
+val Fragment.galleryArgs get() = bundleOrEmptyExpand().galleryBundleOrDefault
 
 /** 预览页参数，建议初始化的时候赋值给对应的数据，这个每次调用都会重新获取数据 */
-val Fragment.prevArgs get() = bundleOrEmptyExpand().prevArgs ?: throw KotlinNullPointerException("prevArgs == null")
+val Fragment.prevArgs get() = bundleOrEmptyExpand().prevArgsOrDefault
 
 /** [ScanFragment] */
 val AppCompatActivity.galleryFragment: ScanFragment get() = supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment
 
 /** [PrevFragment] */
 val AppCompatActivity.prevFragment: PrevFragment get() = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName) as PrevFragment
+
+/** [IScanDelegate] */
+val AppCompatActivity.scanDelegate: IScanDelegate get() = galleryFragment.delegate
+
+/** [IPrevDelegate] */
+val AppCompatActivity.prevDelegate: IPrevDelegate get() = prevFragment.delegate

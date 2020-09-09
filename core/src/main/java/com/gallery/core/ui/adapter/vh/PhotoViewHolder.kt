@@ -3,13 +3,14 @@ package com.gallery.core.ui.adapter.vh
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.kotlin.expand.net.isFileExistsExpand
 import androidx.kotlin.expand.view.showExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.types.isFileExistsExpand
+import com.gallery.scan.types.externalUriExpand
 import com.xadapter.vh.XViewHolder
 
 class PhotoViewHolder(itemView: View,
@@ -33,7 +34,7 @@ class PhotoViewHolder(itemView: View,
     }
 
     private fun clickCheckBox(position: Int, galleryEntity: ScanEntity, selectList: ArrayList<ScanEntity>) {
-        if (!galleryEntity.isFileExistsExpand(context)) {
+        if (!galleryEntity.externalUriExpand.isFileExistsExpand(context)) {
             if (selectList.contains(galleryEntity)) {
                 selectList.remove(galleryEntity)
             }

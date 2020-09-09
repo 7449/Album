@@ -11,10 +11,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.kotlin.expand.app.scanFileExpand
 import androidx.kotlin.expand.app.squareExpand
 import androidx.kotlin.expand.content.drawableExpand
 import androidx.kotlin.expand.content.findIdByUriExpand
 import androidx.kotlin.expand.content.openVideoExpand
+import androidx.kotlin.expand.net.deleteExpand
+import androidx.kotlin.expand.net.isFileExistsExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.GridLayoutManager
@@ -171,7 +174,7 @@ class ScanDelegate(
     }
 
     override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
-        if (!galleryEntity.isFileExistsExpand(activityNotNull)) {
+        if (!galleryEntity.externalUriExpand.isFileExistsExpand(activityNotNull)) {
             galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, galleryEntity)
             return
         }

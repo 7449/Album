@@ -1,8 +1,6 @@
 package com.gallery.ui.wechat.engine
 
 import android.annotation.SuppressLint
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
@@ -28,20 +26,6 @@ internal fun Long.formatTime(): String {
         return "--/--"
     }
     return formatter.format(this * 1000)
-}
-
-internal fun RotateAnimation.doOnAnimationEnd(action: (animation: Animation) -> Unit) {
-    setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationRepeat(animation: Animation) {
-        }
-
-        override fun onAnimationEnd(animation: Animation) {
-            action.invoke(animation)
-        }
-
-        override fun onAnimationStart(animation: Animation) {
-        }
-    })
 }
 
 internal fun Long.toFileSize(): String {

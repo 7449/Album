@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
+import androidx.kotlin.expand.widget.doOnAnimationEndExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
@@ -24,7 +25,10 @@ import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.putArgs
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
-import com.gallery.ui.wechat.engine.*
+import com.gallery.ui.wechat.engine.AnimEngine
+import com.gallery.ui.wechat.engine.displayGalleryThumbnails
+import com.gallery.ui.wechat.engine.displayGalleryWeChat
+import com.gallery.ui.wechat.engine.formatTime
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
 class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener {
@@ -77,8 +81,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 }
             } ?: showFinderActionView()
         }
-        rotateAnimation.doOnAnimationEnd { AnimEngine.newInstance(galleryWeChatRoot.height).openAnim(galleryWeChatFinderRoot) }
-        rotateAnimationResult.doOnAnimationEnd {
+        rotateAnimation.doOnAnimationEndExpand { AnimEngine.newInstance(galleryWeChatRoot.height).openAnim(galleryWeChatFinderRoot) }
+        rotateAnimationResult.doOnAnimationEndExpand {
             AnimEngine.newInstance(galleryWeChatRoot.height).closeAnimate(galleryWeChatFinderRoot) {
                 if (finderList.find { it.isSelected }?.parent == galleryFragment.parentId) {
                     return@closeAnimate

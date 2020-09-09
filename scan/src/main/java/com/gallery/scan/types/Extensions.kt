@@ -1,14 +1,8 @@
 package com.gallery.scan.types
 
-import android.content.ContentResolver
 import android.content.ContentUris
-import android.content.Context
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
-import androidx.fragment.app.FragmentActivity
-import androidx.kotlin.expand.content.findPathByUriExpand
 import androidx.lifecycle.MutableLiveData
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.args.Columns
@@ -41,11 +35,6 @@ val ScanEntity.isImageExpand: Boolean
 val ScanEntity.isAudioExpand: Boolean
     get() = mediaType == Columns.AUDIO
 
-/** 这个操作比较耗时,目前没有找到高版本上判断文件是否存在的有效方法 */
-fun ScanEntity.isFileExistsExpand(context: Context): Boolean {
-    return runCatching { context.contentResolver.openAssetFileDescriptor(externalUriExpand, "r")?.close() }.isSuccess
-}
-
 /** postValue */
 fun <T> MutableLiveData<T>.postValueExpand(value: T) {
     if (hasObservers()) {
@@ -58,34 +47,3 @@ fun Long.isScanAllExpand(): Boolean = this == SCAN_ALL
 
 /** 是否是空扫描 */
 fun Long.isScanNoNeExpand(): Boolean = this == SCAN_NONE
-
-/** 删除Uri */
-fun Uri.deleteExpand(context: Context) {
-    runCatching {
-        context.contentResolver.delete(this, null, null)
-    }.onSuccess { Log.i("gallery", "delete uri success") }.onFailure { Log.e("gallery", "delete uri failure:$this") }
-}
-
-/** Uri path */
-fun Uri.filePathExpand(context: Context): String {
-    return when (scheme) {
-        ContentResolver.SCHEME_CONTENT -> context.findPathByUriExpand(this).orEmpty()
-        ContentResolver.SCHEME_FILE -> path.orEmpty()
-        else -> throw RuntimeException("unsupported uri")
-    }
-}
-
-/** 扫描数据库 */
-fun FragmentActivity.scanFileExpand(uri: Uri, action: (uri: Uri) -> Unit) {
-    scanFileExpand(uri.filePathExpand(this), action)
-}
-
-/** 扫描数据库 */
-fun FragmentActivity.scanFileExpand(path: String, action: (uri: Uri) -> Unit) {
-    MediaScannerConnection.scanFile(this, arrayOf(path), null) { _: String?, uri: Uri? ->
-        runOnUiThread {
-            uri ?: return@runOnUiThread
-            action.invoke(uri)
-        }
-    }
-}

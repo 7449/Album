@@ -3,6 +3,7 @@ package com.gallery.core.delegate
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.kotlin.expand.net.isFileExistsExpand
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
@@ -19,7 +20,7 @@ import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.types.ScanType
-import com.gallery.scan.types.isFileExistsExpand
+import com.gallery.scan.types.externalUriExpand
 import com.gallery.scan.types.isScanNoNeExpand
 
 /**
@@ -109,7 +110,7 @@ class PrevDelegate(
     }
 
     override fun checkBoxClick(checkBox: View) {
-        if (!currentItem.isFileExistsExpand(fragment.requireActivity())) {
+        if (!currentItem.externalUriExpand.isFileExistsExpand(fragment.requireActivity())) {
             if (prevAdapter.containsSelect(currentItem)) {
                 prevAdapter.removeSelectEntity(currentItem)
             }

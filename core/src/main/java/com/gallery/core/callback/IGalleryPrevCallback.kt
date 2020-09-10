@@ -3,11 +3,11 @@ package com.gallery.core.callback
 import android.content.Context
 import android.os.Bundle
 import androidx.annotation.Px
+import androidx.kotlin.expand.text.safeToastExpand
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.expand.safeToastExpand
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.scan.ScanEntity
 

@@ -5,19 +5,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Parcelable
+import android.provider.MediaStore
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.Size
 import com.gallery.core.delegate.PrevDelegate
 import com.gallery.core.delegate.ScanDelegate
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.annotation.ScanTypeDef
 import com.gallery.scan.annotation.SortDef
 import com.gallery.scan.annotation.SortFieldDef
 import com.gallery.scan.args.Columns
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.SCAN_NONE
-import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 import kotlinx.android.parcel.Parcelize
 
@@ -93,12 +93,16 @@ data class PrevArgs(
          */
         val position: Int,
         /**
-         * aloneScan 是否是单独扫描某些类型的数据 [ScanType.IMAGE] [ScanType.VIDEO] [ScanType.MIX]
+         * aloneScan 是否是单独扫描某些类型的数据
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO]
          * 如果[parentId] == [SCAN_NONE] 则认为点击的是预览而不是item,则未选中数据和选中数据应该一致
-         * 如果不是，则判断[scanAlone] == [ScanType.NONE] ，如果不是，则使用 [scanAlone],如果是，则扫描 [GalleryBundle.scanType]类型的数据
+         * 如果不是，则判断[scanAlone] == [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]] ，
+         * 如果不是，则使用 [scanAlone],如果是，则扫描 [GalleryBundle.scanType]类型的数据
          * 如果使用自定义 scanType,则parentId传 [SCAN_ALL] 比较合适
          */
-        @ScanTypeDef
         val scanAlone: Int
 ) : Parcelable {
     companion object {
@@ -106,7 +110,7 @@ data class PrevArgs(
         private const val Key = "prevArgs"
 
         fun newSaveInstance(position: Int, selectList: ArrayList<ScanEntity>): PrevArgs {
-            return PrevArgs(SCAN_ALL, selectList, null, position, ScanType.IMAGE)
+            return PrevArgs(SCAN_ALL, selectList, null, position, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
         }
 
         fun PrevArgs.putPrevArgs(bundle: Bundle = Bundle()): Bundle {
@@ -122,8 +126,7 @@ data class PrevArgs(
             get() = getParcelable<PrevArgs>(Key)
 
         val Bundle.prevArgsOrDefault
-            get() = prevArgs
-                    ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, ScanType.IMAGE)
+            get() = prevArgs ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
 
         val PrevArgs.configOrDefault
             get() = config ?: GalleryBundle()
@@ -139,12 +142,16 @@ data class GalleryBundle(
         val selectEntities: ArrayList<ScanEntity> = ArrayList(),
         /**
          * 扫描类型
-         * [ScanType.IMAGE]
-         * [ScanType.VIDEO]
-         * [ScanType.MIX]
+         * 根据[MediaStore.Files.FileColumns.MEDIA_TYPE]搜索
+         * 可输入以下Type,最少一个类型type,最多三个(去掉NONE)
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
+         * [MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO]
          */
-        @ScanTypeDef
-        val scanType: Int = ScanType.IMAGE,
+        @Suppress("ArrayInDataClass")
+        @Size(min = 1, max = 3)
+        val scanType: IntArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
         /**
          * 排序方式
          * [Sort.DESC]
@@ -195,7 +202,7 @@ data class GalleryBundle(
          * cameraName.cameraNameSuffix
          * sample: photo.jpg
          */
-        val cameraNameSuffix: String = if (scanType == ScanType.VIDEO) "mp4" else "jpg",
+        val cameraNameSuffix: String = if (scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) ".mp4" else ".jpg",
         /**
          * 裁剪路径
          * 只在未拦截自定义裁剪生效,或使用者自定义裁剪使用

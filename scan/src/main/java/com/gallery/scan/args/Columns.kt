@@ -8,12 +8,6 @@ import android.provider.MediaStore
  */
 object Columns {
 
-    const val IMAGE: String = MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
-
-    const val VIDEO: String = MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
-
-    const val AUDIO: String = MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString()
-
     /** 扫描type */
     const val SCAN_TYPE = "scan_type"
     const val SCAN_RESULT = "scan_result"

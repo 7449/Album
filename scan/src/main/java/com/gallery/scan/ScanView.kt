@@ -1,12 +1,12 @@
 package com.gallery.scan
 
+import android.provider.MediaStore
+import androidx.annotation.Size
 import androidx.fragment.app.FragmentActivity
 import androidx.loader.app.LoaderManager
-import com.gallery.scan.annotation.ScanTypeDef
 import com.gallery.scan.annotation.SortDef
 import com.gallery.scan.annotation.SortFieldDef
 import com.gallery.scan.args.Columns
-import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 
 /**
@@ -24,13 +24,15 @@ interface ScanView {
 
     /**
      * 扫描类型
-     * [ScanType.IMAGE]
-     * [ScanType.VIDEO]
-     * [ScanType.MIX]
-     * [ScanType.NONE]
+     * 根据[MediaStore.Files.FileColumns.MEDIA_TYPE]搜索
+     * 可输入以下Type,最少一个类型type,最多三个(去掉NONE)
+     * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
+     * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
+     * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
+     * [MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO]
      */
-    @ScanTypeDef
-    fun scanType(): Int
+    @Size(min = 1, max = 3)
+    fun scanType(): IntArray
 
     /**
      * 排序类型

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
@@ -15,7 +16,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.scan.types.ScanType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.wechat.activity.GalleryWeChatActivity
@@ -32,7 +32,7 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
                     allName = "图片和视频",
                     hideCamera = true,
                     spanCount = 4,
-                    scanType = ScanType.MIX,
+                    scanType = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
                     prevPhotoBackgroundColor = Color.BLACK,
                     checkBoxDrawable = R.drawable.wechat_selector_gallery_item_check,
                     galleryRootBackground = Color.rgb(38, 38, 38)

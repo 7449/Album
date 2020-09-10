@@ -1,6 +1,7 @@
 package com.gallery.core.delegate
 
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.net.isFileExistsExpand
@@ -19,7 +20,6 @@ import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanViewModelFactory
-import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.externalUriExpand
 import com.gallery.scan.types.isScanNoNeExpand
 
@@ -85,7 +85,7 @@ class PrevDelegate(
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
             val scanViewModel = ViewModelProvider(fragment.requireActivity(), ScanViewModelFactory(fragment.requireActivity(),
-                    if (scanAlone == ScanType.NONE) galleryBundle.scanType else scanAlone,
+                    if (scanAlone == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE) galleryBundle.scanType else intArrayOf(scanAlone),
                     galleryBundle.scanSort,
                     galleryBundle.scanSortField))
                     .get(ScanImpl::class.java)

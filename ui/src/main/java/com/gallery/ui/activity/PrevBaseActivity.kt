@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
+import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.prevFragment
-import com.gallery.core.expand.safeToastExpand
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R

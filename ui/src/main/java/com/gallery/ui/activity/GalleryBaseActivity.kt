@@ -3,6 +3,7 @@ package com.gallery.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +24,6 @@ import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.annotation.ScanTypeDef
-import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.*
@@ -112,7 +111,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int, @ScanTypeDef scanAlone: Int = ScanType.NONE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
+    fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
         onStartPrevPage(UIPrevArgs(uiConfig, PrevArgs(parentId, galleryFragment.selectEntities, galleryConfig, position, scanAlone), option), cla)
     }
 

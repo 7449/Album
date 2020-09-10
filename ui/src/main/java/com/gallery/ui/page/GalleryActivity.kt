@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.galleryFragment
-import com.gallery.core.expand.isVideoScan
-import com.gallery.core.expand.safeToastExpand
+import com.gallery.core.expand.isVideoScanExpand
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanAllExpand
@@ -57,7 +57,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         galleryFinderAll.setOnClickListener(this)
 
         galleryFinderAll.text = finderName
-        galleryPre.visibility = if (galleryConfig.radio || galleryConfig.isVideoScan) View.GONE else View.VISIBLE
+        galleryPre.visibility = if (galleryConfig.radio || galleryConfig.isVideoScanExpand) View.GONE else View.VISIBLE
         gallerySelect.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
 
         galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }

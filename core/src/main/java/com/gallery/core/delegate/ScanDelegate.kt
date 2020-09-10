@@ -37,7 +37,10 @@ import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanView
-import com.gallery.scan.types.*
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.Sort
+import com.gallery.scan.types.externalUriExpand
+import com.gallery.scan.types.isScanAllExpand
 
 /**
  * 图库代理
@@ -178,7 +181,7 @@ class ScanDelegate(
             galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, galleryEntity)
             return
         }
-        if (galleryBundle.isVideoScan) {
+        if (galleryBundle.isVideoScanExpand) {
             activityNotNull.openVideoExpand(galleryEntity.externalUriExpand) {
                 galleryCallback.onOpenVideoPlayError(activityNotNull, galleryEntity)
             }
@@ -289,7 +292,7 @@ class ScanDelegate(
         recyclerView.scrollToPosition(position)
     }
 
-    override fun scanType(): Int {
+    override fun scanType(): IntArray {
         return galleryBundle.scanType
     }
 

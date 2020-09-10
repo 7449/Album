@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.os.getBooleanExpand
+import androidx.kotlin.expand.text.safeToastExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.kotlin.expand.widget.doOnAnimationEndExpand
@@ -16,9 +18,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
-import com.gallery.core.expand.safeToastExpand
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.types.*
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.SCAN_NONE
+import com.gallery.scan.types.isScanAllExpand
+import com.gallery.scan.types.isVideoExpand
 import com.gallery.ui.UIResult
 import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
@@ -182,7 +186,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         onStartPrevPage(if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) SCAN_ALL else parentId,
                 if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position,
-                if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) ScanType.VIDEO else ScanType.NONE,
+                if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
                 WeChatPrevArgs(false, videoDuration, galleryWeChatFullImage.isChecked).putArgs(),
                 GalleryWeChatPrevActivity::class.java)
     }

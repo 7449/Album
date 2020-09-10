@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.permission.checkCameraPermissionExpand
 import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
 import com.gallery.core.ui.widget.CameraResultContract
-import com.gallery.scan.types.ScanType
 
 /** camera launcher */
 fun Fragment.requestCameraResultLauncherExpand(cancel: () -> Unit, ok: () -> Unit): ActivityResultLauncher<CameraUri> =
@@ -47,7 +46,9 @@ fun Fragment.checkPermissionAndRequestCameraExpand(launcher: ActivityResultLaunc
 
 /** check camera expand */
 fun Fragment.checkCameraStatusExpand(uri: CameraUri, action: (uri: CameraUri) -> Unit): CameraStatus {
-    val intent: Intent = if (uri.type == ScanType.VIDEO) Intent(MediaStore.ACTION_VIDEO_CAPTURE) else Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    val intent: Intent = if (uri.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE))
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    else Intent(MediaStore.ACTION_VIDEO_CAPTURE)
     return intent.resolveActivity(requireActivity().packageManager)?.let {
         action.invoke(uri)
         CameraStatus.SUCCESS

@@ -2,7 +2,7 @@ package com.gallery.sample.callback
 
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
-import com.gallery.core.expand.safeToastExpand
+import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.scan.ScanEntity
 import com.gallery.ui.wechat.WeChatGalleryCallback
 

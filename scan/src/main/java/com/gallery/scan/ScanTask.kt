@@ -27,16 +27,17 @@ internal class ScanTask(private val context: Context,
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         args ?: throw KotlinNullPointerException("args == null")
         val parent: Long = args.getLong(Columns.PARENT)
+        val typeArray: IntArray = args.getIntArray(Columns.SCAN_TYPE)
         val selection: String = when (args.getSerializable(Columns.SCAN_RESULT) as Result) {
-            Result.SINGLE -> CursorArgs.getResultSelection(args.getLong(Columns.ID))
-            Result.MULTIPLE -> if (parent == SCAN_ALL) CursorArgs.ALL_SELECTION
-            else CursorArgs.getParentSelection(parent)
+            Result.SINGLE -> CursorArgs.getResultSelection(args.getLong(Columns.ID), typeArray)
+            Result.MULTIPLE -> if (parent == SCAN_ALL) CursorArgs.getScanTypeSelection(typeArray)
+            else CursorArgs.getParentSelection(parent, typeArray)
         }
         return CursorLoader(context,
                 CursorArgs.FILE_URI,
                 CursorArgs.ALL_COLUMNS,
                 selection,
-                CursorArgs.getSelectionArgs(args.getInt(Columns.SCAN_TYPE)),
+                typeArray.map { it.toString() }.toTypedArray(),
                 "${args.getString(Columns.SORT_FIELD)} ${args.getString(Columns.SORT)}")
     }
 

@@ -2,10 +2,14 @@ package com.gallery.core.callback
 
 import android.content.Context
 import android.os.Bundle
+import androidx.kotlin.expand.text.safeToastExpand
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.expand.*
+import com.gallery.core.expand.CameraStatus
+import com.gallery.core.expand.PermissionCode
+import com.gallery.core.expand.isImageScanExpand
+import com.gallery.core.expand.isVideoScanExpand
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.ScanEntity
@@ -79,9 +83,9 @@ interface IGalleryCallback {
      * 取消拍照
      */
     fun onCameraCanceled(context: Context?, galleryBundle: GalleryBundle) {
-        if (galleryBundle.isVideoScan) {
+        if (galleryBundle.isVideoScanExpand) {
             context?.getString(R.string.gallery_video_canceled).safeToastExpand(context)
-        } else if (galleryBundle.isImageScan) {
+        } else if (galleryBundle.isImageScanExpand) {
             context?.getString(R.string.gallery_camera_canceled).safeToastExpand(context)
         }
     }

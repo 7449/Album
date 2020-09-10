@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -26,7 +27,6 @@ import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.CustomPageActivity
 import com.gallery.sample.viewmodel.ScanViewModelTest
 import com.gallery.scan.ScanEntity
-import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 import com.gallery.scan.types.externalUriExpand
 import com.gallery.ui.FinderType
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         video.setOnClickListener {
             Gallery.newInstance(
                     activity = this,
-                    galleryBundle = GalleryBundle(scanType = ScanType.VIDEO, cameraText = getString(R.string.video_tips)),
+                    galleryBundle = GalleryBundle(scanType = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO), cameraText = getString(R.string.video_tips)),
                     galleryUiBundle = GalleryUiBundle(toolbarText = getString(R.string.gallery_video_title)),
                     galleryLauncher = galleryLauncher
             )

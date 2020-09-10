@@ -8,9 +8,9 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.DialogFragment
+import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
-import com.gallery.core.expand.safeToastExpand
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.sample.R
 import com.gallery.scan.ScanEntity

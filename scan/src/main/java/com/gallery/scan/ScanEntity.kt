@@ -1,7 +1,7 @@
 package com.gallery.scan
 
 import android.os.Parcelable
-import com.gallery.scan.args.Columns
+import android.provider.MediaStore
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -14,7 +14,7 @@ data class ScanEntity(
         val orientation: Int = 0,
         val bucketId: String = "",
         val bucketDisplayName: String = "",
-        val mediaType: String = Columns.IMAGE,
+        val mediaType: String = MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
         val width: Int = 0,
         val height: Int = 0,
         val dateAdded: Long = 0,

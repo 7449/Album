@@ -17,7 +17,7 @@ fun Context.cameraUriExpand(galleryBundle: GalleryBundle): Uri? {
         galleryBundle.cameraPath.isNullOrEmpty() -> lowerVersionFileExpand(galleryBundle.cameraNameExpand, galleryBundle.relativePath)
         else -> galleryBundle.cameraPath.mkdirsFileExpand(galleryBundle.cameraNameExpand)
     }
-    return if (galleryBundle.isVideoScan) insertVideoUriExpand(file) else insertImageUriExpand(file)
+    return if (galleryBundle.isVideoScanExpand) insertVideoUriExpand(file) else insertImageUriExpand(file)
 }
 
 /** content://media/external/images/media/id */

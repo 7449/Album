@@ -31,8 +31,8 @@ import com.gallery.scan.types.postValueExpand
  *          Log.i("ViewModelProvider", "ViewModelProvider success:${arrayList}")
  *       }
  *
- *       override fun scanType(): Int {
- *          return ScanType.IMAGE
+ *       override fun scanType(): IntArray {
+ *          return intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
  *       }
  *   }
  *   ViewModelProvider(fragmentActivity, ScanViewModelFactory(scanView)).get(ScanImpl::class.java).scanParent(SCAN_ALL)
@@ -41,7 +41,7 @@ import com.gallery.scan.types.postValueExpand
  *
  *  class ScanViewModelFactory(
  *      private val fragmentActivity: FragmentActivity,
- *      private val scanType: Int
+ *      private val scanType: IntArray
  *  ) : ViewModelProvider.Factory {
  *
  *      override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -50,7 +50,7 @@ import com.gallery.scan.types.postValueExpand
  *
  *  }
  *
- *  val viewModel = ViewModelProvider(fragmentActivity, ScanViewModelFactory(fragmentActivity, ScanType.IMAGE))
+ *  val viewModel = ViewModelProvider(fragmentActivity, ScanViewModelFactory(fragmentActivity, intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)))
  *                  .get(ScanImpl::class.java)
  *
  *  viewModel.scanLiveData.observe(fragmentActivity, {
@@ -75,7 +75,7 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
     val errorLiveData = MutableLiveData<ScanError>()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext.applicationContext
-    private val scanType: Int = scanView.scanType()
+    private val scanType: IntArray = scanView.scanType()
     private val scanField: String = scanView.scanSortField()
     private val scanSort: String = scanView.scanSort()
 
@@ -85,7 +85,7 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
             putSerializable(Columns.SCAN_RESULT, Result.MULTIPLE)
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
-            putInt(Columns.SCAN_TYPE, scanType)
+            putIntArray(Columns.SCAN_TYPE, scanType)
         }
     }
 
@@ -95,7 +95,7 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
             putSerializable(Columns.SCAN_RESULT, Result.SINGLE)
             putString(Columns.SORT, scanSort)
             putString(Columns.SORT_FIELD, scanField)
-            putInt(Columns.SCAN_TYPE, scanType)
+            putIntArray(Columns.SCAN_TYPE, scanType)
         }
     }
 

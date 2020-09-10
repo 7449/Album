@@ -14,4 +14,4 @@ enum class PermissionCode {
 }
 
 /** 打开相机的自定义数据携带体 */
-class CameraUri(val type: Int, val uri: Uri)
+class CameraUri(val type: IntArray, val uri: Uri)

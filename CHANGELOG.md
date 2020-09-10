@@ -46,6 +46,11 @@
 
 # scan 
 
+## next version
+
+* 去掉内置ScanType，改为 MediaStore.Files.FileColumns 获取 IntArray
+* ~~去掉内置Columns，改为自定义Columns~~
+
 ## 0.1.4
 
 * 新增 date_added 字段

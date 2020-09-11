@@ -3,7 +3,7 @@ package com.gallery.sample.callback
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.text.safeToastExpand
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.ui.wechat.WeChatGalleryCallback
 
 class WeChatGalleryCallback(private val activity: FragmentActivity) : WeChatGalleryCallback {
@@ -12,11 +12,11 @@ class WeChatGalleryCallback(private val activity: FragmentActivity) : WeChatGall
         uri.toString().safeToastExpand(activity)
     }
 
-    override fun onGalleryResource(scanEntity: ScanMinimumEntity) {
+    override fun onGalleryResource(scanEntity: ScanFileEntity) {
         scanEntity.toString().safeToastExpand(activity)
     }
 
-    override fun onWeChatGalleryResources(entities: List<ScanMinimumEntity>, fullImage: Boolean) {
+    override fun onWeChatGalleryResources(entities: List<ScanFileEntity>, fullImage: Boolean) {
         ("$entities,fullImage:$fullImage").safeToastExpand(activity)
     }
 

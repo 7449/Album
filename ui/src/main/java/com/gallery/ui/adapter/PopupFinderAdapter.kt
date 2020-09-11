@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.ListPopupWindow
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 
@@ -40,7 +40,7 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
         popupWindow.dismiss()
     }
 
-    override fun finderUpdate(finderList: ArrayList<ScanMinimumEntity>) {
+    override fun finderUpdate(finderList: ArrayList<ScanFileEntity>) {
         finderAdapter.updateFinder(finderList)
     }
 
@@ -48,12 +48,12 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
         listener.onGalleryAdapterItemClick(view, position, finderAdapter.getItem(position))
     }
 
-    private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanMinimumEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
+    private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanFileEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
 
-        private val list: ArrayList<ScanMinimumEntity> = ArrayList()
+        private val list: ArrayList<ScanFileEntity> = ArrayList()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val finderEntity: ScanMinimumEntity = getItem(position)
+            val finderEntity: ScanFileEntity = getItem(position)
             val rootView: View = convertView
                     ?: LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder, parent, false).apply {
                         this.tag = ViewHolder(this)
@@ -67,11 +67,11 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
             return rootView
         }
 
-        override fun getItem(position: Int): ScanMinimumEntity = list[position]
+        override fun getItem(position: Int): ScanFileEntity = list[position]
         override fun getItemId(position: Int): Long = position.toLong()
         override fun getCount(): Int = list.size
 
-        fun updateFinder(entities: ArrayList<ScanMinimumEntity>) {
+        fun updateFinder(entities: ArrayList<ScanFileEntity>) {
             list.clear()
             list.addAll(entities)
             notifyDataSetChanged()

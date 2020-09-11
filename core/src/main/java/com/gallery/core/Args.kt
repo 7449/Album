@@ -12,9 +12,7 @@ import androidx.annotation.Size
 import com.gallery.core.delegate.PrevDelegate
 import com.gallery.core.delegate.ScanDelegate
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.args.ScanMinimumEntity
-import com.gallery.scan.annotation.SortDef
-import com.gallery.scan.annotation.SortFieldDef
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.Sort
@@ -43,16 +41,16 @@ data class ScanArgs(
         val parentId: Long,
         val fileUri: Uri,
         val isRefresh: Boolean,
-        val selectList: ArrayList<ScanMinimumEntity>
+        val selectList: ArrayList<ScanFileEntity>
 ) : Parcelable {
     companion object {
         private const val Key = "scanArgs"
 
-        fun newSaveInstance(parentId: Long, fileUri: Uri, selectList: ArrayList<ScanMinimumEntity>): ScanArgs {
+        fun newSaveInstance(parentId: Long, fileUri: Uri, selectList: ArrayList<ScanFileEntity>): ScanArgs {
             return ScanArgs(parentId, fileUri, false, selectList)
         }
 
-        fun newResultInstance(selectList: ArrayList<ScanMinimumEntity>, isRefresh: Boolean): ScanArgs {
+        fun newResultInstance(selectList: ArrayList<ScanFileEntity>, isRefresh: Boolean): ScanArgs {
             return ScanArgs(SCAN_ALL, Uri.EMPTY, isRefresh, selectList)
         }
 
@@ -82,7 +80,7 @@ data class PrevArgs(
         /**
          * 当前选中的数据,如果是预览进入则认为所有数据==[selectList]
          */
-        val selectList: ArrayList<ScanMinimumEntity>,
+        val selectList: ArrayList<ScanFileEntity>,
         /**
          * [GalleryBundle] 参数
          */
@@ -108,7 +106,7 @@ data class PrevArgs(
 
         private const val Key = "prevArgs"
 
-        fun newSaveInstance(position: Int, selectList: ArrayList<ScanMinimumEntity>): PrevArgs {
+        fun newSaveInstance(position: Int, selectList: ArrayList<ScanFileEntity>): PrevArgs {
             return PrevArgs(SCAN_ALL, selectList, null, position, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
         }
 
@@ -139,7 +137,7 @@ data class GalleryBundle(
         /**
          * 默认选中的数据
          */
-        val selectEntities: ArrayList<ScanMinimumEntity> = ArrayList(),
+        val selectEntities: ArrayList<ScanFileEntity> = ArrayList(),
         /**
          * 扫描类型
          * 根据[MediaStore.Files.FileColumns.MEDIA_TYPE]搜索
@@ -156,9 +154,7 @@ data class GalleryBundle(
          * [Sort.DESC]
          * [Sort.ASC]
          */
-        @SortDef
         val scanSort: String = Sort.DESC,
-        @SortFieldDef
         val scanSortField: String = MediaStore.Files.FileColumns.DATE_MODIFIED,
         /**
          * 隐藏相机

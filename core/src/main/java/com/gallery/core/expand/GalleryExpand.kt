@@ -13,10 +13,10 @@ val GalleryBundle.cameraNameExpand: String
 val GalleryBundle.cropNameExpand: String
     get() = "${System.currentTimeMillis()}_${cropName}.${cropNameSuffix}"
 
-/** 是否是纯视频 */
+/** 是否是视频 */
 val GalleryBundle.isVideoScanExpand: Boolean
     get() = scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
 
-/** 是否是纯图片 */
+/** 是否是图片 */
 val GalleryBundle.isImageScanExpand: Boolean
     get() = scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)

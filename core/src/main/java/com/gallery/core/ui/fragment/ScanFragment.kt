@@ -9,7 +9,7 @@ import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
 import com.gallery.core.R
 import com.gallery.core.ScanArgs
 import com.gallery.core.delegate.ScanDelegate
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.types.SCAN_ALL
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
@@ -61,14 +61,14 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
         delegate.scrollToPosition(position)
     }
 
-    fun scanSuccess(arrayList: ArrayList<ScanMinimumEntity>) {
+    fun scanSuccess(arrayList: ArrayList<ScanFileEntity>) {
         delegate.scanSuccess(arrayList)
     }
 
-    val currentEntities: ArrayList<ScanMinimumEntity>
+    val currentEntities: ArrayList<ScanFileEntity>
         get() = delegate.currentEntities
 
-    val selectEntities: ArrayList<ScanMinimumEntity>
+    val selectEntities: ArrayList<ScanFileEntity>
         get() = delegate.selectEntities
 
     val selectEmpty: Boolean

@@ -5,24 +5,24 @@ import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 
 interface IPrevDelegate {
 
     /**
      * [ViewPager2.getCurrentItem]
      */
-    val currentItem: ScanMinimumEntity
+    val currentItem: ScanFileEntity
 
     /**
      * 获取全部预览数据
      */
-    val allItem: ArrayList<ScanMinimumEntity>
+    val allItem: ArrayList<ScanFileEntity>
 
     /**
      * 预览页选中的数据
      */
-    val selectEntities: ArrayList<ScanMinimumEntity>
+    val selectEntities: ArrayList<ScanFileEntity>
 
     /**
      * 预览页选中的数据是否为空
@@ -58,7 +58,7 @@ interface IPrevDelegate {
     /**
      * 更新数据
      */
-    fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanMinimumEntity>)
+    fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanFileEntity>)
 
     /**
      * 如果自定义checkBox调用这个方法是比较简单的方法

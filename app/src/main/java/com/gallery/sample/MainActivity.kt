@@ -26,9 +26,9 @@ import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.CustomPageActivity
 import com.gallery.sample.viewmodel.ScanViewModelTest
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.scan.types.Sort
-import com.gallery.scan.types.externalUriExpand
 import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback
@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Handler().postDelayed({ ScanViewModelTest.test(this) }, 2000)
         Handler().postDelayed({ ScanViewModelTest.testAudio(this) }, 2000)
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
@@ -135,7 +134,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         }
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanMinimumEntity, container: FrameLayout, selectView: TextView) {
+    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)
@@ -149,9 +148,9 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
-    override fun onGalleryResource(context: Context, scanEntity: ScanMinimumEntity) {
+    override fun onGalleryResource(context: Context, scanEntity: ScanFileEntity) {
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanMinimumEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity, position: Int, parentId: Long) {
     }
 }

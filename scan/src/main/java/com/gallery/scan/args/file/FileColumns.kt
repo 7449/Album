@@ -1,14 +1,14 @@
-package com.gallery.scan.args
+package com.gallery.scan.args.file
 
 import android.net.Uri
 import android.provider.BaseColumns
 import android.provider.MediaStore
 
-object Columns {
+internal object FileColumns {
 
-    val fileUri: Uri = MediaStore.Files.getContentUri("external")
+    internal val uri: Uri = MediaStore.Files.getContentUri("external")
 
-    val minimumColumns = arrayOf(
+    internal val columns: Array<String> = arrayOf(
             BaseColumns._ID,
 
             /**

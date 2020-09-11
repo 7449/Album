@@ -1,11 +1,13 @@
 package com.gallery.scan
 
+import android.os.Bundle
+
 interface Scan {
 
-    /** 扫描文件夹 */
-    fun scanParent(parentId: Long)
+    /** 扫描多个数据 */
+    fun scanMultiple(bundle: Bundle)
 
-    /** 扫描拍照 */
-    fun scanResult(id: Long)
+    /** 扫描单个数据 */
+    fun scanSingle(bundle: Bundle)
 
 }

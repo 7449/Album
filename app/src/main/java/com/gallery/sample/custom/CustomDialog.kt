@@ -13,7 +13,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.sample.R
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 
 class CustomDialog : DialogFragment(), IGalleryCallback {
 
@@ -66,11 +66,11 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
         })
     }
 
-    override fun onGalleryResource(context: Context, scanEntity: ScanMinimumEntity) {
+    override fun onGalleryResource(context: Context, scanEntity: ScanFileEntity) {
         scanEntity.toString().safeToastExpand(requireActivity())
         dismiss()
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanMinimumEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity, position: Int, parentId: Long) {
     }
 }

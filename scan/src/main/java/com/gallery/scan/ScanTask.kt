@@ -3,14 +3,11 @@ package com.gallery.scan
 import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.gallery.scan.args.IScanEntityFactory
-import com.gallery.scan.args.ScanParameter.Companion.getScanParameter
-import com.gallery.scan.types.Result
-import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.args.CursorLoaderArgs.Companion.getCursorLoaderArgs
+import com.gallery.scan.args.ScanEntityFactory
 
 /**
  * @author y
@@ -18,55 +15,34 @@ import com.gallery.scan.types.SCAN_ALL
  *
  * 扫描
  */
-internal class ScanTask<ENTITY : IScanEntityFactory>(private val context: Context,
-                                                     private val scanFactory: IScanEntityFactory,
-                                                     private val loaderError: () -> Unit,
-                                                     private val loaderSuccess: (ArrayList<ENTITY>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
-
-    companion object {
-        internal const val SCAN_RESULT = "scan_result"
-        private const val APPEND = " ${MediaStore.Files.FileColumns.MEDIA_TYPE}=? OR"
-
-        private fun getScanTypeSelection(intArray: IntArray): String {
-            val defaultSelection = StringBuilder(" ${MediaStore.Files.FileColumns.SIZE} > 0 AND ")
-            intArray.forEach { _ -> defaultSelection.append(APPEND) }
-            return defaultSelection.toString().removeSuffix("OR")
-        }
-
-        private fun getParentSelection(parent: Long, intArray: IntArray) = "${MediaStore.Files.FileColumns.PARENT}=$parent AND (${getScanTypeSelection(intArray)})"
-
-        private fun getResultSelection(id: Long, intArray: IntArray) = "${MediaStore.Files.FileColumns._ID}=$id AND (${getScanTypeSelection(intArray)})"
-    }
+internal class ScanTask<ENTITY : ScanEntityFactory>(
+        private val context: Context,
+        private val factory: ScanEntityFactory,
+        private val error: () -> Unit,
+        private val success: (ArrayList<ENTITY>) -> Unit
+) : LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         args ?: throw KotlinNullPointerException("args == null")
-        val parent: Long = args.getLong(MediaStore.Files.FileColumns.PARENT)
-        val scanParameter = args.getScanParameter()
-        val typeArray: IntArray = scanParameter.scanType
-        val selection: String = when (args.getSerializable(SCAN_RESULT) as Result) {
-            Result.SINGLE -> getResultSelection(args.getLong(MediaStore.Files.FileColumns._ID), typeArray)
-            Result.MULTIPLE -> if (parent == SCAN_ALL) getScanTypeSelection(typeArray)
-            else getParentSelection(parent, typeArray)
-        }
+        val scanParameter = args.getCursorLoaderArgs()
         return CursorLoader(context,
                 scanParameter.scanUri,
-                scanParameter.scanColumns,
-                selection,
-                typeArray.map { it.toString() }.toTypedArray(),
-                "${scanParameter.scanSortField} ${scanParameter.scanSort}")
+                scanParameter.scanProjection,
+                scanParameter.createSelection(args),
+                scanParameter.createSelectionArgs(args),
+                scanParameter.scanSortOrder)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
         if (data == null) {
-            loaderError.invoke()
+            error.invoke()
             return
         }
-        val cursor: Cursor = data
         val arrayList = ArrayList<ENTITY>()
-        while (cursor.moveToNext()) {
-            arrayList.add(scanFactory.onCreateCursorGeneric(cursor))
+        while (data.moveToNext()) {
+            arrayList.add(factory.onCreateCursorGeneric(data))
         }
-        loaderSuccess(arrayList)
+        success(arrayList)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {

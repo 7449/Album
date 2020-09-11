@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.prevFragment
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.ui.R
 import com.gallery.ui.activity.PrevBaseActivity
 import com.gallery.ui.engine.displayGalleryPrev
@@ -35,12 +35,12 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
         preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanMinimumEntity) {
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
         super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
         preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
     }
 
-    override fun onDisplayGalleryPrev(galleryEntity: ScanMinimumEntity, container: FrameLayout) {
+    override fun onDisplayGalleryPrev(galleryEntity: ScanFileEntity, container: FrameLayout) {
         container.displayGalleryPrev(galleryEntity)
     }
 

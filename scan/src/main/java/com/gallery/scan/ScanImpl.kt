@@ -6,9 +6,9 @@ import android.provider.MediaStore
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.loader.app.LoaderManager
-import com.gallery.scan.args.IScanEntityFactory
-import com.gallery.scan.args.ScanParameter
-import com.gallery.scan.args.ScanParameter.Companion.putScanParameter
+import com.gallery.scan.args.CursorLoaderArgs
+import com.gallery.scan.args.CursorLoaderArgs.Companion.putCursorLoaderArgs
+import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.types.Result
 import com.gallery.scan.types.postValueExpand
 
@@ -67,7 +67,7 @@ import com.gallery.scan.types.postValueExpand
  *  viewModel.scanParent(SCAN_ALL)
  *
  */
-class ScanImpl<ENTITY : IScanEntityFactory>(private val scanView: ScanView<ENTITY>) : ViewModel(), Scan {
+class ScanImpl<ENTITY : ScanEntityFactory>(private val scanView: ScanView<ENTITY>) : ViewModel(), Scan {
 
     companion object {
         private const val SCAN_LOADER_ID = 111
@@ -78,49 +78,49 @@ class ScanImpl<ENTITY : IScanEntityFactory>(private val scanView: ScanView<ENTIT
     val errorLiveData = MutableLiveData<ScanError>()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext.applicationContext
-    private val scanFactoryCreate: IScanEntityFactory = scanView.scanFactoryCreate
-    private val scanParameter: ScanParameter = scanView.scanParameter
+    private val scanEntityFactory: ScanEntityFactory = scanView.scanEntityFactory
+    private val cursorLoaderArgs: CursorLoaderArgs = scanView.scanCursorLoaderArgs
 
-    private fun createScanParentArgs(parentId: Long): Bundle {
+    private fun createScanMultipleArgs(bundle: Bundle): Bundle {
         return Bundle().apply {
-            putLong(MediaStore.Files.FileColumns.PARENT, parentId)
-            putSerializable(ScanTask.SCAN_RESULT, Result.MULTIPLE)
-            putScanParameter(scanParameter)
+            putAll(bundle)
+            putSerializable(MediaStore.Files.FileColumns.MIME_TYPE, Result.MULTIPLE)
+            putCursorLoaderArgs(cursorLoaderArgs)
         }
     }
 
-    private fun createScanResultArgs(id: Long): Bundle {
+    private fun createScanSingleArgs(bundle: Bundle): Bundle {
         return Bundle().apply {
-            putLong(MediaStore.Files.FileColumns._ID, id)
-            putSerializable(ScanTask.SCAN_RESULT, Result.SINGLE)
-            putScanParameter(scanParameter)
+            putAll(bundle)
+            putSerializable(MediaStore.Files.FileColumns.MIME_TYPE, Result.SINGLE)
+            putCursorLoaderArgs(cursorLoaderArgs)
         }
     }
 
-    override fun scanParent(parentId: Long) {
+    override fun scanMultiple(bundle: Bundle) {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanParentArgs(parentId), ScanTask<ENTITY>(context, scanFactoryCreate, {
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(bundle), ScanTask<ENTITY>(context, scanEntityFactory, {
             scanView.scanError()
             errorLiveData.postValueExpand(ScanError(Result.MULTIPLE))
         }) {
             scanView.scanSuccess(it)
-            scanLiveData.postValueExpand(ScanResult(parentId, it))
+            scanLiveData.postValueExpand(ScanResult(bundle, it))
             onCleared()
         })
     }
 
-    override fun scanResult(id: Long) {
+    override fun scanSingle(bundle: Bundle) {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanResultArgs(id), ScanTask<ENTITY>(context, scanFactoryCreate, {
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(bundle), ScanTask<ENTITY>(context, scanEntityFactory, {
             scanView.resultError()
             errorLiveData.postValueExpand(ScanError(Result.SINGLE))
         }) {
             scanView.resultSuccess(if (it.isEmpty()) null else it[0])
-            resultLiveData.postValueExpand(ValueResult(id, if (it.isEmpty()) null else it[0]))
+            resultLiveData.postValueExpand(ValueResult(bundle, if (it.isEmpty()) null else it[0]))
             onCleared()
         })
     }

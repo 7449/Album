@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.ScanArgs
 import com.gallery.core.expand.PermissionCode
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.types.SCAN_ALL
 
 interface IScanDelegate {
@@ -25,12 +25,12 @@ interface IScanDelegate {
      * 当前扫描的数据
      * 已经过滤了CAMERA
      */
-    val currentEntities: ArrayList<ScanMinimumEntity>
+    val currentEntities: ArrayList<ScanFileEntity>
 
     /**
      * 当前选中的数据
      */
-    val selectEntities: ArrayList<ScanMinimumEntity>
+    val selectEntities: ArrayList<ScanFileEntity>
 
     /**
      * 当前选中的数据是否为空

@@ -8,9 +8,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.colorExpand
-import com.gallery.scan.args.ScanMinimumEntity
-import com.gallery.scan.types.isGifExpand
-import com.gallery.scan.types.isVideoExpand
+import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.scan.args.file.isGifExpand
+import com.gallery.scan.args.file.isVideoExpand
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.engine.formatTimeVideo
 import kotlinx.android.synthetic.main.layout_gallery_wechat_item.view.*
@@ -36,7 +36,7 @@ class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: Attri
     private val selectView: View
         get() = viewWeChatBackSelect
 
-    fun update(galleryEntity: ScanMinimumEntity) {
+    fun update(galleryEntity: ScanFileEntity) {
         selectView.visibility = if (galleryEntity.isSelected) View.VISIBLE else View.GONE
         gifView.visibility = if (galleryEntity.isGifExpand) View.VISIBLE else View.GONE
         videoView.visibility = if (galleryEntity.isVideoExpand) View.VISIBLE else View.GONE

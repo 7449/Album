@@ -2,7 +2,7 @@ package com.gallery.ui.adapter
 
 import android.view.View
 import android.widget.FrameLayout
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.activity.GalleryBaseActivity
 
@@ -10,10 +10,10 @@ interface GalleryFinderAdapter {
 
     interface AdapterFinderListener {
         /** 文件夹图片加载 */
-        fun onGalleryFinderThumbnails(finderEntity: ScanMinimumEntity, container: FrameLayout)
+        fun onGalleryFinderThumbnails(finderEntity: ScanFileEntity, container: FrameLayout)
 
         /** item点击 */
-        fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanMinimumEntity)
+        fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanFileEntity)
     }
 
     /** adapter 初始化 */
@@ -23,7 +23,7 @@ interface GalleryFinderAdapter {
     fun setOnAdapterFinderListener(listener: AdapterFinderListener)
 
     /** 更新文件夹数据 */
-    fun finderUpdate(finderList: ArrayList<ScanMinimumEntity>)
+    fun finderUpdate(finderList: ArrayList<ScanFileEntity>)
 
     /** 显示Adapter */
     fun show()

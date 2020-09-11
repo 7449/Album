@@ -18,11 +18,9 @@ import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.ScanViewModelFactory
-import com.gallery.scan.args.Columns
-import com.gallery.scan.args.ScanMinimumEntity
-import com.gallery.scan.args.ScanParameter
-import com.gallery.scan.getScanMinimumImpl
-import com.gallery.scan.types.externalUriExpand
+import com.gallery.scan.args.ScanEntityFactory
+import com.gallery.scan.args.file.*
+import com.gallery.scan.getScanFileImpl
 import com.gallery.scan.types.isScanNoNeExpand
 
 /**
@@ -54,11 +52,11 @@ class PrevDelegate(
     private val galleryPrevCallback: IGalleryPrevCallback by lazy { fragment.galleryPrevCallback }
     private val galleryPrevInterceptor: IGalleryPrevInterceptor by lazy { fragment.galleryPrevInterceptor }
 
-    override val currentItem: ScanMinimumEntity
+    override val currentItem: ScanFileEntity
         get() = prevAdapter.item(currentPosition)
-    override val allItem: ArrayList<ScanMinimumEntity>
+    override val allItem: ArrayList<ScanFileEntity>
         get() = prevAdapter.allItem
-    override val selectEntities: ArrayList<ScanMinimumEntity>
+    override val selectEntities: ArrayList<ScanFileEntity>
         get() = prevAdapter.currentSelectList
     override val selectEmpty: Boolean
         get() = selectEntities.isEmpty()
@@ -86,19 +84,20 @@ class PrevDelegate(
         } else {
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
-            val scanParameter = ScanParameter(Columns.fileUri,
-                    if (scanAlone == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE) galleryBundle.scanType else intArrayOf(scanAlone),
-                    galleryBundle.scanSort,
-                    galleryBundle.scanSortField)
+            val scanParameter = ScanFileArgs(
+                    if (scanAlone == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE) galleryBundle.scanType.map { it.toString() }.toTypedArray() else arrayOf(scanAlone.toString()),
+                    galleryBundle.scanSortField,
+                    galleryBundle.scanSort
+            )
             val scanViewModel = ViewModelProvider(fragment.requireActivity(),
-                    ScanViewModelFactory(fragment.requireActivity(), scanParameter = scanParameter))
-                    .getScanMinimumImpl()
+                    ScanViewModelFactory(fragment.requireActivity(), ScanEntityFactory.scanFileFactory(), scanParameter))
+                    .getScanFileImpl()
             scanViewModel.scanLiveData.observe(fragment.requireActivity(), { updateEntity(savedInstanceState, it.entities) })
-            scanViewModel.scanParent(parentId)
+            scanViewModel.scanMultiple(parentId.multipleFileExpand())
         }
     }
 
-    override fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanMinimumEntity>) {
+    override fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanFileEntity>) {
         val prevArgs: PrevArgs = savedInstanceState?.prevArgs ?: prevArgs
         prevAdapter.addAll(arrayList)
         prevAdapter.addSelectAll(prevArgs.selectList)

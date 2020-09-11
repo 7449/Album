@@ -10,7 +10,7 @@ import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.xadapter.vh.XViewHolder
 
 class GalleryAdapter(
@@ -22,8 +22,8 @@ class GalleryAdapter(
 ) : RecyclerView.Adapter<XViewHolder>() {
 
     interface OnGalleryItemClickListener {
-        fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanMinimumEntity)
-        fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanMinimumEntity)
+        fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanFileEntity)
+        fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanFileEntity)
     }
 
     companion object {
@@ -32,8 +32,8 @@ class GalleryAdapter(
         private const val TYPE_PHOTO = 1
     }
 
-    private val galleryList: ArrayList<ScanMinimumEntity> = arrayListOf()
-    private val selectList: ArrayList<ScanMinimumEntity> = arrayListOf()
+    private val galleryList: ArrayList<ScanFileEntity> = arrayListOf()
+    private val selectList: ArrayList<ScanFileEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
         return when (viewType) {
@@ -66,13 +66,13 @@ class GalleryAdapter(
         else -> TYPE_CAMERA
     }
 
-    fun addAll(newList: ArrayList<ScanMinimumEntity>) {
+    fun addAll(newList: ArrayList<ScanFileEntity>) {
         galleryList.clear()
         galleryList.addAll(newList)
         notifyDataSetChanged()
     }
 
-    fun addSelectAll(newList: ArrayList<ScanMinimumEntity>) {
+    fun addSelectAll(newList: ArrayList<ScanFileEntity>) {
         selectList.clear()
         selectList.addAll(newList)
         notifyDataSetChanged()
@@ -84,13 +84,13 @@ class GalleryAdapter(
         notifyDataSetChanged()
     }
 
-    fun addEntity(position: Int, entity: ScanMinimumEntity) {
+    fun addEntity(position: Int, entity: ScanFileEntity) {
         if (!currentList.contains(entity)) {
             currentList.add(position, entity)
         }
     }
 
-    fun addEntity(entity: ScanMinimumEntity) {
+    fun addEntity(entity: ScanFileEntity) {
         if (!currentList.contains(entity)) {
             currentList.add(entity)
         }
@@ -99,9 +99,9 @@ class GalleryAdapter(
     val isNotEmpty: Boolean
         get() = galleryList.isNotEmpty()
 
-    val currentSelectList: ArrayList<ScanMinimumEntity>
+    val currentSelectList: ArrayList<ScanFileEntity>
         get() = selectList
 
-    val currentList: ArrayList<ScanMinimumEntity>
+    val currentList: ArrayList<ScanFileEntity>
         get() = galleryList
 }

@@ -9,8 +9,8 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.scan.args.ScanMinimumEntity
-import com.gallery.scan.types.externalUriExpand
+import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.scan.args.file.externalUriExpand
 import com.xadapter.vh.XViewHolder
 
 class PhotoViewHolder(itemView: View,
@@ -21,7 +21,7 @@ class PhotoViewHolder(itemView: View,
     private val container: FrameLayout = frameLayout(R.id.galleryContainer)
     private val checkBox: TextView = textView(R.id.galleryCheckBox)
 
-    fun photo(position: Int, galleryEntity: ScanMinimumEntity, selectList: ArrayList<ScanMinimumEntity>, imageLoader: IGalleryImageLoader) {
+    fun photo(position: Int, galleryEntity: ScanFileEntity, selectList: ArrayList<ScanFileEntity>, imageLoader: IGalleryImageLoader) {
         imageLoader.onDisplayGallery(display, display, galleryEntity, container, checkBox)
         container.setBackgroundColor(galleryBundle.photoBackgroundColor)
         if (galleryBundle.radio) {
@@ -33,7 +33,7 @@ class PhotoViewHolder(itemView: View,
         checkBox.setOnClickListener { clickCheckBox(position, galleryEntity, selectList) }
     }
 
-    private fun clickCheckBox(position: Int, galleryEntity: ScanMinimumEntity, selectList: ArrayList<ScanMinimumEntity>) {
+    private fun clickCheckBox(position: Int, galleryEntity: ScanFileEntity, selectList: ArrayList<ScanFileEntity>) {
         if (!galleryEntity.externalUriExpand.isFileExistsExpand(context)) {
             if (selectList.contains(galleryEntity)) {
                 selectList.remove(galleryEntity)

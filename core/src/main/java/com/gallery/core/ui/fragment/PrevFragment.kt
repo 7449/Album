@@ -7,7 +7,7 @@ import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.R
 import com.gallery.core.delegate.PrevDelegate
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
 open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
@@ -26,13 +26,13 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
         return PrevDelegate(this, preViewPager, preCheckBox)
     }
 
-    val currentItem: ScanMinimumEntity
+    val currentItem: ScanFileEntity
         get() = delegate.currentItem
 
-    val allItem: ArrayList<ScanMinimumEntity>
+    val allItem: ArrayList<ScanFileEntity>
         get() = delegate.allItem
 
-    val selectEntities: ArrayList<ScanMinimumEntity>
+    val selectEntities: ArrayList<ScanFileEntity>
         get() = delegate.selectEntities
 
     val selectEmpty: Boolean

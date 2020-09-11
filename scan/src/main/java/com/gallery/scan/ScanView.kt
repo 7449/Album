@@ -2,14 +2,14 @@ package com.gallery.scan
 
 import androidx.fragment.app.FragmentActivity
 import androidx.loader.app.LoaderManager
-import com.gallery.scan.args.IScanEntityFactory
-import com.gallery.scan.args.ScanParameter
+import com.gallery.scan.args.CursorLoaderArgs
+import com.gallery.scan.args.ScanEntityFactory
 
 /**
  * @author y
  * @create 2019/2/27
  */
-interface ScanView<ENTITY : IScanEntityFactory> {
+interface ScanView<ENTITY : ScanEntityFactory> {
 
     /**
      *  [LoaderManager.getInstance]
@@ -19,12 +19,12 @@ interface ScanView<ENTITY : IScanEntityFactory> {
     /**
      * 扫描所需参数
      */
-    val scanParameter: ScanParameter
+    val scanCursorLoaderArgs: CursorLoaderArgs
 
     /**
-     * 自定义参数
+     * 自定义实体类参数[ENTITY]
      */
-    val scanFactoryCreate: IScanEntityFactory
+    val scanEntityFactory: ScanEntityFactory
 
     /**
      * 扫描成功

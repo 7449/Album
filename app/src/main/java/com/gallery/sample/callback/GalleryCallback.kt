@@ -3,7 +3,7 @@ package com.gallery.sample.callback
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import androidx.kotlin.expand.text.safeToastExpand
-import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.ui.GalleryListener
 
 class GalleryCallback(private val activity: FragmentActivity) : GalleryListener {
@@ -12,11 +12,11 @@ class GalleryCallback(private val activity: FragmentActivity) : GalleryListener 
         uri.toString().safeToastExpand(activity)
     }
 
-    override fun onGalleryResource(scanEntity: ScanMinimumEntity) {
+    override fun onGalleryResource(scanEntity: ScanFileEntity) {
         scanEntity.toString().safeToastExpand(activity)
     }
 
-    override fun onGalleryResources(entities: List<ScanMinimumEntity>) {
+    override fun onGalleryResources(entities: List<ScanFileEntity>) {
         entities.toString().safeToastExpand(activity)
     }
 

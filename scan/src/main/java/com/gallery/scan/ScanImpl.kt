@@ -2,10 +2,13 @@ package com.gallery.scan
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.loader.app.LoaderManager
-import com.gallery.scan.args.Columns
+import com.gallery.scan.args.IScanEntityFactory
+import com.gallery.scan.args.ScanParameter
+import com.gallery.scan.args.ScanParameter.Companion.putScanParameter
 import com.gallery.scan.types.Result
 import com.gallery.scan.types.postValueExpand
 
@@ -64,38 +67,33 @@ import com.gallery.scan.types.postValueExpand
  *  viewModel.scanParent(SCAN_ALL)
  *
  */
-class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
+class ScanImpl<ENTITY : IScanEntityFactory>(private val scanView: ScanView<ENTITY>) : ViewModel(), Scan {
 
     companion object {
         private const val SCAN_LOADER_ID = 111
     }
 
-    val scanLiveData = MutableLiveData<ScanResult>()
-    val resultLiveData = MutableLiveData<ValueResult>()
+    val scanLiveData = MutableLiveData<ScanResult<ENTITY>>()
+    val resultLiveData = MutableLiveData<ValueResult<ENTITY>>()
     val errorLiveData = MutableLiveData<ScanError>()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanContext)
     private val context: Context = scanView.scanContext.applicationContext
-    private val scanType: IntArray = scanView.scanType()
-    private val scanField: String = scanView.scanSortField()
-    private val scanSort: String = scanView.scanSort()
+    private val scanFactoryCreate: IScanEntityFactory = scanView.scanFactoryCreate
+    private val scanParameter: ScanParameter = scanView.scanParameter
 
     private fun createScanParentArgs(parentId: Long): Bundle {
         return Bundle().apply {
-            putLong(Columns.PARENT, parentId)
-            putSerializable(Columns.SCAN_RESULT, Result.MULTIPLE)
-            putString(Columns.SORT, scanSort)
-            putString(Columns.SORT_FIELD, scanField)
-            putIntArray(Columns.SCAN_TYPE, scanType)
+            putLong(MediaStore.Files.FileColumns.PARENT, parentId)
+            putSerializable(ScanTask.SCAN_RESULT, Result.MULTIPLE)
+            putScanParameter(scanParameter)
         }
     }
 
     private fun createScanResultArgs(id: Long): Bundle {
         return Bundle().apply {
-            putLong(Columns.ID, id)
-            putSerializable(Columns.SCAN_RESULT, Result.SINGLE)
-            putString(Columns.SORT, scanSort)
-            putString(Columns.SORT_FIELD, scanField)
-            putIntArray(Columns.SCAN_TYPE, scanType)
+            putLong(MediaStore.Files.FileColumns._ID, id)
+            putSerializable(ScanTask.SCAN_RESULT, Result.SINGLE)
+            putScanParameter(scanParameter)
         }
     }
 
@@ -103,7 +101,7 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanParentArgs(parentId), ScanTask(context, {
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanParentArgs(parentId), ScanTask<ENTITY>(context, scanFactoryCreate, {
             scanView.scanError()
             errorLiveData.postValueExpand(ScanError(Result.MULTIPLE))
         }) {
@@ -117,7 +115,7 @@ class ScanImpl(private val scanView: ScanView) : ViewModel(), Scan {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanResultArgs(id), ScanTask(context, {
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanResultArgs(id), ScanTask<ENTITY>(context, scanFactoryCreate, {
             scanView.resultError()
             errorLiveData.postValueExpand(ScanError(Result.SINGLE))
         }) {

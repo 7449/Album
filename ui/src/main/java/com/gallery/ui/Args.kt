@@ -5,18 +5,18 @@ import android.os.Parcelable
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
 import com.gallery.core.delegate.PrevDelegate
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UIGallerySaveArgs(
         val finderName: String,
-        val finderList: ArrayList<ScanEntity>
+        val finderList: ArrayList<ScanMinimumEntity>
 ) : Parcelable {
     companion object {
         private const val Key = "uiGallerySaveArgs"
 
-        fun newSaveInstance(finderName: String, finderList: ArrayList<ScanEntity>): UIGallerySaveArgs {
+        fun newSaveInstance(finderName: String, finderList: ArrayList<ScanMinimumEntity>): UIGallerySaveArgs {
             return UIGallerySaveArgs(finderName, finderList)
         }
 

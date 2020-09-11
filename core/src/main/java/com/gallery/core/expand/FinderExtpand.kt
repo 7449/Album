@@ -1,13 +1,13 @@
 package com.gallery.core.expand
 
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.isScanAllExpand
 
 //获取当前页的文件夹数据
 //目标List为扫描成功之后的数据，返回Finder数据
-fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList<ScanEntity> {
-    val finderList = ArrayList<ScanEntity>()
+fun ArrayList<ScanMinimumEntity>.findFinder(sdName: String, allName: String): ArrayList<ScanMinimumEntity> {
+    val finderList = ArrayList<ScanMinimumEntity>()
     this.forEach { item ->
         if (finderList.find { it.parent == item.parent } == null) {
             finderList.add(item.copy(count = this.count { it.parent == item.parent }))
@@ -26,14 +26,14 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
 //如果现有的文件夹数据找不到parent相同的数据则是一个新的文件夹
 //添加数据并更新第一条数据
 //否则更新第一条数据和文件夹数据
-fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity, sortDesc: Boolean) {
+fun ArrayList<ScanMinimumEntity>.updateResultFinder(scanEntity: ScanMinimumEntity, sortDesc: Boolean) {
     if (isEmpty()) {
         return
     }
-    val find: ScanEntity? = find { it.parent == scanEntity.parent }
+    val find: ScanMinimumEntity? = find { it.parent == scanEntity.parent }
     if (find == null) {
         this.add(1, scanEntity.copy(count = 1))
-        val first: ScanEntity = first()
+        val first: ScanMinimumEntity = first()
         this[indexOf(first)] = first.copy(scanEntity, if (sortDesc) scanEntity.id else first.id, first.bucketDisplayName, first.parent, first.count + 1)
     } else {
         find { it.parent.isScanAllExpand() }?.let {
@@ -45,7 +45,7 @@ fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity, sortDesc: B
     }
 }
 
-internal fun ScanEntity.copy(source: ScanEntity, id: Long, bucketDisplayName: String, parent: Long, count: Int): ScanEntity {
+internal fun ScanMinimumEntity.copy(source: ScanMinimumEntity, id: Long, bucketDisplayName: String, parent: Long, count: Int): ScanMinimumEntity {
     return copy(
             id = id,
             size = source.size,

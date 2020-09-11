@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -31,7 +31,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
         bottomFragment.dismiss()
     }
 
-    override fun finderUpdate(finderList: ArrayList<ScanEntity>) {
+    override fun finderUpdate(finderList: ArrayList<ScanMinimumEntity>) {
         bottomFragment.updateFinder(finderList)
     }
 
@@ -47,7 +47,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
             }
         }
 
-        private val list: ArrayList<ScanEntity> = ArrayList()
+        private val list: ArrayList<ScanMinimumEntity> = ArrayList()
         private val galleryUiBundle by lazy {
             getParcelableOrDefault<GalleryUiBundle>(Key, GalleryUiBundle())
         }
@@ -75,7 +75,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
                 }
 
                 override fun onBindViewHolder(holder: XViewHolder, position: Int) {
-                    val finderEntity: ScanEntity = list[position]
+                    val finderEntity: ScanMinimumEntity = list[position]
                     holder.setText(R.id.tv_gallery_finder_name, "%s".format(finderEntity.bucketDisplayName))
                     holder.textView(R.id.tv_gallery_finder_name).setTextColor(galleryUiBundle.finderItemTextColor)
                     holder.setText(R.id.tv_gallery_finder_file_count, "%s".format(finderEntity.count.toString()))
@@ -85,7 +85,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
             }
         }
 
-        fun updateFinder(entities: ArrayList<ScanEntity>) {
+        fun updateFinder(entities: ArrayList<ScanMinimumEntity>) {
             list.clear()
             list.addAll(entities)
             galleryFinderBottom?.adapter?.notifyDataSetChanged()

@@ -12,14 +12,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.sample.R
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 import com.gallery.scan.types.externalUriExpand
 import com.gallery.ui.page.GalleryActivity
 import kotlinx.android.synthetic.main.simple_gallery_layout.*
 
 class CustomPageActivity : GalleryActivity(R.layout.simple_gallery_layout), IGalleryInterceptor {
 
-    override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
+    override fun onScanSuccess(scanEntities: ArrayList<ScanMinimumEntity>) {
         super.onScanSuccess(scanEntities)
         val arrayList = ArrayList<SimpleGallery>()
         scanEntities.forEach { arrayList.add(SimpleGallery(it.externalUriExpand)) }
@@ -28,7 +28,7 @@ class CustomPageActivity : GalleryActivity(R.layout.simple_gallery_layout), IGal
                 .resource(arrayList)
     }
 
-    override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
+    override fun onGalleryResources(entities: ArrayList<ScanMinimumEntity>) {
         entities.toString().safeToastExpand(this)
     }
 

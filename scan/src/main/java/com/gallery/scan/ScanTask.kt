@@ -3,14 +3,12 @@ package com.gallery.scan
 import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
-import androidx.kotlin.expand.database.getIntOrDefault
-import androidx.kotlin.expand.database.getLongOrDefault
-import androidx.kotlin.expand.database.getStringOrDefault
+import android.provider.MediaStore
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.gallery.scan.args.Columns
-import com.gallery.scan.args.CursorArgs
+import com.gallery.scan.args.IScanEntityFactory
+import com.gallery.scan.args.ScanParameter.Companion.getScanParameter
 import com.gallery.scan.types.Result
 import com.gallery.scan.types.SCAN_ALL
 
@@ -20,25 +18,42 @@ import com.gallery.scan.types.SCAN_ALL
  *
  * 扫描
  */
-internal class ScanTask(private val context: Context,
-                        private val loaderError: () -> Unit,
-                        private val loaderSuccess: (ArrayList<ScanEntity>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
+internal class ScanTask<ENTITY : IScanEntityFactory>(private val context: Context,
+                                                     private val scanFactory: IScanEntityFactory,
+                                                     private val loaderError: () -> Unit,
+                                                     private val loaderSuccess: (ArrayList<ENTITY>) -> Unit) : LoaderManager.LoaderCallbacks<Cursor> {
+
+    companion object {
+        internal const val SCAN_RESULT = "scan_result"
+        private const val APPEND = " ${MediaStore.Files.FileColumns.MEDIA_TYPE}=? OR"
+
+        private fun getScanTypeSelection(intArray: IntArray): String {
+            val defaultSelection = StringBuilder(" ${MediaStore.Files.FileColumns.SIZE} > 0 AND ")
+            intArray.forEach { _ -> defaultSelection.append(APPEND) }
+            return defaultSelection.toString().removeSuffix("OR")
+        }
+
+        private fun getParentSelection(parent: Long, intArray: IntArray) = "${MediaStore.Files.FileColumns.PARENT}=$parent AND (${getScanTypeSelection(intArray)})"
+
+        private fun getResultSelection(id: Long, intArray: IntArray) = "${MediaStore.Files.FileColumns._ID}=$id AND (${getScanTypeSelection(intArray)})"
+    }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         args ?: throw KotlinNullPointerException("args == null")
-        val parent: Long = args.getLong(Columns.PARENT)
-        val typeArray: IntArray = args.getIntArray(Columns.SCAN_TYPE)
-        val selection: String = when (args.getSerializable(Columns.SCAN_RESULT) as Result) {
-            Result.SINGLE -> CursorArgs.getResultSelection(args.getLong(Columns.ID), typeArray)
-            Result.MULTIPLE -> if (parent == SCAN_ALL) CursorArgs.getScanTypeSelection(typeArray)
-            else CursorArgs.getParentSelection(parent, typeArray)
+        val parent: Long = args.getLong(MediaStore.Files.FileColumns.PARENT)
+        val scanParameter = args.getScanParameter()
+        val typeArray: IntArray = scanParameter.scanType
+        val selection: String = when (args.getSerializable(SCAN_RESULT) as Result) {
+            Result.SINGLE -> getResultSelection(args.getLong(MediaStore.Files.FileColumns._ID), typeArray)
+            Result.MULTIPLE -> if (parent == SCAN_ALL) getScanTypeSelection(typeArray)
+            else getParentSelection(parent, typeArray)
         }
         return CursorLoader(context,
-                CursorArgs.FILE_URI,
-                CursorArgs.ALL_COLUMNS,
+                scanParameter.scanUri,
+                scanParameter.scanColumns,
                 selection,
                 typeArray.map { it.toString() }.toTypedArray(),
-                "${args.getString(Columns.SORT_FIELD)} ${args.getString(Columns.SORT)}")
+                "${scanParameter.scanSortField} ${scanParameter.scanSort}")
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
@@ -47,25 +62,9 @@ internal class ScanTask(private val context: Context,
             return
         }
         val cursor: Cursor = data
-        val arrayList = ArrayList<ScanEntity>()
+        val arrayList = ArrayList<ENTITY>()
         while (cursor.moveToNext()) {
-            arrayList.add(ScanEntity(
-                    cursor.getLongOrDefault(Columns.ID),
-                    cursor.getLongOrDefault(Columns.SIZE),
-                    cursor.getLongOrDefault(Columns.DURATION),
-                    cursor.getStringOrDefault(Columns.MIME_TYPE),
-                    cursor.getStringOrDefault(Columns.DISPLAY_NAME),
-                    cursor.getIntOrDefault(Columns.ORIENTATION),
-                    cursor.getStringOrDefault(Columns.BUCKET_ID),
-                    cursor.getStringOrDefault(Columns.BUCKET_DISPLAY_NAME),
-                    cursor.getStringOrDefault(Columns.MEDIA_TYPE),
-                    cursor.getIntOrDefault(Columns.WIDTH),
-                    cursor.getIntOrDefault(Columns.HEIGHT),
-                    cursor.getLongOrDefault(Columns.DATE_ADDED),
-                    cursor.getLongOrDefault(Columns.DATE_MODIFIED),
-                    cursor.getLongOrDefault(Columns.PARENT),
-                    0,
-                    false))
+            arrayList.add(scanFactory.onCreateCursorGeneric(cursor))
         }
         loaderSuccess(arrayList)
     }

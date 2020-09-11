@@ -1,47 +1,51 @@
 package com.gallery.scan
 
-import android.provider.MediaStore
-import androidx.annotation.Size
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.gallery.scan.annotation.SortDef
-import com.gallery.scan.annotation.SortFieldDef
-import com.gallery.scan.args.Columns
+import com.gallery.scan.args.IScanEntityFactory
+import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.ScanParameter
 import com.gallery.scan.types.Result
-import com.gallery.scan.types.Sort
 
 class ScanError(val type: Result)
 
-class ScanResult(val parentId: Long, val entities: ArrayList<ScanEntity>)
+class ScanResult<ENTITY : IScanEntityFactory>(val parentId: Long, val entities: ArrayList<ENTITY>)
 
-class ValueResult(val id: Long, val entity: ScanEntity?)
+class ValueResult<ENTITY : IScanEntityFactory>(val id: Long, val entity: ENTITY?)
 
-fun FragmentActivity.scanViewModel(
-        @Size(min = 1, max = 3) scanType: IntArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-        @SortDef sort: String = Sort.DESC,
-        @SortFieldDef fieldSort: String = Columns.DATE_MODIFIED): ScanImpl {
-    return ScanImpl(object : ScanView {
+fun ViewModelProvider.getScanMinimumImpl(): ScanImpl<ScanMinimumEntity> {
+    return getScanImpl()
+}
+
+fun <ENTITY : IScanEntityFactory> ViewModelProvider.getScanImpl(): ScanImpl<ENTITY> {
+    @Suppress("UNCHECKED_CAST")
+    return get(ScanImpl::class.java) as ScanImpl<ENTITY>
+}
+
+fun <ENTITY : IScanEntityFactory> FragmentActivity.scanViewModel(
+        scanFactoryCreate: IScanEntityFactory = IScanEntityFactory.api19Factory(),
+        scanParameter: ScanParameter = ScanParameter()): ScanImpl<ENTITY> {
+    return ScanImpl(object : ScanView<ENTITY> {
         override val scanContext: FragmentActivity
             get() = this@scanViewModel
 
-        override fun scanType(): IntArray = scanType
+        override val scanParameter: ScanParameter
+            get() = scanParameter
 
-        override fun scanSort(): String = sort
-
-        override fun scanSortField(): String = fieldSort
+        override val scanFactoryCreate: IScanEntityFactory
+            get() = scanFactoryCreate
     })
 }
 
 class ScanViewModelFactory(
         private val fragmentActivity: FragmentActivity,
-        @Size(min = 1, max = 3) private val scanType: IntArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-        @SortDef private val scanSort: String = Sort.DESC,
-        @SortFieldDef private val scanSortField: String = Columns.DATE_MODIFIED
+        private val scanFactoryCreate: IScanEntityFactory = IScanEntityFactory.api19Factory(),
+        private val scanParameter: ScanParameter = ScanParameter()
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return fragmentActivity.scanViewModel(scanType, scanSort, scanSortField) as T
+        return fragmentActivity.scanViewModel<IScanEntityFactory>(scanFactoryCreate, scanParameter) as T
     }
 
 }

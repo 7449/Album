@@ -1,7 +1,7 @@
 package com.gallery.ui
 
 import android.net.Uri
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 
 interface GalleryListener {
     /**
@@ -12,12 +12,12 @@ interface GalleryListener {
     /**
      * 单选不裁剪
      */
-    fun onGalleryResource(scanEntity: ScanEntity) = Unit
+    fun onGalleryResource(scanEntity: ScanMinimumEntity) = Unit
 
     /**
      * 选择图片
      */
-    fun onGalleryResources(entities: List<ScanEntity>) = Unit
+    fun onGalleryResources(entities: List<ScanMinimumEntity>) = Unit
 
     /**
      * 取消图片选择

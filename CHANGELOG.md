@@ -49,7 +49,8 @@
 ## next version
 
 * 去掉内置ScanType，改为 MediaStore.Files.FileColumns 获取 IntArray
-* ~~去掉内置Columns，改为自定义Columns~~
+* 去掉内置Columns，改为自定义Columns
+* 支持自定义实体类，已经内置最低版本19支持的所有字段
 
 ## 0.1.4
 

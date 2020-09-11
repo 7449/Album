@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.ListPopupWindow
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 
@@ -40,7 +40,7 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
         popupWindow.dismiss()
     }
 
-    override fun finderUpdate(finderList: ArrayList<ScanEntity>) {
+    override fun finderUpdate(finderList: ArrayList<ScanMinimumEntity>) {
         finderAdapter.updateFinder(finderList)
     }
 
@@ -48,12 +48,12 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
         listener.onGalleryAdapterItemClick(view, position, finderAdapter.getItem(position))
     }
 
-    private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
+    private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanMinimumEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
 
-        private val list: ArrayList<ScanEntity> = ArrayList()
+        private val list: ArrayList<ScanMinimumEntity> = ArrayList()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val finderEntity: ScanEntity = getItem(position)
+            val finderEntity: ScanMinimumEntity = getItem(position)
             val rootView: View = convertView
                     ?: LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder, parent, false).apply {
                         this.tag = ViewHolder(this)
@@ -67,11 +67,11 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
             return rootView
         }
 
-        override fun getItem(position: Int): ScanEntity = list[position]
+        override fun getItem(position: Int): ScanMinimumEntity = list[position]
         override fun getItemId(position: Int): Long = position.toLong()
         override fun getCount(): Int = list.size
 
-        fun updateFinder(entities: ArrayList<ScanEntity>) {
+        fun updateFinder(entities: ArrayList<ScanMinimumEntity>) {
             list.clear()
             list.addAll(entities)
             notifyDataSetChanged()

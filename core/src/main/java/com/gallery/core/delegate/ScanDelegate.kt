@@ -34,9 +34,12 @@ import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.*
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.widget.SimpleGridDivider
-import com.gallery.scan.ScanEntity
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanView
+import com.gallery.scan.args.Columns
+import com.gallery.scan.args.IScanEntityFactory
+import com.gallery.scan.args.ScanMinimumEntity
+import com.gallery.scan.args.ScanParameter
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.Sort
 import com.gallery.scan.types.externalUriExpand
@@ -49,7 +52,7 @@ class ScanDelegate(
         private val fragment: Fragment,
         private val recyclerView: RecyclerView,
         private val emptyView: ImageView
-) : IScanDelegate, ScanView, GalleryAdapter.OnGalleryItemClickListener {
+) : IScanDelegate, ScanView<ScanMinimumEntity>, GalleryAdapter.OnGalleryItemClickListener {
 
     private var fileUri: Uri = Uri.EMPTY
     var parentId: Long = SCAN_ALL
@@ -76,7 +79,7 @@ class ScanDelegate(
                 }
             }
 
-    private val scan: ScanImpl by lazy { ScanImpl(this) }
+    private val scan: ScanImpl<ScanMinimumEntity> by lazy { ScanImpl(this) }
     private val galleryBundle: GalleryBundle by lazy { fragment.galleryArgs }
     private val galleryImageLoader: IGalleryImageLoader by lazy { fragment.galleryImageLoader }
     private val galleryCallback: IGalleryCallback by lazy { fragment.galleryCallback }
@@ -88,9 +91,9 @@ class ScanDelegate(
         get() = fragment.activity
     override val activityNotNull: FragmentActivity
         get() = fragment.requireActivity()
-    override val currentEntities: ArrayList<ScanEntity>
-        get() = galleryAdapter.currentList.filter { it.parent != GalleryAdapter.CAMERA } as ArrayList<ScanEntity>
-    override val selectEntities: ArrayList<ScanEntity>
+    override val currentEntities: ArrayList<ScanMinimumEntity>
+        get() = galleryAdapter.currentList.filter { it.parent != GalleryAdapter.CAMERA } as ArrayList<ScanMinimumEntity>
+    override val selectEntities: ArrayList<ScanMinimumEntity>
         get() = galleryAdapter.currentSelectList
     override val selectEmpty: Boolean
         get() = selectEntities.isEmpty()
@@ -133,7 +136,7 @@ class ScanDelegate(
     override fun onDestroy() {
     }
 
-    override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
+    override fun scanSuccess(arrayList: ArrayList<ScanMinimumEntity>) {
         if (arrayList.isEmpty() && parentId.isScanAllExpand()) {
             emptyView.showExpand()
             recyclerView.hideExpand()
@@ -144,14 +147,14 @@ class ScanDelegate(
         recyclerView.showExpand()
         galleryCallback.onScanSuccess(arrayList)
         if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
-            arrayList.add(0, ScanEntity(parent = GalleryAdapter.CAMERA))
+            arrayList.add(0, ScanMinimumEntity(parent = GalleryAdapter.CAMERA))
         }
         galleryAdapter.addAll(arrayList)
         galleryAdapter.updateEntity()
         scrollToPosition(0)
     }
 
-    override fun resultSuccess(scanEntity: ScanEntity?) {
+    override fun resultSuccess(scanEntity: ScanMinimumEntity?) {
         scanEntity ?: return galleryCallback.onResultError(activity, galleryBundle)
         if (parentId.isScanAllExpand()) {
             if (galleryBundle.scanSort == Sort.DESC) {
@@ -172,11 +175,11 @@ class ScanDelegate(
         galleryCallback.onResultSuccess(activity, galleryBundle, scanEntity)
     }
 
-    override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
+    override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanMinimumEntity) {
         cameraOpen()
     }
 
-    override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanEntity) {
+    override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanMinimumEntity) {
         if (!galleryEntity.externalUriExpand.isFileExistsExpand(activityNotNull)) {
             galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, galleryEntity)
             return
@@ -292,15 +295,9 @@ class ScanDelegate(
         recyclerView.scrollToPosition(position)
     }
 
-    override fun scanType(): IntArray {
-        return galleryBundle.scanType
-    }
+    override val scanParameter: ScanParameter
+        get() = ScanParameter(Columns.fileUri, galleryBundle.scanType, galleryBundle.scanSort, galleryBundle.scanSortField)
 
-    override fun scanSort(): String {
-        return galleryBundle.scanSort
-    }
-
-    override fun scanSortField(): String {
-        return galleryBundle.scanSortField
-    }
+    override val scanFactoryCreate: IScanEntityFactory
+        get() = IScanEntityFactory.api19Factory()
 }

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanAllExpand
@@ -40,8 +40,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(uiConfig, this) }
     private val videoDuration: Int by lazy { uiGapConfig.getInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, 300000) }
     private val videoDes: String by lazy { uiGapConfig.getString(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DES, "全部视频") }
-    private val videoList: ArrayList<ScanEntity> = ArrayList()
-    private val tempVideoList: ArrayList<ScanEntity> = ArrayList()
+    private val videoList: ArrayList<ScanMinimumEntity> = ArrayList()
+    private val tempVideoList: ArrayList<ScanMinimumEntity> = ArrayList()
 
     override val currentFinderName: String
         get() = galleryWeChatToolbarFinderText.text.toString()
@@ -128,7 +128,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         })
     }
 
-    override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
+    override fun onScanSuccess(scanEntities: ArrayList<ScanMinimumEntity>) {
         if (galleryFragment.parentId.isScanAllExpand() && scanEntities.isNotEmpty()) {
             videoList.clear()
             videoList.addAll(scanEntities.filter { it.isVideoExpand })
@@ -151,7 +151,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         updateView()
     }
 
-    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
+    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanMinimumEntity) {
         galleryFragment.parentId = item.parent
         hideFinderActionView()
     }
@@ -171,19 +171,19 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         super.onResultSelect(bundle)
     }
 
-    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
+    override fun onGalleryFinderThumbnails(finderEntity: ScanMinimumEntity, container: FrameLayout) {
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanEntity, container: FrameLayout, selectView: TextView) {
+    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanMinimumEntity, container: FrameLayout, selectView: TextView) {
         container.displayGalleryWeChat(width, height, galleryFragment.selectEntities, galleryEntity, selectView)
     }
 
-    override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
+    override fun onDisplayGalleryThumbnails(finderEntity: ScanMinimumEntity, container: FrameLayout) {
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanMinimumEntity, position: Int, parentId: Long) {
         onStartPrevPage(if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) SCAN_ALL else parentId,
                 if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position,
                 if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
@@ -191,12 +191,12 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 GalleryWeChatPrevActivity::class.java)
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanMinimumEntity) {
         super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
         galleryFragment.notifyDataSetChanged()
     }
 
-    override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanMinimumEntity) {
         val selectEntities = galleryFragment.selectEntities
         if (scanEntity.isVideoExpand && scanEntity.duration > videoDuration) {
             scanEntity.isSelected = false
@@ -236,7 +236,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         galleryWeChatToolbarFinderIcon.startAnimation(rotateAnimationResult)
     }
 
-    override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
+    override fun onGalleryResources(entities: ArrayList<ScanMinimumEntity>) {
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)

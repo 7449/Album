@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.openVideoExpand
-import com.gallery.scan.ScanEntity
+import com.gallery.scan.args.ScanMinimumEntity
 import com.gallery.scan.types.externalUriExpand
 import com.gallery.scan.types.isGifExpand
 import com.gallery.scan.types.isVideoExpand
@@ -30,7 +30,7 @@ class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: Attribut
     private val gifView: TextView
         get() = prevWeChatGif
 
-    fun update(galleryEntity: ScanEntity) {
+    fun update(galleryEntity: ScanMinimumEntity) {
         imageView.scaleType = if (galleryEntity.isVideoExpand) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
         gifView.visibility = if (galleryEntity.isGifExpand) View.VISIBLE else View.GONE
         gifView.text = context.getString(R.string.gallery_wechat_prev_gif_format).format(galleryEntity.size.toFileSize())

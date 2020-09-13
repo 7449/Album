@@ -62,7 +62,7 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
     }
 
     fun scanSuccess(arrayList: ArrayList<ScanFileEntity>) {
-        delegate.scanSuccess(arrayList)
+        delegate.scanMultipleSuccess(arrayList)
     }
 
     val currentEntities: ArrayList<ScanFileEntity>

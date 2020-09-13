@@ -20,8 +20,9 @@ import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.file.*
-import com.gallery.scan.getScanFileImpl
+import com.gallery.scan.scanFileImpl
 import com.gallery.scan.types.isScanNoNeExpand
+import com.gallery.scan.types.registerMultipleLiveData
 
 /**
  * 预览代理
@@ -84,16 +85,20 @@ class PrevDelegate(
         } else {
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
-            val scanParameter = ScanFileArgs(
+            val scanFileArgs = ScanFileArgs(
                     if (scanAlone == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE) galleryBundle.scanType.map { it.toString() }.toTypedArray() else arrayOf(scanAlone.toString()),
                     galleryBundle.scanSortField,
                     galleryBundle.scanSort
             )
-            val scanViewModel = ViewModelProvider(fragment.requireActivity(),
-                    ScanViewModelFactory(fragment.requireActivity(), ScanEntityFactory.scanFileFactory(), scanParameter))
-                    .getScanFileImpl()
-            scanViewModel.scanLiveData.observe(fragment.requireActivity(), { updateEntity(savedInstanceState, it.entities) })
-            scanViewModel.scanMultiple(parentId.multipleFileExpand())
+            ViewModelProvider(fragment,
+                    ScanViewModelFactory(
+                            ownerFragment = fragment,
+                            factory = ScanEntityFactory.fileExpand(),
+                            args = scanFileArgs
+                    )
+            ).scanFileImpl().registerMultipleLiveData(fragment) { _, result ->
+                updateEntity(savedInstanceState, result)
+            }.scanMultiple(parentId.multipleFileExpand())
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.kotlin.expand.graphics.colorExpand
 import com.gallery.core.GalleryBundle
+import com.gallery.sample.enums.Theme
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 import com.gallery.ui.crop.CropType
@@ -111,10 +112,6 @@ object GalleryTheme {
                 args = Bundle().apply {
                     if (cropType == CropType.CROPPER) {
                         putParcelable(UIResult.CROP_ARGS, CropImageOptions().apply {
-//                            backgroundColor = R.color.colorBlack.colorExpand(activity)
-//                            borderCornerColor = R.color.colorBlack.colorExpand(activity)
-//                            guidelinesColor = R.color.colorBlack.colorExpand(activity)
-//                            activityMenuIconColor = R.color.colorBlack.colorExpand(activity)
                             activityTitle = "Cropper"
                         })
                     } else {

@@ -19,9 +19,9 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 open class CursorLoaderArgs(
-        open val scanUri: Uri,
-        open val scanProjection: Array<String>? = null,
-        open val scanSortOrder: String? = null
+        open val uri: Uri,
+        open val projection: Array<String>? = null,
+        open val sortOrder: String? = null
 ) : Parcelable {
     companion object {
 

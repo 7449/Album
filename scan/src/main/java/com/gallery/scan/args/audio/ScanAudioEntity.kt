@@ -18,9 +18,6 @@ data class ScanAudioEntity(
         val dateModified: Long = 0,
         val mimeType: String = "",
         val width: Int = 0,
-        val height: Int = 0,
-
-        val count: Int = 0,
-        var isSelected: Boolean = false) : Parcelable, ScanEntityFactory {
-    override fun onCreateCursor(cursor: Cursor): ScanEntityFactory = this
+        val height: Int = 0) : Parcelable, ScanEntityFactory {
+    override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory = this
 }

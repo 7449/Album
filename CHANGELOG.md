@@ -51,6 +51,8 @@
 * 去掉内置ScanType，改为 MediaStore.Files.FileColumns 获取 IntArray
 * 去掉内置Columns，改为自定义Columns
 * 支持自定义实体类，已经内置最低版本19支持的所有字段
+* 支持多种扫描格式
+* 去除FragmentActivity限制，由owner获取LoaderManager
 
 ## 0.1.4
 

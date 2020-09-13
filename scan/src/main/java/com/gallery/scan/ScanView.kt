@@ -1,6 +1,8 @@
 package com.gallery.scan
 
-import androidx.fragment.app.FragmentActivity
+import android.content.Context
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.loader.app.LoaderManager
 import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.args.ScanEntityFactory
@@ -12,9 +14,12 @@ import com.gallery.scan.args.ScanEntityFactory
 interface ScanView<ENTITY : ScanEntityFactory> {
 
     /**
-     *  [LoaderManager.getInstance]
+     * [Context]
+     * 如果[scanOwner] [scanOwnerGeneric] 返回的是 FragmentActivity 或者 Fragment
+     * 则[scanContext]不是必须的，否则必须传递context
      */
-    val scanContext: FragmentActivity
+    val scanContext: Context
+        get() = throw KotlinNullPointerException("scanContext == null")
 
     /**
      * 扫描所需参数
@@ -27,26 +32,40 @@ interface ScanView<ENTITY : ScanEntityFactory> {
     val scanEntityFactory: ScanEntityFactory
 
     /**
+     *  [LoaderManager.getInstance]
+     *  注意传入的参数是否正确，Any不正确会导致强转出错
+     */
+    fun scanOwner(): ViewModelStoreOwner
+
+    /**
+     *  [LoaderManager.getInstance]
+     */
+    fun <T> scanOwnerGeneric(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
+        @Suppress("UNCHECKED_CAST")
+        return scanOwner() as T
+    }
+
+    /**
      * 扫描成功
      */
-    fun scanSuccess(arrayList: ArrayList<ENTITY>) {}
+    fun scanMultipleSuccess(entities: ArrayList<ENTITY>) {}
 
     /**
      * 扫描异常
      */
-    fun scanError() {
-        scanSuccess(arrayListOf())
+    fun scanMultipleError() {
+        scanMultipleSuccess(arrayListOf())
     }
 
     /**
-     * 单个文件扫描成功
+     * 单个扫描成功
      */
-    fun resultSuccess(scanEntity: ENTITY?) {}
+    fun scanSingleSuccess(entity: ENTITY?) {}
 
     /**
-     * 单个文件扫描失败
+     * 单个扫描失败
      */
-    fun resultError() {
-        resultSuccess(null)
+    fun scanSingleError() {
+        scanSingleSuccess(null)
     }
 }

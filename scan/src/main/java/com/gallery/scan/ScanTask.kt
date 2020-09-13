@@ -26,11 +26,11 @@ internal class ScanTask<ENTITY : ScanEntityFactory>(
         args ?: throw KotlinNullPointerException("args == null")
         val scanParameter = args.getCursorLoaderArgs()
         return CursorLoader(context,
-                scanParameter.scanUri,
-                scanParameter.scanProjection,
+                scanParameter.uri,
+                scanParameter.projection,
                 scanParameter.createSelection(args),
                 scanParameter.createSelectionArgs(args),
-                scanParameter.scanSortOrder)
+                scanParameter.sortOrder)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
@@ -40,7 +40,7 @@ internal class ScanTask<ENTITY : ScanEntityFactory>(
         }
         val arrayList = ArrayList<ENTITY>()
         while (data.moveToNext()) {
-            arrayList.add(factory.onCreateCursorGeneric(data))
+            arrayList.add(factory.cursorMoveToNextGeneric(data))
         }
         success(arrayList)
     }

@@ -47,9 +47,9 @@ val ScanFileEntity.isAudioExpand: Boolean
     get() = mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
 
 /** 文件实体生成 */
-fun ScanEntityFactory.Companion.scanFileFactory(): ScanEntityFactory {
+fun ScanEntityFactory.Companion.fileExpand(): ScanEntityFactory {
     return object : ScanEntityFactory {
-        override fun onCreateCursor(cursor: Cursor): ScanEntityFactory {
+        override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory {
             return ScanFileEntity(
                     cursor.getLongOrDefault(MediaStore.Files.FileColumns._ID),
 

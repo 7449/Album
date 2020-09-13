@@ -4,15 +4,15 @@ import android.database.Cursor
 
 /**
  * 自定义实体工厂
- * 调用[onCreateCursor]可避免泛型强制转换
+ * 调用[cursorMoveToNext]可避免泛型强制转换
  */
 interface ScanEntityFactory {
 
     companion object
 
-    fun onCreateCursor(cursor: Cursor): ScanEntityFactory
+    fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory
 
     @Suppress("UNCHECKED_CAST")
-    fun <ENTITY : ScanEntityFactory> onCreateCursorGeneric(cursor: Cursor): ENTITY = onCreateCursor(cursor) as ENTITY
+    fun <ENTITY : ScanEntityFactory> cursorMoveToNextGeneric(cursor: Cursor): ENTITY = cursorMoveToNext(cursor) as ENTITY
 
 }

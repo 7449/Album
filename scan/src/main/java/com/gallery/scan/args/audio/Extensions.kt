@@ -8,23 +8,19 @@ import androidx.kotlin.expand.database.getStringOrDefault
 import com.gallery.scan.args.ScanEntityFactory
 
 /** 音频实体生成 */
-fun ScanEntityFactory.Companion.scanAudioFactory(): ScanEntityFactory {
+fun ScanEntityFactory.Companion.audioExpand(): ScanEntityFactory {
     return object : ScanEntityFactory {
-        override fun onCreateCursor(cursor: Cursor): ScanEntityFactory {
+        override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory {
             return ScanAudioEntity(
-                    cursor.getLongOrDefault(MediaStore.Files.FileColumns._ID),
-
-                    cursor.getLongOrDefault(MediaStore.Files.FileColumns.SIZE),
-                    cursor.getStringOrDefault(MediaStore.Files.FileColumns.DISPLAY_NAME),
-                    cursor.getStringOrDefault(MediaStore.Files.FileColumns.TITLE),
-                    cursor.getLongOrDefault(MediaStore.Files.FileColumns.DATE_ADDED),
-                    cursor.getLongOrDefault(MediaStore.Files.FileColumns.DATE_MODIFIED),
-                    cursor.getStringOrDefault(MediaStore.Files.FileColumns.MIME_TYPE),
-                    cursor.getIntOrDefault(MediaStore.Files.FileColumns.WIDTH),
-                    cursor.getIntOrDefault(MediaStore.Files.FileColumns.HEIGHT),
-
-                    0,
-                    false)
+                    cursor.getLongOrDefault(MediaStore.Audio.Media._ID),
+                    cursor.getLongOrDefault(MediaStore.Audio.Media.SIZE),
+                    cursor.getStringOrDefault(MediaStore.Audio.Media.DISPLAY_NAME),
+                    cursor.getStringOrDefault(MediaStore.Audio.Media.TITLE),
+                    cursor.getLongOrDefault(MediaStore.Audio.Media.DATE_ADDED),
+                    cursor.getLongOrDefault(MediaStore.Audio.Media.DATE_MODIFIED),
+                    cursor.getStringOrDefault(MediaStore.Audio.Media.MIME_TYPE),
+                    cursor.getIntOrDefault(MediaStore.Audio.Media.WIDTH),
+                    cursor.getIntOrDefault(MediaStore.Audio.Media.HEIGHT))
         }
     }
 }

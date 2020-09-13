@@ -20,6 +20,7 @@ import androidx.kotlin.expand.net.deleteExpand
 import androidx.kotlin.expand.net.isFileExistsExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -36,8 +37,8 @@ import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.widget.SimpleGridDivider
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanView
-import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.CursorLoaderArgs
+import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.file.*
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.Sort
@@ -99,8 +100,6 @@ class ScanDelegate(
         get() = selectEntities.size
     override val itemCount: Int
         get() = currentEntities.size
-    override val scanContext: FragmentActivity
-        get() = activityNotNull
 
     override fun onSaveInstanceState(outState: Bundle) {
         ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putScanArgs(outState)
@@ -134,8 +133,8 @@ class ScanDelegate(
     override fun onDestroy() {
     }
 
-    override fun scanSuccess(arrayList: ArrayList<ScanFileEntity>) {
-        if (arrayList.isEmpty() && parentId.isScanAllExpand()) {
+    override fun scanMultipleSuccess(entities: ArrayList<ScanFileEntity>) {
+        if (entities.isEmpty() && parentId.isScanAllExpand()) {
             emptyView.showExpand()
             recyclerView.hideExpand()
             galleryCallback.onScanSuccessEmpty(activity, galleryBundle)
@@ -143,34 +142,34 @@ class ScanDelegate(
         }
         emptyView.hideExpand()
         recyclerView.showExpand()
-        galleryCallback.onScanSuccess(arrayList)
+        galleryCallback.onScanSuccess(entities)
         if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
-            arrayList.add(0, ScanFileEntity(parent = GalleryAdapter.CAMERA))
+            entities.add(0, ScanFileEntity(parent = GalleryAdapter.CAMERA))
         }
-        galleryAdapter.addAll(arrayList)
+        galleryAdapter.addAll(entities)
         galleryAdapter.updateEntity()
         scrollToPosition(0)
     }
 
-    override fun resultSuccess(scanEntity: ScanFileEntity?) {
-        scanEntity ?: return galleryCallback.onResultError(activity, galleryBundle)
+    override fun scanSingleSuccess(entity: ScanFileEntity?) {
+        entity ?: return galleryCallback.onResultError(activity, galleryBundle)
         if (parentId.isScanAllExpand()) {
             if (galleryBundle.scanSort == Sort.DESC) {
-                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, scanEntity)
+                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, entity)
             } else {
-                galleryAdapter.addEntity(scanEntity)
+                galleryAdapter.addEntity(entity)
                 scrollToPosition(galleryAdapter.currentList.size - 1)
             }
-        } else if (parentId == scanEntity.parent) {
+        } else if (parentId == entity.parent) {
             if (galleryBundle.scanSort == Sort.DESC) {
-                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, scanEntity)
+                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, entity)
             } else {
-                galleryAdapter.addEntity(scanEntity)
+                galleryAdapter.addEntity(entity)
                 scrollToPosition(galleryAdapter.currentList.size - 1)
             }
         }
         notifyDataSetChanged()
-        galleryCallback.onResultSuccess(activity, galleryBundle, scanEntity)
+        galleryCallback.onResultSuccess(activity, galleryBundle, entity)
     }
 
     override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanFileEntity) {
@@ -301,5 +300,9 @@ class ScanDelegate(
         )
 
     override val scanEntityFactory: ScanEntityFactory
-        get() = ScanEntityFactory.scanFileFactory()
+        get() = ScanEntityFactory.fileExpand()
+
+    override fun scanOwner(): ViewModelStoreOwner {
+        return fragment
+    }
 }

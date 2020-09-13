@@ -58,6 +58,12 @@
             android:layout_height="wrap_content"
             android:text="custom page" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/scanSimple"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="scan" />
+
         <FrameLayout
             android:id="@+id/galleryFragment"
             android:layout_width="match_parent"

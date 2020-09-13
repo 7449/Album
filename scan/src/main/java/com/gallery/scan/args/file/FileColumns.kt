@@ -1,7 +1,6 @@
 package com.gallery.scan.args.file
 
 import android.net.Uri
-import android.provider.BaseColumns
 import android.provider.MediaStore
 
 internal object FileColumns {
@@ -9,19 +8,19 @@ internal object FileColumns {
     internal val uri: Uri = MediaStore.Files.getContentUri("external")
 
     internal val columns: Array<String> = arrayOf(
-            BaseColumns._ID,
 
             /**
              * base columns
              */
-            MediaStore.MediaColumns.SIZE,
-            MediaStore.MediaColumns.DISPLAY_NAME,
-            MediaStore.MediaColumns.TITLE,
-            MediaStore.MediaColumns.DATE_ADDED,
-            MediaStore.MediaColumns.DATE_MODIFIED,
-            MediaStore.MediaColumns.MIME_TYPE,
-            MediaStore.MediaColumns.WIDTH,
-            MediaStore.MediaColumns.HEIGHT,
+            MediaStore.Files.FileColumns._ID,
+            MediaStore.Files.FileColumns.SIZE,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
+            MediaStore.Files.FileColumns.TITLE,
+            MediaStore.Files.FileColumns.DATE_ADDED,
+            MediaStore.Files.FileColumns.DATE_MODIFIED,
+            MediaStore.Files.FileColumns.MIME_TYPE,
+            MediaStore.Files.FileColumns.WIDTH,
+            MediaStore.Files.FileColumns.HEIGHT,
 
             /**
              * file columns

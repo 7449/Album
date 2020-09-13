@@ -32,5 +32,5 @@ data class ScanFileEntity(
 
         val count: Int = 0,
         var isSelected: Boolean = false) : Parcelable, ScanEntityFactory {
-    override fun onCreateCursor(cursor: Cursor): ScanEntityFactory = this
+    override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory = this
 }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.provider.MediaStore
 import android.view.View
 import android.widget.FrameLayout
@@ -25,7 +24,8 @@ import com.gallery.sample.callback.WeChatGalleryCallback
 import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.CustomPageActivity
-import com.gallery.sample.viewmodel.ScanViewModelTest
+import com.gallery.sample.enums.ScanType
+import com.gallery.sample.enums.Theme
 import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.scan.types.Sort
@@ -45,17 +45,32 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(WeChatGalleryCallback(this)))
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        Handler().postDelayed({ ScanViewModelTest.testAudio(this) }, 2000)
+    private fun initGalleryFragment() {
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
         } ?: supportFragmentManager
                 .beginTransaction()
                 .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, hideCamera = true, crop = false, galleryRootBackground = Color.BLACK)), ScanFragment::class.java.simpleName)
                 .commitAllowingStateLoss()
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        initGalleryFragment()
+
+        scanSimple.setOnClickListener {
+            AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("文件", "音频", "视频", "图片", "音视图"), View.NO_ID) { dialog, which ->
+                when (which) {
+                    0 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.FILE))
+                    1 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.AUDIO))
+                    2 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.VIDEO))
+                    3 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.IMAGE))
+                    4 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.MIX))
+                }
+                dialog.dismiss()
+            }.show()
+        }
         selectTheme.setOnClickListener {
             AlertDialog.Builder(this).setSingleChoiceItems(arrayOf("默认", "主题色", "蓝色", "黑色", "粉红色", "WeChat"), View.NO_ID) { dialog, which ->
                 when (which) {

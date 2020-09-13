@@ -1,4 +1,4 @@
-package com.gallery.sample
+package com.gallery.sample.enums
 
 enum class Theme {
     APP,

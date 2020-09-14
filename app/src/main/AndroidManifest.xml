@@ -35,9 +35,6 @@
             android:name="com.gallery.ui.page.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".custom.CustomPageActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
             android:name=".custom.CustomCameraActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity

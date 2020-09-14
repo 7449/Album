@@ -9,7 +9,7 @@ import com.gallery.ui.crop.CropType
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class GalleryUiBundle(
+data class GalleryUiBundle(
         /**
          * 预览toolbar返回是否刷新数据
          */

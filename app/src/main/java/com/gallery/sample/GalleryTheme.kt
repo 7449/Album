@@ -1,15 +1,10 @@
 package com.gallery.sample
 
 import android.app.Activity
-import android.os.Bundle
 import androidx.kotlin.expand.graphics.colorExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.sample.enums.Theme
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.UIResult
-import com.gallery.ui.crop.CropType
-import com.theartofdev.edmodo.cropper.CropImageOptions
-import com.yalantis.ucrop.UCrop
 
 object GalleryTheme {
 
@@ -89,41 +84,5 @@ object GalleryTheme {
                 )
             }
         }
-    }
-
-    fun cropThemeGallery(activity: Activity): GalleryBundle {
-        return GalleryBundle(
-                radio = true,
-                cameraCrop = true,
-                cameraDrawableColor = R.color.colorGray.colorExpand(activity),
-                cameraBackgroundColor = R.color.colorBlack.colorExpand(activity),
-                galleryRootBackground = R.color.colorBlack.colorExpand(activity)
-        )
-    }
-
-    fun cropThemeGalleryUi(activity: Activity, cropType: CropType): GalleryUiBundle {
-        return GalleryUiBundle(
-                cropType = cropType,
-                statusBarColor = R.color.colorBlack.colorExpand(activity),
-                toolbarBackground = R.color.colorBlack.colorExpand(activity),
-                bottomViewBackground = R.color.colorBlack.colorExpand(activity),
-                finderItemBackground = R.color.colorBlack.colorExpand(activity),
-                finderItemTextColor = R.color.colorWhite.colorExpand(activity),
-                args = Bundle().apply {
-                    if (cropType == CropType.CROPPER) {
-                        putParcelable(UIResult.CROP_ARGS, CropImageOptions().apply {
-                            activityTitle = "Cropper"
-                        })
-                    } else {
-                        putBundle(UIResult.CROP_ARGS, Bundle().apply {
-                            putString(UCrop.Options.EXTRA_UCROP_TITLE_TEXT_TOOLBAR, "UCrop")
-                            putInt(UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, R.color.colorWhite.colorExpand(activity))
-                            putInt(UCrop.Options.EXTRA_TOOL_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
-                            putInt(UCrop.Options.EXTRA_STATUS_BAR_COLOR, R.color.colorBlack.colorExpand(activity))
-                            putBoolean(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, true)
-                        })
-                    }
-                }
-        )
     }
 }

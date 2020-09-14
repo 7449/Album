@@ -21,7 +21,6 @@ dependencies {
     implementation(Dep.fragment)
     implementation(Dep.viewPager2)
     implementation(Dep.glide)
-    implementation(Dep.banner)
     implementation(Dep.cameraview)
     implementation(Dep.cropper)
     implementation(Dep.uCrop)

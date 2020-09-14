@@ -1,7 +1,31 @@
 <resources>
     <string name="appName">Gallery</string>
-    <string name="video_tips">摄像</string>
     <string name="gallery_video_title">视频选择</string>
     <string name="camera">camera</string>
     <string name="gallery_camera_canceled" />
+    <string name="theme_default">默认</string>
+    <string name="theme_app">app</string>
+    <string name="theme_blue">蓝色</string>
+    <string name="theme_black">黑色</string>
+    <string name="theme_pink">粉色</string>
+    <string name="select_theme">主题</string>
+    <string name="select_sort">排序</string>
+    <string name="sort_desc">DESC</string>
+    <string name="sort_asc">ASC</string>
+    <string name="select_scan">扫描</string>
+    <string name="scan_image">图片</string>
+    <string name="scan_video">视频</string>
+    <string name="scan_mix">混合</string>
+    <string name="select_crop">裁剪</string>
+    <string name="crop_ucrop">ucrop</string>
+    <string name="crop_cropper">cropper</string>
+    <string name="dialog">Dialog弹窗</string>
+    <string name="scan">scan测试</string>
+    <string name="custom_camera">自定义相机</string>
+    <string name="select_finder">目录</string>
+    <string name="finder_window">popup</string>
+    <string name="finder_bottom">bottom</string>
+    <string name="start_config">启动</string>
+    <string name="crop_no">no crop</string>
+    <string name="theme_wechat">微信</string>
 </resources>

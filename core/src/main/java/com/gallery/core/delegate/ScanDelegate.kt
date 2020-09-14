@@ -22,6 +22,7 @@ import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
@@ -121,8 +122,15 @@ class ScanDelegate(
         }
         galleryAdapter.addSelectAll(selectList ?: galleryBundle.selectEntities)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = GridLayoutManager(recyclerView.context, galleryBundle.spanCount)
-        recyclerView.addItemDecoration(SimpleGridDivider(galleryBundle.dividerWidth))
+        recyclerView.layoutManager = when (galleryBundle.layoutManager) {
+            LayoutManager.GRID -> {
+                recyclerView.addItemDecoration(SimpleGridDivider(galleryBundle.dividerWidth))
+                GridLayoutManager(recyclerView.context, galleryBundle.spanCount, galleryBundle.orientation, false)
+            }
+            LayoutManager.LINEAR -> {
+                LinearLayoutManager(recyclerView.context, galleryBundle.orientation, false)
+            }
+        }
         if (recyclerView.itemAnimator is SimpleItemAnimator) {
             (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }

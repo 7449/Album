@@ -20,3 +20,9 @@ val GalleryBundle.isVideoScanExpand: Boolean
 /** 是否是图片 */
 val GalleryBundle.isImageScanExpand: Boolean
     get() = scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+
+/** 列表管理器 */
+enum class LayoutManager {
+    LINEAR,
+    GRID
+}

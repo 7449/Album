@@ -59,18 +59,10 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
         slide.fillAfter = true
         slide.isFillEnabled = true
         view.startAnimation(slide)
-        slide.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {}
-            override fun onAnimationRepeat(animation: Animation) {}
-        })
     }
 
     override fun onGalleryResource(context: Context, scanEntity: ScanFileEntity) {
         scanEntity.toString().safeToastExpand(requireActivity())
         dismiss()
-    }
-
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity, position: Int, parentId: Long) {
     }
 }

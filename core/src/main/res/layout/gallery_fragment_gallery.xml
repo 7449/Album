@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/gallery_padding_top" />
+        android:clipToPadding="false" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/galleryEmpty"

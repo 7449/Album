@@ -4,6 +4,10 @@
 
 # core
 
+## next version
+
+* 增加LayoutManager扩展
+
 ## 0.1.4
 
 * 修复 ASC 排序finder数据显示问题

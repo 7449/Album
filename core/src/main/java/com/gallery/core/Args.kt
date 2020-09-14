@@ -9,8 +9,10 @@ import android.provider.MediaStore
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
+import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.delegate.PrevDelegate
 import com.gallery.core.delegate.ScanDelegate
+import com.gallery.core.expand.LayoutManager
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.types.SCAN_ALL
@@ -178,6 +180,19 @@ data class GalleryBundle(
          */
         val multipleMaxCount: Int = 9,
         /**
+         * 滑动方向
+         */
+        val orientation: Int = RecyclerView.VERTICAL,
+        /**
+         * 每行几张图片
+         * 只在[layoutManager] == [LayoutManager.GRID]生效
+         */
+        val spanCount: Int = 4,
+        /**
+         * 列表管理器
+         */
+        val layoutManager: LayoutManager = LayoutManager.GRID,
+        /**
          * 文件输出路径
          * [Environment.DIRECTORY_DCIM]
          * [Environment.DIRECTORY_PICTURES]
@@ -227,10 +242,6 @@ data class GalleryBundle(
          * 相机提示文字大小
          */
         val cameraTextSize: Float = 16F,
-        /**
-         * 每行几张图片
-         */
-        val spanCount: Int = 4,
         /**
          * 分割线宽度
          */

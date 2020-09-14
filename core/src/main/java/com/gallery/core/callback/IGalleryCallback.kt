@@ -24,7 +24,7 @@ interface IGalleryCallback {
     /**
      * 单选状态下,点击[Adapter]item返回的那条数据
      */
-    fun onGalleryResource(context: Context, scanEntity: ScanFileEntity)
+    fun onGalleryResource(context: Context, scanEntity: ScanFileEntity) {}
 
     /**
      * 已达到选择最大数
@@ -67,7 +67,7 @@ interface IGalleryCallback {
      * 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法
      * 可以跳转到预览页
      */
-    fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity, position: Int, parentId: Long)
+    fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity, position: Int, parentId: Long) {}
 
     /**
      * 每次扫描之后数据非空触发

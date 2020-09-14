@@ -12,6 +12,7 @@ import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.audio.ScanAudioEntity
 import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.scan.args.picture.ScanPictureEntity
 import com.gallery.scan.types.Result
 
 class ScanError(val type: Result)
@@ -23,6 +24,8 @@ class ScanSingleResult<ENTITY : ScanEntityFactory>(val bundle: Bundle, val entit
 fun ViewModelProvider.scanFileImpl(): ScanImpl<ScanFileEntity> = scanImpl()
 
 fun ViewModelProvider.scanAudioImpl(): ScanImpl<ScanAudioEntity> = scanImpl()
+
+fun ViewModelProvider.scanPictureImpl(): ScanImpl<ScanPictureEntity> = scanImpl()
 
 fun <ENTITY : ScanEntityFactory> ViewModelProvider.scanImpl(): ScanImpl<ENTITY> = get(ScanImpl::class.java) as ScanImpl<ENTITY>
 

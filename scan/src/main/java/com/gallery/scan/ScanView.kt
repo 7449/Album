@@ -33,7 +33,11 @@ interface ScanView<ENTITY : ScanEntityFactory> {
 
     /**
      *  [LoaderManager.getInstance]
-     *  注意传入的参数是否正确，Any不正确会导致强转出错
+     *  注意传入的参数是否正确，[ViewModelStoreOwner]不正确会导致强转出错
+     *  必须继承于
+     *  [ViewModelStoreOwner]
+     *  [LifecycleOwner]
+     *  两个接口，如有需要直接传递 FragmentActivity 或者 Fragment 即可
      */
     fun scanOwner(): ViewModelStoreOwner
 

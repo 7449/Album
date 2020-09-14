@@ -19,54 +19,16 @@ import com.gallery.scan.types.postValueExpand
  * @create 2019/2/27
  * 文件扫描工具类
  *
- *
- *   class ScanViewModelFactory(private val scanView: ScanView) : ViewModelProvider.Factory {
- *
- *       override fun <T : ViewModel> create(modelClass: Class<T>): T {
- *          return ScanImpl(scanView) as T
- *       }
- *
- *   }
- *
- *   val scanView = object : ScanView {
- *       override val scanContext: FragmentActivity
- *          get() = fragmentActivity
- *
- *       override fun scanSuccess(arrayList: ArrayList<ScanEntity>) {
- *          Log.i("ViewModelProvider", "ViewModelProvider success:${arrayList}")
- *       }
- *
- *       override fun scanType(): IntArray {
- *          return intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
- *       }
- *   }
- *   ViewModelProvider(fragmentActivity, ScanViewModelFactory(scanView)).get(ScanImpl::class.java).scanParent(SCAN_ALL)
- *
- *   or
- *
- *  class ScanViewModelFactory(
- *      private val fragmentActivity: FragmentActivity,
- *      private val scanType: IntArray
- *  ) : ViewModelProvider.Factory {
- *
- *      override fun <T : ViewModel> create(modelClass: Class<T>): T {
- *          return fragmentActivity.scanViewModel(scanType) as T
- *      }
- *
- *  }
- *
- *  val viewModel = ViewModelProvider(fragmentActivity, ScanViewModelFactory(fragmentActivity, intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)))
- *                  .get(ScanImpl::class.java)
- *
- *  viewModel.scanLiveData.observe(fragmentActivity, {
- *      Log.i("ViewModelProvider", "ViewModelProvider success:${it.entities}")
- *  })
- *
- *  viewModel.resultLiveData.observe(fragmentActivity, {
- *      Log.i("ViewModelProvider", "ViewModelProvider success:${it.entity}")
- *  })
- *
- *  viewModel.scanParent(SCAN_ALL)
+ * ViewModelProvider(fragment,
+ *    ScanViewModelFactory(
+ *      ownerFragment = fragment,
+ *      factory = ScanEntityFactory.fileExpand(),
+ *      args = scanFileArgs
+ *    )
+ *  )
+ *  .scanFileImpl()s
+ *  .registerMultipleLiveData(fragment) { _, result -> }
+ *  .scanMultiple(parentId.multipleFileExpand())
  *
  */
 class ScanImpl<ENTITY : ScanEntityFactory>(private val scanView: ScanView<ENTITY>) : ViewModel(), Scan {
@@ -84,9 +46,9 @@ class ScanImpl<ENTITY : ScanEntityFactory>(private val scanView: ScanView<ENTITY
     private val loaderArgs: CursorLoaderArgs = scanView.scanCursorLoaderArgs
     private val context: Context by lazy {
         when (objects) {
-            is Fragment -> objects.requireContext()
-            is FragmentActivity -> objects
-            else -> scanView.scanContext
+            is Fragment -> objects.requireContext().applicationContext
+            is FragmentActivity -> objects.applicationContext
+            else -> scanView.scanContext.applicationContext
         }
     }
 

@@ -15,8 +15,11 @@ import com.gallery.scan.args.audio.audioExpand
 import com.gallery.scan.args.file.ScanFileArgs
 import com.gallery.scan.args.file.fileExpand
 import com.gallery.scan.args.file.multipleFileExpand
+import com.gallery.scan.args.picture.ScanPictureArgs
+import com.gallery.scan.args.picture.pictureExpand
 import com.gallery.scan.scanAudioImpl
 import com.gallery.scan.scanFileImpl
+import com.gallery.scan.scanPictureImpl
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.registerMultipleLiveData
 import com.xadapter.vh.LayoutViewHolder
@@ -55,6 +58,14 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                         arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
                         recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(Bundle())
+            MIX -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
+                    factory = ScanEntityFactory.fileExpand(),
+                    args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString()))))
+                    .scanFileImpl()
+                    .registerMultipleLiveData(this) { _, result ->
+                        arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
+                        recyclerview.adapter?.notifyDataSetChanged()
+                    }.scanMultiple(SCAN_ALL.multipleFileExpand())
             AUDIO -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
                     factory = ScanEntityFactory.audioExpand(),
                     args = ScanAudioArgs()))
@@ -63,25 +74,18 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                         arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, "音频") })
                         recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(Bundle())
-            IMAGE -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
-                    factory = ScanEntityFactory.fileExpand(),
-                    args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()))))
-                    .scanFileImpl()
+            PICTURE -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
+                    factory = ScanEntityFactory.pictureExpand(),
+                    args = ScanPictureArgs()))
+                    .scanPictureImpl()
                     .registerMultipleLiveData(this) { _, result ->
-                        arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
+                        arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, "图片") })
                         recyclerview.adapter?.notifyDataSetChanged()
-                    }.scanMultiple(SCAN_ALL.multipleFileExpand())
+                    }.scanMultiple(Bundle())
+            // old
             VIDEO -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
                     factory = ScanEntityFactory.fileExpand(),
                     args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()))))
-                    .scanFileImpl()
-                    .registerMultipleLiveData(this) { _, result ->
-                        arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
-                        recyclerview.adapter?.notifyDataSetChanged()
-                    }.scanMultiple(SCAN_ALL.multipleFileExpand())
-            MIX -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
-                    factory = ScanEntityFactory.fileExpand(),
-                    args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString()))))
                     .scanFileImpl()
                     .registerMultipleLiveData(this) { _, result ->
                         arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })

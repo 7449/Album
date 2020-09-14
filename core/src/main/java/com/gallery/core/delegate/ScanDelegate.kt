@@ -21,10 +21,7 @@ import androidx.kotlin.expand.net.isFileExistsExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.recyclerview.widget.*
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
@@ -128,6 +125,7 @@ class ScanDelegate(
                 GridLayoutManager(recyclerView.context, galleryBundle.spanCount, galleryBundle.orientation, false)
             }
             LayoutManager.LINEAR -> {
+                recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, galleryBundle.orientation))
                 LinearLayoutManager(recyclerView.context, galleryBundle.orientation, false)
             }
         }

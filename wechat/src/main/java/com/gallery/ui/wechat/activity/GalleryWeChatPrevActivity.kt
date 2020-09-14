@@ -88,8 +88,8 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         container.displayGalleryPrevSelect(finderEntity, idList, weChatPrevArgs.isPrev)
     }
 
-    override fun onDisplayGalleryPrev(galleryEntity: ScanFileEntity, container: FrameLayout) {
-        container.displayGalleryPrev(galleryEntity)
+    override fun onDisplayGalleryPrev(scanFileEntity: ScanFileEntity, container: FrameLayout) {
+        container.displayGalleryPrev(scanFileEntity)
     }
 
     override fun onPageSelected(position: Int) {
@@ -133,13 +133,13 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         }
     }
 
-    override fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
-        super.onClickCheckBoxMaxCount(context, galleryBundle, scanEntity)
+    override fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
+        super.onClickCheckBoxMaxCount(context, galleryBundle, scanFileEntity)
         prevWeChatSelect.isChecked = false
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
-        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
+        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanFileEntity)
         prevWeChatSelect.isChecked = false
     }
 

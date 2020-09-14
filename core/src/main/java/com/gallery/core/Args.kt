@@ -125,8 +125,7 @@ data class PrevArgs(
             get() = getParcelable<PrevArgs>(Key)
 
         val Bundle.prevArgsOrDefault
-            get() = prevArgs
-                    ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
+            get() = prevArgs ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
 
         val PrevArgs.configOrDefault
             get() = config ?: GalleryBundle()
@@ -212,7 +211,7 @@ data class GalleryBundle(
          * cameraName.cameraNameSuffix
          * sample: photo.jpg
          */
-        val cameraNameSuffix: String = if (scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) ".mp4" else ".jpg",
+        val cameraNameSuffix: String = "jpg",
         /**
          * 裁剪路径
          * 只在未拦截自定义裁剪生效,或使用者自定义裁剪使用

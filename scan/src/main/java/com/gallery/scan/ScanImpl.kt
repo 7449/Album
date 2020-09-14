@@ -26,7 +26,7 @@ import com.gallery.scan.types.postValueExpand
  *      args = scanFileArgs
  *    )
  *  )
- *  .scanFileImpl()s
+ *  .scanFileImpl()
  *  .registerMultipleLiveData(fragment) { _, result -> }
  *  .scanMultiple(parentId.multipleFileExpand())
  *

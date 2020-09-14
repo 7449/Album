@@ -17,7 +17,7 @@ import kotlinx.android.parcel.Parcelize
 class ScanFileArgs(
         private val scanTypeArray: Array<String>?,
         private val scanSortField: String = MediaStore.Files.FileColumns.DATE_MODIFIED,
-        private val scanSort: String = Sort.DESC,
+        private val scanSort: String = Sort.DESC
 ) : CursorLoaderArgs(FileColumns.uri, FileColumns.columns, "$scanSortField $scanSort") {
 
     override fun createSelection(args: Bundle): String? {

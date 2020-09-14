@@ -19,6 +19,6 @@ internal object PictureColumns {
             MediaStore.Images.Media.HEIGHT,
             MediaStore.Images.Media.ORIENTATION,
             MediaStore.Images.Media.BUCKET_ID,
-            MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+            MediaStore.Images.Media.BUCKET_DISPLAY_NAME
     )
 }

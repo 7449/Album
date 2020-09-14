@@ -12,7 +12,7 @@ interface IGalleryImageLoader {
     /**
      * 首页图片加载
      */
-    fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {}
+    fun onDisplayGallery(width: Int, height: Int, scanFileEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {}
 
     /**
      * 目录图片加载
@@ -22,5 +22,5 @@ interface IGalleryImageLoader {
     /**
      * 预览页图片加载
      */
-    fun onDisplayGalleryPrev(galleryEntity: ScanFileEntity, container: FrameLayout) {}
+    fun onDisplayGalleryPrev(scanFileEntity: ScanFileEntity, container: FrameLayout) {}
 }

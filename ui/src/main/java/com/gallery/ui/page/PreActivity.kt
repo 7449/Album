@@ -35,13 +35,13 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
         preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
-        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
+        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanFileEntity)
         preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
     }
 
-    override fun onDisplayGalleryPrev(galleryEntity: ScanFileEntity, container: FrameLayout) {
-        container.displayGalleryPrev(galleryEntity)
+    override fun onDisplayGalleryPrev(scanFileEntity: ScanFileEntity, container: FrameLayout) {
+        container.displayGalleryPrev(scanFileEntity)
     }
 
     override fun onPageSelected(position: Int) {

@@ -104,15 +104,15 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
-        container.displayGallery(width, height, galleryEntity)
+    override fun onDisplayGallery(width: Int, height: Int, scanFileEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
+        container.displayGallery(width, height, scanFileEntity)
     }
 
     override fun onDisplayGalleryThumbnails(finderEntity: ScanFileEntity, container: FrameLayout) {
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity, position: Int, parentId: Long) {
         onStartPrevPage(parentId, if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position, PreActivity::class.java)
     }
 

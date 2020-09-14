@@ -143,12 +143,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                             scanType = scanArray,
                             scanSort = sortType,
                             crop = cropType != null,
-                            radio = cropType != null
+                            radio = cropType != null,
+                            cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
                     ),
                     galleryUiBundle = galleryUiBundle.copy(
                             finderType = finderType,
                             cropType = cropType ?: CropType.CROPPER,
-                            toolbarText = if (galleryBundle.isVideoScanExpand) getString(R.string.gallery_video_title) else "图片选择"
+                            toolbarText = if (galleryBundle.isVideoScanExpand) getString(R.string.gallery_video_title) else "图片选择",
                     ),
                     galleryLauncher = galleryLauncher)
         }
@@ -176,11 +177,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
         }
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
+    override fun onDisplayGallery(width: Int, height: Int, scanFileEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)
-                .load(galleryEntity.externalUriExpand)
+                .load(scanFileEntity.externalUriExpand)
                 .apply(RequestOptions()
                         .placeholder(R.drawable.ic_gallery_default_loading)
                         .error(R.drawable.ic_gallery_default_loading)

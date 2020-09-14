@@ -92,12 +92,6 @@ class ScanDelegate(
         get() = galleryAdapter.currentList.filter { it.parent != GalleryAdapter.CAMERA } as ArrayList<ScanFileEntity>
     override val selectEntities: ArrayList<ScanFileEntity>
         get() = galleryAdapter.currentSelectList
-    override val selectEmpty: Boolean
-        get() = selectEntities.isEmpty()
-    override val selectCount: Int
-        get() = selectEntities.size
-    override val itemCount: Int
-        get() = currentEntities.size
 
     override fun onSaveInstanceState(outState: Bundle) {
         ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putScanArgs(outState)

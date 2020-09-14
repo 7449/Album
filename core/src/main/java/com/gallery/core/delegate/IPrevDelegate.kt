@@ -4,15 +4,9 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.scan.args.file.ScanFileEntity
 
 interface IPrevDelegate {
-
-    /**
-     * [ViewPager2.getCurrentItem]
-     */
-    val currentItem: ScanFileEntity
 
     /**
      * 获取全部预览数据
@@ -25,25 +19,34 @@ interface IPrevDelegate {
     val selectEntities: ArrayList<ScanFileEntity>
 
     /**
+     * 当前position
+     * [ViewPager2.getCurrentItem]
+     */
+    val currentPosition: Int
+
+    /**
+     * [ViewPager2.getCurrentItem]
+     */
+    val currentItem: ScanFileEntity
+        get() = allItem[currentPosition]
+
+    /**
      * 预览页选中的数据是否为空
      */
     val selectEmpty: Boolean
+        get() = selectEntities.isEmpty()
 
     /**
      * 预览页选中的数据个数
      */
     val selectCount: Int
+        get() = selectEntities.size
 
     /**
      * 预览页全部数据个数
      */
     val itemCount: Int
-
-    /**
-     * 当前position
-     * [ViewPager2.getCurrentItem]
-     */
-    val currentPosition: Int
+        get() = allItem.size
 
     /**
      * 横竖屏保存数据
@@ -61,7 +64,7 @@ interface IPrevDelegate {
     fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanFileEntity>)
 
     /**
-     * 如果自定义checkBox调用这个方法是比较简单的方法
+     * 如果自定义checkBox调用这个是比较简单的方法
      */
     fun checkBoxClick(checkBox: View)
 
@@ -92,7 +95,7 @@ interface IPrevDelegate {
 
     /**
      * 获取预览页销毁时[Activity.setResult]的Bundle
-     * 可作为参数传递给[ScanFragment.onUpdateResult]
+     * 可作为参数传递给[ScanDelegate.onUpdateResult]
      * 用于合并预览页改变的数据
      */
     fun resultBundle(isRefresh: Boolean): Bundle

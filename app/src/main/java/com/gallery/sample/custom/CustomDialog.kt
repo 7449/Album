@@ -61,8 +61,8 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
         view.startAnimation(slide)
     }
 
-    override fun onGalleryResource(context: Context, scanEntity: ScanFileEntity) {
-        scanEntity.toString().safeToastExpand(requireActivity())
+    override fun onGalleryResource(context: Context, scanFileEntity: ScanFileEntity) {
+        scanFileEntity.toString().safeToastExpand(requireActivity())
         dismiss()
     }
 }

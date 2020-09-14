@@ -93,8 +93,8 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
-    override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
-        finderList.updateResultFinder(scanEntity, galleryBundle.scanSort == Sort.DESC)
+    override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
+        finderList.updateResultFinder(scanFileEntity, galleryBundle.scanSort == Sort.DESC)
     }
 
     /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
@@ -155,10 +155,10 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 点击选中,针对单选 */
-    override fun onGalleryResource(context: Context, scanEntity: ScanFileEntity) {
+    override fun onGalleryResource(context: Context, scanFileEntity: ScanFileEntity) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanEntity)
+        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanFileEntity)
         intent.putExtras(bundle)
         setResult(UIResult.RESULT_CODE_SINGLE_DATA, intent)
         finish()

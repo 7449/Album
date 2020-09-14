@@ -43,7 +43,7 @@ interface IGalleryPrevCallback {
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * [PrevFragment.checkBoxClick]
      */
-    fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
+    fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
         context.getString(R.string.gallery_prev_check_file_deleted).safeToastExpand(context)
     }
 
@@ -51,7 +51,7 @@ interface IGalleryPrevCallback {
      * 已达到选择最大数
      * [GalleryBundle.multipleMaxCount]
      */
-    fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
+    fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
         context.getString(R.string.gallery_check_max).safeToastExpand(context)
     }
 

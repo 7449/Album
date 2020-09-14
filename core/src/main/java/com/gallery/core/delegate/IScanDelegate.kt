@@ -37,17 +37,20 @@ interface IScanDelegate {
      * true 空
      */
     val selectEmpty: Boolean
+        get() = selectEntities.isEmpty()
 
     /**
      * 当前选中的数据个数
      */
     val selectCount: Int
+        get() = selectEntities.size
 
     /**
      * 当前扫描的数据个数
      * 已经过滤了CAMERA
      */
     val itemCount: Int
+        get() = currentEntities.size
 
     /**
      * 横竖屏切换

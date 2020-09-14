@@ -21,6 +21,8 @@ import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.file.*
 import com.gallery.scan.scanFileImpl
+import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanNoNeExpand
 import com.gallery.scan.types.registerMultipleLiveData
 
@@ -53,18 +55,10 @@ class PrevDelegate(
     private val galleryPrevCallback: IGalleryPrevCallback by lazy { fragment.galleryPrevCallback }
     private val galleryPrevInterceptor: IGalleryPrevInterceptor by lazy { fragment.galleryPrevInterceptor }
 
-    override val currentItem: ScanFileEntity
-        get() = prevAdapter.item(currentPosition)
     override val allItem: ArrayList<ScanFileEntity>
         get() = prevAdapter.allItem
     override val selectEntities: ArrayList<ScanFileEntity>
         get() = prevAdapter.currentSelectList
-    override val selectEmpty: Boolean
-        get() = selectEntities.isEmpty()
-    override val selectCount: Int
-        get() = selectEntities.size
-    override val itemCount: Int
-        get() = prevAdapter.itemCount
     override val currentPosition: Int
         get() = viewPager2.currentItem
 
@@ -75,6 +69,13 @@ class PrevDelegate(
         PrevArgs.newSaveInstance(currentPosition, selectEntities).putPrevArgs(outState)
     }
 
+    /**
+     * 如果parentId是[SCAN_NONE]的话，就是不扫描，直接把传入的 selectList
+     * 作为全部数据展示
+     * 否则从数据库获取数据，从数据库获取数据时会判断 scanAlone 是否是 [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
+     * 如果是，则使用 [GalleryBundle.scanType]作为参数，否则使用 scanAlone
+     * 如果预览页想扫描专门的类型，则使用 scanAlone 即可，这个时候传入[SCAN_ALL]即可
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         //https://github.com/7449/Album/issues/4
         //新增对单独扫描的支持，获取scanAlone和parentId

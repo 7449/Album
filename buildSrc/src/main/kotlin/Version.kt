@@ -35,7 +35,7 @@ object Dep {
     const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha05"
 
     const val material = "com.google.android.material:material:1.3.0-alpha02"
-    const val cameraview = "com.otaliastudios:cameraview:2.6.3"
+    const val cameraview = "com.otaliastudios:cameraview:2.6.4"
     const val cropper = "com.theartofdev.edmodo:android-image-cropper:2.8.0"
     const val glide = "com.github.bumptech.glide:glide:4.11.0"
     const val uCrop = "com.github.yalantis:ucrop:2.2.6"

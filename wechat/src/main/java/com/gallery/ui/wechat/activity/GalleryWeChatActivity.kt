@@ -175,15 +175,15 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, galleryEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
-        container.displayGalleryWeChat(width, height, galleryFragment.selectEntities, galleryEntity, selectView)
+    override fun onDisplayGallery(width: Int, height: Int, scanFileEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
+        container.displayGalleryWeChat(width, height, galleryFragment.selectEntities, scanFileEntity, selectView)
     }
 
     override fun onDisplayGalleryThumbnails(finderEntity: ScanFileEntity, container: FrameLayout) {
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity, position: Int, parentId: Long) {
         onStartPrevPage(if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) SCAN_ALL else parentId,
                 if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position,
                 if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
@@ -191,26 +191,26 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 GalleryWeChatPrevActivity::class.java)
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
-        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
+        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanFileEntity)
         galleryFragment.notifyDataSetChanged()
     }
 
-    override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanFileEntity) {
+    override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
         val selectEntities = galleryFragment.selectEntities
-        if (scanEntity.isVideoExpand && scanEntity.duration > videoDuration) {
-            scanEntity.isSelected = false
-            selectEntities.remove(scanEntity)
+        if (scanFileEntity.isVideoExpand && scanFileEntity.duration > videoDuration) {
+            scanFileEntity.isSelected = false
+            selectEntities.remove(scanFileEntity)
             getString(R.string.gallery_select_video_max_length).safeToastExpand(this)
-        } else if (scanEntity.isVideoExpand && scanEntity.duration <= 0) {
-            scanEntity.isSelected = false
-            selectEntities.remove(scanEntity)
+        } else if (scanFileEntity.isVideoExpand && scanFileEntity.duration <= 0) {
+            scanFileEntity.isSelected = false
+            selectEntities.remove(scanFileEntity)
             getString(R.string.gallery_select_video_error).safeToastExpand(this)
         } else {
             updateView()
         }
         galleryFragment.notifyItemChanged(position)
-        if (!scanEntity.isSelected) {
+        if (!scanFileEntity.isSelected) {
             galleryFragment.currentEntities.mapIndexedNotNull { index, item -> if (item.isSelected) index else null }.forEach {
                 galleryFragment.notifyItemChanged(it)
             }

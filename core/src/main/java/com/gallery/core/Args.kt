@@ -12,9 +12,9 @@ import androidx.annotation.Size
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.delegate.PrevDelegate
 import com.gallery.core.delegate.ScanDelegate
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.expand.LayoutManager
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.Sort
@@ -43,16 +43,16 @@ data class ScanArgs(
         val parentId: Long,
         val fileUri: Uri,
         val isRefresh: Boolean,
-        val selectList: ArrayList<ScanFileEntity>
+        val selectList: ArrayList<ScanEntity>
 ) : Parcelable {
     companion object {
         private const val Key = "scanArgs"
 
-        fun newSaveInstance(parentId: Long, fileUri: Uri, selectList: ArrayList<ScanFileEntity>): ScanArgs {
+        fun newSaveInstance(parentId: Long, fileUri: Uri, selectList: ArrayList<ScanEntity>): ScanArgs {
             return ScanArgs(parentId, fileUri, false, selectList)
         }
 
-        fun newResultInstance(selectList: ArrayList<ScanFileEntity>, isRefresh: Boolean): ScanArgs {
+        fun newResultInstance(selectList: ArrayList<ScanEntity>, isRefresh: Boolean): ScanArgs {
             return ScanArgs(SCAN_ALL, Uri.EMPTY, isRefresh, selectList)
         }
 
@@ -82,7 +82,7 @@ data class PrevArgs(
         /**
          * 当前选中的数据,如果是预览进入则认为所有数据==[selectList]
          */
-        val selectList: ArrayList<ScanFileEntity>,
+        val selectList: ArrayList<ScanEntity>,
         /**
          * [GalleryBundle] 参数
          */
@@ -108,7 +108,7 @@ data class PrevArgs(
 
         private const val Key = "prevArgs"
 
-        fun newSaveInstance(position: Int, selectList: ArrayList<ScanFileEntity>): PrevArgs {
+        fun newSaveInstance(position: Int, selectList: ArrayList<ScanEntity>): PrevArgs {
             return PrevArgs(SCAN_ALL, selectList, null, position, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
         }
 
@@ -139,7 +139,7 @@ data class GalleryBundle(
         /**
          * 默认选中的数据
          */
-        val selectEntities: ArrayList<ScanFileEntity> = ArrayList(),
+        val selectEntities: ArrayList<ScanEntity> = ArrayList(),
         /**
          * 扫描类型
          * 根据[MediaStore.Files.FileColumns.MEDIA_TYPE]搜索

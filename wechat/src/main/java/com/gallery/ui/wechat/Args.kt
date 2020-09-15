@@ -37,6 +37,7 @@ data class WeChatPrevArgs(
         }
 
         val Bundle.weChatPrevArgsOrDefault
-            get() = apply { classLoader = WeChatPrevArgs::class.java.classLoader }.getParcelable(Key) ?: WeChatPrevArgs(false, 0, false)
+            get() = apply { classLoader = WeChatPrevArgs::class.java.classLoader }.getParcelable(Key)
+                    ?: WeChatPrevArgs(false, 0, false)
     }
 }

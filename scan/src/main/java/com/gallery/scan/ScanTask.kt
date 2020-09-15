@@ -3,6 +3,7 @@ package com.gallery.scan
 import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
@@ -15,11 +16,11 @@ import com.gallery.scan.args.ScanEntityFactory
  *
  * 扫描
  */
-internal class ScanTask<ENTITY : ScanEntityFactory>(
+internal class ScanTask<E : Parcelable>(
         private val context: Context,
         private val factory: ScanEntityFactory,
         private val error: () -> Unit,
-        private val success: (ArrayList<ENTITY>) -> Unit
+        private val success: (ArrayList<E>) -> Unit
 ) : LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
@@ -38,7 +39,7 @@ internal class ScanTask<ENTITY : ScanEntityFactory>(
             error.invoke()
             return
         }
-        val arrayList = ArrayList<ENTITY>()
+        val arrayList = ArrayList<E>()
         while (data.moveToNext()) {
             arrayList.add(factory.cursorMoveToNextGeneric(data))
         }

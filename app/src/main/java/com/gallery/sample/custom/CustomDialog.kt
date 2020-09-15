@@ -11,9 +11,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.ui.fragment.ScanFragment
 import com.gallery.sample.R
-import com.gallery.scan.args.file.ScanFileEntity
 
 class CustomDialog : DialogFragment(), IGalleryCallback {
 
@@ -61,8 +61,8 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
         view.startAnimation(slide)
     }
 
-    override fun onGalleryResource(context: Context, scanFileEntity: ScanFileEntity) {
-        scanFileEntity.toString().safeToastExpand(requireActivity())
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+        scanEntity.toString().safeToastExpand(requireActivity())
         dismiss()
     }
 }

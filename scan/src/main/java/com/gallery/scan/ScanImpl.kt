@@ -2,6 +2,7 @@ package com.gallery.scan
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -31,14 +32,14 @@ import com.gallery.scan.types.postValueExpand
  *  .scanMultiple(parentId.multipleFileExpand())
  *
  */
-class ScanImpl<ENTITY : ScanEntityFactory>(private val scanView: ScanView<ENTITY>) : ViewModel(), Scan {
+class ScanImpl<E : Parcelable>(private val scanView: ScanView<E>) : ViewModel(), Scan {
 
     companion object {
         private const val SCAN_LOADER_ID = 111
     }
 
-    internal val multipleLiveData = MutableLiveData<ScanMultipleResult<ENTITY>>()
-    internal val singleLiveData = MutableLiveData<ScanSingleResult<ENTITY>>()
+    internal val multipleLiveData = MutableLiveData<ScanMultipleResult<E>>()
+    internal val singleLiveData = MutableLiveData<ScanSingleResult<E>>()
     internal val errorLiveData = MutableLiveData<ScanError>()
     private val objects: Any = scanView.scanOwnerGeneric()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanOwnerGeneric())
@@ -72,7 +73,7 @@ class ScanImpl<ENTITY : ScanEntityFactory>(private val scanView: ScanView<ENTITY
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(args), ScanTask<ENTITY>(context, factory, {
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(args), ScanTask<E>(context, factory, {
             scanView.scanMultipleError()
             errorLiveData.postValueExpand(ScanError(Result.MULTIPLE))
         }) {
@@ -86,7 +87,7 @@ class ScanImpl<ENTITY : ScanEntityFactory>(private val scanView: ScanView<ENTITY
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(args), ScanTask<ENTITY>(context, factory, {
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(args), ScanTask<E>(context, factory, {
             scanView.scanSingleError()
             errorLiveData.postValueExpand(ScanError(Result.SINGLE))
         }) {

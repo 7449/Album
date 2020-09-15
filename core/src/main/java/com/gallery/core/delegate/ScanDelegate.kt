@@ -91,9 +91,9 @@ class ScanDelegate(
         get() = fragment.activity
     override val activityNotNull: FragmentActivity
         get() = fragment.requireActivity()
-    override val currentEntities: ArrayList<ScanFileEntity>
-        get() = galleryAdapter.currentList.filter { it.parent != GalleryAdapter.CAMERA } as ArrayList<ScanFileEntity>
-    override val selectEntities: ArrayList<ScanFileEntity>
+    override val currentEntities: ArrayList<ScanEntity>
+        get() = galleryAdapter.currentList.filter { it.parent != GalleryAdapter.CAMERA } as ArrayList<ScanEntity>
+    override val selectEntities: ArrayList<ScanEntity>
         get() = galleryAdapter.currentSelectList
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -140,60 +140,62 @@ class ScanDelegate(
         }
         emptyView.hideExpand()
         recyclerView.showExpand()
-        galleryCallback.onScanSuccess(entities)
         if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
             entities.add(0, ScanFileEntity(parent = GalleryAdapter.CAMERA))
         }
-        galleryAdapter.addAll(entities)
+        val toScanEntity = entities.toScanEntity()
+        galleryAdapter.addAll(toScanEntity)
         galleryAdapter.updateEntity()
+        galleryCallback.onScanSuccess(currentEntities)
         scrollToPosition(0)
     }
 
     override fun scanSingleSuccess(entity: ScanFileEntity?) {
         entity ?: return galleryCallback.onResultError(activity, galleryBundle)
+        val toScanEntity = entity.toScanEntity()
         if (parentId.isScanAllExpand()) {
             if (galleryBundle.scanSort == Sort.DESC) {
-                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, entity)
+                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, toScanEntity)
             } else {
-                galleryAdapter.addEntity(entity)
+                galleryAdapter.addEntity(toScanEntity)
                 scrollToPosition(galleryAdapter.currentList.size - 1)
             }
         } else if (parentId == entity.parent) {
             if (galleryBundle.scanSort == Sort.DESC) {
-                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, entity)
+                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, toScanEntity)
             } else {
-                galleryAdapter.addEntity(entity)
+                galleryAdapter.addEntity(toScanEntity)
                 scrollToPosition(galleryAdapter.currentList.size - 1)
             }
         }
         notifyDataSetChanged()
-        galleryCallback.onResultSuccess(activity, galleryBundle, entity)
+        galleryCallback.onResultSuccess(activity, galleryBundle, toScanEntity)
     }
 
-    override fun onCameraItemClick(view: View, position: Int, galleryEntity: ScanFileEntity) {
+    override fun onCameraItemClick(view: View, position: Int, scanEntity: ScanEntity) {
         cameraOpen()
     }
 
-    override fun onPhotoItemClick(view: View, position: Int, galleryEntity: ScanFileEntity) {
-        if (!galleryEntity.externalUriExpand.isFileExistsExpand(activityNotNull)) {
-            galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, galleryEntity)
+    override fun onPhotoItemClick(view: View, position: Int, scanEntity: ScanEntity) {
+        if (!scanEntity.delegate.externalUriExpand.isFileExistsExpand(activityNotNull)) {
+            galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, scanEntity)
             return
         }
         if (galleryBundle.isVideoScanExpand) {
-            activityNotNull.openVideoExpand(galleryEntity.externalUriExpand) {
-                galleryCallback.onOpenVideoPlayError(activityNotNull, galleryEntity)
+            activityNotNull.openVideoExpand(scanEntity.delegate.externalUriExpand) {
+                galleryCallback.onOpenVideoPlayError(activityNotNull, scanEntity)
             }
             return
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, galleryEntity.externalUriExpand))
+                cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, scanEntity.delegate.externalUriExpand))
             } else {
-                galleryCallback.onGalleryResource(activityNotNull, galleryEntity)
+                galleryCallback.onGalleryResource(activityNotNull, scanEntity)
             }
             return
         }
-        galleryCallback.onPhotoItemClick(activityNotNull, galleryBundle, galleryEntity, position, parentId)
+        galleryCallback.onPhotoItemClick(activityNotNull, galleryBundle, scanEntity, position, parentId)
     }
 
     override fun cameraOpen() {

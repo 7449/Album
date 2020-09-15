@@ -19,11 +19,11 @@ import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.types.Sort
 import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.*
@@ -71,7 +71,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 文件夹数据集合 */
-    val finderList = ArrayList<ScanFileEntity>()
+    val finderList = ArrayList<ScanEntity>()
 
     /** 当前选中文件夹名称 */
     var finderName = ""
@@ -93,12 +93,12 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
-    override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
-        finderList.updateResultFinder(scanFileEntity, galleryBundle.scanSort == Sort.DESC)
+    override fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        finderList.updateResultFinder(scanEntity, galleryBundle.scanSort == Sort.DESC)
     }
 
     /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
-    override fun onScanSuccess(scanEntities: ArrayList<ScanFileEntity>) {
+    override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         if (galleryFragment.parentId.isScanAllExpand() && scanEntities.isNotEmpty()) {
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryConfig.sdName, galleryConfig.allName))
@@ -145,7 +145,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 选择图片,针对多选 */
-    open fun onGalleryResources(entities: ArrayList<ScanFileEntity>) {
+    open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
@@ -155,10 +155,10 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 点击选中,针对单选 */
-    override fun onGalleryResource(context: Context, scanFileEntity: ScanFileEntity) {
+    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanFileEntity)
+        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanEntity)
         intent.putExtras(bundle)
         setResult(UIResult.RESULT_CODE_SINGLE_DATA, intent)
         finish()

@@ -1,6 +1,7 @@
 package com.gallery.scan
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.loader.app.LoaderManager
@@ -11,7 +12,7 @@ import com.gallery.scan.args.ScanEntityFactory
  * @author y
  * @create 2019/2/27
  */
-interface ScanView<ENTITY : ScanEntityFactory> {
+interface ScanView<E : Parcelable> {
 
     /**
      * [Context]
@@ -27,7 +28,7 @@ interface ScanView<ENTITY : ScanEntityFactory> {
     val scanCursorLoaderArgs: CursorLoaderArgs
 
     /**
-     * 自定义实体类参数[ENTITY]
+     * 自定义实体类参数[E]
      */
     val scanEntityFactory: ScanEntityFactory
 
@@ -52,7 +53,7 @@ interface ScanView<ENTITY : ScanEntityFactory> {
     /**
      * 扫描成功
      */
-    fun scanMultipleSuccess(entities: ArrayList<ENTITY>) {}
+    fun scanMultipleSuccess(entities: ArrayList<E>) {}
 
     /**
      * 扫描异常
@@ -64,7 +65,7 @@ interface ScanView<ENTITY : ScanEntityFactory> {
     /**
      * 单个扫描成功
      */
-    fun scanSingleSuccess(entity: ENTITY?) {}
+    fun scanSingleSuccess(entity: E?) {}
 
     /**
      * 单个扫描失败

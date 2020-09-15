@@ -3,6 +3,7 @@
 package com.gallery.scan
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
@@ -17,9 +18,9 @@ import com.gallery.scan.types.Result
 
 class ScanError(val type: Result)
 
-class ScanMultipleResult<ENTITY : ScanEntityFactory>(val bundle: Bundle, val entities: ArrayList<ENTITY>)
+class ScanMultipleResult<E : Parcelable>(val bundle: Bundle, val entities: ArrayList<E>)
 
-class ScanSingleResult<ENTITY : ScanEntityFactory>(val bundle: Bundle, val entity: ENTITY?)
+class ScanSingleResult<E : Parcelable>(val bundle: Bundle, val entity: E?)
 
 fun ViewModelProvider.scanFileImpl(): ScanImpl<ScanFileEntity> = scanImpl()
 
@@ -27,9 +28,9 @@ fun ViewModelProvider.scanAudioImpl(): ScanImpl<ScanAudioEntity> = scanImpl()
 
 fun ViewModelProvider.scanPictureImpl(): ScanImpl<ScanPictureEntity> = scanImpl()
 
-fun <ENTITY : ScanEntityFactory> ViewModelProvider.scanImpl(): ScanImpl<ENTITY> = get(ScanImpl::class.java) as ScanImpl<ENTITY>
+fun <E : Parcelable> ViewModelProvider.scanImpl(): ScanImpl<E> = get(ScanImpl::class.java) as ScanImpl<E>
 
-fun <ENTITY : ScanEntityFactory> FragmentActivity.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<ENTITY> {
+fun <ENTITY : Parcelable> FragmentActivity.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<ENTITY> {
     return ScanImpl(object : ScanView<ENTITY> {
         override val scanCursorLoaderArgs: CursorLoaderArgs
             get() = args
@@ -42,8 +43,8 @@ fun <ENTITY : ScanEntityFactory> FragmentActivity.scanViewModel(factory: ScanEnt
     })
 }
 
-fun <ENTITY : ScanEntityFactory> Fragment.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<ENTITY> {
-    return ScanImpl(object : ScanView<ENTITY> {
+fun <E : Parcelable> Fragment.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<E> {
+    return ScanImpl(object : ScanView<E> {
         override val scanCursorLoaderArgs: CursorLoaderArgs
             get() = args
         override val scanEntityFactory: ScanEntityFactory
@@ -63,8 +64,8 @@ class ScanViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ownerActivity?.scanViewModel<ScanEntityFactory>(factory, args) as? T
-                ?: ownerFragment?.scanViewModel<ScanEntityFactory>(factory, args) as T
+        return ownerActivity?.scanViewModel<Parcelable>(factory, args) as? T
+                ?: ownerFragment?.scanViewModel<Parcelable>(factory, args) as T
     }
 
 }

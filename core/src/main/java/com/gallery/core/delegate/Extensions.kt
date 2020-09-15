@@ -1,5 +1,6 @@
 package com.gallery.core.delegate
 
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
@@ -10,6 +11,8 @@ import com.gallery.core.callback.*
 import com.gallery.core.crop.ICrop
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.scan.args.file.ScanFileEntity
+import kotlinx.android.parcel.Parcelize
 
 /** 图库拦截器 */
 val Fragment.galleryInterceptor: IGalleryInterceptor
@@ -78,3 +81,39 @@ val AppCompatActivity.scanDelegate: IScanDelegate get() = galleryFragment.delega
 
 /** [IPrevDelegate] */
 val AppCompatActivity.prevDelegate: IPrevDelegate get() = prevFragment.delegate
+
+/** [ScanFileEntity]中介 */
+@Parcelize
+data class ScanEntity(
+        val delegate: ScanFileEntity,
+        val count: Int = 0,
+        var isSelected: Boolean = false
+) : Parcelable {
+    val id: Long
+        get() = delegate.id
+    val parent: Long
+        get() = delegate.parent
+    val size: Long
+        get() = delegate.size
+    val duration: Long
+        get() = delegate.duration
+    val dateModified: Long
+        get() = delegate.dateModified
+    val bucketDisplayName: String
+        get() = delegate.bucketDisplayName
+}
+
+/** [ScanFileEntity]转换为[ScanEntity] */
+fun ArrayList<ScanFileEntity>.toScanEntity(): ArrayList<ScanEntity> {
+    return map { ScanEntity(it) } as ArrayList<ScanEntity>
+}
+
+/** [ScanEntity]转换为[ScanFileEntity] */
+fun ArrayList<ScanEntity>.toScanFileEntity(): ArrayList<ScanFileEntity> {
+    return map { it.delegate } as ArrayList<ScanFileEntity>
+}
+
+/** [ScanFileEntity]转换为[ScanEntity] */
+fun ScanFileEntity.toScanEntity(): ScanEntity {
+    return ScanEntity(this)
+}

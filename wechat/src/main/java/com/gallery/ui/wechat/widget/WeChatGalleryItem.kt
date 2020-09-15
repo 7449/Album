@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.colorExpand
-import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.scan.args.file.isGifExpand
 import com.gallery.scan.args.file.isVideoExpand
 import com.gallery.ui.wechat.R
@@ -36,13 +36,13 @@ class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: Attri
     private val selectView: View
         get() = viewWeChatBackSelect
 
-    fun update(galleryEntity: ScanFileEntity) {
+    fun update(galleryEntity: ScanEntity) {
         selectView.visibility = if (galleryEntity.isSelected) View.VISIBLE else View.GONE
-        gifView.visibility = if (galleryEntity.isGifExpand) View.VISIBLE else View.GONE
-        videoView.visibility = if (galleryEntity.isVideoExpand) View.VISIBLE else View.GONE
-        bottomView.visibility = if (galleryEntity.isVideoExpand) View.VISIBLE else View.GONE
-        bottomView.setBackgroundColor(if (galleryEntity.isGifExpand) Color.TRANSPARENT else context.colorExpand(R.color.color_B3000000))
-        bottomView.visibility = if (galleryEntity.isVideoExpand || galleryEntity.isGifExpand) View.VISIBLE else View.GONE
-        videoView.text = if (galleryEntity.isVideoExpand) galleryEntity.duration.formatTimeVideo() else ""
+        gifView.visibility = if (galleryEntity.delegate.isGifExpand) View.VISIBLE else View.GONE
+        videoView.visibility = if (galleryEntity.delegate.isVideoExpand) View.VISIBLE else View.GONE
+        bottomView.visibility = if (galleryEntity.delegate.isVideoExpand) View.VISIBLE else View.GONE
+        bottomView.setBackgroundColor(if (galleryEntity.delegate.isGifExpand) Color.TRANSPARENT else context.colorExpand(R.color.color_B3000000))
+        bottomView.visibility = if (galleryEntity.delegate.isVideoExpand || galleryEntity.delegate.isGifExpand) View.VISIBLE else View.GONE
+        videoView.text = if (galleryEntity.delegate.isVideoExpand) galleryEntity.duration.formatTimeVideo() else ""
     }
 }

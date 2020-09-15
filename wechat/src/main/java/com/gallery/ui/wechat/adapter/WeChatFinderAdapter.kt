@@ -2,7 +2,7 @@ package com.gallery.ui.wechat.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
@@ -13,7 +13,7 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
                           private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener
 ) : RecyclerView.Adapter<XViewHolder>() {
 
-    private val list: ArrayList<ScanFileEntity> = ArrayList()
+    private val list: ArrayList<ScanEntity> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
         val layoutViewHolder = LayoutViewHolder(parent, R.layout.gallery_item_finder_wechat)
@@ -26,7 +26,7 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: XViewHolder, position: Int) {
-        val finderEntity: ScanFileEntity = list[position]
+        val finderEntity: ScanEntity = list[position]
         adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.frameLayout(R.id.iv_gallery_finder_icon))
         holder.setText(R.id.tv_gallery_finder_name, "%s".format(finderEntity.bucketDisplayName))
         holder.textView(R.id.tv_gallery_finder_name).setTextColor(galleryUiBundle.finderItemTextColor)
@@ -35,7 +35,7 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
         holder.setVisibility(R.id.iv_gallery_finder_file_check, finderEntity.isSelected)
     }
 
-    fun updateFinder(entities: ArrayList<ScanFileEntity>) {
+    fun updateFinder(entities: ArrayList<ScanEntity>) {
         list.clear()
         list.addAll(entities)
         notifyDataSetChanged()

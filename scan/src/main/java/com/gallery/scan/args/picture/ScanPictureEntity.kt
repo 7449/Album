@@ -2,9 +2,7 @@
 
 package com.gallery.scan.args.picture
 
-import android.database.Cursor
 import android.os.Parcelable
-import com.gallery.scan.args.ScanEntityFactory
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -20,6 +18,4 @@ data class ScanPictureEntity(
         val height: Int = 0,
         val orientation: Int = 0,
         val bucketId: String = "",
-        val bucketDisplayName: String = "") : Parcelable, ScanEntityFactory {
-    override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory = this
-}
+        val bucketDisplayName: String = "") : Parcelable

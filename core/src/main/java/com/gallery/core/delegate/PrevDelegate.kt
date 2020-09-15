@@ -19,7 +19,10 @@ import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.args.file.*
+import com.gallery.scan.args.file.ScanFileArgs
+import com.gallery.scan.args.file.externalUriExpand
+import com.gallery.scan.args.file.fileExpand
+import com.gallery.scan.args.file.multipleFileExpand
 import com.gallery.scan.scanFileImpl
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.SCAN_NONE
@@ -55,9 +58,9 @@ class PrevDelegate(
     private val galleryPrevCallback: IGalleryPrevCallback by lazy { fragment.galleryPrevCallback }
     private val galleryPrevInterceptor: IGalleryPrevInterceptor by lazy { fragment.galleryPrevInterceptor }
 
-    override val allItem: ArrayList<ScanFileEntity>
+    override val allItem: ArrayList<ScanEntity>
         get() = prevAdapter.allItem
-    override val selectEntities: ArrayList<ScanFileEntity>
+    override val selectEntities: ArrayList<ScanEntity>
         get() = prevAdapter.currentSelectList
     override val currentPosition: Int
         get() = viewPager2.currentItem
@@ -98,12 +101,12 @@ class PrevDelegate(
                             args = scanFileArgs
                     )
             ).scanFileImpl().registerMultipleLiveData(fragment) { _, result ->
-                updateEntity(savedInstanceState, result)
+                updateEntity(savedInstanceState, result.toScanEntity())
             }.scanMultiple(parentId.multipleFileExpand())
         }
     }
 
-    override fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanFileEntity>) {
+    override fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanEntity>) {
         val prevArgs: PrevArgs = savedInstanceState?.prevArgs ?: prevArgs
         prevAdapter.addAll(arrayList)
         prevAdapter.addSelectAll(prevArgs.selectList)
@@ -119,7 +122,7 @@ class PrevDelegate(
     }
 
     override fun checkBoxClick(checkBox: View) {
-        if (!currentItem.externalUriExpand.isFileExistsExpand(fragment.requireActivity())) {
+        if (!currentItem.delegate.externalUriExpand.isFileExistsExpand(fragment.requireActivity())) {
             if (prevAdapter.containsSelect(currentItem)) {
                 prevAdapter.removeSelectEntity(currentItem)
             }

@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.expand.LayoutManager
 import com.gallery.core.expand.isVideoScanExpand
 import com.gallery.core.ui.fragment.ScanFragment
@@ -26,7 +27,6 @@ import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.enums.ScanType
 import com.gallery.sample.enums.Theme
-import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.scan.types.Sort
 import com.gallery.ui.FinderType
@@ -177,11 +177,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
         }
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, scanFileEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
+    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, selectView: TextView) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)
-                .load(scanFileEntity.externalUriExpand)
+                .load(scanEntity.delegate.externalUriExpand)
                 .apply(RequestOptions()
                         .placeholder(R.drawable.ic_gallery_default_loading)
                         .error(R.drawable.ic_gallery_default_loading)

@@ -4,19 +4,18 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.gallery.scan.args.file.ScanFileEntity
 
 interface IPrevDelegate {
 
     /**
      * 获取全部预览数据
      */
-    val allItem: ArrayList<ScanFileEntity>
+    val allItem: ArrayList<ScanEntity>
 
     /**
      * 预览页选中的数据
      */
-    val selectEntities: ArrayList<ScanFileEntity>
+    val selectEntities: ArrayList<ScanEntity>
 
     /**
      * 当前position
@@ -27,7 +26,7 @@ interface IPrevDelegate {
     /**
      * [ViewPager2.getCurrentItem]
      */
-    val currentItem: ScanFileEntity
+    val currentItem: ScanEntity
         get() = allItem[currentPosition]
 
     /**
@@ -61,7 +60,7 @@ interface IPrevDelegate {
     /**
      * 更新数据
      */
-    fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanFileEntity>)
+    fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanEntity>)
 
     /**
      * 如果自定义checkBox调用这个是比较简单的方法

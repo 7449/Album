@@ -2,10 +2,8 @@
 
 package com.gallery.scan.args.file
 
-import android.database.Cursor
 import android.os.Parcelable
 import android.provider.MediaStore
-import com.gallery.scan.args.ScanEntityFactory
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -28,9 +26,5 @@ data class ScanFileEntity(
         val bucketId: String = "",
         val bucketDisplayName: String = "",
 
-        val duration: Long = 0,
-
-        val count: Int = 0,
-        var isSelected: Boolean = false) : Parcelable, ScanEntityFactory {
-    override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory = this
-}
+        val duration: Long = 0
+) : Parcelable

@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.gallery.core.GalleryBundle
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.prevFragment
-import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.args.file.isGifExpand
 import com.gallery.scan.args.file.isVideoExpand
 import com.gallery.ui.activity.PrevBaseActivity
@@ -32,8 +32,8 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     private val weChatPrevArgs: WeChatPrevArgs by lazy { uiGapConfig.weChatPrevArgsOrDefault }
     private val idList: ArrayList<Long> = ArrayList()
 
-    private fun onUpdateVideoTip(scanEntity: ScanFileEntity) {
-        if (!scanEntity.isVideoExpand) {
+    private fun onUpdateVideoTip(scanEntity: ScanEntity) {
+        if (!scanEntity.delegate.isVideoExpand) {
             galleryPrevVideoTip.visibility = View.GONE
             prevWeChatToolbarSend.isEnabled = true
             prevWeChatSelect.isEnabled = true
@@ -80,24 +80,24 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         }
     }
 
-    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanFileEntity) {
+    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
         prevFragment.setCurrentItem(prevFragment.allItem.indexOfFirst { it.id == item.id })
     }
 
-    override fun onGalleryFinderThumbnails(finderEntity: ScanFileEntity, container: FrameLayout) {
+    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
         container.displayGalleryPrevSelect(finderEntity, idList, weChatPrevArgs.isPrev)
     }
 
-    override fun onDisplayGalleryPrev(scanFileEntity: ScanFileEntity, container: FrameLayout) {
-        container.displayGalleryPrev(scanFileEntity)
+    override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
+        container.displayGalleryPrev(scanEntity)
     }
 
     override fun onPageSelected(position: Int) {
-        val currentItem: ScanFileEntity = prevFragment.currentItem
+        val currentItem: ScanEntity = prevFragment.currentItem
         onUpdateVideoTip(prevFragment.currentItem)
         prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
         prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
-        prevWeChatFullImage.visibility = if (currentItem.isGifExpand || currentItem.isVideoExpand) View.GONE else View.VISIBLE
+        prevWeChatFullImage.visibility = if (currentItem.delegate.isGifExpand || currentItem.delegate.isVideoExpand) View.GONE else View.VISIBLE
         selectAdapter.refreshItem(currentItem)
         galleryPrevList.scrollToPosition(selectAdapter.findPosition(currentItem))
     }
@@ -133,13 +133,13 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         }
     }
 
-    override fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
-        super.onClickCheckBoxMaxCount(context, galleryBundle, scanFileEntity)
+    override fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        super.onClickCheckBoxMaxCount(context, galleryBundle, scanEntity)
         prevWeChatSelect.isChecked = false
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity) {
-        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanFileEntity)
+    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
         prevWeChatSelect.isChecked = false
     }
 

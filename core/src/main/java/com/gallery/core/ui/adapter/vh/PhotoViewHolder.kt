@@ -9,7 +9,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.scan.args.file.externalUriExpand
 import com.xadapter.vh.XViewHolder
 
@@ -21,41 +21,41 @@ class PhotoViewHolder(itemView: View,
     private val container: FrameLayout = frameLayout(R.id.galleryContainer)
     private val checkBox: TextView = textView(R.id.galleryCheckBox)
 
-    fun photo(position: Int, galleryEntity: ScanFileEntity, selectList: ArrayList<ScanFileEntity>, imageLoader: IGalleryImageLoader) {
-        imageLoader.onDisplayGallery(display, display, galleryEntity, container, checkBox)
+    fun photo(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
+        imageLoader.onDisplayGallery(display, display, scanEntity, container, checkBox)
         container.setBackgroundColor(galleryBundle.photoBackgroundColor)
         if (galleryBundle.radio) {
             return
         }
         checkBox.showExpand()
-        checkBox.isSelected = galleryEntity.isSelected
+        checkBox.isSelected = scanEntity.isSelected
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
-        checkBox.setOnClickListener { clickCheckBox(position, galleryEntity, selectList) }
+        checkBox.setOnClickListener { clickCheckBox(position, scanEntity, selectList) }
     }
 
-    private fun clickCheckBox(position: Int, galleryEntity: ScanFileEntity, selectList: ArrayList<ScanFileEntity>) {
-        if (!galleryEntity.externalUriExpand.isFileExistsExpand(context)) {
-            if (selectList.contains(galleryEntity)) {
-                selectList.remove(galleryEntity)
+    private fun clickCheckBox(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>) {
+        if (!scanEntity.delegate.externalUriExpand.isFileExistsExpand(context)) {
+            if (selectList.contains(scanEntity)) {
+                selectList.remove(scanEntity)
             }
             checkBox.isSelected = false
-            galleryEntity.isSelected = false
-            galleryCallback.onClickCheckBoxFileNotExist(context, galleryBundle, galleryEntity)
+            scanEntity.isSelected = false
+            galleryCallback.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
             return
         }
-        if (!selectList.contains(galleryEntity) && selectList.size >= galleryBundle.multipleMaxCount) {
-            galleryCallback.onClickCheckBoxMaxCount(context, galleryBundle, galleryEntity)
+        if (!selectList.contains(scanEntity) && selectList.size >= galleryBundle.multipleMaxCount) {
+            galleryCallback.onClickCheckBoxMaxCount(context, galleryBundle, scanEntity)
             return
         }
-        if (!galleryEntity.isSelected) {
-            galleryEntity.isSelected = true
+        if (!scanEntity.isSelected) {
+            scanEntity.isSelected = true
             checkBox.isSelected = true
-            selectList.add(galleryEntity)
+            selectList.add(scanEntity)
         } else {
-            selectList.remove(galleryEntity)
-            galleryEntity.isSelected = false
+            selectList.remove(scanEntity)
+            scanEntity.isSelected = false
             checkBox.isSelected = false
         }
-        galleryCallback.onChangedCheckBox(position, galleryEntity.isSelected, galleryBundle, galleryEntity)
+        galleryCallback.onChangedCheckBox(position, scanEntity.isSelected, galleryBundle, scanEntity)
     }
 }

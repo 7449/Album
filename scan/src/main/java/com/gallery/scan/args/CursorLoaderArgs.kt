@@ -35,7 +35,8 @@ open class CursorLoaderArgs(
         }
 
         internal fun Bundle.getCursorLoaderArgs(): CursorLoaderArgs {
-            return getParcelable(Key) ?: throw KotlinNullPointerException("scanCursorLoaderArgs == null")
+            return getParcelable(Key)
+                    ?: throw KotlinNullPointerException("scanCursorLoaderArgs == null")
         }
 
     }

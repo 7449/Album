@@ -4,14 +4,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.R
-import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.core.delegate.ScanEntity
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder
 
-class PrevAdapter(private val displayPreview: (scanEntity: ScanFileEntity, container: FrameLayout) -> Unit) : RecyclerView.Adapter<XViewHolder>() {
+class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) : RecyclerView.Adapter<XViewHolder>() {
 
-    private val galleryList: ArrayList<ScanFileEntity> = ArrayList()
-    private val selectList: ArrayList<ScanFileEntity> = ArrayList()
+    private val galleryList: ArrayList<ScanEntity> = ArrayList()
+    private val selectList: ArrayList<ScanEntity> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder = LayoutViewHolder(parent, R.layout.gallery_item_gallery_prev)
 
@@ -21,12 +21,12 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanFileEntity, conta
 
     override fun getItemCount(): Int = galleryList.size
 
-    fun addAll(newList: ArrayList<ScanFileEntity>) {
+    fun addAll(newList: ArrayList<ScanEntity>) {
         galleryList.clear()
         galleryList.addAll(newList)
     }
 
-    fun addSelectAll(newList: ArrayList<ScanFileEntity>) {
+    fun addSelectAll(newList: ArrayList<ScanEntity>) {
         selectList.clear()
         selectList.addAll(newList)
     }
@@ -41,16 +41,16 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanFileEntity, conta
 
     fun item(position: Int) = galleryList[position]
 
-    fun containsSelect(selectEntity: ScanFileEntity) = selectList.contains(selectEntity)
+    fun containsSelect(selectEntity: ScanEntity) = selectList.contains(selectEntity)
 
-    fun removeSelectEntity(removeEntity: ScanFileEntity) = selectList.remove(removeEntity)
+    fun removeSelectEntity(removeEntity: ScanEntity) = selectList.remove(removeEntity)
 
-    fun addSelectEntity(addEntity: ScanFileEntity) = selectList.add(addEntity)
+    fun addSelectEntity(addEntity: ScanEntity) = selectList.add(addEntity)
 
-    val currentSelectList: ArrayList<ScanFileEntity>
+    val currentSelectList: ArrayList<ScanEntity>
         get() = selectList
 
-    val allItem: ArrayList<ScanFileEntity>
+    val allItem: ArrayList<ScanEntity>
         get() = galleryList
 }
 

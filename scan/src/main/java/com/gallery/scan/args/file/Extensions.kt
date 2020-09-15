@@ -4,6 +4,7 @@ import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.BaseColumns
 import android.provider.MediaStore
 import androidx.kotlin.expand.database.getIntOrDefault
@@ -49,7 +50,7 @@ val ScanFileEntity.isAudioExpand: Boolean
 /** 文件实体生成 */
 fun ScanEntityFactory.Companion.fileExpand(): ScanEntityFactory {
     return object : ScanEntityFactory {
-        override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory {
+        override fun cursorMoveToNext(cursor: Cursor): Parcelable {
             return ScanFileEntity(
                     cursor.getLongOrDefault(MediaStore.Files.FileColumns._ID),
 
@@ -69,10 +70,8 @@ fun ScanEntityFactory.Companion.fileExpand(): ScanEntityFactory {
                     cursor.getStringOrDefault(MediaStore.Images.ImageColumns.BUCKET_ID),
                     cursor.getStringOrDefault(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME),
 
-                    cursor.getLongOrDefault(MediaStore.Video.VideoColumns.DURATION),
-
-                    0,
-                    false)
+                    cursor.getLongOrDefault(MediaStore.Video.VideoColumns.DURATION)
+            )
         }
     }
 }

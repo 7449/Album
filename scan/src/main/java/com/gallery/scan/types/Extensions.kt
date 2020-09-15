@@ -1,26 +1,26 @@
 package com.gallery.scan.types
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.gallery.scan.ScanImpl
-import com.gallery.scan.args.ScanEntityFactory
 
 const val SCAN_ALL = (-111111111).toLong()
 const val SCAN_NONE = (-11111112).toLong()
 
 /** 注册回调 */
-fun <T : ScanEntityFactory> ScanImpl<T>.registerMultipleLiveData(owner: LifecycleOwner, action: (args: Bundle, result: ArrayList<T>) -> Unit) = also {
+fun <E : Parcelable> ScanImpl<E>.registerMultipleLiveData(owner: LifecycleOwner, action: (args: Bundle, result: ArrayList<E>) -> Unit) = also {
     multipleLiveData.observe(owner) { action.invoke(it.bundle, it.entities) }
 }
 
 /** 注册回调 */
-fun <T : ScanEntityFactory> ScanImpl<T>.registerSingleLiveData(owner: LifecycleOwner, action: (args: Bundle, result: T?) -> Unit) = also {
+fun <E : Parcelable> ScanImpl<E>.registerSingleLiveData(owner: LifecycleOwner, action: (args: Bundle, result: E?) -> Unit) = also {
     singleLiveData.observe(owner) { action.invoke(it.bundle, it.entity) }
 }
 
 /** 注册回调 */
-fun <T : ScanEntityFactory> ScanImpl<T>.registerErrorLiveData(owner: LifecycleOwner, action: (type: Result) -> Unit) = also {
+fun <E : Parcelable> ScanImpl<E>.registerErrorLiveData(owner: LifecycleOwner, action: (type: Result) -> Unit) = also {
     errorLiveData.observe(owner) { action.invoke(it.type) }
 }
 

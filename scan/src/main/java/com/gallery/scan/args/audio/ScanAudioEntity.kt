@@ -2,9 +2,7 @@
 
 package com.gallery.scan.args.audio
 
-import android.database.Cursor
 import android.os.Parcelable
-import com.gallery.scan.args.ScanEntityFactory
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -18,6 +16,4 @@ data class ScanAudioEntity(
         val dateModified: Long = 0,
         val mimeType: String = "",
         val width: Int = 0,
-        val height: Int = 0) : Parcelable, ScanEntityFactory {
-    override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory = this
-}
+        val height: Int = 0) : Parcelable

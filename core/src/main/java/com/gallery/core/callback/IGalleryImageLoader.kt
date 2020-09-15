@@ -2,7 +2,7 @@ package com.gallery.core.callback
 
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.core.delegate.ScanEntity
 
 /**
  * @author y
@@ -12,15 +12,15 @@ interface IGalleryImageLoader {
     /**
      * 首页图片加载
      */
-    fun onDisplayGallery(width: Int, height: Int, scanFileEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {}
+    fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, selectView: TextView) {}
 
     /**
      * 目录图片加载
      */
-    fun onDisplayGalleryThumbnails(finderEntity: ScanFileEntity, container: FrameLayout) {}
+    fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {}
 
     /**
      * 预览页图片加载
      */
-    fun onDisplayGalleryPrev(scanFileEntity: ScanFileEntity, container: FrameLayout) {}
+    fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {}
 }

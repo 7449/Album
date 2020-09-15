@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.openVideoExpand
-import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.scan.args.file.isGifExpand
 import com.gallery.scan.args.file.isVideoExpand
@@ -30,12 +30,12 @@ class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: Attribut
     private val gifView: TextView
         get() = prevWeChatGif
 
-    fun update(galleryEntity: ScanFileEntity) {
-        imageView.scaleType = if (galleryEntity.isVideoExpand) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
-        gifView.visibility = if (galleryEntity.isGifExpand) View.VISIBLE else View.GONE
+    fun update(galleryEntity: ScanEntity) {
+        imageView.scaleType = if (galleryEntity.delegate.isVideoExpand) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
+        gifView.visibility = if (galleryEntity.delegate.isGifExpand) View.VISIBLE else View.GONE
         gifView.text = context.getString(R.string.gallery_wechat_prev_gif_format).format(galleryEntity.size.toFileSize())
-        videoPlayView.visibility = if (galleryEntity.isVideoExpand) View.VISIBLE else View.GONE
-        videoPlayView.setOnClickListener { context.openVideoExpand(galleryEntity.externalUriExpand) {} }
+        videoPlayView.visibility = if (galleryEntity.delegate.isVideoExpand) View.VISIBLE else View.GONE
+        videoPlayView.setOnClickListener { context.openVideoExpand(galleryEntity.delegate.externalUriExpand) {} }
     }
 
 }

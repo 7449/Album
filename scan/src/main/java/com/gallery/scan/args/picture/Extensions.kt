@@ -4,6 +4,7 @@ import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.BaseColumns
 import android.provider.MediaStore
 import androidx.kotlin.expand.database.getIntOrDefault
@@ -32,7 +33,7 @@ val ScanPictureEntity.isGifExpand: Boolean
 /** 图片实体生成 */
 fun ScanEntityFactory.Companion.pictureExpand(): ScanEntityFactory {
     return object : ScanEntityFactory {
-        override fun cursorMoveToNext(cursor: Cursor): ScanEntityFactory {
+        override fun cursorMoveToNext(cursor: Cursor): Parcelable {
             return ScanPictureEntity(
                     cursor.getLongOrDefault(MediaStore.Images.Media._ID),
                     cursor.getLongOrDefault(MediaStore.Images.Media.SIZE),

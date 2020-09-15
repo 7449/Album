@@ -6,15 +6,15 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.ui.widget.GalleryImageView
-import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.ui.R
 import com.gallery.ui.wechat.widget.WeChatGalleryItem
 import com.gallery.ui.wechat.widget.WeChatPrevItem
 import com.gallery.ui.wechat.widget.WeChatSelectItem
 
-internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll: ArrayList<ScanFileEntity>, galleryEntity: ScanFileEntity, selectView: TextView) {
+internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll: ArrayList<ScanEntity>, galleryEntity: ScanEntity, selectView: TextView) {
     removeAllViews()
     val weChatGalleryItem = WeChatGalleryItem(context)
     weChatGalleryItem.update(galleryEntity)
@@ -25,29 +25,29 @@ internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll
     } else {
         selectView.text = ""
     }
-    Glide.with(context).load(galleryEntity.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(weChatGalleryItem.imageView)
+    Glide.with(context).load(galleryEntity.delegate.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(weChatGalleryItem.imageView)
     addView(weChatGalleryItem, FrameLayout.LayoutParams(width, height))
 }
 
-internal fun FrameLayout.displayGalleryThumbnails(finderEntity: ScanFileEntity) {
+internal fun FrameLayout.displayGalleryThumbnails(finderEntity: ScanEntity) {
     removeAllViews()
     val imageView = GalleryImageView(context)
-    Glide.with(context).load(finderEntity.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()).into(imageView)
+    Glide.with(context).load(finderEntity.delegate.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()).into(imageView)
     addView(imageView)
 }
 
-internal fun FrameLayout.displayGalleryPrev(scanEntity: ScanFileEntity) {
+internal fun FrameLayout.displayGalleryPrev(scanEntity: ScanEntity) {
     removeAllViews()
     val weChatPrevItem = WeChatPrevItem(context)
     weChatPrevItem.update(scanEntity)
-    Glide.with(context).load(scanEntity.externalUriExpand).into(weChatPrevItem.imageView)
+    Glide.with(context).load(scanEntity.delegate.externalUriExpand).into(weChatPrevItem.imageView)
     addView(weChatPrevItem)
 }
 
-internal fun FrameLayout.displayGalleryPrevSelect(scanEntity: ScanFileEntity, idList: List<Long>, isPrev: Boolean) {
+internal fun FrameLayout.displayGalleryPrevSelect(scanEntity: ScanEntity, idList: List<Long>, isPrev: Boolean) {
     removeAllViews()
     val weChatSelectItem = WeChatSelectItem(context)
     weChatSelectItem.update(scanEntity, idList, isPrev)
-    Glide.with(context).asBitmap().load(scanEntity.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).fitCenter()).into(weChatSelectItem.imageView)
+    Glide.with(context).asBitmap().load(scanEntity.delegate.externalUriExpand).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).fitCenter()).into(weChatSelectItem.imageView)
     addView(weChatSelectItem)
 }

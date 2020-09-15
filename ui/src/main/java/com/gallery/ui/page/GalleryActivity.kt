@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.isVideoScanExpand
-import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.FinderType
@@ -90,7 +90,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         }
     }
 
-    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanFileEntity) {
+    override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
         if (item.parent == galleryFragment.parentId) {
             newFinderAdapter.hide()
             return
@@ -100,19 +100,19 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         newFinderAdapter.hide()
     }
 
-    override fun onGalleryFinderThumbnails(finderEntity: ScanFileEntity, container: FrameLayout) {
+    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, scanFileEntity: ScanFileEntity, container: FrameLayout, selectView: TextView) {
-        container.displayGallery(width, height, scanFileEntity)
+    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, selectView: TextView) {
+        container.displayGallery(width, height, scanEntity)
     }
 
-    override fun onDisplayGalleryThumbnails(finderEntity: ScanFileEntity, container: FrameLayout) {
+    override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanFileEntity: ScanFileEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
         onStartPrevPage(parentId, if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position, PreActivity::class.java)
     }
 

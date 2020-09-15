@@ -132,10 +132,10 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         if (galleryFragment.parentId.isScanAllExpand() && scanEntities.isNotEmpty()) {
             videoList.clear()
-            videoList.addAll(scanEntities.filter { it.delegate.isVideoExpand })
+            videoList.addAll(scanEntities.filter { it.isVideo })
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryConfig.sdName, galleryConfig.allName))
-            scanEntities.find { it.delegate.isVideoExpand }?.let { it ->
+            scanEntities.find { it.isVideo }?.let { it ->
                 finderList.add(1, it.copy(delegate = it.delegate.copy(parent = WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT, bucketDisplayName = videoDes), count = videoList.size))
             }
             finderList.firstOrNull()?.isSelected = true
@@ -199,11 +199,11 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
 
     override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         val selectEntities = galleryFragment.selectEntities
-        if (scanEntity.delegate.isVideoExpand && scanEntity.duration > videoDuration) {
+        if (scanEntity.isVideo && scanEntity.duration > videoDuration) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_max_length).safeToastExpand(this)
-        } else if (scanEntity.delegate.isVideoExpand && scanEntity.duration <= 0) {
+        } else if (scanEntity.isVideo && scanEntity.duration <= 0) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_error).safeToastExpand(this)

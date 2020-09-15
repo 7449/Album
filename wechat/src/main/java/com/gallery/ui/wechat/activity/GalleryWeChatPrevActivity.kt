@@ -33,7 +33,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     private val idList: ArrayList<Long> = ArrayList()
 
     private fun onUpdateVideoTip(scanEntity: ScanEntity) {
-        if (!scanEntity.delegate.isVideoExpand) {
+        if (!scanEntity.isVideo) {
             galleryPrevVideoTip.visibility = View.GONE
             prevWeChatToolbarSend.isEnabled = true
             prevWeChatSelect.isEnabled = true
@@ -97,7 +97,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         onUpdateVideoTip(prevFragment.currentItem)
         prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
         prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
-        prevWeChatFullImage.visibility = if (currentItem.delegate.isGifExpand || currentItem.delegate.isVideoExpand) View.GONE else View.VISIBLE
+        prevWeChatFullImage.visibility = if (currentItem.isGif || currentItem.isVideo) View.GONE else View.VISIBLE
         selectAdapter.refreshItem(currentItem)
         galleryPrevList.scrollToPosition(selectAdapter.findPosition(currentItem))
     }

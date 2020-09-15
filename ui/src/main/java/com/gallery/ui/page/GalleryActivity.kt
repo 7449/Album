@@ -13,13 +13,13 @@ import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.isVideoScanExpand
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanAllExpand
+import com.gallery.ui.CropType
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
 import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.BottomFinderAdapter
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.adapter.PopupFinderAdapter
-import com.gallery.ui.crop.CropType
 import com.gallery.ui.crop.CropperImpl
 import com.gallery.ui.crop.UCropImpl
 import com.gallery.ui.engine.displayGallery

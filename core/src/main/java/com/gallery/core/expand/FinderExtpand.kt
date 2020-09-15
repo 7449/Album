@@ -3,7 +3,6 @@ package com.gallery.core.expand
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.isScanAllExpand
-import org.jetbrains.annotations.TestOnly
 
 //获取当前页的文件夹数据
 //目标List为扫描成功之后的数据，返回Finder数据
@@ -28,7 +27,6 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
 //添加数据并更新第一条数据
 //否则更新第一条数据和文件夹数据
 //sortDesc true 倒序排列
-@TestOnly
 fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity, sortDesc: Boolean) {
     if (isEmpty()) {
         return

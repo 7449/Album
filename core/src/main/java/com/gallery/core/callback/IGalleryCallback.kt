@@ -71,6 +71,7 @@ interface IGalleryCallback {
 
     /**
      * 每次扫描之后数据非空触发
+     * [scanEntities]已经过滤掉了相机Type,且是在Adapter数据已经合并完成之后调用
      */
     fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {}
 

@@ -16,6 +16,7 @@ import com.gallery.scan.args.file.ScanFileArgs
 import com.gallery.scan.args.file.fileExpand
 import com.gallery.scan.args.file.multipleFileExpand
 import com.gallery.scan.args.picture.ScanPictureArgs
+import com.gallery.scan.args.picture.multiplePictureExpand
 import com.gallery.scan.args.picture.pictureExpand
 import com.gallery.scan.scanAudioImpl
 import com.gallery.scan.scanFileImpl
@@ -81,7 +82,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                     .registerMultipleLiveData(this) { _, result ->
                         arrayList.addAll(result.map { SimpleEntity(it.id.toString(), it.displayName, "图片") })
                         recyclerview.adapter?.notifyDataSetChanged()
-                    }.scanMultiple(Bundle())
+                    }.scanMultiple(SCAN_ALL.multiplePictureExpand())
             // old
             VIDEO -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
                     factory = ScanEntityFactory.fileExpand(),

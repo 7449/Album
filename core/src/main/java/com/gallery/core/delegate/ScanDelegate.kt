@@ -177,19 +177,19 @@ class ScanDelegate(
     }
 
     override fun onPhotoItemClick(view: View, position: Int, scanEntity: ScanEntity) {
-        if (!scanEntity.delegate.externalUriExpand.isFileExistsExpand(activityNotNull)) {
+        if (!scanEntity.uri.isFileExistsExpand(activityNotNull)) {
             galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, scanEntity)
             return
         }
         if (galleryBundle.isVideoScanExpand) {
-            activityNotNull.openVideoExpand(scanEntity.delegate.externalUriExpand) {
+            activityNotNull.openVideoExpand(scanEntity.uri) {
                 galleryCallback.onOpenVideoPlayError(activityNotNull, scanEntity)
             }
             return
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, scanEntity.delegate.externalUriExpand))
+                cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, scanEntity.uri))
             } else {
                 galleryCallback.onGalleryResource(activityNotNull, scanEntity)
             }

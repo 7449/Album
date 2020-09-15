@@ -1,17 +1,19 @@
 package com.gallery.core.delegate
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
+import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.prevArgsOrDefault
 import com.gallery.core.callback.*
 import com.gallery.core.crop.ICrop
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.args.file.ScanFileEntity
+import com.gallery.scan.args.file.*
 import kotlinx.android.parcel.Parcelize
 
 /** 图库拦截器 */
@@ -65,10 +67,10 @@ val Fragment.galleryImageLoader: IGalleryImageLoader
     }
 
 /** Fragment获取[GalleryBundle],建议初始化的时候赋值给对应的数据，这个每次调用都会重新获取数据 */
-val Fragment.galleryArgs get() = bundleOrEmptyExpand().galleryBundleOrDefault
+val Fragment.galleryArgs: GalleryBundle get() = bundleOrEmptyExpand().galleryBundleOrDefault
 
 /** 预览页参数，建议初始化的时候赋值给对应的数据，这个每次调用都会重新获取数据 */
-val Fragment.prevArgs get() = bundleOrEmptyExpand().prevArgsOrDefault
+val Fragment.prevArgs: PrevArgs get() = bundleOrEmptyExpand().prevArgsOrDefault
 
 /** [ScanFragment] */
 val AppCompatActivity.galleryFragment: ScanFragment get() = supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment
@@ -101,6 +103,14 @@ data class ScanEntity(
         get() = delegate.dateModified
     val bucketDisplayName: String
         get() = delegate.bucketDisplayName
+    val uri: Uri
+        get() = delegate.externalUriExpand
+    val isGif: Boolean
+        get() = delegate.isGifExpand
+    val isVideo: Boolean
+        get() = delegate.isVideoExpand
+    val isImage: Boolean
+        get() = delegate.isImageExpand
 }
 
 /** [ScanFileEntity]转换为[ScanEntity] */

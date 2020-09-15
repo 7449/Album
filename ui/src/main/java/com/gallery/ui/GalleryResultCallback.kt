@@ -22,10 +22,7 @@ class GalleryResultCallback(private val galleryListener: GalleryListener) : Acti
             UIResult.RESULT_CODE_MULTIPLE_DATA -> {
                 galleryListener.onGalleryResources(bundleExpand.getParcelableArrayListExpand(UIResult.GALLERY_MULTIPLE_DATA))
             }
-            UIResult.RESULT_CODE_TOOLBAR_BACK -> {
-                galleryListener.onGalleryCancel()
-            }
-            Activity.RESULT_CANCELED -> {
+            UIResult.RESULT_CODE_TOOLBAR_BACK, Activity.RESULT_CANCELED -> {
                 galleryListener.onGalleryCancel()
             }
         }

@@ -8,12 +8,12 @@ import androidx.viewpager2.widget.ViewPager2
 interface IPrevDelegate {
 
     /**
-     * 获取全部预览数据
+     * 获取全部数据
      */
     val allItem: ArrayList<ScanEntity>
 
     /**
-     * 预览页选中的数据
+     * 选中的数据
      */
     val selectEntities: ArrayList<ScanEntity>
 
@@ -63,7 +63,7 @@ interface IPrevDelegate {
     fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanEntity>)
 
     /**
-     * 如果自定义checkBox调用这个是比较简单的方法
+     * checkbox点击
      */
     fun checkBoxClick(checkBox: View)
 
@@ -75,7 +75,9 @@ interface IPrevDelegate {
     /**
      * [ViewPager2]跳转到指定页面
      */
-    fun setCurrentItem(position: Int)
+    fun setCurrentItem(position: Int) {
+        setCurrentItem(position, false)
+    }
 
     /**
      * [ViewPager2]跳转到指定页面
@@ -93,7 +95,7 @@ interface IPrevDelegate {
     fun notifyDataSetChanged()
 
     /**
-     * 获取预览页销毁时[Activity.setResult]的Bundle
+     * 获取预览销毁时[Activity.setResult]的Bundle
      * 可作为参数传递给[ScanDelegate.onUpdateResult]
      * 用于合并预览页改变的数据
      */

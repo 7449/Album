@@ -30,8 +30,8 @@ fun ViewModelProvider.scanPictureImpl(): ScanImpl<ScanPictureEntity> = scanImpl(
 
 fun <E : Parcelable> ViewModelProvider.scanImpl(): ScanImpl<E> = get(ScanImpl::class.java) as ScanImpl<E>
 
-fun <ENTITY : Parcelable> FragmentActivity.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<ENTITY> {
-    return ScanImpl(object : ScanView<ENTITY> {
+fun <E : Parcelable> FragmentActivity.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<E> {
+    return ScanImpl(object : ScanView<E> {
         override val scanCursorLoaderArgs: CursorLoaderArgs
             get() = args
         override val scanEntityFactory: ScanEntityFactory

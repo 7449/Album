@@ -39,8 +39,6 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
 
     fun isCheck(position: Int) = galleryList[position].isSelected
 
-    fun item(position: Int) = galleryList[position]
-
     fun containsSelect(selectEntity: ScanEntity) = selectList.contains(selectEntity)
 
     fun removeSelectEntity(removeEntity: ScanEntity) = selectList.remove(removeEntity)

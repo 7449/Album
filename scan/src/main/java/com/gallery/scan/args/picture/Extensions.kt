@@ -13,13 +13,13 @@ import androidx.kotlin.expand.database.getStringOrDefault
 import com.gallery.scan.args.ScanEntityFactory
 
 /** 获取可使用的多个图片扫描Bundle */
-fun Long.multipleFileExpand(): Bundle {
-    return Bundle().apply { putLong(MediaStore.Files.FileColumns.PARENT, this@multipleFileExpand) }
+fun Long.multiplePictureExpand(): Bundle {
+    return Bundle().apply { putLong(MediaStore.Files.FileColumns.PARENT, this@multiplePictureExpand) }
 }
 
 /** 获取可使用的单个图片扫描Bundle */
-fun Long.singleFileExpand(): Bundle {
-    return Bundle().apply { putLong(BaseColumns._ID, this@singleFileExpand) }
+fun Long.singlePictureExpand(): Bundle {
+    return Bundle().apply { putLong(BaseColumns._ID, this@singlePictureExpand) }
 }
 
 /** 获取可使用的uri */

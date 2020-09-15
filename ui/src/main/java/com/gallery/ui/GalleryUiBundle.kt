@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import com.gallery.ui.crop.CropType
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

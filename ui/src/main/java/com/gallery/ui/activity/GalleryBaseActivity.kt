@@ -40,16 +40,16 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     protected abstract val galleryFragmentId: Int
 
     /** [UIGalleryArgs] */
-    protected val galleryArgs by lazy { bundleOrEmptyExpand().uiGalleryArgsOrDefault }
+    protected val galleryArgs: UIGalleryArgs by lazy { bundleOrEmptyExpand().uiGalleryArgsOrDefault }
 
     /** 初始配置 */
-    protected val galleryConfig by lazy { galleryArgs.galleryBundle }
+    protected val galleryConfig: GalleryBundle by lazy { galleryArgs.galleryBundle }
 
     /** ui 配置 */
-    protected val uiConfig by lazy { galleryArgs.galleryUiBundle }
+    protected val uiConfig: GalleryUiBundle by lazy { galleryArgs.galleryUiBundle }
 
     /** 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
-    protected val uiGapConfig by lazy { galleryArgs.galleryOption }
+    protected val uiGapConfig: Bundle by lazy { galleryArgs.galleryOption }
 
     /** 预览页启动[ActivityResultLauncher],暂不对实现类开放  */
     private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
@@ -115,14 +115,14 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
         onStartPrevPage(UIPrevArgs(uiConfig, PrevArgs(parentId, galleryFragment.selectEntities, galleryConfig, position, scanAlone), option), cla)
     }
 
-    /** 自定义Fragment */
-    open fun createFragment(): Fragment {
-        return ScanFragment.newInstance(galleryConfig)
-    }
-
     /** 启动预览 */
     open fun onStartPrevPage(uiPrevArgs: UIPrevArgs, cla: Class<out PrevBaseActivity>) {
         prevLauncher.launch(PrevBaseActivity.newInstance(this, uiPrevArgs, cla))
+    }
+
+    /** 自定义Fragment */
+    open fun createFragment(): Fragment {
+        return ScanFragment.newInstance(galleryConfig)
     }
 
     /** 预览页toolbar返回 */

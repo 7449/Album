@@ -61,15 +61,8 @@ data class ScanArgs(
             return bundle
         }
 
-        fun Bundle.putScanArgs(scanArgs: ScanArgs) {
-            putParcelable(Key, scanArgs)
-        }
-
         val Bundle.scanArgs
             get() = getParcelable<ScanArgs>(Key)
-
-        val Bundle.scanArgsOrDefault
-            get() = scanArgs ?: ScanArgs(SCAN_NONE, Uri.EMPTY, false, arrayListOf())
     }
 }
 
@@ -96,7 +89,6 @@ data class PrevArgs(
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO]
          * 如果[parentId] == [SCAN_NONE] 则认为点击的是预览而不是item,则未选中数据和选中数据应该一致
          * 如果不是，则判断[scanAlone] == [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]] ，
          * 如果不是，则使用 [scanAlone],如果是，则扫描 [GalleryBundle.scanType]类型的数据
@@ -117,20 +109,14 @@ data class PrevArgs(
             return bundle
         }
 
-        fun Bundle.putPrevArgs(prevArgs: PrevArgs) {
-            putParcelable(Key, prevArgs)
-        }
-
         val Bundle.prevArgs
             get() = getParcelable<PrevArgs>(Key)
 
         val Bundle.prevArgsOrDefault
-            get() = prevArgs
-                    ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
+            get() = prevArgs ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
 
         val PrevArgs.configOrDefault
             get() = config ?: GalleryBundle()
-
     }
 }
 
@@ -146,7 +132,6 @@ data class GalleryBundle(
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO]
          */
         @Suppress("ArrayInDataClass")
         @Size(min = 1)
@@ -257,7 +242,7 @@ data class GalleryBundle(
         @DrawableRes
         val checkBoxDrawable: Int = R.drawable.selector_gallery_item_check,
         /**
-         * 没有图片显示的占位图片
+         * 空数据占位图片
          */
         @DrawableRes
         val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable,
@@ -298,10 +283,6 @@ data class GalleryBundle(
         fun GalleryBundle.putGalleryArgs(bundle: Bundle = Bundle()): Bundle {
             bundle.putParcelable(Key, this)
             return bundle
-        }
-
-        fun Bundle.putGalleryArgs(galleryBundle: GalleryBundle) {
-            putParcelable(Key, galleryBundle)
         }
 
         val Bundle.galleryBundle

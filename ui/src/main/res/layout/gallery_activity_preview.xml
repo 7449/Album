@@ -52,8 +52,6 @@
             tools:ignore="RtlHardcoded"
             tools:text="选择" />
 
-
     </RelativeLayout>
-
 
 </LinearLayout>

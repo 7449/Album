@@ -10,7 +10,6 @@ import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.delegate.ScanEntity
-import com.gallery.scan.args.file.externalUriExpand
 import com.xadapter.vh.XViewHolder
 
 class PhotoViewHolder(itemView: View,
@@ -27,14 +26,14 @@ class PhotoViewHolder(itemView: View,
         if (galleryBundle.radio) {
             return
         }
-        checkBox.showExpand()
-        checkBox.isSelected = scanEntity.isSelected
-        checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener { clickCheckBox(position, scanEntity, selectList) }
+        checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
+        checkBox.isSelected = scanEntity.isSelected
+        checkBox.showExpand()
     }
 
     private fun clickCheckBox(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>) {
-        if (!scanEntity.delegate.externalUriExpand.isFileExistsExpand(context)) {
+        if (!scanEntity.uri.isFileExistsExpand(context)) {
             if (selectList.contains(scanEntity)) {
                 selectList.remove(scanEntity)
             }

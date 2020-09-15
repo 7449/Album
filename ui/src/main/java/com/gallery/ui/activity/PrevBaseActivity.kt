@@ -9,6 +9,7 @@ import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.kotlin.expand.text.safeToastExpand
+import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
@@ -42,18 +43,18 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     protected abstract val galleryFragmentId: Int
 
     /** [UIPrevArgs] */
-    protected val uiPrevArgs by lazy {
+    protected val uiPrevArgs: UIPrevArgs by lazy {
         bundleOrEmptyExpand().uiPrevArgs ?: throw KotlinNullPointerException("uiPrevArgs == null")
     }
 
     /** 初始配置 */
-    protected val galleryConfig by lazy { uiPrevArgs.prevArgs.configOrDefault }
+    protected val galleryConfig: GalleryBundle by lazy { uiPrevArgs.prevArgs.configOrDefault }
 
     /** ui 配置 */
-    val uiConfig by lazy { uiPrevArgs.uiBundle }
+    val uiConfig: GalleryUiBundle by lazy { uiPrevArgs.uiBundle }
 
     /**  暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
-    val uiGapConfig by lazy { uiPrevArgs.option }
+    val uiGapConfig: Bundle by lazy { uiPrevArgs.option }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

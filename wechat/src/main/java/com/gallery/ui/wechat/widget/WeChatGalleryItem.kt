@@ -38,11 +38,11 @@ class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: Attri
 
     fun update(galleryEntity: ScanEntity) {
         selectView.visibility = if (galleryEntity.isSelected) View.VISIBLE else View.GONE
-        gifView.visibility = if (galleryEntity.delegate.isGifExpand) View.VISIBLE else View.GONE
-        videoView.visibility = if (galleryEntity.delegate.isVideoExpand) View.VISIBLE else View.GONE
-        bottomView.visibility = if (galleryEntity.delegate.isVideoExpand) View.VISIBLE else View.GONE
-        bottomView.setBackgroundColor(if (galleryEntity.delegate.isGifExpand) Color.TRANSPARENT else context.colorExpand(R.color.color_B3000000))
-        bottomView.visibility = if (galleryEntity.delegate.isVideoExpand || galleryEntity.delegate.isGifExpand) View.VISIBLE else View.GONE
-        videoView.text = if (galleryEntity.delegate.isVideoExpand) galleryEntity.duration.formatTimeVideo() else ""
+        gifView.visibility = if (galleryEntity.isGif) View.VISIBLE else View.GONE
+        videoView.visibility = if (galleryEntity.isVideo) View.VISIBLE else View.GONE
+        bottomView.visibility = if (galleryEntity.isVideo) View.VISIBLE else View.GONE
+        bottomView.setBackgroundColor(if (galleryEntity.isGif) Color.TRANSPARENT else context.colorExpand(R.color.color_B3000000))
+        bottomView.visibility = if (galleryEntity.isVideo || galleryEntity.isGif) View.VISIBLE else View.GONE
+        videoView.text = if (galleryEntity.isVideo) galleryEntity.duration.formatTimeVideo() else ""
     }
 }

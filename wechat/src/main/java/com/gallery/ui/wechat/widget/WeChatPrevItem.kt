@@ -31,11 +31,11 @@ class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: Attribut
         get() = prevWeChatGif
 
     fun update(galleryEntity: ScanEntity) {
-        imageView.scaleType = if (galleryEntity.delegate.isVideoExpand) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
-        gifView.visibility = if (galleryEntity.delegate.isGifExpand) View.VISIBLE else View.GONE
+        imageView.scaleType = if (galleryEntity.isVideo) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
+        gifView.visibility = if (galleryEntity.isGif) View.VISIBLE else View.GONE
         gifView.text = context.getString(R.string.gallery_wechat_prev_gif_format).format(galleryEntity.size.toFileSize())
-        videoPlayView.visibility = if (galleryEntity.delegate.isVideoExpand) View.VISIBLE else View.GONE
-        videoPlayView.setOnClickListener { context.openVideoExpand(galleryEntity.delegate.externalUriExpand) {} }
+        videoPlayView.visibility = if (galleryEntity.isVideo) View.VISIBLE else View.GONE
+        videoPlayView.setOnClickListener { context.openVideoExpand(galleryEntity.uri) {} }
     }
 
 }

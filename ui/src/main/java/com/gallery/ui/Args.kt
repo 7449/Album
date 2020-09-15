@@ -45,16 +45,8 @@ data class UIGalleryArgs(
             return bundle
         }
 
-        fun Bundle.putUIGalleryArgs(uiGalleryArgs: Bundle) {
-            putParcelable(Key, uiGalleryArgs)
-        }
-
-        val Bundle.uiGalleryArgs
-            get() = getParcelable<UIGalleryArgs>(Key)
-
         val Bundle.uiGalleryArgsOrDefault
-            get() = uiGalleryArgs
-                    ?: UIGalleryArgs(GalleryBundle(), GalleryUiBundle(), Bundle(), Bundle())
+            get() = getParcelable(Key) ?: UIGalleryArgs(GalleryBundle(), GalleryUiBundle(), Bundle(), Bundle())
     }
 }
 
@@ -79,10 +71,6 @@ data class UIPrevArgs(
         fun UIPrevArgs.putPrevArgs(bundle: Bundle = Bundle()): Bundle {
             bundle.putParcelable(Key, this)
             return bundle
-        }
-
-        fun Bundle.putPrevArgs(uiPrevArgs: UIPrevArgs) {
-            putParcelable(Key, uiPrevArgs)
         }
 
         val Bundle.uiPrevArgs

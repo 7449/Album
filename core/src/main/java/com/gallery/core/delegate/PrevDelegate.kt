@@ -20,7 +20,6 @@ import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.file.ScanFileArgs
-import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.scan.args.file.fileExpand
 import com.gallery.scan.args.file.multipleFileExpand
 import com.gallery.scan.scanFileImpl
@@ -122,7 +121,7 @@ class PrevDelegate(
     }
 
     override fun checkBoxClick(checkBox: View) {
-        if (!currentItem.delegate.externalUriExpand.isFileExistsExpand(fragment.requireActivity())) {
+        if (!currentItem.uri.isFileExistsExpand(fragment.requireActivity())) {
             if (prevAdapter.containsSelect(currentItem)) {
                 prevAdapter.removeSelectEntity(currentItem)
             }
@@ -140,6 +139,7 @@ class PrevDelegate(
             currentItem.isSelected = false
             checkBox.isSelected = false
         } else {
+            @Suppress("unused")
             prevAdapter.addSelectEntity(currentItem)
             currentItem.isSelected = true
             checkBox.isSelected = true
@@ -149,10 +149,6 @@ class PrevDelegate(
 
     override fun isCheckBox(position: Int): Boolean {
         return prevAdapter.isCheck(position)
-    }
-
-    override fun setCurrentItem(position: Int) {
-        setCurrentItem(position, false)
     }
 
     override fun setCurrentItem(position: Int, smoothScroll: Boolean) {

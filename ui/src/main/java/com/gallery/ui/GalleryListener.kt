@@ -7,20 +7,20 @@ interface GalleryListener {
     /**
      * 裁剪成功
      */
-    fun onGalleryCropResource(uri: Uri) = Unit
+    fun onGalleryCropResource(uri: Uri) {}
 
     /**
      * 单选不裁剪
      */
-    fun onGalleryResource(scanEntity: ScanEntity) = Unit
+    fun onGalleryResource(scanEntity: ScanEntity) {}
 
     /**
      * 选择图片
      */
-    fun onGalleryResources(entities: List<ScanEntity>) = Unit
+    fun onGalleryResources(entities: List<ScanEntity>) {}
 
     /**
      * 取消图片选择
      */
-    fun onGalleryCancel() = Unit
+    fun onGalleryCancel() {}
 }

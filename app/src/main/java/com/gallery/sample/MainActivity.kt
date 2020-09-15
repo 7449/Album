@@ -29,10 +29,10 @@ import com.gallery.sample.enums.ScanType
 import com.gallery.sample.enums.Theme
 import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.scan.types.Sort
+import com.gallery.ui.CropType
 import com.gallery.ui.FinderType
 import com.gallery.ui.Gallery
 import com.gallery.ui.GalleryResultCallback
-import com.gallery.ui.crop.CropType
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
 import kotlinx.android.synthetic.main.activity_main.*
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)
-                .load(scanEntity.delegate.externalUriExpand)
+                .load(scanEntity.uri)
                 .apply(RequestOptions()
                         .placeholder(R.drawable.ic_gallery_default_loading)
                         .error(R.drawable.ic_gallery_default_loading)

@@ -21,7 +21,10 @@ import androidx.kotlin.expand.net.isFileExistsExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
@@ -32,7 +35,7 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.expand.*
 import com.gallery.core.ui.adapter.GalleryAdapter
-import com.gallery.core.ui.widget.SimpleGridDivider
+import com.gallery.core.ui.widget.SimpleDivider
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.ScanView
 import com.gallery.scan.args.CursorLoaderArgs
@@ -114,15 +117,10 @@ class ScanDelegate(
         galleryAdapter.addSelectAll(selectList ?: galleryBundle.selectEntities)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = when (galleryBundle.layoutManager) {
-            LayoutManager.GRID -> {
-                recyclerView.addItemDecoration(SimpleGridDivider(galleryBundle.dividerWidth))
-                GridLayoutManager(recyclerView.context, galleryBundle.spanCount, galleryBundle.orientation, false)
-            }
-            LayoutManager.LINEAR -> {
-                recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, galleryBundle.orientation))
-                LinearLayoutManager(recyclerView.context, galleryBundle.orientation, false)
-            }
+            LayoutManager.GRID -> GridLayoutManager(recyclerView.context, galleryBundle.spanCount, galleryBundle.orientation, false)
+            LayoutManager.LINEAR -> LinearLayoutManager(recyclerView.context, galleryBundle.orientation, false)
         }
+        recyclerView.addItemDecoration(SimpleDivider(galleryBundle.dividerWidth))
         if (recyclerView.itemAnimator is SimpleItemAnimator) {
             (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }

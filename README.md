@@ -17,7 +17,7 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
             
 #### dependencies
 
-    implementation 'com.ydevelop:gallery.ui:0.0.9'
+    implementation 'com.ydevelop:gallery.ui:0.1.0'
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"

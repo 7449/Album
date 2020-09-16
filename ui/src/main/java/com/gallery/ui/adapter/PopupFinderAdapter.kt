@@ -11,6 +11,7 @@ import androidx.appcompat.widget.ListPopupWindow
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
+import com.gallery.ui.base.adapter.BaseFinderAdapter
 
 class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener {
 

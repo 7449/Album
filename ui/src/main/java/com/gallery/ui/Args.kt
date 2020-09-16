@@ -46,7 +46,8 @@ data class UIGalleryArgs(
         }
 
         val Bundle.uiGalleryArgsOrDefault
-            get() = getParcelable(Key) ?: UIGalleryArgs(GalleryBundle(), GalleryUiBundle(), Bundle(), Bundle())
+            get() = getParcelable(Key)
+                    ?: UIGalleryArgs(GalleryBundle(), GalleryUiBundle(), Bundle(), Bundle())
     }
 }
 

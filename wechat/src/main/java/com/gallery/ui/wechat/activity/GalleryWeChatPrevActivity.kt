@@ -9,8 +9,8 @@ import androidx.core.content.ContextCompat
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.prevFragment
-import com.gallery.ui.activity.PrevBaseActivity
-import com.gallery.ui.adapter.GalleryFinderAdapter
+import com.gallery.ui.base.activity.PrevBaseActivity
+import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.weChatPrevArgsOrDefault
 import com.gallery.ui.wechat.WeChatPrevSaveArgs.Companion.putArgs

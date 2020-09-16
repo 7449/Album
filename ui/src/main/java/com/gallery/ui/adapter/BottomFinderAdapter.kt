@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
+import com.gallery.ui.base.adapter.BaseFinderAdapter
+import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder

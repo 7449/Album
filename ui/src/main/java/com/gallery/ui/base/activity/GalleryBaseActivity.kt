@@ -1,4 +1,4 @@
-package com.gallery.ui.activity
+package com.gallery.ui.base.activity
 
 import android.content.Context
 import android.content.Intent
@@ -99,7 +99,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
 
     /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
-        if (galleryFragment.parentId.isScanAllExpand() && scanEntities.isNotEmpty()) {
+        if (galleryFragment.parentId.isScanAllExpand()) {
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryConfig.sdName, galleryConfig.allName))
         }

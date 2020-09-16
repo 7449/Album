@@ -16,10 +16,10 @@ import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.CropType
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
-import com.gallery.ui.activity.GalleryBaseActivity
 import com.gallery.ui.adapter.BottomFinderAdapter
-import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.adapter.PopupFinderAdapter
+import com.gallery.ui.base.activity.GalleryBaseActivity
+import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.gallery.ui.crop.CropperImpl
 import com.gallery.ui.crop.UCropImpl
 import com.gallery.ui.engine.displayGallery

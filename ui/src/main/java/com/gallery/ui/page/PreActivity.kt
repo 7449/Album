@@ -7,7 +7,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.prevFragment
 import com.gallery.ui.R
-import com.gallery.ui.activity.PrevBaseActivity
+import com.gallery.ui.base.activity.PrevBaseActivity
 import com.gallery.ui.engine.displayGalleryPrev
 import com.gallery.ui.obtain
 import kotlinx.android.synthetic.main.gallery_activity_preview.*

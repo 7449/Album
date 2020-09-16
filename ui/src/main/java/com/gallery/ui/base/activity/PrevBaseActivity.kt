@@ -1,4 +1,4 @@
-package com.gallery.ui.activity
+package com.gallery.ui.base.activity
 
 import android.content.Context
 import android.content.Intent

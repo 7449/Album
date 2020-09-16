@@ -23,8 +23,8 @@ import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.UIResult
-import com.gallery.ui.activity.GalleryBaseActivity
-import com.gallery.ui.adapter.GalleryFinderAdapter
+import com.gallery.ui.base.activity.GalleryBaseActivity
+import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.putArgs
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter

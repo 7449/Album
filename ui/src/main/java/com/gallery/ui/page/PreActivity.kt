@@ -30,7 +30,7 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
         preToolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
-    override fun onPrevViewCreated(savedInstanceState: Bundle?) {
+    override fun onPrevCreated() {
         preCount.text = "%s / %s".format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
         preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }

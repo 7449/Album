@@ -12,7 +12,7 @@ interface IGalleryImageLoader {
     /**
      * 首页图片加载
      */
-    fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, selectView: TextView) {}
+    fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView) {}
 
     /**
      * 目录图片加载

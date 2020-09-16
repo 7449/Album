@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.ui.widget.GalleryImageView
-import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.ui.R
 import com.gallery.ui.wechat.widget.WeChatGalleryItem
 import com.gallery.ui.wechat.widget.WeChatPrevItem

@@ -106,7 +106,7 @@ class ScanDelegate(
             fileUri = it.fileUri
             it.selectList
         }
-        galleryCallback.onGalleryViewCreated(savedInstanceState)
+        galleryCallback.onGalleryCreated()
         fragment.view?.setBackgroundColor(galleryBundle.galleryRootBackground)
         emptyView.setImageDrawable(activityNotNull.drawableExpand(galleryBundle.photoEmptyDrawable))
         emptyView.setOnClickListener { v ->
@@ -135,7 +135,7 @@ class ScanDelegate(
         if (entities.isEmpty() && parentId.isScanAllExpand()) {
             emptyView.showExpand()
             recyclerView.hideExpand()
-            galleryCallback.onScanSuccessEmpty(activity, galleryBundle)
+            galleryCallback.onScanSuccessEmpty(activity)
             return
         }
         emptyView.hideExpand()
@@ -169,7 +169,7 @@ class ScanDelegate(
             }
         }
         notifyDataSetChanged()
-        galleryCallback.onResultSuccess(activity, galleryBundle, toScanEntity)
+        galleryCallback.onResultSuccess(activity, toScanEntity)
     }
 
     override fun onCameraItemClick(view: View, position: Int, scanEntity: ScanEntity) {
@@ -178,7 +178,7 @@ class ScanDelegate(
 
     override fun onPhotoItemClick(view: View, position: Int, scanEntity: ScanEntity) {
         if (!scanEntity.uri.isFileExistsExpand(activityNotNull)) {
-            galleryCallback.onClickItemFileNotExist(activityNotNull, galleryBundle, scanEntity)
+            galleryCallback.onClickItemFileNotExist(activityNotNull, scanEntity)
             return
         }
         if (galleryBundle.isVideoScanExpand) {
@@ -200,18 +200,18 @@ class ScanDelegate(
 
     override fun cameraOpen() {
         if (!fragment.checkPermissionAndRequestCameraExpand(cameraPermissionLauncher)) {
-            galleryCallback.onCameraOpenStatus(activity, CameraStatus.PERMISSION, galleryBundle)
+            galleryCallback.onCameraOpenStatus(activity, CameraStatus.PERMISSION)
             return
         }
         val cameraUriExpand: Uri? = activityNotNull.cameraUriExpand(galleryBundle)
         cameraUriExpand?.let {
             fileUri = it
-        } ?: galleryCallback.onCameraOpenStatus(activity, CameraStatus.ERROR, galleryBundle)
+        } ?: galleryCallback.onCameraOpenStatus(activity, CameraStatus.ERROR)
         val onCustomCamera: Boolean = galleryInterceptor.onCustomCamera(fileUri)
         if (onCustomCamera || cameraUriExpand == null) {
             return
         }
-        galleryCallback.onCameraOpenStatus(activity, fragment.checkCameraStatusExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) }, galleryBundle)
+        galleryCallback.onCameraOpenStatus(activity, fragment.checkCameraStatusExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) })
     }
 
     override fun cameraSuccess() {

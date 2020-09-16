@@ -104,7 +104,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, selectView: TextView) {
+    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView) {
         container.displayGallery(width, height, scanEntity)
     }
 

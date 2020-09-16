@@ -19,7 +19,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
-import com.gallery.scan.args.file.isVideoExpand
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanAllExpand
@@ -106,7 +105,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         }
     }
 
-    override fun onGalleryViewCreated(savedInstanceState: Bundle?) {
+    override fun onGalleryCreated() {
         galleryFragment.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 recyclerView.layoutManager ?: return
@@ -176,8 +175,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, selectView: TextView) {
-        container.displayGalleryWeChat(width, height, galleryFragment.selectEntities, scanEntity, selectView)
+    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView) {
+        container.displayGalleryWeChat(width, height, galleryFragment.selectEntities, scanEntity, checkBox)
     }
 
     override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
@@ -192,12 +191,12 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                 GalleryWeChatPrevActivity::class.java)
     }
 
-    override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
-        super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
+    override fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
+        super.onClickCheckBoxFileNotExist(context, scanEntity)
         galleryFragment.notifyDataSetChanged()
     }
 
-    override fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    override fun onChangedCheckBox(position: Int, scanEntity: ScanEntity) {
         val selectEntities = galleryFragment.selectEntities
         if (scanEntity.isVideo && scanEntity.duration > videoDuration) {
             scanEntity.isSelected = false

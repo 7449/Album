@@ -9,8 +9,6 @@ import androidx.core.content.ContextCompat
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.prevFragment
-import com.gallery.scan.args.file.isGifExpand
-import com.gallery.scan.args.file.isVideoExpand
 import com.gallery.ui.activity.PrevBaseActivity
 import com.gallery.ui.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
@@ -102,7 +100,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         galleryPrevList.scrollToPosition(selectAdapter.findPosition(currentItem))
     }
 
-    override fun onPrevViewCreated(savedInstanceState: Bundle?) {
+    override fun onPrevCreated() {
         prevWeChatToolbarText.text = (prevFragment.currentPosition + 1).toString() + "/" + prevFragment.itemCount
         prevWeChatToolbarSend.text = uiConfig.selectText + if (prevFragment.selectEmpty) "" else "(${prevFragment.selectCount}/${galleryConfig.multipleMaxCount})"
         prevWeChatSelect.setOnClickListener { prevFragment.checkBoxClick(it) }

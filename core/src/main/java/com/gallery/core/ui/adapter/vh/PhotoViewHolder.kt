@@ -39,11 +39,11 @@ class PhotoViewHolder(itemView: View,
             }
             checkBox.isSelected = false
             scanEntity.isSelected = false
-            galleryCallback.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
+            galleryCallback.onClickCheckBoxFileNotExist(context, scanEntity)
             return
         }
         if (!selectList.contains(scanEntity) && selectList.size >= galleryBundle.multipleMaxCount) {
-            galleryCallback.onClickCheckBoxMaxCount(context, galleryBundle, scanEntity)
+            galleryCallback.onClickCheckBoxMaxCount(context, scanEntity)
             return
         }
         if (!scanEntity.isSelected) {
@@ -55,6 +55,6 @@ class PhotoViewHolder(itemView: View,
             scanEntity.isSelected = false
             checkBox.isSelected = false
         }
-        galleryCallback.onChangedCheckBox(position, scanEntity.isSelected, galleryBundle, scanEntity)
+        galleryCallback.onChangedCheckBox(position, scanEntity)
     }
 }

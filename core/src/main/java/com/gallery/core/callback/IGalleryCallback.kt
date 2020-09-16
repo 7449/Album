@@ -1,7 +1,6 @@
 package com.gallery.core.callback
 
 import android.content.Context
-import android.os.Bundle
 import androidx.kotlin.expand.text.safeToastExpand
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
@@ -19,10 +18,11 @@ interface IGalleryCallback {
     /**
      * [ScanDelegate.onCreate]触发
      */
-    fun onGalleryViewCreated(savedInstanceState: Bundle?) {}
+    fun onGalleryCreated() {}
 
     /**
-     * 单选状态下,点击[Adapter]item返回的那条数据
+     * 单选非裁剪状态下,点击[Adapter]item返回的那条数据
+     * [ScanEntity.delegate]为获取的数据
      */
     fun onGalleryResource(context: Context, scanEntity: ScanEntity) {}
 
@@ -30,16 +30,18 @@ interface IGalleryCallback {
      * 已达到选择最大数
      * [GalleryBundle.multipleMaxCount]
      */
-    fun onClickCheckBoxMaxCount(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    fun onClickCheckBoxMaxCount(context: Context, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_check_max).safeToastExpand(context)
     }
 
     /**
      * 点击CheckBox时该文件已经被删除
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
+     * 这里存在一个问题，在小米手机上发现了，小米手机云端未下载的图片也会扫描出来
+     * 但是这个时候文件是不存在的..
      * [PhotoViewHolder.photo]
      */
-    fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_file_deleted).safeToastExpand(context)
     }
 
@@ -48,7 +50,7 @@ interface IGalleryCallback {
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * 这个方法优先级高于单选和视频播放，裁剪等功能
      */
-    fun onClickItemFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
+    fun onClickItemFileNotExist(context: Context, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_item_file_deleted).safeToastExpand(context)
     }
 
@@ -56,7 +58,7 @@ interface IGalleryCallback {
      * 点击CheckBox时会触发
      * [PhotoViewHolder.photo]
      */
-    fun onChangedCheckBox(position: Int, isSelect: Boolean, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
+    fun onChangedCheckBox(position: Int, scanEntity: ScanEntity) {}
 
     /**
      * 刷新预览页数据之后触发
@@ -66,6 +68,7 @@ interface IGalleryCallback {
     /**
      * 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法
      * 可以跳转到预览页
+     * [parentId]也可由[ScanDelegate.parentId]直接获取
      */
     fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {}
 
@@ -78,7 +81,7 @@ interface IGalleryCallback {
     /**
      * 单个文件扫描成功
      */
-    fun onResultSuccess(context: Context?, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {}
+    fun onResultSuccess(context: Context?, scanEntity: ScanEntity) {}
 
     /**
      * 取消拍照
@@ -104,7 +107,7 @@ interface IGalleryCallback {
      * [CameraStatus.ERROR] 失败
      * [CameraStatus.PERMISSION] 权限被拒
      */
-    fun onCameraOpenStatus(context: Context?, status: CameraStatus, galleryBundle: GalleryBundle) {
+    fun onCameraOpenStatus(context: Context?, status: CameraStatus) {
         when (status) {
             CameraStatus.ERROR -> context?.getString(R.string.gallery_open_camera_error).safeToastExpand(context)
             CameraStatus.SUCCESS -> context?.getString(R.string.gallery_open_camera_success).safeToastExpand(context)
@@ -116,7 +119,7 @@ interface IGalleryCallback {
     /**
      * 没有扫描到任何数据
      */
-    fun onScanSuccessEmpty(context: Context?, galleryBundle: GalleryBundle) {
+    fun onScanSuccessEmpty(context: Context?) {
         context?.getString(R.string.gallery_scan_success_empty).safeToastExpand(context)
     }
 

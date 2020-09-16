@@ -110,7 +110,7 @@ class PrevDelegate(
         prevAdapter.addAll(arrayList)
         prevAdapter.addSelectAll(prevArgs.selectList)
         prevAdapter.updateEntity()
-        galleryPrevCallback.onPrevViewCreated(savedInstanceState)
+        galleryPrevCallback.onPrevCreated()
         viewPager2.adapter = prevAdapter
         viewPager2.registerOnPageChangeCallback(pageChangeCallback)
         fragment.view?.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)

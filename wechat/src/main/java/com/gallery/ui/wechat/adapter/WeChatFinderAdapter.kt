@@ -28,11 +28,12 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
     override fun onBindViewHolder(holder: XViewHolder, position: Int) {
         val finderEntity: ScanEntity = list[position]
         adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.frameLayout(R.id.iv_gallery_finder_icon))
-        holder.setText(R.id.tv_gallery_finder_name, "%s".format(finderEntity.bucketDisplayName))
-        holder.textView(R.id.tv_gallery_finder_name).setTextColor(galleryUiBundle.finderItemTextColor)
-        holder.setText(R.id.tv_gallery_finder_file_count, "(%s)".format(finderEntity.count.toString()))
-        holder.textView(R.id.tv_gallery_finder_file_count).setTextColor(galleryUiBundle.finderItemTextCountColor)
-        holder.setVisibility(R.id.iv_gallery_finder_file_check, finderEntity.isSelected)
+        holder
+                .setText(R.id.tv_gallery_finder_name, "%s".format(finderEntity.bucketDisplayName))
+                .setTextColor(R.id.tv_gallery_finder_name, galleryUiBundle.finderItemTextColor)
+                .setText(R.id.tv_gallery_finder_file_count, "(%s)".format(finderEntity.count.toString()))
+                .setTextColor(R.id.tv_gallery_finder_file_count, galleryUiBundle.finderItemTextCountColor)
+                .setVisibility(R.id.iv_gallery_finder_file_check, finderEntity.isSelected)
     }
 
     fun updateFinder(entities: ArrayList<ScanEntity>) {

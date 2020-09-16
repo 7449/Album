@@ -13,16 +13,16 @@ import com.gallery.ui.wechat.widget.WeChatGalleryItem
 import com.gallery.ui.wechat.widget.WeChatPrevItem
 import com.gallery.ui.wechat.widget.WeChatSelectItem
 
-internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll: ArrayList<ScanEntity>, galleryEntity: ScanEntity, selectView: TextView) {
+internal fun FrameLayout.displayGalleryWeChat(width: Int, height: Int, selectAll: ArrayList<ScanEntity>, galleryEntity: ScanEntity, checkBox: TextView) {
     removeAllViews()
     val weChatGalleryItem = WeChatGalleryItem(context)
     weChatGalleryItem.update(galleryEntity)
-    selectView.gravity = Gravity.CENTER
-    selectView.setTextColor(Color.WHITE)
+    checkBox.gravity = Gravity.CENTER
+    checkBox.setTextColor(Color.WHITE)
     if (galleryEntity.isSelected) {
-        selectView.text = (selectAll.indexOf(galleryEntity) + 1).toString()
+        checkBox.text = (selectAll.indexOf(galleryEntity) + 1).toString()
     } else {
-        selectView.text = ""
+        checkBox.text = ""
     }
     Glide.with(context).load(galleryEntity.uri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(weChatGalleryItem.imageView)
     addView(weChatGalleryItem, FrameLayout.LayoutParams(width, height))

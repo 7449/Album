@@ -9,8 +9,6 @@ import android.widget.ImageView
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import com.gallery.core.delegate.ScanEntity
-import com.gallery.scan.args.file.isGifExpand
-import com.gallery.scan.args.file.isVideoExpand
 import com.gallery.ui.wechat.R
 import kotlinx.android.synthetic.main.layout_select_wechat_item.view.*
 
@@ -33,14 +31,14 @@ class WeChatSelectItem @JvmOverloads constructor(context: Context, attrs: Attrib
     private val view: View
         get() = selectWeChatView
 
-    fun update(galleryEntity: ScanEntity, idList: List<Long>, isPrev: Boolean) {
-        gifView.visibility = if (galleryEntity.isGif) View.VISIBLE else View.GONE
-        videoView.visibility = if (galleryEntity.isVideo) View.VISIBLE else View.GONE
+    fun update(scanEntity: ScanEntity, idList: List<Long>, isPrev: Boolean) {
+        gifView.visibility = if (scanEntity.isGif) View.VISIBLE else View.GONE
+        videoView.visibility = if (scanEntity.isVideo) View.VISIBLE else View.GONE
         if (!isPrev) {
             view.hideExpand()
             return
         }
-        idList.find { it == galleryEntity.id }?.let {
+        idList.find { it == scanEntity.id }?.let {
             view.showExpand()
         } ?: view.hideExpand()
     }

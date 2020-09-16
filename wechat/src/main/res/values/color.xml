@@ -2,9 +2,7 @@
 <resources>
     <color name="color_1BB84D">#1BB84D</color>
     <color name="color_333333">#333333</color>
-    <color name="color_666666">#666666</color>
     <color name="color_999999">#999999</color>
     <color name="color_3B3B3B">#3B3B3B</color>
-    <color name="color_262626">#262626</color>
     <color name="color_B3000000">#B3000000</color>
 </resources>

@@ -9,8 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.colorExpand
 import com.gallery.core.delegate.ScanEntity
-import com.gallery.scan.args.file.isGifExpand
-import com.gallery.scan.args.file.isVideoExpand
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.engine.formatTimeVideo
 import kotlinx.android.synthetic.main.layout_gallery_wechat_item.view.*
@@ -36,13 +34,13 @@ class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: Attri
     private val selectView: View
         get() = viewWeChatBackSelect
 
-    fun update(galleryEntity: ScanEntity) {
-        selectView.visibility = if (galleryEntity.isSelected) View.VISIBLE else View.GONE
-        gifView.visibility = if (galleryEntity.isGif) View.VISIBLE else View.GONE
-        videoView.visibility = if (galleryEntity.isVideo) View.VISIBLE else View.GONE
-        bottomView.visibility = if (galleryEntity.isVideo) View.VISIBLE else View.GONE
-        bottomView.setBackgroundColor(if (galleryEntity.isGif) Color.TRANSPARENT else context.colorExpand(R.color.color_B3000000))
-        bottomView.visibility = if (galleryEntity.isVideo || galleryEntity.isGif) View.VISIBLE else View.GONE
-        videoView.text = if (galleryEntity.isVideo) galleryEntity.duration.formatTimeVideo() else ""
+    fun update(scanEntity: ScanEntity) {
+        selectView.visibility = if (scanEntity.isSelected) View.VISIBLE else View.GONE
+        gifView.visibility = if (scanEntity.isGif) View.VISIBLE else View.GONE
+        videoView.visibility = if (scanEntity.isVideo) View.VISIBLE else View.GONE
+        bottomView.visibility = if (scanEntity.isVideo) View.VISIBLE else View.GONE
+        bottomView.setBackgroundColor(if (scanEntity.isGif) Color.TRANSPARENT else context.colorExpand(R.color.color_B3000000))
+        bottomView.visibility = if (scanEntity.isVideo || scanEntity.isGif) View.VISIBLE else View.GONE
+        videoView.text = if (scanEntity.isVideo) scanEntity.duration.formatTimeVideo() else ""
     }
 }

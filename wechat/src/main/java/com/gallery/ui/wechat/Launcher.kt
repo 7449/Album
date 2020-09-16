@@ -31,7 +31,6 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
             GalleryBundle(
                     allName = "图片和视频",
                     hideCamera = true,
-                    spanCount = 4,
                     scanType = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
                     prevPhotoBackgroundColor = Color.BLACK,
                     checkBoxDrawable = R.drawable.wechat_selector_gallery_item_check,
@@ -42,10 +41,8 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
                     toolbarBackground = Color.rgb(38, 38, 38),
                     bottomViewBackground = Color.rgb(19, 19, 19),
                     preBottomViewBackground = Color.rgb(38, 38, 38),
-                    preViewText = "预览",
                     preBottomOkText = "选择",
                     preBottomOkTextSize = 14.toFloat(),
-                    preBottomOkTextColor = Color.WHITE,
                     preViewTextSize = 14.toFloat(),
                     selectText = "发送",
                     selectTextSize = 12.toFloat(),

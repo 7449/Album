@@ -59,7 +59,6 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        uiPrevArgs
         super.onCreate(savedInstanceState)
         obtain(uiConfig)
         idList.clear()
@@ -70,16 +69,18 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         galleryPrevList.adapter = selectAdapter
         prevWeChatToolbarSend.isEnabled = true
         prevWeChatToolbarSend.setOnClickListener {
-            if (prevFragment.selectEmpty) {
-                prevFragment.selectEntities.add(prevFragment.currentItem)
-                prevFragment.selectEntities.forEach { it.isSelected = true }
+            val fragment = prevFragment
+            if (fragment.selectEmpty) {
+                fragment.selectEntities.add(fragment.currentItem)
+                fragment.selectEntities.forEach { it.isSelected = true }
             }
             onGallerySelectEntities()
         }
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
-        prevFragment.setCurrentItem(prevFragment.allItem.indexOfFirst { it.id == item.id })
+        val fragment = prevFragment
+        fragment.setCurrentItem(fragment.allItem.indexOfFirst { it.id == item.id })
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
@@ -91,29 +92,32 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
     }
 
     override fun onPageSelected(position: Int) {
-        val currentItem: ScanEntity = prevFragment.currentItem
-        onUpdateVideoTip(prevFragment.currentItem)
-        prevWeChatToolbarText.text = (position + 1).toString() + "/" + prevFragment.itemCount
-        prevWeChatSelect.isChecked = prevFragment.isCheckBox(position)
+        val fragment = prevFragment
+        val currentItem: ScanEntity = fragment.currentItem
+        onUpdateVideoTip(fragment.currentItem)
+        prevWeChatToolbarText.text = (position + 1).toString() + "/" + fragment.itemCount
+        prevWeChatSelect.isChecked = fragment.isCheckBox(position)
         prevWeChatFullImage.visibility = if (currentItem.isGif || currentItem.isVideo) View.GONE else View.VISIBLE
         selectAdapter.refreshItem(currentItem)
         galleryPrevList.scrollToPosition(selectAdapter.findPosition(currentItem))
     }
 
     override fun onPrevCreated() {
-        prevWeChatToolbarText.text = (prevFragment.currentPosition + 1).toString() + "/" + prevFragment.itemCount
-        prevWeChatToolbarSend.text = uiConfig.selectText + if (prevFragment.selectEmpty) "" else "(${prevFragment.selectCount}/${galleryConfig.multipleMaxCount})"
-        prevWeChatSelect.setOnClickListener { prevFragment.checkBoxClick(it) }
-        galleryPrevList.visibility = if (prevFragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
-        galleryPrevListLine.visibility = if (prevFragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
-        selectAdapter.updateSelect(if (weChatPrevArgs.isPrev) uiPrevArgs.prevArgs.selectList else prevFragment.selectEntities)
-        onUpdateVideoTip(prevFragment.currentItem)
-        prevFragment.view?.findViewById<View>(R.id.preCheckBox)?.visibility = View.GONE
+        val fragment = prevFragment
+        prevWeChatToolbarText.text = (fragment.currentPosition + 1).toString() + "/" + fragment.itemCount
+        prevWeChatToolbarSend.text = uiConfig.selectText + if (fragment.selectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
+        prevWeChatSelect.setOnClickListener { fragment.checkBoxClick(it) }
+        galleryPrevList.visibility = if (fragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
+        galleryPrevListLine.visibility = if (fragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
+        selectAdapter.updateSelect(if (weChatPrevArgs.isPrev) uiPrevArgs.prevArgs.selectList else fragment.selectEntities)
+        onUpdateVideoTip(fragment.currentItem)
+        fragment.view?.findViewById<View>(R.id.preCheckBox)?.visibility = View.GONE
     }
 
     override fun onChangedCheckBox() {
-        val currentItem = prevFragment.currentItem
-        prevWeChatToolbarSend.text = uiConfig.selectText + if (prevFragment.selectEmpty) "" else "(${prevFragment.selectCount}/${galleryConfig.multipleMaxCount})"
+        val fragment = prevFragment
+        val currentItem = fragment.currentItem
+        prevWeChatToolbarSend.text = uiConfig.selectText + if (fragment.selectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
         if (weChatPrevArgs.isPrev) {
             if (!currentItem.isSelected) {
                 idList.add(currentItem.id)
@@ -122,9 +126,9 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
             }
             selectAdapter.refreshItem(currentItem)
         } else {
-            galleryPrevList.visibility = if (prevFragment.selectEmpty) View.GONE else View.VISIBLE
-            galleryPrevListLine.visibility = if (prevFragment.selectEmpty) View.GONE else View.VISIBLE
-            selectAdapter.updateSelect(prevFragment.selectEntities)
+            galleryPrevList.visibility = if (fragment.selectEmpty) View.GONE else View.VISIBLE
+            galleryPrevListLine.visibility = if (fragment.selectEmpty) View.GONE else View.VISIBLE
+            selectAdapter.updateSelect(fragment.selectEntities)
             if (currentItem.isSelected) {
                 selectAdapter.addSelect(currentItem)
             }

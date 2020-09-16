@@ -34,7 +34,7 @@ class WeChatPrevSelectAdapter(
 
     fun updateSelect(entities: List<ScanEntity>) {
         list.clear()
-        entities.forEach { list.add(it.copy(isSelected = false)) }
+        list.addAll(entities.map { it.copy() })
         notifyDataSetChanged()
     }
 

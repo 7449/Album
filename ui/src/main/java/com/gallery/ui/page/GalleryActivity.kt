@@ -6,11 +6,14 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.kotlin.expand.text.safeToastExpand
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.isVideoScanExpand
+import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.scan.types.SCAN_NONE
 import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.CropType
@@ -22,8 +25,6 @@ import com.gallery.ui.base.activity.GalleryBaseActivity
 import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.gallery.ui.crop.CropperImpl
 import com.gallery.ui.crop.UCropImpl
-import com.gallery.ui.engine.displayGallery
-import com.gallery.ui.engine.displayGalleryThumbnails
 import com.gallery.ui.obtain
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
@@ -105,11 +106,17 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView) {
-        container.displayGallery(width, height, scanEntity)
+        container.removeAllViews()
+        val imageView = GalleryImageView(container.context)
+        Glide.with(container.context).load(scanEntity.uri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(imageView)
+        container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
     override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
-        container.displayGalleryThumbnails(finderEntity)
+        container.removeAllViews()
+        val imageView = GalleryImageView(container.context)
+        Glide.with(container.context).load(finderEntity.uri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()).into(imageView)
+        container.addView(imageView)
     }
 
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {

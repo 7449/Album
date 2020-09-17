@@ -3,6 +3,7 @@ package com.gallery.ui.base.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.app.addFragmentExpand
@@ -14,6 +15,7 @@ import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
+import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.prevFragment
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.ui.GalleryUiBundle
@@ -111,4 +113,7 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     open fun onGallerySelectEmpty() {
         getString(R.string.gallery_prev_select_empty_pre).safeToastExpand(this)
     }
+
+    /** 预览图加载 */
+    abstract override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout)
 }

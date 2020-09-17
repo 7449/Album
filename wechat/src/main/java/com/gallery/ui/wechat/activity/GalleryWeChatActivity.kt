@@ -39,8 +39,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(uiConfig, this) }
     private val videoDuration: Int by lazy { uiGapConfig.getInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, 300000) }
     private val videoDes: String by lazy { uiGapConfig.getString(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DES, "全部视频") }
-    private val videoList: ArrayList<ScanEntity> = ArrayList()
-    private val tempVideoList: ArrayList<ScanEntity> = ArrayList()
+    private val videoList: ArrayList<ScanEntity> = arrayListOf()
+    private val tempVideoList: ArrayList<ScanEntity> = arrayListOf()
 
     override val currentFinderName: String
         get() = galleryWeChatToolbarFinderText.text.toString()

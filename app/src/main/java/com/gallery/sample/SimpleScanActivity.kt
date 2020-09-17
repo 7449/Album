@@ -32,7 +32,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
         const val args = "args"
     }
 
-    private val arrayList: ArrayList<SimpleEntity> = ArrayList()
+    private val arrayList: ArrayList<SimpleEntity> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

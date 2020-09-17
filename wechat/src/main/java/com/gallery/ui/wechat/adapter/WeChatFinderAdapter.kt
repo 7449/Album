@@ -13,7 +13,7 @@ class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
                           private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener
 ) : RecyclerView.Adapter<XViewHolder>() {
 
-    private val list: ArrayList<ScanEntity> = ArrayList()
+    private val list: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
         val layoutViewHolder = LayoutViewHolder(parent, R.layout.gallery_item_finder_wechat)

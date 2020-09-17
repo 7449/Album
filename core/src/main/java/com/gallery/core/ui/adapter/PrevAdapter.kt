@@ -10,8 +10,8 @@ import com.xadapter.vh.XViewHolder
 
 class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) : RecyclerView.Adapter<XViewHolder>() {
 
-    private val galleryList: ArrayList<ScanEntity> = ArrayList()
-    private val selectList: ArrayList<ScanEntity> = ArrayList()
+    private val galleryList: ArrayList<ScanEntity> = arrayListOf()
+    private val selectList: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder = LayoutViewHolder(parent, R.layout.gallery_item_gallery_prev)
 

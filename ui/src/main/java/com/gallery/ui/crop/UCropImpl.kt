@@ -29,10 +29,6 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
                     onCropSuccess(delegate, galleryBundle, uri)
                 }
             }
-            Activity.RESULT_CANCELED -> {
-            }
-            UCrop.RESULT_ERROR -> {
-            }
         }
     }
 

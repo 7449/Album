@@ -28,7 +28,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
 
     private val selectAdapter: WeChatPrevSelectAdapter = WeChatPrevSelectAdapter(this)
     private val weChatPrevArgs: WeChatPrevArgs by lazy { uiGapConfig.weChatPrevArgsOrDefault }
-    private val idList: ArrayList<Long> = ArrayList()
+    private val idList: ArrayList<Long> = arrayListOf()
 
     private fun onUpdateVideoTip(scanEntity: ScanEntity) {
         if (!scanEntity.isVideo) {

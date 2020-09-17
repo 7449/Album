@@ -126,7 +126,7 @@ data class GalleryBundle(
         /**
          * 默认选中的数据
          */
-        val selectEntities: ArrayList<ScanEntity> = ArrayList(),
+        val selectEntities: ArrayList<ScanEntity> = arrayListOf(),
         /**
          * 扫描类型
          * 根据[MediaStore.Files.FileColumns.MEDIA_TYPE]搜索

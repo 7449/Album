@@ -49,7 +49,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
             }
         }
 
-        private val list: ArrayList<ScanEntity> = ArrayList()
+        private val list: ArrayList<ScanEntity> = arrayListOf()
         private val galleryUiBundle by lazy {
             getParcelableOrDefault<GalleryUiBundle>(Key, GalleryUiBundle())
         }
@@ -79,9 +79,9 @@ class BottomFinderAdapter : BaseFinderAdapter() {
                 override fun onBindViewHolder(holder: XViewHolder, position: Int) {
                     val finderEntity: ScanEntity = list[position]
                     holder.setText(R.id.tv_gallery_finder_name, "%s".format(finderEntity.bucketDisplayName))
-                    holder.textView(R.id.tv_gallery_finder_name).setTextColor(galleryUiBundle.finderItemTextColor)
-                    holder.setText(R.id.tv_gallery_finder_file_count, "%s".format(finderEntity.count.toString()))
-                    holder.textView(R.id.tv_gallery_finder_file_count).setTextColor(galleryUiBundle.finderItemTextCountColor)
+                            .setTextColor(R.id.tv_gallery_finder_name, galleryUiBundle.finderItemTextColor)
+                            .setText(R.id.tv_gallery_finder_file_count, "%s".format(finderEntity.count.toString()))
+                            .setTextColor(R.id.tv_gallery_finder_file_count, galleryUiBundle.finderItemTextCountColor)
                     adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.frameLayout(R.id.iv_gallery_finder_icon))
                 }
             }

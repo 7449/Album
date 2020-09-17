@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -51,7 +53,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     /** 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
     protected val uiGapConfig: Bundle by lazy { galleryArgs.galleryOption }
 
-    /** 预览页启动[ActivityResultLauncher],暂不对实现类开放  */
+    /** 预览页启动[ActivityResultLauncher]  */
     private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
         when (intent.resultCode) {
@@ -71,7 +73,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 文件夹数据集合 */
-    val finderList = ArrayList<ScanEntity>()
+    val finderList = arrayListOf<ScanEntity>()
 
     /** 当前选中文件夹名称 */
     var finderName = ""
@@ -85,7 +87,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
         super.onCreate(savedInstanceState)
         val saveArgs = savedInstanceState?.uiGallerySaveArgs
         finderList.clear()
-        finderList.addAll(saveArgs?.finderList ?: arrayListOf())
+        finderList.addAll(saveArgs?.finderList.orEmpty())
         finderName = saveArgs?.finderName ?: galleryConfig.allName
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
@@ -163,4 +165,10 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
         setResult(UIResult.RESULT_CODE_SINGLE_DATA, intent)
         finish()
     }
+
+    /** 文件目录加载图片 */
+    abstract override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout)
+
+    /** 文件加载图片 */
+    abstract override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView)
 }

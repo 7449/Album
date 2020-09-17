@@ -51,7 +51,7 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
 
     private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
 
-        private val list: ArrayList<ScanEntity> = ArrayList()
+        private val list: ArrayList<ScanEntity> = arrayListOf()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val finderEntity: ScanEntity = getItem(position)

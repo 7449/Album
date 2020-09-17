@@ -2,17 +2,24 @@ package com.gallery.ui.page
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.bumptech.glide.Glide
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.prevFragment
+import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.ui.R
 import com.gallery.ui.base.activity.PrevBaseActivity
-import com.gallery.ui.engine.displayGalleryPrev
 import com.gallery.ui.obtain
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevBaseActivity(layoutId) {
+
+    companion object {
+        private const val format = "%s / %s"
+    }
 
     override val galleryFragmentId: Int
         get() = R.id.preFragment
@@ -30,18 +37,26 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
         preToolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
+    override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
+        container.removeAllViews()
+        val imageView: GalleryImageView = GalleryImageView(container.context).apply {
+            layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT).apply {
+                gravity = Gravity.CENTER
+            }
+        }
+        Glide.with(container.context).load(scanEntity.uri).into(imageView)
+        container.addView(imageView)
+    }
+
     override fun onPrevCreated() {
-        preCount.text = "%s / %s".format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
-        preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
+        val fragment = prevFragment
+        preCount.text = format.format(fragment.selectCount, galleryConfig.multipleMaxCount)
+        preToolbar.title = uiConfig.preTitle + "(" + (fragment.currentPosition + 1) + "/" + fragment.itemCount + ")"
     }
 
     override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
-        preCount.text = "%s / %s".format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
-    }
-
-    override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
-        container.displayGalleryPrev(scanEntity)
+        preCount.text = format.format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
     }
 
     override fun onPageSelected(position: Int) {
@@ -49,6 +64,6 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
     }
 
     override fun onChangedCheckBox() {
-        preCount.text = "%s / %s".format(prevFragment.selectCount.toString(), galleryConfig.multipleMaxCount)
+        preCount.text = format.format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
     }
 }

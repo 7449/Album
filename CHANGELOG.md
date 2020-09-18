@@ -57,6 +57,10 @@
 
 # scan 
 
+## next version
+
+* 更新viewModel发送逻辑
+
 ## 0.1.5
 
 * 去掉内置ScanType，改为 MediaStore.Files.FileColumns 获取 IntArray

@@ -25,10 +25,12 @@ fun <E : Parcelable> ScanImpl<E>.registerErrorLiveData(owner: LifecycleOwner, ac
 }
 
 /** postValue */
-fun <T> MutableLiveData<T>.postValueExpand(value: T) {
+fun <T> MutableLiveData<T>.postValueExpand(value: T): Boolean {
     if (hasObservers()) {
         postValue(value)
+        return true
     }
+    return false
 }
 
 /** 是否是扫描全部的Id */

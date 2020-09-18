@@ -78,12 +78,6 @@ val AppCompatActivity.galleryFragment: ScanFragment get() = supportFragmentManag
 /** [PrevFragment] */
 val AppCompatActivity.prevFragment: PrevFragment get() = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName) as PrevFragment
 
-/** [IScanDelegate] */
-val AppCompatActivity.scanDelegate: IScanDelegate get() = galleryFragment.delegate
-
-/** [IPrevDelegate] */
-val AppCompatActivity.prevDelegate: IPrevDelegate get() = prevFragment.delegate
-
 /** [ScanFileEntity]中介 */
 @Parcelize
 data class ScanEntity(

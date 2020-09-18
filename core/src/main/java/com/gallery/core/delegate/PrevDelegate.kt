@@ -139,7 +139,6 @@ class PrevDelegate(
             currentItem.isSelected = false
             checkBox.isSelected = false
         } else {
-            @Suppress("unused")
             prevAdapter.addSelectEntity(currentItem)
             currentItem.isSelected = true
             checkBox.isSelected = true

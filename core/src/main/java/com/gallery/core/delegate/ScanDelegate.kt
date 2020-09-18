@@ -153,14 +153,8 @@ class ScanDelegate(
     override fun scanSingleSuccess(entity: ScanFileEntity?) {
         entity ?: return galleryCallback.onResultError(activity, galleryBundle)
         val toScanEntity = entity.toScanEntity()
-        if (parentId.isScanAllExpand()) {
-            if (galleryBundle.scanSort == Sort.DESC) {
-                galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, toScanEntity)
-            } else {
-                galleryAdapter.addEntity(toScanEntity)
-                scrollToPosition(galleryAdapter.currentList.size - 1)
-            }
-        } else if (parentId == entity.parent) {
+        //拍照或裁剪成功扫描到数据之后根据扫描方式更新数据
+        if (parentId.isScanAllExpand() || parentId == entity.parent) {
             if (galleryBundle.scanSort == Sort.DESC) {
                 galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, toScanEntity)
             } else {

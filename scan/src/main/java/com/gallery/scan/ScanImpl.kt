@@ -74,11 +74,13 @@ class ScanImpl<E : Parcelable>(private val scanView: ScanView<E>) : ViewModel(),
             return
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(args), ScanTask<E>(context, factory, {
-            scanView.scanMultipleError()
-            errorLiveData.postValueExpand(ScanError(Result.MULTIPLE))
+            if (!errorLiveData.postValueExpand(ScanError(Result.MULTIPLE))) {
+                scanView.scanMultipleError()
+            }
         }) {
-            scanView.scanMultipleSuccess(it)
-            multipleLiveData.postValueExpand(ScanMultipleResult(Bundle(args), it))
+            if (!multipleLiveData.postValueExpand(ScanMultipleResult(Bundle(args), it))) {
+                scanView.scanMultipleSuccess(it)
+            }
             onCleared()
         })
     }
@@ -88,11 +90,13 @@ class ScanImpl<E : Parcelable>(private val scanView: ScanView<E>) : ViewModel(),
             return
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(args), ScanTask<E>(context, factory, {
-            scanView.scanSingleError()
-            errorLiveData.postValueExpand(ScanError(Result.SINGLE))
+            if (!errorLiveData.postValueExpand(ScanError(Result.SINGLE))) {
+                scanView.scanSingleError()
+            }
         }) {
-            scanView.scanSingleSuccess(if (it.isEmpty()) null else it[0])
-            singleLiveData.postValueExpand(ScanSingleResult(Bundle(args), if (it.isEmpty()) null else it[0]))
+            if (!singleLiveData.postValueExpand(ScanSingleResult(Bundle(args), if (it.isEmpty()) null else it[0]))) {
+                scanView.scanSingleSuccess(if (it.isEmpty()) null else it[0])
+            }
             onCleared()
         })
     }

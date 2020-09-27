@@ -51,7 +51,7 @@ import com.gallery.scan.types.isScanAllExpand
 class ScanDelegate(
         private val fragment: Fragment,
         private val recyclerView: RecyclerView,
-        private val emptyView: ImageView
+        private val emptyView: ImageView,
 ) : IScanDelegate, ScanView<ScanFileEntity>, GalleryAdapter.OnGalleryItemClickListener {
 
     private var fileUri: Uri = Uri.EMPTY
@@ -92,7 +92,7 @@ class ScanDelegate(
     override val activityNotNull: FragmentActivity
         get() = fragment.requireActivity()
     override val currentEntities: ArrayList<ScanEntity>
-        get() = galleryAdapter.currentList.filter { it.parent != GalleryAdapter.CAMERA } as ArrayList<ScanEntity>
+        get() = galleryAdapter.currentList.filterTo(ArrayList()) { it.parent != GalleryAdapter.CAMERA }
     override val selectEntities: ArrayList<ScanEntity>
         get() = galleryAdapter.currentSelectList
 

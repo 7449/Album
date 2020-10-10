@@ -14,8 +14,6 @@ internal object AudioColumns {
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.DATE_ADDED,
             MediaStore.Audio.Media.DATE_MODIFIED,
-            MediaStore.Audio.Media.MIME_TYPE,
-            MediaStore.Audio.Media.WIDTH,
-            MediaStore.Audio.Media.HEIGHT
+            MediaStore.Audio.Media.MIME_TYPE
     )
 }

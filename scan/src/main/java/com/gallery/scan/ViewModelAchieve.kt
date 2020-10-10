@@ -60,7 +60,7 @@ class ScanViewModelFactory(
         private val ownerActivity: FragmentActivity? = null,
         private val ownerFragment: Fragment? = null,
         private val factory: ScanEntityFactory,
-        private val args: CursorLoaderArgs
+        private val args: CursorLoaderArgs,
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

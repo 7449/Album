@@ -15,5 +15,4 @@ data class ScanAudioEntity(
         val dateAdded: Long = 0,
         val dateModified: Long = 0,
         val mimeType: String = "",
-        val width: Int = 0,
-        val height: Int = 0) : Parcelable
+) : Parcelable

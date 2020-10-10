@@ -3,7 +3,6 @@ package com.gallery.scan.args.audio
 import android.database.Cursor
 import android.os.Parcelable
 import android.provider.MediaStore
-import androidx.kotlin.expand.database.getIntOrDefault
 import androidx.kotlin.expand.database.getLongOrDefault
 import androidx.kotlin.expand.database.getStringOrDefault
 import com.gallery.scan.args.ScanEntityFactory
@@ -20,8 +19,7 @@ fun ScanEntityFactory.Companion.audioExpand(): ScanEntityFactory {
                     cursor.getLongOrDefault(MediaStore.Audio.Media.DATE_ADDED),
                     cursor.getLongOrDefault(MediaStore.Audio.Media.DATE_MODIFIED),
                     cursor.getStringOrDefault(MediaStore.Audio.Media.MIME_TYPE),
-                    cursor.getIntOrDefault(MediaStore.Audio.Media.WIDTH),
-                    cursor.getIntOrDefault(MediaStore.Audio.Media.HEIGHT))
+            )
         }
     }
 }

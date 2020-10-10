@@ -3,16 +3,15 @@ package com.gallery.scan
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.loader.app.LoaderManager
 import com.gallery.scan.args.CursorLoaderArgs
-import com.gallery.scan.args.CursorLoaderArgs.Companion.putCursorLoaderArgs
 import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.types.Result
+import com.gallery.scan.listener.ScanListener
+import com.gallery.scan.types.ResultType
 import com.gallery.scan.types.postValueExpand
 
 /**
@@ -32,7 +31,7 @@ import com.gallery.scan.types.postValueExpand
  *  .scanMultiple(parentId.multipleFileExpand())
  *
  */
-class ScanImpl<E : Parcelable>(private val scanView: ScanView<E>) : ViewModel(), Scan {
+class ScanImpl<E : Parcelable>(private val scanView: ScanView) : ViewModel(), Scan<E> {
 
     companion object {
         private const val SCAN_LOADER_ID = 111
@@ -41,6 +40,7 @@ class ScanImpl<E : Parcelable>(private val scanView: ScanView<E>) : ViewModel(),
     internal val multipleLiveData = MutableLiveData<ScanMultipleResult<E>>()
     internal val singleLiveData = MutableLiveData<ScanSingleResult<E>>()
     internal val errorLiveData = MutableLiveData<ScanError>()
+    private var scanListener: ScanListener<E>? = null
     private val objects: Any = scanView.scanOwnerGeneric()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanView.scanOwnerGeneric())
     private val factory: ScanEntityFactory = scanView.scanEntityFactory
@@ -53,33 +53,25 @@ class ScanImpl<E : Parcelable>(private val scanView: ScanView<E>) : ViewModel(),
         }
     }
 
-    private fun createScanMultipleArgs(bundle: Bundle): Bundle {
-        return Bundle().apply {
-            putAll(bundle)
-            putSerializable(MediaStore.Files.FileColumns.MIME_TYPE, Result.MULTIPLE)
-            putCursorLoaderArgs(loaderArgs)
-        }
+    override fun registerScanListener(scanListener: ScanListener<E>) {
+        this.scanListener = scanListener
     }
 
-    private fun createScanSingleArgs(bundle: Bundle): Bundle {
-        return Bundle().apply {
-            putAll(bundle)
-            putSerializable(MediaStore.Files.FileColumns.MIME_TYPE, Result.SINGLE)
-            putCursorLoaderArgs(loaderArgs)
-        }
+    override fun unregisterScanListener() {
+        this.scanListener = null
     }
 
     override fun scanMultiple(args: Bundle) {
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(args), ScanTask<E>(context, factory, {
-            if (!errorLiveData.postValueExpand(ScanError(Result.MULTIPLE))) {
-                scanView.scanMultipleError()
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(args, loaderArgs), ScanTask<E>(context, factory, {
+            if (!errorLiveData.postValueExpand(ScanError(ResultType.MULTIPLE))) {
+                scanListener?.scanMultipleError()
             }
         }) {
             if (!multipleLiveData.postValueExpand(ScanMultipleResult(Bundle(args), it))) {
-                scanView.scanMultipleSuccess(it)
+                scanListener?.scanMultipleSuccess(it)
             }
             onCleared()
         })
@@ -89,13 +81,13 @@ class ScanImpl<E : Parcelable>(private val scanView: ScanView<E>) : ViewModel(),
         if (loaderManager.hasRunningLoaders()) {
             return
         }
-        loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(args), ScanTask<E>(context, factory, {
-            if (!errorLiveData.postValueExpand(ScanError(Result.SINGLE))) {
-                scanView.scanSingleError()
+        loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(args, loaderArgs), ScanTask<E>(context, factory, {
+            if (!errorLiveData.postValueExpand(ScanError(ResultType.SINGLE))) {
+                scanListener?.scanSingleError()
             }
         }) {
             if (!singleLiveData.postValueExpand(ScanSingleResult(Bundle(args), if (it.isEmpty()) null else it[0]))) {
-                scanView.scanSingleSuccess(if (it.isEmpty()) null else it[0])
+                scanListener?.scanSingleSuccess(if (it.isEmpty()) null else it[0])
             }
             onCleared()
         })

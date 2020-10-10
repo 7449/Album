@@ -18,4 +18,5 @@ data class ScanPictureEntity(
         val height: Int = 0,
         val orientation: Int = 0,
         val bucketId: String = "",
-        val bucketDisplayName: String = "") : Parcelable
+        val bucketDisplayName: String = "",
+) : Parcelable

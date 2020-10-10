@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.provider.BaseColumns
 import android.provider.MediaStore
 import com.gallery.scan.args.CursorLoaderArgs
-import com.gallery.scan.types.Result
+import com.gallery.scan.types.ResultType
 import com.gallery.scan.types.SCAN_ALL
 import com.gallery.scan.types.Sort
 import kotlinx.android.parcel.Parcelize
@@ -17,15 +17,15 @@ import kotlinx.android.parcel.Parcelize
 class ScanFileArgs(
         private val scanTypeArray: Array<String>?,
         private val scanSortField: String = MediaStore.Files.FileColumns.DATE_MODIFIED,
-        private val scanSort: String = Sort.DESC
+        private val scanSort: String = Sort.DESC,
 ) : CursorLoaderArgs(FileColumns.uri, FileColumns.columns, "$scanSortField $scanSort") {
 
     override fun createSelection(args: Bundle): String? {
         val parent: Long = args.getLong(MediaStore.Files.FileColumns.PARENT)
         scanTypeArray ?: return null
-        return when (args.getSerializable(MediaStore.Files.FileColumns.MIME_TYPE) as Result) {
-            Result.SINGLE -> resultSelection(args.getLong(MediaStore.Files.FileColumns._ID), scanTypeArray)
-            Result.MULTIPLE -> if (parent == SCAN_ALL) scanTypeSelection(scanTypeArray) else parentSelection(parent, scanTypeArray)
+        return when (args.getSerializable(MediaStore.Files.FileColumns.MIME_TYPE) as ResultType) {
+            ResultType.SINGLE -> resultSelection(args.getLong(MediaStore.Files.FileColumns._ID), scanTypeArray)
+            ResultType.MULTIPLE -> if (parent == SCAN_ALL) scanTypeSelection(scanTypeArray) else parentSelection(parent, scanTypeArray)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.gallery.scan
 
 import android.content.Context
-import android.os.Parcelable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.loader.app.LoaderManager
@@ -12,7 +11,7 @@ import com.gallery.scan.args.ScanEntityFactory
  * @author y
  * @create 2019/2/27
  */
-interface ScanView<E : Parcelable> {
+interface ScanView {
 
     /**
      * [Context]
@@ -28,7 +27,7 @@ interface ScanView<E : Parcelable> {
     val scanCursorLoaderArgs: CursorLoaderArgs
 
     /**
-     * 自定义实体类参数[E]
+     * 自定义实体类参数
      */
     val scanEntityFactory: ScanEntityFactory
 
@@ -50,27 +49,4 @@ interface ScanView<E : Parcelable> {
         return scanOwner() as T
     }
 
-    /**
-     * 扫描成功
-     */
-    fun scanMultipleSuccess(entities: ArrayList<E>) {}
-
-    /**
-     * 扫描异常
-     */
-    fun scanMultipleError() {
-        scanMultipleSuccess(arrayListOf())
-    }
-
-    /**
-     * 单个扫描成功
-     */
-    fun scanSingleSuccess(entity: E?) {}
-
-    /**
-     * 单个扫描失败
-     */
-    fun scanSingleError() {
-        scanSingleSuccess(null)
-    }
 }

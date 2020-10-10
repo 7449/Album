@@ -23,7 +23,7 @@ import kotlinx.android.parcel.Parcelize
 open class CursorLoaderArgs(
         open val uri: Uri,
         open val projection: Array<String>? = null,
-        open val sortOrder: String? = null
+        open val sortOrder: String? = null,
 ) : Parcelable {
     companion object {
 
@@ -35,7 +35,8 @@ open class CursorLoaderArgs(
         }
 
         internal fun Bundle.getCursorLoaderArgs(): CursorLoaderArgs {
-            return getParcelable(Key) ?: throw KotlinNullPointerException("scanCursorLoaderArgs == null")
+            return getParcelable(Key)
+                    ?: throw KotlinNullPointerException("scanCursorLoaderArgs == null")
         }
 
     }

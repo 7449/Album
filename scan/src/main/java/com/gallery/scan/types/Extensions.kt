@@ -20,7 +20,7 @@ fun <E : Parcelable> ScanImpl<E>.registerSingleLiveData(owner: LifecycleOwner, a
 }
 
 /** 注册回调 */
-fun <E : Parcelable> ScanImpl<E>.registerErrorLiveData(owner: LifecycleOwner, action: (type: Result) -> Unit) = also {
+fun <E : Parcelable> ScanImpl<E>.registerErrorLiveData(owner: LifecycleOwner, action: (type: ResultType) -> Unit) = also {
     errorLiveData.observe(owner) { action.invoke(it.type) }
 }
 
@@ -28,6 +28,15 @@ fun <E : Parcelable> ScanImpl<E>.registerErrorLiveData(owner: LifecycleOwner, ac
 fun <T> MutableLiveData<T>.postValueExpand(value: T): Boolean {
     if (hasObservers()) {
         postValue(value)
+        return true
+    }
+    return false
+}
+
+/** setValue */
+fun <T> MutableLiveData<T>.setValueExpand(valueT: T): Boolean {
+    if (hasObservers()) {
+        value = valueT
         return true
     }
     return false

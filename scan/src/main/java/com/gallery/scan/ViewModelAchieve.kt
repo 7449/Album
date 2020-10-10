@@ -14,9 +14,9 @@ import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.audio.ScanAudioEntity
 import com.gallery.scan.args.file.ScanFileEntity
 import com.gallery.scan.args.picture.ScanPictureEntity
-import com.gallery.scan.types.Result
+import com.gallery.scan.types.ResultType
 
-class ScanError(val type: Result)
+class ScanError(val type: ResultType)
 
 class ScanMultipleResult<E : Parcelable>(val bundle: Bundle, val entities: ArrayList<E>)
 
@@ -31,7 +31,7 @@ fun ViewModelProvider.scanPictureImpl(): ScanImpl<ScanPictureEntity> = scanImpl(
 fun <E : Parcelable> ViewModelProvider.scanImpl(): ScanImpl<E> = get(ScanImpl::class.java) as ScanImpl<E>
 
 fun <E : Parcelable> FragmentActivity.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<E> {
-    return ScanImpl(object : ScanView<E> {
+    return ScanImpl(object : ScanView {
         override val scanCursorLoaderArgs: CursorLoaderArgs
             get() = args
         override val scanEntityFactory: ScanEntityFactory
@@ -44,7 +44,7 @@ fun <E : Parcelable> FragmentActivity.scanViewModel(factory: ScanEntityFactory, 
 }
 
 fun <E : Parcelable> Fragment.scanViewModel(factory: ScanEntityFactory, args: CursorLoaderArgs): ScanImpl<E> {
-    return ScanImpl(object : ScanView<E> {
+    return ScanImpl(object : ScanView {
         override val scanCursorLoaderArgs: CursorLoaderArgs
             get() = args
         override val scanEntityFactory: ScanEntityFactory

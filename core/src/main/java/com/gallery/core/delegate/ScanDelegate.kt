@@ -20,7 +20,7 @@ import androidx.kotlin.expand.net.deleteExpand
 import androidx.kotlin.expand.net.isFileExistsExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,13 +37,11 @@ import com.gallery.core.expand.*
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.widget.SimpleDivider
 import com.gallery.scan.ScanImpl
-import com.gallery.scan.ScanView
-import com.gallery.scan.args.CursorLoaderArgs
+import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.args.file.*
-import com.gallery.scan.types.SCAN_ALL
-import com.gallery.scan.types.Sort
-import com.gallery.scan.types.isScanAllExpand
+import com.gallery.scan.scanFileImpl
+import com.gallery.scan.types.*
 
 /**
  * 图库代理
@@ -52,7 +50,7 @@ class ScanDelegate(
         private val fragment: Fragment,
         private val recyclerView: RecyclerView,
         private val emptyView: ImageView,
-) : IScanDelegate, ScanView<ScanFileEntity>, GalleryAdapter.OnGalleryItemClickListener {
+) : IScanDelegate, GalleryAdapter.OnGalleryItemClickListener {
 
     private var fileUri: Uri = Uri.EMPTY
     var parentId: Long = SCAN_ALL
@@ -79,7 +77,21 @@ class ScanDelegate(
                 }
             }
 
-    private val scan: ScanImpl<ScanFileEntity> by lazy { ScanImpl(this) }
+    private val scan: ScanImpl<ScanFileEntity> by lazy {
+        ViewModelProvider(fragment,
+                ScanViewModelFactory(
+                        ownerFragment = fragment,
+                        factory = ScanEntityFactory.fileExpand(),
+                        args = ScanFileArgs(
+                                galleryBundle.scanType.map { it.toString() }.toTypedArray(),
+                                galleryBundle.scanSortField,
+                                galleryBundle.scanSort
+                        )
+                ))
+                .scanFileImpl()
+                .registerMultipleLiveData(fragment) { _, result -> scanMultipleSuccess(result) }
+                .registerSingleLiveData(fragment) { _, result -> scanSingleSuccess(result) }
+    }
     private val galleryBundle: GalleryBundle by lazy { fragment.galleryArgs }
     private val galleryImageLoader: IGalleryImageLoader by lazy { fragment.galleryImageLoader }
     private val galleryCallback: IGalleryCallback by lazy { fragment.galleryCallback }
@@ -131,7 +143,7 @@ class ScanDelegate(
     override fun onDestroy() {
     }
 
-    override fun scanMultipleSuccess(entities: ArrayList<ScanFileEntity>) {
+    fun scanMultipleSuccess(entities: ArrayList<ScanFileEntity>) {
         if (entities.isEmpty() && parentId.isScanAllExpand()) {
             emptyView.showExpand()
             recyclerView.hideExpand()
@@ -150,7 +162,7 @@ class ScanDelegate(
         scrollToPosition(0)
     }
 
-    override fun scanSingleSuccess(entity: ScanFileEntity?) {
+    fun scanSingleSuccess(entity: ScanFileEntity?) {
         entity ?: return galleryCallback.onResultError(activity, galleryBundle)
         val toScanEntity = entity.toScanEntity()
         //拍照或裁剪成功扫描到数据之后根据扫描方式更新数据
@@ -286,17 +298,4 @@ class ScanDelegate(
         recyclerView.scrollToPosition(position)
     }
 
-    override val scanCursorLoaderArgs: CursorLoaderArgs
-        get() = ScanFileArgs(
-                galleryBundle.scanType.map { it.toString() }.toTypedArray(),
-                galleryBundle.scanSortField,
-                galleryBundle.scanSort
-        )
-
-    override val scanEntityFactory: ScanEntityFactory
-        get() = ScanEntityFactory.fileExpand()
-
-    override fun scanOwner(): ViewModelStoreOwner {
-        return fragment
-    }
 }

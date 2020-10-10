@@ -26,5 +26,5 @@ data class ScanFileEntity(
         val bucketId: String = "",
         val bucketDisplayName: String = "",
 
-        val duration: Long = 0
+        val duration: Long = 0,
 ) : Parcelable

@@ -1,4 +1,4 @@
-package com.gallery.scan
+package com.gallery.scan.task
 
 import android.content.Context
 import android.database.Cursor

@@ -1,12 +1,15 @@
-package com.gallery.scan
+package com.gallery.scan.callback
 
 import android.os.Bundle
 import android.provider.MediaStore
+import com.gallery.scan.ScanImpl
 import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.args.CursorLoaderArgs.Companion.putCursorLoaderArgs
-import com.gallery.scan.listener.ScanListener
 import com.gallery.scan.types.ResultType
 
+/**
+ * 实现:[ScanImpl]
+ */
 interface Scan<E> {
 
     /** 注册回调 */
@@ -25,7 +28,7 @@ interface Scan<E> {
     fun createScanMultipleArgs(bundle: Bundle, args: CursorLoaderArgs): Bundle {
         return Bundle().apply {
             putAll(bundle)
-            putSerializable(MediaStore.Files.FileColumns.MIME_TYPE, ResultType.MULTIPLE)
+            putString(MediaStore.Files.FileColumns.MIME_TYPE, ResultType.MULTIPLE)
             putCursorLoaderArgs(args)
         }
     }
@@ -34,7 +37,7 @@ interface Scan<E> {
     fun createScanSingleArgs(bundle: Bundle, args: CursorLoaderArgs): Bundle {
         return Bundle().apply {
             putAll(bundle)
-            putSerializable(MediaStore.Files.FileColumns.MIME_TYPE, ResultType.SINGLE)
+            putString(MediaStore.Files.FileColumns.MIME_TYPE, ResultType.SINGLE)
             putCursorLoaderArgs(args)
         }
     }

@@ -27,7 +27,6 @@ import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.enums.ScanType
 import com.gallery.sample.enums.Theme
-import com.gallery.scan.args.file.externalUriExpand
 import com.gallery.scan.types.Sort
 import com.gallery.ui.CropType
 import com.gallery.ui.FinderType

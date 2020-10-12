@@ -13,7 +13,7 @@ import com.gallery.core.callback.*
 import com.gallery.core.crop.ICrop
 import com.gallery.core.ui.fragment.PrevFragment
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.args.file.*
+import com.gallery.scan.extensions.*
 import kotlinx.android.parcel.Parcelize
 
 /** 图库拦截器 */
@@ -83,7 +83,7 @@ val AppCompatActivity.prevFragment: PrevFragment get() = supportFragmentManager.
 data class ScanEntity(
         val delegate: ScanFileEntity,
         val count: Int = 0,
-        var isSelected: Boolean = false
+        var isSelected: Boolean = false,
 ) : Parcelable {
     val id: Long
         get() = delegate.id
@@ -98,13 +98,13 @@ data class ScanEntity(
     val bucketDisplayName: String
         get() = delegate.bucketDisplayName
     val uri: Uri
-        get() = delegate.externalUriExpand
+        get() = delegate.id.externalUriExpand(delegate.mediaType)
     val isGif: Boolean
-        get() = delegate.isGifExpand
+        get() = delegate.mimeType.isGifExpand
     val isVideo: Boolean
-        get() = delegate.isVideoExpand
+        get() = delegate.mimeType.isVideoExpand
     val isImage: Boolean
-        get() = delegate.isImageExpand
+        get() = delegate.mimeType.isImageExpand
 }
 
 /** [ScanFileEntity]转换为[ScanEntity] */

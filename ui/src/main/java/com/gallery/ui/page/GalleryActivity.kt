@@ -14,8 +14,8 @@ import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.isVideoScanExpand
 import com.gallery.core.ui.widget.GalleryImageView
-import com.gallery.scan.types.SCAN_NONE
-import com.gallery.scan.types.isScanAllExpand
+import com.gallery.scan.extensions.isScanAllExpand
+import com.gallery.scan.types.ScanType
 import com.gallery.ui.CropType
 import com.gallery.ui.FinderType
 import com.gallery.ui.R
@@ -71,7 +71,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     onGalleryPreEmpty()
                     return
                 }
-                onStartPrevPage(SCAN_NONE, 0, PreActivity::class.java)
+                onStartPrevPage(ScanType.SCAN_NONE, 0, PreActivity::class.java)
             }
             R.id.gallerySelect -> {
                 if (galleryFragment.selectEmpty) {

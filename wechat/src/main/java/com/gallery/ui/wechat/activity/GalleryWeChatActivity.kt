@@ -19,9 +19,8 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
-import com.gallery.scan.types.SCAN_ALL
-import com.gallery.scan.types.SCAN_NONE
-import com.gallery.scan.types.isScanAllExpand
+import com.gallery.scan.extensions.isScanAllExpand
+import com.gallery.scan.types.ScanType
 import com.gallery.ui.UIResult
 import com.gallery.ui.base.activity.GalleryBaseActivity
 import com.gallery.ui.base.adapter.GalleryFinderAdapter
@@ -68,7 +67,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
 
         galleryWeChatFinder.adapter = newFinderAdapter
         galleryWeChatPrev.setOnClickListener {
-            onStartPrevPage(SCAN_NONE, 0,
+            onStartPrevPage(ScanType.SCAN_NONE, 0,
                     option = WeChatPrevArgs(true, videoDuration, galleryWeChatFullImage.isChecked).putArgs(Bundle()),
                     cla = GalleryWeChatPrevActivity::class.java
             )
@@ -104,7 +103,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
                     currentFragment.parentId = WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT
                     currentFragment.scanMultipleSuccess(videoList)
                 } else {
-                    currentFragment.onScanGallery(find?.parent ?: SCAN_ALL)
+                    currentFragment.onScanGallery(find?.parent ?: ScanType.SCAN_ALL)
                 }
                 finderList.forEach { it.isSelected = it.parent == currentFragment.parentId }
                 newFinderAdapter.notifyDataSetChanged()
@@ -195,9 +194,9 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    /** 如果是全部视频parentId传递[SCAN_ALL]否则传递当前[parentId] */
+    /** 如果是全部视频parentId传递[ScanType.SCAN_ALL]否则传递当前[parentId] */
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) SCAN_ALL else parentId,
+        onStartPrevPage(if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) ScanType.SCAN_ALL else parentId,
                 position,
                 if (parentId == WeChatUiResult.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
                 WeChatPrevArgs(false, videoDuration, galleryWeChatFullImage.isChecked).putArgs(),

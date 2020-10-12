@@ -11,7 +11,7 @@ import com.gallery.core.ScanArgs
 import com.gallery.core.delegate.ScanDelegate
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.delegate.toScanFileEntity
-import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.ScanType
 import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
 
 open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
@@ -38,7 +38,7 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
         delegate.cameraSuccess()
     }
 
-    fun onScanGallery(parent: Long = SCAN_ALL, isCamera: Boolean = false) {
+    fun onScanGallery(parent: Long = ScanType.SCAN_ALL, isCamera: Boolean = false) {
         delegate.onScanGallery(parent, isCamera)
     }
 

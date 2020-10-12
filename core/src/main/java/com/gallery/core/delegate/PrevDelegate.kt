@@ -17,16 +17,11 @@ import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.ui.adapter.PrevAdapter
-import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.args.file.ScanFileArgs
-import com.gallery.scan.args.file.fileExpand
-import com.gallery.scan.args.file.multipleFileExpand
-import com.gallery.scan.scanFileImpl
-import com.gallery.scan.types.SCAN_ALL
-import com.gallery.scan.types.SCAN_NONE
-import com.gallery.scan.types.isScanNoNeExpand
-import com.gallery.scan.types.registerMultipleLiveData
+import com.gallery.scan.extensions.*
+import com.gallery.scan.extensions.ScanFileArgs
+import com.gallery.scan.types.ScanType.SCAN_ALL
+import com.gallery.scan.types.ScanType.SCAN_NONE
 
 /**
  * 预览代理
@@ -34,7 +29,7 @@ import com.gallery.scan.types.registerMultipleLiveData
 class PrevDelegate(
         private val fragment: Fragment,
         private val viewPager2: ViewPager2,
-        private val checkBox: View
+        private val checkBox: View,
 ) : IPrevDelegate {
 
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
@@ -99,9 +94,9 @@ class PrevDelegate(
                             factory = ScanEntityFactory.fileExpand(),
                             args = scanFileArgs
                     )
-            ).scanFileImpl().registerMultipleLiveData(fragment) { _, result ->
-                updateEntity(savedInstanceState, result.toScanEntity())
-            }.scanMultiple(parentId.multipleFileExpand())
+            ).scanFileImpl().registerLiveData(fragment) { result ->
+                updateEntity(savedInstanceState, result.multipleValue.toScanEntity())
+            }.scanMultiple(parentId.multipleScanExpand())
         }
     }
 

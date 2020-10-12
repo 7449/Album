@@ -37,11 +37,11 @@ import com.gallery.core.expand.*
 import com.gallery.core.ui.adapter.GalleryAdapter
 import com.gallery.core.ui.widget.SimpleDivider
 import com.gallery.scan.ScanImpl
-import com.gallery.scan.ScanViewModelFactory
 import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.args.file.*
-import com.gallery.scan.scanFileImpl
-import com.gallery.scan.types.*
+import com.gallery.scan.extensions.*
+import com.gallery.scan.result.Result
+import com.gallery.scan.types.ScanType
+import com.gallery.scan.types.Sort
 
 /**
  * 图库代理
@@ -53,7 +53,7 @@ class ScanDelegate(
 ) : IScanDelegate, GalleryAdapter.OnGalleryItemClickListener {
 
     private var fileUri: Uri = Uri.EMPTY
-    var parentId: Long = SCAN_ALL
+    var parentId: Long = ScanType.SCAN_ALL
 
     private val openCameraLauncher: ActivityResultLauncher<CameraUri> = fragment.requestCameraResultLauncherExpand({ cameraCanceled() }) { cameraSuccess() }
     private val cropLauncher: ActivityResultLauncher<Intent> =
@@ -89,8 +89,13 @@ class ScanDelegate(
                         )
                 ))
                 .scanFileImpl()
-                .registerMultipleLiveData(fragment) { _, result -> scanMultipleSuccess(result) }
-                .registerSingleLiveData(fragment) { _, result -> scanSingleSuccess(result) }
+                .registerLiveData(fragment) { result ->
+                    if (result is Result.Multiple) {
+                        scanMultipleSuccess(result.multipleValue)
+                    } else if (result is Result.Single) {
+                        scanSingleSuccess(result.singleValue)
+                    }
+                }
     }
     private val galleryBundle: GalleryBundle by lazy { fragment.galleryArgs }
     private val galleryImageLoader: IGalleryImageLoader by lazy { fragment.galleryImageLoader }
@@ -258,16 +263,16 @@ class ScanDelegate(
         // 可以直接插入到当前数据,如果不等于,不能插入,因为裁剪之后的图片属于另一个文件夹的数据
         // 文件夹数据更新的时候也需要处理这种情况
         if (isCamera && galleryAdapter.isNotEmpty) {
-            scan.scanSingle(activityNotNull.findIdByUriExpand(fileUri).singleFileExpand())
+            scan.scanSingle(activityNotNull.findIdByUriExpand(fileUri).singleScanExpand())
         } else {
-            scan.scanMultiple(parent.multipleFileExpand())
+            scan.scanMultiple(parent.multipleScanExpand())
         }
     }
 
     override fun onScanResult(uri: Uri) {
         when (uri.scheme) {
-            ContentResolver.SCHEME_CONTENT -> activityNotNull.scanFileExpand(uri) { scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleFileExpand()) }
-            ContentResolver.SCHEME_FILE -> activityNotNull.scanFileExpand(uri.path.orEmpty()) { scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleFileExpand()) }
+            ContentResolver.SCHEME_CONTENT -> activityNotNull.scanFileExpand(uri) { scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleScanExpand()) }
+            ContentResolver.SCHEME_FILE -> activityNotNull.scanFileExpand(uri.path.orEmpty()) { scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleScanExpand()) }
             else -> Log.e("gallery", "unsupported uri")
         }
     }

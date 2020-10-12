@@ -1,4 +1,4 @@
-package com.gallery.scan
+package com.gallery.scan.callback
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
@@ -10,8 +10,9 @@ import com.gallery.scan.args.ScanEntityFactory
 /**
  * @author y
  * @create 2019/2/27
+ * 核心参数
  */
-interface ScanView {
+interface ScanCore {
 
     /**
      * [Context]
@@ -32,6 +33,7 @@ interface ScanView {
     val scanEntityFactory: ScanEntityFactory
 
     /**
+     *  [scanOwnerGeneric]
      *  [LoaderManager.getInstance]
      *  注意传入的参数是否正确，[ViewModelStoreOwner]不正确会导致强转出错
      *  必须继承于
@@ -39,14 +41,15 @@ interface ScanView {
      *  [LifecycleOwner]
      *  两个接口，如有需要直接传递 FragmentActivity 或者 Fragment 即可
      */
-    fun scanOwner(): ViewModelStoreOwner
+    val scanOwner: ViewModelStoreOwner
 
     /**
      *  [LoaderManager.getInstance]
+     *  [scanOwner]
      */
     fun <T> scanOwnerGeneric(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
         @Suppress("UNCHECKED_CAST")
-        return scanOwner() as T
+        return scanOwner as T
     }
 
 }

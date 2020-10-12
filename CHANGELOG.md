@@ -1,7 +1,3 @@
-# next version
-
-* 通过weChat Library bug测试得出core需要添加部分开放api
-
 # core
 
 ## 0.1.5
@@ -57,9 +53,11 @@
 
 # scan 
 
-## next version
+## 0.1.6
 
 * 更新viewModel发送逻辑
+* 修改部分api
+* 拆分回调
 
 ## 0.1.5
 

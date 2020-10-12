@@ -1,13 +1,25 @@
-package com.gallery.scan.args.file
+package com.gallery.scan.extensions
 
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.provider.MediaStore
 import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.types.ResultType
-import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 import kotlinx.android.parcel.Parcelize
+
+/**
+ * 音频扫描
+ */
+@Parcelize
+class ScanAudioArgs : CursorLoaderArgs(AudioColumns.uri, AudioColumns.columns)
+
+/**
+ * 图片扫描
+ */
+@Parcelize
+class ScanPictureArgs : CursorLoaderArgs(PictureColumns.uri, PictureColumns.columns)
 
 /**
  * 文件扫描
@@ -22,10 +34,12 @@ class ScanFileArgs(
 
     override fun createSelection(args: Bundle): String? {
         val parent: Long = args.getLong(MediaStore.Files.FileColumns.PARENT)
+        val mimeType = args.getString(MediaStore.Files.FileColumns.MIME_TYPE)
         scanTypeArray ?: return null
-        return when (args.getSerializable(MediaStore.Files.FileColumns.MIME_TYPE) as ResultType) {
+        return when (mimeType) {
             ResultType.SINGLE -> resultSelection(args.getLong(MediaStore.Files.FileColumns._ID), scanTypeArray)
-            ResultType.MULTIPLE -> if (parent == SCAN_ALL) scanTypeSelection(scanTypeArray) else parentSelection(parent, scanTypeArray)
+            ResultType.MULTIPLE -> if (parent == ScanType.SCAN_ALL) scanTypeSelection(scanTypeArray) else parentSelection(parent, scanTypeArray)
+            else -> throw KotlinNullPointerException("mime_type == [$mimeType]")
         }
     }
 
@@ -47,5 +61,6 @@ class ScanFileArgs(
             scanTypeArray.forEach { _ -> defaultSelection.append(APPEND) }
             return defaultSelection.toString().removeSuffix("OR")
         }
+
     }
 }

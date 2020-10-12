@@ -1,4 +1,4 @@
-package com.gallery.scan.listener
+package com.gallery.scan.callback
 
 /**
  * 数据回调

@@ -26,8 +26,8 @@ import com.gallery.core.delegate.galleryFragment
 import com.gallery.core.expand.findFinder
 import com.gallery.core.expand.updateResultFinder
 import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.Sort
-import com.gallery.scan.types.isScanAllExpand
 import com.gallery.ui.*
 import com.gallery.ui.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
 import com.gallery.ui.UIGallerySaveArgs.Companion.putArgs

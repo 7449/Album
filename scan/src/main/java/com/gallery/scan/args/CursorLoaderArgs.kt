@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.loader.content.CursorLoader
 import com.gallery.scan.ScanImpl
-import com.gallery.scan.args.audio.ScanAudioArgs
-import com.gallery.scan.args.file.ScanFileArgs
-import com.gallery.scan.args.picture.ScanPictureArgs
+import com.gallery.scan.extensions.ScanAudioArgs
+import com.gallery.scan.extensions.ScanFileArgs
+import com.gallery.scan.extensions.ScanPictureArgs
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -60,4 +60,5 @@ open class CursorLoaderArgs(
      * 传递的数据，可自行获取需要的数据
      */
     open fun createSelectionArgs(args: Bundle): Array<String>? = null
+
 }

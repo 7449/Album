@@ -15,8 +15,7 @@ import com.gallery.core.delegate.ScanDelegate
 import com.gallery.core.delegate.ScanEntity
 import com.gallery.core.expand.LayoutManager
 import com.gallery.core.ui.fragment.ScanFragment
-import com.gallery.scan.types.SCAN_ALL
-import com.gallery.scan.types.SCAN_NONE
+import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 import kotlinx.android.parcel.Parcelize
 
@@ -43,7 +42,7 @@ data class ScanArgs(
         val parentId: Long,
         val fileUri: Uri,
         val isRefresh: Boolean,
-        val selectList: ArrayList<ScanEntity>
+        val selectList: ArrayList<ScanEntity>,
 ) : Parcelable {
     companion object {
         private const val Key = "scanArgs"
@@ -53,7 +52,7 @@ data class ScanArgs(
         }
 
         fun newResultInstance(selectList: ArrayList<ScanEntity>, isRefresh: Boolean): ScanArgs {
-            return ScanArgs(SCAN_ALL, Uri.EMPTY, isRefresh, selectList)
+            return ScanArgs(ScanType.SCAN_ALL, Uri.EMPTY, isRefresh, selectList)
         }
 
         fun ScanArgs.putScanArgs(bundle: Bundle = Bundle()): Bundle {
@@ -94,14 +93,14 @@ data class PrevArgs(
          * 如果不是，则使用 [scanAlone],如果是，则扫描 [GalleryBundle.scanType]类型的数据
          * 如果使用自定义 scanType,则parentId传 [SCAN_ALL] 比较合适
          */
-        val scanAlone: Int
+        val scanAlone: Int,
 ) : Parcelable {
     companion object {
 
         private const val Key = "prevArgs"
 
         fun newSaveInstance(position: Int, selectList: ArrayList<ScanEntity>): PrevArgs {
-            return PrevArgs(SCAN_ALL, selectList, null, position, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
+            return PrevArgs(ScanType.SCAN_ALL, selectList, null, position, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
         }
 
         fun PrevArgs.putPrevArgs(bundle: Bundle = Bundle()): Bundle {
@@ -114,7 +113,7 @@ data class PrevArgs(
 
         val Bundle.prevArgsOrDefault
             get() = prevArgs
-                    ?: PrevArgs(SCAN_ALL, arrayListOf(), GalleryBundle(), 0, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
+                    ?: PrevArgs(ScanType.SCAN_ALL, arrayListOf(), GalleryBundle(), 0, MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
 
         val PrevArgs.configOrDefault
             get() = config ?: GalleryBundle()
@@ -276,7 +275,7 @@ data class GalleryBundle(
          * [ScanFragment]RootView背景色
          */
         @ColorInt
-        val galleryRootBackground: Int = Color.WHITE
+        val galleryRootBackground: Int = Color.WHITE,
 ) : Parcelable {
     companion object {
         private const val Key = "galleryBundle"

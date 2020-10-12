@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.ScanArgs
 import com.gallery.core.expand.PermissionCode
-import com.gallery.scan.types.SCAN_ALL
+import com.gallery.scan.types.ScanType
 
 interface IScanDelegate {
 
@@ -69,7 +69,7 @@ interface IScanDelegate {
     /**
      * 扫描设备
      */
-    fun onScanGallery(parent: Long = SCAN_ALL, isCamera: Boolean = false)
+    fun onScanGallery(parent: Long = ScanType.SCAN_ALL, isCamera: Boolean = false)
 
     /**
      * 扫描单个数据

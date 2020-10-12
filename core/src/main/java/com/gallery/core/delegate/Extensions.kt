@@ -109,12 +109,12 @@ data class ScanEntity(
 
 /** [ScanFileEntity]转换为[ScanEntity] */
 fun ArrayList<ScanFileEntity>.toScanEntity(): ArrayList<ScanEntity> {
-    return map { ScanEntity(it) } as ArrayList<ScanEntity>
+    return mapTo(ArrayList()) { ScanEntity(it) }
 }
 
 /** [ScanEntity]转换为[ScanFileEntity] */
 fun ArrayList<ScanEntity>.toScanFileEntity(): ArrayList<ScanFileEntity> {
-    return map { it.delegate } as ArrayList<ScanFileEntity>
+    return mapTo(ArrayList()) { it.delegate }
 }
 
 /** [ScanFileEntity]转换为[ScanEntity] */

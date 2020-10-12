@@ -23,7 +23,7 @@ import kotlinx.android.parcel.Parcelize
  * 1.
  *  调用[PrevDelegate.resultBundle]获取需要的参数
  *  其中
- *  [parentId]默认参数 [SCAN_ALL]
+ *  [parentId]默认参数 [ScanType.SCAN_ALL]
  *  [fileUri]默认参数 [Uri.EMPTY]
  *  [isRefresh]是否需要合并数据并刷新
  *  [selectList]选中的数据
@@ -88,10 +88,10 @@ data class PrevArgs(
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
-         * 如果[parentId] == [SCAN_NONE] 则认为点击的是预览而不是item,则未选中数据和选中数据应该一致
+         * 如果[parentId] == [ScanType.SCAN_NONE] 则认为点击的是预览而不是item,则未选中数据和选中数据应该一致
          * 如果不是，则判断[scanAlone] == [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]] ，
          * 如果不是，则使用 [scanAlone],如果是，则扫描 [GalleryBundle.scanType]类型的数据
-         * 如果使用自定义 scanType,则parentId传 [SCAN_ALL] 比较合适
+         * 如果使用自定义 scanType,则parentId传 [ScanType.SCAN_ALL] 比较合适
          */
         val scanAlone: Int,
 ) : Parcelable {

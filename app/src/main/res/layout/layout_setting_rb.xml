@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cropRg"
+    android:id="@+id/settingRg"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:checkedButton="@id/crop_no">
@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="@string/select_crop"
+        android:text="@string/select_setting"
         android:textColor="@color/colorBlack" />
 
     <RadioButton
@@ -32,5 +32,12 @@
         android:layout_height="wrap_content"
         android:button="@drawable/default_selector_rb_check"
         android:text="@string/crop_ucrop" />
+
+    <RadioButton
+        android:id="@+id/single_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/default_selector_rb_check"
+        android:text="@string/single_select" />
 
 </RadioGroup>

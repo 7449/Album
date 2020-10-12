@@ -35,9 +35,9 @@ import com.gallery.ui.GalleryResultCallback
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_crop_rb.*
 import kotlinx.android.synthetic.main.layout_finder_rb.*
 import kotlinx.android.synthetic.main.layout_scan_rb.*
+import kotlinx.android.synthetic.main.layout_setting_rb.*
 import kotlinx.android.synthetic.main.layout_sort_rb.*
 import kotlinx.android.synthetic.main.layout_theme_rb.*
 
@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
         initGalleryFragment()
 
         var isWeChat = false
+        var isRadio = false
         var galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT)
         var galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT)
         var scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
@@ -113,11 +114,24 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                 R.id.scan_mix -> scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
             }
         }
-        cropRg.setOnCheckedChangeListener { _, i ->
+        settingRg.setOnCheckedChangeListener { _, i ->
             when (i) {
-                R.id.crop_no -> cropType = null
-                R.id.crop_cropper -> cropType = CropType.CROPPER
-                R.id.crop_ucrop -> cropType = CropType.UCROP
+                R.id.single_select -> {
+                    cropType = null
+                    isRadio = true
+                }
+                R.id.crop_no -> {
+                    cropType = null
+                    isRadio = false
+                }
+                R.id.crop_cropper -> {
+                    cropType = CropType.CROPPER
+                    isRadio = false
+                }
+                R.id.crop_ucrop -> {
+                    cropType = CropType.UCROP
+                    isRadio = false
+                }
             }
         }
         sortRg.setOnCheckedChangeListener { _, i ->
@@ -142,7 +156,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                             scanType = scanArray,
                             scanSort = sortType,
                             crop = cropType != null,
-                            radio = cropType != null,
+                            radio = isRadio || cropType != null,
                             cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
                     ),
                     galleryUiBundle = galleryUiBundle.copy(

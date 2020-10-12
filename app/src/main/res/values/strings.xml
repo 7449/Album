@@ -16,7 +16,7 @@
     <string name="scan_image">图片</string>
     <string name="scan_video">视频</string>
     <string name="scan_mix">混合</string>
-    <string name="select_crop">裁剪</string>
+    <string name="select_setting">设置</string>
     <string name="crop_ucrop">ucrop</string>
     <string name="crop_cropper">cropper</string>
     <string name="dialog">Dialog弹窗</string>
@@ -28,4 +28,5 @@
     <string name="start_config">启动</string>
     <string name="crop_no">no crop</string>
     <string name="theme_wechat">微信</string>
+    <string name="single_select">单选</string>
 </resources>

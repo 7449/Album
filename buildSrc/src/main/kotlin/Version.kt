@@ -23,7 +23,7 @@ object ClassPath {
 object Dep {
     const val viewHolder = "com.ydevelop:rv-adapter-viewholder:0.0.6"
     const val kotlinx = "com.ydevelop:kotlinx:0.0.7"
-    const val scan = "com.ydevelop:gallery.scan:0.1.5"
+    const val scan = "com.ydevelop:gallery.scan:0.1.6"
     const val core = "com.ydevelop:gallery.core:0.1.5"
     const val ui = "com.ydevelop:gallery.ui:0.1.0"
 

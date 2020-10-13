@@ -16,9 +16,9 @@ import androidx.kotlin.expand.widget.doOnAnimationEndExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.delegate.galleryFragment
-import com.gallery.core.expand.findFinder
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extension.compat.findFinder
+import com.gallery.core.extension.compat.galleryFragment
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.UIResult

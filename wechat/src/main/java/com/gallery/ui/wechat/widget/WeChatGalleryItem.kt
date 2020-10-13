@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.kotlin.expand.content.colorExpand
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.engine.formatTimeVideo
 import kotlinx.android.synthetic.main.layout_gallery_wechat_item.view.*

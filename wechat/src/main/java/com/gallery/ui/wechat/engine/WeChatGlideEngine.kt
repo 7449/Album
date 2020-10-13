@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.ui.R
 import com.gallery.ui.wechat.widget.WeChatGalleryItem

@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.ui.wechat.R
 import kotlinx.android.synthetic.main.layout_select_wechat_item.view.*
 

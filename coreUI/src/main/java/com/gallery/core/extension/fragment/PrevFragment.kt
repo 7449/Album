@@ -1,13 +1,19 @@
-package com.gallery.core.ui.fragment
+package com.gallery.core.extension.fragment
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import com.gallery.core.PrevArgs
+import com.gallery.core.PrevArgs.Companion.prevArgsOrDefault
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
-import com.gallery.core.R
-import com.gallery.core.delegate.PrevDelegate
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.callback.IGalleryPrevCallback
+import com.gallery.core.callback.IGalleryPrevInterceptor
+import com.gallery.core.delegate.IPrevDelegate
+import com.gallery.core.delegate.PrevDelegateImpl
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extension.R
 import kotlinx.android.synthetic.main.gallery_fragment_preview.*
 
 open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
@@ -20,10 +26,41 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
         }
     }
 
-    val delegate: PrevDelegate by lazy { createDelegate() }
+    private val galleryPrevInterceptor: IGalleryPrevInterceptor
+        get() = when {
+            parentFragment is IGalleryPrevInterceptor -> parentFragment as IGalleryPrevInterceptor
+            activity is IGalleryPrevInterceptor -> activity as IGalleryPrevInterceptor
+            else -> object : IGalleryPrevInterceptor {}
+        }
 
-    open fun createDelegate(): PrevDelegate {
-        return PrevDelegate(this, preViewPager, preCheckBox)
+    private val galleryPrevCallback: IGalleryPrevCallback
+        get() = when {
+            parentFragment is IGalleryPrevCallback -> parentFragment as IGalleryPrevCallback
+            activity is IGalleryPrevCallback -> activity as IGalleryPrevCallback
+            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryPrevCallback")
+        }
+
+    private val galleryImageLoader: IGalleryImageLoader
+        get() = when {
+            parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
+            activity is IGalleryImageLoader -> activity as IGalleryImageLoader
+            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
+        }
+
+    private val prevArgs: PrevArgs get() = bundleOrEmptyExpand().prevArgsOrDefault
+
+    val delegate: IPrevDelegate by lazy { createDelegate() }
+
+    open fun createDelegate(): PrevDelegateImpl {
+        return PrevDelegateImpl(
+                this,
+                preViewPager,
+                preCheckBox,
+                galleryPrevCallback,
+                galleryPrevInterceptor,
+                galleryImageLoader,
+                prevArgs
+        )
     }
 
     val currentItem: ScanEntity

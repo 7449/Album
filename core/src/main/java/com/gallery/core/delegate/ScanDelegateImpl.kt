@@ -1,5 +1,6 @@
 package com.gallery.core.delegate
 
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
@@ -33,8 +34,10 @@ import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
-import com.gallery.core.expand.*
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extensions.*
 import com.gallery.core.ui.adapter.GalleryAdapter
+import com.gallery.core.ui.widget.CameraResultContract
 import com.gallery.core.ui.widget.SimpleDivider
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.args.ScanEntityFactory
@@ -46,21 +49,63 @@ import com.gallery.scan.types.Sort
 /**
  * 图库代理
  */
-class ScanDelegate(
+class ScanDelegateImpl(
+        /**
+         * [Fragment]
+         * 承载容器
+         */
         private val fragment: Fragment,
+        /**
+         * [RecyclerView]
+         * 展示View
+         */
         private val recyclerView: RecyclerView,
+        /**
+         * [ImageView]
+         * 空白占位符
+         */
         private val emptyView: ImageView,
+        /**
+         * [GalleryBundle]
+         * 定制化参数列表
+         */
+        private val galleryBundle: GalleryBundle,
+        /**
+         * [ICrop]
+         * 裁剪
+         */
+        private val galleryICrop: ICrop,
+        /**
+         * [IGalleryCallback]
+         * 各种回调
+         */
+        private val galleryCallback: IGalleryCallback,
+        /**
+         * [IGalleryInterceptor]
+         * 拦截功能回调，目前支持自定义相机和占位符点击事件
+         */
+        private val galleryInterceptor: IGalleryInterceptor,
+        /**
+         * [IGalleryImageLoader]
+         * 图片加载框架
+         */
+        private val galleryImageLoader: IGalleryImageLoader,
 ) : IScanDelegate, GalleryAdapter.OnGalleryItemClickListener {
 
     private var fileUri: Uri = Uri.EMPTY
-    var parentId: Long = ScanType.SCAN_ALL
+    private var parentId: Long = ScanType.SCAN_ALL
 
-    private val openCameraLauncher: ActivityResultLauncher<CameraUri> = fragment.requestCameraResultLauncherExpand({ cameraCanceled() }) { cameraSuccess() }
+    private val openCameraLauncher: ActivityResultLauncher<CameraUri> = fragment.registerForActivityResult(CameraResultContract()) {
+        when (it) {
+            Activity.RESULT_CANCELED -> cameraCanceled()
+            Activity.RESULT_OK -> cameraSuccess()
+        }
+    }
     private val cropLauncher: ActivityResultLauncher<Intent> =
             fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { intent -> galleryICrop.onCropResult(this, galleryBundle, intent) }
     private val cameraPermissionLauncher: ActivityResultLauncher<String> =
-            fragment.requestPermissionResultLauncherExpand {
+            fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 if (it) {
                     permissionsGranted(PermissionCode.READ)
                 } else {
@@ -69,7 +114,7 @@ class ScanDelegate(
             }
 
     private val writePermissionLauncher: ActivityResultLauncher<String> =
-            fragment.requestPermissionResultLauncherExpand {
+            fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 if (it) {
                     permissionsGranted(PermissionCode.WRITE)
                 } else {
@@ -91,17 +136,13 @@ class ScanDelegate(
                 .scanFileImpl()
                 .registerLiveData(fragment) { result ->
                     if (result is Result.Multiple) {
-                        scanMultipleSuccess(result.multipleValue)
+                        onScanMultipleSuccess(result.multipleValue)
                     } else if (result is Result.Single) {
-                        scanSingleSuccess(result.singleValue)
+                        onScanSingleSuccess(result.singleValue)
                     }
                 }
     }
-    private val galleryBundle: GalleryBundle by lazy { fragment.galleryArgs }
-    private val galleryImageLoader: IGalleryImageLoader by lazy { fragment.galleryImageLoader }
-    private val galleryCallback: IGalleryCallback by lazy { fragment.galleryCallback }
-    private val galleryInterceptor: IGalleryInterceptor by lazy { fragment.galleryInterceptor }
-    private val galleryICrop: ICrop by lazy { fragment.galleryCrop }
+
     private val galleryAdapter: GalleryAdapter by lazy { GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this) }
 
     override val activity: FragmentActivity?
@@ -112,6 +153,12 @@ class ScanDelegate(
         get() = galleryAdapter.currentList.filterTo(ArrayList()) { it.parent != GalleryAdapter.CAMERA }
     override val selectEntities: ArrayList<ScanEntity>
         get() = galleryAdapter.currentSelectList
+    override val currentParentId: Long
+        get() = parentId
+
+    override fun onUpdateParentId(parentId: Long) {
+        this.parentId = parentId
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putScanArgs(outState)
@@ -148,7 +195,7 @@ class ScanDelegate(
     override fun onDestroy() {
     }
 
-    fun scanMultipleSuccess(entities: ArrayList<ScanFileEntity>) {
+    override fun onScanMultipleSuccess(entities: ArrayList<ScanFileEntity>) {
         if (entities.isEmpty() && parentId.isScanAllExpand()) {
             emptyView.showExpand()
             recyclerView.hideExpand()
@@ -167,7 +214,7 @@ class ScanDelegate(
         scrollToPosition(0)
     }
 
-    fun scanSingleSuccess(entity: ScanFileEntity?) {
+    override fun onScanSingleSuccess(entity: ScanFileEntity?) {
         entity ?: return galleryCallback.onResultError(activity, galleryBundle)
         val toScanEntity = entity.toScanEntity()
         //拍照或裁剪成功扫描到数据之后根据扫描方式更新数据

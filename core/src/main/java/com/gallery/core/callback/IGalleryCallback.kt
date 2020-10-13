@@ -5,18 +5,18 @@ import androidx.kotlin.expand.text.safeToastExpand
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.delegate.ScanDelegate
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.expand.CameraStatus
-import com.gallery.core.expand.PermissionCode
-import com.gallery.core.expand.isImageScanExpand
-import com.gallery.core.expand.isVideoScanExpand
+import com.gallery.core.delegate.ScanDelegateImpl
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extensions.CameraStatus
+import com.gallery.core.extensions.PermissionCode
+import com.gallery.core.extensions.isImageScanExpand
+import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 
 interface IGalleryCallback {
 
     /**
-     * [ScanDelegate.onCreate]触发
+     * [ScanDelegateImpl.onCreate]触发
      */
     fun onGalleryCreated() {}
 
@@ -68,7 +68,6 @@ interface IGalleryCallback {
     /**
      * 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法
      * 可以跳转到预览页
-     * [parentId]也可由[ScanDelegate.parentId]直接获取
      */
     fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {}
 

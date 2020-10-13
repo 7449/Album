@@ -1,9 +1,9 @@
 package com.gallery.core.callback
 
-import com.gallery.core.ui.fragment.PrevFragment
+import com.gallery.core.delegate.IPrevDelegate
 
 /**
- * [PrevFragment] 拦截器
+ * [IPrevDelegate] 拦截器
  */
 interface IGalleryPrevInterceptor
 

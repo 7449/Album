@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.gallery.core.GalleryBundle
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.delegate.prevFragment
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extension.compat.prevFragment
 import com.gallery.ui.base.activity.PrevBaseActivity
 import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*

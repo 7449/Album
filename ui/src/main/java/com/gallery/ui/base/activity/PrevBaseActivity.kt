@@ -15,9 +15,9 @@ import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.delegate.prevFragment
-import com.gallery.core.ui.fragment.PrevFragment
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extension.compat.prevFragment
+import com.gallery.core.extension.fragment.PrevFragment
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIPrevArgs

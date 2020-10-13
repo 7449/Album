@@ -6,9 +6,9 @@ import android.net.Uri
 import androidx.activity.result.ActivityResult
 import androidx.kotlin.expand.net.orEmptyExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.delegate.ScanDelegate
-import com.gallery.core.expand.cropUriExpand
-import com.gallery.core.expand.cropUriExpand2
+import com.gallery.core.delegate.IScanDelegate
+import com.gallery.core.extensions.cropUriExpand
+import com.gallery.core.extensions.cropUriExpand2
 
 /**
  * core library 剥离出裁剪相关功能，仅提供对外的裁剪接口，具体实现可由
@@ -42,7 +42,7 @@ interface ICrop {
     /**
      * 打开裁剪
      */
-    fun openCrop(delegate: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
+    fun openCrop(delegate: IScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
         TODO("cropping has not been initialized")
     }
 
@@ -51,7 +51,7 @@ interface ICrop {
      * [ActivityResult.mResultCode]
      * [ActivityResult.mData]
      */
-    fun onCropResult(delegate: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
+    fun onCropResult(delegate: IScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
         TODO("need to handle crop callback")
     }
 }

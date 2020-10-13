@@ -8,7 +8,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.ui.adapter.vh.CameraViewHolder
 import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.xadapter.vh.XViewHolder
@@ -18,7 +18,7 @@ class GalleryAdapter(
         private val galleryBundle: GalleryBundle,
         private val galleryCallback: IGalleryCallback,
         private val imageLoader: IGalleryImageLoader,
-        private val galleryItemClickListener: OnGalleryItemClickListener
+        private val galleryItemClickListener: OnGalleryItemClickListener,
 ) : RecyclerView.Adapter<XViewHolder>() {
 
     interface OnGalleryItemClickListener {

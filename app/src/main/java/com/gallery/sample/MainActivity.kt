@@ -16,10 +16,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.expand.LayoutManager
-import com.gallery.core.expand.isVideoScanExpand
-import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extensions.LayoutManager
+import com.gallery.core.extensions.isVideoScanExpand
+import com.gallery.core.extension.fragment.ScanFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback

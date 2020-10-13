@@ -8,7 +8,7 @@ import androidx.activity.result.ActivityResult
 import androidx.kotlin.expand.net.deleteExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
-import com.gallery.core.delegate.ScanDelegate
+import com.gallery.core.delegate.IScanDelegate
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIResult
 import com.theartofdev.edmodo.cropper.CropImage
@@ -19,7 +19,7 @@ class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     private var cropUri: Uri? = null
 
-    override fun onCropResult(delegate: ScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
+    override fun onCropResult(delegate: IScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri -> onCropSuccess(delegate, uri) }
                     ?: cropUri?.deleteExpand(delegate.activityNotNull)
@@ -28,7 +28,7 @@ class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         }
     }
 
-    override fun openCrop(delegate: ScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
+    override fun openCrop(delegate: IScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
         this.cropUri = cropOutPutUri(delegate.activityNotNull, galleryBundle)
         val intent = Intent().setClass(delegate.activityNotNull, CropImageActivity::class.java)
         val bundle = Bundle()
@@ -42,7 +42,7 @@ class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         return intent
     }
 
-    private fun onCropSuccess(delegate: ScanDelegate, uri: Uri) {
+    private fun onCropSuccess(delegate: IScanDelegate, uri: Uri) {
         delegate.onScanResult(uri)
         val intent = Intent()
         val bundle = Bundle()

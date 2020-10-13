@@ -2,7 +2,7 @@ package com.gallery.ui.base.adapter
 
 import android.view.View
 import android.widget.FrameLayout
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.base.activity.GalleryBaseActivity
 

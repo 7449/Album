@@ -14,22 +14,61 @@ import com.gallery.core.PrevArgs.Companion.prevArgs
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
+import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extensions.toScanEntity
 import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
-import com.gallery.scan.extensions.ScanFileArgs
 import com.gallery.scan.types.ScanType.SCAN_ALL
 import com.gallery.scan.types.ScanType.SCAN_NONE
 
 /**
  * 预览代理
  */
-class PrevDelegate(
+class PrevDelegateImpl(
+        /**
+         * [Fragment]
+         * 承载容器
+         */
         private val fragment: Fragment,
+        /**
+         * [ViewPager2]
+         * 展示View
+         */
         private val viewPager2: ViewPager2,
+        /**
+         * [View]
+         * 选择View
+         */
         private val checkBox: View,
+        /**
+         * [IGalleryPrevCallback]
+         * 预览回调
+         */
+        private val galleryPrevCallback: IGalleryPrevCallback,
+        /**
+         * [IGalleryPrevInterceptor]
+         * 预览拦截器，暂时没有用到
+         */
+        private val galleryPrevInterceptor: IGalleryPrevInterceptor,
+        /**
+         * [IGalleryImageLoader]
+         * 图片加载框架
+         */
+        private val galleryImageLoader: IGalleryImageLoader,
+        /**
+         * [PrevArgs]
+         * 核心参数列表
+         */
+        private val prevArgs: PrevArgs,
+        /**
+         * [GalleryBundle]
+         * ui参数列表
+         */
+        private val galleryBundle: GalleryBundle = prevArgs.configOrDefault,
 ) : IPrevDelegate {
 
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
@@ -46,11 +85,8 @@ class PrevDelegate(
             checkBox.isSelected = isCheckBox(position)
         }
     }
-    private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> fragment.galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
-    private val prevArgs: PrevArgs by lazy { fragment.prevArgs }
-    private val galleryBundle: GalleryBundle by lazy { prevArgs.configOrDefault }
-    private val galleryPrevCallback: IGalleryPrevCallback by lazy { fragment.galleryPrevCallback }
-    private val galleryPrevInterceptor: IGalleryPrevInterceptor by lazy { fragment.galleryPrevInterceptor }
+
+    private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
 
     override val allItem: ArrayList<ScanEntity>
         get() = prevAdapter.allItem

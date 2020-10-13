@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.ScanArgs
-import com.gallery.core.expand.PermissionCode
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extensions.PermissionCode
+import com.gallery.scan.extensions.ScanFileEntity
 import com.gallery.scan.types.ScanType
 
 interface IScanDelegate {
@@ -52,6 +54,16 @@ interface IScanDelegate {
         get() = currentEntities.size
 
     /**
+     * 当前扫描Id
+     */
+    val currentParentId: Long
+
+    /**
+     * 更新当前扫描Id
+     */
+    fun onUpdateParentId(parentId: Long)
+
+    /**
      * 横竖屏切换
      */
     fun onSaveInstanceState(outState: Bundle)
@@ -72,9 +84,19 @@ interface IScanDelegate {
     fun onScanGallery(parent: Long = ScanType.SCAN_ALL, isCamera: Boolean = false)
 
     /**
+     * 扫描集合成功
+     */
+    fun onScanMultipleSuccess(entities: ArrayList<ScanFileEntity>)
+
+    /**
      * 扫描单个数据
      */
     fun onScanResult(uri: Uri)
+
+    /**
+     * 扫描单个文件成功
+     */
+    fun onScanSingleSuccess(entity: ScanFileEntity?)
 
     /**
      * 刷新预览之后的数据

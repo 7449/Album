@@ -11,8 +11,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extension.fragment.ScanFragment
 import com.gallery.sample.R
 
 class CustomDialog : DialogFragment(), IGalleryCallback {

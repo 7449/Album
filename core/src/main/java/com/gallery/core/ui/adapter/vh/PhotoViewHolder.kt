@@ -9,13 +9,15 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.xadapter.vh.XViewHolder
 
-class PhotoViewHolder(itemView: View,
-                      private val galleryBundle: GalleryBundle,
-                      private val display: Int,
-                      private val galleryCallback: IGalleryCallback) : XViewHolder(itemView) {
+class PhotoViewHolder(
+        itemView: View,
+        private val galleryBundle: GalleryBundle,
+        private val display: Int,
+        private val galleryCallback: IGalleryCallback,
+) : XViewHolder(itemView) {
 
     private val container: FrameLayout = frameLayout(R.id.galleryContainer)
     private val checkBox: TextView = textView(R.id.galleryCheckBox)

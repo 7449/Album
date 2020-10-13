@@ -1,5 +1,9 @@
 # core
 
+## 0.1.6
+
+* 修改部分api命名
+
 ## 0.1.5
 
 * 增加LayoutManager扩展

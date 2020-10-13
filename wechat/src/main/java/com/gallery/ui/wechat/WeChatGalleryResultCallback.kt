@@ -11,7 +11,7 @@ import androidx.kotlin.expand.os.orEmptyExpand
 import com.gallery.ui.UIResult
 
 class WeChatGalleryResultCallback(
-        private val galleryListener: WeChatGalleryCallback
+        private val galleryListener: WeChatGalleryCallback,
 ) : ActivityResultCallback<ActivityResult> {
 
     override fun onActivityResult(intent: ActivityResult) {

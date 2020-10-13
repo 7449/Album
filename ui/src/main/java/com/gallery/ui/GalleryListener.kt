@@ -1,7 +1,7 @@
 package com.gallery.ui
 
 import android.net.Uri
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 
 interface GalleryListener {
     /**

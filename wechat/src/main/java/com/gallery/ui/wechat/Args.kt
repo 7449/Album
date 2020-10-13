@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class WeChatPrevSaveArgs(
-        val ids: ArrayList<Long>
+        val ids: ArrayList<Long>,
 ) : Parcelable {
     companion object {
         private const val Key = "weChatPrevSaveArgs"
@@ -27,7 +27,7 @@ data class WeChatPrevArgs(
         /** 限制的视频时长 */
         val videoDuration: Int,
         /** 是否选择原图 */
-        val fullImageSelect: Boolean
+        val fullImageSelect: Boolean,
 ) : Parcelable {
     companion object {
         private const val Key = "weChatPrevArgs"

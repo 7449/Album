@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.os.Parcelable
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
-import com.gallery.core.delegate.PrevDelegate
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.PrevDelegateImpl
+import com.gallery.core.delegate.entity.ScanEntity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UIGallerySaveArgs(
         val finderName: String,
-        val finderList: ArrayList<ScanEntity>
+        val finderList: ArrayList<ScanEntity>,
 ) : Parcelable {
     companion object {
         private const val Key = "uiGallerySaveArgs"
@@ -35,7 +35,7 @@ data class UIGalleryArgs(
         val galleryBundle: GalleryBundle,
         val galleryUiBundle: GalleryUiBundle,
         val galleryOption: Bundle,
-        val galleryPrevOption: Bundle
+        val galleryPrevOption: Bundle,
 ) : Parcelable {
     companion object {
         private const val Key = "uiGalleryArgs"
@@ -58,13 +58,13 @@ data class UIPrevArgs(
          */
         val uiBundle: GalleryUiBundle,
         /**
-         * 预览页[PrevDelegate]需要的数据
+         * 预览页[PrevDelegateImpl]需要的数据
          */
         val prevArgs: PrevArgs,
         /**
          * 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据
          */
-        val option: Bundle
+        val option: Bundle,
 ) : Parcelable {
     companion object {
         private const val Key = "uiPrevArgs"

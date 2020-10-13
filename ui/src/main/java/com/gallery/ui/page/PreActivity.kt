@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.gallery.core.GalleryBundle
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.delegate.prevFragment
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extension.compat.prevFragment
 import com.gallery.core.ui.widget.GalleryImageView
 import com.gallery.ui.R
 import com.gallery.ui.base.activity.PrevBaseActivity

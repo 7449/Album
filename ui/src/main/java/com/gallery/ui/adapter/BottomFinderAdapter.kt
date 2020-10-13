@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.base.adapter.BaseFinderAdapter

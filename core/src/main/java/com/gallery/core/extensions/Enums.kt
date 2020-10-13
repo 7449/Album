@@ -1,6 +1,11 @@
-package com.gallery.core.expand
+package com.gallery.core.extensions
 
 import android.net.Uri
+
+enum class LayoutManager {
+    LINEAR,
+    GRID
+}
 
 enum class CameraStatus {
     SUCCESS,

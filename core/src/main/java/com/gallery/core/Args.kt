@@ -10,18 +10,17 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.delegate.PrevDelegate
-import com.gallery.core.delegate.ScanDelegate
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.expand.LayoutManager
-import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.core.delegate.PrevDelegateImpl
+import com.gallery.core.delegate.ScanDelegateImpl
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extensions.LayoutManager
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 import kotlinx.android.parcel.Parcelize
 
 /**
  * 1.
- *  调用[PrevDelegate.resultBundle]获取需要的参数
+ *  调用[PrevDelegateImpl.resultBundle]获取需要的参数
  *  其中
  *  [parentId]默认参数 [ScanType.SCAN_ALL]
  *  [fileUri]默认参数 [Uri.EMPTY]
@@ -30,7 +29,7 @@ import kotlinx.android.parcel.Parcelize
  *  如果需要获取数据可通过[ScanArgs.scanArgs]获取里面的[selectList]
  *
  * 2.
- *  在横竖屏切换时[ScanDelegate.onSaveInstanceState]获取需要的参数
+ *  在横竖屏切换时[ScanDelegateImpl.onSaveInstanceState]获取需要的参数
  *  其中
  *  [parentId]当前的parentId
  *  [fileUri]拍照的Uri
@@ -68,7 +67,7 @@ data class ScanArgs(
 @Parcelize
 data class PrevArgs(
         /**
-         * 当前文件的parentId,用于扫描数据库获取对应的数 如果是预览进入的话可传[SCAN_NONE]
+         * 当前文件的parentId,用于扫描数据库获取对应的数 如果是预览进入的话可传[ScanType.SCAN_NONE]
          */
         val parentId: Long,
         /**
@@ -272,7 +271,7 @@ data class GalleryBundle(
         @ColorInt
         val prevPhotoBackgroundColor: Int = Color.WHITE,
         /**
-         * [ScanFragment]RootView背景色
+         * RootView背景色
          */
         @ColorInt
         val galleryRootBackground: Int = Color.WHITE,

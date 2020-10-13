@@ -169,5 +169,5 @@ data class GalleryUiBundle(
         /**
          * 携带的参数
          */
-        val args: Bundle = Bundle.EMPTY
+        val args: Bundle = Bundle.EMPTY,
 ) : Parcelable

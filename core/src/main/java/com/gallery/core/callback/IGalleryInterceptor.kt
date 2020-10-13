@@ -3,10 +3,10 @@ package com.gallery.core.callback
 import android.net.Uri
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.core.delegate.IScanDelegate
 
 /**
- * [ScanFragment] 拦截器
+ * [IScanDelegate] 拦截器
  */
 interface IGalleryInterceptor {
 
@@ -29,10 +29,10 @@ interface IGalleryInterceptor {
      * [uri]只是插入了路径,没有插入其他数据
      *
      * 这里的resultCode可自定义,但是回调自行调用
-     * [ScanFragment.onCameraResultCanceled]
-     * [ScanFragment.onCameraResultOk]
+     * [IScanDelegate.cameraCanceled]
+     * [IScanDelegate.cameraSuccess]
      *
-     * 这里需要注意的是[ScanFragment.onCameraResultOk]不需要任何参数,只需要拍照成功之后
+     * 这里需要注意的是[IScanDelegate.cameraSuccess]不需要任何参数,只需要拍照成功之后
      * 手动调用刷新图库即可，因此自定义返回的[Uri]则在自定义相机的时候非常重要,需要传递过去之后
      * 把拍照的数据写入到这个[uri]中
      *

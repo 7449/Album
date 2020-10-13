@@ -21,11 +21,11 @@ import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
-import com.gallery.core.delegate.ScanEntity
-import com.gallery.core.delegate.galleryFragment
-import com.gallery.core.expand.findFinder
-import com.gallery.core.expand.updateResultFinder
-import com.gallery.core.ui.fragment.ScanFragment
+import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.extension.compat.findFinder
+import com.gallery.core.extension.compat.galleryFragment
+import com.gallery.core.extension.compat.updateResultFinder
+import com.gallery.core.extension.fragment.ScanFragment
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.Sort
 import com.gallery.ui.*

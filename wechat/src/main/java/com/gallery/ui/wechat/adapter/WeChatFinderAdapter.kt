@@ -2,15 +2,16 @@ package com.gallery.ui.wechat.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.delegate.ScanEntity
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder
 
-class WeChatFinderAdapter(private val galleryUiBundle: GalleryUiBundle,
-                          private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener
+class WeChatFinderAdapter(
+        private val galleryUiBundle: GalleryUiBundle,
+        private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<XViewHolder>() {
 
     private val list: ArrayList<ScanEntity> = arrayListOf()

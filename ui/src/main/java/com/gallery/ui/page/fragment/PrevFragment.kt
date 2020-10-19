@@ -3,21 +3,20 @@ package com.gallery.ui.page.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import com.gallery.core.PrevArgs
-import com.gallery.core.PrevArgs.Companion.prevArgsOrDefault
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.IPrevDelegate
-import com.gallery.core.delegate.PrevDelegateImpl
 import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.ui.R
 
 open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
 
     companion object {
+        @JvmStatic
         fun newInstance(prevArgs: PrevArgs): PrevFragment {
             val prevFragment = PrevFragment()
             prevFragment.arguments = prevArgs.putPrevArgs()
@@ -28,6 +27,7 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
     /**
      * 预览拦截器，暂时没有用到
      */
+    @Suppress("unused")
     private val galleryPrevInterceptor: IGalleryPrevInterceptor
         get() = when {
             parentFragment is IGalleryPrevInterceptor -> parentFragment as IGalleryPrevInterceptor
@@ -49,17 +49,10 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
             else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
         }
 
-    private val prevArgs: PrevArgs get() = bundleOrEmptyExpand().prevArgsOrDefault
-
     val delegate: IPrevDelegate by lazy { createDelegate() }
 
     open fun createDelegate(): PrevDelegateImpl {
-        return PrevDelegateImpl(
-                this,
-                prevArgs,
-                galleryPrevCallback = galleryPrevCallback,
-                galleryImageLoader = galleryImageLoader
-        )
+        return PrevDelegateImpl(this, galleryPrevCallback, galleryImageLoader)
     }
 
     val currentItem: ScanEntity

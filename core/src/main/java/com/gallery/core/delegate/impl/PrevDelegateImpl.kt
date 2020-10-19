@@ -1,22 +1,25 @@
-package com.gallery.core.delegate
+package com.gallery.core.delegate.impl
 
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.net.isFileExistsExpand
+import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.PrevArgs.Companion.prevArgs
+import com.gallery.core.PrevArgs.Companion.prevArgsOrDefault
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.R
 import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
+import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.adapter.PrevAdapter
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.toScanEntity
@@ -33,18 +36,9 @@ class PrevDelegateImpl(
          * [Fragment]
          * 承载容器
          * 使用容器获取需要的[ViewPager2]
+         * [Fragment]中必须存在 [R.id.gallery_prev_viewpager2] [R.id.gallery_prev_checkbox] 两个id的View
          */
         private val fragment: Fragment,
-        /**
-         * [PrevArgs]
-         * 核心参数列表
-         */
-        private val prevArgs: PrevArgs,
-        /**
-         * [GalleryBundle]
-         * ui参数列表
-         */
-        private val galleryBundle: GalleryBundle = prevArgs.configOrDefault,
         /**
          * [IGalleryPrevCallback]
          * 预览回调
@@ -75,6 +69,8 @@ class PrevDelegateImpl(
     private val viewPager2: ViewPager2 by lazy { fragment.view?.findViewById(R.id.gallery_prev_viewpager2) as ViewPager2 }
     private val checkBox: View by lazy { fragment.view?.findViewById(R.id.gallery_prev_checkbox) as View }
     private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
+    private val prevArgs: PrevArgs by lazy { fragment.bundleOrEmptyExpand().prevArgsOrDefault }
+    private val galleryBundle: GalleryBundle by lazy { prevArgs.configOrDefault }
 
     override val allItem: ArrayList<ScanEntity>
         get() = prevAdapter.allItem

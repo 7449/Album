@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.delegate.impl.ScanDelegateImpl
 
 interface IPrevDelegate {
 

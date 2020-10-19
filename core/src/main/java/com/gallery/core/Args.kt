@@ -10,8 +10,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.delegate.PrevDelegateImpl
-import com.gallery.core.delegate.ScanDelegateImpl
+import com.gallery.core.delegate.impl.PrevDelegateImpl
+import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.LayoutManager
 import com.gallery.scan.types.ScanType
@@ -125,9 +125,6 @@ data class GalleryBundle(
         /**
          * 扫描类型
          * 根据[MediaStore.Files.FileColumns.MEDIA_TYPE]搜索
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
          */
         @Suppress("ArrayInDataClass")
         @Size(min = 1)

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
-import com.gallery.core.delegate.PrevDelegateImpl
+import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.delegate.entity.ScanEntity
 import kotlinx.android.parcel.Parcelize
 

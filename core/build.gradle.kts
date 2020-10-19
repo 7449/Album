@@ -18,8 +18,8 @@ dependencies {
 //    api(project(":scan"))
     api(Dep.scan)
     api(Dep.viewHolder)
+    compileOnly(Dep.viewPager2)
     compileOnly(Dep.appcompat)
     compileOnly(Dep.fragment)
     compileOnly(Dep.kotlin)
-    compileOnly(Dep.viewPager2)
 }

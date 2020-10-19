@@ -17,7 +17,7 @@ object Version {
 object ClassPath {
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
     const val bintray = "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
-    const val gradle = "com.android.tools.build:gradle:4.1.0"
+    const val gradle = "com.android.tools.build:gradle:4.0.2"
 }
 
 object Dep {

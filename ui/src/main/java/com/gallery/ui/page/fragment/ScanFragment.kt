@@ -3,10 +3,8 @@ package com.gallery.ui.page.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
 import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
 import com.gallery.core.ScanArgs
 import com.gallery.core.callback.IGalleryCallback
@@ -14,8 +12,8 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
-import com.gallery.core.delegate.ScanDelegateImpl
 import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.extensions.toScanFileEntity
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.R
@@ -23,6 +21,7 @@ import com.gallery.ui.R
 open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
 
     companion object {
+        @JvmStatic
         fun newInstance(galleryBundle: GalleryBundle): ScanFragment {
             val scanFragment = ScanFragment()
             scanFragment.arguments = galleryBundle.putGalleryArgs()
@@ -51,23 +50,18 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
             else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
         }
 
-    private val galleryCrop: ICrop
+    private val galleryCrop: ICrop?
         get() = when {
             parentFragment is ICrop -> (parentFragment as ICrop).cropImpl
-                    ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
             activity is ICrop -> (activity as ICrop).cropImpl
-                    ?: throw KotlinNullPointerException("cropImpl == null or crop == null")
-            else -> object : ICrop {}
+            else -> null
         }
-
-    private val galleryArgs: GalleryBundle get() = bundleOrEmptyExpand().galleryBundleOrDefault
 
     val delegate: IScanDelegate by lazy { createDelegate() }
 
     open fun createDelegate(): ScanDelegateImpl {
         return ScanDelegateImpl(
                 this,
-                galleryArgs,
                 galleryCrop,
                 galleryCallback,
                 galleryInterceptor,

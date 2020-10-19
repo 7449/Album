@@ -1,4 +1,4 @@
-package com.gallery.core.delegate
+package com.gallery.core.delegate.impl
 
 import android.Manifest
 import android.app.Activity
@@ -21,6 +21,7 @@ import androidx.kotlin.expand.content.findIdByUriExpand
 import androidx.kotlin.expand.content.openVideoExpand
 import androidx.kotlin.expand.net.deleteExpand
 import androidx.kotlin.expand.net.isFileExistsExpand
+import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.kotlin.expand.os.permission.checkCameraPermissionExpand
 import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
 import androidx.kotlin.expand.view.hideExpand
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
 import com.gallery.core.R
 import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
@@ -41,6 +43,7 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.camera.CameraResultContract
 import com.gallery.core.camera.CameraUri
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter
 import com.gallery.core.delegate.divider.DefaultDivider
 import com.gallery.core.delegate.entity.ScanEntity
@@ -59,18 +62,14 @@ class ScanDelegateImpl(
         /**
          * [Fragment]
          * 承载容器
+         * [Fragment]中必须存在 [R.id.gallery_recyclerview] [R.id.gallery_empty_view] 两个id的View
          */
         private val fragment: Fragment,
-        /**
-         * [GalleryBundle]
-         * 定制化参数列表
-         */
-        private val galleryBundle: GalleryBundle,
         /**
          * [ICrop]
          * 裁剪
          */
-        private val galleryICrop: ICrop,
+        private val galleryICrop: ICrop?,
         /**
          * [IGalleryCallback]
          * 各种回调
@@ -91,15 +90,21 @@ class ScanDelegateImpl(
     private var fileUri: Uri = Uri.EMPTY
     private var parentId: Long = ScanType.SCAN_ALL
 
+    /** 相机启动器 */
     private val openCameraLauncher: ActivityResultLauncher<CameraUri> = fragment.registerForActivityResult(CameraResultContract()) {
         when (it) {
             Activity.RESULT_CANCELED -> cameraCanceled()
             Activity.RESULT_OK -> cameraSuccess()
         }
     }
+
+    /** 裁剪启动器 */
     private val cropLauncher: ActivityResultLauncher<Intent> =
-            fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { intent -> galleryICrop.onCropResult(this, galleryBundle, intent) }
+            fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                galleryICrop?.onCropResult(this, galleryBundle, it)
+            }
+
+    /** 相机权限启动器 */
     private val cameraPermissionLauncher: ActivityResultLauncher<String> =
             fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 if (it) {
@@ -109,6 +114,7 @@ class ScanDelegateImpl(
                 }
             }
 
+    /** 读写文件启动器 */
     private val writePermissionLauncher: ActivityResultLauncher<String> =
             fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 if (it) {
@@ -139,6 +145,7 @@ class ScanDelegateImpl(
                 }
     }
 
+    private val galleryBundle: GalleryBundle by lazy { fragment.bundleOrEmptyExpand().galleryBundleOrDefault }
     private val galleryAdapter: GalleryAdapter by lazy { GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this) }
     private val recyclerView: RecyclerView by lazy { fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView }
     private val emptyView: ImageView by lazy { fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView }
@@ -245,7 +252,7 @@ class ScanDelegateImpl(
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, scanEntity.uri))
+                cropLauncher.launch(galleryICrop?.openCrop(this, galleryBundle, scanEntity.uri))
             } else {
                 galleryCallback.onGalleryResource(activityNotNull, scanEntity)
             }
@@ -294,7 +301,7 @@ class ScanDelegateImpl(
     override fun cameraSuccess() {
         activityNotNull.scanFileExpand(fileUri) { onScanGallery(parentId, true) }
         if (galleryBundle.cameraCrop) {
-            cropLauncher.launch(galleryICrop.openCrop(this, galleryBundle, fileUri))
+            cropLauncher.launch(galleryICrop?.openCrop(this, galleryBundle, fileUri))
         }
     }
 

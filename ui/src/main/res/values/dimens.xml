@@ -13,5 +13,4 @@
     <dimen name="gallery_button_margin">3dp</dimen>
     <dimen name="gallery_empty_width">160dp</dimen>
     <dimen name="gallery_empty_height">160dp</dimen>
-    <dimen name="item_gallery_check_margin">5dp</dimen>
 </resources>

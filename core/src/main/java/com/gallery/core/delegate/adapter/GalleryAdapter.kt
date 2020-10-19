@@ -67,20 +67,20 @@ class GalleryAdapter(
     }
 
     fun addAll(newList: ArrayList<ScanEntity>) {
-        galleryList.clear()
-        galleryList.addAll(newList)
+        currentList.clear()
+        currentList.addAll(newList)
         notifyDataSetChanged()
     }
 
     fun addSelectAll(newList: ArrayList<ScanEntity>) {
-        selectList.clear()
-        selectList.addAll(newList)
+        currentSelectList.clear()
+        currentSelectList.addAll(newList)
         notifyDataSetChanged()
     }
 
     fun updateEntity() {
         currentList.forEach { it.isSelected = false }
-        selectList.forEach { select -> currentList.find { it.id == select.id }?.isSelected = true }
+        currentSelectList.forEach { select -> currentList.find { it.id == select.id }?.isSelected = true }
         notifyDataSetChanged()
     }
 
@@ -97,7 +97,7 @@ class GalleryAdapter(
     }
 
     val isNotEmpty: Boolean
-        get() = galleryList.isNotEmpty()
+        get() = currentList.isNotEmpty()
 
     val currentSelectList: ArrayList<ScanEntity>
         get() = selectList

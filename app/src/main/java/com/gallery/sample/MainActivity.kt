@@ -19,8 +19,8 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.LayoutManager
 import com.gallery.core.extensions.isVideoScanExpand
-import com.gallery.core.extension.fragment.ScanFragment
-import com.gallery.core.ui.widget.GalleryImageView
+import com.gallery.ui.page.fragment.ScanFragment
+import com.gallery.ui.widget.GalleryImageView
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback
 import com.gallery.sample.custom.CustomCameraActivity

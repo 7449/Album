@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="gallery_recyclerview" type="id" />
+    <item name="gallery_empty_view" type="id" />
+    <item name="gallery_prev_viewpager2" type="id" />
+    <item name="gallery_prev_checkbox" type="id" />
+</resources>

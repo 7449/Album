@@ -1,4 +1,4 @@
-package com.gallery.core.extension.fragment
+package com.gallery.ui.page.fragment
 
 import android.os.Bundle
 import android.view.View
@@ -16,10 +16,9 @@ import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.ScanDelegateImpl
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.core.extension.R
 import com.gallery.core.extensions.toScanFileEntity
 import com.gallery.scan.types.ScanType
-import kotlinx.android.synthetic.main.gallery_fragment_gallery.*
+import com.gallery.ui.R
 
 open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
 
@@ -68,8 +67,6 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
     open fun createDelegate(): ScanDelegateImpl {
         return ScanDelegateImpl(
                 this,
-                galleryRecyclerView,
-                galleryEmpty,
                 galleryArgs,
                 galleryCrop,
                 galleryCallback,

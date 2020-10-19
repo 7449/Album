@@ -11,7 +11,7 @@ import com.gallery.core.extensions.CameraStatus
 import com.gallery.core.extensions.PermissionCode
 import com.gallery.core.extensions.isImageScanExpand
 import com.gallery.core.extensions.isVideoScanExpand
-import com.gallery.core.ui.adapter.vh.PhotoViewHolder
+import com.gallery.core.delegate.adapter.viewholder.PhotoViewHolder
 
 interface IGalleryCallback {
 

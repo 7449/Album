@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.core.extension.compat.findFinder
-import com.gallery.core.extension.compat.galleryFragment
+import com.gallery.ui.compat.findFinder
+import com.gallery.ui.compat.galleryFragment
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.UIResult

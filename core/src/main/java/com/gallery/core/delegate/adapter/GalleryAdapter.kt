@@ -1,4 +1,4 @@
-package com.gallery.core.ui.adapter
+package com.gallery.core.delegate.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +8,9 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.delegate.adapter.viewholder.CameraViewHolder
+import com.gallery.core.delegate.adapter.viewholder.PhotoViewHolder
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.core.ui.adapter.vh.CameraViewHolder
-import com.gallery.core.ui.adapter.vh.PhotoViewHolder
 import com.xadapter.vh.XViewHolder
 
 class GalleryAdapter(

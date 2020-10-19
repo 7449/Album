@@ -1,10 +1,12 @@
 package com.gallery.core.delegate
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -19,6 +21,8 @@ import androidx.kotlin.expand.content.findIdByUriExpand
 import androidx.kotlin.expand.content.openVideoExpand
 import androidx.kotlin.expand.net.deleteExpand
 import androidx.kotlin.expand.net.isFileExistsExpand
+import androidx.kotlin.expand.os.permission.checkCameraPermissionExpand
+import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.lifecycle.ViewModelProvider
@@ -27,18 +31,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
+import com.gallery.core.R
 import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
+import com.gallery.core.camera.CameraResultContract
+import com.gallery.core.camera.CameraUri
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.adapter.GalleryAdapter
+import com.gallery.core.delegate.divider.DefaultDivider
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.*
-import com.gallery.core.ui.adapter.GalleryAdapter
-import com.gallery.core.ui.widget.CameraResultContract
-import com.gallery.core.ui.widget.SimpleDivider
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
@@ -55,16 +61,6 @@ class ScanDelegateImpl(
          * 承载容器
          */
         private val fragment: Fragment,
-        /**
-         * [RecyclerView]
-         * 展示View
-         */
-        private val recyclerView: RecyclerView,
-        /**
-         * [ImageView]
-         * 空白占位符
-         */
-        private val emptyView: ImageView,
         /**
          * [GalleryBundle]
          * 定制化参数列表
@@ -144,6 +140,8 @@ class ScanDelegateImpl(
     }
 
     private val galleryAdapter: GalleryAdapter by lazy { GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this) }
+    private val recyclerView: RecyclerView by lazy { fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView }
+    private val emptyView: ImageView by lazy { fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView }
 
     override val activity: FragmentActivity?
         get() = fragment.activity
@@ -184,7 +182,7 @@ class ScanDelegateImpl(
             LayoutManager.GRID -> GridLayoutManager(recyclerView.context, galleryBundle.spanCount, galleryBundle.orientation, false)
             LayoutManager.LINEAR -> LinearLayoutManager(recyclerView.context, galleryBundle.orientation, false)
         }
-        recyclerView.addItemDecoration(SimpleDivider(galleryBundle.dividerWidth))
+        recyclerView.addItemDecoration(DefaultDivider(galleryBundle.dividerWidth))
         if (recyclerView.itemAnimator is SimpleItemAnimator) {
             (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
@@ -257,6 +255,16 @@ class ScanDelegateImpl(
     }
 
     override fun cameraOpen() {
+
+        fun Fragment.checkPermissionAndRequestCameraExpand(launcher: ActivityResultLauncher<String>): Boolean {
+            return if (!checkCameraPermissionExpand()) {
+                launcher.launch(Manifest.permission.CAMERA)
+                false
+            } else {
+                true
+            }
+        }
+
         if (!fragment.checkPermissionAndRequestCameraExpand(cameraPermissionLauncher)) {
             galleryCallback.onCameraOpenStatus(activity, CameraStatus.PERMISSION)
             return
@@ -269,6 +277,17 @@ class ScanDelegateImpl(
         if (onCustomCamera || cameraUriExpand == null) {
             return
         }
+
+        fun Fragment.checkCameraStatusExpand(uri: CameraUri, action: (uri: CameraUri) -> Unit): CameraStatus {
+            val intent: Intent = if (uri.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE))
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            else Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+            return intent.resolveActivity(requireActivity().packageManager)?.let {
+                action.invoke(uri)
+                CameraStatus.SUCCESS
+            } ?: CameraStatus.ERROR
+        }
+
         galleryCallback.onCameraOpenStatus(activity, fragment.checkCameraStatusExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) })
     }
 
@@ -297,6 +316,16 @@ class ScanDelegateImpl(
     }
 
     override fun onScanGallery(parent: Long, isCamera: Boolean) {
+
+        fun Fragment.checkPermissionAndRequestWriteExpand(launcher: ActivityResultLauncher<String>): Boolean {
+            return if (!checkWritePermissionExpand()) {
+                launcher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                false
+            } else {
+                true
+            }
+        }
+
         if (!fragment.checkPermissionAndRequestWriteExpand(writePermissionLauncher)) {
             return
         }

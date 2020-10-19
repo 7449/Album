@@ -1,4 +1,4 @@
-package com.gallery.core.ui.adapter.vh
+package com.gallery.core.delegate.adapter.viewholder
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter

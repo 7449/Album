@@ -83,7 +83,7 @@ data class PrevArgs(
          */
         val position: Int,
         /**
-         * aloneScan 是否是单独扫描某些类型的数据
+         * [scanAlone] 是否是单独扫描某些类型的数据
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
          * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]

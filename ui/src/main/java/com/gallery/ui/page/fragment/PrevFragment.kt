@@ -1,4 +1,4 @@
-package com.gallery.core.extension.fragment
+package com.gallery.ui.page.fragment
 
 import android.os.Bundle
 import android.view.View
@@ -13,8 +13,7 @@ import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.PrevDelegateImpl
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.core.extension.R
-import kotlinx.android.synthetic.main.gallery_fragment_preview.*
+import com.gallery.ui.R
 
 open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
 
@@ -54,12 +53,10 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
     open fun createDelegate(): PrevDelegateImpl {
         return PrevDelegateImpl(
                 this,
-                preViewPager,
-                preCheckBox,
-                galleryPrevCallback,
-                galleryPrevInterceptor,
-                galleryImageLoader,
-                prevArgs
+                prevArgs,
+                galleryPrevCallback = galleryPrevCallback,
+                galleryPrevInterceptor = galleryPrevInterceptor,
+                galleryImageLoader = galleryImageLoader
         )
     }
 

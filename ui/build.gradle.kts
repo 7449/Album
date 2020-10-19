@@ -14,8 +14,8 @@ android {
     compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.ui") }
 }
 dependencies {
-    api(project(":coreUI"))
-//    api(Dep.coreUI)
+    api(project(":core"))
+//    api(Dep.core)
     compileOnly(Dep.recyclerView)
     compileOnly(Dep.fragment)
     compileOnly(Dep.kotlin)

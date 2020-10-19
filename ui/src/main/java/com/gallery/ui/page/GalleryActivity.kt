@@ -11,9 +11,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.core.extension.compat.galleryFragment
+import com.gallery.ui.compat.galleryFragment
 import com.gallery.core.extensions.isVideoScanExpand
-import com.gallery.core.ui.widget.GalleryImageView
+import com.gallery.ui.widget.GalleryImageView
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.CropType

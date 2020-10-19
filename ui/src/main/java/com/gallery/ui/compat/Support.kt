@@ -1,8 +1,8 @@
-package com.gallery.core.extension.compat
+package com.gallery.ui.compat
 
 import androidx.appcompat.app.AppCompatActivity
-import com.gallery.core.extension.fragment.PrevFragment
-import com.gallery.core.extension.fragment.ScanFragment
+import com.gallery.ui.page.fragment.PrevFragment
+import com.gallery.ui.page.fragment.ScanFragment
 
 /** [ScanFragment] */
 val AppCompatActivity.galleryFragment: ScanFragment get() = supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment

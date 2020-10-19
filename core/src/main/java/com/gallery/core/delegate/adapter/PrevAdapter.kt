@@ -1,4 +1,4 @@
-package com.gallery.core.ui.adapter
+package com.gallery.core.delegate.adapter
 
 import android.view.ViewGroup
 import android.widget.FrameLayout

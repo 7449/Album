@@ -12,14 +12,15 @@ import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.PrevArgs.Companion.prevArgs
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
+import com.gallery.core.R
 import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
+import com.gallery.core.delegate.adapter.PrevAdapter
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.toScanEntity
-import com.gallery.core.ui.adapter.PrevAdapter
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
 import com.gallery.scan.types.ScanType.SCAN_ALL
@@ -32,18 +33,19 @@ class PrevDelegateImpl(
         /**
          * [Fragment]
          * 承载容器
+         * 使用容器获取需要的[ViewPager2]
          */
         private val fragment: Fragment,
         /**
-         * [ViewPager2]
-         * 展示View
+         * [PrevArgs]
+         * 核心参数列表
          */
-        private val viewPager2: ViewPager2,
+        private val prevArgs: PrevArgs,
         /**
-         * [View]
-         * 选择View
+         * [GalleryBundle]
+         * ui参数列表
          */
-        private val checkBox: View,
+        private val galleryBundle: GalleryBundle = prevArgs.configOrDefault,
         /**
          * [IGalleryPrevCallback]
          * 预览回调
@@ -59,16 +61,6 @@ class PrevDelegateImpl(
          * 图片加载框架
          */
         private val galleryImageLoader: IGalleryImageLoader,
-        /**
-         * [PrevArgs]
-         * 核心参数列表
-         */
-        private val prevArgs: PrevArgs,
-        /**
-         * [GalleryBundle]
-         * ui参数列表
-         */
-        private val galleryBundle: GalleryBundle = prevArgs.configOrDefault,
 ) : IPrevDelegate {
 
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
@@ -86,6 +78,8 @@ class PrevDelegateImpl(
         }
     }
 
+    private val viewPager2: ViewPager2 by lazy { fragment.view?.findViewById(R.id.gallery_prev_viewpager2) as ViewPager2 }
+    private val checkBox: View by lazy { fragment.view?.findViewById(R.id.gallery_prev_checkbox) as View }
     private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
 
     override val allItem: ArrayList<ScanEntity>

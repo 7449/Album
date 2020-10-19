@@ -5,14 +5,14 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/galleryRecyclerView"
+        android:id="@+id/gallery_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/galleryEmpty"
+        android:id="@+id/gallery_empty_view"
         android:layout_width="@dimen/gallery_empty_width"
         android:layout_height="@dimen/gallery_empty_height"
         android:layout_gravity="center"

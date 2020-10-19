@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/preViewPager"
+        android:id="@+id/gallery_prev_viewpager2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/preCheckBox"
+        android:id="@+id/gallery_prev_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

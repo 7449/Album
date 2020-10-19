@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.core.extension.compat.prevFragment
+import com.gallery.ui.compat.prevFragment
 import com.gallery.ui.base.activity.PrevBaseActivity
 import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
@@ -111,7 +111,7 @@ class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wec
         galleryPrevListLine.visibility = if (fragment.selectEntities.isEmpty()) View.GONE else View.VISIBLE
         selectAdapter.updateSelect(if (weChatPrevArgs.isPrev) uiPrevArgs.prevArgs.selectList else fragment.selectEntities)
         onUpdateVideoTip(fragment.currentItem)
-        fragment.view?.findViewById<View>(R.id.preCheckBox)?.visibility = View.GONE
+        fragment.view?.findViewById<View>(R.id.gallery_prev_checkbox)?.visibility = View.GONE
     }
 
     override fun onChangedCheckBox() {

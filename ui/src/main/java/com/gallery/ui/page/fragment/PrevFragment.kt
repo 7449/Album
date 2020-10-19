@@ -25,6 +25,9 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
         }
     }
 
+    /**
+     * 预览拦截器，暂时没有用到
+     */
     private val galleryPrevInterceptor: IGalleryPrevInterceptor
         get() = when {
             parentFragment is IGalleryPrevInterceptor -> parentFragment as IGalleryPrevInterceptor
@@ -55,7 +58,6 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
                 this,
                 prevArgs,
                 galleryPrevCallback = galleryPrevCallback,
-                galleryPrevInterceptor = galleryPrevInterceptor,
                 galleryImageLoader = galleryImageLoader
         )
     }

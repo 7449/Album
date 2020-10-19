@@ -84,9 +84,6 @@ data class PrevArgs(
         val position: Int,
         /**
          * [scanAlone] 是否是单独扫描某些类型的数据
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE]
-         * [MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO]
          * 如果[parentId] == [ScanType.SCAN_NONE] 则认为点击的是预览而不是item,则未选中数据和选中数据应该一致
          * 如果不是，则判断[scanAlone] == [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]] ，
          * 如果不是，则使用 [scanAlone],如果是，则扫描 [GalleryBundle.scanType]类型的数据

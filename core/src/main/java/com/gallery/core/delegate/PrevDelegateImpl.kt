@@ -17,7 +17,6 @@ import com.gallery.core.ScanArgs
 import com.gallery.core.ScanArgs.Companion.putScanArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
-import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.adapter.PrevAdapter
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.toScanEntity
@@ -52,11 +51,6 @@ class PrevDelegateImpl(
          */
         private val galleryPrevCallback: IGalleryPrevCallback,
         /**
-         * [IGalleryPrevInterceptor]
-         * 预览拦截器，暂时没有用到
-         */
-        private val galleryPrevInterceptor: IGalleryPrevInterceptor,
-        /**
          * [IGalleryImageLoader]
          * 图片加载框架
          */
@@ -89,9 +83,7 @@ class PrevDelegateImpl(
     override val currentPosition: Int
         get() = viewPager2.currentItem
 
-    /**
-     * 保存当前position和选中的文件数据
-     */
+    /** 保存当前position和选中的文件数据 */
     override fun onSaveInstanceState(outState: Bundle) {
         PrevArgs.newSaveInstance(currentPosition, selectEntities).putPrevArgs(outState)
     }
@@ -101,7 +93,7 @@ class PrevDelegateImpl(
      * 作为全部数据展示
      * 否则从数据库获取数据，从数据库获取数据时会判断 scanAlone 是否是 [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]
      * 如果是，则使用 [GalleryBundle.scanType]作为参数，否则使用 scanAlone
-     * 如果预览页想扫描专门的类型，则使用 scanAlone 即可，这个时候传入[SCAN_ALL]即可
+     * 如果预览页想扫描专门的类型，则使用 scanAlone，这个时候传入[SCAN_ALL]即可
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         //https://github.com/7449/Album/issues/4

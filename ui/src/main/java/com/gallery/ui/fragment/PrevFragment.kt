@@ -51,7 +51,7 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
 
     val delegate: IPrevDelegate by lazy { createDelegate() }
 
-    open fun createDelegate(): PrevDelegateImpl {
+    open fun createDelegate(): IPrevDelegate {
         return PrevDelegateImpl(this, galleryPrevCallback, galleryImageLoader)
     }
 

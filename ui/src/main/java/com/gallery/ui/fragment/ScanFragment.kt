@@ -59,7 +59,7 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
 
     val delegate: IScanDelegate by lazy { createDelegate() }
 
-    open fun createDelegate(): ScanDelegateImpl {
+    open fun createDelegate(): IScanDelegate {
         return ScanDelegateImpl(
                 this,
                 galleryCrop,

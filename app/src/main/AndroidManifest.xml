@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gallery.sample">
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
         android:name=".App"
@@ -41,6 +42,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.gallery.ui.wechat.activity.GalleryWeChatPrevActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".crop.UCropGalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

@@ -21,6 +21,5 @@ dependencies {
     compileOnly(Dep.kotlin)
     compileOnly(Dep.glide)
     compileOnly(Dep.material)
-    compileOnly(Dep.uCrop)
     compileOnly(Dep.cropper)
 }

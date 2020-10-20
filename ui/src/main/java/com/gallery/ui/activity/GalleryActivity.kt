@@ -19,11 +19,9 @@ import com.gallery.ui.activity.base.GalleryBaseActivity
 import com.gallery.ui.activity.ext.galleryFragment
 import com.gallery.ui.activity.ext.obtain
 import com.gallery.ui.crop.CropperImpl
-import com.gallery.ui.crop.UCropImpl
 import com.gallery.ui.finder.BottomFinderAdapter
 import com.gallery.ui.finder.GalleryFinderAdapter
 import com.gallery.ui.finder.PopupFinderAdapter
-import com.gallery.ui.result.CropType
 import com.gallery.ui.result.FinderType
 import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
@@ -31,7 +29,7 @@ import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
         View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
 
-    private val newFinderAdapter: GalleryFinderAdapter by lazy {
+    open val newFinderAdapter: GalleryFinderAdapter by lazy {
         if (uiConfig.finderType == FinderType.POPUP) {
             return@lazy PopupFinderAdapter()
         } else {
@@ -40,7 +38,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     }
 
     override val cropImpl: ICrop?
-        get() = if (uiConfig.cropType == CropType.CROPPER) CropperImpl(uiConfig) else UCropImpl(uiConfig)
+        get() = CropperImpl(uiConfig)
 
     override val currentFinderName: String
         get() = galleryFinderAll.text.toString()

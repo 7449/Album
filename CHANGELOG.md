@@ -38,6 +38,10 @@
 
 # ui
 
+## next version
+
+* 将目录bottom和裁剪ucrop转移至sample,ui库只保留一个
+
 ## 0.1.1
 
 * 适配core0.1.6

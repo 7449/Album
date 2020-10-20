@@ -19,21 +19,22 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.LayoutManager
 import com.gallery.core.extensions.isVideoScanExpand
-import com.gallery.ui.fragment.ScanFragment
-import com.gallery.ui.widget.GalleryImageView
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback
+import com.gallery.sample.crop.UCropGalleryActivity
 import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.enums.ScanType
 import com.gallery.sample.enums.Theme
 import com.gallery.scan.types.Sort
-import com.gallery.ui.result.CropType
-import com.gallery.ui.result.FinderType
 import com.gallery.ui.Gallery
+import com.gallery.ui.activity.GalleryActivity
+import com.gallery.ui.fragment.ScanFragment
+import com.gallery.ui.result.FinderType
 import com.gallery.ui.result.GalleryResultCallback
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
+import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_finder_rb.*
 import kotlinx.android.synthetic.main.layout_scan_rb.*
@@ -67,12 +68,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
 
         var isWeChat = false
         var isRadio = false
+        var cls: Class<*>? = null
         var galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT)
         var galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT)
         var scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
         var sortType = Sort.DESC
         var finderType = FinderType.POPUP
-        var cropType: CropType? = null
 
         themeRg.setOnCheckedChangeListener { _, i ->
             when (i) {
@@ -117,19 +118,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
         settingRg.setOnCheckedChangeListener { _, i ->
             when (i) {
                 R.id.single_select -> {
-                    cropType = null
+                    cls = null
                     isRadio = true
                 }
                 R.id.crop_no -> {
-                    cropType = null
+                    cls = null
                     isRadio = false
                 }
                 R.id.crop_cropper -> {
-                    cropType = CropType.CROPPER
+                    cls = null
                     isRadio = false
                 }
                 R.id.crop_ucrop -> {
-                    cropType = CropType.UCROP
+                    cls = UCropGalleryActivity::class.java
                     isRadio = false
                 }
             }
@@ -152,16 +153,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                 return@setOnClickListener
             }
             Gallery.newInstance(activity = this,
+                    clz = cls ?: GalleryActivity::class.java,
                     galleryBundle = galleryBundle.copy(
                             scanType = scanArray,
                             scanSort = sortType,
-                            crop = cropType != null,
-                            radio = isRadio || cropType != null,
+                            crop = crop_cropper.isChecked || crop_ucrop.isChecked,
+                            radio = isRadio || crop_cropper.isChecked || crop_ucrop.isChecked,
                             cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
                     ),
                     galleryUiBundle = galleryUiBundle.copy(
                             finderType = finderType,
-                            cropType = cropType ?: CropType.CROPPER,
                             toolbarText = if (galleryBundle.isVideoScanExpand) getString(R.string.gallery_video_title) else "图片选择",
                     ),
                     galleryLauncher = galleryLauncher)

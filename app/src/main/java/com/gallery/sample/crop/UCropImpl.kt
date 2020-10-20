@@ -1,4 +1,4 @@
-package com.gallery.ui.crop
+package com.gallery.sample.crop
 
 import android.app.Activity
 import android.content.Intent

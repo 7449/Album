@@ -9,7 +9,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
-import com.gallery.ui.result.CropType
 import com.gallery.ui.result.FinderType
 import kotlinx.android.parcel.Parcelize
 
@@ -98,10 +97,6 @@ data class GalleryUiBundle(
          * 文件夹样式
          */
         val finderType: FinderType = FinderType.POPUP,
-        /**
-         * 裁剪
-         */
-        val cropType: CropType = CropType.CROPPER,
         /**
          * toolbar返回图标
          */

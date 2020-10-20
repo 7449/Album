@@ -1,4 +1,4 @@
-package com.gallery.ui.base.activity
+package com.gallery.ui.activity.base
 
 import android.content.Context
 import android.content.Intent
@@ -16,13 +16,13 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.ui.compat.prevFragment
-import com.gallery.ui.page.fragment.PrevFragment
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIPrevArgs
 import com.gallery.ui.UIPrevArgs.Companion.putPrevArgs
 import com.gallery.ui.UIPrevArgs.Companion.uiPrevArgs
+import com.gallery.ui.activity.ext.prevFragment
+import com.gallery.ui.fragment.PrevFragment
 
 abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
 

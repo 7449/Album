@@ -1,4 +1,4 @@
-package com.gallery.ui
+package com.gallery.ui.result
 
 enum class FinderType {
     POPUP,

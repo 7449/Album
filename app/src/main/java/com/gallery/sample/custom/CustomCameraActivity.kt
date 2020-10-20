@@ -6,9 +6,9 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.gallery.ui.compat.galleryFragment
 import com.gallery.sample.camera.CameraActivity
-import com.gallery.ui.page.GalleryActivity
+import com.gallery.ui.activity.GalleryActivity
+import com.gallery.ui.activity.ext.galleryFragment
 
 class CustomCameraActivity : GalleryActivity() {
 

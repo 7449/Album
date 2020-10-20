@@ -1,4 +1,4 @@
-package com.gallery.ui.base.activity
+package com.gallery.ui.activity.base
 
 import android.content.Context
 import android.content.Intent
@@ -23,15 +23,19 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.scan.extensions.isScanAllExpand
-import com.gallery.ui.compat.findFinder
-import com.gallery.ui.compat.galleryFragment
-import com.gallery.ui.compat.updateResultFinder
-import com.gallery.ui.page.fragment.ScanFragment
 import com.gallery.scan.types.Sort
-import com.gallery.ui.*
+import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.UIGalleryArgs
 import com.gallery.ui.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
+import com.gallery.ui.UIGallerySaveArgs
 import com.gallery.ui.UIGallerySaveArgs.Companion.putArgs
 import com.gallery.ui.UIGallerySaveArgs.Companion.uiGallerySaveArgs
+import com.gallery.ui.UIPrevArgs
+import com.gallery.ui.activity.ext.galleryFragment
+import com.gallery.ui.finder.compat.findFinder
+import com.gallery.ui.finder.compat.updateResultFinder
+import com.gallery.ui.fragment.ScanFragment
+import com.gallery.ui.result.UiConfig
 
 abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
 
@@ -142,7 +146,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
 
     /** 用于 toolbar 返回 finish */
     open fun onGalleryFinish() {
-        setResult(UIResult.RESULT_CODE_TOOLBAR_BACK)
+        setResult(UiConfig.RESULT_CODE_TOOLBAR_BACK)
         finish()
     }
 
@@ -150,9 +154,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
+        bundle.putParcelableArrayList(UiConfig.GALLERY_MULTIPLE_DATA, entities)
         intent.putExtras(bundle)
-        setResult(UIResult.RESULT_CODE_MULTIPLE_DATA, intent)
+        setResult(UiConfig.RESULT_CODE_MULTIPLE_DATA, intent)
         finish()
     }
 
@@ -160,9 +164,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_SINGLE_DATA, scanEntity)
+        bundle.putParcelable(UiConfig.GALLERY_SINGLE_DATA, scanEntity)
         intent.putExtras(bundle)
-        setResult(UIResult.RESULT_CODE_SINGLE_DATA, intent)
+        setResult(UiConfig.RESULT_CODE_SINGLE_DATA, intent)
         finish()
     }
 

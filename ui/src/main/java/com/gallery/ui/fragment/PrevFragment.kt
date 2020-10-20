@@ -1,4 +1,4 @@
-package com.gallery.ui.page.fragment
+package com.gallery.ui.fragment
 
 import android.os.Bundle
 import android.view.View

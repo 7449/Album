@@ -15,7 +15,7 @@ android {
     }
 }
 dependencies {
-    implementation(project(":wechat"))
+    api(project(":wechat"))
     implementation(Dep.material)
     implementation(Dep.appcompat)
     implementation(Dep.fragment)

@@ -1,12 +1,10 @@
 package com.gallery.ui.widget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 
-@SuppressLint("AppCompatCustomView")
-class GalleryImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ImageView(context, attrs, defStyleAttr) {
+class GalleryImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : AppCompatImageView(context, attrs, defStyleAttr) {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(measuredWidth, measuredWidth)

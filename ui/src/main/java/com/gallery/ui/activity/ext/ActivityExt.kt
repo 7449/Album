@@ -1,18 +1,28 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.gallery.ui
+package com.gallery.ui.activity.ext
 
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.kotlin.expand.content.drawableExpand
 import androidx.kotlin.expand.content.minimumDrawableExpand
 import androidx.kotlin.expand.version.hasLExpand
 import androidx.kotlin.expand.view.statusBarColorExpand
-import com.gallery.ui.page.GalleryActivity
-import com.gallery.ui.page.PreActivity
+import com.gallery.ui.GalleryUiBundle
+import com.gallery.ui.activity.GalleryActivity
+import com.gallery.ui.activity.PreActivity
+import com.gallery.ui.fragment.PrevFragment
+import com.gallery.ui.fragment.ScanFragment
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
+
+/** [ScanFragment] */
+val AppCompatActivity.galleryFragment: ScanFragment get() = supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName) as ScanFragment
+
+/** [PrevFragment] */
+val AppCompatActivity.prevFragment: PrevFragment get() = supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName) as PrevFragment
 
 @SuppressLint("NewApi")
 internal inline fun GalleryActivity.obtain(galleryUiBundle: GalleryUiBundle) {

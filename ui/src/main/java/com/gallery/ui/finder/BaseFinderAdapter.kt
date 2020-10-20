@@ -1,8 +1,8 @@
-package com.gallery.ui.base.adapter
+package com.gallery.ui.finder
 
 import android.view.View
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.base.activity.GalleryBaseActivity
+import com.gallery.ui.activity.base.GalleryBaseActivity
 
 abstract class BaseFinderAdapter : GalleryFinderAdapter {
 

@@ -1,4 +1,4 @@
-package com.gallery.ui.adapter
+package com.gallery.ui.finder
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
-import com.gallery.ui.base.adapter.BaseFinderAdapter
-import com.gallery.ui.base.adapter.GalleryFinderAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder

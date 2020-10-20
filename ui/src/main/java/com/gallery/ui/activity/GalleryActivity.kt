@@ -1,4 +1,4 @@
-package com.gallery.ui.page
+package com.gallery.ui.activity
 
 import android.content.Context
 import android.os.Bundle
@@ -11,21 +11,21 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.ui.compat.galleryFragment
 import com.gallery.core.extensions.isVideoScanExpand
-import com.gallery.ui.widget.GalleryImageView
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
-import com.gallery.ui.CropType
-import com.gallery.ui.FinderType
 import com.gallery.ui.R
-import com.gallery.ui.adapter.BottomFinderAdapter
-import com.gallery.ui.adapter.PopupFinderAdapter
-import com.gallery.ui.base.activity.GalleryBaseActivity
-import com.gallery.ui.base.adapter.GalleryFinderAdapter
+import com.gallery.ui.activity.base.GalleryBaseActivity
+import com.gallery.ui.activity.ext.galleryFragment
+import com.gallery.ui.activity.ext.obtain
 import com.gallery.ui.crop.CropperImpl
 import com.gallery.ui.crop.UCropImpl
-import com.gallery.ui.obtain
+import com.gallery.ui.finder.BottomFinderAdapter
+import com.gallery.ui.finder.GalleryFinderAdapter
+import com.gallery.ui.finder.PopupFinderAdapter
+import com.gallery.ui.result.CropType
+import com.gallery.ui.result.FinderType
+import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),

@@ -19,7 +19,7 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.LayoutManager
 import com.gallery.core.extensions.isVideoScanExpand
-import com.gallery.ui.page.fragment.ScanFragment
+import com.gallery.ui.fragment.ScanFragment
 import com.gallery.ui.widget.GalleryImageView
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback
@@ -28,10 +28,10 @@ import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.enums.ScanType
 import com.gallery.sample.enums.Theme
 import com.gallery.scan.types.Sort
-import com.gallery.ui.CropType
-import com.gallery.ui.FinderType
+import com.gallery.ui.result.CropType
+import com.gallery.ui.result.FinderType
 import com.gallery.ui.Gallery
-import com.gallery.ui.GalleryResultCallback
+import com.gallery.ui.result.GalleryResultCallback
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
 import kotlinx.android.synthetic.main.activity_main.*

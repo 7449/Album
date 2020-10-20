@@ -1,4 +1,4 @@
-package com.gallery.ui.compat
+package com.gallery.ui.finder.compat
 
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.scan.extensions.isScanAllExpand

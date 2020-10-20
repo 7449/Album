@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.ui.compat.findFinder
-import com.gallery.ui.compat.galleryFragment
+import com.gallery.ui.finder.compat.findFinder
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
-import com.gallery.ui.UIResult
-import com.gallery.ui.base.activity.GalleryBaseActivity
-import com.gallery.ui.base.adapter.GalleryFinderAdapter
+import com.gallery.ui.result.UiConfig
+import com.gallery.ui.activity.base.GalleryBaseActivity
+import com.gallery.ui.activity.ext.galleryFragment
+import com.gallery.ui.finder.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.putArgs
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
@@ -266,10 +266,10 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(UIResult.GALLERY_MULTIPLE_DATA, entities)
+        bundle.putParcelableArrayList(UiConfig.GALLERY_MULTIPLE_DATA, entities)
         bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
         intent.putExtras(bundle)
-        setResult(UIResult.RESULT_CODE_MULTIPLE_DATA, intent)
+        setResult(UiConfig.RESULT_CODE_MULTIPLE_DATA, intent)
         finish()
     }
 

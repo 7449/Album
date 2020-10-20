@@ -1,4 +1,4 @@
-package com.gallery.ui.page
+package com.gallery.ui.activity
 
 import android.content.Context
 import android.os.Bundle
@@ -8,11 +8,11 @@ import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.ui.compat.prevFragment
-import com.gallery.ui.widget.GalleryImageView
 import com.gallery.ui.R
-import com.gallery.ui.base.activity.PrevBaseActivity
-import com.gallery.ui.obtain
+import com.gallery.ui.activity.base.PrevBaseActivity
+import com.gallery.ui.activity.ext.obtain
+import com.gallery.ui.activity.ext.prevFragment
+import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
 open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevBaseActivity(layoutId) {

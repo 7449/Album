@@ -1,10 +1,10 @@
-package com.gallery.ui.base.adapter
+package com.gallery.ui.finder
 
 import android.view.View
 import android.widget.FrameLayout
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.base.activity.GalleryBaseActivity
+import com.gallery.ui.activity.base.GalleryBaseActivity
 
 interface GalleryFinderAdapter {
 

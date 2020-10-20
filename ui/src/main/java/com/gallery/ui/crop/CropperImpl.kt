@@ -10,7 +10,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.UIResult
+import com.gallery.ui.result.UiConfig
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
@@ -36,7 +36,7 @@ class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
             val args = galleryUiBundle.args
             args.classLoader = CropImageOptions::class.java.classLoader
-            args.getParcelable<CropImageOptions>(UIResult.CROP_ARGS)
+            args.getParcelable<CropImageOptions>(UiConfig.CROP_ARGS)
         }.getOrElse { CropImageOptions() } ?: CropImageOptions())
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
         return intent
@@ -46,9 +46,9 @@ class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         delegate.onScanResult(uri)
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UIResult.GALLERY_RESULT_CROP, uri)
+        bundle.putParcelable(UiConfig.GALLERY_RESULT_CROP, uri)
         intent.putExtras(bundle)
-        delegate.activityNotNull.setResult(UIResult.RESULT_CODE_CROP, intent)
+        delegate.activityNotNull.setResult(UiConfig.RESULT_CODE_CROP, intent)
         delegate.activityNotNull.finish()
     }
 }

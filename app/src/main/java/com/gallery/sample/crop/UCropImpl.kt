@@ -19,7 +19,6 @@ import com.gallery.ui.result.UiConfig
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
-@Deprecated("annoying version support", replaceWith = ReplaceWith("CropperImpl(galleryUiBundle)"))
 open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     override fun onCropResult(delegate: IScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {

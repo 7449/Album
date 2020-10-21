@@ -21,11 +21,9 @@ import com.gallery.core.extensions.LayoutManager
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback
-import com.gallery.sample.crop.UCropGalleryActivity
 import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
-import com.gallery.sample.enums.ScanType
-import com.gallery.sample.enums.Theme
+import com.gallery.sample.custom.UCropGalleryActivity
 import com.gallery.scan.types.Sort
 import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity

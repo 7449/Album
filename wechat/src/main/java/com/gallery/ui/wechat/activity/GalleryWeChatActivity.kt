@@ -17,13 +17,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.ui.finder.compat.findFinder
-import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
-import com.gallery.ui.result.UiConfig
 import com.gallery.ui.activity.base.GalleryBaseActivity
 import com.gallery.ui.activity.ext.galleryFragment
 import com.gallery.ui.finder.GalleryFinderAdapter
+import com.gallery.ui.finder.compat.findFinder
+import com.gallery.ui.result.UiConfig
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.putArgs
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
@@ -137,7 +136,7 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
 
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         val currentFragment = galleryFragment
-        if (currentFragment.parentId.isScanAllExpand()) {
+        if (currentFragment.isScanAll) {
             videoList.clear()
             videoList.addAll(scanEntities.filter { it.isVideo })
             finderList.clear()

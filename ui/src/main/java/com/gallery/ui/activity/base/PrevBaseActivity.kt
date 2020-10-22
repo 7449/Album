@@ -66,24 +66,16 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     }
 
     /** 自定义Fragment */
-    open fun createFragment(): Fragment {
-        return PrevFragment.newInstance(uiPrevArgs.prevArgs)
-    }
+    open fun createFragment(): Fragment = PrevFragment.newInstance(uiPrevArgs.prevArgs)
 
     /** back返回,可为Bundle插入需要的数据 */
-    open fun onKeyBackResult(bundle: Bundle): Bundle {
-        return bundle
-    }
+    open fun onKeyBackResult(bundle: Bundle): Bundle = bundle
 
     /** toolbar返回,可为Bundle插入需要的数据 */
-    open fun onToolbarFinishResult(bundle: Bundle): Bundle {
-        return bundle
-    }
+    open fun onToolbarFinishResult(bundle: Bundle): Bundle = bundle
 
     /** 预览页点击选择返回,可为Bundle插入需要的数据 */
-    open fun onSelectEntitiesResult(bundle: Bundle): Bundle {
-        return bundle
-    }
+    open fun onSelectEntitiesResult(bundle: Bundle): Bundle = bundle
 
     /** onBackPressed */
     override fun onBackPressed() {
@@ -114,6 +106,6 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
         getString(R.string.gallery_prev_select_empty_pre).safeToastExpand(this)
     }
 
-    /** 预览图加载 */
+    /** 预览图加载，预览页必须实现 */
     abstract override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout)
 }

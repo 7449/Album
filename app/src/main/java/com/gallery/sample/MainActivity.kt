@@ -28,13 +28,11 @@ import com.gallery.scan.types.Sort
 import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.fragment.ScanFragment
-import com.gallery.ui.result.FinderType
 import com.gallery.ui.result.GalleryResultCallback
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
 import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_finder_rb.*
 import kotlinx.android.synthetic.main.layout_scan_rb.*
 import kotlinx.android.synthetic.main.layout_setting_rb.*
 import kotlinx.android.synthetic.main.layout_sort_rb.*
@@ -71,7 +69,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
         var galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT)
         var scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
         var sortType = Sort.DESC
-        var finderType = FinderType.POPUP
 
         themeRg.setOnCheckedChangeListener { _, i ->
             when (i) {
@@ -139,12 +136,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                 R.id.sort_asc -> sortType = Sort.ASC
             }
         }
-        finderRg.setOnCheckedChangeListener { _, i ->
-            when (i) {
-                R.id.finder_window -> finderType = FinderType.POPUP
-                R.id.finder_bottom -> finderType = FinderType.BOTTOM
-            }
-        }
         startConfig.setOnClickListener {
             if (isWeChat) {
                 weChatUiGallery(galleryWeChatLauncher)
@@ -160,7 +151,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                             cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
                     ),
                     galleryUiBundle = galleryUiBundle.copy(
-                            finderType = finderType,
                             toolbarText = if (galleryBundle.isVideoScanExpand) getString(R.string.gallery_video_title) else "图片选择",
                     ),
                     galleryLauncher = galleryLauncher)

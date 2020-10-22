@@ -1,4 +1,4 @@
-package com.gallery.ui.finder
+package com.gallery.sample.custom
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,10 @@ import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.sample.R
 import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.R
+import com.gallery.ui.finder.BaseFinderAdapter
+import com.gallery.ui.finder.GalleryFinderAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder

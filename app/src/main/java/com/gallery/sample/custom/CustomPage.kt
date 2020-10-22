@@ -11,10 +11,12 @@ import com.gallery.sample.camera.CameraActivity
 import com.gallery.sample.crop.UCropImpl
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.activity.ext.galleryFragment
+import com.gallery.ui.finder.GalleryFinderAdapter
 
 class UCropGalleryActivity : GalleryActivity() {
     override val cropImpl: ICrop?
         get() = UCropImpl(uiConfig)
+    override val galleryFinderAdapter: GalleryFinderAdapter by lazy { BottomFinderAdapter() }
 }
 
 class CustomCameraActivity : GalleryActivity() {

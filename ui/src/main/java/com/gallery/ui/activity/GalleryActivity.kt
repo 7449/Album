@@ -19,26 +19,18 @@ import com.gallery.ui.activity.base.GalleryBaseActivity
 import com.gallery.ui.activity.ext.galleryFragment
 import com.gallery.ui.activity.ext.obtain
 import com.gallery.ui.crop.CropperImpl
-import com.gallery.ui.finder.BottomFinderAdapter
 import com.gallery.ui.finder.GalleryFinderAdapter
 import com.gallery.ui.finder.PopupFinderAdapter
-import com.gallery.ui.result.FinderType
 import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
 open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
         View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
 
-    open val newFinderAdapter: GalleryFinderAdapter by lazy {
-        if (uiConfig.finderType == FinderType.POPUP) {
-            return@lazy PopupFinderAdapter()
-        } else {
-            return@lazy BottomFinderAdapter()
-        }
-    }
+    override val galleryFinderAdapter: GalleryFinderAdapter by lazy { PopupFinderAdapter() }
 
     override val cropImpl: ICrop?
-        get() = CropperImpl(uiConfig)
+        get() = CropperImpl(this, uiConfig)
 
     override val currentFinderName: String
         get() = galleryFinderAll.text.toString()
@@ -49,8 +41,8 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         obtain(uiConfig)
-        newFinderAdapter.adapterInit(this, uiConfig, galleryFinderAll)
-        newFinderAdapter.setOnAdapterFinderListener(this)
+        galleryFinderAdapter.adapterInit(this, uiConfig, galleryFinderAll)
+        galleryFinderAdapter.setOnAdapterFinderListener(this)
         galleryPre.setOnClickListener(this)
         gallerySelect.setOnClickListener(this)
         galleryFinderAll.setOnClickListener(this)
@@ -83,20 +75,20 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
                     onGalleryFinderEmpty()
                     return
                 }
-                newFinderAdapter.finderUpdate(finderList)
-                newFinderAdapter.show()
+                galleryFinderAdapter.finderUpdate(finderList)
+                galleryFinderAdapter.show()
             }
         }
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
         if (item.parent == galleryFragment.parentId) {
-            newFinderAdapter.hide()
+            galleryFinderAdapter.hide()
             return
         }
         galleryFinderAll.text = item.bucketDisplayName
         galleryFragment.onScanGallery(item.parent)
-        newFinderAdapter.hide()
+        galleryFinderAdapter.hide()
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {

@@ -24,9 +24,6 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
         }
     }
 
-    /**
-     * 预览拦截器，暂时没有用到
-     */
     @Suppress("unused")
     private val galleryPrevInterceptor: IGalleryPrevInterceptor
         get() = when {

@@ -15,22 +15,22 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
 
-class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
+class CropperImpl(private val activity: Activity, private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     private var cropUri: Uri? = null
 
     override fun onCropResult(delegate: IScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri -> onCropSuccess(delegate, uri) }
-                    ?: cropUri?.deleteExpand(delegate.activityNotNull)
-            Activity.RESULT_CANCELED -> cropUri?.deleteExpand(delegate.activityNotNull)
-            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> cropUri?.deleteExpand(delegate.activityNotNull)
+                    ?: cropUri?.deleteExpand(activity)
+            Activity.RESULT_CANCELED -> cropUri?.deleteExpand(activity)
+            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> cropUri?.deleteExpand(activity)
         }
     }
 
     override fun openCrop(delegate: IScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
-        this.cropUri = cropOutPutUri(delegate.activityNotNull, galleryBundle)
-        val intent = Intent().setClass(delegate.activityNotNull, CropImageActivity::class.java)
+        this.cropUri = cropOutPutUri(activity, galleryBundle)
+        val intent = Intent().setClass(activity, CropImageActivity::class.java)
         val bundle = Bundle()
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
@@ -48,7 +48,7 @@ class CropperImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         val bundle = Bundle()
         bundle.putParcelable(UiConfig.GALLERY_RESULT_CROP, uri)
         intent.putExtras(bundle)
-        delegate.activityNotNull.setResult(UiConfig.RESULT_CODE_CROP, intent)
-        delegate.activityNotNull.finish()
+        activity.setResult(UiConfig.RESULT_CODE_CROP, intent)
+        activity.finish()
     }
 }

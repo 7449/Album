@@ -22,7 +22,6 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.Sort
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIGalleryArgs
@@ -32,6 +31,7 @@ import com.gallery.ui.UIGallerySaveArgs.Companion.putArgs
 import com.gallery.ui.UIGallerySaveArgs.Companion.uiGallerySaveArgs
 import com.gallery.ui.UIPrevArgs
 import com.gallery.ui.activity.ext.galleryFragment
+import com.gallery.ui.finder.GalleryFinderAdapter
 import com.gallery.ui.finder.compat.findFinder
 import com.gallery.ui.finder.compat.updateResultFinder
 import com.gallery.ui.fragment.ScanFragment
@@ -45,7 +45,12 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     /** 当前Fragment 文件Id,用于初始化[ScanFragment] */
     protected abstract val galleryFragmentId: Int
 
+    /** 目录View */
+    protected open val galleryFinderAdapter: GalleryFinderAdapter
+        get() = throw KotlinNullPointerException("galleryFinderAdapter == null")
+
     /** [UIGalleryArgs] */
+    @Suppress("MemberVisibilityCanBePrivate")
     protected val galleryArgs: UIGalleryArgs by lazy { bundleOrEmptyExpand().uiGalleryArgsOrDefault }
 
     /** 初始配置 */
@@ -105,7 +110,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
 
     /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
-        if (galleryFragment.parentId.isScanAllExpand()) {
+        if (galleryFragment.isScanAll) {
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryConfig.sdName, galleryConfig.allName))
         }

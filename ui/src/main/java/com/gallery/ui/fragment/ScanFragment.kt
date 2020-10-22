@@ -15,6 +15,7 @@ import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.extensions.toScanFileEntity
+import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.R
 
@@ -121,6 +122,9 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
         set(value) {
             delegate.onUpdateParentId(value)
         }
+
+    val isScanAll: Boolean
+        get() = parentId.isScanAllExpand()
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

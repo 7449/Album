@@ -9,7 +9,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
-import com.gallery.ui.result.FinderType
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -93,10 +92,6 @@ data class GalleryUiBundle(
          * 预览back返回是否刷新数据
          */
         val preBackRefresh: Boolean = true,
-        /**
-         * 文件夹样式
-         */
-        val finderType: FinderType = FinderType.POPUP,
         /**
          * toolbar返回图标
          */

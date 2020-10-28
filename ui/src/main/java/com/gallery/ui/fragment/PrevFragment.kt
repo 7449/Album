@@ -7,7 +7,6 @@ import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
-import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
@@ -24,32 +23,21 @@ open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fra
         }
     }
 
-    @Suppress("unused")
-    private val galleryPrevInterceptor: IGalleryPrevInterceptor
-        get() = when {
-            parentFragment is IGalleryPrevInterceptor -> parentFragment as IGalleryPrevInterceptor
-            activity is IGalleryPrevInterceptor -> activity as IGalleryPrevInterceptor
-            else -> object : IGalleryPrevInterceptor {}
-        }
-
-    private val galleryPrevCallback: IGalleryPrevCallback
-        get() = when {
-            parentFragment is IGalleryPrevCallback -> parentFragment as IGalleryPrevCallback
-            activity is IGalleryPrevCallback -> activity as IGalleryPrevCallback
-            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryPrevCallback")
-        }
-
-    private val galleryImageLoader: IGalleryImageLoader
-        get() = when {
-            parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
-            activity is IGalleryImageLoader -> activity as IGalleryImageLoader
-            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
-        }
-
     val delegate: IPrevDelegate by lazy { createDelegate() }
 
     open fun createDelegate(): IPrevDelegate {
-        return PrevDelegateImpl(this, galleryPrevCallback, galleryImageLoader)
+        return PrevDelegateImpl(this,
+                when {
+                    parentFragment is IGalleryPrevCallback -> parentFragment as IGalleryPrevCallback
+                    activity is IGalleryPrevCallback -> activity as IGalleryPrevCallback
+                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryPrevCallback")
+                },
+                when {
+                    parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
+                    activity is IGalleryImageLoader -> activity as IGalleryImageLoader
+                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
+                }
+        )
     }
 
     val currentItem: ScanEntity

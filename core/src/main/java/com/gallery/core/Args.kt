@@ -10,9 +10,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.delegate.impl.ScanDelegateImpl
-import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.extensions.LayoutManager
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort

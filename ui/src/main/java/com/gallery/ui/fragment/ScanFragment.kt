@@ -30,43 +30,32 @@ open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fra
         }
     }
 
-    private val galleryInterceptor: IGalleryInterceptor
-        get() = when {
-            parentFragment is IGalleryInterceptor -> parentFragment as IGalleryInterceptor
-            activity is IGalleryInterceptor -> activity as IGalleryInterceptor
-            else -> object : IGalleryInterceptor {}
-        }
-
-    private val galleryCallback: IGalleryCallback
-        get() = when {
-            parentFragment is IGalleryCallback -> parentFragment as IGalleryCallback
-            activity is IGalleryCallback -> activity as IGalleryCallback
-            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryCallback")
-        }
-
-    private val galleryImageLoader: IGalleryImageLoader
-        get() = when {
-            parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
-            activity is IGalleryImageLoader -> activity as IGalleryImageLoader
-            else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
-        }
-
-    private val galleryCrop: ICrop?
-        get() = when {
-            parentFragment is ICrop -> (parentFragment as ICrop).cropImpl
-            activity is ICrop -> (activity as ICrop).cropImpl
-            else -> null
-        }
-
     val delegate: IScanDelegate by lazy { createDelegate() }
 
     open fun createDelegate(): IScanDelegate {
         return ScanDelegateImpl(
                 this,
-                galleryCrop,
-                galleryCallback,
-                galleryInterceptor,
-                galleryImageLoader)
+                when {
+                    parentFragment is ICrop -> (parentFragment as ICrop).cropImpl
+                    activity is ICrop -> (activity as ICrop).cropImpl
+                    else -> null
+                },
+                when {
+                    parentFragment is IGalleryCallback -> parentFragment as IGalleryCallback
+                    activity is IGalleryCallback -> activity as IGalleryCallback
+                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryCallback")
+                },
+                when {
+                    parentFragment is IGalleryInterceptor -> parentFragment as IGalleryInterceptor
+                    activity is IGalleryInterceptor -> activity as IGalleryInterceptor
+                    else -> object : IGalleryInterceptor {}
+                },
+                when {
+                    parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
+                    activity is IGalleryImageLoader -> activity as IGalleryImageLoader
+                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
+                }
+        )
     }
 
     fun onCameraResultCanceled() {

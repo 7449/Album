@@ -1,17 +1,27 @@
 package com.gallery.core.delegate.adapter
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.kotlin.expand.net.isFileExistsExpand
+import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.delegate.adapter.viewholder.CameraViewHolder
-import com.gallery.core.delegate.adapter.viewholder.PhotoViewHolder
 import com.gallery.core.delegate.entity.ScanEntity
-import com.xadapter.vh.XViewHolder
+import kotlinx.android.extensions.CacheImplementation
+import kotlinx.android.extensions.ContainerOptions
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.gallery_item_gallery.*
+import kotlinx.android.synthetic.main.gallery_item_gallery_camera.*
 
 class GalleryAdapter(
         private val display: Int,
@@ -19,7 +29,7 @@ class GalleryAdapter(
         private val galleryCallback: IGalleryCallback,
         private val imageLoader: IGalleryImageLoader,
         private val galleryItemClickListener: OnGalleryItemClickListener,
-) : RecyclerView.Adapter<XViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnGalleryItemClickListener {
         fun onCameraItemClick(view: View, position: Int, scanEntity: ScanEntity)
@@ -35,7 +45,7 @@ class GalleryAdapter(
     private val galleryList: ArrayList<ScanEntity> = arrayListOf()
     private val selectList: ArrayList<ScanEntity> = arrayListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_CAMERA -> {
                 val cameraView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_camera, parent, false)
@@ -52,7 +62,7 @@ class GalleryAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: XViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CameraViewHolder -> holder.camera()
             is PhotoViewHolder -> holder.photo(position, galleryList[position], currentSelectList, imageLoader)
@@ -104,4 +114,77 @@ class GalleryAdapter(
 
     val currentList: ArrayList<ScanEntity>
         get() = galleryList
+
+    @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
+    class CameraViewHolder(
+            itemView: View,
+            private val galleryBundle: GalleryBundle,
+    ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+        override val containerView: View
+            get() = itemView
+
+        fun camera() {
+            val drawable: Drawable? = ContextCompat.getDrawable(containerView.context, galleryBundle.cameraDrawable)
+            drawable?.colorFilter = PorterDuffColorFilter(galleryBundle.cameraDrawableColor, PorterDuff.Mode.SRC_ATOP)
+            galleryImageCameraTv.text = galleryBundle.cameraText
+            galleryImageCameraTv.textSize = galleryBundle.cameraTextSize
+            galleryImageCameraTv.setTextColor(galleryBundle.cameraTextColor)
+            gallery_camera_root_view.setBackgroundColor(galleryBundle.cameraBackgroundColor)
+            galleryImageCamera.setImageDrawable(drawable)
+        }
+
+    }
+
+    @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
+    class PhotoViewHolder(
+            itemView: View,
+            private val galleryBundle: GalleryBundle,
+            private val display: Int,
+            private val galleryCallback: IGalleryCallback,
+    ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+
+        override val containerView: View
+            get() = itemView
+
+        private val container: FrameLayout = galleryContainer
+        private val checkBox: TextView = galleryCheckBox
+
+        fun photo(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
+            imageLoader.onDisplayGallery(display, display, scanEntity, container, checkBox)
+            container.setBackgroundColor(galleryBundle.photoBackgroundColor)
+            if (galleryBundle.radio) {
+                return
+            }
+            checkBox.setOnClickListener { clickCheckBox(position, scanEntity, selectList) }
+            checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
+            checkBox.isSelected = scanEntity.isSelected
+            checkBox.showExpand()
+        }
+
+        private fun clickCheckBox(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>) {
+            if (!scanEntity.uri.isFileExistsExpand(containerView.context)) {
+                if (selectList.contains(scanEntity)) {
+                    selectList.remove(scanEntity)
+                }
+                checkBox.isSelected = false
+                scanEntity.isSelected = false
+                galleryCallback.onClickCheckBoxFileNotExist(containerView.context, scanEntity)
+                return
+            }
+            if (!selectList.contains(scanEntity) && selectList.size >= galleryBundle.multipleMaxCount) {
+                galleryCallback.onClickCheckBoxMaxCount(containerView.context, scanEntity)
+                return
+            }
+            if (!scanEntity.isSelected) {
+                scanEntity.isSelected = true
+                checkBox.isSelected = true
+                selectList.add(scanEntity)
+            } else {
+                selectList.remove(scanEntity)
+                scanEntity.isSelected = false
+                checkBox.isSelected = false
+            }
+            galleryCallback.onChangedCheckBox(position, scanEntity)
+        }
+    }
 }

@@ -14,6 +14,7 @@ android {
 dependencies {
     api(project(":ui"))
 //    api(Dep.ui)
+    api(Dep.viewHolder)
     compileOnly(Dep.appcompat)
     compileOnly(Dep.material)
     compileOnly(Dep.recyclerView)

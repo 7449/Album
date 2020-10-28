@@ -5,13 +5,13 @@ import androidx.kotlin.expand.text.safeToastExpand
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
-import com.gallery.core.delegate.impl.ScanDelegateImpl
+import com.gallery.core.delegate.adapter.GalleryAdapter.PhotoViewHolder
 import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.extensions.CameraStatus
 import com.gallery.core.extensions.PermissionCode
 import com.gallery.core.extensions.isImageScanExpand
 import com.gallery.core.extensions.isVideoScanExpand
-import com.gallery.core.delegate.adapter.viewholder.PhotoViewHolder
 
 interface IGalleryCallback {
 

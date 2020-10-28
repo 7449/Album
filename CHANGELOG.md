@@ -1,5 +1,9 @@
 # core
 
+## next version
+
+* 剥离 XViewHolder
+
 ## 0.1.6
 
 * 修改部分api命名

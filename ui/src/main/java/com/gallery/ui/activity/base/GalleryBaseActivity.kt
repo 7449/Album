@@ -14,6 +14,10 @@ import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.kotlin.expand.os.orEmptyExpand
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
 import com.gallery.core.ScanArgs.Companion.scanArgs
@@ -21,7 +25,7 @@ import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.Sort
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.UIGalleryArgs
@@ -35,7 +39,9 @@ import com.gallery.ui.finder.GalleryFinderAdapter
 import com.gallery.ui.finder.compat.findFinder
 import com.gallery.ui.finder.compat.updateResultFinder
 import com.gallery.ui.fragment.ScanFragment
+import com.gallery.ui.result.LayoutManager
 import com.gallery.ui.result.UiConfig
+import com.gallery.ui.widget.GalleryDivider
 
 abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
 
@@ -101,6 +107,20 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
         supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
+    }
+
+    /** 初始化布局，重写时需注意super */
+    override fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
+        fragment.view?.setBackgroundColor(uiConfig.galleryRootBackground)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = when (uiConfig.layoutManager) {
+            LayoutManager.GRID -> GridLayoutManager(recyclerView.context, galleryBundle.spanCount, uiConfig.orientation, false)
+            LayoutManager.LINEAR -> LinearLayoutManager(recyclerView.context, uiConfig.orientation, false)
+        }
+        recyclerView.addItemDecoration(GalleryDivider(uiConfig.dividerWidth))
+        if (recyclerView.itemAnimator is SimpleItemAnimator) {
+            (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        }
     }
 
     /** 单个数据扫描成功之后刷新文件夹数据 */

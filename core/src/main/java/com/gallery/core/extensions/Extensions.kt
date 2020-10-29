@@ -9,7 +9,7 @@ import androidx.kotlin.expand.util.lowerVersionFileExpand
 import androidx.kotlin.expand.util.mkdirsFileExpand
 import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.extensions.ScanFileEntity
 import java.io.File
 

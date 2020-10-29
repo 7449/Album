@@ -9,15 +9,16 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.text.safeToastExpand
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.core.extensions.LayoutManager
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback
@@ -31,6 +32,7 @@ import com.gallery.ui.fragment.ScanFragment
 import com.gallery.ui.result.GalleryResultCallback
 import com.gallery.ui.wechat.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
+import com.gallery.ui.widget.GalleryDivider
 import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_scan_rb.*
@@ -50,8 +52,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
             supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
         } ?: supportFragmentManager
                 .beginTransaction()
-                .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(orientation = RecyclerView.HORIZONTAL, layoutManager = LayoutManager.LINEAR, radio = true, hideCamera = true, crop = false, galleryRootBackground = Color.BLACK)), ScanFragment::class.java.simpleName)
+                .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(
+                        radio = true,
+                        hideCamera = true,
+                        crop = false,
+                )), ScanFragment::class.java.simpleName)
                 .commitAllowingStateLoss()
+    }
+
+    override fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
+        fragment.view?.setBackgroundColor(Color.BLACK)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(recyclerView.context, RecyclerView.HORIZONTAL, false)
+        recyclerView.addItemDecoration(GalleryDivider(10))
     }
 
     companion object {

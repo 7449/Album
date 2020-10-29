@@ -32,11 +32,11 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
                     allName = "图片和视频",
                     hideCamera = true,
                     scanType = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-                    prevPhotoBackgroundColor = Color.BLACK,
                     checkBoxDrawable = R.drawable.wechat_selector_gallery_item_check,
-                    galleryRootBackground = Color.rgb(38, 38, 38)
             ),
             GalleryUiBundle(
+                    prevPhotoBackgroundColor = Color.BLACK,
+                    galleryRootBackground = Color.rgb(38, 38, 38),
                     statusBarColor = Color.rgb(38, 38, 38),
                     toolbarBackground = Color.rgb(38, 38, 38),
                     bottomViewBackground = Color.rgb(19, 19, 19),

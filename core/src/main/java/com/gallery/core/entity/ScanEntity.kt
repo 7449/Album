@@ -1,4 +1,4 @@
-package com.gallery.core.delegate.entity
+package com.gallery.core.entity
 
 import android.net.Uri
 import android.os.Parcelable

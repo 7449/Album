@@ -8,7 +8,7 @@ import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.ui.R
 

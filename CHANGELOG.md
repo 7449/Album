@@ -1,8 +1,9 @@
 # core
 
-## next version
+## 0.1.7
 
 * 剥离 XViewHolder
+* 剥离部分参数至 UI Library
 
 ## 0.1.6
 

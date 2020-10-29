@@ -12,7 +12,7 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.extensions.toScanFileEntity
 import com.gallery.scan.extensions.isScanAllExpand

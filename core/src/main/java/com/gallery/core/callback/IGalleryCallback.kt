@@ -1,13 +1,16 @@
 package com.gallery.core.callback
 
 import android.content.Context
+import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.text.safeToastExpand
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.delegate.adapter.GalleryAdapter.PhotoViewHolder
-import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.ScanDelegateImpl
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.CameraStatus
 import com.gallery.core.extensions.PermissionCode
 import com.gallery.core.extensions.isImageScanExpand
@@ -17,8 +20,10 @@ interface IGalleryCallback {
 
     /**
      * [ScanDelegateImpl.onCreate]触发
+     * 为[recyclerView]设置布局管理器
+     * 必须实现
      */
-    fun onGalleryCreated() {}
+    fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?)
 
     /**
      * 单选非裁剪状态下,点击[Adapter]item返回的那条数据

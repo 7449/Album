@@ -8,12 +8,16 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.text.safeToastExpand
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
-import com.gallery.core.delegate.entity.ScanEntity
-import com.gallery.ui.fragment.ScanFragment
+import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.R
+import com.gallery.ui.fragment.ScanFragment
+import com.gallery.ui.widget.GalleryDivider
 
 class CustomDialog : DialogFragment(), IGalleryCallback {
 
@@ -64,5 +68,12 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         scanEntity.toString().safeToastExpand(requireActivity())
         dismiss()
+    }
+
+    override fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
+        fragment.view?.setBackgroundColor(Color.BLACK)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = GridLayoutManager(recyclerView.context, galleryBundle.spanCount, GridLayoutManager.VERTICAL, false)
+        recyclerView.addItemDecoration(GalleryDivider(8))
     }
 }

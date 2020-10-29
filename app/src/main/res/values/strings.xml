@@ -2,7 +2,6 @@
     <string name="appName">Gallery</string>
     <string name="gallery_video_title">视频选择</string>
     <string name="camera">camera</string>
-    <string name="gallery_camera_canceled" />
     <string name="theme_default">默认</string>
     <string name="theme_app">app</string>
     <string name="theme_blue">蓝色</string>
@@ -22,9 +21,6 @@
     <string name="dialog">Dialog弹窗</string>
     <string name="scan">scan测试</string>
     <string name="custom_camera">自定义相机</string>
-    <string name="select_finder">目录</string>
-    <string name="finder_window">popup</string>
-    <string name="finder_bottom">bottom</string>
     <string name="start_config">启动</string>
     <string name="crop_no">no crop</string>
     <string name="theme_wechat">微信</string>

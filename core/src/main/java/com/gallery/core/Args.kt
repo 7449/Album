@@ -9,11 +9,9 @@ import android.provider.MediaStore
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
-import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.delegate.impl.ScanDelegateImpl
-import com.gallery.core.extensions.LayoutManager
+import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
 import kotlinx.android.parcel.Parcelize
@@ -158,18 +156,9 @@ data class GalleryBundle(
          */
         val multipleMaxCount: Int = 9,
         /**
-         * 滑动方向
-         */
-        val orientation: Int = RecyclerView.VERTICAL,
-        /**
-         * 每行几张图片
-         * 只在[layoutManager] == [LayoutManager.GRID]生效
+         * 用于配置加载图片的 Width Height
          */
         val spanCount: Int = 4,
-        /**
-         * 列表管理器
-         */
-        val layoutManager: LayoutManager = LayoutManager.GRID,
         /**
          * 文件输出路径
          * [Environment.DIRECTORY_DCIM]
@@ -221,10 +210,6 @@ data class GalleryBundle(
          */
         val cameraTextSize: Float = 16F,
         /**
-         * 分割线宽度
-         */
-        val dividerWidth: Int = 8,
-        /**
          * 相机图片
          */
         @DrawableRes
@@ -254,21 +239,6 @@ data class GalleryBundle(
          */
         @ColorInt
         val cameraBackgroundColor: Int = Color.parseColor("#FFB0C9C9"),
-        /**
-         * 图片背景色
-         */
-        @ColorInt
-        val photoBackgroundColor: Int = Color.WHITE,
-        /**
-         * 预览图片背景色
-         */
-        @ColorInt
-        val prevPhotoBackgroundColor: Int = Color.WHITE,
-        /**
-         * RootView背景色
-         */
-        @ColorInt
-        val galleryRootBackground: Int = Color.WHITE,
 ) : Parcelable {
     companion object {
         private const val Key = "galleryBundle"

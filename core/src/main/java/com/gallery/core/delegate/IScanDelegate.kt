@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.ScanArgs
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.PermissionCode
 import com.gallery.scan.extensions.ScanFileEntity
 import com.gallery.scan.types.ScanType

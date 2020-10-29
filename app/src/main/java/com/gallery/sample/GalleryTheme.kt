@@ -29,8 +29,6 @@ object GalleryTheme {
                 return GalleryBundle(
                         cameraDrawableColor = R.color.colorGray.colorExpand(activity),
                         cameraBackgroundColor = R.color.colorBlack.colorExpand(activity),
-                        galleryRootBackground = R.color.colorBlack.colorExpand(activity),
-                        prevPhotoBackgroundColor = R.color.colorBlack.colorExpand(activity)
                 )
             }
             Theme.APP -> {
@@ -66,6 +64,8 @@ object GalleryTheme {
             }
             Theme.BLACK -> {
                 return GalleryUiBundle(
+                        prevPhotoBackgroundColor = R.color.colorBlack.colorExpand(activity),
+                        galleryRootBackground = R.color.colorBlack.colorExpand(activity),
                         statusBarColor = R.color.colorBlack.colorExpand(activity),
                         toolbarBackground = R.color.colorBlack.colorExpand(activity),
                         bottomViewBackground = R.color.colorBlack.colorExpand(activity),

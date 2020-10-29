@@ -27,10 +27,7 @@ import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
 import com.gallery.core.R
@@ -40,13 +37,10 @@ import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
-import com.gallery.core.camera.CameraResultContract
-import com.gallery.core.camera.CameraUri
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter
-import com.gallery.core.delegate.divider.DefaultDivider
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
 import com.gallery.scan.ScanImpl
 import com.gallery.scan.args.ScanEntityFactory
@@ -175,8 +169,8 @@ class ScanDelegateImpl(
             fileUri = it.fileUri
             it.selectList
         }
-        galleryCallback.onGalleryCreated()
-        fragment.view?.setBackgroundColor(galleryBundle.galleryRootBackground)
+        /* 这里初始化Recyclerview布局管理器,放在 UI Library,core Library 只处理Adapter */
+        galleryCallback.onGalleryCreated(fragment, recyclerView, galleryBundle, savedInstanceState)
         emptyView.setImageDrawable(activityNotNull.drawableExpand(galleryBundle.photoEmptyDrawable))
         emptyView.setOnClickListener { v ->
             if (galleryInterceptor.onEmptyPhotoClick(v)) {
@@ -184,15 +178,6 @@ class ScanDelegateImpl(
             }
         }
         galleryAdapter.addSelectAll(selectList ?: galleryBundle.selectEntities)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = when (galleryBundle.layoutManager) {
-            LayoutManager.GRID -> GridLayoutManager(recyclerView.context, galleryBundle.spanCount, galleryBundle.orientation, false)
-            LayoutManager.LINEAR -> LinearLayoutManager(recyclerView.context, galleryBundle.orientation, false)
-        }
-        recyclerView.addItemDecoration(DefaultDivider(galleryBundle.dividerWidth))
-        if (recyclerView.itemAnimator is SimpleItemAnimator) {
-            (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        }
         recyclerView.adapter = galleryAdapter
         onScanGallery(parentId)
     }

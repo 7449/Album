@@ -2,7 +2,7 @@ package com.gallery.core.callback
 
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 
 /**
  * @author y

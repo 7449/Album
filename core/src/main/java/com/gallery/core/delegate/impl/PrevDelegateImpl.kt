@@ -21,7 +21,7 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.adapter.PrevAdapter
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.toScanEntity
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
@@ -123,10 +123,9 @@ class PrevDelegateImpl(
         prevAdapter.addAll(arrayList)
         prevAdapter.addSelectAll(prevArgs.selectList)
         prevAdapter.updateEntity()
-        galleryPrevCallback.onPrevCreated()
+        galleryPrevCallback.onPrevCreated(fragment, galleryBundle, savedInstanceState)
         viewPager2.adapter = prevAdapter
         viewPager2.registerOnPageChangeCallback(pageChangeCallback)
-        fragment.view?.setBackgroundColor(galleryBundle.prevPhotoBackgroundColor)
         setCurrentItem(prevArgs.position)
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener { checkBoxClick(checkBox) }

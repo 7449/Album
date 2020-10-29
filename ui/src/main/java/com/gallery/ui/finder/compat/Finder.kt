@@ -1,6 +1,6 @@
 package com.gallery.ui.finder.compat
 
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 

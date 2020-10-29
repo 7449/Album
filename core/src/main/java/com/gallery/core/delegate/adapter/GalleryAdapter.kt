@@ -16,7 +16,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
 import kotlinx.android.extensions.LayoutContainer
@@ -151,7 +151,6 @@ class GalleryAdapter(
 
         fun photo(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
             imageLoader.onDisplayGallery(display, display, scanEntity, container, checkBox)
-            container.setBackgroundColor(galleryBundle.photoBackgroundColor)
             if (galleryBundle.radio) {
                 return
             }

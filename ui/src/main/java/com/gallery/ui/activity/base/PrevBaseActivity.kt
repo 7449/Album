@@ -15,7 +15,7 @@ import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
 import com.gallery.ui.UIPrevArgs
@@ -63,6 +63,10 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
         supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
+    }
+
+    override fun onPrevCreated(fragment: Fragment, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
+        fragment.view?.setBackgroundColor(uiConfig.prevPhotoBackgroundColor)
     }
 
     /** 自定义Fragment */

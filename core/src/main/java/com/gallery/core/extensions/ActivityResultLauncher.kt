@@ -1,9 +1,12 @@
-package com.gallery.core.camera
+package com.gallery.core.extensions
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
+
+class CameraUri(val type: IntArray, val uri: Uri)
 
 class CameraResultContract : ActivityResultContract<CameraUri, Int>() {
     override fun createIntent(context: Context, input: CameraUri): Intent =

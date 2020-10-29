@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.text.safeToastExpand
 import androidx.kotlin.expand.view.hideExpand
@@ -16,7 +17,7 @@ import androidx.kotlin.expand.widget.doOnAnimationEndExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.activity.base.GalleryBaseActivity
 import com.gallery.ui.activity.ext.galleryFragment
@@ -110,7 +111,8 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
         }
     }
 
-    override fun onGalleryCreated() {
+    override fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
+        super.onGalleryCreated(fragment, recyclerView, galleryBundle, savedInstanceState)
         val currentFragment = galleryFragment
         currentFragment.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

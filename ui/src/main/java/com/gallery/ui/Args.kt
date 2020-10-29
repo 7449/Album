@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
-import com.gallery.core.delegate.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
+import com.gallery.core.entity.ScanEntity
+import com.gallery.ui.result.LayoutManager
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -84,6 +86,18 @@ data class UIPrevArgs(
 
 @Parcelize
 data class GalleryUiBundle(
+        /**
+         * 分割线宽度
+         */
+        val dividerWidth: Int = 8,
+        /**
+         * 滑动方向
+         */
+        val orientation: Int = RecyclerView.VERTICAL,
+        /**
+         * 列表管理器
+         */
+        val layoutManager: LayoutManager = LayoutManager.GRID,
         /**
          * 预览toolbar返回是否刷新数据
          */
@@ -171,6 +185,11 @@ data class GalleryUiBundle(
         @ColorInt
         val selectTextColor: Int = Color.WHITE,
         /**
+         * RootView背景色
+         */
+        @ColorInt
+        val galleryRootBackground: Int = Color.WHITE,
+        /**
          * 底部背景色
          */
         @ColorInt
@@ -206,6 +225,11 @@ data class GalleryUiBundle(
          * 预览页title
          */
         val preTitle: String = "选择",
+        /**
+         * 预览背景色
+         */
+        @ColorInt
+        val prevPhotoBackgroundColor: Int = Color.WHITE,
         /**
          * 预览页底部提示栏背景色
          */

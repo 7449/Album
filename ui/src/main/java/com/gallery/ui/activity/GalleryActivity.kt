@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType

@@ -1,14 +1,16 @@
 package com.gallery.core.callback
 
 import android.content.Context
+import android.os.Bundle
 import androidx.annotation.Px
+import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.text.safeToastExpand
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.delegate.IPrevDelegate
-import com.gallery.core.delegate.entity.ScanEntity
+import com.gallery.core.entity.ScanEntity
 
 /**
  *
@@ -20,7 +22,7 @@ interface IGalleryPrevCallback {
      * 预览涉及到了扫描图库数据库,所以这个方法在
      * 点击item进入预览的情况下不会及时触发
      */
-    fun onPrevCreated() {}
+    fun onPrevCreated(fragment: Fragment, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {}
 
     /**
      * [ViewPager2.OnPageChangeCallback.onPageScrolled]

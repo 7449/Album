@@ -1,4 +1,4 @@
-package com.gallery.ui.fragment
+package com.gallery.compat.fragment
 
 import android.os.Bundle
 import android.view.View
@@ -8,16 +8,16 @@ import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
-import com.gallery.core.entity.ScanEntity
 import com.gallery.core.delegate.impl.PrevDelegateImpl
+import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.R
 
-open class PrevFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
+open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
 
     companion object {
         @JvmStatic
-        fun newInstance(prevArgs: PrevArgs): PrevFragment {
-            val prevFragment = PrevFragment()
+        fun newInstance(prevArgs: PrevArgs): PrevCompatFragment {
+            val prevFragment = PrevCompatFragment()
             prevFragment.arguments = prevArgs.putPrevArgs()
             return prevFragment
         }

@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.finder.GalleryFinderAdapter
+import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder

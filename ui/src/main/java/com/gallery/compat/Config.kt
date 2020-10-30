@@ -1,8 +1,6 @@
-package com.gallery.ui.result
+package com.gallery.compat
 
-import com.gallery.ui.GalleryUiBundle
-
-object UiConfig {
+object Config {
     /**
      * 裁剪携带的参数
      * 从[GalleryUiBundle.args]里面获取

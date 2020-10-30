@@ -15,9 +15,9 @@ import androidx.kotlin.expand.view.statusBarColorExpand
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.Gallery
-import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.wechat.activity.GalleryWeChatActivity
 import com.gallery.ui.wechat.activity.GalleryWeChatPrevActivity
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*

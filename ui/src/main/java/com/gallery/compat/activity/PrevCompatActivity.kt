@@ -1,4 +1,4 @@
-package com.gallery.ui.activity.base
+package com.gallery.compat.activity
 
 import android.content.Context
 import android.content.Intent
@@ -10,21 +10,20 @@ import androidx.kotlin.expand.app.addFragmentExpand
 import androidx.kotlin.expand.app.showFragmentExpand
 import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.kotlin.expand.text.safeToastExpand
+import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.UIPrevArgs
+import com.gallery.compat.UIPrevArgs.Companion.putPrevArgs
+import com.gallery.compat.UIPrevArgs.Companion.uiPrevArgs
+import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.GalleryUiBundle
 import com.gallery.ui.R
-import com.gallery.ui.UIPrevArgs
-import com.gallery.ui.UIPrevArgs.Companion.putPrevArgs
-import com.gallery.ui.UIPrevArgs.Companion.uiPrevArgs
-import com.gallery.ui.activity.ext.prevFragment
-import com.gallery.ui.fragment.PrevFragment
 
-abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
+abstract class PrevCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
 
     companion object {
         /** 预览页toolbar返回 result_code */
@@ -36,12 +35,12 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
         /** 预览页选中数据返回 result_code */
         internal const val RESULT_CODE_SELECT = -17
 
-        fun newInstance(context: Context, uiPrevArgs: UIPrevArgs, cla: Class<out PrevBaseActivity>): Intent {
+        fun newInstance(context: Context, uiPrevArgs: UIPrevArgs, cla: Class<out PrevCompatActivity>): Intent {
             return Intent(context, cla).putExtras(uiPrevArgs.putPrevArgs())
         }
     }
 
-    /** 当前Fragment 文件Id,用于初始化[PrevFragment] */
+    /** 当前Fragment 文件Id,用于初始化[PrevCompatFragment] */
     protected abstract val galleryFragmentId: Int
 
     /** [UIPrevArgs] */
@@ -60,7 +59,7 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.findFragmentByTag(PrevFragment::class.java.simpleName)?.let {
+        supportFragmentManager.findFragmentByTag(PrevCompatFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
@@ -70,7 +69,7 @@ abstract class PrevBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IG
     }
 
     /** 自定义Fragment */
-    open fun createFragment(): Fragment = PrevFragment.newInstance(uiPrevArgs.prevArgs)
+    open fun createFragment(): Fragment = PrevCompatFragment.newInstance(uiPrevArgs.prevArgs)
 
     /** back返回,可为Bundle插入需要的数据 */
     open fun onKeyBackResult(bundle: Bundle): Bundle = bundle

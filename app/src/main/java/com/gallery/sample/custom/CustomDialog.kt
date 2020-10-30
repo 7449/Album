@@ -16,8 +16,8 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.R
-import com.gallery.ui.fragment.ScanFragment
-import com.gallery.ui.widget.GalleryDivider
+import com.gallery.compat.fragment.GalleryCompatFragment
+import com.gallery.compat.widget.GalleryDivider
 
 class CustomDialog : DialogFragment(), IGalleryCallback {
 
@@ -47,11 +47,11 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        childFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
+        childFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)?.let {
             childFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
         } ?: childFragmentManager
                 .beginTransaction()
-                .add(R.id.galleryFragment, ScanFragment.newInstance(GalleryBundle(radio = true, crop = false, hideCamera = true)), ScanFragment::class.java.simpleName)
+                .add(R.id.galleryFragment, GalleryCompatFragment.newInstance(GalleryBundle(radio = true, crop = false, hideCamera = true)), GalleryCompatFragment::class.java.simpleName)
                 .commitAllowingStateLoss()
     }
 

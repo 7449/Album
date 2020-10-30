@@ -1,22 +1,27 @@
 package com.gallery.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
+import androidx.kotlin.expand.content.drawableExpand
+import androidx.kotlin.expand.version.hasLExpand
+import androidx.kotlin.expand.view.statusBarColorExpand
 import com.bumptech.glide.Glide
+import com.gallery.compat.activity.PrevCompatActivity
+import com.gallery.compat.activity.prevFragment
+import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.R
-import com.gallery.ui.activity.base.PrevBaseActivity
-import com.gallery.ui.activity.ext.obtain
-import com.gallery.ui.activity.ext.prevFragment
-import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 
-open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevBaseActivity(layoutId) {
+open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevCompatActivity(layoutId) {
 
     companion object {
         private const val format = "%s / %s"
@@ -25,9 +30,31 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
     override val galleryFragmentId: Int
         get() = R.id.preFragment
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        obtain(uiConfig)
+
+        window.statusBarColorExpand(uiConfig.statusBarColor)
+        if (hasLExpand()) {
+            window.statusBarColor = uiConfig.statusBarColor
+        }
+        preToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
+        val drawable = drawableExpand(uiConfig.toolbarIcon)
+        drawable?.colorFilter = PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+        preToolbar.navigationIcon = drawable
+        preToolbar.setBackgroundColor(uiConfig.toolbarBackground)
+        if (hasLExpand()) {
+            preToolbar.elevation = uiConfig.toolbarElevation
+        }
+
+        preCount.textSize = uiConfig.preBottomCountTextSize
+        preCount.setTextColor(uiConfig.preBottomCountTextColor)
+
+        preBottomView.setBackgroundColor(uiConfig.preBottomViewBackground)
+        preBottomViewSelect.text = uiConfig.preBottomOkText
+        preBottomViewSelect.textSize = uiConfig.preBottomOkTextSize
+        preBottomViewSelect.setTextColor(uiConfig.preBottomOkTextColor)
+
         preBottomViewSelect.setOnClickListener {
             if (prevFragment.selectEmpty) {
                 onGallerySelectEmpty()

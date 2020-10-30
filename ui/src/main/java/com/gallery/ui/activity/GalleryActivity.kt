@@ -1,13 +1,25 @@
 package com.gallery.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.kotlin.expand.content.drawableExpand
+import androidx.kotlin.expand.content.minimumDrawableExpand
 import androidx.kotlin.expand.text.safeToastExpand
+import androidx.kotlin.expand.version.hasLExpand
+import androidx.kotlin.expand.view.statusBarColorExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.gallery.compat.activity.GalleryCompatActivity
+import com.gallery.compat.activity.galleryFragment
+import com.gallery.compat.crop.GalleryCompatCropper
+import com.gallery.compat.finder.GalleryFinderAdapter
+import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.entity.ScanEntity
@@ -15,22 +27,16 @@ import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.R
-import com.gallery.ui.activity.base.GalleryBaseActivity
-import com.gallery.ui.activity.ext.galleryFragment
-import com.gallery.ui.activity.ext.obtain
-import com.gallery.ui.crop.CropperImpl
-import com.gallery.ui.finder.GalleryFinderAdapter
 import com.gallery.ui.finder.PopupFinderAdapter
-import com.gallery.ui.widget.GalleryImageView
 import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
-open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryBaseActivity(layoutId),
+open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryCompatActivity(layoutId),
         View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
 
     override val galleryFinderAdapter: GalleryFinderAdapter by lazy { PopupFinderAdapter() }
 
     override val cropImpl: ICrop?
-        get() = CropperImpl(this, uiConfig)
+        get() = GalleryCompatCropper(this, uiConfig)
 
     override val currentFinderName: String
         get() = galleryFinderAll.text.toString()
@@ -38,9 +44,38 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     override val galleryFragmentId: Int
         get() = R.id.galleryFrame
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        obtain(uiConfig)
+
+        window.statusBarColorExpand(uiConfig.statusBarColor)
+        if (hasLExpand()) {
+            window.statusBarColor = uiConfig.statusBarColor
+        }
+        galleryToolbar.title = uiConfig.toolbarText
+        galleryToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
+        val drawable = drawableExpand(uiConfig.toolbarIcon)
+        drawable?.colorFilter = PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+        galleryToolbar.navigationIcon = drawable
+        galleryToolbar.setBackgroundColor(uiConfig.toolbarBackground)
+        if (hasLExpand()) {
+            galleryToolbar.elevation = uiConfig.toolbarElevation
+        }
+
+        galleryFinderAll.textSize = uiConfig.finderTextSize
+        galleryFinderAll.setTextColor(uiConfig.finderTextColor)
+        galleryFinderAll.setCompoundDrawables(null, null, minimumDrawableExpand(uiConfig.finderTextCompoundDrawable, uiConfig.finderTextDrawableColor), null)
+
+        galleryPre.text = uiConfig.preViewText
+        galleryPre.textSize = uiConfig.preViewTextSize
+        galleryPre.setTextColor(uiConfig.preViewTextColor)
+
+        gallerySelect.text = uiConfig.selectText
+        gallerySelect.textSize = uiConfig.selectTextSize
+        gallerySelect.setTextColor(uiConfig.selectTextColor)
+
+        galleryBottomView.setBackgroundColor(uiConfig.bottomViewBackground)
+
         galleryFinderAdapter.adapterInit(this, uiConfig, galleryFinderAll)
         galleryFinderAdapter.setOnAdapterFinderListener(this)
         galleryPre.setOnClickListener(this)

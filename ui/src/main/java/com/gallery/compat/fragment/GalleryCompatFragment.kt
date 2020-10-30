@@ -1,4 +1,4 @@
-package com.gallery.ui.fragment
+package com.gallery.compat.fragment
 
 import android.os.Bundle
 import android.view.View
@@ -12,19 +12,19 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
-import com.gallery.core.entity.ScanEntity
 import com.gallery.core.delegate.impl.ScanDelegateImpl
+import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.toScanFileEntity
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.R
 
-open class ScanFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
+open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
 
     companion object {
         @JvmStatic
-        fun newInstance(galleryBundle: GalleryBundle): ScanFragment {
-            val scanFragment = ScanFragment()
+        fun newInstance(galleryBundle: GalleryBundle): GalleryCompatFragment {
+            val scanFragment = GalleryCompatFragment()
             scanFragment.arguments = galleryBundle.putGalleryArgs()
             return scanFragment
         }

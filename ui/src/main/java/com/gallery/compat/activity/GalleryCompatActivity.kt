@@ -1,4 +1,4 @@
-package com.gallery.ui.activity.base
+package com.gallery.compat.activity
 
 import android.content.Context
 import android.content.Intent
@@ -18,6 +18,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.gallery.compat.*
+import com.gallery.compat.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
+import com.gallery.compat.UIGallerySaveArgs.Companion.putArgs
+import com.gallery.compat.UIGallerySaveArgs.Companion.uiGallerySaveArgs
+import com.gallery.compat.finder.GalleryFinderAdapter
+import com.gallery.compat.finder.findFinder
+import com.gallery.compat.finder.updateResultFinder
+import com.gallery.compat.fragment.GalleryCompatFragment
+import com.gallery.compat.widget.GalleryDivider
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
 import com.gallery.core.ScanArgs.Companion.scanArgs
@@ -27,28 +36,13 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.Sort
-import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.UIGalleryArgs
-import com.gallery.ui.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
-import com.gallery.ui.UIGallerySaveArgs
-import com.gallery.ui.UIGallerySaveArgs.Companion.putArgs
-import com.gallery.ui.UIGallerySaveArgs.Companion.uiGallerySaveArgs
-import com.gallery.ui.UIPrevArgs
-import com.gallery.ui.activity.ext.galleryFragment
-import com.gallery.ui.finder.GalleryFinderAdapter
-import com.gallery.ui.finder.compat.findFinder
-import com.gallery.ui.finder.compat.updateResultFinder
-import com.gallery.ui.fragment.ScanFragment
-import com.gallery.ui.result.LayoutManager
-import com.gallery.ui.result.UiConfig
-import com.gallery.ui.widget.GalleryDivider
 
-abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
+abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
     protected abstract val currentFinderName: String
 
-    /** 当前Fragment 文件Id,用于初始化[ScanFragment] */
+    /** 当前Fragment 文件Id,用于初始化[GalleryCompatFragment] */
     protected abstract val galleryFragmentId: Int
 
     /** 目录View */
@@ -72,15 +66,15 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
         val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
         when (intent.resultCode) {
-            PrevBaseActivity.RESULT_CODE_SELECT -> {
+            PrevCompatActivity.RESULT_CODE_SELECT -> {
                 galleryFragment.onUpdateResult(bundleExpand.scanArgs)
                 onResultSelect(bundleExpand)
             }
-            PrevBaseActivity.RESULT_CODE_TOOLBAR -> {
+            PrevCompatActivity.RESULT_CODE_TOOLBAR -> {
                 galleryFragment.onUpdateResult(bundleExpand.scanArgs)
                 onResultToolbar(bundleExpand)
             }
-            PrevBaseActivity.RESULT_CODE_BACK -> {
+            PrevCompatActivity.RESULT_CODE_BACK -> {
                 galleryFragment.onUpdateResult(bundleExpand.scanArgs)
                 onResultBack(bundleExpand)
             }
@@ -104,7 +98,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
         finderList.clear()
         finderList.addAll(saveArgs?.finderList.orEmpty())
         finderName = saveArgs?.finderName ?: galleryConfig.allName
-        supportFragmentManager.findFragmentByTag(ScanFragment::class.java.simpleName)?.let {
+        supportFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)?.let {
             showFragmentExpand(fragment = it)
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
@@ -137,23 +131,23 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int, cla: Class<out PrevBaseActivity>) {
+    fun onStartPrevPage(parentId: Long, position: Int, cla: Class<out PrevCompatActivity>) {
         onStartPrevPage(parentId = parentId, position = position, option = galleryArgs.galleryPrevOption, cla = cla)
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevBaseActivity>) {
+    fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevCompatActivity>) {
         onStartPrevPage(UIPrevArgs(uiConfig, PrevArgs(parentId, galleryFragment.selectEntities, galleryConfig, position, scanAlone), option), cla)
     }
 
     /** 启动预览 */
-    open fun onStartPrevPage(uiPrevArgs: UIPrevArgs, cla: Class<out PrevBaseActivity>) {
-        prevLauncher.launch(PrevBaseActivity.newInstance(this, uiPrevArgs, cla))
+    open fun onStartPrevPage(uiPrevArgs: UIPrevArgs, cla: Class<out PrevCompatActivity>) {
+        prevLauncher.launch(PrevCompatActivity.newInstance(this, uiPrevArgs, cla))
     }
 
     /** 自定义Fragment */
     open fun createFragment(): Fragment {
-        return ScanFragment.newInstance(galleryConfig)
+        return GalleryCompatFragment.newInstance(galleryConfig)
     }
 
     /** 预览页toolbar返回 */
@@ -171,7 +165,7 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
 
     /** 用于 toolbar 返回 finish */
     open fun onGalleryFinish() {
-        setResult(UiConfig.RESULT_CODE_TOOLBAR_BACK)
+        setResult(Config.RESULT_CODE_TOOLBAR_BACK)
         finish()
     }
 
@@ -179,9 +173,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(UiConfig.GALLERY_MULTIPLE_DATA, entities)
+        bundle.putParcelableArrayList(Config.GALLERY_MULTIPLE_DATA, entities)
         intent.putExtras(bundle)
-        setResult(UiConfig.RESULT_CODE_MULTIPLE_DATA, intent)
+        setResult(Config.RESULT_CODE_MULTIPLE_DATA, intent)
         finish()
     }
 
@@ -189,9 +183,9 @@ abstract class GalleryBaseActivity(layoutId: Int) : AppCompatActivity(layoutId),
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UiConfig.GALLERY_SINGLE_DATA, scanEntity)
+        bundle.putParcelable(Config.GALLERY_SINGLE_DATA, scanEntity)
         intent.putExtras(bundle)
-        setResult(UiConfig.RESULT_CODE_SINGLE_DATA, intent)
+        setResult(Config.RESULT_CODE_SINGLE_DATA, intent)
         finish()
     }
 

@@ -1,4 +1,4 @@
-package com.gallery.ui.crop
+package com.gallery.compat.crop
 
 import android.app.Activity
 import android.content.Intent
@@ -6,16 +6,16 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.kotlin.expand.net.deleteExpand
+import com.gallery.compat.Config
+import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
-import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.result.UiConfig
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
 
-class CropperImpl(private val activity: Activity, private val galleryUiBundle: GalleryUiBundle) : ICrop {
+class GalleryCompatCropper(private val activity: Activity, private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     private var cropUri: Uri? = null
 
@@ -36,7 +36,7 @@ class CropperImpl(private val activity: Activity, private val galleryUiBundle: G
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
             val args = galleryUiBundle.args
             args.classLoader = CropImageOptions::class.java.classLoader
-            args.getParcelable<CropImageOptions>(UiConfig.CROP_ARGS)
+            args.getParcelable<CropImageOptions>(Config.CROP_ARGS)
         }.getOrElse { CropImageOptions() } ?: CropImageOptions())
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
         return intent
@@ -46,9 +46,9 @@ class CropperImpl(private val activity: Activity, private val galleryUiBundle: G
         delegate.onScanResult(uri)
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(UiConfig.GALLERY_RESULT_CROP, uri)
+        bundle.putParcelable(Config.GALLERY_RESULT_CROP, uri)
         intent.putExtras(bundle)
-        activity.setResult(UiConfig.RESULT_CODE_CROP, intent)
+        activity.setResult(Config.RESULT_CODE_CROP, intent)
         activity.finish()
     }
 }

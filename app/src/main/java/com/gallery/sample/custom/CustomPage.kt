@@ -6,12 +6,12 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.gallery.compat.activity.galleryFragment
+import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.crop.ICrop
 import com.gallery.sample.camera.CameraActivity
 import com.gallery.sample.crop.UCropImpl
 import com.gallery.ui.activity.GalleryActivity
-import com.gallery.ui.activity.ext.galleryFragment
-import com.gallery.ui.finder.GalleryFinderAdapter
 
 class UCropGalleryActivity : GalleryActivity() {
     override val cropImpl: ICrop?

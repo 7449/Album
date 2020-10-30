@@ -1,4 +1,4 @@
-package com.gallery.ui
+package com.gallery.compat
 
 import android.graphics.Color
 import android.os.Bundle
@@ -10,11 +10,11 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.result.LayoutManager
+import com.gallery.ui.R
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class UIGallerySaveArgs(
+internal data class UIGallerySaveArgs(
         val finderName: String,
         val finderList: ArrayList<ScanEntity>,
 ) : Parcelable {

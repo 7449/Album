@@ -1,4 +1,4 @@
-package com.gallery.ui.result
+package com.gallery.compat
 
 enum class LayoutManager {
     LINEAR,

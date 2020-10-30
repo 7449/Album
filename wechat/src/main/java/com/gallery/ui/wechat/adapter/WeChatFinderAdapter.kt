@@ -2,9 +2,9 @@ package com.gallery.ui.wechat.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.finder.GalleryFinderAdapter
+import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.ui.wechat.R
 import com.xadapter.vh.LayoutViewHolder
 import com.xadapter.vh.XViewHolder

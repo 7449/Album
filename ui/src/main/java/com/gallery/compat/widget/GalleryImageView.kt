@@ -1,4 +1,4 @@
-package com.gallery.ui.widget
+package com.gallery.compat.widget
 
 import android.content.Context
 import android.util.AttributeSet

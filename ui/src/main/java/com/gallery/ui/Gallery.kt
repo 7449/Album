@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.UIGalleryArgs
+import com.gallery.compat.UIGalleryArgs.Companion.putArgs
 import com.gallery.core.GalleryBundle
-import com.gallery.ui.UIGalleryArgs.Companion.putArgs
 import com.gallery.ui.activity.GalleryActivity
 
 class Gallery(

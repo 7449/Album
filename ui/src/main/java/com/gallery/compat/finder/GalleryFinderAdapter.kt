@@ -1,10 +1,10 @@
-package com.gallery.ui.finder
+package com.gallery.compat.finder
 
 import android.view.View
 import android.widget.FrameLayout
+import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.GalleryUiBundle
-import com.gallery.ui.activity.base.GalleryBaseActivity
 
 interface GalleryFinderAdapter {
 
@@ -17,7 +17,7 @@ interface GalleryFinderAdapter {
     }
 
     /** adapter 初始化 */
-    fun adapterInit(activity: GalleryBaseActivity, uiBundle: GalleryUiBundle, anchorView: View?)
+    fun adapterInit(activity: GalleryCompatActivity, uiBundle: GalleryUiBundle, anchorView: View?)
 
     /** 注册Adapter回调 */
     fun setOnAdapterFinderListener(listener: AdapterFinderListener)

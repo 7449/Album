@@ -16,14 +16,14 @@ import androidx.kotlin.expand.view.showExpand
 import androidx.kotlin.expand.widget.doOnAnimationEndExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.compat.Config
+import com.gallery.compat.activity.GalleryCompatActivity
+import com.gallery.compat.activity.galleryFragment
+import com.gallery.compat.finder.GalleryFinderAdapter
+import com.gallery.compat.finder.findFinder
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.ScanType
-import com.gallery.ui.activity.base.GalleryBaseActivity
-import com.gallery.ui.activity.ext.galleryFragment
-import com.gallery.ui.finder.GalleryFinderAdapter
-import com.gallery.ui.finder.compat.findFinder
-import com.gallery.ui.result.UiConfig
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.putArgs
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
@@ -33,7 +33,7 @@ import com.gallery.ui.wechat.engine.displayGalleryWeChat
 import com.gallery.ui.wechat.engine.formatTime
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
-class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener {
+class GalleryWeChatActivity : GalleryCompatActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener {
 
     private val newFinderAdapter: WeChatFinderAdapter by lazy { WeChatFinderAdapter(uiConfig, this) }
     private val videoDuration: Int by lazy { uiGapConfig.getInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, 300000) }
@@ -267,10 +267,10 @@ class GalleryWeChatActivity : GalleryBaseActivity(R.layout.gallery_activity_wech
     override fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(UiConfig.GALLERY_MULTIPLE_DATA, entities)
+        bundle.putParcelableArrayList(Config.GALLERY_MULTIPLE_DATA, entities)
         bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, galleryWeChatFullImage.isChecked)
         intent.putExtras(bundle)
-        setResult(UiConfig.RESULT_CODE_MULTIPLE_DATA, intent)
+        setResult(Config.RESULT_CODE_MULTIPLE_DATA, intent)
         finish()
     }
 

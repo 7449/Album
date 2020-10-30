@@ -7,11 +7,11 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.gallery.compat.activity.PrevCompatActivity
+import com.gallery.compat.activity.prevFragment
+import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.activity.base.PrevBaseActivity
-import com.gallery.ui.activity.ext.prevFragment
-import com.gallery.ui.finder.GalleryFinderAdapter
 import com.gallery.ui.wechat.*
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.weChatPrevArgsOrDefault
 import com.gallery.ui.wechat.WeChatPrevSaveArgs.Companion.putArgs
@@ -22,7 +22,7 @@ import com.gallery.ui.wechat.engine.displayGalleryPrevSelect
 import kotlinx.android.synthetic.main.gallery_activity_wechat_prev.*
 
 @SuppressLint("SetTextI18n")
-class GalleryWeChatPrevActivity : PrevBaseActivity(R.layout.gallery_activity_wechat_prev), GalleryFinderAdapter.AdapterFinderListener {
+class GalleryWeChatPrevActivity : PrevCompatActivity(R.layout.gallery_activity_wechat_prev), GalleryFinderAdapter.AdapterFinderListener {
 
     override val galleryFragmentId: Int
         get() = R.id.preWeChatFragment

@@ -10,7 +10,7 @@ import androidx.kotlin.expand.net.orEmptyExpand
 import androidx.kotlin.expand.os.orEmptyExpand
 import androidx.kotlin.expand.util.copyImageExpand
 import androidx.kotlin.expand.version.hasQExpand
-import com.gallery.compat.Config
+import com.gallery.compat.GalleryConfig
 import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
@@ -33,7 +33,7 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
     override fun openCrop(delegate: IScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
         return UCrop.of(inputUri, cropOutPutUri2(delegate.activityNotNull, galleryBundle))
-                .withOptions(UCrop.Options().apply { optionBundle.putAll(galleryUiBundle.args.getBundle(Config.CROP_ARGS).orEmptyExpand()) })
+                .withOptions(UCrop.Options().apply { optionBundle.putAll(galleryUiBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()) })
                 .getIntent(delegate.activityNotNull)
     }
 
@@ -53,9 +53,9 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         delegate.onScanResult(currentUri)
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(Config.GALLERY_RESULT_CROP, currentUri)
+        bundle.putParcelable(GalleryConfig.GALLERY_RESULT_CROP, currentUri)
         intent.putExtras(bundle)
-        delegate.activityNotNull.setResult(Config.RESULT_CODE_CROP, intent)
+        delegate.activityNotNull.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
         delegate.activityNotNull.finish()
     }
 }

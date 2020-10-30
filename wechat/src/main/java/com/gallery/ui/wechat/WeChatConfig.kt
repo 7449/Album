@@ -1,6 +1,6 @@
 package com.gallery.ui.wechat
 
-object WeChatUiResult {
+object WeChatConfig {
     const val GALLERY_WE_CHAT_RESULT_FULL_IMAGE = "galleryWeChatResultFullImage"
     const val GALLERY_WE_CHAT_VIDEO_DURATION = "galleryWeChatVideoDuration"
     const val GALLERY_WE_CHAT_VIDEO_DES = "galleryWeChatVideoDes"

@@ -14,11 +14,12 @@ android {
 dependencies {
     api(project(":ui"))
 //    api(Dep.ui)
-    api(Dep.viewHolder)
-    compileOnly(Dep.appcompat)
-    compileOnly(Dep.material)
-    compileOnly(Dep.recyclerView)
-    compileOnly(Dep.fragment)
     compileOnly(Dep.glide)
+
+    /* 和 ui library 依赖保持一致 */
+    compileOnly(Dep.appcompat)
+    compileOnly(Dep.fragment)
+    compileOnly(Dep.viewPager2)
+    compileOnly(Dep.recyclerView)
     compileOnly(Dep.kotlin)
 }

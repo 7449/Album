@@ -1,4 +1,4 @@
-package com.gallery.ui.wechat.engine
+package com.gallery.ui.wechat
 
 import android.annotation.SuppressLint
 import java.text.DecimalFormat

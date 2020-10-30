@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.gallery.compat.fragment.GalleryCompatFragment
+import com.gallery.compat.widget.GalleryDivider
+import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
@@ -28,12 +31,9 @@ import com.gallery.sample.custom.UCropGalleryActivity
 import com.gallery.scan.types.Sort
 import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity
-import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.ui.result.GalleryResultCallback
-import com.gallery.ui.wechat.WeChatGalleryResultCallback
+import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatUiGallery
-import com.gallery.compat.widget.GalleryDivider
-import com.gallery.compat.widget.GalleryImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_scan_rb.*
 import kotlinx.android.synthetic.main.layout_setting_rb.*

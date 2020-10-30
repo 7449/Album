@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.activity.prevFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
@@ -67,6 +68,7 @@ class GalleryWeChatPrevActivity : PrevCompatActivity(R.layout.gallery_activity_w
         prevWeChatToolbarBack.setOnClickListener { onGalleryFinish() }
         prevWeChatToolbarText.text = "%s / %s".format(0, galleryConfig.multipleMaxCount)
         prevWeChatFullImage.isChecked = weChatPrevArgs.fullImageSelect
+        galleryPrevList.layoutManager = LinearLayoutManager(this)
         galleryPrevList.adapter = selectAdapter
         prevWeChatToolbarSend.isEnabled = true
         prevWeChatToolbarSend.setOnClickListener {
@@ -148,17 +150,17 @@ class GalleryWeChatPrevActivity : PrevCompatActivity(R.layout.gallery_activity_w
     }
 
     override fun onKeyBackResult(bundle: Bundle): Bundle {
-        bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
+        bundle.putBoolean(WeChatConfig.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
         return super.onSelectEntitiesResult(bundle)
     }
 
     override fun onToolbarFinishResult(bundle: Bundle): Bundle {
-        bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
+        bundle.putBoolean(WeChatConfig.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
         return super.onSelectEntitiesResult(bundle)
     }
 
     override fun onSelectEntitiesResult(bundle: Bundle): Bundle {
-        bundle.putBoolean(WeChatUiResult.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
+        bundle.putBoolean(WeChatConfig.GALLERY_WE_CHAT_RESULT_FULL_IMAGE, prevWeChatFullImage.isChecked)
         return super.onSelectEntitiesResult(bundle)
     }
 }

@@ -17,8 +17,9 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 //    api(project(":scan"))
     api(Dep.scan)
-    compileOnly(Dep.viewPager2)
     compileOnly(Dep.appcompat)
     compileOnly(Dep.fragment)
+    compileOnly(Dep.viewPager2)
+    compileOnly(Dep.recyclerView)
     compileOnly(Dep.kotlin)
 }

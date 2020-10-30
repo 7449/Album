@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.kotlin.expand.net.deleteExpand
-import com.gallery.compat.Config
+import com.gallery.compat.GalleryConfig
 import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
@@ -36,7 +36,7 @@ class GalleryCompatCropper(private val activity: Activity, private val galleryUi
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
             val args = galleryUiBundle.args
             args.classLoader = CropImageOptions::class.java.classLoader
-            args.getParcelable<CropImageOptions>(Config.CROP_ARGS)
+            args.getParcelable<CropImageOptions>(GalleryConfig.CROP_ARGS)
         }.getOrElse { CropImageOptions() } ?: CropImageOptions())
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
         return intent
@@ -46,9 +46,9 @@ class GalleryCompatCropper(private val activity: Activity, private val galleryUi
         delegate.onScanResult(uri)
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(Config.GALLERY_RESULT_CROP, uri)
+        bundle.putParcelable(GalleryConfig.GALLERY_RESULT_CROP, uri)
         intent.putExtras(bundle)
-        activity.setResult(Config.RESULT_CODE_CROP, intent)
+        activity.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
         activity.finish()
     }
 }

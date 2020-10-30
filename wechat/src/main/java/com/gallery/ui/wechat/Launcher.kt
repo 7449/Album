@@ -53,8 +53,8 @@ fun FragmentActivity.weChatUiGallery(galleryLauncher: ActivityResultLauncher<Int
                     finderTextSize = 14.toFloat()
             ),
             galleryOption = Bundle().apply {
-                putInt(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DURATION, 500000)
-                putString(WeChatUiResult.GALLERY_WE_CHAT_VIDEO_DES, "全部视频")
+                putInt(WeChatConfig.GALLERY_WE_CHAT_VIDEO_DURATION, 500000)
+                putString(WeChatConfig.GALLERY_WE_CHAT_VIDEO_DES, "全部视频")
             },
             clz = GalleryWeChatActivity::class.java
     )

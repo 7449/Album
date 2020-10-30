@@ -1,4 +1,4 @@
-package com.gallery.ui.wechat
+package com.gallery.ui.wechat.result
 
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.result.GalleryListener

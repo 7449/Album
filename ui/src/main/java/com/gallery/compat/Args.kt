@@ -97,7 +97,7 @@ data class GalleryUiBundle(
         /**
          * 列表管理器
          */
-        val layoutManager: LayoutManager = LayoutManager.GRID,
+        val layoutManager: LayoutManagerTypes = LayoutManagerTypes.GRID,
         /**
          * 预览toolbar返回是否刷新数据
          */

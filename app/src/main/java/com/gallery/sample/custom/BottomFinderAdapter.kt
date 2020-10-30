@@ -8,14 +8,16 @@ import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.GalleryUiBundle
-import com.gallery.core.entity.ScanEntity
-import com.gallery.sample.R
 import com.gallery.compat.finder.BaseFinderAdapter
 import com.gallery.compat.finder.GalleryFinderAdapter
+import com.gallery.core.entity.ScanEntity
+import com.gallery.sample.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.xadapter.vh.LayoutViewHolder
-import com.xadapter.vh.XViewHolder
+import kotlinx.android.extensions.CacheImplementation
+import kotlinx.android.extensions.ContainerOptions
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.gallery_finder_bottom.*
+import kotlinx.android.synthetic.main.gallery_finder_bottom_item.*
 
 class BottomFinderAdapter : BaseFinderAdapter() {
 
@@ -65,24 +67,25 @@ class BottomFinderAdapter : BaseFinderAdapter() {
             super.onViewCreated(view, savedInstanceState)
             view.setBackgroundColor(galleryUiBundle.finderItemBackground)
             galleryFinderBottom.layoutManager = LinearLayoutManager(requireContext())
-            galleryFinderBottom.adapter = object : RecyclerView.Adapter<XViewHolder>() {
+            galleryFinderBottom.adapter = object : RecyclerView.Adapter<ViewHolder>() {
+
                 override fun getItemCount(): Int = list.size
 
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): XViewHolder {
-                    return LayoutViewHolder(parent, R.layout.gallery_finder_bottom_item).apply {
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                    return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.gallery_finder_bottom_item, parent, false)).apply {
                         this.itemView.setOnClickListener {
                             adapterFinderListener.onGalleryAdapterItemClick(it, this.bindingAdapterPosition, list[this.bindingAdapterPosition])
                         }
                     }
                 }
 
-                override fun onBindViewHolder(holder: XViewHolder, position: Int) {
+                override fun onBindViewHolder(holder: ViewHolder, position: Int) {
                     val finderEntity: ScanEntity = list[position]
-                    holder.setText(R.id.tv_gallery_finder_name, "%s".format(finderEntity.bucketDisplayName))
-                            .setTextColor(R.id.tv_gallery_finder_name, galleryUiBundle.finderItemTextColor)
-                            .setText(R.id.tv_gallery_finder_file_count, "%s".format(finderEntity.count.toString()))
-                            .setTextColor(R.id.tv_gallery_finder_file_count, galleryUiBundle.finderItemTextCountColor)
-                    adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.frameLayout(R.id.iv_gallery_finder_icon))
+                    holder.tvGalleryFinderNameBt.text = "%s".format(finderEntity.bucketDisplayName)
+                    holder.tvGalleryFinderNameBt.setTextColor(galleryUiBundle.finderItemTextColor)
+                    holder.tvGalleryFinderFileCountBt.text = "%s".format(finderEntity.count.toString())
+                    holder.tvGalleryFinderFileCountBt.setTextColor(galleryUiBundle.finderItemTextCountColor)
+                    adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.ivGalleryFinderIconBt)
                 }
             }
         }
@@ -91,6 +94,12 @@ class BottomFinderAdapter : BaseFinderAdapter() {
             list.clear()
             list.addAll(entities)
             galleryFinderBottom?.adapter?.notifyDataSetChanged()
+        }
+
+        @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+            override val containerView: View
+                get() = itemView
         }
 
     }

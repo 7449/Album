@@ -1,15 +1,21 @@
 package com.gallery.sample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
-import com.xadapter.vh.LayoutViewHolder
+import kotlinx.android.extensions.CacheImplementation
+import kotlinx.android.extensions.ContainerOptions
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_simple_scan.*
+import kotlinx.android.synthetic.main.item_simple_scan.*
 
 class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
 
@@ -19,17 +25,24 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
 
     private val arrayList: ArrayList<SimpleEntity> = arrayListOf()
 
+    @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+        override val containerView: View
+            get() = itemView
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val scanType = intent.getSerializableExtra(args) as ScanType
-        recyclerview.adapter = object : RecyclerView.Adapter<LayoutViewHolder>() {
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LayoutViewHolder {
-                return LayoutViewHolder(parent, R.layout.item_simple_scan)
+        recyclerview.adapter = object : RecyclerView.Adapter<ViewHolder>() {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_simple_scan, parent, false))
             }
 
-            override fun onBindViewHolder(holder: LayoutViewHolder, position: Int) {
+            @SuppressLint("SetTextI18n")
+            override fun onBindViewHolder(holder: ViewHolder, position: Int) {
                 val simpleEntity = arrayList[position]
-                holder.setText(R.id.text, "id:${simpleEntity.id} \nname:${simpleEntity.name} \nmediaType:${simpleEntity.mediaType}")
+                holder.text.text = "id:${simpleEntity.id} \nname:${simpleEntity.name} \nmediaType:${simpleEntity.mediaType}"
             }
 
             override fun getItemCount(): Int = arrayList.size

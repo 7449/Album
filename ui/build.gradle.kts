@@ -14,12 +14,16 @@ android {
     compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.ui") }
 }
 dependencies {
-//    api(project(":core"))
-    api(Dep.core)
-    compileOnly(Dep.recyclerView)
-    compileOnly(Dep.fragment)
-    compileOnly(Dep.kotlin)
+    api(project(":core"))
+//    api(Dep.core)
+
     compileOnly(Dep.glide)
-    compileOnly(Dep.material)
     compileOnly(Dep.cropper)
+
+    /* 和 core library 依赖保持一致 */
+    compileOnly(Dep.appcompat)
+    compileOnly(Dep.fragment)
+    compileOnly(Dep.viewPager2)
+    compileOnly(Dep.recyclerView)
+    compileOnly(Dep.kotlin)
 }

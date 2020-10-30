@@ -7,32 +7,32 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:id="@+id/iv_gallery_finder_icon"
+        android:id="@+id/ivGalleryFinderIcon"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_centerVertical="true" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_gallery_finder_name"
+        android:id="@+id/tvGalleryFinderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/item_list_popup_margin_left"
-        android:layout_toEndOf="@+id/iv_gallery_finder_icon"
+        android:layout_toEndOf="@+id/ivGalleryFinderIcon"
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
         tools:ignore="RtlHardcoded" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_gallery_finder_file_count"
+        android:id="@+id/tvGalleryFinderFileCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@+id/tv_gallery_finder_name"
+        android:layout_toEndOf="@+id/tvGalleryFinderName"
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
@@ -40,7 +40,7 @@
         tools:text="(3)" />
 
     <ImageView
-        android:id="@+id/iv_gallery_finder_file_check"
+        android:id="@+id/ivGalleryFinderFileCheck"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"

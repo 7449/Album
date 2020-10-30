@@ -1,6 +1,6 @@
 package com.gallery.compat
 
-enum class LayoutManager {
+enum class LayoutManagerTypes {
     LINEAR,
     GRID
 }

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.kotlin.expand.content.openVideoExpand
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.R
-import com.gallery.ui.wechat.engine.toFileSize
+import com.gallery.ui.wechat.toFileSize
 import kotlinx.android.synthetic.main.layout_prev_wechat_item.view.*
 
 class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {

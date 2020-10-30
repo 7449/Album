@@ -108,8 +108,8 @@ abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId
         fragment.view?.setBackgroundColor(uiConfig.galleryRootBackground)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = when (uiConfig.layoutManager) {
-            LayoutManager.GRID -> GridLayoutManager(recyclerView.context, galleryBundle.spanCount, uiConfig.orientation, false)
-            LayoutManager.LINEAR -> LinearLayoutManager(recyclerView.context, uiConfig.orientation, false)
+            LayoutManagerTypes.GRID -> GridLayoutManager(recyclerView.context, galleryBundle.spanCount, uiConfig.orientation, false)
+            LayoutManagerTypes.LINEAR -> LinearLayoutManager(recyclerView.context, uiConfig.orientation, false)
         }
         recyclerView.addItemDecoration(GalleryDivider(uiConfig.dividerWidth))
         if (recyclerView.itemAnimator is SimpleItemAnimator) {
@@ -165,7 +165,7 @@ abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId
 
     /** 用于 toolbar 返回 finish */
     open fun onGalleryFinish() {
-        setResult(Config.RESULT_CODE_TOOLBAR_BACK)
+        setResult(GalleryConfig.RESULT_CODE_TOOLBAR_BACK)
         finish()
     }
 
@@ -173,9 +173,9 @@ abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(Config.GALLERY_MULTIPLE_DATA, entities)
+        bundle.putParcelableArrayList(GalleryConfig.GALLERY_MULTIPLE_DATA, entities)
         intent.putExtras(bundle)
-        setResult(Config.RESULT_CODE_MULTIPLE_DATA, intent)
+        setResult(GalleryConfig.RESULT_CODE_MULTIPLE_DATA, intent)
         finish()
     }
 
@@ -183,9 +183,9 @@ abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(Config.GALLERY_SINGLE_DATA, scanEntity)
+        bundle.putParcelable(GalleryConfig.GALLERY_SINGLE_DATA, scanEntity)
         intent.putExtras(bundle)
-        setResult(Config.RESULT_CODE_SINGLE_DATA, intent)
+        setResult(GalleryConfig.RESULT_CODE_SINGLE_DATA, intent)
         finish()
     }
 

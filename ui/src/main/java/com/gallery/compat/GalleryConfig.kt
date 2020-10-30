@@ -1,6 +1,6 @@
 package com.gallery.compat
 
-object Config {
+object GalleryConfig {
     /**
      * 裁剪携带的参数
      * 从[GalleryUiBundle.args]里面获取

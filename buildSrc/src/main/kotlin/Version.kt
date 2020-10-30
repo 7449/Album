@@ -20,8 +20,11 @@ object ClassPath {
     const val gradle = "com.android.tools.build:gradle:4.0.2"
 }
 
+object Maven {
+    const val jitpack = "https://jitpack.io"
+}
+
 object Dep {
-    const val viewHolder = "com.ydevelop:rv-adapter-viewholder:0.0.6"
     const val kotlinx = "com.ydevelop:kotlinx:0.0.7"
     const val scan = "com.ydevelop:gallery.scan:0.1.6"
     const val core = "com.ydevelop:gallery.core:0.1.7"
@@ -31,10 +34,10 @@ object Dep {
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
     const val fragment = "androidx.fragment:fragment:1.3.0-beta01"
-    const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha06"
-
+    const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
     const val material = "com.google.android.material:material:1.3.0-alpha03"
+
     const val cameraview = "com.otaliastudios:cameraview:2.6.4"
     const val cropper = "com.theartofdev.edmodo:android-image-cropper:2.8.0"
     const val glide = "com.github.bumptech.glide:glide:4.11.0"

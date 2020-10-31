@@ -29,7 +29,7 @@ data class ScanEntity(
     val isGif: Boolean
         get() = delegate.mimeType.isGifExpand
     val isVideo: Boolean
-        get() = delegate.mimeType.isVideoExpand
+        get() = delegate.mediaType.isVideoExpand
     val isImage: Boolean
-        get() = delegate.mimeType.isImageExpand
+        get() = delegate.mediaType.isImageExpand
 }

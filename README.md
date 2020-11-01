@@ -15,7 +15,7 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
             
 #### dependencies
 
-    implementation 'com.ydevelop:gallery.ui:0.1.1'
+    implementation 'com.ydevelop:gallery.ui:0.1.2'
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
@@ -40,19 +40,17 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
     
 #### custom page
 
-  [SimpleGalleryActivity](./app/src/main/java/com/gallery/sample/custom/CustomPageActivity.kt)
+  [CustomyActivity](./app/src/main/java/com/gallery/sample/custom/CustomPage.kt)
   
 #### custom crop
 
   [ICrop](./core/src/main/java/com/gallery/core/crop/ICrop.kt)
   
-  [CropperImpl](./ui/src/main/java/com/gallery/ui/crop/CropperImpl.kt)
-  
-  [UCropImpl](./ui/src/main/java/com/gallery/ui/crop/UCropImpl.kt)
+  [UCropImpl](./app/src/main/java/com/gallery/sample/crop/UCropImpl.kt)
 
 #### custom camera
 
-  [CustomCameraActivity](./app/src/main/java/com/gallery/sample/custom/CustomCameraActivity.kt)
+  [CameraActivity](./app/src/main/java/com/gallery/sample/camera/CameraActivity.kt)
 
 ## Screenshot
 

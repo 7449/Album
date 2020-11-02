@@ -5,7 +5,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class WeChatPrevSaveArgs(
+internal data class WeChatPrevSaveArgs(
         val ids: ArrayList<Long>,
 ) : Parcelable {
     companion object {
@@ -21,7 +21,7 @@ data class WeChatPrevSaveArgs(
 }
 
 @Parcelize
-data class WeChatPrevArgs(
+internal data class WeChatPrevArgs(
         /** 是否是点击预览进入 */
         val isPrev: Boolean,
         /** 限制的视频时长 */

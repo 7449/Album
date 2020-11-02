@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.kotlin.expand.content.colorExpand
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.R
-import com.gallery.ui.wechat.formatTimeVideo
+import com.gallery.ui.wechat.extension.formatTimeVideo
 import kotlinx.android.synthetic.main.layout_gallery_wechat_item.view.*
 
 class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {

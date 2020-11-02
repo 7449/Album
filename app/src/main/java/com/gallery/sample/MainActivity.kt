@@ -32,8 +32,8 @@ import com.gallery.scan.types.Sort
 import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.result.GalleryResultCallback
+import com.gallery.ui.wechat.extension.weChatUiGallery
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
-import com.gallery.ui.wechat.weChatUiGallery
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_scan_rb.*
 import kotlinx.android.synthetic.main.layout_setting_rb.*

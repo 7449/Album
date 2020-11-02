@@ -1,4 +1,4 @@
-package com.gallery.ui.wechat.engine
+package com.gallery.ui.wechat.extension
 
 import android.graphics.Color
 import android.view.Gravity

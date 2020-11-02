@@ -11,10 +11,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.kotlin.expand.os.getBooleanExpand
 import androidx.kotlin.expand.text.safeToastExpand
+import androidx.kotlin.expand.version.hasLExpand
 import androidx.kotlin.expand.view.hideExpand
 import androidx.kotlin.expand.view.showExpand
+import androidx.kotlin.expand.view.statusBarColorExpand
 import androidx.kotlin.expand.widget.doOnAnimationEndExpand
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.GalleryConfig
 import com.gallery.compat.activity.GalleryCompatActivity
@@ -24,12 +28,12 @@ import com.gallery.compat.finder.findFinder
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.ScanType
-import com.gallery.ui.wechat.*
+import com.gallery.ui.wechat.R
+import com.gallery.ui.wechat.WeChatConfig
+import com.gallery.ui.wechat.WeChatPrevArgs
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.putArgs
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
-import com.gallery.ui.wechat.engine.AnimEngine
-import com.gallery.ui.wechat.engine.displayGalleryThumbnails
-import com.gallery.ui.wechat.engine.displayGalleryWeChat
+import com.gallery.ui.wechat.extension.*
 import kotlinx.android.synthetic.main.gallery_activity_wechat_gallery.*
 
 class GalleryWeChatActivity : GalleryCompatActivity(R.layout.gallery_activity_wechat_gallery), GalleryFinderAdapter.AdapterFinderListener {
@@ -51,9 +55,33 @@ class GalleryWeChatActivity : GalleryCompatActivity(R.layout.gallery_activity_we
         outState.putParcelableArrayList(WeChatConfig.GALLERY_WE_CHAT_VIDEO_ALL, videoList)
     }
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        obtain(uiConfig)
+
+        window.statusBarColorExpand(uiConfig.statusBarColor)
+        if (hasLExpand()) {
+            window.statusBarColor = uiConfig.statusBarColor
+        }
+        galleryWeChatToolbar.setBackgroundColor(uiConfig.toolbarBackground)
+
+        galleryWeChatFinder.layoutManager = LinearLayoutManager(this)
+        galleryWeChatFinder.setBackgroundColor(uiConfig.finderItemBackground)
+        galleryWeChatFinder.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
+
+        galleryWeChatBottomView.setBackgroundColor(uiConfig.bottomViewBackground)
+
+        galleryWeChatPrev.text = uiConfig.preViewText
+        galleryWeChatPrev.textSize = uiConfig.preViewTextSize
+
+        galleryWeChatToolbarSend.textSize = uiConfig.selectTextSize
+        galleryWeChatToolbarSend.text = uiConfig.selectText
+        galleryWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
+
+        galleryWeChatToolbarFinderText.textSize = uiConfig.finderTextSize
+        galleryWeChatToolbarFinderText.setTextColor(uiConfig.finderTextColor)
+        galleryWeChatToolbarFinderIcon.setImageResource(uiConfig.finderTextCompoundDrawable)
+        galleryWeChatToolbarFinderText.text = finderName
 
         tempVideoList.clear()
         tempVideoList.addAll(savedInstanceState?.getParcelableArrayList(WeChatConfig.GALLERY_WE_CHAT_VIDEO_ALL)
@@ -86,10 +114,10 @@ class GalleryWeChatActivity : GalleryCompatActivity(R.layout.gallery_activity_we
                 }
             } ?: showFinderActionView()
         }
-        rotateAnimation.doOnAnimationEndExpand { AnimEngine.newInstance(galleryWeChatRoot.height).openAnim(galleryWeChatFinderRoot) }
+        rotateAnimation.doOnAnimationEndExpand { AnimExtension.newInstance(galleryWeChatRoot.height).openAnim(galleryWeChatFinderRoot) }
         rotateAnimationResult.doOnAnimationEndExpand {
             val currentFragment = galleryFragment
-            AnimEngine.newInstance(galleryWeChatRoot.height).closeAnimate(galleryWeChatFinderRoot) {
+            AnimExtension.newInstance(galleryWeChatRoot.height).closeAnimate(galleryWeChatFinderRoot) {
                 if (finderList.find { it.isSelected }?.parent == currentFragment.parentId) {
                     return@closeAnimate
                 }

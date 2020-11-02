@@ -7,19 +7,24 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.kotlin.expand.version.hasLExpand
+import androidx.kotlin.expand.view.statusBarColorExpand
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.activity.prevFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.wechat.*
+import com.gallery.ui.wechat.R
+import com.gallery.ui.wechat.WeChatConfig
+import com.gallery.ui.wechat.WeChatPrevArgs
 import com.gallery.ui.wechat.WeChatPrevArgs.Companion.weChatPrevArgsOrDefault
+import com.gallery.ui.wechat.WeChatPrevSaveArgs
 import com.gallery.ui.wechat.WeChatPrevSaveArgs.Companion.putArgs
 import com.gallery.ui.wechat.WeChatPrevSaveArgs.Companion.weChatPrevSaveArgs
 import com.gallery.ui.wechat.adapter.WeChatPrevSelectAdapter
-import com.gallery.ui.wechat.engine.displayGalleryPrev
-import com.gallery.ui.wechat.engine.displayGalleryPrevSelect
+import com.gallery.ui.wechat.extension.displayGalleryPrev
+import com.gallery.ui.wechat.extension.displayGalleryPrevSelect
 import kotlinx.android.synthetic.main.gallery_activity_wechat_prev.*
 
 @SuppressLint("SetTextI18n")
@@ -60,9 +65,29 @@ class GalleryWeChatPrevActivity : PrevCompatActivity(R.layout.gallery_activity_w
         WeChatPrevSaveArgs(idList).putArgs(outState)
     }
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        obtain(uiConfig)
+
+        window.statusBarColorExpand(uiConfig.statusBarColor)
+        if (hasLExpand()) {
+            window.statusBarColor = uiConfig.statusBarColor
+        }
+        prevWeChatToolbar.setBackgroundColor(uiConfig.toolbarBackground)
+
+        prevWeChatBottomView.setBackgroundColor(uiConfig.preBottomViewBackground)
+        galleryPrevList.setBackgroundColor(uiConfig.preBottomViewBackground)
+        galleryPrevList.alpha = 0.9.toFloat()
+        prevWeChatSelect.text = uiConfig.preBottomOkText
+        prevWeChatSelect.textSize = uiConfig.preBottomOkTextSize
+        prevWeChatSelect.setTextColor(uiConfig.preBottomOkTextColor)
+
+        prevWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
+        prevWeChatSelect.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
+
+        prevWeChatToolbarSend.textSize = uiConfig.selectTextSize
+        prevWeChatToolbarSend.text = uiConfig.selectText
+
         idList.clear()
         idList.addAll(savedInstanceState?.weChatPrevSaveArgs?.ids ?: arrayListOf())
         prevWeChatToolbarBack.setOnClickListener { onGalleryFinish() }

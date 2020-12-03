@@ -14,18 +14,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.kotlin.expand.app.scanFileExpand
-import androidx.kotlin.expand.app.squareExpand
-import androidx.kotlin.expand.content.drawableExpand
-import androidx.kotlin.expand.content.findIdByUriExpand
-import androidx.kotlin.expand.content.openVideoExpand
-import androidx.kotlin.expand.net.deleteExpand
-import androidx.kotlin.expand.net.isFileExistsExpand
-import androidx.kotlin.expand.os.bundleOrEmptyExpand
-import androidx.kotlin.expand.os.permission.checkCameraPermissionExpand
-import androidx.kotlin.expand.os.permission.checkWritePermissionExpand
-import androidx.kotlin.expand.view.hideExpand
-import androidx.kotlin.expand.view.showExpand
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
@@ -139,7 +127,7 @@ class ScanDelegateImpl(
                 }
     }
 
-    private val galleryBundle: GalleryBundle by lazy { fragment.bundleOrEmptyExpand().galleryBundleOrDefault }
+    private val galleryBundle: GalleryBundle by lazy { fragment.arguments.orEmptyExpand().galleryBundleOrDefault }
     private val galleryAdapter: GalleryAdapter by lazy { GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this) }
     private val recyclerView: RecyclerView by lazy { fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView }
     private val emptyView: ImageView by lazy { fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView }

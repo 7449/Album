@@ -6,9 +6,9 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.kotlin.expand.view.hideExpand
-import androidx.kotlin.expand.view.showExpand
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.hideExpand
+import com.gallery.core.extensions.showExpand
 import com.gallery.ui.wechat.R
 import kotlinx.android.synthetic.main.layout_select_wechat_item.view.*
 

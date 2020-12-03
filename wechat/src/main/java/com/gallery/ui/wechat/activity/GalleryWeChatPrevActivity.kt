@@ -7,14 +7,14 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.version.hasLExpand
-import androidx.kotlin.expand.view.statusBarColorExpand
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.activity.prevFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.hasLExpand
+import com.gallery.core.extensions.statusBarColorExpand
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig
 import com.gallery.ui.wechat.WeChatPrevArgs

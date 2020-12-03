@@ -9,7 +9,6 @@ import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.text.safeToastExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.fragment.GalleryCompatFragment
@@ -17,6 +16,7 @@ import com.gallery.compat.widget.GalleryDivider
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.R
 
 class CustomDialog : DialogFragment(), IGalleryCallback {

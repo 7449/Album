@@ -8,11 +8,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.kotlin.expand.content.drawableExpand
-import androidx.kotlin.expand.content.minimumDrawableExpand
-import androidx.kotlin.expand.text.safeToastExpand
-import androidx.kotlin.expand.version.hasLExpand
-import androidx.kotlin.expand.view.statusBarColorExpand
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.activity.GalleryCompatActivity
@@ -23,7 +18,7 @@ import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.isVideoScanExpand
+import com.gallery.core.extensions.*
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.R

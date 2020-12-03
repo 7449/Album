@@ -10,7 +10,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.text.safeToastExpand
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,6 +22,7 @@ import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.isVideoScanExpand
+import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.callback.GalleryCallback
 import com.gallery.sample.callback.WeChatGalleryCallback
 import com.gallery.sample.custom.CustomCameraActivity

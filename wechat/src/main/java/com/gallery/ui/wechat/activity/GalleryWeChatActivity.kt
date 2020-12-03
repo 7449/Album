@@ -9,13 +9,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.os.getBooleanExpand
-import androidx.kotlin.expand.text.safeToastExpand
-import androidx.kotlin.expand.version.hasLExpand
-import androidx.kotlin.expand.view.hideExpand
-import androidx.kotlin.expand.view.showExpand
-import androidx.kotlin.expand.view.statusBarColorExpand
-import androidx.kotlin.expand.widget.doOnAnimationEndExpand
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +20,7 @@ import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.*
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig

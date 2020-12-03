@@ -6,21 +6,21 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.app.addFragmentExpand
-import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.os.bundleOrEmptyExpand
-import androidx.kotlin.expand.text.safeToastExpand
 import com.gallery.compat.GalleryUiBundle
 import com.gallery.compat.UIPrevArgs
 import com.gallery.compat.UIPrevArgs.Companion.putPrevArgs
 import com.gallery.compat.UIPrevArgs.Companion.uiPrevArgs
 import com.gallery.compat.fragment.PrevCompatFragment
+import com.gallery.compat.fragment.addFragmentExpand
+import com.gallery.compat.fragment.showFragmentExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.bundleOrEmptyExpand
+import com.gallery.core.extensions.safeToastExpand
 import com.gallery.ui.R
 
 abstract class PrevCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {

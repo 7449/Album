@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.net.isFileExistsExpand
-import androidx.kotlin.expand.os.bundleOrEmptyExpand
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
@@ -22,6 +20,8 @@ import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.adapter.PrevAdapter
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.isFileExistsExpand
+import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.toScanEntity
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
@@ -69,7 +69,7 @@ class PrevDelegateImpl(
     private val viewPager2: ViewPager2 by lazy { fragment.view?.findViewById(R.id.gallery_prev_viewpager2) as ViewPager2 }
     private val checkBox: View by lazy { fragment.view?.findViewById(R.id.gallery_prev_checkbox) as View }
     private val prevAdapter: PrevAdapter by lazy { PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) } }
-    private val prevArgs: PrevArgs by lazy { fragment.bundleOrEmptyExpand().prevArgsOrDefault }
+    private val prevArgs: PrevArgs by lazy { fragment.arguments.orEmptyExpand().prevArgsOrDefault }
     private val galleryBundle: GalleryBundle by lazy { prevArgs.configOrDefault }
 
     override val allItem: ArrayList<ScanEntity>

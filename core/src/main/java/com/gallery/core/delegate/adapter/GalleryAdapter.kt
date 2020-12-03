@@ -9,14 +9,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.kotlin.expand.net.isFileExistsExpand
-import androidx.kotlin.expand.view.showExpand
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.isFileExistsExpand
+import com.gallery.core.extensions.showExpand
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
 import kotlinx.android.extensions.LayoutContainer

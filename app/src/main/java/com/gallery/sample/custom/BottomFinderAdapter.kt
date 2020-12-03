@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.kotlin.expand.os.getParcelableOrDefault
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.GalleryUiBundle
 import com.gallery.compat.finder.BaseFinderAdapter
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.getParcelableOrDefault
 import com.gallery.sample.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.extensions.CacheImplementation
@@ -53,7 +53,7 @@ class BottomFinderAdapter : BaseFinderAdapter() {
 
         private val list: ArrayList<ScanEntity> = arrayListOf()
         private val galleryUiBundle by lazy {
-            getParcelableOrDefault<GalleryUiBundle>(Key, GalleryUiBundle())
+            arguments.getParcelableOrDefault<GalleryUiBundle>(Key, GalleryUiBundle())
         }
         private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener by lazy {
             requireActivity() as GalleryFinderAdapter.AdapterFinderListener

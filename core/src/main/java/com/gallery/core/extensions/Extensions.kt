@@ -3,11 +3,6 @@ package com.gallery.core.extensions
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.kotlin.expand.content.insertImageUriExpand
-import androidx.kotlin.expand.content.insertVideoUriExpand
-import androidx.kotlin.expand.util.lowerVersionFileExpand
-import androidx.kotlin.expand.util.mkdirsFileExpand
-import androidx.kotlin.expand.version.hasQExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.extensions.ScanFileEntity

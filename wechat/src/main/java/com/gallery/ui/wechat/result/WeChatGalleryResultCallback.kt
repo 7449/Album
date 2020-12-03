@@ -4,11 +4,11 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
-import androidx.kotlin.expand.os.getBooleanExpand
-import androidx.kotlin.expand.os.getParcelableArrayListExpand
-import androidx.kotlin.expand.os.getParcelableExpand
-import androidx.kotlin.expand.os.orEmptyExpand
 import com.gallery.compat.GalleryConfig
+import com.gallery.core.extensions.getBooleanExpand
+import com.gallery.core.extensions.getParcelableArrayListExpand
+import com.gallery.core.extensions.getParcelableExpand
+import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.ui.wechat.WeChatConfig
 
 class WeChatGalleryResultCallback(

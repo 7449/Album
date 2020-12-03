@@ -1,9 +1,6 @@
 package com.gallery.scan.extensions
 
 import android.provider.MediaStore
-import androidx.kotlin.expand.database.getIntOrDefault
-import androidx.kotlin.expand.database.getLongOrDefault
-import androidx.kotlin.expand.database.getStringOrDefault
 import com.gallery.scan.args.ScanEntityFactory
 
 /** 音频实体生成 [AudioColumns.columns] */

@@ -5,12 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
-import androidx.kotlin.expand.net.deleteExpand
 import com.gallery.compat.GalleryConfig
 import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
+import com.gallery.core.extensions.deleteExpand
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions

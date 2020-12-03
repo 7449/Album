@@ -5,7 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.kotlin.expand.net.orEmptyExpand
+import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.sample.R
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger

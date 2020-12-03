@@ -4,13 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import androidx.annotation.Px
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.text.safeToastExpand
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.safeToastExpand
 
 /**
  *

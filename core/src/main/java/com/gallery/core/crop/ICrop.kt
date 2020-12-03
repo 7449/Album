@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.ActivityResult
-import androidx.kotlin.expand.net.orEmptyExpand
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.extensions.cropUriExpand
 import com.gallery.core.extensions.cropUriExpand2
+import com.gallery.core.extensions.orEmptyExpand
 
 /**
  * core library 剥离出裁剪相关功能，仅提供对外的裁剪接口，具体实现可由

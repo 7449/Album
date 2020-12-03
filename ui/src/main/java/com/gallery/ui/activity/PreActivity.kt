@@ -9,15 +9,15 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.content.drawableExpand
-import androidx.kotlin.expand.version.hasLExpand
-import androidx.kotlin.expand.view.statusBarColorExpand
 import com.bumptech.glide.Glide
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.activity.prevFragment
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.drawableExpand
+import com.gallery.core.extensions.hasLExpand
+import com.gallery.core.extensions.statusBarColorExpand
 import com.gallery.ui.R
 import kotlinx.android.synthetic.main.gallery_activity_preview.*
 

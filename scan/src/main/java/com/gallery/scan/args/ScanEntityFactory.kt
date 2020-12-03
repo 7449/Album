@@ -5,7 +5,7 @@ import com.gallery.scan.task.ScanTask
 
 /**
  * 自定义实体工厂
- * 调用[cursorMoveToNext]可避免泛型强制转换
+ * 调用[cursorMoveToNextGeneric]可避免泛型强制转换
  * [ScanTask]
  */
 interface ScanEntityFactory {

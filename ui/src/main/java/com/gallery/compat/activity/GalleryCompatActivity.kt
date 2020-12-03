@@ -10,10 +10,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.kotlin.expand.app.addFragmentExpand
-import androidx.kotlin.expand.app.showFragmentExpand
-import androidx.kotlin.expand.os.bundleOrEmptyExpand
-import androidx.kotlin.expand.os.orEmptyExpand
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +22,8 @@ import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.compat.finder.updateResultFinder
 import com.gallery.compat.fragment.GalleryCompatFragment
+import com.gallery.compat.fragment.addFragmentExpand
+import com.gallery.compat.fragment.showFragmentExpand
 import com.gallery.compat.widget.GalleryDivider
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
@@ -35,6 +33,8 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.bundleOrEmptyExpand
+import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.scan.types.Sort
 
 abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {

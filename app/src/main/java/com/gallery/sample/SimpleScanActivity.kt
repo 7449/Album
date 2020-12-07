@@ -49,7 +49,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
         }
 
         when (scanType) {
-            ScanType.FILE -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
+            ScanType.FILE -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.fileExpand(),
                     args = ScanFileArgs(null)))
                     .scanFileImpl()
@@ -57,7 +57,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
                         recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(Bundle())
-            ScanType.MIX -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
+            ScanType.MIX -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.fileExpand(),
                     args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString()))))
                     .scanFileImpl()
@@ -65,7 +65,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
                         recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(com.gallery.scan.types.ScanType.SCAN_ALL.multipleScanExpand())
-            ScanType.AUDIO -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
+            ScanType.AUDIO -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.audioExpand(),
                     args = ScanAudioArgs()))
                     .scanAudioImpl()
@@ -73,7 +73,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, "音频") })
                         recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(Bundle())
-            ScanType.PICTURE -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
+            ScanType.PICTURE -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.pictureExpand(),
                     args = ScanPictureArgs()))
                     .scanPictureImpl()
@@ -82,7 +82,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                         recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(com.gallery.scan.types.ScanType.SCAN_ALL.multipleScanExpand())
             // old
-            ScanType.VIDEO -> ViewModelProvider(this, ScanViewModelFactory(ownerActivity = this,
+            ScanType.VIDEO -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.fileExpand(),
                     args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()))))
                     .scanFileImpl()

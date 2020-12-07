@@ -33,7 +33,6 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.bundleOrEmptyExpand
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.scan.types.Sort
 
@@ -51,7 +50,7 @@ abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId
 
     /** [UIGalleryArgs] */
     @Suppress("MemberVisibilityCanBePrivate")
-    protected val galleryArgs: UIGalleryArgs by lazy { bundleOrEmptyExpand().uiGalleryArgsOrDefault }
+    protected val galleryArgs: UIGalleryArgs by lazy { intent?.extras.orEmptyExpand().uiGalleryArgsOrDefault }
 
     /** 初始配置 */
     protected val galleryConfig: GalleryBundle by lazy { galleryArgs.galleryBundle }

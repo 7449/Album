@@ -13,16 +13,16 @@ import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.callback.ScanCore
 
-/** [ScanFileEntity] [ScanViewModelFactory] */
+/** [ScanFileEntity] [ScanViewModelFactory2] */
 fun ViewModelProvider.scanFileImpl(): ScanImpl<ScanFileEntity> = scanImpl()
 
-/** [ScanAudioEntity] [ScanViewModelFactory] */
+/** [ScanAudioEntity] [ScanViewModelFactory2] */
 fun ViewModelProvider.scanAudioImpl(): ScanImpl<ScanAudioEntity> = scanImpl()
 
-/** [ScanPictureEntity] [ScanViewModelFactory] */
+/** [ScanPictureEntity] [ScanViewModelFactory2] */
 fun ViewModelProvider.scanPictureImpl(): ScanImpl<ScanPictureEntity> = scanImpl()
 
-/** [ScanImpl] [ScanViewModelFactory] */
+/** [ScanImpl] [ScanViewModelFactory2] */
 fun <E> ViewModelProvider.scanImpl(): ScanImpl<E> = get(ScanImpl::class.java) as ScanImpl<E>
 
 open class ScanViewModelFactory2(
@@ -56,22 +56,24 @@ open class ScanViewModelFactory(
         factory, args
 )
 
-class ActivityScanViewModelFactory(
-        ownerActivity: FragmentActivity,
+fun FragmentActivity.scanViewModelFactory(
         factory: ScanEntityFactory,
         args: CursorLoaderArgs,
-) : ScanViewModelFactory(
-        ownerActivity = ownerActivity,
-        factory = factory,
-        args = args
-)
+): ScanViewModelFactory2 {
+    return ScanViewModelFactory(
+            ownerActivity = this,
+            factory = factory,
+            args = args
+    )
+}
 
-class FragmentScanViewModelFactory(
-        ownerFragment: Fragment,
+fun Fragment.scanViewModelFactory(
         factory: ScanEntityFactory,
         args: CursorLoaderArgs,
-) : ScanViewModelFactory(
-        ownerFragment = ownerFragment,
-        factory = factory,
-        args = args
-)
+): ScanViewModelFactory2 {
+    return ScanViewModelFactory(
+            ownerFragment = this,
+            factory = factory,
+            args = args
+    )
+}

@@ -107,8 +107,7 @@ class PrevDelegateImpl(
                     galleryBundle.scanSort
             )
             ViewModelProvider(fragment,
-                    ScanViewModelFactory(
-                            ownerFragment = fragment,
+                    fragment.scanViewModelFactory(
                             factory = ScanEntityFactory.fileExpand(),
                             args = scanFileArgs
                     )

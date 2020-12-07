@@ -25,18 +25,17 @@ object Maven {
 }
 
 object Dep {
-    const val kotlinx = "com.ydevelop:kotlinx:0.0.7"
-    const val scan = "com.ydevelop:gallery.scan:0.1.6"
-    const val core = "com.ydevelop:gallery.core:0.1.7"
-    const val ui = "com.ydevelop:gallery.ui:0.1.2"
+    const val scan = "com.ydevelop:gallery.scan:0.1.7"
+    const val core = "com.ydevelop:gallery.core:0.1.8"
+    const val ui = "com.ydevelop:gallery.ui:0.1.3"
 
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.20"
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
-    const val fragment = "androidx.fragment:fragment:1.3.0-beta01"
-    const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha06"
+    const val fragment = "androidx.fragment:fragment:1.3.0-beta02"
+    const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0-beta01"
     const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
-    const val material = "com.google.android.material:material:1.3.0-alpha03"
+    const val material = "com.google.android.material:material:1.3.0-alpha04"
 
     const val cameraview = "com.otaliastudios:cameraview:2.6.4"
     const val cropper = "com.theartofdev.edmodo:android-image-cropper:2.8.0"

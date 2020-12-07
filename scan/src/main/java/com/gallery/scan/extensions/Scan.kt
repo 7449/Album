@@ -18,7 +18,7 @@ fun Long.isScanNoNeExpand(): Boolean = this == ScanType.SCAN_NONE
 fun Long.multipleScanExpand(): Bundle = Bundle().apply { putLong(MediaStore.Files.FileColumns.PARENT, this@multipleScanExpand) }
 
 /** 获取可使用的单个扫描Bundle */
-fun Long.singleScanExpand(): Bundle = Bundle().apply { putLong(BaseColumns._ID, this@singleScanExpand) }
+fun Long.singleScanExpand(): Bundle = Bundle().apply { putLong(MediaStore.Files.FileColumns._ID, this@singleScanExpand) }
 
 /** 获取可使用的uri */
 fun Long.externalUriExpand(mediaType: String): Uri {

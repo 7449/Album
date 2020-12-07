@@ -108,8 +108,7 @@ class ScanDelegateImpl(
 
     private val scan: ScanImpl<ScanFileEntity> by lazy {
         ViewModelProvider(fragment,
-                ScanViewModelFactory(
-                        ownerFragment = fragment,
+                fragment.scanViewModelFactory(
                         factory = ScanEntityFactory.fileExpand(),
                         args = ScanFileArgs(
                                 galleryBundle.scanType.map { it.toString() }.toTypedArray(),

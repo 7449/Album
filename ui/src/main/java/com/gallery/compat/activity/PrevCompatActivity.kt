@@ -19,7 +19,7 @@ import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.bundleOrEmptyExpand
+import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.ui.R
 
@@ -45,7 +45,7 @@ abstract class PrevCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), 
 
     /** [UIPrevArgs] */
     protected val uiPrevArgs: UIPrevArgs by lazy {
-        bundleOrEmptyExpand().uiPrevArgs ?: throw KotlinNullPointerException("uiPrevArgs == null")
+        intent?.extras.orEmptyExpand().uiPrevArgs ?: throw KotlinNullPointerException("uiPrevArgs == null")
     }
 
     /** 初始配置 */

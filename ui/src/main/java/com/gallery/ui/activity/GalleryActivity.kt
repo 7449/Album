@@ -22,11 +22,13 @@ import com.gallery.core.extensions.*
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.types.ScanType
 import com.gallery.ui.R
+import com.gallery.ui.databinding.GalleryActivityGalleryBinding
 import com.gallery.ui.finder.PopupFinderAdapter
-import kotlinx.android.synthetic.main.gallery_activity_gallery.*
 
-open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : GalleryCompatActivity(layoutId),
+open class GalleryActivity : GalleryCompatActivity(),
         View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
+
+    private val viewBinding: GalleryActivityGalleryBinding by lazy { GalleryActivityGalleryBinding.inflate(layoutInflater) }
 
     override val galleryFinderAdapter: GalleryFinderAdapter by lazy { PopupFinderAdapter() }
 
@@ -34,7 +36,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
         get() = GalleryCompatCropper(this, uiConfig)
 
     override val currentFinderName: String
-        get() = galleryFinderAll.text.toString()
+        get() = viewBinding.galleryFinderAll.text.toString()
 
     override val galleryFragmentId: Int
         get() = R.id.galleryFrame
@@ -42,46 +44,46 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(viewBinding.root)
         window.statusBarColorExpand(uiConfig.statusBarColor)
         if (hasLExpand()) {
             window.statusBarColor = uiConfig.statusBarColor
         }
-        galleryToolbar.title = uiConfig.toolbarText
-        galleryToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
+        viewBinding.galleryToolbar.title = uiConfig.toolbarText
+        viewBinding.galleryToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
         val drawable = drawableExpand(uiConfig.toolbarIcon)
         drawable?.colorFilter = PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        galleryToolbar.navigationIcon = drawable
-        galleryToolbar.setBackgroundColor(uiConfig.toolbarBackground)
+        viewBinding.galleryToolbar.navigationIcon = drawable
+        viewBinding.galleryToolbar.setBackgroundColor(uiConfig.toolbarBackground)
         if (hasLExpand()) {
-            galleryToolbar.elevation = uiConfig.toolbarElevation
+            viewBinding.galleryToolbar.elevation = uiConfig.toolbarElevation
         }
 
-        galleryFinderAll.textSize = uiConfig.finderTextSize
-        galleryFinderAll.setTextColor(uiConfig.finderTextColor)
-        galleryFinderAll.setCompoundDrawables(null, null, minimumDrawableExpand(uiConfig.finderTextCompoundDrawable, uiConfig.finderTextDrawableColor), null)
+        viewBinding.galleryFinderAll.textSize = uiConfig.finderTextSize
+        viewBinding.galleryFinderAll.setTextColor(uiConfig.finderTextColor)
+        viewBinding.galleryFinderAll.setCompoundDrawables(null, null, minimumDrawableExpand(uiConfig.finderTextCompoundDrawable, uiConfig.finderTextDrawableColor), null)
 
-        galleryPre.text = uiConfig.preViewText
-        galleryPre.textSize = uiConfig.preViewTextSize
-        galleryPre.setTextColor(uiConfig.preViewTextColor)
+        viewBinding.galleryPre.text = uiConfig.preViewText
+        viewBinding.galleryPre.textSize = uiConfig.preViewTextSize
+        viewBinding.galleryPre.setTextColor(uiConfig.preViewTextColor)
 
-        gallerySelect.text = uiConfig.selectText
-        gallerySelect.textSize = uiConfig.selectTextSize
-        gallerySelect.setTextColor(uiConfig.selectTextColor)
+        viewBinding.gallerySelect.text = uiConfig.selectText
+        viewBinding.gallerySelect.textSize = uiConfig.selectTextSize
+        viewBinding.gallerySelect.setTextColor(uiConfig.selectTextColor)
 
-        galleryBottomView.setBackgroundColor(uiConfig.bottomViewBackground)
+        viewBinding.galleryBottomView.setBackgroundColor(uiConfig.bottomViewBackground)
 
-        galleryFinderAdapter.adapterInit(this, uiConfig, galleryFinderAll)
+        galleryFinderAdapter.adapterInit(this, uiConfig, viewBinding.galleryFinderAll)
         galleryFinderAdapter.setOnAdapterFinderListener(this)
-        galleryPre.setOnClickListener(this)
-        gallerySelect.setOnClickListener(this)
-        galleryFinderAll.setOnClickListener(this)
+        viewBinding.galleryPre.setOnClickListener(this)
+        viewBinding.gallerySelect.setOnClickListener(this)
+        viewBinding.galleryFinderAll.setOnClickListener(this)
 
-        galleryFinderAll.text = finderName
-        galleryPre.visibility = if (galleryConfig.radio || galleryConfig.isVideoScanExpand) View.GONE else View.VISIBLE
-        gallerySelect.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
+        viewBinding.galleryFinderAll.text = finderName
+        viewBinding.galleryPre.visibility = if (galleryConfig.radio || galleryConfig.isVideoScanExpand) View.GONE else View.VISIBLE
+        viewBinding.gallerySelect.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
 
-        galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }
+        viewBinding.galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
     override fun onClick(v: View) {
@@ -116,7 +118,7 @@ open class GalleryActivity(layoutId: Int = R.layout.gallery_activity_gallery) : 
             galleryFinderAdapter.hide()
             return
         }
-        galleryFinderAll.text = item.bucketDisplayName
+        viewBinding.galleryFinderAll.text = item.bucketDisplayName
         galleryFragment.onScanGallery(item.parent)
         galleryFinderAdapter.hide()
     }

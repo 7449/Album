@@ -11,7 +11,7 @@ import androidx.appcompat.widget.ListPopupWindow
 import com.gallery.compat.GalleryUiBundle
 import com.gallery.compat.finder.BaseFinderAdapter
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.R
+import com.gallery.ui.databinding.GalleryItemFinderBinding
 
 class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener {
 
@@ -56,9 +56,9 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val finderEntity: ScanEntity = getItem(position)
             val rootView: View = convertView
-                    ?: LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder, parent, false).apply {
-                        this.tag = ViewHolder(this)
-                    }
+                    ?: GalleryItemFinderBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
+                        this.root.tag = ViewHolder(this)
+                    }.root
             val viewHolder: ViewHolder = rootView.tag as ViewHolder
             viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
             viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)
@@ -78,10 +78,10 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
             notifyDataSetChanged()
         }
 
-        private class ViewHolder(view: View) {
-            val frameLayout: FrameLayout = view.findViewById(R.id.iv_gallery_finder_icon)
-            val appCompatTextView: AppCompatTextView = view.findViewById(R.id.tv_gallery_finder_name)
-            val appCompatTextViewCount: AppCompatTextView = view.findViewById(R.id.tv_gallery_finder_file_count)
+        private class ViewHolder(viewBinding: GalleryItemFinderBinding) {
+            val frameLayout: FrameLayout = viewBinding.ivGalleryFinderIcon
+            val appCompatTextView: AppCompatTextView = viewBinding.tvGalleryFinderName
+            val appCompatTextViewCount: AppCompatTextView = viewBinding.tvGalleryFinderFileCount
         }
     }
 }

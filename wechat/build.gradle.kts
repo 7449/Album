@@ -10,10 +10,11 @@ android {
         targetSdkVersion(Version.targetSdk)
     }
     androidExtensions { isExperimental = true }
+    buildFeatures.viewBinding = true
 }
 dependencies {
-//    api(project(":ui"))
-    api(Dep.ui)
+    api(project(":ui"))
+//    api(Dep.ui)
     compileOnly(Dep.glide)
 
     /* 和 ui library 依赖保持一致 */

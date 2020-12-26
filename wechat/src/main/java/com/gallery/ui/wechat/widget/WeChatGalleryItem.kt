@@ -3,6 +3,7 @@ package com.gallery.ui.wechat.widget
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -10,29 +11,27 @@ import android.widget.TextView
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.colorExpand
 import com.gallery.ui.wechat.R
+import com.gallery.ui.wechat.databinding.LayoutGalleryWechatItemBinding
 import com.gallery.ui.wechat.extension.formatTimeVideo
-import kotlinx.android.synthetic.main.layout_gallery_wechat_item.view.*
 
 class WeChatGalleryItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
-    init {
-        addView(View.inflate(context, R.layout.layout_gallery_wechat_item, null))
-    }
+    private val viewBinding: LayoutGalleryWechatItemBinding = LayoutGalleryWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     val imageView: ImageView
-        get() = viewWeChatImageView
+        get() = viewBinding.viewWeChatImageView
 
     private val gifView: View
-        get() = viewWeChatGif
+        get() = viewBinding.viewWeChatGif
 
     private val videoView: TextView
-        get() = viewWeChatVideo
+        get() = viewBinding.viewWeChatVideo
 
     private val bottomView: View
-        get() = viewWeChatBottomView
+        get() = viewBinding.viewWeChatBottomView
 
     private val selectView: View
-        get() = viewWeChatBackSelect
+        get() = viewBinding.viewWeChatBackSelect
 
     fun update(scanEntity: ScanEntity) {
         selectView.visibility = if (scanEntity.isSelected) VISIBLE else GONE

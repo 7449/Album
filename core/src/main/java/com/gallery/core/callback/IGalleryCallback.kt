@@ -9,7 +9,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.R
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter.PhotoViewHolder
-import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
 

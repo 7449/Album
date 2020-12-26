@@ -14,6 +14,7 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     androidExtensions { isExperimental = true }
+    buildFeatures.viewBinding = true
 }
 dependencies {
     api(project(":wechat"))

@@ -11,13 +11,9 @@ import com.gallery.compat.finder.BaseFinderAdapter
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.getParcelableOrDefault
-import com.gallery.sample.R
+import com.gallery.sample.databinding.GalleryFinderBottomBinding
+import com.gallery.sample.databinding.GalleryFinderBottomItemBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.extensions.CacheImplementation
-import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.gallery_finder_bottom.*
-import kotlinx.android.synthetic.main.gallery_finder_bottom_item.*
 
 class BottomFinderAdapter : BaseFinderAdapter() {
 
@@ -58,21 +54,24 @@ class BottomFinderAdapter : BaseFinderAdapter() {
         private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener by lazy {
             requireActivity() as GalleryFinderAdapter.AdapterFinderListener
         }
+        private val viewBinding: GalleryFinderBottomBinding by lazy {
+            GalleryFinderBottomBinding.inflate(layoutInflater)
+        }
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            return inflater.inflate(R.layout.gallery_finder_bottom, container, false)
+            return viewBinding.root
         }
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             view.setBackgroundColor(galleryUiBundle.finderItemBackground)
-            galleryFinderBottom.layoutManager = LinearLayoutManager(requireContext())
-            galleryFinderBottom.adapter = object : RecyclerView.Adapter<ViewHolder>() {
+            viewBinding.galleryFinderBottom.layoutManager = LinearLayoutManager(requireContext())
+            viewBinding.galleryFinderBottom.adapter = object : RecyclerView.Adapter<ViewHolder>() {
 
                 override fun getItemCount(): Int = list.size
 
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                    return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.gallery_finder_bottom_item, parent, false)).apply {
+                    return ViewHolder(GalleryFinderBottomItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)).apply {
                         this.itemView.setOnClickListener {
                             adapterFinderListener.onGalleryAdapterItemClick(it, this.bindingAdapterPosition, list[this.bindingAdapterPosition])
                         }
@@ -81,11 +80,11 @@ class BottomFinderAdapter : BaseFinderAdapter() {
 
                 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
                     val finderEntity: ScanEntity = list[position]
-                    holder.tvGalleryFinderNameBt.text = "%s".format(finderEntity.bucketDisplayName)
-                    holder.tvGalleryFinderNameBt.setTextColor(galleryUiBundle.finderItemTextColor)
-                    holder.tvGalleryFinderFileCountBt.text = "%s".format(finderEntity.count.toString())
-                    holder.tvGalleryFinderFileCountBt.setTextColor(galleryUiBundle.finderItemTextCountColor)
-                    adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.ivGalleryFinderIconBt)
+                    holder.viewBinding.tvGalleryFinderNameBt.text = "%s".format(finderEntity.bucketDisplayName)
+                    holder.viewBinding.tvGalleryFinderNameBt.setTextColor(galleryUiBundle.finderItemTextColor)
+                    holder.viewBinding.tvGalleryFinderFileCountBt.text = "%s".format(finderEntity.count.toString())
+                    holder.viewBinding.tvGalleryFinderFileCountBt.setTextColor(galleryUiBundle.finderItemTextCountColor)
+                    adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.viewBinding.ivGalleryFinderIconBt)
                 }
             }
         }
@@ -93,14 +92,12 @@ class BottomFinderAdapter : BaseFinderAdapter() {
         fun updateFinder(entities: ArrayList<ScanEntity>) {
             list.clear()
             list.addAll(entities)
-            galleryFinderBottom?.adapter?.notifyDataSetChanged()
+            if (isAdded) {
+                viewBinding.galleryFinderBottom.adapter?.notifyDataSetChanged()
+            }
         }
 
-        @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
-        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
-            override val containerView: View
-                get() = itemView
-        }
+        class ViewHolder(val viewBinding: GalleryFinderBottomItemBinding) : RecyclerView.ViewHolder(viewBinding.root)
 
     }
 }

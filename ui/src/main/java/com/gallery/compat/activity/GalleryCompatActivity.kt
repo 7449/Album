@@ -36,7 +36,7 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.scan.types.Sort
 
-abstract class GalleryCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
+abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
     protected abstract val currentFinderName: String

@@ -15,9 +15,9 @@ object Version {
 }
 
 object ClassPath {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.20"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21"
     const val bintray = "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
-    const val gradle = "com.android.tools.build:gradle:4.0.2"
+    const val gradle = "com.android.tools.build:gradle:4.1.1"
 }
 
 object Maven {
@@ -29,7 +29,7 @@ object Dep {
     const val core = "com.ydevelop:gallery.core:0.1.8"
     const val ui = "com.ydevelop:gallery.ui:0.1.3"
 
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.20"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21"
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
     const val fragment = "androidx.fragment:fragment:1.3.0-beta02"

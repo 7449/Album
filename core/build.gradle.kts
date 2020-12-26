@@ -11,6 +11,7 @@ android {
         targetSdkVersion(Version.targetSdk)
     }
     androidExtensions { isExperimental = true }
+    buildFeatures.viewBinding = true
     compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.core") }
 }
 dependencies {

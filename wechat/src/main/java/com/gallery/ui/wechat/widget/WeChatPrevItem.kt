@@ -2,6 +2,7 @@ package com.gallery.ui.wechat.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -9,23 +10,21 @@ import android.widget.TextView
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.openVideoExpand
 import com.gallery.ui.wechat.R
+import com.gallery.ui.wechat.databinding.LayoutPrevWechatItemBinding
 import com.gallery.ui.wechat.extension.toFileSize
-import kotlinx.android.synthetic.main.layout_prev_wechat_item.view.*
 
 class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
-    init {
-        addView(View.inflate(context, R.layout.layout_prev_wechat_item, null))
-    }
+    private val viewBinding: LayoutPrevWechatItemBinding = LayoutPrevWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     val imageView: ImageView
-        get() = prevWeChatImageView
+        get() = viewBinding.prevWeChatImageView
 
     private val videoPlayView: View
-        get() = prevWeChatVideo
+        get() = viewBinding.prevWeChatVideo
 
     private val gifView: TextView
-        get() = prevWeChatGif
+        get() = viewBinding.prevWeChatGif
 
     fun update(scanEntity: ScanEntity) {
         imageView.scaleType = if (scanEntity.isVideo) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER

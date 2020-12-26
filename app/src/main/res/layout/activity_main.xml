@@ -30,24 +30,28 @@
                 android:orientation="horizontal">
 
                 <include
+                    android:id="@+id/include_theme"
                     layout="@layout/layout_theme_rb"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
                 <include
+                    android:id="@+id/include_scan"
                     layout="@layout/layout_scan_rb"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
                 <include
+                    android:id="@+id/include_sort"
                     layout="@layout/layout_sort_rb"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
                 <include
+                    android:id="@+id/include_setting"
                     layout="@layout/layout_setting_rb"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

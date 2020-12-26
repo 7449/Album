@@ -19,13 +19,15 @@ import com.gallery.core.extensions.drawableExpand
 import com.gallery.core.extensions.hasLExpand
 import com.gallery.core.extensions.statusBarColorExpand
 import com.gallery.ui.R
-import kotlinx.android.synthetic.main.gallery_activity_preview.*
+import com.gallery.ui.databinding.GalleryActivityPreviewBinding
 
-open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : PrevCompatActivity(layoutId) {
+open class PreActivity : PrevCompatActivity() {
 
     companion object {
         private const val format = "%s / %s"
     }
+
+    private val viewBinding: GalleryActivityPreviewBinding by lazy { GalleryActivityPreviewBinding.inflate(layoutInflater) }
 
     override val galleryFragmentId: Int
         get() = R.id.preFragment
@@ -33,36 +35,36 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(viewBinding.root)
         window.statusBarColorExpand(uiConfig.statusBarColor)
         if (hasLExpand()) {
             window.statusBarColor = uiConfig.statusBarColor
         }
-        preToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
+        viewBinding.preToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
         val drawable = drawableExpand(uiConfig.toolbarIcon)
         drawable?.colorFilter = PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        preToolbar.navigationIcon = drawable
-        preToolbar.setBackgroundColor(uiConfig.toolbarBackground)
+        viewBinding.preToolbar.navigationIcon = drawable
+        viewBinding.preToolbar.setBackgroundColor(uiConfig.toolbarBackground)
         if (hasLExpand()) {
-            preToolbar.elevation = uiConfig.toolbarElevation
+            viewBinding.preToolbar.elevation = uiConfig.toolbarElevation
         }
 
-        preCount.textSize = uiConfig.preBottomCountTextSize
-        preCount.setTextColor(uiConfig.preBottomCountTextColor)
+        viewBinding.preCount.textSize = uiConfig.preBottomCountTextSize
+        viewBinding.preCount.setTextColor(uiConfig.preBottomCountTextColor)
 
-        preBottomView.setBackgroundColor(uiConfig.preBottomViewBackground)
-        preBottomViewSelect.text = uiConfig.preBottomOkText
-        preBottomViewSelect.textSize = uiConfig.preBottomOkTextSize
-        preBottomViewSelect.setTextColor(uiConfig.preBottomOkTextColor)
+        viewBinding.preBottomView.setBackgroundColor(uiConfig.preBottomViewBackground)
+        viewBinding.preBottomViewSelect.text = uiConfig.preBottomOkText
+        viewBinding.preBottomViewSelect.textSize = uiConfig.preBottomOkTextSize
+        viewBinding.preBottomViewSelect.setTextColor(uiConfig.preBottomOkTextColor)
 
-        preBottomViewSelect.setOnClickListener {
+        viewBinding.preBottomViewSelect.setOnClickListener {
             if (prevFragment.selectEmpty) {
                 onGallerySelectEmpty()
             } else {
                 onGallerySelectEntities()
             }
         }
-        preToolbar.setNavigationOnClickListener { onGalleryFinish() }
+        viewBinding.preToolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
     override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
@@ -79,20 +81,20 @@ open class PreActivity(layoutId: Int = R.layout.gallery_activity_preview) : Prev
     override fun onPrevCreated(fragment: Fragment, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
         super.onPrevCreated(fragment, galleryBundle, savedInstanceState)
         val prevFragment = prevFragment
-        preCount.text = format.format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
-        preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
+        viewBinding.preCount.text = format.format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
+        viewBinding.preToolbar.title = uiConfig.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
     }
 
     override fun onClickCheckBoxFileNotExist(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity) {
         super.onClickCheckBoxFileNotExist(context, galleryBundle, scanEntity)
-        preCount.text = format.format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
+        viewBinding.preCount.text = format.format(prevFragment.selectCount, galleryBundle.multipleMaxCount)
     }
 
     override fun onPageSelected(position: Int) {
-        preToolbar.title = uiConfig.preTitle + "(" + (position + 1) + "/" + prevFragment.itemCount + ")"
+        viewBinding.preToolbar.title = uiConfig.preTitle + "(" + (position + 1) + "/" + prevFragment.itemCount + ")"
     }
 
     override fun onChangedCheckBox() {
-        preCount.text = format.format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
+        viewBinding.preCount.text = format.format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
     }
 }

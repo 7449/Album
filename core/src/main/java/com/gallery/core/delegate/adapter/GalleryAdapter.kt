@@ -11,17 +11,13 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
+import com.gallery.core.databinding.GalleryItemGalleryBinding
+import com.gallery.core.databinding.GalleryItemGalleryCameraBinding
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.isFileExistsExpand
 import com.gallery.core.extensions.showExpand
-import kotlinx.android.extensions.CacheImplementation
-import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.gallery_item_gallery.*
-import kotlinx.android.synthetic.main.gallery_item_gallery_camera.*
 
 class GalleryAdapter(
         private val display: Int,
@@ -48,15 +44,13 @@ class GalleryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_CAMERA -> {
-                val cameraView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery_camera, parent, false)
-                val cameraViewHolder = CameraViewHolder(cameraView, galleryBundle)
-                cameraView.setOnClickListener { v -> galleryItemClickListener.onCameraItemClick(v, cameraViewHolder.bindingAdapterPosition, galleryList[cameraViewHolder.bindingAdapterPosition]) }
+                val cameraViewHolder = CameraViewHolder(GalleryItemGalleryCameraBinding.inflate(LayoutInflater.from(parent.context), parent, false), galleryBundle)
+                cameraViewHolder.itemView.setOnClickListener { v -> galleryItemClickListener.onCameraItemClick(v, cameraViewHolder.bindingAdapterPosition, galleryList[cameraViewHolder.bindingAdapterPosition]) }
                 cameraViewHolder
             }
             else -> {
-                val photoView: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_gallery, parent, false)
-                val photoViewHolder = PhotoViewHolder(photoView, galleryBundle, display, galleryCallback)
-                photoView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
+                val photoViewHolder = PhotoViewHolder(GalleryItemGalleryBinding.inflate(LayoutInflater.from(parent.context), parent, false), galleryBundle, display, galleryCallback)
+                photoViewHolder.itemView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
                 photoViewHolder
             }
         }
@@ -115,39 +109,32 @@ class GalleryAdapter(
     val currentList: ArrayList<ScanEntity>
         get() = galleryList
 
-    @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
     class CameraViewHolder(
-            itemView: View,
+            private val viewBinding: GalleryItemGalleryCameraBinding,
             private val galleryBundle: GalleryBundle,
-    ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
-        override val containerView: View
-            get() = itemView
+    ) : RecyclerView.ViewHolder(viewBinding.root) {
 
         fun camera() {
-            val drawable: Drawable? = ContextCompat.getDrawable(containerView.context, galleryBundle.cameraDrawable)
+            val drawable: Drawable? = ContextCompat.getDrawable(itemView.context, galleryBundle.cameraDrawable)
             drawable?.colorFilter = PorterDuffColorFilter(galleryBundle.cameraDrawableColor, PorterDuff.Mode.SRC_ATOP)
-            galleryImageCameraTv.text = galleryBundle.cameraText
-            galleryImageCameraTv.textSize = galleryBundle.cameraTextSize
-            galleryImageCameraTv.setTextColor(galleryBundle.cameraTextColor)
-            gallery_camera_root_view.setBackgroundColor(galleryBundle.cameraBackgroundColor)
-            galleryImageCamera.setImageDrawable(drawable)
+            viewBinding.galleryImageCameraTv.text = galleryBundle.cameraText
+            viewBinding.galleryImageCameraTv.textSize = galleryBundle.cameraTextSize
+            viewBinding.galleryImageCameraTv.setTextColor(galleryBundle.cameraTextColor)
+            viewBinding.galleryCameraRootView.setBackgroundColor(galleryBundle.cameraBackgroundColor)
+            viewBinding.galleryImageCamera.setImageDrawable(drawable)
         }
 
     }
 
-    @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
     class PhotoViewHolder(
-            itemView: View,
+            viewBinding: GalleryItemGalleryBinding,
             private val galleryBundle: GalleryBundle,
             private val display: Int,
             private val galleryCallback: IGalleryCallback,
-    ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+    ) : RecyclerView.ViewHolder(viewBinding.root) {
 
-        override val containerView: View
-            get() = itemView
-
-        private val container: FrameLayout = galleryContainer
-        private val checkBox: TextView = galleryCheckBox
+        private val container: FrameLayout = viewBinding.galleryContainer
+        private val checkBox: TextView = viewBinding.galleryCheckBox
 
         fun photo(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
             imageLoader.onDisplayGallery(display, display, scanEntity, container, checkBox)
@@ -161,17 +148,17 @@ class GalleryAdapter(
         }
 
         private fun clickCheckBox(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>) {
-            if (!scanEntity.uri.isFileExistsExpand(containerView.context)) {
+            if (!scanEntity.uri.isFileExistsExpand(itemView.context)) {
                 if (selectList.contains(scanEntity)) {
                     selectList.remove(scanEntity)
                 }
                 checkBox.isSelected = false
                 scanEntity.isSelected = false
-                galleryCallback.onClickCheckBoxFileNotExist(containerView.context, scanEntity)
+                galleryCallback.onClickCheckBoxFileNotExist(itemView.context, scanEntity)
                 return
             }
             if (!selectList.contains(scanEntity) && selectList.size >= galleryBundle.multipleMaxCount) {
-                galleryCallback.onClickCheckBoxMaxCount(containerView.context, scanEntity)
+                galleryCallback.onClickCheckBoxMaxCount(itemView.context, scanEntity)
                 return
             }
             if (!scanEntity.isSelected) {

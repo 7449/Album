@@ -11,4 +11,5 @@ fun <T : Parcelable> Bundle?.getParcelableArrayListExpand(key: String): ArrayLis
 
 fun <T : Parcelable> Bundle?.getParcelableOrDefault(key: String, defaultValue: Parcelable = this?.getParcelable<T>(key)!!): T = getObjExpand(key) { defaultValue as T }
 
-fun <T> Bundle?.getObjExpand(key: String, action: () -> T): T = this?.get(key) as? T ?: action.invoke()
+fun <T> Bundle?.getObjExpand(key: String, action: () -> T): T = this?.get(key) as? T
+        ?: action.invoke()

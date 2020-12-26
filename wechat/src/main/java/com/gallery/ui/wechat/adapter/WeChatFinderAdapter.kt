@@ -7,11 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.GalleryUiBundle
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.wechat.R
-import kotlinx.android.extensions.CacheImplementation
-import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.gallery_item_finder_wechat.*
+import com.gallery.ui.wechat.databinding.GalleryItemFinderWechatBinding
 
 class WeChatFinderAdapter(
         private val galleryUiBundle: GalleryUiBundle,
@@ -21,7 +17,7 @@ class WeChatFinderAdapter(
     private val list: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutViewHolder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.gallery_item_finder_wechat, parent, false))
+        val layoutViewHolder = ViewHolder(GalleryItemFinderWechatBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         layoutViewHolder.itemView.setOnClickListener {
             adapterFinderListener.onGalleryAdapterItemClick(it, layoutViewHolder.bindingAdapterPosition, list[layoutViewHolder.bindingAdapterPosition])
         }
@@ -32,7 +28,7 @@ class WeChatFinderAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val finderEntity: ScanEntity = list[position]
-        adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.ivGalleryFinderIcon)
+        adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.viewBinding.ivGalleryFinderIcon)
         holder.bind(galleryUiBundle, finderEntity)
     }
 
@@ -42,17 +38,14 @@ class WeChatFinderAdapter(
         notifyDataSetChanged()
     }
 
-    @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
-        override val containerView: View
-            get() = itemView
+    class ViewHolder(val viewBinding: GalleryItemFinderWechatBinding) : RecyclerView.ViewHolder(viewBinding.root) {
 
         fun bind(galleryUiBundle: GalleryUiBundle, finderEntity: ScanEntity) {
-            tvGalleryFinderName.text = "%s".format(finderEntity.bucketDisplayName)
-            tvGalleryFinderName.setTextColor(galleryUiBundle.finderItemTextColor)
-            tvGalleryFinderFileCount.text = "(%s)".format(finderEntity.count.toString())
-            tvGalleryFinderFileCount.setTextColor(galleryUiBundle.finderItemTextCountColor)
-            ivGalleryFinderFileCheck.visibility = if (finderEntity.isSelected) View.VISIBLE else View.GONE
+            viewBinding.tvGalleryFinderName.text = "%s".format(finderEntity.bucketDisplayName)
+            viewBinding.tvGalleryFinderName.setTextColor(galleryUiBundle.finderItemTextColor)
+            viewBinding.tvGalleryFinderFileCount.text = "(%s)".format(finderEntity.count.toString())
+            viewBinding.tvGalleryFinderFileCount.setTextColor(galleryUiBundle.finderItemTextCountColor)
+            viewBinding.ivGalleryFinderFileCheck.visibility = if (finderEntity.isSelected) View.VISIBLE else View.GONE
         }
     }
 

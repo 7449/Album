@@ -23,7 +23,7 @@ import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.ui.R
 
-abstract class PrevCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
+abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
 
     companion object {
         /** 预览页toolbar返回 result_code */
@@ -45,7 +45,8 @@ abstract class PrevCompatActivity(layoutId: Int) : AppCompatActivity(layoutId), 
 
     /** [UIPrevArgs] */
     protected val uiPrevArgs: UIPrevArgs by lazy {
-        intent?.extras.orEmptyExpand().uiPrevArgs ?: throw KotlinNullPointerException("uiPrevArgs == null")
+        intent?.extras.orEmptyExpand().uiPrevArgs
+                ?: throw KotlinNullPointerException("uiPrevArgs == null")
     }
 
     /** 初始配置 */

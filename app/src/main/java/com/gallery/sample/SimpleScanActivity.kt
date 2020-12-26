@@ -4,45 +4,39 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.sample.databinding.ActivitySimpleScanBinding
+import com.gallery.sample.databinding.ItemSimpleScanBinding
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
-import kotlinx.android.extensions.CacheImplementation
-import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_simple_scan.*
-import kotlinx.android.synthetic.main.item_simple_scan.*
 
-class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
+class SimpleScanActivity : AppCompatActivity() {
 
     companion object {
         const val args = "args"
     }
 
     private val arrayList: ArrayList<SimpleEntity> = arrayListOf()
+    private val viewBinding: ActivitySimpleScanBinding by lazy { ActivitySimpleScanBinding.inflate(layoutInflater) }
 
-    @ContainerOptions(cache = CacheImplementation.SPARSE_ARRAY)
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
-        override val containerView: View
-            get() = itemView
-    }
+    class ViewHolder(val viewBinding: ItemSimpleScanBinding) : RecyclerView.ViewHolder(viewBinding.root)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(viewBinding.root)
         val scanType = intent.getSerializableExtra(args) as ScanType
-        recyclerview.adapter = object : RecyclerView.Adapter<ViewHolder>() {
+        viewBinding.recyclerview.adapter = object : RecyclerView.Adapter<ViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_simple_scan, parent, false))
+                return ViewHolder(ItemSimpleScanBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
 
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: ViewHolder, position: Int) {
                 val simpleEntity = arrayList[position]
-                holder.text.text = "id:${simpleEntity.id} \nname:${simpleEntity.name} \nmediaType:${simpleEntity.mediaType}"
+                holder.viewBinding.text.text = "id:${simpleEntity.id} \nname:${simpleEntity.name} \nmediaType:${simpleEntity.mediaType}"
             }
 
             override fun getItemCount(): Int = arrayList.size
@@ -55,7 +49,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                     .scanFileImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
-                        recyclerview.adapter?.notifyDataSetChanged()
+                        viewBinding.recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(Bundle())
             ScanType.MIX -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.fileExpand(),
@@ -63,7 +57,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                     .scanFileImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
-                        recyclerview.adapter?.notifyDataSetChanged()
+                        viewBinding.recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(com.gallery.scan.types.ScanType.SCAN_ALL.multipleScanExpand())
             ScanType.AUDIO -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.audioExpand(),
@@ -71,7 +65,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                     .scanAudioImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, "音频") })
-                        recyclerview.adapter?.notifyDataSetChanged()
+                        viewBinding.recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(Bundle())
             ScanType.PICTURE -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.pictureExpand(),
@@ -79,7 +73,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                     .scanPictureImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, "图片") })
-                        recyclerview.adapter?.notifyDataSetChanged()
+                        viewBinding.recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(com.gallery.scan.types.ScanType.SCAN_ALL.multipleScanExpand())
             // old
             ScanType.VIDEO -> ViewModelProvider(this, scanViewModelFactory(
@@ -88,7 +82,7 @@ class SimpleScanActivity : AppCompatActivity(R.layout.activity_simple_scan) {
                     .scanFileImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
-                        recyclerview.adapter?.notifyDataSetChanged()
+                        viewBinding.recyclerview.adapter?.notifyDataSetChanged()
                     }.scanMultiple(com.gallery.scan.types.ScanType.SCAN_ALL.multipleScanExpand())
         }
     }

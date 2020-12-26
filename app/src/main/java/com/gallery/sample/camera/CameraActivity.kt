@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gallery.core.extensions.orEmptyExpand
-import com.gallery.sample.R
+import com.gallery.sample.databinding.ActivityCameraBinding
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
-import kotlinx.android.synthetic.main.activity_camera.*
-
 
 class CameraActivity : AppCompatActivity() {
 
@@ -22,16 +20,17 @@ class CameraActivity : AppCompatActivity() {
         const val CUSTOM_CAMERA_OUT_PUT_URI = "customCameraOutPutUri"
     }
 
+    private val viewBinding: ActivityCameraBinding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
+        setContentView(viewBinding.root)
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
-        camera.setLifecycleOwner(this)
-        camera.addCameraListener(Listener())
-        cameraOk.setOnClickListener {
-            if (camera.isTakingPicture) return@setOnClickListener
-            camera.takePictureSnapshot()
+        viewBinding.camera.setLifecycleOwner(this)
+        viewBinding.camera.addCameraListener(Listener())
+        viewBinding.cameraOk.setOnClickListener {
+            if (viewBinding.camera.isTakingPicture) return@setOnClickListener
+            viewBinding.camera.takePictureSnapshot()
         }
     }
 

@@ -28,24 +28,21 @@ import com.gallery.sample.callback.WeChatGalleryCallback
 import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.UCropGalleryActivity
+import com.gallery.sample.databinding.ActivityMainBinding
 import com.gallery.scan.types.Sort
 import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.result.GalleryResultCallback
 import com.gallery.ui.wechat.extension.weChatUiGallery
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_scan_rb.*
-import kotlinx.android.synthetic.main.layout_setting_rb.*
-import kotlinx.android.synthetic.main.layout_sort_rb.*
-import kotlinx.android.synthetic.main.layout_theme_rb.*
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback, IGalleryImageLoader {
+class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader {
 
     private val galleryLauncher: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(GalleryCallback(this)))
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(WeChatGalleryCallback(this)))
+    private val viewBinding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     private fun initGalleryFragment() {
         supportFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)?.let {
@@ -73,6 +70,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(viewBinding.root)
         initGalleryFragment()
 
         var isWeChat = false
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
         var scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
         var sortType = Sort.DESC
 
-        themeRg.setOnCheckedChangeListener { _, i ->
+        viewBinding.includeTheme.themeRg.setOnCheckedChangeListener { _, i ->
             when (i) {
                 R.id.theme_default -> {
                     isWeChat = false
@@ -116,14 +114,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                 }
             }
         }
-        scanRg.setOnCheckedChangeListener { _, i ->
+        viewBinding.includeScan.scanRg.setOnCheckedChangeListener { _, i ->
             when (i) {
                 R.id.scan_image -> scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
                 R.id.scan_video -> scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
                 R.id.scan_mix -> scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
             }
         }
-        settingRg.setOnCheckedChangeListener { _, i ->
+        viewBinding.includeSetting.settingRg.setOnCheckedChangeListener { _, i ->
             when (i) {
                 R.id.single_select -> {
                     cls = null
@@ -143,13 +141,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                 }
             }
         }
-        sortRg.setOnCheckedChangeListener { _, i ->
+        viewBinding.includeSort.sortRg.setOnCheckedChangeListener { _, i ->
             when (i) {
                 R.id.sort_desc -> sortType = Sort.DESC
                 R.id.sort_asc -> sortType = Sort.ASC
             }
         }
-        startConfig.setOnClickListener {
+        viewBinding.startConfig.setOnClickListener {
             if (isWeChat) {
                 weChatUiGallery(galleryWeChatLauncher)
                 return@setOnClickListener
@@ -159,8 +157,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                     galleryBundle = galleryBundle.copy(
                             scanType = scanArray,
                             scanSort = sortType,
-                            crop = crop_cropper.isChecked || crop_ucrop.isChecked,
-                            radio = isRadio || crop_cropper.isChecked || crop_ucrop.isChecked,
+                            crop = viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
+                            radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
                             cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
                     ),
                     galleryUiBundle = galleryUiBundle.copy(
@@ -169,7 +167,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                     galleryLauncher = galleryLauncher)
         }
 
-        scanSimple.setOnClickListener {
+        viewBinding.scanSimple.setOnClickListener {
             showArray(scanArrayList) {
                 when (it) {
                     0 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.FILE))
@@ -180,14 +178,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), IGalleryCallback
                 }
             }
         }
-        customCamera.setOnClickListener {
+        viewBinding.customCamera.setOnClickListener {
             Gallery.newInstance(
                     activity = this,
                     galleryLauncher = galleryLauncher,
                     clz = CustomCameraActivity::class.java
             )
         }
-        dialog.setOnClickListener {
+        viewBinding.dialog.setOnClickListener {
             CustomDialog.newInstance().show(supportFragmentManager, CustomDialog::class.java.simpleName)
         }
     }

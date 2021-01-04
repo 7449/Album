@@ -1,7 +1,7 @@
 plugins {
     id(Plugin.library)
     kotlin(Plugin.kotlin_android)
-    kotlin(Plugin.kotlin_ext)
+    id(Plugin.kotlin_parcelize)
 }
 apply(from = "../gradle/UPLOAD.gradle")
 android {
@@ -10,7 +10,6 @@ android {
         minSdkVersion(Version.minSdk)
         targetSdkVersion(Version.targetSdk)
     }
-    androidExtensions { isExperimental = true }
     buildFeatures.viewBinding = true
     compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.ui") }
 }

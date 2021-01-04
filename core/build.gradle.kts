@@ -1,7 +1,7 @@
 plugins {
     id(Plugin.library)
     kotlin(Plugin.kotlin_android)
-    kotlin(Plugin.kotlin_ext)
+    id(Plugin.kotlin_parcelize)
 }
 apply(from = "../gradle/UPLOAD.gradle")
 android {
@@ -10,14 +10,13 @@ android {
         minSdkVersion(Version.minSdk)
         targetSdkVersion(Version.targetSdk)
     }
-    androidExtensions { isExperimental = true }
     buildFeatures.viewBinding = true
     compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.core") }
 }
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-//    api(project(":scan"))
-    api(Dep.scan)
+    api(project(":scan"))
+//    api(Dep.scan)
     compileOnly(Dep.appcompat)
     compileOnly(Dep.fragment)
     compileOnly(Dep.viewPager2)

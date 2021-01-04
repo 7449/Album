@@ -11,7 +11,7 @@ import com.gallery.core.PrevArgs
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class UIGallerySaveArgs(

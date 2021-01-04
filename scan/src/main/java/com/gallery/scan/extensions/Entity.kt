@@ -2,7 +2,7 @@ package com.gallery.scan.extensions
 
 import android.os.Parcelable
 import android.provider.MediaStore
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ScanAudioEntity(

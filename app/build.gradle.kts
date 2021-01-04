@@ -1,7 +1,6 @@
 plugins {
     id(Plugin.application)
     kotlin(Plugin.kotlin_android)
-    kotlin(Plugin.kotlin_ext)
 }
 android {
     compileSdkVersion(Version.compileSdk)
@@ -13,7 +12,6 @@ android {
         versionName = Version.versionName
         vectorDrawables.useSupportLibrary = true
     }
-    androidExtensions { isExperimental = true }
     buildFeatures.viewBinding = true
 }
 dependencies {

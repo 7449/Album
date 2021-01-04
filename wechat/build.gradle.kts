@@ -1,7 +1,7 @@
 plugins {
     id(Plugin.library)
     kotlin(Plugin.kotlin_android)
-    kotlin(Plugin.kotlin_ext)
+    id(Plugin.kotlin_parcelize)
 }
 android {
     compileSdkVersion(Version.compileSdk)
@@ -9,7 +9,6 @@ android {
         minSdkVersion(Version.minSdk)
         targetSdkVersion(Version.targetSdk)
     }
-    androidExtensions { isExperimental = true }
     buildFeatures.viewBinding = true
 }
 dependencies {

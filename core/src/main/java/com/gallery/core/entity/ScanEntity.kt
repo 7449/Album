@@ -3,7 +3,7 @@ package com.gallery.core.entity
 import android.net.Uri
 import android.os.Parcelable
 import com.gallery.scan.extensions.*
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /** [ScanFileEntity]中介 */
 @Parcelize

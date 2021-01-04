@@ -14,7 +14,7 @@ import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * 1.

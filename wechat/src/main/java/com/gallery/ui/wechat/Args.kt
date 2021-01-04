@@ -2,7 +2,7 @@ package com.gallery.ui.wechat
 
 import android.os.Bundle
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class WeChatPrevSaveArgs(

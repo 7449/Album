@@ -26,8 +26,8 @@ object Maven {
 
 object Dep {
     const val scan = "com.ydevelop:gallery.scan:0.1.9"
-    const val core = "com.ydevelop:gallery.core:0.1.8"
-    const val ui = "com.ydevelop:gallery.ui:0.1.3"
+    const val core = "com.ydevelop:gallery.core:0.1.9"
+    const val ui = "com.ydevelop:gallery.ui:0.1.4"
 
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21"
 

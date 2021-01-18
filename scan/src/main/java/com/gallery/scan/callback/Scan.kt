@@ -2,9 +2,9 @@ package com.gallery.scan.callback
 
 import android.os.Bundle
 import android.provider.MediaStore
-import com.gallery.scan.ScanImpl
 import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.args.CursorLoaderArgs.Companion.putCursorLoaderArgs
+import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.types.ResultType
 
 /**

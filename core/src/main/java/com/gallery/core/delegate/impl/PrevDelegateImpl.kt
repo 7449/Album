@@ -25,6 +25,8 @@ import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.toScanEntity
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
+import com.gallery.scan.impl.file.FileScanArgs
+import com.gallery.scan.impl.file.fileExpand
 import com.gallery.scan.types.ScanType.SCAN_ALL
 import com.gallery.scan.types.ScanType.SCAN_NONE
 
@@ -101,7 +103,7 @@ class PrevDelegateImpl(
         } else {
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
-            val scanFileArgs = ScanFileArgs(
+            val scanFileArgs = FileScanArgs(
                     if (scanAlone == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE) galleryBundle.scanType.map { it.toString() }.toTypedArray() else arrayOf(scanAlone.toString()),
                     galleryBundle.scanSortField,
                     galleryBundle.scanSort

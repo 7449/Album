@@ -1,4 +1,4 @@
-package com.gallery.scan
+package com.gallery.scan.impl
 
 import android.content.Context
 import android.os.Bundle

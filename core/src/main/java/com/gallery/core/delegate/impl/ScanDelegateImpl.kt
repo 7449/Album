@@ -30,9 +30,12 @@ import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
-import com.gallery.scan.ScanImpl
+import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
+import com.gallery.scan.impl.file.FileScanArgs
+import com.gallery.scan.impl.file.FileScanEntity
+import com.gallery.scan.impl.file.fileExpand
 import com.gallery.scan.result.Result
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
@@ -106,11 +109,11 @@ class ScanDelegateImpl(
                 }
             }
 
-    private val scan: ScanImpl<ScanFileEntity> by lazy {
+    private val scan: ScanImpl<FileScanEntity> by lazy {
         ViewModelProvider(fragment,
                 fragment.scanViewModelFactory(
                         factory = ScanEntityFactory.fileExpand(),
-                        args = ScanFileArgs(
+                        args = FileScanArgs(
                                 galleryBundle.scanType.map { it.toString() }.toTypedArray(),
                                 galleryBundle.scanSortField,
                                 galleryBundle.scanSort
@@ -172,8 +175,8 @@ class ScanDelegateImpl(
     override fun onDestroy() {
     }
 
-    override fun onScanMultipleSuccess(entities: ArrayList<ScanFileEntity>) {
-        if (entities.isEmpty() && parentId.isScanAllExpand()) {
+    override fun onScanMultipleSuccess(scanEntities: ArrayList<FileScanEntity>) {
+        if (scanEntities.isEmpty() && parentId.isScanAllExpand()) {
             emptyView.showExpand()
             recyclerView.hideExpand()
             galleryCallback.onScanSuccessEmpty(activity)
@@ -182,20 +185,20 @@ class ScanDelegateImpl(
         emptyView.hideExpand()
         recyclerView.showExpand()
         if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
-            entities.add(0, ScanFileEntity(parent = GalleryAdapter.CAMERA))
+            scanEntities.add(0, FileScanEntity(parent = GalleryAdapter.CAMERA))
         }
-        val toScanEntity = entities.toScanEntity()
+        val toScanEntity = scanEntities.toScanEntity()
         galleryAdapter.addAll(toScanEntity)
         galleryAdapter.updateEntity()
         galleryCallback.onScanSuccess(currentEntities)
         scrollToPosition(0)
     }
 
-    override fun onScanSingleSuccess(entity: ScanFileEntity?) {
-        entity ?: return galleryCallback.onResultError(activity, galleryBundle)
-        val toScanEntity = entity.toScanEntity()
+    override fun onScanSingleSuccess(scanEntity: FileScanEntity?) {
+        scanEntity ?: return galleryCallback.onResultError(activity, galleryBundle)
+        val toScanEntity = scanEntity.toScanEntity()
         //拍照或裁剪成功扫描到数据之后根据扫描方式更新数据
-        if (parentId.isScanAllExpand() || parentId == entity.parent) {
+        if (parentId.isScanAllExpand() || parentId == scanEntity.parent) {
             if (galleryBundle.scanSort == Sort.DESC) {
                 galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, toScanEntity)
             } else {

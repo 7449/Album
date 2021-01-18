@@ -1,6 +1,7 @@
 plugins {
     id(Plugin.application)
     kotlin(Plugin.kotlin_android)
+    id(Plugin.kotlin_parcelize)
 }
 android {
     compileSdkVersion(Version.compileSdk)

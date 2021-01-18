@@ -4,7 +4,6 @@ import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.provider.BaseColumns
 import android.provider.MediaStore
 import com.gallery.scan.types.ScanType
 
@@ -25,14 +24,13 @@ fun Long.externalUriExpand(mediaType: String): Uri {
     return when (mediaType) {
         MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)
         MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, this)
-        MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString() -> ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, this)
         else -> Uri.EMPTY
     }
 }
 
 /** 是否是动态图 */
 val String.isGifExpand: Boolean
-    get() = contains("gif")
+    get() = contains("gif") || contains("GIF")
 
 /** 是否是视频 */
 val String.isVideoExpand: Boolean
@@ -42,18 +40,14 @@ val String.isVideoExpand: Boolean
 val String.isImageExpand: Boolean
     get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
 
-/** 是否是音频 */
-val String.isAudioExpand: Boolean
-    get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
-
-internal fun Cursor?.getIntOrDefault(columnName: String, defaultValue: Int = 0): Int =
+fun Cursor?.getIntOrDefault(columnName: String, defaultValue: Int = 0): Int =
         getValueOrDefault(columnName, { defaultValue }) { it.getInt(it.getColumnIndex(columnName)) }
 
-internal fun Cursor?.getLongOrDefault(columnName: String, defaultValue: Long = 0.toLong()): Long =
+fun Cursor?.getLongOrDefault(columnName: String, defaultValue: Long = 0.toLong()): Long =
         getValueOrDefault(columnName, { defaultValue }) { it.getLong(it.getColumnIndex(columnName)) }
 
-internal fun Cursor?.getStringOrDefault(columnName: String, defaultValue: String = ""): String =
+fun Cursor?.getStringOrDefault(columnName: String, defaultValue: String = ""): String =
         getValueOrDefault(columnName, { defaultValue }) { it.getString(it.getColumnIndex(columnName)) }
 
-internal inline fun <T> Cursor?.getValueOrDefault(name: String, valueNull: () -> T, a: (c: Cursor) -> T): T =
+inline fun <T> Cursor?.getValueOrDefault(name: String, valueNull: () -> T, a: (c: Cursor) -> T): T =
         if (this?.isNull(getColumnIndex(name)) == false) a.invoke(this) else valueNull.invoke()

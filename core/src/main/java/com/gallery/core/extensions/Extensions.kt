@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
-import com.gallery.scan.extensions.ScanFileEntity
+import com.gallery.scan.impl.file.FileScanEntity
 import java.io.File
 
 /** 是否为亮色 */
@@ -96,14 +96,14 @@ val GalleryBundle.isVideoScanExpand: Boolean get() = scanType.size == 1 && scanT
 /** 是否是图片 */
 val GalleryBundle.isImageScanExpand: Boolean get() = scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
 
-/** [ScanFileEntity]转换为[ScanEntity] */
-fun ArrayList<ScanFileEntity>.toScanEntity(): ArrayList<ScanEntity> = mapTo(ArrayList()) { ScanEntity(it) }
+/** [FileScanEntity]转换为[ScanEntity] */
+fun ArrayList<FileScanEntity>.toScanEntity(): ArrayList<ScanEntity> = mapTo(ArrayList()) { ScanEntity(it) }
 
-/** [ScanEntity]转换为[ScanFileEntity] */
-fun ArrayList<ScanEntity>.toScanFileEntity(): ArrayList<ScanFileEntity> = mapTo(ArrayList()) { it.delegate }
+/** [ScanEntity]转换为[FileScanEntity] */
+fun ArrayList<ScanEntity>.toScanFileEntity(): ArrayList<FileScanEntity> = mapTo(ArrayList()) { it.delegate }
 
-/** [ScanFileEntity]转换为[ScanEntity] */
-fun ScanFileEntity.toScanEntity(): ScanEntity = ScanEntity(this)
+/** [FileScanEntity]转换为[ScanEntity] */
+fun FileScanEntity.toScanEntity(): ScanEntity = ScanEntity(this)
 
 /** content://media/external/images/media/id or content://media/external/video/media/id */
 fun Context.cameraUriExpand(galleryBundle: GalleryBundle): Uri? {

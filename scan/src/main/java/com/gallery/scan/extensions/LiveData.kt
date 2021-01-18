@@ -4,7 +4,7 @@ package com.gallery.scan.extensions
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import com.gallery.scan.ScanImpl
+import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.result.Result
 
 /** 注册回调 */

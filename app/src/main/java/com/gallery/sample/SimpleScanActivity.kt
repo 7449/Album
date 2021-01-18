@@ -10,8 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.sample.databinding.ActivitySimpleScanBinding
 import com.gallery.sample.databinding.ItemSimpleScanBinding
+import com.gallery.sample.scan.*
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
+import com.gallery.scan.impl.file.FileScanArgs
+import com.gallery.scan.impl.file.fileExpand
 
 class SimpleScanActivity : AppCompatActivity() {
 
@@ -24,6 +27,7 @@ class SimpleScanActivity : AppCompatActivity() {
 
     class ViewHolder(val viewBinding: ItemSimpleScanBinding) : RecyclerView.ViewHolder(viewBinding.root)
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
@@ -45,7 +49,7 @@ class SimpleScanActivity : AppCompatActivity() {
         when (scanType) {
             ScanType.FILE -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.fileExpand(),
-                    args = ScanFileArgs(null)))
+                    args = FileScanArgs(null)))
                     .scanFileImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
@@ -53,7 +57,7 @@ class SimpleScanActivity : AppCompatActivity() {
                     }.scanMultiple(Bundle())
             ScanType.MIX -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.fileExpand(),
-                    args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString()))))
+                    args = FileScanArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString()))))
                     .scanFileImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })
@@ -78,7 +82,7 @@ class SimpleScanActivity : AppCompatActivity() {
             // old
             ScanType.VIDEO -> ViewModelProvider(this, scanViewModelFactory(
                     factory = ScanEntityFactory.fileExpand(),
-                    args = ScanFileArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()))))
+                    args = FileScanArgs(arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()))))
                     .scanFileImpl()
                     .registerLiveData(this) { result ->
                         arrayList.addAll(result.multipleValue.map { SimpleEntity(it.id.toString(), it.displayName, it.mediaType) })

@@ -3,12 +3,13 @@ package com.gallery.core.entity
 import android.net.Uri
 import android.os.Parcelable
 import com.gallery.scan.extensions.*
+import com.gallery.scan.impl.file.FileScanEntity
 import kotlinx.parcelize.Parcelize
 
-/** [ScanFileEntity]中介 */
+/** [FileScanEntity]中介 */
 @Parcelize
 data class ScanEntity(
-        val delegate: ScanFileEntity,
+        val delegate: FileScanEntity,
         val count: Int = 0,
         var isSelected: Boolean = false,
 ) : Parcelable {

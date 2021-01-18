@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.ScanArgs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.PermissionCode
-import com.gallery.scan.extensions.ScanFileEntity
+import com.gallery.scan.impl.file.FileScanEntity
 import com.gallery.scan.types.ScanType
 
 interface IScanDelegate {
@@ -86,7 +86,7 @@ interface IScanDelegate {
     /**
      * 扫描集合成功
      */
-    fun onScanMultipleSuccess(entities: ArrayList<ScanFileEntity>)
+    fun onScanMultipleSuccess(scanEntities: ArrayList<FileScanEntity>)
 
     /**
      * 扫描单个数据
@@ -96,7 +96,7 @@ interface IScanDelegate {
     /**
      * 扫描单个文件成功
      */
-    fun onScanSingleSuccess(entity: ScanFileEntity?)
+    fun onScanSingleSuccess(scanEntity: FileScanEntity?)
 
     /**
      * 刷新预览之后的数据

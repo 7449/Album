@@ -1,4 +1,4 @@
-package com.gallery.scan.extensions
+package com.gallery.scan.impl.file
 
 import android.os.Bundle
 import android.provider.BaseColumns
@@ -7,26 +7,14 @@ import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.types.ResultType
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
-import kotlinx.android.parcel.Parcelize
-
-/**
- * 音频扫描
- */
-@Parcelize
-class ScanAudioArgs : CursorLoaderArgs(AudioColumns.uri, AudioColumns.columns)
-
-/**
- * 图片扫描
- */
-@Parcelize
-class ScanPictureArgs : CursorLoaderArgs(PictureColumns.uri, PictureColumns.columns)
+import kotlinx.parcelize.Parcelize
 
 /**
  * 文件扫描
  * 根据[MediaStore.Files.FileColumns.DATE_MODIFIED]字段[Sort.DESC]排序
  */
 @Parcelize
-class ScanFileArgs(
+class FileScanArgs(
         private val scanTypeArray: Array<String>?,
         private val scanSortField: String = MediaStore.Files.FileColumns.DATE_MODIFIED,
         private val scanSort: String = Sort.DESC,

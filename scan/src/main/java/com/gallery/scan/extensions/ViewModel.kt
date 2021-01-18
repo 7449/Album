@@ -8,19 +8,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.gallery.scan.ScanImpl
 import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.callback.ScanCore
+import com.gallery.scan.impl.ScanImpl
+import com.gallery.scan.impl.file.FileScanEntity
 
-/** [ScanFileEntity] [ScanViewModelFactory2] */
-fun ViewModelProvider.scanFileImpl(): ScanImpl<ScanFileEntity> = scanImpl()
-
-/** [ScanAudioEntity] [ScanViewModelFactory2] */
-fun ViewModelProvider.scanAudioImpl(): ScanImpl<ScanAudioEntity> = scanImpl()
-
-/** [ScanPictureEntity] [ScanViewModelFactory2] */
-fun ViewModelProvider.scanPictureImpl(): ScanImpl<ScanPictureEntity> = scanImpl()
+/** [FileScanEntity] [ScanViewModelFactory2] */
+fun ViewModelProvider.scanFileImpl(): ScanImpl<FileScanEntity> = scanImpl()
 
 /** [ScanImpl] [ScanViewModelFactory2] */
 fun <E> ViewModelProvider.scanImpl(): ScanImpl<E> = get(ScanImpl::class.java) as ScanImpl<E>

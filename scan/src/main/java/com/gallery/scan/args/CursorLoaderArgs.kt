@@ -4,20 +4,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.loader.content.CursorLoader
-import com.gallery.scan.ScanImpl
-import com.gallery.scan.extensions.ScanAudioArgs
-import com.gallery.scan.extensions.ScanFileArgs
-import com.gallery.scan.extensions.ScanPictureArgs
-import kotlinx.android.parcel.Parcelize
+import com.gallery.scan.impl.ScanImpl
+import com.gallery.scan.impl.file.FileScanArgs
+import kotlinx.parcelize.Parcelize
 
 /**
  * 扫描所需参数
  *
  * 承载[CursorLoader]所需的全部参数
  *
- * 文件扫描[ScanFileArgs]
- * 音频扫描[ScanAudioArgs]
- * 图片扫描[ScanPictureArgs]
+ * 文件扫描[FileScanArgs]
  */
 @Parcelize
 open class CursorLoaderArgs(

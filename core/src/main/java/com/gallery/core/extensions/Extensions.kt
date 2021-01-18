@@ -1,6 +1,7 @@
 package com.gallery.core.extensions
 
 import android.app.Activity
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -83,6 +84,27 @@ fun Context.openVideoExpand(uri: Uri, error: () -> Unit) {
         startActivity(video)
     }.onFailure { error.invoke() }
 }
+
+/** 获取可使用的uri */
+fun Long.externalUriExpand(mediaType: String): Uri {
+    return when (mediaType) {
+        MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)
+        MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, this)
+        else -> Uri.EMPTY
+    }
+}
+
+/** 是否是动态图 */
+val String.isGifExpand: Boolean
+    get() = contains("gif") || contains("GIF")
+
+/** 是否是视频 */
+val String.isVideoExpand: Boolean
+    get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
+
+/** 是否是图片 */
+val String.isImageExpand: Boolean
+    get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
 
 /** 返回拍照文件名称 为了防止重复前缀加时间戳 */
 val GalleryBundle.cameraNameExpand: String get() = "${System.currentTimeMillis()}_${cameraName}.${cameraNameSuffix}"

@@ -13,6 +13,7 @@ import com.gallery.sample.databinding.ItemSimpleScanBinding
 import com.gallery.sample.scan.*
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
+import com.gallery.scan.impl.ScanImpl.Companion.registerLiveData
 import com.gallery.scan.impl.file.FileScanArgs
 import com.gallery.scan.impl.file.fileExpand
 

@@ -16,18 +16,6 @@ fun Uri?.orEmptyExpand(): Uri = this ?: Uri.EMPTY
 /** 根据Id获取Uri */
 fun Context.findIdByUriExpand(uri: Uri): Long = contentResolver.queryIdExpand(uri)
 
-/** 根据文件路径获取Uri */
-fun Context.findPathByUriExpand(uri: Uri): String? = contentResolver.queryDataExpand(uri)
-
-/** 根据Uri获取文件路径 */
-fun Uri.filePathExpand(context: Context): String {
-    return when (scheme) {
-        ContentResolver.SCHEME_CONTENT -> context.findPathByUriExpand(this).orEmpty()
-        ContentResolver.SCHEME_FILE -> path.orEmpty()
-        else -> throw RuntimeException("unsupported uri")
-    }
-}
-
 /** 文件是否存在，适配至Android11(目前没有找到比较好的在高版本上检测文件是否存在的方法) */
 fun Uri.isFileExistsExpand(context: Context): Boolean {
     return runCatching {
@@ -43,10 +31,6 @@ fun Uri.deleteExpand(context: Context) {
             .onSuccess { Log.i("UriUtils", "delete uri success:$this") }
             .onFailure { Log.e("UriUtils", "delete uri failure:$this") }
 }
-
-/** 根据Uri获取Cursor */
-fun ContentResolver.queryExpand(uri: Uri, vararg name: String): Cursor? =
-        query(uri, name, null, null, null)
 
 /** 根据Uri查询DATA(文件路径) *已过时 */
 fun ContentResolver.queryDataExpand(uri: Uri): String? =
@@ -75,7 +59,11 @@ fun ContentResolver.queryIdExpand(uri: Uri): Long {
     return id
 }
 
-/** 获取图片Uri */
+/** 根据Uri获取Cursor */
+fun ContentResolver.queryExpand(uri: Uri, vararg name: String): Cursor? =
+        query(uri, name, null, null, null)
+
+/** 获取图片Uri,适配至高版本 */
 fun Context.insertImageUriExpand(
         file: File,
         relativePath: String = Environment.DIRECTORY_DCIM,
@@ -96,7 +84,7 @@ fun Context.insertImageUriExpand(contentValues: ContentValues): Uri? =
             null
         }
 
-/** 获取视频Uri */
+/** 获取视频Uri,适配至高版本 */
 fun Context.insertVideoUriExpand(
         file: File,
         relativePath: String = Environment.DIRECTORY_DCIM,

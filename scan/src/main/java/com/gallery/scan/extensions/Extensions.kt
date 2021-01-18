@@ -1,8 +1,6 @@
 package com.gallery.scan.extensions
 
-import android.content.ContentUris
 import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import com.gallery.scan.types.ScanType
@@ -18,27 +16,6 @@ fun Long.multipleScanExpand(): Bundle = Bundle().apply { putLong(MediaStore.File
 
 /** 获取可使用的单个扫描Bundle */
 fun Long.singleScanExpand(): Bundle = Bundle().apply { putLong(MediaStore.Files.FileColumns._ID, this@singleScanExpand) }
-
-/** 获取可使用的uri */
-fun Long.externalUriExpand(mediaType: String): Uri {
-    return when (mediaType) {
-        MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)
-        MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, this)
-        else -> Uri.EMPTY
-    }
-}
-
-/** 是否是动态图 */
-val String.isGifExpand: Boolean
-    get() = contains("gif") || contains("GIF")
-
-/** 是否是视频 */
-val String.isVideoExpand: Boolean
-    get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
-
-/** 是否是图片 */
-val String.isImageExpand: Boolean
-    get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
 
 fun Cursor?.getIntOrDefault(columnName: String, defaultValue: Int = 0): Int =
         getValueOrDefault(columnName, { defaultValue }) { it.getInt(it.getColumnIndex(columnName)) }

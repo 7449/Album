@@ -2,7 +2,10 @@ package com.gallery.core.entity
 
 import android.net.Uri
 import android.os.Parcelable
-import com.gallery.scan.extensions.*
+import com.gallery.core.extensions.externalUriExpand
+import com.gallery.core.extensions.isGifExpand
+import com.gallery.core.extensions.isImageExpand
+import com.gallery.core.extensions.isVideoExpand
 import com.gallery.scan.impl.file.FileScanEntity
 import kotlinx.parcelize.Parcelize
 

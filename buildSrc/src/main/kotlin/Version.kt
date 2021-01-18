@@ -25,7 +25,7 @@ object Maven {
 }
 
 object Dep {
-    const val scan = "com.ydevelop:gallery.scan:0.1.7"
+    const val scan = "com.ydevelop:gallery.scan:0.1.9"
     const val core = "com.ydevelop:gallery.core:0.1.8"
     const val ui = "com.ydevelop:gallery.ui:0.1.3"
 

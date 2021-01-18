@@ -2,12 +2,10 @@ package com.gallery.core.delegate.impl
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
@@ -30,9 +28,10 @@ import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
-import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.*
+import com.gallery.scan.impl.ScanImpl
+import com.gallery.scan.impl.ScanImpl.Companion.registerLiveData
 import com.gallery.scan.impl.file.FileScanArgs
 import com.gallery.scan.impl.file.FileScanEntity
 import com.gallery.scan.impl.file.fileExpand
@@ -328,10 +327,8 @@ class ScanDelegateImpl(
     }
 
     override fun onScanResult(uri: Uri) {
-        when (uri.scheme) {
-            ContentResolver.SCHEME_CONTENT -> activityNotNull.scanFileExpand(uri) { scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleScanExpand()) }
-            ContentResolver.SCHEME_FILE -> activityNotNull.scanFileExpand(uri.path.orEmpty()) { scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleScanExpand()) }
-            else -> Log.e("gallery", "unsupported uri")
+        activityNotNull.scanFileExpand(uri) {
+            scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleScanExpand())
         }
     }
 

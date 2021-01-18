@@ -9,8 +9,8 @@ import android.provider.MediaStore
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
-import com.gallery.core.delegate.impl.PrevDelegateImpl
-import com.gallery.core.delegate.impl.ScanDelegateImpl
+import com.gallery.core.delegate.IPrevDelegate
+import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.types.ScanType
 import com.gallery.scan.types.Sort
@@ -18,7 +18,7 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * 1.
- *  调用[PrevDelegateImpl.resultBundle]获取需要的参数
+ *  调用[IPrevDelegate.resultBundle]获取需要的参数
  *  其中
  *  [parentId]默认参数 [ScanType.SCAN_ALL]
  *  [fileUri]默认参数 [Uri.EMPTY]
@@ -27,7 +27,7 @@ import kotlinx.parcelize.Parcelize
  *  如果需要获取数据可通过[ScanArgs.scanArgs]获取里面的[selectList]
  *
  * 2.
- *  在横竖屏切换时[ScanDelegateImpl.onSaveInstanceState]获取需要的参数
+ *  在横竖屏切换时[IScanDelegate.onSaveInstanceState]获取需要的参数
  *  其中
  *  [parentId]当前的parentId
  *  [fileUri]拍照的Uri

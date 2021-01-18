@@ -10,7 +10,10 @@ import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
-import com.gallery.core.extensions.*
+import com.gallery.core.extensions.cropNameExpand
+import com.gallery.core.extensions.hasQExpand
+import com.gallery.core.extensions.orEmptyExpand
+import com.gallery.core.extensions.queryDataExpand
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
@@ -37,7 +40,7 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
             uri
         } else {
             val contentUri = delegate.activityNotNull.copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand()
-            val filePath: String? = delegate.activityNotNull.findPathByUriExpand(contentUri)
+            val filePath: String? = delegate.activityNotNull.contentResolver.queryDataExpand(contentUri)
             if (filePath.isNullOrEmpty()) {
                 uri
             } else {

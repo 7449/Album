@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             Gallery.newInstance(activity = this,
                     clz = cls ?: GalleryActivity::class.java,
                     galleryBundle = galleryBundle.copy(
+                            cameraText = "相机",
                             scanType = scanArray,
                             scanSort = sortType,
                             crop = viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,

@@ -1,10 +1,8 @@
 package com.gallery.core.delegate.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.databinding.GalleryItemGalleryPrevBinding
 import com.gallery.core.entity.ScanEntity
 
 class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) : RecyclerView.Adapter<PrevAdapter.ViewHolder>() {
@@ -13,11 +11,13 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
     private val selectList: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(GalleryItemGalleryPrevBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(FrameLayout(parent.context).apply {
+            layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        })
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        displayPreview.invoke(galleryList[position], holder.viewBinding.galleryPrevContainer)
+        displayPreview.invoke(galleryList[position], holder.view)
     }
 
     override fun getItemCount(): Int = galleryList.size
@@ -52,6 +52,6 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
     val allItem: ArrayList<ScanEntity>
         get() = galleryList
 
-    class ViewHolder(val viewBinding: GalleryItemGalleryPrevBinding) : RecyclerView.ViewHolder(viewBinding.root)
+    class ViewHolder(val view: FrameLayout) : RecyclerView.ViewHolder(view)
 }
 

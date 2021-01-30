@@ -3,18 +3,20 @@ package com.gallery.core.delegate.adapter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.databinding.GalleryItemGalleryBinding
-import com.gallery.core.databinding.GalleryItemGalleryCameraBinding
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.isFileExistsExpand
 import com.gallery.core.extensions.showExpand
@@ -44,7 +46,7 @@ class GalleryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_CAMERA -> {
-                val cameraViewHolder = CameraViewHolder(GalleryItemGalleryCameraBinding.inflate(LayoutInflater.from(parent.context), parent, false), galleryBundle)
+                val cameraViewHolder = CameraViewHolder.newInstance(parent, galleryBundle)
                 cameraViewHolder.itemView.setOnClickListener { v -> galleryItemClickListener.onCameraItemClick(v, cameraViewHolder.bindingAdapterPosition, galleryList[cameraViewHolder.bindingAdapterPosition]) }
                 cameraViewHolder
             }
@@ -110,18 +112,42 @@ class GalleryAdapter(
         get() = galleryList
 
     class CameraViewHolder(
-            private val viewBinding: GalleryItemGalleryCameraBinding,
-            private val galleryBundle: GalleryBundle,
-    ) : RecyclerView.ViewHolder(viewBinding.root) {
+            private val rootView: FrameLayout,
+            private val galleryImageCamera: AppCompatImageView,
+            private val galleryImageCameraTv: AppCompatTextView,
+            private val galleryBundle: GalleryBundle
+    ) : RecyclerView.ViewHolder(rootView) {
+
+        companion object {
+            fun newInstance(parent: ViewGroup, galleryBundle: GalleryBundle): CameraViewHolder {
+                val rootView = FrameLayout(parent.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                }
+                val galleryImageCamera = AppCompatImageView(rootView.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                        this.gravity = Gravity.CENTER
+                    }
+                }
+                val galleryImageCameraTv = AppCompatTextView(rootView.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                        this.gravity = Gravity.CENTER or Gravity.BOTTOM
+                        this.bottomMargin = 5
+                    }
+                }
+                rootView.addView(galleryImageCamera)
+                rootView.addView(galleryImageCameraTv)
+                return CameraViewHolder(rootView, galleryImageCamera, galleryImageCameraTv, galleryBundle)
+            }
+        }
 
         fun camera() {
             val drawable: Drawable? = ContextCompat.getDrawable(itemView.context, galleryBundle.cameraDrawable)
             drawable?.colorFilter = PorterDuffColorFilter(galleryBundle.cameraDrawableColor, PorterDuff.Mode.SRC_ATOP)
-            viewBinding.galleryImageCameraTv.text = galleryBundle.cameraText
-            viewBinding.galleryImageCameraTv.textSize = galleryBundle.cameraTextSize
-            viewBinding.galleryImageCameraTv.setTextColor(galleryBundle.cameraTextColor)
-            viewBinding.galleryCameraRootView.setBackgroundColor(galleryBundle.cameraBackgroundColor)
-            viewBinding.galleryImageCamera.setImageDrawable(drawable)
+            galleryImageCameraTv.text = galleryBundle.cameraText
+            galleryImageCameraTv.textSize = galleryBundle.cameraTextSize
+            galleryImageCameraTv.setTextColor(galleryBundle.cameraTextColor)
+            galleryImageCamera.setImageDrawable(drawable)
+            rootView.setBackgroundColor(galleryBundle.cameraBackgroundColor)
         }
 
     }

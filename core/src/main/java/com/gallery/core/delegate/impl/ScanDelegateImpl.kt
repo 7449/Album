@@ -98,7 +98,7 @@ class ScanDelegateImpl(
                 }
             }
 
-    /** 读写文件启动器 */
+    /** 读写权限启动器 */
     private val writePermissionLauncher: ActivityResultLauncher<String> =
             fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 if (it) {
@@ -108,30 +108,30 @@ class ScanDelegateImpl(
                 }
             }
 
-    private val scan: ScanImpl<FileScanEntity> by lazy {
-        ViewModelProvider(fragment,
-                fragment.scanViewModelFactory(
-                        factory = ScanEntityFactory.fileExpand(),
-                        args = FileScanArgs(
-                                galleryBundle.scanType.map { it.toString() }.toTypedArray(),
-                                galleryBundle.scanSortField,
-                                galleryBundle.scanSort
-                        )
-                ))
-                .scanFileImpl()
-                .registerLiveData(fragment) { result ->
-                    if (result is Result.Multiple) {
-                        onScanMultipleSuccess(result.multipleValue)
-                    } else if (result is Result.Single) {
-                        onScanSingleSuccess(result.singleValue)
-                    }
-                }
-    }
+    /** 涉及到View的获取，获取[ScanDelegateImpl]实例时必须在[Fragment.onViewCreated]之后 */
+    private val galleryBundle: GalleryBundle = fragment.arguments.orEmptyExpand().galleryBundleOrDefault
+    private val galleryAdapter: GalleryAdapter = GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
+    private val recyclerView: RecyclerView = fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView
+    private val emptyView: ImageView = fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView
 
-    private val galleryBundle: GalleryBundle by lazy { fragment.arguments.orEmptyExpand().galleryBundleOrDefault }
-    private val galleryAdapter: GalleryAdapter by lazy { GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this) }
-    private val recyclerView: RecyclerView by lazy { fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView }
-    private val emptyView: ImageView by lazy { fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView }
+    private val scan: ScanImpl<FileScanEntity> =
+            ViewModelProvider(fragment,
+                    fragment.scanViewModelFactory(
+                            factory = ScanEntityFactory.fileExpand(),
+                            args = FileScanArgs(
+                                    galleryBundle.scanType.map { it.toString() }.toTypedArray(),
+                                    galleryBundle.scanSortField,
+                                    galleryBundle.scanSort
+                            )
+                    ))
+                    .scanFileImpl()
+                    .registerLiveData(fragment) { result ->
+                        if (result is Result.Multiple) {
+                            onScanMultipleSuccess(result.multipleValue)
+                        } else if (result is Result.Single) {
+                            onScanSingleSuccess(result.singleValue)
+                        }
+                    }
 
     override val activity: FragmentActivity?
         get() = fragment.activity

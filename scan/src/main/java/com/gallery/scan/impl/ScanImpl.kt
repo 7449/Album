@@ -46,33 +46,27 @@ class ScanImpl<E>(private val scanCore: ScanCore) : ViewModel(), Scan<E> {
         }
     }
 
-    private val multipleError = {
-        resultLiveData.value = Result.Error(ResultType.MULTIPLE)
-        onCleared()
-    }
+    private val multipleError = { resultLiveData.value = Result.Error(ResultType.MULTIPLE) }
 
-    private val singleError = {
-        resultLiveData.value = Result.Error(ResultType.SINGLE)
-        onCleared()
-    }
+    private val singleError = { resultLiveData.value = Result.Error(ResultType.SINGLE) }
 
     override fun scanMultiple(args: Bundle) {
+        onCleared()
         if (loaderManager.hasRunningLoaders()) {
             return
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(args, loaderArgs), ScanTask<E>(context, factory, multipleError) {
             resultLiveData.value = Result.Multiple(it)
-            onCleared()
         })
     }
 
     override fun scanSingle(args: Bundle) {
+        onCleared()
         if (loaderManager.hasRunningLoaders()) {
             return
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(args, loaderArgs), ScanTask<E>(context, factory, singleError) {
             resultLiveData.value = Result.Single(if (it.isEmpty()) null else it[0])
-            onCleared()
         })
     }
 

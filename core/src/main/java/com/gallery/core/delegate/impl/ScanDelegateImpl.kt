@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
@@ -126,10 +127,10 @@ class ScanDelegateImpl(
                     ))
                     .scanFileImpl()
                     .registerLiveData(fragment) { result ->
-                        if (result is Result.Multiple) {
-                            onScanMultipleSuccess(result.multipleValue)
-                        } else if (result is Result.Single) {
-                            onScanSingleSuccess(result.singleValue)
+                        when (result) {
+                            is Result.Multiple -> onScanMultipleSuccess(result.multipleValue)
+                            is Result.Single -> onScanSingleSuccess(result.singleValue)
+                            else -> Log.i("ScanDelegate", result.toString())
                         }
                     }
 
@@ -183,7 +184,10 @@ class ScanDelegateImpl(
         }
         emptyView.hideExpand()
         recyclerView.showExpand()
-        if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
+        //修复LiveData更新数据
+        if (parentId.isScanAllExpand()
+                && !galleryBundle.hideCamera
+                && scanEntities.first().parent != GalleryAdapter.CAMERA) {
             scanEntities.add(0, FileScanEntity(parent = GalleryAdapter.CAMERA))
         }
         val toScanEntity = scanEntities.toScanEntity()

@@ -12,6 +12,12 @@ import com.gallery.scan.types.ResultType
  */
 interface Scan<E> {
 
+    /** 注册回调 */
+    fun registerScanCall(scanCall: ScanCall<E>)
+
+    /** 反注册回调 */
+    fun unregisterScanCall()
+
     /** 扫描多个数据 */
     fun scanMultiple(args: Bundle)
 

@@ -14,13 +14,13 @@ import com.gallery.scan.callback.ScanCore
 import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.impl.file.FileScanEntity
 
-/** [FileScanEntity] [ScanViewModelFactory2] */
+/** [FileScanEntity] [ScanViewModelFactory] */
 fun ViewModelProvider.scanFileImpl(): ScanImpl<FileScanEntity> = scanImpl()
 
-/** [ScanImpl] [ScanViewModelFactory2] */
+/** [ScanImpl] [ScanViewModelFactory] */
 fun <E> ViewModelProvider.scanImpl(): ScanImpl<E> = get(ScanImpl::class.java) as ScanImpl<E>
 
-open class ScanViewModelFactory2(
+open class ScanViewModelFactory(
         private val context: Context,
         private val viewModelStoreOwner: ViewModelStoreOwner,
         private val factory: ScanEntityFactory,
@@ -38,36 +38,25 @@ open class ScanViewModelFactory2(
 
 }
 
-open class ScanViewModelFactory(
-        ownerActivity: FragmentActivity? = null,
-        ownerFragment: Fragment? = null,
+fun Fragment.scanViewModelFactory(
         factory: ScanEntityFactory,
         args: CursorLoaderArgs,
-) : ScanViewModelFactory2(
-        ownerActivity ?: ownerFragment?.activity
-        ?: throw KotlinNullPointerException("ownerActivity or ownerFragment == null,"),
-        ownerActivity ?: ownerFragment
-        ?: throw KotlinNullPointerException("ownerActivity or ownerFragment == null,"),
-        factory, args
-)
-
-fun FragmentActivity.scanViewModelFactory(
-        factory: ScanEntityFactory,
-        args: CursorLoaderArgs,
-): ScanViewModelFactory2 {
+): ScanViewModelFactory {
     return ScanViewModelFactory(
-            ownerActivity = this,
+            context = requireActivity(),
+            viewModelStoreOwner = this,
             factory = factory,
             args = args
     )
 }
 
-fun Fragment.scanViewModelFactory(
+fun FragmentActivity.scanViewModelFactory(
         factory: ScanEntityFactory,
         args: CursorLoaderArgs,
-): ScanViewModelFactory2 {
+): ScanViewModelFactory {
     return ScanViewModelFactory(
-            ownerFragment = this,
+            context = this,
+            viewModelStoreOwner = this,
             factory = factory,
             args = args
     )

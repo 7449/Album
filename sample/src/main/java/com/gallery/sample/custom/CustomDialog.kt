@@ -7,19 +7,25 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.widget.GalleryDivider
+import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
+import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.R
 
-class CustomDialog : DialogFragment(), IGalleryCallback {
+class CustomDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
 
     companion object {
         fun newInstance(): CustomDialog {
@@ -75,5 +81,19 @@ class CustomDialog : DialogFragment(), IGalleryCallback {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = GridLayoutManager(recyclerView.context, galleryBundle.spanCount, GridLayoutManager.VERTICAL, false)
         recyclerView.addItemDecoration(GalleryDivider(8))
+    }
+
+    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView) {
+        container.removeAllViews()
+        val imageView = GalleryImageView(container.context)
+        Glide.with(container.context)
+                .load(scanEntity.uri)
+                .apply(RequestOptions()
+                        .placeholder(R.drawable.ic_gallery_default_loading)
+                        .error(R.drawable.ic_gallery_default_loading)
+                        .centerCrop()
+                        .override(width, height))
+                .into(imageView)
+        container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 }

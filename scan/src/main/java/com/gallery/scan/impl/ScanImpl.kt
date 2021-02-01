@@ -2,6 +2,8 @@ package com.gallery.scan.impl
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Looper
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
@@ -11,6 +13,7 @@ import androidx.loader.app.LoaderManager
 import com.gallery.scan.args.CursorLoaderArgs
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.callback.Scan
+import com.gallery.scan.callback.ScanCall
 import com.gallery.scan.callback.ScanCore
 import com.gallery.scan.result.Result
 import com.gallery.scan.task.ScanTask
@@ -33,6 +36,7 @@ class ScanImpl<E>(private val scanCore: ScanCore) : ViewModel(), Scan<E> {
 
     }
 
+    private var scanCall: ScanCall<E>? = null
     private val resultLiveData = MutableLiveData<Result<*>>()
     private val objects: Any = scanCore.scanOwnerGeneric()
     private val loaderManager: LoaderManager = LoaderManager.getInstance(scanCore.scanOwnerGeneric())
@@ -46,31 +50,56 @@ class ScanImpl<E>(private val scanCore: ScanCore) : ViewModel(), Scan<E> {
         }
     }
 
-    private val multipleError = { resultLiveData.value = Result.Error(ResultType.MULTIPLE) }
+    private val multipleError = {
+        resultLiveData.value = Result.Error(ResultType.MULTIPLE)
+        onCleared()
+    }
 
-    private val singleError = { resultLiveData.value = Result.Error(ResultType.SINGLE) }
+    private val singleError = {
+        resultLiveData.value = Result.Error(ResultType.SINGLE)
+        onCleared()
+    }
+
+    override fun registerScanCall(scanCall: ScanCall<E>) {
+        this.scanCall = scanCall
+    }
+
+    override fun unregisterScanCall() {
+        this.scanCall = null
+    }
 
     override fun scanMultiple(args: Bundle) {
-        onCleared()
         if (loaderManager.hasRunningLoaders()) {
             return
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, createScanMultipleArgs(args, loaderArgs), ScanTask<E>(context, factory, multipleError) {
-            resultLiveData.value = Result.Multiple(it)
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                resultLiveData.value = Result.Multiple(it)
+            } else {
+                resultLiveData.postValue(Result.Multiple(it))
+            }
+            scanCall?.scanMultipleSuccess(it)
+            Toast.makeText(context, "toast", Toast.LENGTH_SHORT).show()
+            onCleared()
         })
     }
 
     override fun scanSingle(args: Bundle) {
-        onCleared()
         if (loaderManager.hasRunningLoaders()) {
             return
         }
         loaderManager.restartLoader(SCAN_LOADER_ID, createScanSingleArgs(args, loaderArgs), ScanTask<E>(context, factory, singleError) {
-            resultLiveData.value = Result.Single(if (it.isEmpty()) null else it[0])
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                resultLiveData.value = Result.Single(if (it.isEmpty()) null else it[0])
+            } else {
+                resultLiveData.postValue(Result.Single(if (it.isEmpty()) null else it[0]))
+            }
+            scanCall?.scanSingleSuccess(if (it.isEmpty()) null else it[0])
+            onCleared()
         })
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         loaderManager.destroyLoader(SCAN_LOADER_ID)
     }
 

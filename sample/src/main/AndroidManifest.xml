@@ -15,7 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SimpleScanActivity" />
         <activity
             android:name=".camera.CameraActivity"
             android:configChanges="screenLayout|keyboardHidden"

@@ -14,7 +14,7 @@ import com.gallery.sample.crop.UCropImpl
 import com.gallery.ui.activity.GalleryActivity
 
 class UCropGalleryActivity : GalleryActivity() {
-    override val cropImpl: ICrop?
+    override val cropImpl: ICrop
         get() = UCropImpl(uiConfig)
     override val galleryFinderAdapter: GalleryFinderAdapter by lazy { BottomFinderAdapter() }
 }

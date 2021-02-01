@@ -1,26 +1,11 @@
 package com.gallery.sample
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.gallery.compat.fragment.GalleryCompatFragment
-import com.gallery.compat.widget.GalleryDivider
-import com.gallery.compat.widget.GalleryImageView
-import com.gallery.core.GalleryBundle
-import com.gallery.core.callback.IGalleryCallback
-import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.callback.GalleryCallback
@@ -36,7 +21,7 @@ import com.gallery.ui.result.GalleryResultCallback
 import com.gallery.ui.wechat.extension.weChatUiGallery
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
 
-class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader {
+class MainActivity : AppCompatActivity() {
 
     private val galleryLauncher: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(GalleryCallback(this)))
@@ -44,34 +29,9 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
             registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(WeChatGalleryCallback(this)))
     private val viewBinding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
-    private fun initGalleryFragment() {
-        supportFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)?.let {
-            supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
-        } ?: supportFragmentManager
-                .beginTransaction()
-                .add(R.id.galleryFragment, GalleryCompatFragment.newInstance(GalleryBundle(
-                        radio = true,
-                        hideCamera = true,
-                        crop = false,
-                )), GalleryCompatFragment::class.java.simpleName)
-                .commitAllowingStateLoss()
-    }
-
-    override fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
-        fragment.view?.setBackgroundColor(Color.BLACK)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(recyclerView.context, RecyclerView.HORIZONTAL, false)
-        recyclerView.addItemDecoration(GalleryDivider(10))
-    }
-
-    companion object {
-        val scanArrayList = arrayOf("文件", "音频", "视频", "图片", "音视图")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        initGalleryFragment()
 
         var isWeChat = false
         var isRadio = false
@@ -167,18 +127,6 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
                     ),
                     galleryLauncher = galleryLauncher)
         }
-
-        viewBinding.scanSimple.setOnClickListener {
-            showArray(scanArrayList) {
-                when (it) {
-                    0 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.FILE))
-                    1 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.AUDIO))
-                    2 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.VIDEO))
-                    3 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.PICTURE))
-                    4 -> startActivity(Intent(this, SimpleScanActivity::class.java).putExtra(SimpleScanActivity.args, ScanType.MIX))
-                }
-            }
-        }
         viewBinding.customCamera.setOnClickListener {
             Gallery.newInstance(
                     activity = this,
@@ -189,19 +137,5 @@ class MainActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader 
         viewBinding.dialog.setOnClickListener {
             CustomDialog.newInstance().show(supportFragmentManager, CustomDialog::class.java.simpleName)
         }
-    }
-
-    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView) {
-        container.removeAllViews()
-        val imageView = GalleryImageView(container.context)
-        Glide.with(container.context)
-                .load(scanEntity.uri)
-                .apply(RequestOptions()
-                        .placeholder(R.drawable.ic_gallery_default_loading)
-                        .error(R.drawable.ic_gallery_default_loading)
-                        .centerCrop()
-                        .override(width, height))
-                .into(imageView)
-        container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 }

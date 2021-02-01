@@ -12,14 +12,6 @@ enum class Theme {
     PINK,
 }
 
-enum class ScanType {
-    FILE,
-    AUDIO,
-    PICTURE,
-    VIDEO,
-    MIX
-}
-
 fun AppCompatActivity.showArray(array: Array<String>, action: (position: Int) -> Unit) {
     AlertDialog.Builder(this)
             .setSingleChoiceItems(array, View.NO_ID)

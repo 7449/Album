@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gallery.core.GalleryBundle
 import com.gallery.core.PrevArgs
@@ -24,12 +23,12 @@ import com.gallery.core.extensions.isFileExistsExpand
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.toScanEntity
 import com.gallery.scan.args.ScanEntityFactory
+import com.gallery.scan.callback.ScanCore.Companion.scanCore
 import com.gallery.scan.extensions.isScanNoNeExpand
 import com.gallery.scan.extensions.multipleScanExpand
-import com.gallery.scan.extensions.scanFileImpl
-import com.gallery.scan.extensions.scanViewModelFactory
-import com.gallery.scan.impl.ScanImpl.Companion.registerLiveData
+import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.impl.file.FileScanArgs
+import com.gallery.scan.impl.file.FileScanEntity
 import com.gallery.scan.impl.file.fileExpand
 import com.gallery.scan.types.ScanType.SCAN_ALL
 import com.gallery.scan.types.ScanType.SCAN_NONE
@@ -112,13 +111,11 @@ class PrevDelegateImpl(
                     galleryBundle.scanSortField,
                     galleryBundle.scanSort
             )
-            ViewModelProvider(fragment,
-                    fragment.scanViewModelFactory(
-                            factory = ScanEntityFactory.fileExpand(),
-                            args = scanFileArgs
-                    )
-            ).scanFileImpl().registerLiveData(fragment) { result ->
-                updateEntity(savedInstanceState, result.multipleValue.toScanEntity())
+            ScanImpl<FileScanEntity>(fragment.scanCore(
+                    factory = ScanEntityFactory.fileExpand(),
+                    args = scanFileArgs
+            )).registerScanResource {
+                updateEntity(savedInstanceState, it.multipleValue.toScanEntity())
             }.scanMultiple(parentId.multipleScanExpand())
         }
     }

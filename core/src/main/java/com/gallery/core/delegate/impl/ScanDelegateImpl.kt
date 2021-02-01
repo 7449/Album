@@ -13,7 +13,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
@@ -30,9 +29,11 @@ import com.gallery.core.delegate.adapter.GalleryAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
 import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.extensions.*
+import com.gallery.scan.callback.ScanCore.Companion.scanCore
+import com.gallery.scan.extensions.isScanAllExpand
+import com.gallery.scan.extensions.multipleScanExpand
+import com.gallery.scan.extensions.singleScanExpand
 import com.gallery.scan.impl.ScanImpl
-import com.gallery.scan.impl.ScanImpl.Companion.registerLiveData
 import com.gallery.scan.impl.file.FileScanArgs
 import com.gallery.scan.impl.file.FileScanEntity
 import com.gallery.scan.impl.file.fileExpand
@@ -116,23 +117,20 @@ class ScanDelegateImpl(
     private val emptyView: ImageView = fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView
 
     private val scan: ScanImpl<FileScanEntity> =
-            ViewModelProvider(fragment,
-                    fragment.scanViewModelFactory(
-                            factory = ScanEntityFactory.fileExpand(),
-                            args = FileScanArgs(
-                                    galleryBundle.scanType.map { it.toString() }.toTypedArray(),
-                                    galleryBundle.scanSortField,
-                                    galleryBundle.scanSort
-                            )
-                    ))
-                    .scanFileImpl()
-                    .registerLiveData(fragment) { result ->
-                        when (result) {
-                            is Result.Multiple -> onScanMultipleSuccess(result.multipleValue)
-                            is Result.Single -> onScanSingleSuccess(result.singleValue)
-                            else -> Log.i("ScanDelegate", result.toString())
-                        }
-                    }
+            ScanImpl<FileScanEntity>(fragment.scanCore(
+                    factory = ScanEntityFactory.fileExpand(),
+                    args = FileScanArgs(
+                            galleryBundle.scanType.map { it.toString() }.toTypedArray(),
+                            galleryBundle.scanSortField,
+                            galleryBundle.scanSort
+                    )
+            )).registerScanResource {
+                when (it) {
+                    is Result.Multiple -> onScanMultipleSuccess(it.multipleValue)
+                    is Result.Single -> onScanSingleSuccess(it.singleValue)
+                    else -> Log.i("ScanDelegate", it.toString())
+                }
+            }
 
     override val activity: FragmentActivity?
         get() = fragment.activity

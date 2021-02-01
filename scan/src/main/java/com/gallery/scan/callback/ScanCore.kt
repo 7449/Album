@@ -1,6 +1,7 @@
 package com.gallery.scan.callback
 
-import android.content.Context
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.loader.app.LoaderManager
@@ -14,24 +15,43 @@ import com.gallery.scan.args.ScanEntityFactory
  */
 interface ScanCore {
 
-    /**
-     * [Context]
-     * 如果[scanOwner] [scanOwnerGeneric] 返回的是 FragmentActivity 或者 Fragment
-     * 则[scanContext]不是必须的，否则必须传递context
-     */
-    val scanContext: Context
-        get() = throw KotlinNullPointerException("scanContext == null")
+    companion object {
+        fun Fragment.scanCore(
+                factory: ScanEntityFactory,
+                args: CursorLoaderArgs
+        ): ScanCore {
+            return object : ScanCore {
+                override val scanOwner: LifecycleOwner
+                    get() = this@scanCore
+                override val scanCursorLoaderArgs: CursorLoaderArgs
+                    get() = args
+                override val scanEntityFactory: ScanEntityFactory
+                    get() = factory
+            }
+        }
+
+        fun FragmentActivity.scanCore(
+                factory: ScanEntityFactory,
+                args: CursorLoaderArgs
+        ): ScanCore {
+            return object : ScanCore {
+                override val scanOwner: LifecycleOwner
+                    get() = this@scanCore
+                override val scanCursorLoaderArgs: CursorLoaderArgs
+                    get() = args
+                override val scanEntityFactory: ScanEntityFactory
+                    get() = factory
+            }
+        }
+    }
 
     /**
-     *  [scanOwnerGeneric]
-     *  [LoaderManager.getInstance]
-     *  注意传入的参数是否正确，[ViewModelStoreOwner]不正确会导致强转出错
+     *  注意传入的参数是否正确，[LifecycleOwner]不正确会导致强转出错
      *  必须继承于
      *  [ViewModelStoreOwner]
      *  [LifecycleOwner]
-     *  两个接口，如有需要直接传递 FragmentActivity 或者 Fragment 即可
      */
-    val scanOwner: ViewModelStoreOwner
+    val scanOwner: LifecycleOwner
 
     /**
      * 扫描所需参数

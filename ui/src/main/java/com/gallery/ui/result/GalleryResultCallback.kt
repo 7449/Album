@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import com.gallery.compat.GalleryConfig
-import com.gallery.core.extensions.getParcelableArrayListExpand
-import com.gallery.core.extensions.getParcelableExpand
+import com.gallery.compat.extensions.getParcelableArrayListExpand
+import com.gallery.compat.extensions.getParcelableExpand
 import com.gallery.core.extensions.orEmptyExpand
 
 class GalleryResultCallback(private val galleryListener: GalleryListener) : ActivityResultCallback<ActivityResult> {

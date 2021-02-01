@@ -2,8 +2,8 @@ package com.gallery.sample
 
 import android.app.Activity
 import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.extensions.colorExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.extensions.colorExpand
 
 object GalleryTheme {
 

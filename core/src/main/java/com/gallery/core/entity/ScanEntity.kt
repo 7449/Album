@@ -1,11 +1,9 @@
 package com.gallery.core.entity
 
+import android.content.ContentUris
 import android.net.Uri
 import android.os.Parcelable
-import com.gallery.core.extensions.externalUriExpand
-import com.gallery.core.extensions.isGifExpand
-import com.gallery.core.extensions.isImageExpand
-import com.gallery.core.extensions.isVideoExpand
+import android.provider.MediaStore
 import com.gallery.scan.impl.file.FileScanEntity
 import kotlinx.parcelize.Parcelize
 
@@ -29,11 +27,15 @@ data class ScanEntity(
     val bucketDisplayName: String
         get() = delegate.bucketDisplayName
     val uri: Uri
-        get() = delegate.id.externalUriExpand(delegate.mediaType)
+        get() = when (delegate.mediaType) {
+            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, delegate.id)
+            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, delegate.id)
+            else -> Uri.EMPTY
+        }
     val isGif: Boolean
-        get() = delegate.mimeType.isGifExpand
+        get() = delegate.mimeType.contains("gif") || delegate.mimeType.contains("GIF")
     val isVideo: Boolean
-        get() = delegate.mediaType.isVideoExpand
+        get() = delegate.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
     val isImage: Boolean
-        get() = delegate.mediaType.isImageExpand
+        get() = delegate.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
 }

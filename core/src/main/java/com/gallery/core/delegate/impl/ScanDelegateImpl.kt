@@ -182,10 +182,7 @@ class ScanDelegateImpl(
         }
         emptyView.hideExpand()
         recyclerView.showExpand()
-        //修复LiveData更新数据
-        if (parentId.isScanAllExpand()
-                && !galleryBundle.hideCamera
-                && scanEntities.first().parent != GalleryAdapter.CAMERA) {
+        if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
             scanEntities.add(0, FileScanEntity(parent = GalleryAdapter.CAMERA))
         }
         val toScanEntity = scanEntities.toScanEntity()

@@ -18,13 +18,6 @@ import com.gallery.core.extensions.safeToastExpand
 interface IGalleryPrevCallback {
 
     /**
-     * [IPrevDelegate.onCreate]触发
-     * 预览涉及到了扫描图库数据库,所以这个方法在
-     * 点击item进入预览的情况下不会及时触发
-     */
-    fun onPrevCreated(fragment: Fragment, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {}
-
-    /**
      * [ViewPager2.OnPageChangeCallback.onPageScrolled]
      */
     fun onPageScrolled(position: Int, positionOffset: Float, @Px positionOffsetPixels: Int) {}
@@ -38,6 +31,11 @@ interface IGalleryPrevCallback {
      * [ViewPager2.OnPageChangeCallback.onPageScrollStateChanged]
      */
     fun onPageScrollStateChanged(@ScrollState state: Int) {}
+
+    /**
+     * [IPrevDelegate.onCreate]触发
+     */
+    fun onPrevCreated(fragment: Fragment, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {}
 
     /**
      * 点击图片时该文件已被删除
@@ -60,4 +58,5 @@ interface IGalleryPrevCallback {
      * [IPrevDelegate.checkBoxClick]
      */
     fun onChangedCheckBox() {}
+
 }

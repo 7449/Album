@@ -1,4 +1,4 @@
-package com.gallery.core.extensions
+package com.gallery.compat.extensions
 
 import android.os.Bundle
 import android.os.Parcelable

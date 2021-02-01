@@ -10,7 +10,7 @@ import com.gallery.compat.GalleryUiBundle
 import com.gallery.compat.finder.BaseFinderAdapter
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.getParcelableOrDefault
+import com.gallery.compat.extensions.getParcelableOrDefault
 import com.gallery.sample.databinding.GalleryFinderBottomBinding
 import com.gallery.sample.databinding.GalleryFinderBottomItemBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

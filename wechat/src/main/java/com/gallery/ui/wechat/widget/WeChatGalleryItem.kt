@@ -8,8 +8,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import com.gallery.compat.extensions.colorExpand
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.colorExpand
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.LayoutGalleryWechatItemBinding
 import com.gallery.ui.wechat.extension.formatTimeVideo

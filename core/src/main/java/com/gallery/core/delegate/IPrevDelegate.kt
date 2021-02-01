@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
 
 interface IPrevDelegate {
@@ -98,7 +97,7 @@ interface IPrevDelegate {
 
     /**
      * 获取预览销毁时[Activity.setResult]的Bundle
-     * 可作为参数传递给[ScanDelegateImpl.onUpdateResult]
+     * 可作为参数传递给[IScanDelegate.onUpdateResult]
      * 用于合并预览页改变的数据
      */
     fun resultBundle(isRefresh: Boolean): Bundle
@@ -107,4 +106,5 @@ interface IPrevDelegate {
      * 销毁
      */
     fun onDestroy()
+
 }

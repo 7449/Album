@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.GalleryConfig
 import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.activity.galleryFragment
+import com.gallery.compat.extensions.getBooleanExpand
+import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.core.GalleryBundle

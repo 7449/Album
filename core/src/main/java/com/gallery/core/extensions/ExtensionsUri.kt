@@ -33,6 +33,7 @@ fun Uri.deleteExpand(context: Context) {
 }
 
 /** 根据Uri查询DATA(文件路径) *已过时 */
+@Suppress("DEPRECATION")
 fun ContentResolver.queryDataExpand(uri: Uri): String? =
         queryExpand(uri, MediaStore.MediaColumns.DATA).use {
             val cursor = it ?: return null
@@ -72,6 +73,7 @@ fun Context.insertImageUriExpand(
         put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
         put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
     } else {
+        @Suppress("DEPRECATION")
         put(MediaStore.MediaColumns.DATA, file.path)
     }
 })
@@ -93,6 +95,7 @@ fun Context.insertVideoUriExpand(
         put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
         put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
     } else {
+        @Suppress("DEPRECATION")
         put(MediaStore.MediaColumns.DATA, file.path)
     }
 })

@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import com.gallery.compat.GalleryConfig
-import com.gallery.core.extensions.getBooleanExpand
-import com.gallery.core.extensions.getParcelableArrayListExpand
-import com.gallery.core.extensions.getParcelableExpand
+import com.gallery.compat.extensions.getBooleanExpand
+import com.gallery.compat.extensions.getParcelableArrayListExpand
+import com.gallery.compat.extensions.getParcelableExpand
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.ui.wechat.WeChatConfig
 

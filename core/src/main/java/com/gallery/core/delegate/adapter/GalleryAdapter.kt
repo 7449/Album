@@ -4,11 +4,9 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -16,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.databinding.GalleryItemGalleryBinding
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.hideExpand
 import com.gallery.core.extensions.isFileExistsExpand
 import com.gallery.core.extensions.showExpand
 
@@ -51,7 +49,7 @@ class GalleryAdapter(
                 cameraViewHolder
             }
             else -> {
-                val photoViewHolder = PhotoViewHolder(GalleryItemGalleryBinding.inflate(LayoutInflater.from(parent.context), parent, false), galleryBundle, display, galleryCallback)
+                val photoViewHolder = PhotoViewHolder.newInstance(parent, galleryBundle, display, galleryCallback)
                 photoViewHolder.itemView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
                 photoViewHolder
             }
@@ -153,14 +151,34 @@ class GalleryAdapter(
     }
 
     class PhotoViewHolder(
-            viewBinding: GalleryItemGalleryBinding,
+            private val rootView: FrameLayout,
+            private val container: FrameLayout,
+            private val checkBox: AppCompatTextView,
             private val galleryBundle: GalleryBundle,
             private val display: Int,
             private val galleryCallback: IGalleryCallback,
-    ) : RecyclerView.ViewHolder(viewBinding.root) {
+    ) : RecyclerView.ViewHolder(rootView) {
 
-        private val container: FrameLayout = viewBinding.galleryContainer
-        private val checkBox: TextView = viewBinding.galleryCheckBox
+        companion object {
+            fun newInstance(parent: ViewGroup, galleryBundle: GalleryBundle, display: Int, galleryCallback: IGalleryCallback): PhotoViewHolder {
+                val rootView = FrameLayout(parent.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                }
+                val galleryContainer = FrameLayout(rootView.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                }
+                val galleryCheckBox = AppCompatTextView(rootView.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                        this.gravity = Gravity.END
+                        this.bottomMargin = 5
+                    }
+                }
+                galleryCheckBox.hideExpand()
+                rootView.addView(galleryContainer)
+                rootView.addView(galleryCheckBox)
+                return PhotoViewHolder(rootView, galleryContainer, galleryCheckBox, galleryBundle, display, galleryCallback)
+            }
+        }
 
         fun photo(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
             imageLoader.onDisplayGallery(display, display, scanEntity, container, checkBox)

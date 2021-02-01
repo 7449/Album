@@ -38,8 +38,6 @@ interface IGalleryCallback {
     /**
      * 点击CheckBox时该文件已经被删除
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
-     * 这里存在一个问题，在小米手机上发现了，小米手机云端未下载的图片也会扫描出来
-     * 但是这个时候文件是不存在的..
      * [PhotoViewHolder.photo]
      */
     fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {

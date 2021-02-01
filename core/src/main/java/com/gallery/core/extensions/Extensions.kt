@@ -1,21 +1,13 @@
 package com.gallery.core.extensions
 
 import android.app.Activity
-import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.DisplayMetrics
-import android.view.View
-import android.view.Window
 import android.widget.Toast
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -27,45 +19,15 @@ import java.io.File
 /** 是否为亮色 */
 fun Int.isLightColorExpand(): Boolean = ColorUtils.calculateLuminance(this) >= 0.5
 
-/** 获取颜色 */
-fun Int.colorExpand(activity: Context): Int = activity.colorExpand(this)
-
 /** 获取安全Bundle */
 fun Bundle?.orEmptyExpand(): Bundle = this ?: Bundle.EMPTY
-
-/** 获取颜色 */
-fun Context.colorExpand(@ColorRes id: Int): Int = ContextCompat.getColor(this, id)
 
 /** 获取Drawable */
 fun Context.drawableExpand(@DrawableRes id: Int): Drawable? = ContextCompat.getDrawable(this, id)
 
-/** 获取自定义颜色Drawable */
-fun Context.minimumDrawableExpand(@DrawableRes id: Int, @ColorInt color: Int): Drawable? = drawableExpand(id)?.minimumWidthAndHeightDrawableExpand(color)
-
-/** 获取自定义Drawable */
-fun Drawable.minimumWidthAndHeightDrawableExpand(@ColorInt color: Int): Drawable {
-    this.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-    this.setBounds(0, 0, this.minimumWidth, this.minimumHeight)
-    return this
-}
-
 /** 获取计算的Item宽高 */
 fun Activity.squareExpand(count: Int): Int {
-    val dm = DisplayMetrics()
-    windowManager.defaultDisplay.getMetrics(dm)
-    return dm.widthPixels / count
-}
-
-/** 设置状态栏颜色 */
-fun Window.statusBarColorExpand(@ColorInt color: Int) {
-    if (hasMExpand()) {
-        statusBarColor = color
-        if (color.isLightColorExpand()) {
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
-    }
+    return resources.displayMetrics.widthPixels / count
 }
 
 /** 安全Toast(过滤空数据) */
@@ -84,27 +46,6 @@ fun Context.openVideoExpand(uri: Uri, error: () -> Unit) {
         startActivity(video)
     }.onFailure { error.invoke() }
 }
-
-/** 获取可使用的uri */
-fun Long.externalUriExpand(mediaType: String): Uri {
-    return when (mediaType) {
-        MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)
-        MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, this)
-        else -> Uri.EMPTY
-    }
-}
-
-/** 是否是动态图 */
-val String.isGifExpand: Boolean
-    get() = contains("gif") || contains("GIF")
-
-/** 是否是视频 */
-val String.isVideoExpand: Boolean
-    get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
-
-/** 是否是图片 */
-val String.isImageExpand: Boolean
-    get() = this == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()
 
 /** 返回拍照文件名称 为了防止重复前缀加时间戳 */
 val GalleryBundle.cameraNameExpand: String get() = "${System.currentTimeMillis()}_${cameraName}.${cameraNameSuffix}"

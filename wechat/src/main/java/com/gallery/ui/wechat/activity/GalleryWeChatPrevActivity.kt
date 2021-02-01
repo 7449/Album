@@ -10,11 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.activity.prevFragment
+import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.hasLExpand
-import com.gallery.core.extensions.statusBarColorExpand
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig
 import com.gallery.ui.wechat.WeChatPrevArgs

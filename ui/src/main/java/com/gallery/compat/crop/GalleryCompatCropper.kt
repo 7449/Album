@@ -51,4 +51,5 @@ class GalleryCompatCropper(private val activity: Activity, private val galleryUi
         activity.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
         activity.finish()
     }
+
 }

@@ -1,6 +1,5 @@
 package com.gallery.ui.activity
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -11,13 +10,12 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.gallery.compat.activity.PrevCompatActivity
-import com.gallery.compat.activity.prevFragment
+import com.gallery.compat.extensions.prevFragment
 import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawableExpand
-import com.gallery.core.extensions.hasLExpand
 import com.gallery.ui.R
 import com.gallery.ui.databinding.GalleryActivityPreviewBinding
 
@@ -32,20 +30,16 @@ open class PreActivity : PrevCompatActivity() {
     override val galleryFragmentId: Int
         get() = R.id.preFragment
 
-    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
         window.statusBarColorExpand(uiConfig.statusBarColor)
-        if (hasLExpand()) {
-            window.statusBarColor = uiConfig.statusBarColor
-        }
         viewBinding.preToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
         val drawable = drawableExpand(uiConfig.toolbarIcon)
         drawable?.colorFilter = PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.preToolbar.navigationIcon = drawable
         viewBinding.preToolbar.setBackgroundColor(uiConfig.toolbarBackground)
-        if (hasLExpand()) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             viewBinding.preToolbar.elevation = uiConfig.toolbarElevation
         }
 

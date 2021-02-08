@@ -1,6 +1,5 @@
 package com.gallery.ui.activity
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -11,8 +10,8 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.activity.GalleryCompatActivity
-import com.gallery.compat.activity.galleryFragment
 import com.gallery.compat.crop.GalleryCompatCropper
+import com.gallery.compat.extensions.galleryFragment
 import com.gallery.compat.extensions.minimumDrawableExpand
 import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
@@ -21,7 +20,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawableExpand
-import com.gallery.core.extensions.hasLExpand
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.scan.extensions.isScanAllExpand
@@ -30,12 +28,15 @@ import com.gallery.ui.R
 import com.gallery.ui.databinding.GalleryActivityGalleryBinding
 import com.gallery.ui.finder.PopupFinderAdapter
 
-open class GalleryActivity : GalleryCompatActivity(),
-        View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
+open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
 
     private val viewBinding: GalleryActivityGalleryBinding by lazy { GalleryActivityGalleryBinding.inflate(layoutInflater) }
 
-    override val galleryFinderAdapter: GalleryFinderAdapter by lazy { PopupFinderAdapter() }
+    override val galleryFinderAdapter: GalleryFinderAdapter by lazy {
+        PopupFinderAdapter(
+                this@GalleryActivity, viewBinding.galleryFinderAll, uiConfig, this@GalleryActivity
+        )
+    }
 
     override val cropImpl: ICrop?
         get() = GalleryCompatCropper(this, uiConfig)
@@ -46,21 +47,18 @@ open class GalleryActivity : GalleryCompatActivity(),
     override val galleryFragmentId: Int
         get() = R.id.galleryFrame
 
-    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
+
         window.statusBarColorExpand(uiConfig.statusBarColor)
-        if (hasLExpand()) {
-            window.statusBarColor = uiConfig.statusBarColor
-        }
         viewBinding.galleryToolbar.title = uiConfig.toolbarText
         viewBinding.galleryToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
         val drawable = drawableExpand(uiConfig.toolbarIcon)
         drawable?.colorFilter = PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.galleryToolbar.navigationIcon = drawable
         viewBinding.galleryToolbar.setBackgroundColor(uiConfig.toolbarBackground)
-        if (hasLExpand()) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             viewBinding.galleryToolbar.elevation = uiConfig.toolbarElevation
         }
 
@@ -78,8 +76,7 @@ open class GalleryActivity : GalleryCompatActivity(),
 
         viewBinding.galleryBottomView.setBackgroundColor(uiConfig.bottomViewBackground)
 
-        galleryFinderAdapter.adapterInit(this, uiConfig, viewBinding.galleryFinderAll)
-        galleryFinderAdapter.setOnAdapterFinderListener(this)
+        galleryFinderAdapter.finderInit()
         viewBinding.galleryPre.setOnClickListener(this)
         viewBinding.gallerySelect.setOnClickListener(this)
         viewBinding.galleryFinderAll.setOnClickListener(this)

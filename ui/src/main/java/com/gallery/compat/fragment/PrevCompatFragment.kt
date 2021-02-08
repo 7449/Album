@@ -5,8 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.gallery.core.PrevArgs
 import com.gallery.core.PrevArgs.Companion.putPrevArgs
-import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
@@ -15,7 +13,6 @@ import com.gallery.ui.R
 open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
 
     companion object {
-        @JvmStatic
         fun newInstance(prevArgs: PrevArgs): PrevCompatFragment {
             val prevFragment = PrevCompatFragment()
             prevFragment.arguments = prevArgs.putPrevArgs()
@@ -23,21 +20,10 @@ open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview)
         }
     }
 
-    val delegate: IPrevDelegate by lazy { createDelegate() }
+    private val delegate: IPrevDelegate by lazy { createDelegate() }
 
     open fun createDelegate(): IPrevDelegate {
-        return PrevDelegateImpl(this,
-                when {
-                    parentFragment is IGalleryPrevCallback -> parentFragment as IGalleryPrevCallback
-                    activity is IGalleryPrevCallback -> activity as IGalleryPrevCallback
-                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryPrevCallback")
-                },
-                when {
-                    parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
-                    activity is IGalleryImageLoader -> activity as IGalleryImageLoader
-                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
-                }
-        )
+        return PrevDelegateImpl(this, galleryCallback(), galleryCallback())
     }
 
     val currentItem: ScanEntity
@@ -102,4 +88,5 @@ open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview)
         delegate.onDestroy()
         super.onDestroyView()
     }
+
 }

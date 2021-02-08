@@ -10,6 +10,7 @@ import com.gallery.compat.GalleryUiBundle
 import com.gallery.compat.UIPrevArgs
 import com.gallery.compat.UIPrevArgs.Companion.putPrevArgs
 import com.gallery.compat.UIPrevArgs.Companion.uiPrevArgs
+import com.gallery.compat.extensions.prevFragment
 import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.compat.fragment.addFragmentExpand
 import com.gallery.compat.fragment.showFragmentExpand

@@ -18,6 +18,7 @@ import com.gallery.compat.*
 import com.gallery.compat.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
 import com.gallery.compat.UIGallerySaveArgs.Companion.putArgs
 import com.gallery.compat.UIGallerySaveArgs.Companion.uiGallerySaveArgs
+import com.gallery.compat.extensions.galleryFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.compat.finder.updateResultFinder
@@ -102,7 +103,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
 
-    /** 初始化布局，重写时需注意super */
+    /** 初始化布局，子类重写时需注意super */
     override fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
         fragment.view?.setBackgroundColor(uiConfig.galleryRootBackground)
         recyclerView.setHasFixedSize(true)
@@ -121,7 +122,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         finderList.updateResultFinder(scanEntity, galleryConfig.scanSort == Sort.DESC)
     }
 
-    /** 数据扫描成功之后刷新文件夹数据  该方法重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
+    /** 数据扫描成功之后刷新文件夹数据  该方法子类重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         if (galleryFragment.isScanAll) {
             finderList.clear()

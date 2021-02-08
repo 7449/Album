@@ -4,31 +4,45 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
-import android.view.View
+import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
 import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.gallery.compat.fragment.GalleryCompatFragment
+import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.core.extensions.drawableExpand
-import com.gallery.core.extensions.hasMExpand
-import com.gallery.core.extensions.isLightColorExpand
+
+/** [GalleryCompatFragment] */
+val AppCompatActivity.galleryFragment: GalleryCompatFragment get() = supportFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName) as GalleryCompatFragment
+
+/** [PrevCompatFragment] */
+val AppCompatActivity.prevFragment: PrevCompatFragment get() = supportFragmentManager.findFragmentByTag(PrevCompatFragment::class.java.simpleName) as PrevCompatFragment
 
 /** 设置状态栏颜色 */
 fun Window.statusBarColorExpand(@ColorInt color: Int) {
-    if (hasMExpand()) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         statusBarColor = color
-        if (color.isLightColorExpand()) {
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
     }
 }
 
+fun Bundle?.getBooleanExpand(key: String): Boolean = getObjExpand(key) { false }
+
+inline fun <reified T : Parcelable> Bundle?.getParcelableExpand(key: String): T = getParcelableOrDefault(key)
+
+inline fun <reified T : Parcelable> Bundle?.getParcelableArrayListExpand(key: String): ArrayList<T> = getObjExpand(key) { arrayListOf() }
+
+inline fun <reified T : Parcelable> Bundle?.getParcelableOrDefault(key: String, defaultValue: Parcelable = this?.getParcelable<T>(key)!!): T = getObjExpand(key) { defaultValue as T }
+
+inline fun <reified T> Bundle?.getObjExpand(key: String, action: () -> T): T = this?.get(key) as? T
+        ?: action.invoke()
+
 /** 获取颜色 */
 fun Int.colorExpand(activity: Context): Int = activity.colorExpand(this)
-
 
 /** 获取颜色 */
 fun Context.colorExpand(@ColorRes id: Int): Int = ContextCompat.getColor(this, id)

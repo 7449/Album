@@ -7,10 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
 import com.gallery.core.ScanArgs
-import com.gallery.core.callback.IGalleryCallback
-import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
-import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
@@ -22,7 +19,6 @@ import com.gallery.ui.R
 open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
 
     companion object {
-        @JvmStatic
         fun newInstance(galleryBundle: GalleryBundle): GalleryCompatFragment {
             val scanFragment = GalleryCompatFragment()
             scanFragment.arguments = galleryBundle.putGalleryArgs()
@@ -30,31 +26,15 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
         }
     }
 
-    val delegate: IScanDelegate by lazy { createDelegate() }
+    private val delegate: IScanDelegate by lazy { createDelegate() }
 
     open fun createDelegate(): IScanDelegate {
         return ScanDelegateImpl(
                 this,
-                when {
-                    parentFragment is ICrop -> (parentFragment as ICrop).cropImpl
-                    activity is ICrop -> (activity as ICrop).cropImpl
-                    else -> null
-                },
-                when {
-                    parentFragment is IGalleryCallback -> parentFragment as IGalleryCallback
-                    activity is IGalleryCallback -> activity as IGalleryCallback
-                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryCallback")
-                },
-                when {
-                    parentFragment is IGalleryInterceptor -> parentFragment as IGalleryInterceptor
-                    activity is IGalleryInterceptor -> activity as IGalleryInterceptor
-                    else -> object : IGalleryInterceptor {}
-                },
-                when {
-                    parentFragment is IGalleryImageLoader -> parentFragment as IGalleryImageLoader
-                    activity is IGalleryImageLoader -> activity as IGalleryImageLoader
-                    else -> throw IllegalArgumentException(context.toString() + " must implement IGalleryImageLoader")
-                }
+                galleryCallbackOrNull(),
+                galleryCallback(),
+                galleryCallbackOrNewInstance { object : IGalleryInterceptor {} },
+                galleryCallback()
         )
     }
 

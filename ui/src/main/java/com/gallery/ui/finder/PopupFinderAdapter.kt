@@ -8,28 +8,46 @@ import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.ListPopupWindow
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.gallery.compat.GalleryUiBundle
-import com.gallery.compat.finder.BaseFinderAdapter
+import com.gallery.compat.activity.GalleryCompatActivity
+import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.databinding.GalleryItemFinderBinding
 
-class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener {
+class PopupFinderAdapter(
+        private val activity: GalleryCompatActivity,
+        private val viewAnchor: View,
+        private val uiBundle: GalleryUiBundle,
+        private val finderListener: GalleryFinderAdapter.AdapterFinderListener
+) : GalleryFinderAdapter, AdapterView.OnItemClickListener {
 
-    private val popupWindow: ListPopupWindow by lazy {
-        ListPopupWindow(activity).apply {
-            this.anchorView = viewAnchor
-            this.width = uiBundle.listPopupWidth
-            this.horizontalOffset = uiBundle.listPopupHorizontalOffset
-            this.verticalOffset = uiBundle.listPopupVerticalOffset
-            this.isModal = true
-            this.setOnItemClickListener(this@PopupFinderAdapter)
-            this.setAdapter(finderAdapter)
-        }
+    private val finderAdapter: FinderAdapter = FinderAdapter(uiBundle) { finderEntity, container ->
+        finderListener.onGalleryFinderThumbnails(finderEntity, container)
     }
-    private val finderAdapter: FinderAdapter by lazy {
-        FinderAdapter(uiBundle) { finderEntity, container ->
-            listener.onGalleryFinderThumbnails(finderEntity, container)
-        }
+    private val popupWindow: ListPopupWindow = ListPopupWindow(activity).apply {
+        this.anchorView = viewAnchor
+        this.width = uiBundle.listPopupWidth
+        this.horizontalOffset = uiBundle.listPopupHorizontalOffset
+        this.verticalOffset = uiBundle.listPopupVerticalOffset
+        this.isModal = true
+        this.setOnItemClickListener(this@PopupFinderAdapter)
+        this.setAdapter(finderAdapter)
+    }
+
+    init {
+        activity.lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                if (source.lifecycle.currentState == Lifecycle.State.DESTROYED) {
+                    activity.lifecycle.removeObserver(this)
+                    if (popupWindow.isShowing) {
+                        popupWindow.dismiss()
+                    }
+                }
+            }
+        })
     }
 
     override fun show() {
@@ -46,7 +64,7 @@ class PopupFinderAdapter : BaseFinderAdapter(), AdapterView.OnItemClickListener 
     }
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        listener.onGalleryAdapterItemClick(view, position, finderAdapter.getItem(position))
+        finderListener.onGalleryAdapterItemClick(view, position, finderAdapter.getItem(position))
     }
 
     private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit) : BaseAdapter() {

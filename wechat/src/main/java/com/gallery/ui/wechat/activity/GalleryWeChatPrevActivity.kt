@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.compat.activity.PrevCompatActivity
-import com.gallery.compat.activity.prevFragment
+import com.gallery.compat.extensions.prevFragment
 import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.GalleryBundle

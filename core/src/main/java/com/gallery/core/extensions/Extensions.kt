@@ -5,19 +5,22 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.impl.file.FileScanEntity
 import java.io.File
 
-/** 是否为亮色 */
-fun Int.isLightColorExpand(): Boolean = ColorUtils.calculateLuminance(this) >= 0.5
+/** 是否高于等于Q */
+fun hasQExpand(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
+/** 是否高于等于L_MR1 */
+fun hasLExpand(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
 
 /** 获取安全Bundle */
 fun Bundle?.orEmptyExpand(): Bundle = this ?: Bundle.EMPTY
@@ -26,9 +29,7 @@ fun Bundle?.orEmptyExpand(): Bundle = this ?: Bundle.EMPTY
 fun Context.drawableExpand(@DrawableRes id: Int): Drawable? = ContextCompat.getDrawable(this, id)
 
 /** 获取计算的Item宽高 */
-fun Activity.squareExpand(count: Int): Int {
-    return resources.displayMetrics.widthPixels / count
-}
+fun Activity.squareExpand(count: Int): Int = resources.displayMetrics.widthPixels / count
 
 /** 安全Toast(过滤空数据) */
 fun String?.safeToastExpand(context: Context?) {

@@ -13,7 +13,6 @@ android {
     compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.core") }
 }
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 //    api(project(":scan"))
     api(Dep.scan)
     compileOnly(Dep.appcompat)

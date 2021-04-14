@@ -9,23 +9,17 @@ import com.gallery.core.delegate.IScanDelegate
  * [IScanDelegate] 拦截器
  */
 interface IGalleryInterceptor {
-
     /**
      * 自定义相机
      *
      * true 自定义相机，否则打开系统相机
-     *
-     * 简单示例
      *
      * [uri]返回预创建Uri,如果自定义相机这里需要处理两种情况
      *
      * [FragmentActivity.RESULT_OK]
      * [FragmentActivity.RESULT_CANCELED]
      *
-     * [uri]的格式一直都是
-     *
-     * content://media/external/images/media/id
-     *
+     * [uri]的格式一直都是`content://media/external/images/media/id`
      * [uri]只是插入了路径,没有插入其他数据
      *
      * 这里的resultCode可自定义,但是回调自行调用
@@ -34,7 +28,7 @@ interface IGalleryInterceptor {
      *
      * 这里需要注意的是[IScanDelegate.cameraSuccess]不需要任何参数,只需要拍照成功之后
      * 手动调用刷新图库即可，因此自定义返回的[Uri]则在自定义相机的时候非常重要,需要传递过去之后
-     * 把拍照的数据写入到这个[uri]中
+     * 把拍照的数据写入到[uri]中
      *
      * class CustomCameraActivity : GalleryActivity() {
      *

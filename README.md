@@ -1,21 +1,19 @@
 ## version
 
-core:![](https://api.bintray.com/packages/ydevelop/maven/gallery.core/images/download.svg)
-
-ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/download.svg)
-
 #### Manifests.xml
 
         <activity
-            android:name="com.gallery.ui.page.GalleryActivity"
+            android:name="com.gallery.ui.activity.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.gallery.ui.page.PreActivity"
+            android:name="com.gallery.ui.activity.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
             
 #### dependencies
 
-    implementation 'com.ydevelop:gallery.ui:0.1.5'
+    implementation 'com.github.7449.Album:ui:1.0.0'
+    implementation 'com.github.7449.Album:core:1.0.0'
+    implementation 'com.github.7449.Album:scan:1.0.0'
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
@@ -46,11 +44,11 @@ ui:![](https://api.bintray.com/packages/ydevelop/maven/gallery.ui/images/downloa
 
   [ICrop](./core/src/main/java/com/gallery/core/crop/ICrop.kt)
   
-  [UCropImpl](./app/src/main/java/com/gallery/sample/crop/UCropImpl.kt)
+  [UCropImpl](./sample/src/main/java/com/gallery/sample/crop/UCropImpl.kt)
 
 #### custom camera
 
-  [CameraActivity](./app/src/main/java/com/gallery/sample/camera/CameraActivity.kt)
+  [CameraActivity](./sample/src/main/java/com/gallery/sample/camera/CameraActivity.kt)
 
 ## Screenshot
 

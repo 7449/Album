@@ -3,6 +3,7 @@ object Plugin {
     const val library = "com.android.library"
     const val kotlin_android = "android"
     const val kotlin_parcelize = "kotlin-parcelize"
+    const val maven = "com.github.dcendents.android-maven"
 }
 
 object Version {
@@ -16,7 +17,7 @@ object Version {
 
 object ClassPath {
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32"
-    const val bintray = "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
+    const val maven = "com.github.dcendents:android-maven-gradle-plugin:2.1"
     const val gradle = "com.android.tools.build:gradle:4.1.3"
 }
 

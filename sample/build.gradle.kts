@@ -16,7 +16,10 @@ android {
     buildFeatures.viewBinding = true
 }
 dependencies {
-    api(project(":wechat"))
+    implementation(project(":wechat"))
+    implementation(project(":ui"))
+    implementation(project(":core"))
+    implementation(project(":scan"))
 
     implementation(Dep.glide)
     implementation(Dep.material)

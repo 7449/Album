@@ -1,9 +1,9 @@
 plugins {
     id(Plugin.library)
+    id(Plugin.maven)
     kotlin(Plugin.kotlin_android)
     id(Plugin.kotlin_parcelize)
 }
-apply(from = "../gradle/UPLOAD.gradle")
 android {
     compileSdkVersion(Version.compileSdk)
     defaultConfig {
@@ -11,19 +11,24 @@ android {
         targetSdkVersion(Version.targetSdk)
     }
     buildFeatures.viewBinding = true
-    compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.ui") }
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-module-name",
+            "com.github.7449.album.ui"
+        )
+    }
 }
 dependencies {
-    api(project(":core"))
-//    api(Dep.core)
+    compileOnly(project(":core"))
+    compileOnly(project(":scan"))
 
-    compileOnly(Dep.glide)
-    compileOnly(Dep.cropper)
+    implementation(Dep.glide)
+    implementation(Dep.cropper)
 
     /* 和 core library 依赖保持一致 */
-    compileOnly(Dep.appcompat)
-    compileOnly(Dep.fragment)
-    compileOnly(Dep.viewPager2)
-    compileOnly(Dep.recyclerView)
-    compileOnly(Dep.kotlin)
+    implementation(Dep.appcompat)
+    implementation(Dep.fragment)
+    implementation(Dep.viewPager2)
+    implementation(Dep.recyclerView)
+    implementation(Dep.kotlin)
 }

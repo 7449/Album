@@ -12,14 +12,16 @@ android {
     buildFeatures.viewBinding = true
 }
 dependencies {
-    api(project(":ui"))
-//    api(Dep.ui)
-    compileOnly(Dep.glide)
+    compileOnly(project(":ui"))
+    compileOnly(project(":scan"))
+    compileOnly(project(":core"))
+
+    implementation(Dep.glide)
 
     /* 和 ui library 依赖保持一致 */
-    compileOnly(Dep.appcompat)
-    compileOnly(Dep.fragment)
-    compileOnly(Dep.viewPager2)
-    compileOnly(Dep.recyclerView)
-    compileOnly(Dep.kotlin)
+    implementation(Dep.appcompat)
+    implementation(Dep.fragment)
+    implementation(Dep.viewPager2)
+    implementation(Dep.recyclerView)
+    implementation(Dep.kotlin)
 }

@@ -1,23 +1,27 @@
 plugins {
     id(Plugin.library)
+    id(Plugin.maven)
     kotlin(Plugin.kotlin_android)
     id(Plugin.kotlin_parcelize)
 }
-apply(from = "../gradle/UPLOAD.gradle")
 android {
     compileSdkVersion(Version.compileSdk)
     defaultConfig {
         minSdkVersion(Version.minSdk)
         targetSdkVersion(Version.targetSdk)
     }
-    compileOptions { kotlinOptions.freeCompilerArgs += listOf("-module-name", "com.ydevelop.gallery.core") }
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-module-name",
+            "com.github.7449.album.core"
+        )
+    }
 }
 dependencies {
-//    api(project(":scan"))
-    api(Dep.scan)
-    compileOnly(Dep.appcompat)
-    compileOnly(Dep.fragment)
-    compileOnly(Dep.viewPager2)
-    compileOnly(Dep.recyclerView)
-    compileOnly(Dep.kotlin)
+    compileOnly(project(":scan"))
+    implementation(Dep.appcompat)
+    implementation(Dep.fragment)
+    implementation(Dep.viewPager2)
+    implementation(Dep.recyclerView)
+    implementation(Dep.kotlin)
 }

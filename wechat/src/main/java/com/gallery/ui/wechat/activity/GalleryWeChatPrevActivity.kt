@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.extensions.prevFragment
-import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.IPrevDelegate
@@ -89,7 +88,6 @@ class GalleryWeChatPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        window.statusBarColorExpand(uiConfig.statusBarColor)
         window.statusBarColor = uiConfig.statusBarColor
         viewBinding.prevWeChatToolbar.setBackgroundColor(uiConfig.toolbarBackground)
 

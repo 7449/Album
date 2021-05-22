@@ -18,7 +18,7 @@ import com.theartofdev.edmodo.cropper.CropImageOptions
 
 class GalleryCompatCropper(
     private val activity: Activity,
-    private val galleryUiBundle: GalleryUiBundle
+    private val uiBundle: GalleryUiBundle
 ) : ICrop {
 
     private var cropUri: Uri? = null
@@ -34,10 +34,9 @@ class GalleryCompatCropper(
                     delegate,
                     uri
                 )
-            }
-                ?: cropUri?.deleteExpand(activity)
-            Activity.RESULT_CANCELED -> cropUri?.deleteExpand(activity)
-            CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> cropUri?.deleteExpand(activity)
+            } ?: cropUri?.deleteExpand(activity)
+            Activity.RESULT_CANCELED, CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE
+            -> cropUri?.deleteExpand(activity)
         }
     }
 
@@ -47,7 +46,7 @@ class GalleryCompatCropper(
         val bundle = Bundle()
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
-            val args = galleryUiBundle.args
+            val args = uiBundle.args
             args.classLoader = CropImageOptions::class.java.classLoader
             args.getParcelable<CropImageOptions>(GalleryConfig.CROP_ARGS)
         }.getOrElse { CropImageOptions() } ?: CropImageOptions())

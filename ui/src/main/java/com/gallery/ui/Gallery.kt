@@ -12,25 +12,31 @@ import com.gallery.core.GalleryBundle
 import com.gallery.ui.activity.GalleryActivity
 
 class Gallery(
-        activity: FragmentActivity? = null,
-        fragment: Fragment? = null,
-        private val galleryLauncher: ActivityResultLauncher<Intent>,
-        private val uiGalleryArgs: UIGalleryArgs,
-        private val clz: Class<*> = GalleryActivity::class.java,
+    activity: FragmentActivity? = null,
+    fragment: Fragment? = null,
+    private val galleryLauncher: ActivityResultLauncher<Intent>,
+    private val uiGalleryArgs: UIGalleryArgs,
+    private val clz: Class<*> = GalleryActivity::class.java,
 ) {
 
     companion object {
         fun newInstance(
-                activity: FragmentActivity? = null,
-                fragment: Fragment? = null,
-                galleryLauncher: ActivityResultLauncher<Intent>,
-                galleryBundle: GalleryBundle = GalleryBundle(),
-                galleryUiBundle: GalleryUiBundle = GalleryUiBundle(),
-                galleryOption: Bundle = Bundle.EMPTY,
-                galleryPrevOption: Bundle = Bundle.EMPTY,
-                clz: Class<*> = GalleryActivity::class.java,
+            activity: FragmentActivity? = null,
+            fragment: Fragment? = null,
+            galleryLauncher: ActivityResultLauncher<Intent>,
+            galleryBundle: GalleryBundle = GalleryBundle(),
+            galleryUiBundle: GalleryUiBundle = GalleryUiBundle(),
+            galleryOption: Bundle = Bundle.EMPTY,
+            galleryPrevOption: Bundle = Bundle.EMPTY,
+            clz: Class<*> = GalleryActivity::class.java,
         ): Gallery {
-            return Gallery(activity, fragment, galleryLauncher, UIGalleryArgs(galleryBundle, galleryUiBundle, galleryOption, galleryPrevOption), clz)
+            return Gallery(
+                activity,
+                fragment,
+                galleryLauncher,
+                UIGalleryArgs(galleryBundle, galleryUiBundle, galleryOption, galleryPrevOption),
+                clz
+            )
         }
     }
 

@@ -6,7 +6,6 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -28,11 +27,6 @@ val AppCompatActivity.prevFragment: PrevCompatFragment
         PrevCompatFragment::class.java.simpleName
     ) as PrevCompatFragment
 
-/** 设置状态栏颜色 */
-fun Window.statusBarColorExpand(@ColorInt color: Int) {
-    statusBarColor = color
-}
-
 fun Bundle?.getBooleanExpand(key: String): Boolean = getObjExpand(key) { false }
 
 inline fun <reified T : Parcelable> Bundle?.getParcelableExpand(key: String): T =
@@ -43,9 +37,8 @@ inline fun <reified T : Parcelable> Bundle?.getParcelableArrayListExpand(key: St
 
 inline fun <reified T : Parcelable> Bundle?.getParcelableOrDefault(
     key: String,
-    defaultValue: Parcelable = this?.getParcelable<T>(
-        key
-    )!!
+    defaultValue: Parcelable
+    = this?.getParcelable<T>(key)!!
 ): T = getObjExpand(key) { defaultValue as T }
 
 inline fun <reified T> Bundle?.getObjExpand(key: String, action: () -> T): T = this?.get(key) as? T

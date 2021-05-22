@@ -171,7 +171,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
                 uiConfig,
                 PrevArgs(
                     parentId,
-                    galleryFragment.selectEntities,
+                    galleryFragment.selectItem,
                     galleryConfig,
                     position,
                     scanAlone
@@ -244,4 +244,5 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         container: FrameLayout,
         checkBox: TextView
     )
+
 }

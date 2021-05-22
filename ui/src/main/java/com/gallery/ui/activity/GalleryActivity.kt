@@ -13,7 +13,6 @@ import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.crop.GalleryCompatCropper
 import com.gallery.compat.extensions.galleryFragment
 import com.gallery.compat.extensions.minimumDrawableExpand
-import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
@@ -22,8 +21,8 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawableExpand
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
-import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.Types
+import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.ui.R
 import com.gallery.ui.databinding.GalleryActivityGalleryBinding
 import com.gallery.ui.finder.PopupFinderAdapter
@@ -55,8 +54,7 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-
-        window.statusBarColorExpand(uiConfig.statusBarColor)
+        window.statusBarColor = uiConfig.statusBarColor
         viewBinding.galleryToolbar.title = uiConfig.toolbarText
         viewBinding.galleryToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
         val drawable = drawableExpand(uiConfig.toolbarIcon)
@@ -104,18 +102,18 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     override fun onClick(v: View) {
         when (v.id) {
             R.id.galleryPre -> {
-                if (galleryFragment.selectEmpty) {
+                if (galleryFragment.isSelectEmpty) {
                     onGalleryPreEmpty()
                     return
                 }
                 onStartPrevPage(Types.Scan.SCAN_NONE, 0, PreActivity::class.java)
             }
             R.id.gallerySelect -> {
-                if (galleryFragment.selectEmpty) {
+                if (galleryFragment.isSelectEmpty) {
                     onGalleryOkEmpty()
                     return
                 }
-                onGalleryResources(galleryFragment.selectEntities)
+                onGalleryResources(galleryFragment.selectItem)
             }
             R.id.galleryFinderAll -> {
                 if (finderList.isEmpty()) {
@@ -196,4 +194,5 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     open fun onGalleryFinderEmpty() {
         getString(R.string.gallery_finder_empty).safeToastExpand(this)
     }
+
 }

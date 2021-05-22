@@ -18,10 +18,10 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.databinding.GalleryItemFinderBinding
 
 class PopupFinderAdapter(
-        private val activity: GalleryCompatActivity,
-        private val viewAnchor: View,
-        private val uiBundle: GalleryUiBundle,
-        private val finderListener: GalleryFinderAdapter.AdapterFinderListener
+    private val activity: GalleryCompatActivity,
+    private val viewAnchor: View,
+    private val uiBundle: GalleryUiBundle,
+    private val finderListener: GalleryFinderAdapter.AdapterFinderListener
 ) : GalleryFinderAdapter, AdapterView.OnItemClickListener {
 
     private val finderAdapter: FinderAdapter = FinderAdapter(uiBundle) { finderEntity, container ->
@@ -67,16 +67,23 @@ class PopupFinderAdapter(
         finderListener.onGalleryAdapterItemClick(view, position, finderAdapter.getItem(position))
     }
 
-    private class FinderAdapter(private val galleryUiBundle: GalleryUiBundle, private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit) : BaseAdapter() {
+    private class FinderAdapter(
+        private val galleryUiBundle: GalleryUiBundle,
+        private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit
+    ) : BaseAdapter() {
 
         private val list: ArrayList<ScanEntity> = arrayListOf()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val finderEntity: ScanEntity = getItem(position)
             val rootView: View = convertView
-                    ?: GalleryItemFinderBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
-                        this.root.tag = ViewHolder(this)
-                    }.root
+                ?: GalleryItemFinderBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                ).apply {
+                    this.root.tag = ViewHolder(this)
+                }.root
             val viewHolder: ViewHolder = rootView.tag as ViewHolder
             viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
             viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)

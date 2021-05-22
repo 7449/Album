@@ -16,7 +16,6 @@ import com.gallery.compat.GalleryConfig
 import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.extensions.galleryFragment
 import com.gallery.compat.extensions.getBooleanExpand
-import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.core.GalleryBundle
@@ -75,7 +74,6 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        window.statusBarColorExpand(uiConfig.statusBarColor)
         window.statusBarColor = uiConfig.statusBarColor
         viewBinding.galleryWeChatToolbar.setBackgroundColor(uiConfig.toolbarBackground)
 
@@ -125,7 +123,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
                 cla = GalleryWeChatPrevActivity::class.java
             )
         }
-        viewBinding.galleryWeChatToolbarSend.setOnClickListener { onGalleryResources(galleryFragment.selectEntities) }
+        viewBinding.galleryWeChatToolbarSend.setOnClickListener { onGalleryResources(galleryFragment.selectItem) }
         viewBinding.galleryWeChatToolbarFinder.setOnClickListener {
             if (finderList.isNullOrEmpty()) {
                 onGalleryFinderEmpty()
@@ -187,8 +185,8 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
                 } else {
                     viewBinding.galleryWeChatTime.showExpand()
                 }
-                if (currentFragment.currentEntities.isNotEmpty()) {
-                    currentFragment.currentEntities[if (position < 0) 0 else position].let {
+                if (currentFragment.allItem.isNotEmpty()) {
+                    currentFragment.allItem[if (position < 0) 0 else position].let {
                         viewBinding.galleryWeChatTime.text = it.dateModified.formatTime()
                     }
                 }
@@ -275,7 +273,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         container.displayGalleryWeChat(
             width,
             height,
-            galleryFragment.selectEntities,
+            galleryFragment.selectItem,
             scanEntity,
             checkBox
         )
@@ -322,7 +320,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
      */
     override fun onChangedItem(position: Int, scanEntity: ScanEntity) {
         val fragment = galleryFragment
-        val selectEntities = fragment.selectEntities
+        val selectEntities = fragment.selectItem
         if (scanEntity.isVideo && scanEntity.duration > videoDuration) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
@@ -338,7 +336,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         if (scanEntity.isSelected) {
             return
         }
-        fragment.currentEntities.mapIndexedNotNull { index, item -> if (item.isSelected) index else null }
+        fragment.allItem.mapIndexedNotNull { index, item -> if (item.isSelected) index else null }
             .forEach {
                 fragment.notifyItemChanged(it)
             }
@@ -348,12 +346,12 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     @SuppressLint("SetTextI18n")
     private fun updateView() {
         val fragment = galleryFragment
-        viewBinding.galleryWeChatToolbarSend.isEnabled = !fragment.selectEmpty
-        viewBinding.galleryWeChatPrev.isEnabled = !fragment.selectEmpty
+        viewBinding.galleryWeChatToolbarSend.isEnabled = !fragment.isSelectEmpty
+        viewBinding.galleryWeChatPrev.isEnabled = !fragment.isSelectEmpty
         viewBinding.galleryWeChatToolbarSend.text =
-            uiConfig.selectText + if (fragment.selectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
+            uiConfig.selectText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
         viewBinding.galleryWeChatPrev.text =
-            uiConfig.preViewText + if (fragment.selectEmpty) "" else "(${fragment.selectCount})"
+            uiConfig.preViewText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount})"
     }
 
     /** 显示Finder */

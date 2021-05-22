@@ -123,4 +123,5 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
 
     /** 预览图加载，预览页必须实现 */
     abstract override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout)
+
 }

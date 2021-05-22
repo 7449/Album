@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
 import com.gallery.core.callback.IGalleryInterceptor
+import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.args.ScanArgs
 import com.gallery.core.delegate.impl.ScanDelegateImpl
@@ -32,9 +33,9 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
     open fun createDelegate(): IScanDelegate {
         return ScanDelegateImpl(
             this,
-            galleryCallbackOrNull(),
+            galleryCallbackOrNull<ICrop>()?.cropImpl,
             galleryCallback(),
-            galleryCallbackOrNewInstance { object : IGalleryInterceptor {} },
+            galleryCallbackOrNewInstance<IGalleryInterceptor> { object : IGalleryInterceptor {} },
             galleryCallback()
         )
     }
@@ -78,13 +79,13 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
     val rootView: View
         get() = delegate.rootView
 
-    val currentEntities: ArrayList<ScanEntity>
+    val allItem: ArrayList<ScanEntity>
         get() = delegate.allItem
 
-    val selectEntities: ArrayList<ScanEntity>
+    val selectItem: ArrayList<ScanEntity>
         get() = delegate.selectItem
 
-    val selectEmpty: Boolean
+    val isSelectEmpty: Boolean
         get() = delegate.isSelectEmpty
 
     val selectCount: Int

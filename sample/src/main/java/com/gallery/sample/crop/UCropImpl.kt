@@ -18,7 +18,7 @@ import com.gallery.core.extensions.queryDataExpand
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
-open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
+open class UCropImpl(private val uiBundle: GalleryUiBundle) : ICrop {
 
     override fun onCropResult(
         delegate: IScanDelegate,
@@ -39,7 +39,7 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
             .withOptions(
                 UCrop.Options().apply {
                     optionBundle.putAll(
-                        galleryUiBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()
+                        uiBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()
                     )
                 })
             .getIntent(context)

@@ -10,7 +10,6 @@ import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.extensions.prevFragment
-import com.gallery.compat.extensions.statusBarColorExpand
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.IPrevDelegate
@@ -37,16 +36,14 @@ open class PreActivity : PrevCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        window.statusBarColorExpand(uiConfig.statusBarColor)
+        window.statusBarColor = uiConfig.statusBarColor
         viewBinding.preToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
         val drawable = drawableExpand(uiConfig.toolbarIcon)
         drawable?.colorFilter =
             PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.preToolbar.navigationIcon = drawable
         viewBinding.preToolbar.setBackgroundColor(uiConfig.toolbarBackground)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            viewBinding.preToolbar.elevation = uiConfig.toolbarElevation
-        }
+        viewBinding.preToolbar.elevation = uiConfig.toolbarElevation
 
         viewBinding.preCount.textSize = uiConfig.preBottomCountTextSize
         viewBinding.preCount.setTextColor(uiConfig.preBottomCountTextColor)
@@ -111,4 +108,5 @@ open class PreActivity : PrevCompatActivity() {
         viewBinding.preCount.text =
             format.format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
     }
+
 }

@@ -2,7 +2,6 @@ package com.gallery.core.callback
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.gallery.core.GalleryBundle
@@ -19,10 +18,15 @@ interface IGalleryCallback {
      * 为[recyclerView]设置布局管理器
      * 必须实现
      */
-    fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?)
+    fun onGalleryCreated(
+        delegate: IScanDelegate,
+        recyclerView: RecyclerView,
+        bundle: GalleryBundle,
+        savedInstanceState: Bundle?
+    )
 
     /**
-     * 单选非裁剪状态下,点击[Adapter]item返回的那条数据
+     * 单选非裁剪状态下,点击[Adapter]item返回的数据
      * [ScanEntity.delegate]为获取的数据
      */
     fun onGalleryResource(context: Context, scanEntity: ScanEntity) {}
@@ -31,7 +35,7 @@ interface IGalleryCallback {
      * 已达到选择最大数
      * [GalleryBundle.multipleMaxCount]
      */
-    fun onClickCheckBoxMaxCount(context: Context, scanEntity: ScanEntity) {
+    fun onClickItemMaxCount(context: Context, scanEntity: ScanEntity) {
         context.getString(R.string.gallery_check_max).safeToastExpand(context)
     }
 
@@ -57,7 +61,7 @@ interface IGalleryCallback {
      * 点击CheckBox时会触发
      * [PhotoViewHolder.photo]
      */
-    fun onChangedCheckBox(position: Int, scanEntity: ScanEntity) {}
+    fun onChangedItem(position: Int, scanEntity: ScanEntity) {}
 
     /**
      * 刷新预览页数据之后触发
@@ -68,7 +72,14 @@ interface IGalleryCallback {
      * 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法
      * 可以跳转到预览页
      */
-    fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {}
+    fun onPhotoItemClick(
+        context: Context,
+        bundle: GalleryBundle,
+        scanEntity: ScanEntity,
+        position: Int,
+        parentId: Long
+    ) {
+    }
 
     /**
      * 每次扫描之后数据非空触发
@@ -107,8 +118,10 @@ interface IGalleryCallback {
      */
     fun onCameraOpenStatus(context: Context?, status: CameraStatus) {
         when (status) {
-            CameraStatus.ERROR -> context?.getString(R.string.gallery_open_camera_error).safeToastExpand(context)
-            CameraStatus.SUCCESS -> context?.getString(R.string.gallery_open_camera_success).safeToastExpand(context)
+            CameraStatus.ERROR -> context?.getString(R.string.gallery_open_camera_error)
+                .safeToastExpand(context)
+            CameraStatus.SUCCESS -> context?.getString(R.string.gallery_open_camera_success)
+                .safeToastExpand(context)
             CameraStatus.PERMISSION -> {
             }
         }

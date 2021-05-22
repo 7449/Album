@@ -27,12 +27,13 @@ import com.gallery.compat.fragment.addFragmentExpand
 import com.gallery.compat.fragment.showFragmentExpand
 import com.gallery.compat.widget.GalleryDivider
 import com.gallery.core.GalleryBundle
-import com.gallery.core.PrevArgs
-import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.IScanDelegate
+import com.gallery.core.delegate.args.PrevArgs
+import com.gallery.core.delegate.args.ScanArgs.Companion.scanArgs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.scan.Types
@@ -108,17 +109,17 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
 
     /** 初始化布局，子类重写时需注意super */
     override fun onGalleryCreated(
-        fragment: Fragment,
+        delegate: IScanDelegate,
         recyclerView: RecyclerView,
-        galleryBundle: GalleryBundle,
+        bundle: GalleryBundle,
         savedInstanceState: Bundle?
     ) {
-        fragment.view?.setBackgroundColor(uiConfig.galleryRootBackground)
+        delegate.rootView.setBackgroundColor(uiConfig.galleryRootBackground)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = when (uiConfig.layoutManager) {
             LayoutManagerTypes.GRID -> GridLayoutManager(
                 recyclerView.context,
-                galleryBundle.spanCount,
+                bundle.spanCount,
                 uiConfig.orientation,
                 false
             )

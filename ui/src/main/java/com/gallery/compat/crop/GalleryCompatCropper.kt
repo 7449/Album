@@ -1,6 +1,7 @@
 package com.gallery.compat.crop
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,21 +16,33 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
 
-class GalleryCompatCropper(private val activity: Activity, private val galleryUiBundle: GalleryUiBundle) : ICrop {
+class GalleryCompatCropper(
+    private val activity: Activity,
+    private val galleryUiBundle: GalleryUiBundle
+) : ICrop {
 
     private var cropUri: Uri? = null
 
-    override fun onCropResult(delegate: IScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
+    override fun onCropResult(
+        delegate: IScanDelegate,
+        galleryBundle: GalleryBundle,
+        intent: ActivityResult
+    ) {
         when (intent.resultCode) {
-            Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri -> onCropSuccess(delegate, uri) }
-                    ?: cropUri?.deleteExpand(activity)
+            Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri ->
+                onCropSuccess(
+                    delegate,
+                    uri
+                )
+            }
+                ?: cropUri?.deleteExpand(activity)
             Activity.RESULT_CANCELED -> cropUri?.deleteExpand(activity)
             CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> cropUri?.deleteExpand(activity)
         }
     }
 
-    override fun openCrop(delegate: IScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
-        this.cropUri = cropOutPutUri(activity, galleryBundle)
+    override fun openCrop(context: Context, bundle: GalleryBundle, inputUri: Uri): Intent {
+        this.cropUri = cropOutPutUri(activity, bundle)
         val intent = Intent().setClass(activity, CropImageActivity::class.java)
         val bundle = Bundle()
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)

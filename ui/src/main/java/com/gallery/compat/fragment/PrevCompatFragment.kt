@@ -3,14 +3,15 @@ package com.gallery.compat.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.gallery.core.PrevArgs
-import com.gallery.core.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.delegate.IPrevDelegate
+import com.gallery.core.delegate.args.PrevArgs
+import com.gallery.core.delegate.args.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.R
 
-open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview) : Fragment(layoutId) {
+open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview) :
+    Fragment(layoutId) {
 
     companion object {
         fun newInstance(prevArgs: PrevArgs): PrevCompatFragment {
@@ -26,17 +27,20 @@ open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview)
         return PrevDelegateImpl(this, galleryCallback(), galleryCallback())
     }
 
+    val rootView: View
+        get() = delegate.rootView
+
     val currentItem: ScanEntity
         get() = delegate.currentItem
 
     val allItem: ArrayList<ScanEntity>
         get() = delegate.allItem
 
-    val selectEntities: ArrayList<ScanEntity>
-        get() = delegate.selectEntities
+    val selectItem: ArrayList<ScanEntity>
+        get() = delegate.selectItem
 
-    val selectEmpty: Boolean
-        get() = delegate.selectEmpty
+    val isSelectEmpty: Boolean
+        get() = delegate.isSelectEmpty
 
     val selectCount: Int
         get() = delegate.selectCount
@@ -48,11 +52,11 @@ open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview)
         get() = delegate.currentPosition
 
     fun checkBoxClick(checkBox: View) {
-        delegate.checkBoxClick(checkBox)
+        delegate.itemViewClick(checkBox)
     }
 
     fun isCheckBox(position: Int): Boolean {
-        return delegate.isCheckBox(position)
+        return delegate.isSelected(position)
     }
 
     fun setCurrentItem(position: Int) {

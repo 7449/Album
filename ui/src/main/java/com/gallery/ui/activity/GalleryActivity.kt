@@ -170,14 +170,14 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
 
     override fun onPhotoItemClick(
         context: Context,
-        galleryBundle: GalleryBundle,
+        bundle: GalleryBundle,
         scanEntity: ScanEntity,
         position: Int,
         parentId: Long
     ) {
         onStartPrevPage(
             parentId,
-            if (parentId.isScanAllExpand && !galleryBundle.hideCamera) position - 1 else position,
+            if (parentId.isScanAllExpand && !bundle.hideCamera) position - 1 else position,
             PreActivity::class.java
         )
     }

@@ -16,15 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
 import com.gallery.core.R
-import com.gallery.core.ScanArgs
-import com.gallery.core.ScanArgs.Companion.putScanArgs
-import com.gallery.core.ScanArgs.Companion.scanArgs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter
+import com.gallery.core.delegate.args.ScanArgs
+import com.gallery.core.delegate.args.ScanArgs.Companion.putScanArgs
+import com.gallery.core.delegate.args.ScanArgs.Companion.scanArgs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
 import com.gallery.scan.Types
@@ -113,7 +113,7 @@ class ScanDelegateImpl(
     private val galleryBundle: GalleryBundle =
         fragment.arguments.orEmptyExpand().galleryBundleOrDefault
     private val galleryAdapter: GalleryAdapter = GalleryAdapter(
-        activityNotNull.squareExpand(galleryBundle.spanCount),
+        requireActivity.squareExpand(galleryBundle.spanCount),
         galleryBundle,
         galleryCallback,
         galleryImageLoader,
@@ -141,23 +141,22 @@ class ScanDelegateImpl(
             }
         }
 
-    override val activity: FragmentActivity?
-        get() = fragment.activity
-    override val activityNotNull: FragmentActivity
-        get() = fragment.requireActivity()
-    override val currentEntities: ArrayList<ScanEntity>
-        get() = galleryAdapter.currentList.filterTo(ArrayList()) { it.parent != GalleryAdapter.CAMERA }
-    override val selectEntities: ArrayList<ScanEntity>
-        get() = galleryAdapter.currentSelectList
-    override val currentParentId: Long
-        get() = parentId
+    override val rootView: View get() = fragment.view ?: View(fragment.requireActivity())
+    override val activity: FragmentActivity? get() = fragment.activity
+    override val requireActivity: FragmentActivity get() = fragment.requireActivity()
+    override val selectItem: ArrayList<ScanEntity> get() = galleryAdapter.currentSelectList
+    override val currentParentId: Long get() = parentId
+    override val allItem: ArrayList<ScanEntity>
+        get() = galleryAdapter.currentList.filterTo(
+            ArrayList()
+        ) { it.parent != GalleryAdapter.CAMERA }
 
     override fun onUpdateParentId(parentId: Long) {
         this.parentId = parentId
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        ScanArgs.newSaveInstance(parentId, fileUri, selectEntities).putScanArgs(outState)
+        ScanArgs.newSaveInstance(parentId, fileUri, selectItem).putScanArgs(outState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -167,8 +166,8 @@ class ScanDelegateImpl(
             it.selectList
         }
         /* 这里初始化Recyclerview布局管理器,放在 UI Library,core Library 只处理Adapter */
-        galleryCallback.onGalleryCreated(fragment, recyclerView, galleryBundle, savedInstanceState)
-        emptyView.setImageDrawable(activityNotNull.drawableExpand(galleryBundle.photoEmptyDrawable))
+        galleryCallback.onGalleryCreated(this, recyclerView, galleryBundle, savedInstanceState)
+        emptyView.setImageDrawable(requireActivity.drawableExpand(galleryBundle.photoEmptyDrawable))
         emptyView.setOnClickListener { v ->
             if (galleryInterceptor.onEmptyPhotoClick(v)) {
                 cameraOpen()
@@ -197,7 +196,7 @@ class ScanDelegateImpl(
         val toScanEntity = scanEntities.toScanEntity()
         galleryAdapter.addAll(toScanEntity)
         galleryAdapter.updateEntity()
-        galleryCallback.onScanSuccess(currentEntities)
+        galleryCallback.onScanSuccess(allItem)
         scrollToPosition(0)
     }
 
@@ -222,26 +221,32 @@ class ScanDelegateImpl(
     }
 
     override fun onPhotoItemClick(view: View, position: Int, scanEntity: ScanEntity) {
-        if (!scanEntity.uri.isFileExistsExpand(activityNotNull)) {
-            galleryCallback.onClickItemFileNotExist(activityNotNull, scanEntity)
+        if (!scanEntity.uri.isFileExistsExpand(requireActivity)) {
+            galleryCallback.onClickItemFileNotExist(requireActivity, scanEntity)
             return
         }
         if (galleryBundle.isVideoScanExpand) {
-            activityNotNull.openVideoExpand(scanEntity.uri) {
-                galleryCallback.onOpenVideoPlayError(activityNotNull, scanEntity)
+            requireActivity.openVideoExpand(scanEntity.uri) {
+                galleryCallback.onOpenVideoPlayError(requireActivity, scanEntity)
             }
             return
         }
         if (galleryBundle.radio) {
             if (galleryBundle.crop) {
-                cropLauncher.launch(galleryICrop?.openCrop(this, galleryBundle, scanEntity.uri))
+                cropLauncher.launch(
+                    galleryICrop?.openCrop(
+                        requireActivity,
+                        galleryBundle,
+                        scanEntity.uri
+                    )
+                )
             } else {
-                galleryCallback.onGalleryResource(activityNotNull, scanEntity)
+                galleryCallback.onGalleryResource(requireActivity, scanEntity)
             }
             return
         }
         galleryCallback.onPhotoItemClick(
-            activityNotNull,
+            requireActivity,
             galleryBundle,
             scanEntity,
             position,
@@ -264,7 +269,7 @@ class ScanDelegateImpl(
             galleryCallback.onCameraOpenStatus(activity, CameraStatus.PERMISSION)
             return
         }
-        val cameraUriExpand: Uri? = activityNotNull.cameraUriExpand(galleryBundle)
+        val cameraUriExpand: Uri? = requireActivity.cameraUriExpand(galleryBundle)
         cameraUriExpand?.let {
             fileUri = it
         } ?: galleryCallback.onCameraOpenStatus(activity, CameraStatus.ERROR)
@@ -298,14 +303,14 @@ class ScanDelegateImpl(
     }
 
     override fun cameraSuccess() {
-        activityNotNull.scanFileExpand(fileUri) { onScanGallery(parentId, true) }
+        requireActivity.scanFileExpand(fileUri) { onScanGallery(parentId, true) }
         if (galleryBundle.cameraCrop) {
-            cropLauncher.launch(galleryICrop?.openCrop(this, galleryBundle, fileUri))
+            cropLauncher.launch(galleryICrop?.openCrop(requireActivity, galleryBundle, fileUri))
         }
     }
 
     override fun cameraCanceled() {
-        fileUri.deleteExpand(activityNotNull)
+        fileUri.deleteExpand(requireActivity)
         fileUri = Uri.EMPTY
         galleryCallback.onCameraCanceled(activity, galleryBundle)
     }
@@ -345,21 +350,21 @@ class ScanDelegateImpl(
         // 可以直接插入到当前数据,如果不等于,不能插入,因为裁剪之后的图片属于另一个文件夹的数据
         // 文件夹数据更新的时候也需要处理这种情况
         if (isCamera && galleryAdapter.isNotEmpty) {
-            scan.scanSingle(activityNotNull.findIdByUriExpand(fileUri).singleScanExpand())
+            scan.scanSingle(requireActivity.findIdByUriExpand(fileUri).singleScanExpand())
         } else {
             scan.scanMultiple(parent.multipleScanExpand())
         }
     }
 
     override fun onScanResult(uri: Uri) {
-        activityNotNull.scanFileExpand(uri) {
-            scan.scanSingle(activityNotNull.findIdByUriExpand(it).singleScanExpand())
+        requireActivity.scanFileExpand(uri) {
+            scan.scanSingle(requireActivity.findIdByUriExpand(it).singleScanExpand())
         }
     }
 
     override fun onUpdateResult(scanArgs: ScanArgs?) {
         scanArgs ?: return
-        if (!scanArgs.isRefresh || selectEntities == scanArgs.selectList) {
+        if (!scanArgs.isRefresh || selectItem == scanArgs.selectList) {
             return
         }
         galleryAdapter.addSelectAll(scanArgs.selectList)

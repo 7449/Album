@@ -28,20 +28,20 @@ fun Uri.deleteExpand(context: Context) {
     runCatching {
         context.contentResolver.delete(this, null, null)
     }
-            .onSuccess { Log.i("UriUtils", "delete uri success:$this") }
-            .onFailure { Log.e("UriUtils", "delete uri failure:$this") }
+        .onSuccess { Log.i("UriUtils", "delete uri success:$this") }
+        .onFailure { Log.e("UriUtils", "delete uri failure:$this") }
 }
 
 /** 根据Uri查询DATA(文件路径) *已过时 */
-@Suppress("DEPRECATION")
+@Deprecated("@Deprecated MediaStore.MediaColumns.DATA")
 fun ContentResolver.queryDataExpand(uri: Uri): String? =
-        queryExpand(uri, MediaStore.MediaColumns.DATA).use {
-            val cursor = it ?: return null
-            while (cursor.moveToNext()) {
-                return cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-            }
-            return null
+    queryExpand(uri, MediaStore.MediaColumns.DATA).use {
+        val cursor = it ?: return null
+        while (cursor.moveToNext()) {
+            return cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
         }
+        return null
+    }
 
 /** 根据Uri查询Id */
 fun ContentResolver.queryIdExpand(uri: Uri): Long {
@@ -62,12 +62,12 @@ fun ContentResolver.queryIdExpand(uri: Uri): Long {
 
 /** 根据Uri获取Cursor */
 fun ContentResolver.queryExpand(uri: Uri, vararg name: String): Cursor? =
-        query(uri, name, null, null, null)
+    query(uri, name, null, null, null)
 
-/** 获取图片Uri,适配至高版本 */
+/** 获取图片Uri,适配至高版本,Q以上按照[MediaStore.MediaColumns.RELATIVE_PATH]，以下按照[MediaStore.MediaColumns.DATA]  */
 fun Context.insertImageUriExpand(
-        file: File,
-        relativePath: String = Environment.DIRECTORY_DCIM,
+    file: File,
+    relativePath: String = Environment.DIRECTORY_DCIM,
 ): Uri? = insertImageUriExpand(ContentValues().apply {
     if (hasQExpand()) {
         put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
@@ -80,16 +80,16 @@ fun Context.insertImageUriExpand(
 
 /** 获取图片Uri */
 fun Context.insertImageUriExpand(contentValues: ContentValues): Uri? =
-        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        } else {
-            null
-        }
+    if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+        contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+    } else {
+        null
+    }
 
-/** 获取视频Uri,适配至高版本 */
+/** 获取视频Uri,适配至高版本,Q以上按照[MediaStore.MediaColumns.RELATIVE_PATH]，以下按照[MediaStore.MediaColumns.DATA] */
 fun Context.insertVideoUriExpand(
-        file: File,
-        relativePath: String = Environment.DIRECTORY_DCIM,
+    file: File,
+    relativePath: String = Environment.DIRECTORY_DCIM,
 ): Uri? = insertVideoUriExpand(ContentValues().apply {
     if (hasQExpand()) {
         put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
@@ -102,8 +102,8 @@ fun Context.insertVideoUriExpand(
 
 /** 获取视频Uri */
 fun Context.insertVideoUriExpand(contentValues: ContentValues): Uri? =
-        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues)
-        } else {
-            null
-        }
+    if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+        contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues)
+    } else {
+        null
+    }

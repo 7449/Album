@@ -20,11 +20,11 @@ import com.gallery.core.extensions.isFileExistsExpand
 import com.gallery.core.extensions.showExpand
 
 class GalleryAdapter(
-        private val display: Int,
-        private val galleryBundle: GalleryBundle,
-        private val galleryCallback: IGalleryCallback,
-        private val imageLoader: IGalleryImageLoader,
-        private val galleryItemClickListener: OnGalleryItemClickListener,
+    private val display: Int,
+    private val galleryBundle: GalleryBundle,
+    private val galleryCallback: IGalleryCallback,
+    private val imageLoader: IGalleryImageLoader,
+    private val galleryItemClickListener: OnGalleryItemClickListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnGalleryItemClickListener {
@@ -44,13 +44,27 @@ class GalleryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_CAMERA -> {
-                val cameraViewHolder = CameraViewHolder.newInstance(parent, galleryBundle)
-                cameraViewHolder.itemView.setOnClickListener { v -> galleryItemClickListener.onCameraItemClick(v, cameraViewHolder.bindingAdapterPosition, galleryList[cameraViewHolder.bindingAdapterPosition]) }
+                val cameraViewHolder =
+                    CameraViewHolder.newInstance(parent, galleryBundle)
+                cameraViewHolder.itemView.setOnClickListener { v ->
+                    galleryItemClickListener.onCameraItemClick(
+                        v,
+                        cameraViewHolder.bindingAdapterPosition,
+                        galleryList[cameraViewHolder.bindingAdapterPosition]
+                    )
+                }
                 cameraViewHolder
             }
             else -> {
-                val photoViewHolder = PhotoViewHolder.newInstance(parent, galleryBundle, display, galleryCallback)
-                photoViewHolder.itemView.setOnClickListener { v -> galleryItemClickListener.onPhotoItemClick(v, photoViewHolder.bindingAdapterPosition, galleryList[photoViewHolder.bindingAdapterPosition]) }
+                val photoViewHolder =
+                    PhotoViewHolder.newInstance(parent, galleryBundle, display, galleryCallback)
+                photoViewHolder.itemView.setOnClickListener { v ->
+                    galleryItemClickListener.onPhotoItemClick(
+                        v,
+                        photoViewHolder.bindingAdapterPosition,
+                        galleryList[photoViewHolder.bindingAdapterPosition]
+                    )
+                }
                 photoViewHolder
             }
         }
@@ -59,7 +73,12 @@ class GalleryAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CameraViewHolder -> holder.camera()
-            is PhotoViewHolder -> holder.photo(position, galleryList[position], currentSelectList, imageLoader)
+            is PhotoViewHolder -> holder.photo(
+                position,
+                galleryList[position],
+                currentSelectList,
+                imageLoader
+            )
         }
     }
 
@@ -84,7 +103,9 @@ class GalleryAdapter(
 
     fun updateEntity() {
         currentList.forEach { it.isSelected = false }
-        currentSelectList.forEach { select -> currentList.find { it.id == select.id }?.isSelected = true }
+        currentSelectList.forEach { select ->
+            currentList.find { it.id == select.id }?.isSelected = true
+        }
         notifyDataSetChanged()
     }
 
@@ -110,37 +131,53 @@ class GalleryAdapter(
         get() = galleryList
 
     class CameraViewHolder(
-            private val rootView: FrameLayout,
-            private val galleryImageCamera: AppCompatImageView,
-            private val galleryImageCameraTv: AppCompatTextView,
-            private val galleryBundle: GalleryBundle
+        private val rootView: FrameLayout,
+        private val galleryImageCamera: AppCompatImageView,
+        private val galleryImageCameraTv: AppCompatTextView,
+        private val galleryBundle: GalleryBundle
     ) : RecyclerView.ViewHolder(rootView) {
 
         companion object {
             fun newInstance(parent: ViewGroup, galleryBundle: GalleryBundle): CameraViewHolder {
                 val rootView = FrameLayout(parent.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
                 }
                 val galleryImageCamera = AppCompatImageView(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
                         this.gravity = Gravity.CENTER
                     }
                 }
                 val galleryImageCameraTv = AppCompatTextView(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
                         this.gravity = Gravity.CENTER or Gravity.BOTTOM
                         this.bottomMargin = 5
                     }
                 }
                 rootView.addView(galleryImageCamera)
                 rootView.addView(galleryImageCameraTv)
-                return CameraViewHolder(rootView, galleryImageCamera, galleryImageCameraTv, galleryBundle)
+                return CameraViewHolder(
+                    rootView,
+                    galleryImageCamera,
+                    galleryImageCameraTv,
+                    galleryBundle
+                )
             }
         }
 
         fun camera() {
-            val drawable: Drawable? = ContextCompat.getDrawable(itemView.context, galleryBundle.cameraDrawable)
-            drawable?.colorFilter = PorterDuffColorFilter(galleryBundle.cameraDrawableColor, PorterDuff.Mode.SRC_ATOP)
+            val drawable: Drawable? =
+                ContextCompat.getDrawable(itemView.context, galleryBundle.cameraDrawable)
+            drawable?.colorFilter =
+                PorterDuffColorFilter(galleryBundle.cameraDrawableColor, PorterDuff.Mode.SRC_ATOP)
             galleryImageCameraTv.text = galleryBundle.cameraText
             galleryImageCameraTv.textSize = galleryBundle.cameraTextSize
             galleryImageCameraTv.setTextColor(galleryBundle.cameraTextColor)
@@ -151,24 +188,38 @@ class GalleryAdapter(
     }
 
     class PhotoViewHolder(
-            private val rootView: FrameLayout,
-            private val container: FrameLayout,
-            private val checkBox: AppCompatTextView,
-            private val galleryBundle: GalleryBundle,
-            private val display: Int,
-            private val galleryCallback: IGalleryCallback,
+        private val rootView: FrameLayout,
+        private val container: FrameLayout,
+        private val checkBox: AppCompatTextView,
+        private val galleryBundle: GalleryBundle,
+        private val display: Int,
+        private val galleryCallback: IGalleryCallback,
     ) : RecyclerView.ViewHolder(rootView) {
 
         companion object {
-            fun newInstance(parent: ViewGroup, galleryBundle: GalleryBundle, display: Int, galleryCallback: IGalleryCallback): PhotoViewHolder {
+            fun newInstance(
+                parent: ViewGroup,
+                galleryBundle: GalleryBundle,
+                display: Int,
+                galleryCallback: IGalleryCallback
+            ): PhotoViewHolder {
                 val rootView = FrameLayout(parent.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
                 }
                 val galleryContainer = FrameLayout(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
                 }
                 val galleryCheckBox = AppCompatTextView(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
                         this.gravity = Gravity.END
                         this.bottomMargin = 5
                     }
@@ -176,22 +227,38 @@ class GalleryAdapter(
                 galleryCheckBox.hideExpand()
                 rootView.addView(galleryContainer)
                 rootView.addView(galleryCheckBox)
-                return PhotoViewHolder(rootView, galleryContainer, galleryCheckBox, galleryBundle, display, galleryCallback)
+                return PhotoViewHolder(
+                    rootView,
+                    galleryContainer,
+                    galleryCheckBox,
+                    galleryBundle,
+                    display,
+                    galleryCallback
+                )
             }
         }
 
-        fun photo(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>, imageLoader: IGalleryImageLoader) {
+        fun photo(
+            position: Int,
+            scanEntity: ScanEntity,
+            selectList: ArrayList<ScanEntity>,
+            imageLoader: IGalleryImageLoader
+        ) {
             imageLoader.onDisplayGallery(display, display, scanEntity, container, checkBox)
             if (galleryBundle.radio) {
                 return
             }
-            checkBox.setOnClickListener { clickCheckBox(position, scanEntity, selectList) }
+            checkBox.setOnClickListener { clickItemView(position, scanEntity, selectList) }
             checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
             checkBox.isSelected = scanEntity.isSelected
             checkBox.showExpand()
         }
 
-        private fun clickCheckBox(position: Int, scanEntity: ScanEntity, selectList: ArrayList<ScanEntity>) {
+        private fun clickItemView(
+            position: Int,
+            scanEntity: ScanEntity,
+            selectList: ArrayList<ScanEntity>
+        ) {
             if (!scanEntity.uri.isFileExistsExpand(itemView.context)) {
                 if (selectList.contains(scanEntity)) {
                     selectList.remove(scanEntity)
@@ -202,7 +269,7 @@ class GalleryAdapter(
                 return
             }
             if (!selectList.contains(scanEntity) && selectList.size >= galleryBundle.multipleMaxCount) {
-                galleryCallback.onClickCheckBoxMaxCount(itemView.context, scanEntity)
+                galleryCallback.onClickItemMaxCount(itemView.context, scanEntity)
                 return
             }
             if (!scanEntity.isSelected) {
@@ -214,7 +281,7 @@ class GalleryAdapter(
                 scanEntity.isSelected = false
                 checkBox.isSelected = false
             }
-            galleryCallback.onChangedCheckBox(position, scanEntity)
+            galleryCallback.onChangedItem(position, scanEntity)
         }
     }
 }

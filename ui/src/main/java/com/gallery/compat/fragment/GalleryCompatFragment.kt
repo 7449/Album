@@ -6,17 +6,18 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
-import com.gallery.core.ScanArgs
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.delegate.IScanDelegate
+import com.gallery.core.delegate.args.ScanArgs
 import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.toScanFileEntity
-import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.Types
+import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.ui.R
 
-open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
+open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_gallery) :
+    Fragment(layoutId) {
 
     companion object {
         fun newInstance(galleryBundle: GalleryBundle): GalleryCompatFragment {
@@ -30,11 +31,11 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
 
     open fun createDelegate(): IScanDelegate {
         return ScanDelegateImpl(
-                this,
-                galleryCallbackOrNull(),
-                galleryCallback(),
-                galleryCallbackOrNewInstance { object : IGalleryInterceptor {} },
-                galleryCallback()
+            this,
+            galleryCallbackOrNull(),
+            galleryCallback(),
+            galleryCallbackOrNewInstance { object : IGalleryInterceptor {} },
+            galleryCallback()
         )
     }
 
@@ -74,14 +75,17 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
         delegate.onScanMultipleSuccess(arrayList.toScanFileEntity())
     }
 
+    val rootView: View
+        get() = delegate.rootView
+
     val currentEntities: ArrayList<ScanEntity>
-        get() = delegate.currentEntities
+        get() = delegate.allItem
 
     val selectEntities: ArrayList<ScanEntity>
-        get() = delegate.selectEntities
+        get() = delegate.selectItem
 
     val selectEmpty: Boolean
-        get() = delegate.selectEmpty
+        get() = delegate.isSelectEmpty
 
     val selectCount: Int
         get() = delegate.selectCount

@@ -17,13 +17,14 @@ interface IGalleryInterceptor {
      * [uri]返回预创建Uri,如果自定义相机这里需要处理两种情况
      *
      * [FragmentActivity.RESULT_OK]
+     * 以及
      * [FragmentActivity.RESULT_CANCELED]
      *
-     * [uri]的格式一直都是`content://media/external/images/media/id`
-     * [uri]只是插入了路径,没有插入其他数据
+     * [uri]的格式一直都是`content://media/external/images/media/id`,只是插入了路径,没有插入其他数据
      *
      * 这里的resultCode可自定义,但是回调自行调用
      * [IScanDelegate.cameraCanceled]
+     * 或者
      * [IScanDelegate.cameraSuccess]
      *
      * 这里需要注意的是[IScanDelegate.cameraSuccess]不需要任何参数,只需要拍照成功之后

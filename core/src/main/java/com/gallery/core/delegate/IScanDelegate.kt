@@ -2,15 +2,21 @@ package com.gallery.core.delegate
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.ScanArgs
+import com.gallery.core.delegate.args.ScanArgs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.PermissionCode
-import com.gallery.scan.impl.file.FileScanEntity
 import com.gallery.scan.Types
+import com.gallery.scan.impl.file.FileScanEntity
 
 interface IScanDelegate {
+
+    /**
+     * 根View
+     */
+    val rootView: View
 
     /**
      * 当前Activity
@@ -20,38 +26,38 @@ interface IScanDelegate {
     /**
      * 当前Activity
      */
-    val activityNotNull: FragmentActivity
+    val requireActivity: FragmentActivity
 
     /**
      * 当前扫描的数据
      * 已经过滤了CAMERA
      */
-    val currentEntities: ArrayList<ScanEntity>
+    val allItem: ArrayList<ScanEntity>
 
     /**
      * 当前选中的数据
      */
-    val selectEntities: ArrayList<ScanEntity>
+    val selectItem: ArrayList<ScanEntity>
 
     /**
      * 当前选中的数据是否为空
      * true 空
      */
-    val selectEmpty: Boolean
-        get() = selectEntities.isEmpty()
+    val isSelectEmpty: Boolean
+        get() = selectItem.isEmpty()
 
     /**
      * 当前选中的数据个数
      */
     val selectCount: Int
-        get() = selectEntities.size
+        get() = selectItem.size
 
     /**
      * 当前扫描的数据个数
      * 已经过滤了CAMERA
      */
     val itemCount: Int
-        get() = currentEntities.size
+        get() = allItem.size
 
     /**
      * 当前扫描Id
@@ -79,19 +85,19 @@ interface IScanDelegate {
     fun onDestroy()
 
     /**
-     * 扫描设备
+     * 扫描图库
      */
     fun onScanGallery(parent: Long = Types.Scan.SCAN_ALL, isCamera: Boolean = false)
-
-    /**
-     * 扫描集合成功
-     */
-    fun onScanMultipleSuccess(scanEntities: ArrayList<FileScanEntity>)
 
     /**
      * 扫描单个数据
      */
     fun onScanResult(uri: Uri)
+
+    /**
+     * 扫描集合成功
+     */
+    fun onScanMultipleSuccess(scanEntities: ArrayList<FileScanEntity>)
 
     /**
      * 扫描单个文件成功

@@ -9,6 +9,11 @@ import com.gallery.core.entity.ScanEntity
 interface IPrevDelegate {
 
     /**
+     * 根View
+     */
+    val rootView: View
+
+    /**
      * 获取全部数据
      */
     val allItem: ArrayList<ScanEntity>
@@ -16,7 +21,7 @@ interface IPrevDelegate {
     /**
      * 选中的数据
      */
-    val selectEntities: ArrayList<ScanEntity>
+    val selectItem: ArrayList<ScanEntity>
 
     /**
      * 当前position
@@ -33,14 +38,14 @@ interface IPrevDelegate {
     /**
      * 预览页选中的数据是否为空
      */
-    val selectEmpty: Boolean
-        get() = selectEntities.isEmpty()
+    val isSelectEmpty: Boolean
+        get() = selectItem.isEmpty()
 
     /**
      * 预览页选中的数据个数
      */
     val selectCount: Int
-        get() = selectEntities.size
+        get() = selectItem.size
 
     /**
      * 预览页全部数据个数
@@ -64,14 +69,14 @@ interface IPrevDelegate {
     fun updateEntity(savedInstanceState: Bundle?, arrayList: ArrayList<ScanEntity>)
 
     /**
-     * checkbox点击
+     * 选中or未选中点击
      */
-    fun checkBoxClick(checkBox: View)
+    fun itemViewClick(box: View)
 
     /**
      * 当前item是否是选中状态
      */
-    fun isCheckBox(position: Int): Boolean
+    fun isSelected(position: Int): Boolean
 
     /**
      * [ViewPager2]跳转到指定页面

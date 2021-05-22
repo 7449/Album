@@ -10,9 +10,9 @@ import kotlinx.parcelize.Parcelize
 /** [FileScanEntity]中介 */
 @Parcelize
 data class ScanEntity(
-        val delegate: FileScanEntity,
-        val count: Int = 0,
-        var isSelected: Boolean = false,
+    val delegate: FileScanEntity,
+    val count: Int = 0,
+    var isSelected: Boolean = false,
 ) : Parcelable {
     val id: Long
         get() = delegate.id
@@ -28,8 +28,14 @@ data class ScanEntity(
         get() = delegate.bucketDisplayName
     val uri: Uri
         get() = when (delegate.mediaType) {
-            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, delegate.id)
-            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, delegate.id)
+            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                delegate.id
+            )
+            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                delegate.id
+            )
             else -> Uri.EMPTY
         }
     val isGif: Boolean

@@ -15,16 +15,18 @@ import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.compat.fragment.addFragmentExpand
 import com.gallery.compat.fragment.showFragmentExpand
 import com.gallery.core.GalleryBundle
-import com.gallery.core.PrevArgs.Companion.configOrDefault
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
+import com.gallery.core.delegate.IPrevDelegate
+import com.gallery.core.delegate.args.PrevArgs.Companion.configOrDefault
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.ui.R
 
-abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, IGalleryImageLoader, IGalleryPrevInterceptor {
+abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, IGalleryImageLoader,
+    IGalleryPrevInterceptor {
 
     companion object {
         /** 预览页toolbar返回 result_code */
@@ -36,7 +38,11 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
         /** 预览页选中数据返回 result_code */
         internal const val RESULT_CODE_SELECT = -17
 
-        fun newInstance(context: Context, uiPrevArgs: UIPrevArgs, cla: Class<out PrevCompatActivity>): Intent {
+        fun newInstance(
+            context: Context,
+            uiPrevArgs: UIPrevArgs,
+            cla: Class<out PrevCompatActivity>
+        ): Intent {
             return Intent(context, cla).putExtras(uiPrevArgs.putPrevArgs())
         }
     }
@@ -47,7 +53,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
     /** [UIPrevArgs] */
     protected val uiPrevArgs: UIPrevArgs by lazy {
         intent?.extras.orEmptyExpand().uiPrevArgs
-                ?: throw KotlinNullPointerException("uiPrevArgs == null")
+            ?: throw KotlinNullPointerException("uiPrevArgs == null")
     }
 
     /** 初始配置 */
@@ -66,8 +72,12 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
 
-    override fun onPrevCreated(fragment: Fragment, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
-        fragment.view?.setBackgroundColor(uiConfig.prevPhotoBackgroundColor)
+    override fun onPrevCreated(
+        delegate: IPrevDelegate,
+        bundle: GalleryBundle,
+        savedInstanceState: Bundle?
+    ) {
+        delegate.rootView.setBackgroundColor(uiConfig.prevPhotoBackgroundColor)
     }
 
     /** 自定义Fragment */

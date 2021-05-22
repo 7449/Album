@@ -1,6 +1,7 @@
 package com.gallery.sample.crop
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -19,7 +20,11 @@ import java.io.File
 
 open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
 
-    override fun onCropResult(delegate: IScanDelegate, galleryBundle: GalleryBundle, intent: ActivityResult) {
+    override fun onCropResult(
+        delegate: IScanDelegate,
+        galleryBundle: GalleryBundle,
+        intent: ActivityResult
+    ) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> intent.data?.let {
                 UCrop.getOutput(it)?.let { uri ->
@@ -29,18 +34,26 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         }
     }
 
-    override fun openCrop(delegate: IScanDelegate, galleryBundle: GalleryBundle, inputUri: Uri): Intent {
-        return UCrop.of(inputUri, cropOutPutUri2(delegate.activityNotNull, galleryBundle))
-                .withOptions(UCrop.Options().apply { optionBundle.putAll(galleryUiBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()) })
-                .getIntent(delegate.activityNotNull)
+    override fun openCrop(context: Context, bundle: GalleryBundle, inputUri: Uri): Intent {
+        return UCrop.of(inputUri, cropOutPutUri2(context, bundle))
+            .withOptions(
+                UCrop.Options().apply {
+                    optionBundle.putAll(
+                        galleryUiBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()
+                    )
+                })
+            .getIntent(context)
     }
 
     private fun onCropSuccess(delegate: IScanDelegate, galleryBundle: GalleryBundle, uri: Uri) {
         val currentUri: Uri = if (!hasQExpand()) {
             uri
         } else {
-            val contentUri = delegate.activityNotNull.copyImageExpand(uri, galleryBundle.cropNameExpand).orEmptyExpand()
-            val filePath: String? = delegate.activityNotNull.contentResolver.queryDataExpand(contentUri)
+            val contentUri =
+                delegate.requireActivity.copyImageExpand(uri, galleryBundle.cropNameExpand)
+                    .orEmptyExpand()
+            val filePath: String? =
+                delegate.requireActivity.contentResolver.queryDataExpand(contentUri)
             if (filePath.isNullOrEmpty()) {
                 uri
             } else {
@@ -53,7 +66,7 @@ open class UCropImpl(private val galleryUiBundle: GalleryUiBundle) : ICrop {
         val bundle = Bundle()
         bundle.putParcelable(GalleryConfig.GALLERY_RESULT_CROP, currentUri)
         intent.putExtras(bundle)
-        delegate.activityNotNull.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
-        delegate.activityNotNull.finish()
+        delegate.requireActivity.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
+        delegate.requireActivity.finish()
     }
 }

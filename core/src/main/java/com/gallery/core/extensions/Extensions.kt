@@ -19,9 +19,6 @@ import java.io.File
 /** 是否高于等于Q */
 fun hasQExpand(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
-/** 是否高于等于L_MR1 */
-fun hasLExpand(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
-
 /** 获取安全Bundle */
 fun Bundle?.orEmptyExpand(): Bundle = this ?: Bundle.EMPTY
 
@@ -80,26 +77,33 @@ fun FileScanEntity.toScanEntity(): ScanEntity = ScanEntity(this)
 /** content://media/external/images/media/id or content://media/external/video/media/id */
 fun Context.cameraUriExpand(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
+        // Android Q
         hasQExpand() -> File("", galleryBundle.cameraNameExpand)
+        // 低版本如果自定义目录为空，则取缓存路径
         galleryBundle.cameraPath.isNullOrEmpty() -> lowerVersionFileExpand(
             galleryBundle.cameraNameExpand,
             galleryBundle.relativePath
         )
+        // 自定义拍照路径，仅支持Android Q以下
         else -> galleryBundle.cameraPath.mkdirsFileExpand(galleryBundle.cameraNameExpand)
     }
-    return if (galleryBundle.isVideoScanExpand) insertVideoUriExpand(file) else insertImageUriExpand(
-        file
-    )
+    return if (galleryBundle.isVideoScanExpand)
+        insertVideoUriExpand(file)
+    else
+        insertImageUriExpand(file)
 }
 
 /** content://media/external/images/media/id */
 fun Context.cropUriExpand(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
+        // Android Q
         hasQExpand() -> File("", galleryBundle.cropNameExpand)
+        // 低版本如果自定义目录为空，则取缓存路径
         galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(
             galleryBundle.cropNameExpand,
             galleryBundle.relativePath
         )
+        // 自定义裁剪路径，仅支持Android Q以下
         else -> galleryBundle.cropPath.mkdirsFileExpand(galleryBundle.cropNameExpand)
     }
     return insertImageUriExpand(file)
@@ -109,11 +113,14 @@ fun Context.cropUriExpand(galleryBundle: GalleryBundle): Uri? {
 @Deprecated("no support for higher version, annoying version support")
 fun Context.cropUriExpand2(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
+        // Android Q file:///storage/emulated/0/Android/data/packageName/cache/xxxxx.jpg
         hasQExpand() -> File(externalCacheDir, galleryBundle.cropNameExpand)
+        // 低版本如果自定义目录为空，则取缓存路径
         galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(
             galleryBundle.cropNameExpand,
             galleryBundle.relativePath
         )
+        // 自定义裁剪路径，仅支持Android Q以下
         else -> galleryBundle.cropPath.mkdirsFileExpand(galleryBundle.cropNameExpand)
     }
     return Uri.fromFile(file)

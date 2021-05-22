@@ -17,9 +17,9 @@
             
 #### dependencies
 
-    implementation 'com.github.7449.Album:ui:1.0.0'
-    implementation 'com.github.7449.Album:core:1.0.0'
-    implementation 'com.github.7449.Album:scan:1.0.0'
+    implementation 'com.github.7449.Album:ui:1.0.1'
+    implementation 'com.github.7449.Album:core:1.0.1'
+    implementation 'com.github.7449.Album:scan:1.0.1'
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"

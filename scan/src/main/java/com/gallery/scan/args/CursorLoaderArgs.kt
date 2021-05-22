@@ -17,10 +17,11 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 open class CursorLoaderArgs(
-        open val uri: Uri,
-        open val projection: Array<String>? = null,
-        open val sortOrder: String? = null,
+    open val uri: Uri,
+    open val projection: Array<String>? = null,
+    open val sortOrder: String? = null,
 ) : Parcelable {
+
     companion object {
 
         private const val Key = "scanCursorLoaderArgs"
@@ -32,7 +33,7 @@ open class CursorLoaderArgs(
 
         internal fun Bundle.getCursorLoaderArgs(): CursorLoaderArgs {
             return getParcelable(Key)
-                    ?: throw KotlinNullPointerException("scanCursorLoaderArgs == null")
+                ?: throw KotlinNullPointerException("scanCursorLoaderArgs == null")
         }
 
     }
@@ -42,6 +43,7 @@ open class CursorLoaderArgs(
      * [args]为CursorLoader传递的Bundle
      * 里面包含了
      * [ScanImpl.scanMultiple]
+     * 和
      * [ScanImpl.scanSingle]
      * 传递的数据，可自行获取需要的数据
      */
@@ -52,6 +54,7 @@ open class CursorLoaderArgs(
      * [args]为CursorLoader传递的Bundle
      * 里面包含了
      * [ScanImpl.scanMultiple]
+     * 和
      * [ScanImpl.scanSingle]
      * 传递的数据，可自行获取需要的数据
      */

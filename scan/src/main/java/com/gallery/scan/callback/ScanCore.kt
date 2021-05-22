@@ -1,7 +1,5 @@
 package com.gallery.scan.callback
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.loader.app.LoaderManager
@@ -15,40 +13,13 @@ import com.gallery.scan.args.ScanEntityFactory
  */
 interface ScanCore {
 
-    companion object {
-        fun Fragment.scanCore(
-                factory: ScanEntityFactory,
-                args: CursorLoaderArgs
-        ): ScanCore {
-            return object : ScanCore {
-                override val scanOwner: LifecycleOwner
-                    get() = this@scanCore
-                override val scanCursorLoaderArgs: CursorLoaderArgs
-                    get() = args
-                override val scanEntityFactory: ScanEntityFactory
-                    get() = factory
-            }
-        }
-
-        fun FragmentActivity.scanCore(
-                factory: ScanEntityFactory,
-                args: CursorLoaderArgs
-        ): ScanCore {
-            return object : ScanCore {
-                override val scanOwner: LifecycleOwner
-                    get() = this@scanCore
-                override val scanCursorLoaderArgs: CursorLoaderArgs
-                    get() = args
-                override val scanEntityFactory: ScanEntityFactory
-                    get() = factory
-            }
-        }
-    }
+    companion object;
 
     /**
      *  注意传入的参数是否正确，[LifecycleOwner]不正确会导致强转出错
      *  必须继承于
      *  [ViewModelStoreOwner]
+     *  和
      *  [LifecycleOwner]
      */
     val scanOwner: LifecycleOwner
@@ -65,6 +36,7 @@ interface ScanCore {
 
     /**
      *  [LoaderManager.getInstance]
+     *  和
      *  [scanOwner]
      */
     fun <T> scanOwnerGeneric(): T where T : LifecycleOwner, T : ViewModelStoreOwner {

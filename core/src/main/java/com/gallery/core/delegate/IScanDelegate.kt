@@ -8,7 +8,7 @@ import com.gallery.core.ScanArgs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.PermissionCode
 import com.gallery.scan.impl.file.FileScanEntity
-import com.gallery.scan.types.ScanType
+import com.gallery.scan.Types
 
 interface IScanDelegate {
 
@@ -81,7 +81,7 @@ interface IScanDelegate {
     /**
      * 扫描设备
      */
-    fun onScanGallery(parent: Long = ScanType.SCAN_ALL, isCamera: Boolean = false)
+    fun onScanGallery(parent: Long = Types.Scan.SCAN_ALL, isCamera: Boolean = false)
 
     /**
      * 扫描集合成功

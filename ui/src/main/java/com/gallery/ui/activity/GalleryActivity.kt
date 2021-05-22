@@ -23,18 +23,23 @@ import com.gallery.core.extensions.drawableExpand
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.scan.extensions.isScanAllExpand
-import com.gallery.scan.types.ScanType
+import com.gallery.scan.Types
 import com.gallery.ui.R
 import com.gallery.ui.databinding.GalleryActivityGalleryBinding
 import com.gallery.ui.finder.PopupFinderAdapter
 
-open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener, GalleryFinderAdapter.AdapterFinderListener {
+open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
+    GalleryFinderAdapter.AdapterFinderListener {
 
-    private val viewBinding: GalleryActivityGalleryBinding by lazy { GalleryActivityGalleryBinding.inflate(layoutInflater) }
+    private val viewBinding: GalleryActivityGalleryBinding by lazy {
+        GalleryActivityGalleryBinding.inflate(
+            layoutInflater
+        )
+    }
 
     override val galleryFinderAdapter: GalleryFinderAdapter by lazy {
         PopupFinderAdapter(
-                this@GalleryActivity, viewBinding.galleryFinderAll, uiConfig, this@GalleryActivity
+            this@GalleryActivity, viewBinding.galleryFinderAll, uiConfig, this@GalleryActivity
         )
     }
 
@@ -55,16 +60,23 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener, Gall
         viewBinding.galleryToolbar.title = uiConfig.toolbarText
         viewBinding.galleryToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
         val drawable = drawableExpand(uiConfig.toolbarIcon)
-        drawable?.colorFilter = PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+        drawable?.colorFilter =
+            PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.galleryToolbar.navigationIcon = drawable
         viewBinding.galleryToolbar.setBackgroundColor(uiConfig.toolbarBackground)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            viewBinding.galleryToolbar.elevation = uiConfig.toolbarElevation
-        }
+        viewBinding.galleryToolbar.elevation = uiConfig.toolbarElevation
 
         viewBinding.galleryFinderAll.textSize = uiConfig.finderTextSize
         viewBinding.galleryFinderAll.setTextColor(uiConfig.finderTextColor)
-        viewBinding.galleryFinderAll.setCompoundDrawables(null, null, minimumDrawableExpand(uiConfig.finderTextCompoundDrawable, uiConfig.finderTextDrawableColor), null)
+        viewBinding.galleryFinderAll.setCompoundDrawables(
+            null,
+            null,
+            minimumDrawableExpand(
+                uiConfig.finderTextCompoundDrawable,
+                uiConfig.finderTextDrawableColor
+            ),
+            null
+        )
 
         viewBinding.galleryPre.text = uiConfig.preViewText
         viewBinding.galleryPre.textSize = uiConfig.preViewTextSize
@@ -82,7 +94,8 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener, Gall
         viewBinding.galleryFinderAll.setOnClickListener(this)
 
         viewBinding.galleryFinderAll.text = finderName
-        viewBinding.galleryPre.visibility = if (galleryConfig.radio || galleryConfig.isVideoScanExpand) View.GONE else View.VISIBLE
+        viewBinding.galleryPre.visibility =
+            if (galleryConfig.radio || galleryConfig.isVideoScanExpand) View.GONE else View.VISIBLE
         viewBinding.gallerySelect.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
 
         viewBinding.galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }
@@ -95,7 +108,7 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener, Gall
                     onGalleryPreEmpty()
                     return
                 }
-                onStartPrevPage(ScanType.SCAN_NONE, 0, PreActivity::class.java)
+                onStartPrevPage(Types.Scan.SCAN_NONE, 0, PreActivity::class.java)
             }
             R.id.gallerySelect -> {
                 if (galleryFragment.selectEmpty) {
@@ -129,22 +142,44 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener, Gall
         onDisplayGalleryThumbnails(finderEntity, container)
     }
 
-    override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView) {
+    override fun onDisplayGallery(
+        width: Int,
+        height: Int,
+        scanEntity: ScanEntity,
+        container: FrameLayout,
+        checkBox: TextView
+    ) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
-        Glide.with(container.context).load(scanEntity.uri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)).into(imageView)
+        Glide.with(container.context).load(scanEntity.uri).apply(
+            RequestOptions().placeholder(R.drawable.ic_gallery_default_loading)
+                .error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)
+        ).into(imageView)
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
     override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
-        Glide.with(container.context).load(finderEntity.uri).apply(RequestOptions().placeholder(R.drawable.ic_gallery_default_loading).error(R.drawable.ic_gallery_default_loading).centerCrop()).into(imageView)
+        Glide.with(container.context).load(finderEntity.uri).apply(
+            RequestOptions().placeholder(R.drawable.ic_gallery_default_loading)
+                .error(R.drawable.ic_gallery_default_loading).centerCrop()
+        ).into(imageView)
         container.addView(imageView)
     }
 
-    override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(parentId, if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) position - 1 else position, PreActivity::class.java)
+    override fun onPhotoItemClick(
+        context: Context,
+        galleryBundle: GalleryBundle,
+        scanEntity: ScanEntity,
+        position: Int,
+        parentId: Long
+    ) {
+        onStartPrevPage(
+            parentId,
+            if (parentId.isScanAllExpand && !galleryBundle.hideCamera) position - 1 else position,
+            PreActivity::class.java
+        )
     }
 
     /** 点击预览但是未选择图片 */

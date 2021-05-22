@@ -22,58 +22,69 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.isFileExistsExpand
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.toScanEntity
+import com.gallery.scan.Types.Scan.SCAN_ALL
+import com.gallery.scan.Types.Scan.SCAN_NONE
 import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.callback.ScanCore.Companion.scanCore
 import com.gallery.scan.extensions.isScanNoNeExpand
 import com.gallery.scan.extensions.multipleScanExpand
+import com.gallery.scan.extensions.scanCore
 import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.impl.file.FileScanArgs
 import com.gallery.scan.impl.file.FileScanEntity
 import com.gallery.scan.impl.file.fileExpand
-import com.gallery.scan.types.ScanType.SCAN_ALL
-import com.gallery.scan.types.ScanType.SCAN_NONE
 
 /**
  * 预览代理
  */
 class PrevDelegateImpl(
-        /**
-         * [Fragment]
-         * 承载容器
-         * 使用容器获取需要的[ViewPager2]
-         * [Fragment]中必须存在 [R.id.gallery_prev_viewpager2] [R.id.gallery_prev_checkbox] 两个id的View
-         */
-        private val fragment: Fragment,
-        /**
-         * [IGalleryPrevCallback]
-         * 预览回调
-         */
-        private val galleryPrevCallback: IGalleryPrevCallback,
-        /**
-         * [IGalleryImageLoader]
-         * 图片加载框架
-         */
-        private val galleryImageLoader: IGalleryImageLoader,
+    /**
+     * [Fragment]
+     * 承载容器
+     * 使用容器获取需要的[ViewPager2]
+     * [Fragment]中必须存在 [R.id.gallery_prev_viewpager2] [R.id.gallery_prev_checkbox] 两个id的View
+     */
+    private val fragment: Fragment,
+    /**
+     * [IGalleryPrevCallback]
+     * 预览回调
+     */
+    private val galleryPrevCallback: IGalleryPrevCallback,
+    /**
+     * [IGalleryImageLoader]
+     * 图片加载框架
+     */
+    private val galleryImageLoader: IGalleryImageLoader,
 ) : IPrevDelegate {
 
-    private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            galleryPrevCallback.onPageScrolled(position, positionOffset, positionOffsetPixels)
+    private val pageChangeCallback: ViewPager2.OnPageChangeCallback =
+        object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                galleryPrevCallback.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                galleryPrevCallback.onPageScrollStateChanged(state)
+            }
+
+            override fun onPageSelected(position: Int) {
+                galleryPrevCallback.onPageSelected(position)
+                checkBox.isSelected = isCheckBox(position)
+            }
         }
 
-        override fun onPageScrollStateChanged(state: Int) {
-            galleryPrevCallback.onPageScrollStateChanged(state)
-        }
-
-        override fun onPageSelected(position: Int) {
-            galleryPrevCallback.onPageSelected(position)
-            checkBox.isSelected = isCheckBox(position)
-        }
-    }
-
-    private val viewPager2: ViewPager2 = fragment.view?.findViewById(R.id.gallery_prev_viewpager2) as ViewPager2
+    private val viewPager2: ViewPager2 =
+        fragment.view?.findViewById(R.id.gallery_prev_viewpager2) as ViewPager2
     private val checkBox: View = fragment.view?.findViewById(R.id.gallery_prev_checkbox) as View
-    private val prevAdapter: PrevAdapter = PrevAdapter { entity, container -> galleryImageLoader.onDisplayGalleryPrev(entity, container) }
+    private val prevAdapter: PrevAdapter = PrevAdapter { entity, container ->
+        galleryImageLoader.onDisplayGalleryPrev(
+            entity,
+            container
+        )
+    }
     private val prevArgs: PrevArgs = fragment.arguments.orEmptyExpand().prevArgsOrDefault
     private val galleryBundle: GalleryBundle = prevArgs.configOrDefault
 
@@ -101,21 +112,24 @@ class PrevDelegateImpl(
         //新增对单独扫描的支持，获取scanAlone和parentId
         val scanAlone = prevArgs.scanAlone
         val parentId: Long = prevArgs.parentId
-        if (parentId.isScanNoNeExpand()) {
+        if (parentId.isScanNoNeExpand) {
             updateEntity(savedInstanceState, prevArgs.selectList)
         } else {
             //https://issuetracker.google.com/issues/127692541
             //这个问题已经在ViewPager2上修复
             val scanFileArgs = FileScanArgs(
-                    if (scanAlone == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE) galleryBundle.scanType.map { it.toString() }.toTypedArray() else arrayOf(scanAlone.toString()),
-                    galleryBundle.scanSortField,
-                    galleryBundle.scanSort
+                if (scanAlone == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE) galleryBundle.scanType.map { it.toString() }
+                    .toTypedArray() else arrayOf(scanAlone.toString()),
+                galleryBundle.scanSortField,
+                galleryBundle.scanSort
             )
-            ScanImpl<FileScanEntity>(fragment.scanCore(
+            ScanImpl<FileScanEntity>(
+                fragment.scanCore(
                     factory = ScanEntityFactory.fileExpand(),
                     args = scanFileArgs
-            )).registerScanResource {
-                updateEntity(savedInstanceState, it.multipleValue.toScanEntity())
+                )
+            ) {
+                updateEntity(savedInstanceState, multipleValue.toScanEntity())
             }.scanMultiple(parentId.multipleScanExpand())
         }
     }
@@ -141,11 +155,19 @@ class PrevDelegateImpl(
             }
             checkBox.isSelected = false
             currentItem.isSelected = false
-            galleryPrevCallback.onClickCheckBoxFileNotExist(fragment.requireActivity(), galleryBundle, currentItem)
+            galleryPrevCallback.onClickCheckBoxFileNotExist(
+                fragment.requireActivity(),
+                galleryBundle,
+                currentItem
+            )
             return
         }
         if (!prevAdapter.containsSelect(currentItem) && selectEntities.size >= galleryBundle.multipleMaxCount) {
-            galleryPrevCallback.onClickCheckBoxMaxCount(fragment.requireActivity(), galleryBundle, currentItem)
+            galleryPrevCallback.onClickCheckBoxMaxCount(
+                fragment.requireActivity(),
+                galleryBundle,
+                currentItem
+            )
             return
         }
         if (currentItem.isSelected) {

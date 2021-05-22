@@ -14,7 +14,7 @@ import com.gallery.sample.custom.CustomCameraActivity
 import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.UCropGalleryActivity
 import com.gallery.sample.databinding.ActivityMainBinding
-import com.gallery.scan.types.Sort
+import com.gallery.scan.Types
 import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.result.GalleryResultCallback
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         var galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT)
         var galleryUiBundle = GalleryTheme.themeGalleryUi(this, Theme.DEFAULT)
         var scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
-        var sortType = Sort.DESC
+        var sortType = Types.Sort.DESC
 
         viewBinding.includeTheme.themeRg.setOnCheckedChangeListener { _, i ->
             when (i) {
@@ -103,8 +103,8 @@ class MainActivity : AppCompatActivity() {
         }
         viewBinding.includeSort.sortRg.setOnCheckedChangeListener { _, i ->
             when (i) {
-                R.id.sort_desc -> sortType = Sort.DESC
-                R.id.sort_asc -> sortType = Sort.ASC
+                R.id.sort_desc -> sortType = Types.Sort.DESC
+                R.id.sort_asc -> sortType = Types.Sort.ASC
             }
         }
         viewBinding.startConfig.setOnClickListener {

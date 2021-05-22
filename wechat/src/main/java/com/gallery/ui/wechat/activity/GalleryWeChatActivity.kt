@@ -23,7 +23,7 @@ import com.gallery.compat.finder.findFinder
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
-import com.gallery.scan.types.ScanType
+import com.gallery.scan.Types
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig
 import com.gallery.ui.wechat.WeChatPrevArgs
@@ -91,7 +91,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
 
         viewBinding.galleryWeChatFinder.adapter = newFinderAdapter
         viewBinding.galleryWeChatPrev.setOnClickListener {
-            onStartPrevPage(ScanType.SCAN_NONE, 0,
+            onStartPrevPage(Types.Scan.SCAN_NONE, 0,
                     option = WeChatPrevArgs(true, videoDuration, viewBinding.galleryWeChatFullImage.isChecked).putArgs(Bundle()),
                     cla = GalleryWeChatPrevActivity::class.java
             )
@@ -127,7 +127,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
                     currentFragment.parentId = WeChatConfig.GALLERY_WE_CHAT_ALL_VIDEO_PARENT
                     currentFragment.scanMultipleSuccess(videoList)
                 } else {
-                    currentFragment.onScanGallery(find?.parent ?: ScanType.SCAN_ALL)
+                    currentFragment.onScanGallery(find?.parent ?: Types.Scan.SCAN_ALL)
                 }
                 finderList.forEach { it.isSelected = it.parent == currentFragment.parentId }
                 newFinderAdapter.notifyDataSetChanged()
@@ -219,9 +219,9 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         container.displayGalleryThumbnails(finderEntity)
     }
 
-    /** 如果是全部视频parentId传递[ScanType.SCAN_ALL]否则传递当前[parentId] */
+    /** 如果是全部视频parentId传递[Types.Scan.SCAN_ALL]否则传递当前[parentId] */
     override fun onPhotoItemClick(context: Context, galleryBundle: GalleryBundle, scanEntity: ScanEntity, position: Int, parentId: Long) {
-        onStartPrevPage(if (parentId == WeChatConfig.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) ScanType.SCAN_ALL else parentId,
+        onStartPrevPage(if (parentId == WeChatConfig.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) Types.Scan.SCAN_ALL else parentId,
                 position,
                 if (parentId == WeChatConfig.GALLERY_WE_CHAT_ALL_VIDEO_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
                 WeChatPrevArgs(false, videoDuration, viewBinding.galleryWeChatFullImage.isChecked).putArgs(),

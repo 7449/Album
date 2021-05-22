@@ -16,9 +16,9 @@ object Version {
 }
 
 object ClassPath {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0"
     const val maven = "com.github.dcendents:android-maven-gradle-plugin:2.1"
-    const val gradle = "com.android.tools.build:gradle:4.1.3"
+    const val gradle = "com.android.tools.build:gradle:4.2.1"
 }
 
 object Maven {
@@ -30,10 +30,10 @@ object Dep {
     const val core = "com.github.7449.Album:core:1.0.0"
     const val ui = "com.github.7449.Album:ui:1.0.0"
 
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
 
-    const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
-    const val fragment = "androidx.fragment:fragment:1.3.2"
+    const val appcompat = "androidx.appcompat:appcompat:1.3.0"
+    const val fragment = "androidx.fragment:fragment:1.3.4"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0"
     const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
     const val material = "com.google.android.material:material:1.3.0"

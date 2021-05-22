@@ -35,9 +35,10 @@ import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
-import com.gallery.scan.types.Sort
+import com.gallery.scan.Types
 
-abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader, IGalleryInterceptor, ICrop {
+abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader,
+    IGalleryInterceptor, ICrop {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
     protected abstract val currentFinderName: String
@@ -63,23 +64,24 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
     protected val uiGapConfig: Bundle by lazy { galleryArgs.galleryOption }
 
     /** 预览页启动[ActivityResultLauncher]  */
-    private val prevLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
-        val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
-        when (intent.resultCode) {
-            PrevCompatActivity.RESULT_CODE_SELECT -> {
-                galleryFragment.onUpdateResult(bundleExpand.scanArgs)
-                onResultSelect(bundleExpand)
-            }
-            PrevCompatActivity.RESULT_CODE_TOOLBAR -> {
-                galleryFragment.onUpdateResult(bundleExpand.scanArgs)
-                onResultToolbar(bundleExpand)
-            }
-            PrevCompatActivity.RESULT_CODE_BACK -> {
-                galleryFragment.onUpdateResult(bundleExpand.scanArgs)
-                onResultBack(bundleExpand)
+    private val prevLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
+            val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
+            when (intent.resultCode) {
+                PrevCompatActivity.RESULT_CODE_SELECT -> {
+                    galleryFragment.onUpdateResult(bundleExpand.scanArgs)
+                    onResultSelect(bundleExpand)
+                }
+                PrevCompatActivity.RESULT_CODE_TOOLBAR -> {
+                    galleryFragment.onUpdateResult(bundleExpand.scanArgs)
+                    onResultToolbar(bundleExpand)
+                }
+                PrevCompatActivity.RESULT_CODE_BACK -> {
+                    galleryFragment.onUpdateResult(bundleExpand.scanArgs)
+                    onResultBack(bundleExpand)
+                }
             }
         }
-    }
 
     /** 文件夹数据集合 */
     val finderList = arrayListOf<ScanEntity>()
@@ -98,18 +100,33 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         finderList.clear()
         finderList.addAll(saveArgs?.finderList.orEmpty())
         finderName = saveArgs?.finderName ?: galleryConfig.allName
-        supportFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)?.let {
-            showFragmentExpand(fragment = it)
-        } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
+        supportFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)
+            ?.let {
+                showFragmentExpand(fragment = it)
+            } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
 
     /** 初始化布局，子类重写时需注意super */
-    override fun onGalleryCreated(fragment: Fragment, recyclerView: RecyclerView, galleryBundle: GalleryBundle, savedInstanceState: Bundle?) {
+    override fun onGalleryCreated(
+        fragment: Fragment,
+        recyclerView: RecyclerView,
+        galleryBundle: GalleryBundle,
+        savedInstanceState: Bundle?
+    ) {
         fragment.view?.setBackgroundColor(uiConfig.galleryRootBackground)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = when (uiConfig.layoutManager) {
-            LayoutManagerTypes.GRID -> GridLayoutManager(recyclerView.context, galleryBundle.spanCount, uiConfig.orientation, false)
-            LayoutManagerTypes.LINEAR -> LinearLayoutManager(recyclerView.context, uiConfig.orientation, false)
+            LayoutManagerTypes.GRID -> GridLayoutManager(
+                recyclerView.context,
+                galleryBundle.spanCount,
+                uiConfig.orientation,
+                false
+            )
+            LayoutManagerTypes.LINEAR -> LinearLayoutManager(
+                recyclerView.context,
+                uiConfig.orientation,
+                false
+            )
         }
         recyclerView.addItemDecoration(GalleryDivider(uiConfig.dividerWidth))
         if (recyclerView.itemAnimator is SimpleItemAnimator) {
@@ -119,7 +136,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
     override fun onResultSuccess(context: Context?, scanEntity: ScanEntity) {
-        finderList.updateResultFinder(scanEntity, galleryConfig.scanSort == Sort.DESC)
+        finderList.updateResultFinder(scanEntity, galleryConfig.scanSort == Types.Sort.DESC)
     }
 
     /** 数据扫描成功之后刷新文件夹数据  该方法子类重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
@@ -132,12 +149,35 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
 
     /** 启动预览 */
     fun onStartPrevPage(parentId: Long, position: Int, cla: Class<out PrevCompatActivity>) {
-        onStartPrevPage(parentId = parentId, position = position, option = galleryArgs.galleryPrevOption, cla = cla)
+        onStartPrevPage(
+            parentId = parentId,
+            position = position,
+            option = galleryArgs.galleryPrevOption,
+            cla = cla
+        )
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int, scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE, option: Bundle = Bundle.EMPTY, cla: Class<out PrevCompatActivity>) {
-        onStartPrevPage(UIPrevArgs(uiConfig, PrevArgs(parentId, galleryFragment.selectEntities, galleryConfig, position, scanAlone), option), cla)
+    fun onStartPrevPage(
+        parentId: Long,
+        position: Int,
+        scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
+        option: Bundle = Bundle.EMPTY,
+        cla: Class<out PrevCompatActivity>
+    ) {
+        onStartPrevPage(
+            UIPrevArgs(
+                uiConfig,
+                PrevArgs(
+                    parentId,
+                    galleryFragment.selectEntities,
+                    galleryConfig,
+                    position,
+                    scanAlone
+                ),
+                option
+            ), cla
+        )
     }
 
     /** 启动预览 */
@@ -190,8 +230,17 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
     }
 
     /** 文件目录加载图片 */
-    abstract override fun onDisplayGalleryThumbnails(finderEntity: ScanEntity, container: FrameLayout)
+    abstract override fun onDisplayGalleryThumbnails(
+        finderEntity: ScanEntity,
+        container: FrameLayout
+    )
 
     /** 文件加载图片 */
-    abstract override fun onDisplayGallery(width: Int, height: Int, scanEntity: ScanEntity, container: FrameLayout, checkBox: TextView)
+    abstract override fun onDisplayGallery(
+        width: Int,
+        height: Int,
+        scanEntity: ScanEntity,
+        container: FrameLayout,
+        checkBox: TextView
+    )
 }

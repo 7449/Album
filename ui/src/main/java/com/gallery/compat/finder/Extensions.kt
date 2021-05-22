@@ -2,7 +2,7 @@ package com.gallery.compat.finder
 
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.extensions.isScanAllExpand
-import com.gallery.scan.types.ScanType
+import com.gallery.scan.Types
 
 //获取当前页的文件夹数据
 //目标List为扫描成功之后的数据，返回Finder数据
@@ -10,13 +10,26 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
     val finderList = ArrayList<ScanEntity>()
     forEach { item ->
         if (finderList.find { it.parent == item.parent } == null) {
-            finderList.add(ScanEntity(item.delegate, count = this.count { it.parent == item.parent }))
+            finderList.add(
+                ScanEntity(
+                    item.delegate,
+                    count = this.count { it.parent == item.parent })
+            )
         }
     }
     if (finderList.isNotEmpty()) {
-        finderList.add(0, finderList.first().copy(delegate = finderList.first().delegate.copy(parent = ScanType.SCAN_ALL, bucketDisplayName = allName), count = this.size))
+        finderList.add(
+            0,
+            finderList.first().copy(
+                delegate = finderList.first().delegate.copy(
+                    parent = Types.Scan.SCAN_ALL,
+                    bucketDisplayName = allName
+                ), count = this.size
+            )
+        )
         finderList.find { it.bucketDisplayName == "0" }?.let {
-            finderList[finderList.indexOf(it)] = it.copy(delegate = it.delegate.copy(bucketDisplayName = sdName))
+            finderList[finderList.indexOf(it)] =
+                it.copy(delegate = it.delegate.copy(bucketDisplayName = sdName))
         }
     }
     return finderList
@@ -35,13 +48,22 @@ fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity, sortDesc: B
     if (find == null) {
         this.add(1, ScanEntity(scanEntity.delegate, 1))
         val first: ScanEntity = first()
-        this[indexOf(first)] = first.copy(delegate = (if (sortDesc) scanEntity.delegate else first.delegate).copy(parent = ScanType.SCAN_ALL), count = first.count + 1)
+        this[indexOf(first)] = first.copy(
+            delegate = (if (sortDesc) scanEntity.delegate else first.delegate).copy(parent = Types.Scan.SCAN_ALL),
+            count = first.count + 1
+        )
     } else {
-        find { it.parent.isScanAllExpand() }?.let {
-            this[indexOf(it)] = it.copy(delegate = (if (sortDesc) scanEntity.delegate else it.delegate).copy(parent = ScanType.SCAN_ALL), count = it.count + 1)
+        find { it.parent.isScanAllExpand }?.let {
+            this[indexOf(it)] = it.copy(
+                delegate = (if (sortDesc) scanEntity.delegate else it.delegate).copy(parent = Types.Scan.SCAN_ALL),
+                count = it.count + 1
+            )
         }
         find { it.parent == scanEntity.parent }?.let {
-            this[indexOf(it)] = it.copy(delegate = if (sortDesc) scanEntity.delegate else it.delegate, count = it.count + 1)
+            this[indexOf(it)] = it.copy(
+                delegate = if (sortDesc) scanEntity.delegate else it.delegate,
+                count = it.count + 1
+            )
         }
     }
 }

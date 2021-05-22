@@ -16,29 +16,31 @@ import com.gallery.scan.args.ScanEntityFactory
  * 扫描
  */
 internal class ScanTask<E>(
-        private val context: Context,
-        private val factory: ScanEntityFactory,
-        private val error: () -> Unit,
-        private val success: (ArrayList<E>) -> Unit,
+    private val context: Context,
+    private val factory: ScanEntityFactory,
+    private val success: (ArrayList<E>) -> Unit
 ) : LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         args ?: throw KotlinNullPointerException("args == null")
         val scanParameter = args.getCursorLoaderArgs()
-        return CursorLoader(context,
-                scanParameter.uri,
-                scanParameter.projection,
-                scanParameter.createSelection(args),
-                scanParameter.createSelectionArgs(args),
-                scanParameter.sortOrder)
+        val bundle = Bundle(args)
+        return CursorLoader(
+            context,
+            scanParameter.uri,
+            scanParameter.projection,
+            scanParameter.createSelection(bundle),
+            scanParameter.createSelectionArgs(bundle),
+            scanParameter.sortOrder
+        )
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
         if (data == null) {
-            error.invoke()
+            success.invoke(arrayListOf())
             return
         }
-        val arrayList = ArrayList<E>()
+        val arrayList = arrayListOf<E>()
         while (data.moveToNext()) {
             arrayList.add(factory.cursorMoveToNextGeneric(data))
         }
@@ -47,4 +49,5 @@ internal class ScanTask<E>(
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
     }
+
 }

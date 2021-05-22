@@ -55,16 +55,24 @@ val GalleryBundle.cameraNameExpand: String get() = "${System.currentTimeMillis()
 val GalleryBundle.cropNameExpand: String get() = "${System.currentTimeMillis()}_${cropName}.${cropNameSuffix}"
 
 /** 是否是视频 */
-val GalleryBundle.isVideoScanExpand: Boolean get() = scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+val GalleryBundle.isVideoScanExpand: Boolean
+    get() = scanType.size == 1 && scanType.contains(
+        MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+    )
 
 /** 是否是图片 */
-val GalleryBundle.isImageScanExpand: Boolean get() = scanType.size == 1 && scanType.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+val GalleryBundle.isImageScanExpand: Boolean
+    get() = scanType.size == 1 && scanType.contains(
+        MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+    )
 
 /** [FileScanEntity]转换为[ScanEntity] */
-fun ArrayList<FileScanEntity>.toScanEntity(): ArrayList<ScanEntity> = mapTo(ArrayList()) { ScanEntity(it) }
+fun ArrayList<FileScanEntity>.toScanEntity(): ArrayList<ScanEntity> =
+    mapTo(ArrayList()) { ScanEntity(it) }
 
 /** [ScanEntity]转换为[FileScanEntity] */
-fun ArrayList<ScanEntity>.toScanFileEntity(): ArrayList<FileScanEntity> = mapTo(ArrayList()) { it.delegate }
+fun ArrayList<ScanEntity>.toScanFileEntity(): ArrayList<FileScanEntity> =
+    mapTo(ArrayList()) { it.delegate }
 
 /** [FileScanEntity]转换为[ScanEntity] */
 fun FileScanEntity.toScanEntity(): ScanEntity = ScanEntity(this)
@@ -73,17 +81,25 @@ fun FileScanEntity.toScanEntity(): ScanEntity = ScanEntity(this)
 fun Context.cameraUriExpand(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
         hasQExpand() -> File("", galleryBundle.cameraNameExpand)
-        galleryBundle.cameraPath.isNullOrEmpty() -> lowerVersionFileExpand(galleryBundle.cameraNameExpand, galleryBundle.relativePath)
+        galleryBundle.cameraPath.isNullOrEmpty() -> lowerVersionFileExpand(
+            galleryBundle.cameraNameExpand,
+            galleryBundle.relativePath
+        )
         else -> galleryBundle.cameraPath.mkdirsFileExpand(galleryBundle.cameraNameExpand)
     }
-    return if (galleryBundle.isVideoScanExpand) insertVideoUriExpand(file) else insertImageUriExpand(file)
+    return if (galleryBundle.isVideoScanExpand) insertVideoUriExpand(file) else insertImageUriExpand(
+        file
+    )
 }
 
 /** content://media/external/images/media/id */
 fun Context.cropUriExpand(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
         hasQExpand() -> File("", galleryBundle.cropNameExpand)
-        galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(galleryBundle.cropNameExpand, galleryBundle.relativePath)
+        galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(
+            galleryBundle.cropNameExpand,
+            galleryBundle.relativePath
+        )
         else -> galleryBundle.cropPath.mkdirsFileExpand(galleryBundle.cropNameExpand)
     }
     return insertImageUriExpand(file)
@@ -94,7 +110,10 @@ fun Context.cropUriExpand(galleryBundle: GalleryBundle): Uri? {
 fun Context.cropUriExpand2(galleryBundle: GalleryBundle): Uri? {
     val file: File = when {
         hasQExpand() -> File(externalCacheDir, galleryBundle.cropNameExpand)
-        galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(galleryBundle.cropNameExpand, galleryBundle.relativePath)
+        galleryBundle.cropPath.isNullOrEmpty() -> lowerVersionFileExpand(
+            galleryBundle.cropNameExpand,
+            galleryBundle.relativePath
+        )
         else -> galleryBundle.cropPath.mkdirsFileExpand(galleryBundle.cropNameExpand)
     }
     return Uri.fromFile(file)

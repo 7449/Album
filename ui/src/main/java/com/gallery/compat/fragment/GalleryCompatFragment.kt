@@ -13,7 +13,7 @@ import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.toScanFileEntity
 import com.gallery.scan.extensions.isScanAllExpand
-import com.gallery.scan.types.ScanType
+import com.gallery.scan.Types
 import com.gallery.ui.R
 
 open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_gallery) : Fragment(layoutId) {
@@ -46,7 +46,7 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
         delegate.cameraSuccess()
     }
 
-    fun onScanGallery(parent: Long = ScanType.SCAN_ALL, isCamera: Boolean = false) {
+    fun onScanGallery(parent: Long = Types.Scan.SCAN_ALL, isCamera: Boolean = false) {
         delegate.onScanGallery(parent, isCamera)
     }
 
@@ -93,7 +93,7 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
         }
 
     val isScanAll: Boolean
-        get() = parentId.isScanAllExpand()
+        get() = parentId.isScanAllExpand
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

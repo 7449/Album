@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
@@ -28,109 +27,119 @@ import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
+import com.gallery.scan.Types
 import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.callback.ScanCore.Companion.scanCore
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.scan.extensions.multipleScanExpand
+import com.gallery.scan.extensions.scanCore
 import com.gallery.scan.extensions.singleScanExpand
 import com.gallery.scan.impl.ScanImpl
 import com.gallery.scan.impl.file.FileScanArgs
 import com.gallery.scan.impl.file.FileScanEntity
 import com.gallery.scan.impl.file.fileExpand
 import com.gallery.scan.result.Result
-import com.gallery.scan.types.ScanType
-import com.gallery.scan.types.Sort
 
 /**
  * 图库代理
  */
 class ScanDelegateImpl(
-        /**
-         * [Fragment]
-         * 承载容器
-         * [Fragment]中必须存在 [R.id.gallery_recyclerview] [R.id.gallery_empty_view] 两个id的View
-         */
-        private val fragment: Fragment,
-        /**
-         * [ICrop]
-         * 裁剪
-         */
-        private val galleryICrop: ICrop?,
-        /**
-         * [IGalleryCallback]
-         * 各种回调
-         */
-        private val galleryCallback: IGalleryCallback,
-        /**
-         * [IGalleryInterceptor]
-         * 拦截功能回调，目前支持自定义相机和占位符点击事件
-         */
-        private val galleryInterceptor: IGalleryInterceptor,
-        /**
-         * [IGalleryImageLoader]
-         * 图片加载框架
-         */
-        private val galleryImageLoader: IGalleryImageLoader,
+    /**
+     * [Fragment]
+     * 承载容器
+     * [Fragment]中必须存在 [R.id.gallery_recyclerview] [R.id.gallery_empty_view] 两个id的View
+     */
+    private val fragment: Fragment,
+    /**
+     * [ICrop]
+     * 裁剪
+     */
+    private val galleryICrop: ICrop?,
+    /**
+     * [IGalleryCallback]
+     * 各种回调
+     */
+    private val galleryCallback: IGalleryCallback,
+    /**
+     * [IGalleryInterceptor]
+     * 拦截功能回调，目前支持自定义相机和占位符点击事件
+     */
+    private val galleryInterceptor: IGalleryInterceptor,
+    /**
+     * [IGalleryImageLoader]
+     * 图片加载框架
+     */
+    private val galleryImageLoader: IGalleryImageLoader,
 ) : IScanDelegate, GalleryAdapter.OnGalleryItemClickListener {
 
     private var fileUri: Uri = Uri.EMPTY
-    private var parentId: Long = ScanType.SCAN_ALL
+    private var parentId: Long = Types.Scan.SCAN_ALL
 
     /** 相机启动器 */
-    private val openCameraLauncher: ActivityResultLauncher<CameraUri> = fragment.registerForActivityResult(CameraResultContract()) {
-        when (it) {
-            Activity.RESULT_CANCELED -> cameraCanceled()
-            Activity.RESULT_OK -> cameraSuccess()
+    private val openCameraLauncher: ActivityResultLauncher<CameraUri> =
+        fragment.registerForActivityResult(CameraResultContract()) {
+            when (it) {
+                Activity.RESULT_CANCELED -> cameraCanceled()
+                Activity.RESULT_OK -> cameraSuccess()
+            }
         }
-    }
 
     /** 裁剪启动器 */
     private val cropLauncher: ActivityResultLauncher<Intent> =
-            fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                galleryICrop?.onCropResult(this, galleryBundle, it)
-            }
+        fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            galleryICrop?.onCropResult(this, galleryBundle, it)
+        }
 
     /** 相机权限启动器 */
     private val cameraPermissionLauncher: ActivityResultLauncher<String> =
-            fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-                if (it) {
-                    permissionsGranted(PermissionCode.READ)
-                } else {
-                    permissionsDenied(PermissionCode.READ)
-                }
+        fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                permissionsGranted(PermissionCode.READ)
+            } else {
+                permissionsDenied(PermissionCode.READ)
             }
+        }
 
     /** 读写权限启动器 */
     private val writePermissionLauncher: ActivityResultLauncher<String> =
-            fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-                if (it) {
-                    permissionsGranted(PermissionCode.WRITE)
-                } else {
-                    permissionsDenied(PermissionCode.WRITE)
-                }
+        fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                permissionsGranted(PermissionCode.WRITE)
+            } else {
+                permissionsDenied(PermissionCode.WRITE)
             }
+        }
 
     /** 涉及到View的获取，获取[ScanDelegateImpl]实例时必须在[Fragment.onViewCreated]之后 */
-    private val galleryBundle: GalleryBundle = fragment.arguments.orEmptyExpand().galleryBundleOrDefault
-    private val galleryAdapter: GalleryAdapter = GalleryAdapter(activityNotNull.squareExpand(galleryBundle.spanCount), galleryBundle, galleryCallback, galleryImageLoader, this)
-    private val recyclerView: RecyclerView = fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView
-    private val emptyView: ImageView = fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView
+    private val galleryBundle: GalleryBundle =
+        fragment.arguments.orEmptyExpand().galleryBundleOrDefault
+    private val galleryAdapter: GalleryAdapter = GalleryAdapter(
+        activityNotNull.squareExpand(galleryBundle.spanCount),
+        galleryBundle,
+        galleryCallback,
+        galleryImageLoader,
+        this
+    )
+    private val recyclerView: RecyclerView =
+        fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView
+    private val emptyView: ImageView =
+        fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView
 
     private val scan: ScanImpl<FileScanEntity> =
-            ScanImpl<FileScanEntity>(fragment.scanCore(
-                    factory = ScanEntityFactory.fileExpand(),
-                    args = FileScanArgs(
-                            galleryBundle.scanType.map { it.toString() }.toTypedArray(),
-                            galleryBundle.scanSortField,
-                            galleryBundle.scanSort
-                    )
-            )).registerScanResource {
-                when (it) {
-                    is Result.Multiple -> onScanMultipleSuccess(it.multipleValue)
-                    is Result.Single -> onScanSingleSuccess(it.singleValue)
-                    else -> Log.i("ScanDelegate", it.toString())
-                }
+        ScanImpl(
+            fragment.scanCore(
+                factory = ScanEntityFactory.fileExpand(),
+                args = FileScanArgs(
+                    galleryBundle.scanType.map { it.toString() }.toTypedArray(),
+                    galleryBundle.scanSortField,
+                    galleryBundle.scanSort
+                )
+            )
+        ) {
+            when (this) {
+                is Result.Multiple -> onScanMultipleSuccess(multipleValue)
+                is Result.Single -> onScanSingleSuccess(singleValue)
             }
+        }
 
     override val activity: FragmentActivity?
         get() = fragment.activity
@@ -174,7 +183,7 @@ class ScanDelegateImpl(
     }
 
     override fun onScanMultipleSuccess(scanEntities: ArrayList<FileScanEntity>) {
-        if (scanEntities.isEmpty() && parentId.isScanAllExpand()) {
+        if (scanEntities.isEmpty() && parentId.isScanAllExpand) {
             emptyView.showExpand()
             recyclerView.hideExpand()
             galleryCallback.onScanSuccessEmpty(activity)
@@ -182,7 +191,7 @@ class ScanDelegateImpl(
         }
         emptyView.hideExpand()
         recyclerView.showExpand()
-        if (parentId.isScanAllExpand() && !galleryBundle.hideCamera) {
+        if (parentId.isScanAllExpand && !galleryBundle.hideCamera) {
             scanEntities.add(0, FileScanEntity(parent = GalleryAdapter.CAMERA))
         }
         val toScanEntity = scanEntities.toScanEntity()
@@ -196,8 +205,8 @@ class ScanDelegateImpl(
         scanEntity ?: return galleryCallback.onResultError(activity, galleryBundle)
         val toScanEntity = scanEntity.toScanEntity()
         //拍照或裁剪成功扫描到数据之后根据扫描方式更新数据
-        if (parentId.isScanAllExpand() || parentId == scanEntity.parent) {
-            if (galleryBundle.scanSort == Sort.DESC) {
+        if (parentId.isScanAllExpand || parentId == scanEntity.parent) {
+            if (galleryBundle.scanSort == Types.Sort.DESC) {
                 galleryAdapter.addEntity(if (galleryBundle.hideCamera) 0 else 1, toScanEntity)
             } else {
                 galleryAdapter.addEntity(toScanEntity)
@@ -231,7 +240,13 @@ class ScanDelegateImpl(
             }
             return
         }
-        galleryCallback.onPhotoItemClick(activityNotNull, galleryBundle, scanEntity, position, parentId)
+        galleryCallback.onPhotoItemClick(
+            activityNotNull,
+            galleryBundle,
+            scanEntity,
+            position,
+            parentId
+        )
     }
 
     override fun cameraOpen() {
@@ -258,17 +273,28 @@ class ScanDelegateImpl(
             return
         }
 
-        fun Fragment.checkCameraStatusExpand(uri: CameraUri, action: (uri: CameraUri) -> Unit): CameraStatus {
-            val intent: Intent = if (uri.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE))
-                Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            else Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        fun Fragment.checkCameraStatusExpand(
+            uri: CameraUri,
+            action: (uri: CameraUri) -> Unit
+        ): CameraStatus {
+            val intent: Intent =
+                if (uri.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE))
+                    Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                else Intent(MediaStore.ACTION_VIDEO_CAPTURE)
             return intent.resolveActivity(requireActivity().packageManager)?.let {
                 action.invoke(uri)
                 CameraStatus.SUCCESS
             } ?: CameraStatus.ERROR
         }
 
-        galleryCallback.onCameraOpenStatus(activity, fragment.checkCameraStatusExpand(CameraUri(galleryBundle.scanType, fileUri)) { openCameraLauncher.launch(it) })
+        galleryCallback.onCameraOpenStatus(
+            activity,
+            fragment.checkCameraStatusExpand(
+                CameraUri(
+                    galleryBundle.scanType,
+                    fileUri
+                )
+            ) { openCameraLauncher.launch(it) })
     }
 
     override fun cameraSuccess() {

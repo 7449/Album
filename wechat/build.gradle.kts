@@ -11,6 +11,12 @@ android {
         targetSdkVersion(Version.targetSdk)
     }
     buildFeatures.viewBinding = true
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-module-name",
+            "com.github.7449.album.wechat"
+        )
+    }
 }
 dependencies {
     compileOnly(project(":ui"))

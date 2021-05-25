@@ -12,9 +12,14 @@ import com.gallery.core.extensions.hideExpand
 import com.gallery.core.extensions.showExpand
 import com.gallery.ui.wechat.databinding.LayoutSelectWechatItemBinding
 
-class WeChatSelectItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+class WeChatSelectItem @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val viewBinding: LayoutSelectWechatItemBinding = LayoutSelectWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
+    private val viewBinding: LayoutSelectWechatItemBinding =
+        LayoutSelectWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     init {
         setBackgroundColor(Color.BLACK)

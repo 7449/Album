@@ -19,12 +19,13 @@ class UCropGalleryActivity : GalleryActivity() {
 
 class CustomCameraActivity : GalleryActivity() {
 
-    private val cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
-        when (intent.resultCode) {
-            Activity.RESULT_CANCELED -> galleryFragment.onCameraResultCanceled()
-            Activity.RESULT_OK -> galleryFragment.onCameraResultOk()
+    private val cameraLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
+            when (intent.resultCode) {
+                Activity.RESULT_CANCELED -> galleryFragment.onCameraResultCanceled()
+                Activity.RESULT_OK -> galleryFragment.onCameraResultOk()
+            }
         }
-    }
 
     override fun onCustomCamera(uri: Uri): Boolean {
         cameraLauncher.launch(Intent(this, CameraActivity::class.java).apply {

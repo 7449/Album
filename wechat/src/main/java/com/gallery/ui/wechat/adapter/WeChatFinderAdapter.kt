@@ -10,26 +10,39 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.databinding.GalleryItemFinderWechatBinding
 
 class WeChatFinderAdapter(
-        private val galleryUiBundle: GalleryUiBundle,
-        private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener,
+    private val uiBundle: GalleryUiBundle,
+    private val listener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<WeChatFinderAdapter.ViewHolder>() {
 
     private val list: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutViewHolder = ViewHolder(GalleryItemFinderWechatBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-        layoutViewHolder.itemView.setOnClickListener {
-            adapterFinderListener.onGalleryAdapterItemClick(it, layoutViewHolder.bindingAdapterPosition, list[layoutViewHolder.bindingAdapterPosition])
+        return ViewHolder(
+            GalleryItemFinderWechatBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        ).apply {
+            itemView.setOnClickListener {
+                listener.onGalleryAdapterItemClick(
+                    it,
+                    bindingAdapterPosition,
+                    list[bindingAdapterPosition]
+                )
+            }
         }
-        return layoutViewHolder
     }
 
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val finderEntity: ScanEntity = list[position]
-        adapterFinderListener.onGalleryFinderThumbnails(finderEntity, holder.viewBinding.ivGalleryFinderIcon)
-        holder.bind(galleryUiBundle, finderEntity)
+        val entity: ScanEntity = list[position]
+        listener.onGalleryFinderThumbnails(
+            entity,
+            holder.binding.ivGalleryFinderIcon
+        )
+        holder.bind(uiBundle, entity)
     }
 
     fun updateFinder(entities: ArrayList<ScanEntity>) {
@@ -38,15 +51,18 @@ class WeChatFinderAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val viewBinding: GalleryItemFinderWechatBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+    class ViewHolder(val binding: GalleryItemFinderWechatBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(galleryUiBundle: GalleryUiBundle, finderEntity: ScanEntity) {
-            viewBinding.tvGalleryFinderName.text = "%s".format(finderEntity.bucketDisplayName)
-            viewBinding.tvGalleryFinderName.setTextColor(galleryUiBundle.finderItemTextColor)
-            viewBinding.tvGalleryFinderFileCount.text = "(%s)".format(finderEntity.count.toString())
-            viewBinding.tvGalleryFinderFileCount.setTextColor(galleryUiBundle.finderItemTextCountColor)
-            viewBinding.ivGalleryFinderFileCheck.visibility = if (finderEntity.isSelected) View.VISIBLE else View.GONE
+        fun bind(uiBundle: GalleryUiBundle, entity: ScanEntity) {
+            binding.tvGalleryFinderName.text = "%s".format(entity.bucketDisplayName)
+            binding.tvGalleryFinderName.setTextColor(uiBundle.finderItemTextColor)
+            binding.tvGalleryFinderFileCount.text = "(%s)".format(entity.count.toString())
+            binding.tvGalleryFinderFileCount.setTextColor(uiBundle.finderItemTextCountColor)
+            binding.ivGalleryFinderFileCheck.visibility =
+                if (entity.isSelected) View.VISIBLE else View.GONE
         }
+
     }
 
 }

@@ -23,18 +23,18 @@ class Gallery(
         fun newInstance(
             activity: FragmentActivity? = null,
             fragment: Fragment? = null,
-            galleryLauncher: ActivityResultLauncher<Intent>,
-            galleryBundle: GalleryBundle = GalleryBundle(),
-            galleryUiBundle: GalleryUiBundle = GalleryUiBundle(),
-            galleryOption: Bundle = Bundle.EMPTY,
-            galleryPrevOption: Bundle = Bundle.EMPTY,
+            launcher: ActivityResultLauncher<Intent>,
+            bundle: GalleryBundle = GalleryBundle(),
+            uiBundle: GalleryUiBundle = GalleryUiBundle(),
+            option: Bundle = Bundle.EMPTY,
+            prevOption: Bundle = Bundle.EMPTY,
             clz: Class<*> = GalleryActivity::class.java,
         ): Gallery {
             return Gallery(
                 activity,
                 fragment,
-                galleryLauncher,
-                UIGalleryArgs(galleryBundle, galleryUiBundle, galleryOption, galleryPrevOption),
+                launcher,
+                UIGalleryArgs(bundle, uiBundle, option, prevOption),
                 clz
             )
         }

@@ -20,7 +20,11 @@ class CameraActivity : AppCompatActivity() {
         const val CUSTOM_CAMERA_OUT_PUT_URI = "customCameraOutPutUri"
     }
 
-    private val viewBinding: ActivityCameraBinding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
+    private val viewBinding: ActivityCameraBinding by lazy {
+        ActivityCameraBinding.inflate(
+            layoutInflater
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +47,13 @@ class CameraActivity : AppCompatActivity() {
 
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
-            val fileUri: Uri = intent.extras?.getParcelable<Uri>(CUSTOM_CAMERA_OUT_PUT_URI).orEmptyExpand()
+            val fileUri: Uri =
+                intent.extras?.getParcelable<Uri>(CUSTOM_CAMERA_OUT_PUT_URI).orEmptyExpand()
             Log.i("Camera", fileUri.toString())
             contentResolver.openOutputStream(fileUri)?.use { it.write(result.data) }
             setResult(Activity.RESULT_OK)
             finish()
         }
     }
+
 }

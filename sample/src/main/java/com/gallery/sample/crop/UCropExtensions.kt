@@ -12,9 +12,9 @@ import java.io.OutputStream
 
 /** 复制文件 */
 fun Context.copyImageExpand(
-        inputUri: Uri,
-        displayName: String,
-        relativePath: String = Environment.DIRECTORY_DCIM,
+    inputUri: Uri,
+    displayName: String,
+    relativePath: String = Environment.DIRECTORY_DCIM,
 ): Uri? {
     if (!hasQExpand()) {
         return null

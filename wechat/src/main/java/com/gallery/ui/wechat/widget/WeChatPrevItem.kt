@@ -13,9 +13,14 @@ import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.LayoutPrevWechatItemBinding
 import com.gallery.ui.wechat.extension.toFileSize
 
-class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+class WeChatPrevItem @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val viewBinding: LayoutPrevWechatItemBinding = LayoutPrevWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
+    private val viewBinding: LayoutPrevWechatItemBinding =
+        LayoutPrevWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     val imageView: ImageView
         get() = viewBinding.prevWeChatImageView
@@ -27,9 +32,11 @@ class WeChatPrevItem @JvmOverloads constructor(context: Context, attrs: Attribut
         get() = viewBinding.prevWeChatGif
 
     fun update(scanEntity: ScanEntity) {
-        imageView.scaleType = if (scanEntity.isVideo) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
+        imageView.scaleType =
+            if (scanEntity.isVideo) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
         gifView.visibility = if (scanEntity.isGif) View.VISIBLE else View.GONE
-        gifView.text = context.getString(R.string.gallery_wechat_prev_gif_format).format(scanEntity.size.toFileSize())
+        gifView.text = context.getString(R.string.gallery_wechat_prev_gif_format)
+            .format(scanEntity.size.toFileSize())
         videoPlayView.visibility = if (scanEntity.isVideo) View.VISIBLE else View.GONE
         videoPlayView.setOnClickListener { context.openVideoExpand(scanEntity.uri) {} }
     }

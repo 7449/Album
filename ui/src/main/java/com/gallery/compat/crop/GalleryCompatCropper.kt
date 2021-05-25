@@ -43,14 +43,14 @@ class GalleryCompatCropper(
     override fun openCrop(context: Context, bundle: GalleryBundle, inputUri: Uri): Intent {
         this.cropUri = cropOutPutUri(activity, bundle)
         val intent = Intent().setClass(activity, CropImageActivity::class.java)
-        val bundle = Bundle()
-        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
-        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
+        val value = Bundle()
+        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
+        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
             val args = uiBundle.args
             args.classLoader = CropImageOptions::class.java.classLoader
             args.getParcelable<CropImageOptions>(GalleryConfig.CROP_ARGS)
         }.getOrElse { CropImageOptions() } ?: CropImageOptions())
-        intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
+        intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, value)
         return intent
     }
 

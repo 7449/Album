@@ -6,4 +6,5 @@ import com.gallery.ui.result.GalleryListener
 interface WeChatGalleryCallback : GalleryListener {
 
     fun onWeChatGalleryResources(entities: List<ScanEntity>, fullImage: Boolean)
+    
 }

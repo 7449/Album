@@ -17,9 +17,10 @@
             
 #### dependencies
 
-    implementation 'com.github.7449.Album:ui:1.0.1'
-    implementation 'com.github.7449.Album:core:1.0.1'
-    implementation 'com.github.7449.Album:scan:1.0.1'
+    implementation 'com.github.7449.Album:wechat:1.0.2'
+    implementation 'com.github.7449.Album:ui:1.0.2'
+    implementation 'com.github.7449.Album:core:1.0.2'
+    implementation 'com.github.7449.Album:scan:1.0.2'
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
@@ -44,7 +45,7 @@
     
 #### custom page
 
-  [CustomyActivity](./app/src/main/java/com/gallery/sample/custom/CustomPage.kt)
+  [CustomyActivity](./sample/src/main/java/com/gallery/sample/custom/CustomPage.kt)
   
 #### custom crop
 

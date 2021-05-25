@@ -18,16 +18,26 @@ import com.gallery.scan.Types
 import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.result.GalleryResultCallback
-import com.gallery.ui.wechat.extension.weChatUiGallery
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
+import com.gallery.ui.wechat.weChatGallery
 
 class MainActivity : AppCompatActivity() {
 
     private val galleryLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), GalleryResultCallback(GalleryCallback(this)))
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            GalleryResultCallback(GalleryCallback(this))
+        )
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult(), WeChatGalleryResultCallback(WeChatGalleryCallback(this)))
-    private val viewBinding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            WeChatGalleryResultCallback(WeChatGalleryCallback(this))
+        )
+    private val viewBinding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(
+            layoutInflater
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,9 +86,14 @@ class MainActivity : AppCompatActivity() {
         }
         viewBinding.includeScan.scanRg.setOnCheckedChangeListener { _, i ->
             when (i) {
-                R.id.scan_image -> scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
-                R.id.scan_video -> scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
-                R.id.scan_mix -> scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+                R.id.scan_image -> scanArray =
+                    intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+                R.id.scan_video -> scanArray =
+                    intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+                R.id.scan_mix -> scanArray = intArrayOf(
+                    MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
+                    MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                )
             }
         }
         viewBinding.includeSetting.settingRg.setOnCheckedChangeListener { _, i ->
@@ -109,33 +124,37 @@ class MainActivity : AppCompatActivity() {
         }
         viewBinding.startConfig.setOnClickListener {
             if (isWeChat) {
-                weChatUiGallery(galleryWeChatLauncher)
+                weChatGallery(launcher = galleryWeChatLauncher)
                 return@setOnClickListener
             }
-            Gallery.newInstance(activity = this,
-                    clz = cls ?: GalleryActivity::class.java,
-                    galleryBundle = galleryBundle.copy(
-                            cameraText = "相机",
-                            scanType = scanArray,
-                            scanSort = sortType,
-                            crop = viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
-                            radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
-                            cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
-                    ),
-                    galleryUiBundle = galleryUiBundle.copy(
-                            toolbarText = if (galleryBundle.isVideoScanExpand) getString(R.string.gallery_video_title) else "图片选择",
-                    ),
-                    galleryLauncher = galleryLauncher)
+            Gallery.newInstance(
+                activity = this,
+                clz = cls ?: GalleryActivity::class.java,
+                bundle = galleryBundle.copy(
+                    cameraText = "相机",
+                    scanType = scanArray,
+                    scanSort = sortType,
+                    crop = viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
+                    radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
+                    cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
+                ),
+                uiBundle = galleryUiBundle.copy(
+                    toolbarText = if (galleryBundle.isVideoScanExpand) getString(R.string.gallery_video_title) else "图片选择",
+                ),
+                launcher = galleryLauncher
+            )
         }
         viewBinding.customCamera.setOnClickListener {
             Gallery.newInstance(
-                    activity = this,
-                    galleryLauncher = galleryLauncher,
-                    clz = CustomCameraActivity::class.java
+                activity = this,
+                launcher = galleryLauncher,
+                clz = CustomCameraActivity::class.java
             )
         }
         viewBinding.dialog.setOnClickListener {
-            CustomDialog.newInstance().show(supportFragmentManager, CustomDialog::class.java.simpleName)
+            CustomDialog.newInstance()
+                .show(supportFragmentManager, CustomDialog::class.java.simpleName)
         }
     }
+
 }

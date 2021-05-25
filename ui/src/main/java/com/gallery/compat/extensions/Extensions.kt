@@ -7,10 +7,8 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.core.extensions.drawableExpand
@@ -27,8 +25,6 @@ val AppCompatActivity.prevFragment: PrevCompatFragment
         PrevCompatFragment::class.java.simpleName
     ) as PrevCompatFragment
 
-fun Bundle?.getBooleanExpand(key: String): Boolean = getObjExpand(key) { false }
-
 inline fun <reified T : Parcelable> Bundle?.getParcelableExpand(key: String): T =
     getParcelableOrDefault(key)
 
@@ -43,12 +39,6 @@ inline fun <reified T : Parcelable> Bundle?.getParcelableOrDefault(
 
 inline fun <reified T> Bundle?.getObjExpand(key: String, action: () -> T): T = this?.get(key) as? T
     ?: action.invoke()
-
-/** 获取颜色 */
-fun Int.colorExpand(activity: Context): Int = activity.colorExpand(this)
-
-/** 获取颜色 */
-fun Context.colorExpand(@ColorRes id: Int): Int = ContextCompat.getColor(this, id)
 
 /** 获取自定义颜色Drawable */
 fun Context.minimumDrawableExpand(@DrawableRes id: Int, @ColorInt color: Int): Drawable? =

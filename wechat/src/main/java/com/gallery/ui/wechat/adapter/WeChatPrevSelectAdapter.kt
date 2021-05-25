@@ -10,26 +10,36 @@ import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.GalleryItemPrevSelectWechatBinding
 
 class WeChatPrevSelectAdapter(
-        private val adapterFinderListener: GalleryFinderAdapter.AdapterFinderListener,
+    private val listener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<WeChatPrevSelectAdapter.ViewHolder>() {
 
     private val list: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutViewHolder = ViewHolder(GalleryItemPrevSelectWechatBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-        layoutViewHolder.itemView.setOnClickListener {
-            adapterFinderListener.onGalleryAdapterItemClick(it, layoutViewHolder.bindingAdapterPosition, list[layoutViewHolder.bindingAdapterPosition])
+        return ViewHolder(
+            GalleryItemPrevSelectWechatBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        ).apply {
+            itemView.setOnClickListener {
+                listener.onGalleryAdapterItemClick(
+                    it,
+                    bindingAdapterPosition,
+                    list[bindingAdapterPosition]
+                )
+            }
         }
-        return layoutViewHolder
     }
 
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val finderEntity: ScanEntity = list[position]
-        val frameLayout: FrameLayout = holder.viewBinding.prevSelectFrame
-        frameLayout.setBackgroundResource(if (finderEntity.isSelected) R.drawable.wechat_selector_gallery_select else 0)
-        adapterFinderListener.onGalleryFinderThumbnails(finderEntity, frameLayout)
+        val entity: ScanEntity = list[position]
+        val frameLayout: FrameLayout = holder.binding.prevSelectFrame
+        frameLayout.setBackgroundResource(if (entity.isSelected) R.drawable.wechat_selector_gallery_select else 0)
+        listener.onGalleryFinderThumbnails(entity, frameLayout)
     }
 
     fun updateSelect(entities: List<ScanEntity>) {
@@ -38,7 +48,7 @@ class WeChatPrevSelectAdapter(
         notifyDataSetChanged()
     }
 
-    fun findPosition(scanEntity: ScanEntity): Int {
+    fun index(scanEntity: ScanEntity): Int {
         return list.indexOfFirst { it.id == scanEntity.id }
     }
 
@@ -55,6 +65,7 @@ class WeChatPrevSelectAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val viewBinding: GalleryItemPrevSelectWechatBinding) : RecyclerView.ViewHolder(viewBinding.root)
+    class ViewHolder(val binding: GalleryItemPrevSelectWechatBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
 }

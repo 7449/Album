@@ -48,7 +48,7 @@ class CustomDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         val view: View = inflater.inflate(R.layout.dialog_gallery, container, false)
         slideToUp(view)
@@ -130,4 +130,5 @@ class CustomDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
             .into(imageView)
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
+
 }

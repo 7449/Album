@@ -69,4 +69,5 @@ open class UCropImpl(private val uiBundle: GalleryUiBundle) : ICrop {
         delegate.requireActivity.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
         delegate.requireActivity.finish()
     }
+
 }

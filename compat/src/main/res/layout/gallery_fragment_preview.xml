@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/gallery_prev_checkbox_margin"
         android:button="@null" />
 
 </FrameLayout>

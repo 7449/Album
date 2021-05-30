@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 object Plugin {
     const val application = "com.android.application"
     const val library = "com.android.library"
@@ -26,10 +28,6 @@ object Maven {
 }
 
 object Dep {
-    const val scan = "com.github.7449.Album:scan:1.0.0"
-    const val core = "com.github.7449.Album:core:1.0.0"
-    const val ui = "com.github.7449.Album:ui:1.0.0"
-
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.0"
@@ -42,4 +40,29 @@ object Dep {
     const val cropper = "com.theartofdev.edmodo:android-image-cropper:2.8.0"
     const val glide = "com.github.bumptech.glide:glide:4.12.0"
     const val uCrop = "com.github.yalantis:ucrop:2.2.6"
+}
+
+object DepList {
+    val scan = mutableListOf(Dep.fragment, Dep.kotlin)
+    val core = scan
+        .plus(Dep.appcompat)
+        .plus(Dep.viewPager2)
+        .plus(Dep.recyclerView)
+    val ui = core
+        .plus(Dep.glide)
+        .plus(Dep.cropper)
+    val wechat = core
+        .plus(Dep.glide)
+    val sample = (scan + core + ui + wechat)
+        .plus(Dep.material)
+        .plus(Dep.uCrop)
+        .plus(Dep.cameraview)
+}
+
+object DepLib {
+    val core = mutableListOf(":scan")
+    val compat = core.plus(":core")
+    val ui = compat.plus(":compat")
+    val wechat = compat.plus(":compat")
+    val sample = (wechat + ui).plus(":wechat").plus(":ui")
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.compat.R
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
 import com.gallery.core.callback.IGalleryInterceptor
@@ -15,7 +16,6 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.toScanFileEntity
 import com.gallery.scan.Types
 import com.gallery.scan.extensions.isScanAllExpand
-import com.gallery.ui.R
 
 open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_gallery) :
     Fragment(layoutId) {

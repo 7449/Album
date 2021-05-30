@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.GalleryCompatBundle
 import com.gallery.compat.UIPrevArgs
 import com.gallery.compat.UIPrevArgs.Companion.putPrevArgs
 import com.gallery.compat.UIPrevArgs.Companion.uiPrevArgs
@@ -22,8 +22,6 @@ import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.args.PrevArgs.Companion.configOrDefault
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
-import com.gallery.core.extensions.safeToastExpand
-import com.gallery.ui.R
 
 abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, IGalleryImageLoader,
     IGalleryPrevInterceptor {
@@ -59,10 +57,10 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
     /** 初始配置 */
     protected val galleryConfig: GalleryBundle by lazy { uiPrevArgs.prevArgs.configOrDefault }
 
-    /** ui 配置 */
-    val uiConfig: GalleryUiBundle by lazy { uiPrevArgs.uiBundle }
+    /** compat 配置 */
+    val compatConfig: GalleryCompatBundle by lazy { uiPrevArgs.compatBundle }
 
-    /**  暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
+    /**  暂存Bundle,用于自定义布局时[GalleryCompatBundle]无法满足需要配置时携带数据 */
     val uiGapConfig: Bundle by lazy { uiPrevArgs.option }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +75,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
         bundle: GalleryBundle,
         savedInstanceState: Bundle?
     ) {
-        delegate.rootView.setBackgroundColor(uiConfig.prevPhotoBackgroundColor)
+        delegate.rootView.setBackgroundColor(compatConfig.prevRootBackground)
     }
 
     /** 自定义Fragment */
@@ -95,7 +93,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
     /** onBackPressed */
     override fun onBackPressed() {
         val intent = Intent()
-        intent.putExtras(onKeyBackResult(prevFragment.resultBundle(uiConfig.preBackRefresh)))
+        intent.putExtras(onKeyBackResult(prevFragment.resultBundle(compatConfig.preBackRefresh)))
         setResult(RESULT_CODE_BACK, intent)
         super.onBackPressed()
     }
@@ -103,7 +101,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
     /** finish */
     open fun onGalleryFinish() {
         val intent = Intent()
-        intent.putExtras(onToolbarFinishResult(prevFragment.resultBundle(uiConfig.preFinishRefresh)))
+        intent.putExtras(onToolbarFinishResult(prevFragment.resultBundle(compatConfig.preFinishRefresh)))
         setResult(RESULT_CODE_TOOLBAR, intent)
         finish()
     }
@@ -114,11 +112,6 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
         intent.putExtras(onSelectEntitiesResult(prevFragment.resultBundle(true)))
         setResult(RESULT_CODE_SELECT, intent)
         finish()
-    }
-
-    /** 选择数据为空 */
-    open fun onGallerySelectEmpty() {
-        getString(R.string.gallery_prev_select_empty_pre).safeToastExpand(this)
     }
 
     /** 预览图加载，预览页必须实现 */

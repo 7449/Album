@@ -58,10 +58,10 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
     /** 初始配置 */
     protected val galleryConfig: GalleryBundle by lazy { galleryArgs.galleryBundle }
 
-    /** ui 配置 */
-    protected val uiConfig: GalleryUiBundle by lazy { galleryArgs.galleryUiBundle }
+    /** compat 配置 */
+    protected val compatConfig: GalleryCompatBundle by lazy { galleryArgs.galleryCompatBundle }
 
-    /** 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据 */
+    /** 暂存Bundle,用于自定义布局时[GalleryCompatBundle]无法满足需要配置时携带数据 */
     protected val uiGapConfig: Bundle by lazy { galleryArgs.galleryOption }
 
     /** 预览页启动[ActivityResultLauncher]  */
@@ -114,22 +114,22 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         bundle: GalleryBundle,
         savedInstanceState: Bundle?
     ) {
-        delegate.rootView.setBackgroundColor(uiConfig.galleryRootBackground)
+        delegate.rootView.setBackgroundColor(compatConfig.galleryRootBackground)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = when (uiConfig.layoutManager) {
+        recyclerView.layoutManager = when (compatConfig.layoutManager) {
             LayoutManagerTypes.GRID -> GridLayoutManager(
                 recyclerView.context,
                 bundle.spanCount,
-                uiConfig.orientation,
+                compatConfig.orientation,
                 false
             )
             LayoutManagerTypes.LINEAR -> LinearLayoutManager(
                 recyclerView.context,
-                uiConfig.orientation,
+                compatConfig.orientation,
                 false
             )
         }
-        recyclerView.addItemDecoration(GalleryDivider(uiConfig.dividerWidth))
+        recyclerView.addItemDecoration(GalleryDivider(compatConfig.dividerWidth))
         if (recyclerView.itemAnimator is SimpleItemAnimator) {
             (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
@@ -168,7 +168,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
     ) {
         onStartPrevPage(
             UIPrevArgs(
-                uiConfig,
+                compatConfig,
                 PrevArgs(
                     parentId,
                     galleryFragment.selectItem,

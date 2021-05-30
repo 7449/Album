@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="gallery_empty_width">160dp</dimen>
+    <dimen name="gallery_empty_height">160dp</dimen>
+    <dimen name="gallery_prev_checkbox_margin">5dp</dimen>
+</resources>

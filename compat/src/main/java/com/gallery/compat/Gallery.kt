@@ -1,22 +1,19 @@
-package com.gallery.ui
+package com.gallery.compat
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.gallery.compat.GalleryUiBundle
-import com.gallery.compat.UIGalleryArgs
 import com.gallery.compat.UIGalleryArgs.Companion.putArgs
 import com.gallery.core.GalleryBundle
-import com.gallery.ui.activity.GalleryActivity
 
 class Gallery(
     activity: FragmentActivity? = null,
     fragment: Fragment? = null,
     private val galleryLauncher: ActivityResultLauncher<Intent>,
     private val uiGalleryArgs: UIGalleryArgs,
-    private val clz: Class<*> = GalleryActivity::class.java,
+    private val clz: Class<*>,
 ) {
 
     companion object {
@@ -25,16 +22,16 @@ class Gallery(
             fragment: Fragment? = null,
             launcher: ActivityResultLauncher<Intent>,
             bundle: GalleryBundle = GalleryBundle(),
-            uiBundle: GalleryUiBundle = GalleryUiBundle(),
+            compatBundle: GalleryCompatBundle = GalleryCompatBundle(),
             option: Bundle = Bundle.EMPTY,
             prevOption: Bundle = Bundle.EMPTY,
-            clz: Class<*> = GalleryActivity::class.java,
+            clz: Class<*>,
         ): Gallery {
             return Gallery(
                 activity,
                 fragment,
                 launcher,
-                UIGalleryArgs(bundle, uiBundle, option, prevOption),
+                UIGalleryArgs(bundle, compatBundle, option, prevOption),
                 clz
             )
         }
@@ -67,4 +64,5 @@ class Gallery(
     private fun startFragment() {
         galleryLauncher.launch(launchIntent())
     }
+
 }

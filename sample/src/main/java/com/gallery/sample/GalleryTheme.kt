@@ -1,7 +1,7 @@
 package com.gallery.sample
 
 import android.app.Activity
-import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.GalleryCompatBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.wechat.extension.colorExpand
 
@@ -41,13 +41,13 @@ object GalleryTheme {
         }
     }
 
-    fun themeGalleryUi(activity: Activity, theme: Theme): GalleryUiBundle {
+    fun themeGalleryUi(activity: Activity, theme: Theme): GalleryCompatBundle {
         when (theme) {
             Theme.DEFAULT -> {
-                return GalleryUiBundle()
+                return GalleryCompatBundle()
             }
             Theme.BLUE -> {
-                return GalleryUiBundle(
+                return GalleryCompatBundle(
                     statusBarColor = R.color.colorBlue.colorExpand(activity),
                     toolbarBackground = R.color.colorBlue.colorExpand(activity),
                     bottomViewBackground = R.color.colorBlue.colorExpand(activity),
@@ -55,7 +55,7 @@ object GalleryTheme {
                 )
             }
             Theme.PINK -> {
-                return GalleryUiBundle(
+                return GalleryCompatBundle(
                     statusBarColor = R.color.colorPink.colorExpand(activity),
                     toolbarBackground = R.color.colorPink.colorExpand(activity),
                     bottomViewBackground = R.color.colorPink.colorExpand(activity),
@@ -63,8 +63,8 @@ object GalleryTheme {
                 )
             }
             Theme.BLACK -> {
-                return GalleryUiBundle(
-                    prevPhotoBackgroundColor = R.color.colorBlack.colorExpand(activity),
+                return GalleryCompatBundle(
+                    prevRootBackground = R.color.colorBlack.colorExpand(activity),
                     galleryRootBackground = R.color.colorBlack.colorExpand(activity),
                     statusBarColor = R.color.colorBlack.colorExpand(activity),
                     toolbarBackground = R.color.colorBlack.colorExpand(activity),
@@ -75,7 +75,7 @@ object GalleryTheme {
                 )
             }
             Theme.APP -> {
-                return GalleryUiBundle(
+                return GalleryCompatBundle(
                     statusBarColor = R.color.colorAccent.colorExpand(activity),
                     toolbarBackground = R.color.colorAccent.colorExpand(activity),
                     bottomViewBackground = R.color.colorAccent.colorExpand(activity),

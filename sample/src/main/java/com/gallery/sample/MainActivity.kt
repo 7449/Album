@@ -6,6 +6,7 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.gallery.compat.Gallery
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.callback.GalleryCallback
@@ -15,7 +16,6 @@ import com.gallery.sample.custom.CustomDialog
 import com.gallery.sample.custom.UCropGalleryActivity
 import com.gallery.sample.databinding.ActivityMainBinding
 import com.gallery.scan.Types
-import com.gallery.ui.Gallery
 import com.gallery.ui.activity.GalleryActivity
 import com.gallery.ui.result.GalleryResultCallback
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                     radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
                     cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
                 ),
-                uiBundle = galleryUiBundle.copy(
+                compatBundle = galleryUiBundle.copy(
                     toolbarText = if (galleryBundle.isVideoScanExpand) getString(R.string.gallery_video_title) else "图片选择",
                 ),
                 launcher = galleryLauncher

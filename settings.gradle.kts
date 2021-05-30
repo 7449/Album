@@ -1,6 +1,8 @@
 include(
-        ":core",
-        ":scan",
-        ":ui",
-        ":sample",
-        ":wechat")
+    ":core",
+    ":scan",
+    ":ui",
+    ":sample",
+    ":compat",
+    ":wechat"
+)

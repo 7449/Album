@@ -37,6 +37,7 @@ import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
 import com.gallery.ui.wechat.databinding.GalleryActivityWechatGalleryBinding
 import com.gallery.ui.wechat.extension.*
 import com.gallery.ui.wechat.widget.WeChatGalleryItem
+import java.util.*
 
 class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.AdapterFinderListener {
 
@@ -74,7 +75,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     }
     private val newFinderAdapter: WeChatFinderAdapter by lazy {
         WeChatFinderAdapter(
-            uiConfig,
+            compatConfig,
             this
         )
     }
@@ -115,11 +116,11 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        window.statusBarColor = uiConfig.statusBarColor
-        binding.galleryWeChatToolbar.setBackgroundColor(uiConfig.toolbarBackground)
+        window.statusBarColor = compatConfig.statusBarColor
+        binding.galleryWeChatToolbar.setBackgroundColor(compatConfig.toolbarBackground)
 
         binding.galleryWeChatFinder.layoutManager = LinearLayoutManager(this)
-        binding.galleryWeChatFinder.setBackgroundColor(uiConfig.finderItemBackground)
+        binding.galleryWeChatFinder.setBackgroundColor(compatConfig.finderItemBackground)
         binding.galleryWeChatFinder.addItemDecoration(
             DividerItemDecoration(
                 this,
@@ -127,18 +128,18 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
             )
         )
 
-        binding.galleryWeChatBottomView.setBackgroundColor(uiConfig.bottomViewBackground)
+        binding.galleryWeChatBottomView.setBackgroundColor(compatConfig.bottomViewBackground)
 
-        binding.galleryWeChatPrev.text = uiConfig.preViewText
-        binding.galleryWeChatPrev.textSize = uiConfig.preViewTextSize
+        binding.galleryWeChatPrev.text = compatConfig.preViewText
+        binding.galleryWeChatPrev.textSize = compatConfig.preViewTextSize
 
-        binding.galleryWeChatToolbarSend.textSize = uiConfig.selectTextSize
-        binding.galleryWeChatToolbarSend.text = uiConfig.selectText
+        binding.galleryWeChatToolbarSend.textSize = compatConfig.selectTextSize
+        binding.galleryWeChatToolbarSend.text = compatConfig.selectText
         binding.galleryWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
 
-        binding.galleryWeChatToolbarFinderText.textSize = uiConfig.finderTextSize
-        binding.galleryWeChatToolbarFinderText.setTextColor(uiConfig.finderTextColor)
-        binding.galleryWeChatToolbarFinderIcon.setImageResource(uiConfig.finderTextCompoundDrawable)
+        binding.galleryWeChatToolbarFinderText.textSize = compatConfig.finderTextSize
+        binding.galleryWeChatToolbarFinderText.setTextColor(compatConfig.finderTextColor)
+        binding.galleryWeChatToolbarFinderIcon.setImageResource(compatConfig.finderTextCompoundDrawable)
         binding.galleryWeChatToolbarFinderText.text = finderName
 
         tempVideoList.clear()
@@ -327,8 +328,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
             checkBox.text = ""
         }
         Glide.with(this).load(scanEntity.uri).apply(
-            RequestOptions().placeholder(com.gallery.ui.R.drawable.ic_gallery_default_loading)
-                .error(com.gallery.ui.R.drawable.ic_gallery_default_loading).centerCrop()
+            RequestOptions().centerCrop()
                 .override(width, height)
         ).into(weChatGalleryItem.imageView)
         container.addView(weChatGalleryItem, FrameLayout.LayoutParams(width, height))
@@ -338,8 +338,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(this).load(finderEntity.uri).apply(
-            RequestOptions().placeholder(com.gallery.ui.R.drawable.ic_gallery_default_loading)
-                .error(com.gallery.ui.R.drawable.ic_gallery_default_loading).centerCrop()
+            RequestOptions().centerCrop()
         ).into(imageView)
         container.addView(imageView)
     }
@@ -410,9 +409,9 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         binding.galleryWeChatToolbarSend.isEnabled = !fragment.isSelectEmpty
         binding.galleryWeChatPrev.isEnabled = !fragment.isSelectEmpty
         binding.galleryWeChatToolbarSend.text =
-            uiConfig.selectText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
+            compatConfig.selectText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
         binding.galleryWeChatPrev.text =
-            uiConfig.preViewText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount})"
+            compatConfig.preViewText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount})"
     }
 
     /** 显示Finder */

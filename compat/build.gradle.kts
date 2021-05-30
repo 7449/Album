@@ -5,7 +5,7 @@ plugins {
     id(Plugin.kotlin_parcelize)
 }
 android {
-    compileSdkVersion(Version.minSdk)
+    compileSdkVersion(Version.compileSdk)
     defaultConfig {
         minSdkVersion(Version.minSdk)
         targetSdkVersion(Version.targetSdk)
@@ -13,10 +13,11 @@ android {
     compileOptions {
         kotlinOptions.freeCompilerArgs += listOf(
             "-module-name",
-            "com.github.7449.album.scan"
+            "com.github.7449.album.compat"
         )
     }
 }
 dependencies {
-    DepList.scan.forEach { implementation(it) }
+    DepLib.compat.forEach { compileOnly(project(it)) }
+    DepList.core.forEach { implementation(it) }
 }

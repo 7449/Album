@@ -6,8 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
+import com.gallery.compat.GalleryCompatBundle
 import com.gallery.compat.GalleryConfig
-import com.gallery.compat.GalleryUiBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
@@ -18,7 +18,7 @@ import com.gallery.core.extensions.queryDataExpand
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
-open class UCropImpl(private val uiBundle: GalleryUiBundle) : ICrop {
+open class UCropImpl(private val compatBundle: GalleryCompatBundle) : ICrop {
 
     override fun onCropResult(
         delegate: IScanDelegate,
@@ -39,7 +39,7 @@ open class UCropImpl(private val uiBundle: GalleryUiBundle) : ICrop {
             .withOptions(
                 UCrop.Options().apply {
                     optionBundle.putAll(
-                        uiBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()
+                        compatBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()
                     )
                 })
             .getIntent(context)

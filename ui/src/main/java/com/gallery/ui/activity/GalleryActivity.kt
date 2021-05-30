@@ -10,9 +10,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.activity.GalleryCompatActivity
-import com.gallery.compat.crop.GalleryCompatCropper
 import com.gallery.compat.extensions.galleryFragment
-import com.gallery.compat.extensions.minimumDrawableExpand
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
@@ -24,8 +22,10 @@ import com.gallery.core.extensions.safeToastExpand
 import com.gallery.scan.Types
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.ui.R
+import com.gallery.ui.crop.GalleryCompatCropper
 import com.gallery.ui.databinding.GalleryActivityGalleryBinding
 import com.gallery.ui.finder.PopupFinderAdapter
+import com.gallery.ui.minimumDrawableExpand
 
 open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     GalleryFinderAdapter.AdapterFinderListener {
@@ -38,12 +38,12 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
 
     override val galleryFinderAdapter: GalleryFinderAdapter by lazy {
         PopupFinderAdapter(
-            this@GalleryActivity, viewBinding.galleryFinderAll, uiConfig, this@GalleryActivity
+            this@GalleryActivity, viewBinding.galleryFinderAll, compatConfig, this@GalleryActivity
         )
     }
 
     override val cropImpl: ICrop?
-        get() = GalleryCompatCropper(this, uiConfig)
+        get() = GalleryCompatCropper(this, compatConfig)
 
     override val currentFinderName: String
         get() = viewBinding.galleryFinderAll.text.toString()
@@ -54,37 +54,37 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        window.statusBarColor = uiConfig.statusBarColor
-        viewBinding.galleryToolbar.title = uiConfig.toolbarText
-        viewBinding.galleryToolbar.setTitleTextColor(uiConfig.toolbarTextColor)
-        val drawable = drawableExpand(uiConfig.toolbarIcon)
+        window.statusBarColor = compatConfig.statusBarColor
+        viewBinding.galleryToolbar.title = compatConfig.toolbarText
+        viewBinding.galleryToolbar.setTitleTextColor(compatConfig.toolbarTextColor)
+        val drawable = drawableExpand(compatConfig.toolbarIcon)
         drawable?.colorFilter =
-            PorterDuffColorFilter(uiConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+            PorterDuffColorFilter(compatConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.galleryToolbar.navigationIcon = drawable
-        viewBinding.galleryToolbar.setBackgroundColor(uiConfig.toolbarBackground)
-        viewBinding.galleryToolbar.elevation = uiConfig.toolbarElevation
+        viewBinding.galleryToolbar.setBackgroundColor(compatConfig.toolbarBackground)
+        viewBinding.galleryToolbar.elevation = compatConfig.toolbarElevation
 
-        viewBinding.galleryFinderAll.textSize = uiConfig.finderTextSize
-        viewBinding.galleryFinderAll.setTextColor(uiConfig.finderTextColor)
+        viewBinding.galleryFinderAll.textSize = compatConfig.finderTextSize
+        viewBinding.galleryFinderAll.setTextColor(compatConfig.finderTextColor)
         viewBinding.galleryFinderAll.setCompoundDrawables(
             null,
             null,
             minimumDrawableExpand(
-                uiConfig.finderTextCompoundDrawable,
-                uiConfig.finderTextDrawableColor
+                compatConfig.finderTextCompoundDrawable,
+                compatConfig.finderTextDrawableColor
             ),
             null
         )
 
-        viewBinding.galleryPre.text = uiConfig.preViewText
-        viewBinding.galleryPre.textSize = uiConfig.preViewTextSize
-        viewBinding.galleryPre.setTextColor(uiConfig.preViewTextColor)
+        viewBinding.galleryPre.text = compatConfig.preViewText
+        viewBinding.galleryPre.textSize = compatConfig.preViewTextSize
+        viewBinding.galleryPre.setTextColor(compatConfig.preViewTextColor)
 
-        viewBinding.gallerySelect.text = uiConfig.selectText
-        viewBinding.gallerySelect.textSize = uiConfig.selectTextSize
-        viewBinding.gallerySelect.setTextColor(uiConfig.selectTextColor)
+        viewBinding.gallerySelect.text = compatConfig.selectText
+        viewBinding.gallerySelect.textSize = compatConfig.selectTextSize
+        viewBinding.gallerySelect.setTextColor(compatConfig.selectTextColor)
 
-        viewBinding.galleryBottomView.setBackgroundColor(uiConfig.bottomViewBackground)
+        viewBinding.galleryBottomView.setBackgroundColor(compatConfig.bottomViewBackground)
 
         galleryFinderAdapter.finderInit()
         viewBinding.galleryPre.setOnClickListener(this)

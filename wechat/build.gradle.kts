@@ -19,16 +19,6 @@ android {
     }
 }
 dependencies {
-    compileOnly(project(":ui"))
-    compileOnly(project(":scan"))
-    compileOnly(project(":core"))
-
-    implementation(Dep.glide)
-
-    /* 和 ui library 依赖保持一致 */
-    implementation(Dep.appcompat)
-    implementation(Dep.fragment)
-    implementation(Dep.viewPager2)
-    implementation(Dep.recyclerView)
-    implementation(Dep.kotlin)
+    DepLib.wechat.forEach { compileOnly(project(it)) }
+    DepList.wechat.forEach { implementation(it) }
 }

@@ -3,12 +3,12 @@ package com.gallery.compat.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.gallery.compat.R
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.args.PrevArgs
 import com.gallery.core.delegate.args.PrevArgs.Companion.putPrevArgs
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.R
 
 open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview) :
     Fragment(layoutId) {

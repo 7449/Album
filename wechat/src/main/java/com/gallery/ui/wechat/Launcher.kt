@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
-import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.Gallery
+import com.gallery.compat.GalleryCompatBundle
 import com.gallery.core.GalleryBundle
-import com.gallery.ui.Gallery
 import com.gallery.ui.wechat.activity.GalleryWeChatActivity
 
 val scanType = intArrayOf(
@@ -39,8 +39,8 @@ fun FragmentActivity.weChatGallery(
             scanType = scanType,
             checkBoxDrawable = checkBoxResource,
         ),
-        uiBundle = GalleryUiBundle(
-            prevPhotoBackgroundColor = Color.BLACK,
+        compatBundle = GalleryCompatBundle(
+            prevRootBackground = Color.BLACK,
             galleryRootBackground = Color.rgb(38, 38, 38),
             statusBarColor = Color.rgb(38, 38, 38),
             toolbarBackground = Color.rgb(38, 38, 38),

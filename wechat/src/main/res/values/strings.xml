@@ -6,4 +6,8 @@
     <string name="gallery_select_video_prev_error">不能分享超过%s分钟的视频</string>
     <string name="gallery_wechat_select">选择</string>
     <string name="gallery_wechat_prev_gif_format">GIF size：%s</string>
+    <string name="gallery_prev_select_empty_pre">未选择数据</string>
+    <string name="gallery_prev_select_empty">未选择图片</string>
+    <string name="gallery_finder_empty">文件目录为空</string>
+    <string name="gallery_ok_select_empty">未选择图片</string>
 </resources>

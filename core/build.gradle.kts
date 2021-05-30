@@ -18,10 +18,6 @@ android {
     }
 }
 dependencies {
-    compileOnly(project(":scan"))
-    implementation(Dep.appcompat)
-    implementation(Dep.fragment)
-    implementation(Dep.viewPager2)
-    implementation(Dep.recyclerView)
-    implementation(Dep.kotlin)
+    DepLib.core.forEach { compileOnly(project(it)) }
+    DepList.core.forEach { implementation(it) }
 }

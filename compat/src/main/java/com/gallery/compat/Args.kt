@@ -10,7 +10,6 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.args.PrevArgs
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -41,7 +40,7 @@ internal data class UIGallerySaveArgs(
 @Parcelize
 data class UIGalleryArgs(
     val galleryBundle: GalleryBundle,
-    val galleryUiBundle: GalleryUiBundle,
+    val galleryCompatBundle: GalleryCompatBundle,
     val galleryOption: Bundle,
     val galleryPrevOption: Bundle,
 ) : Parcelable {
@@ -55,7 +54,7 @@ data class UIGalleryArgs(
 
         val Bundle.uiGalleryArgsOrDefault
             get() = getParcelable(Key)
-                ?: UIGalleryArgs(GalleryBundle(), GalleryUiBundle(), Bundle(), Bundle())
+                ?: UIGalleryArgs(GalleryBundle(), GalleryCompatBundle(), Bundle(), Bundle())
     }
 }
 
@@ -64,13 +63,13 @@ data class UIPrevArgs(
     /**
      * UI配置参数
      */
-    val uiBundle: GalleryUiBundle,
+    val compatBundle: GalleryCompatBundle,
     /**
      * 预览页[PrevDelegateImpl]需要的数据
      */
     val prevArgs: PrevArgs,
     /**
-     * 暂存Bundle,用于自定义布局时[GalleryUiBundle]无法满足需要配置时携带数据
+     * 暂存Bundle,用于自定义布局时[GalleryCompatBundle]无法满足需要配置时携带数据
      */
     val option: Bundle,
 ) : Parcelable {
@@ -88,7 +87,7 @@ data class UIPrevArgs(
 }
 
 @Parcelize
-data class GalleryUiBundle(
+data class GalleryCompatBundle(
     /**
      * 分割线宽度
      */
@@ -109,6 +108,21 @@ data class GalleryUiBundle(
      * 预览back返回是否刷新数据
      */
     val preBackRefresh: Boolean = true,
+    /**
+     * RootView背景色
+     */
+    @ColorInt
+    val galleryRootBackground: Int = Color.WHITE,
+    /**
+     * 预览背景色
+     */
+    @ColorInt
+    val prevRootBackground: Int = Color.WHITE,
+    /**
+     * 携带的参数
+     */
+    val args: Bundle = Bundle.EMPTY,
+//
     /**
      * toolbar返回图标
      */
@@ -188,11 +202,6 @@ data class GalleryUiBundle(
     @ColorInt
     val selectTextColor: Int = Color.WHITE,
     /**
-     * RootView背景色
-     */
-    @ColorInt
-    val galleryRootBackground: Int = Color.WHITE,
-    /**
      * 底部背景色
      */
     @ColorInt
@@ -229,11 +238,6 @@ data class GalleryUiBundle(
      */
     val preTitle: String = "选择",
     /**
-     * 预览背景色
-     */
-    @ColorInt
-    val prevPhotoBackgroundColor: Int = Color.WHITE,
-    /**
      * 预览页底部提示栏背景色
      */
     @ColorInt
@@ -260,8 +264,4 @@ data class GalleryUiBundle(
      * 预览页底部提示栏数字文字大小
      */
     val preBottomCountTextSize: Float = 16F,
-    /**
-     * 携带的参数
-     */
-    val args: Bundle = Bundle.EMPTY,
 ) : Parcelable

@@ -11,7 +11,7 @@ import androidx.appcompat.widget.ListPopupWindow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.gallery.compat.GalleryUiBundle
+import com.gallery.compat.GalleryCompatBundle
 import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
@@ -20,18 +20,19 @@ import com.gallery.ui.databinding.GalleryItemFinderBinding
 class PopupFinderAdapter(
     private val activity: GalleryCompatActivity,
     private val viewAnchor: View,
-    private val uiBundle: GalleryUiBundle,
+    private val compatBundle: GalleryCompatBundle,
     private val finderListener: GalleryFinderAdapter.AdapterFinderListener
 ) : GalleryFinderAdapter, AdapterView.OnItemClickListener {
 
-    private val finderAdapter: FinderAdapter = FinderAdapter(uiBundle) { finderEntity, container ->
-        finderListener.onGalleryFinderThumbnails(finderEntity, container)
-    }
+    private val finderAdapter: FinderAdapter =
+        FinderAdapter(compatBundle) { finderEntity, container ->
+            finderListener.onGalleryFinderThumbnails(finderEntity, container)
+        }
     private val popupWindow: ListPopupWindow = ListPopupWindow(activity).apply {
         this.anchorView = viewAnchor
-        this.width = uiBundle.listPopupWidth
-        this.horizontalOffset = uiBundle.listPopupHorizontalOffset
-        this.verticalOffset = uiBundle.listPopupVerticalOffset
+        this.width = compatBundle.listPopupWidth
+        this.horizontalOffset = compatBundle.listPopupHorizontalOffset
+        this.verticalOffset = compatBundle.listPopupVerticalOffset
         this.isModal = true
         this.setOnItemClickListener(this@PopupFinderAdapter)
         this.setAdapter(finderAdapter)
@@ -52,7 +53,7 @@ class PopupFinderAdapter(
 
     override fun show() {
         popupWindow.show()
-        popupWindow.listView?.setBackgroundColor(uiBundle.finderItemBackground)
+        popupWindow.listView?.setBackgroundColor(compatBundle.finderItemBackground)
     }
 
     override fun hide() {
@@ -68,7 +69,7 @@ class PopupFinderAdapter(
     }
 
     private class FinderAdapter(
-        private val galleryUiBundle: GalleryUiBundle,
+        private val galleryCompatBundle: GalleryCompatBundle,
         private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit
     ) : BaseAdapter() {
 
@@ -85,9 +86,9 @@ class PopupFinderAdapter(
                     this.root.tag = ViewHolder(this)
                 }.root
             val viewHolder: ViewHolder = rootView.tag as ViewHolder
-            viewHolder.appCompatTextView.setTextColor(galleryUiBundle.finderItemTextColor)
+            viewHolder.appCompatTextView.setTextColor(galleryCompatBundle.finderItemTextColor)
             viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)
-            viewHolder.appCompatTextViewCount.setTextColor(galleryUiBundle.finderItemTextCountColor)
+            viewHolder.appCompatTextViewCount.setTextColor(galleryCompatBundle.finderItemTextCountColor)
             viewHolder.appCompatTextViewCount.text = "%s".format(finderEntity.count.toString())
             displayFinder.invoke(finderEntity, viewHolder.frameLayout)
             return rootView

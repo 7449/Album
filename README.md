@@ -5,6 +5,8 @@
 			maven { url 'https://jitpack.io' }
 		}
 	}
+	
+[![](https://jitpack.io/v/7449/Album.svg)](https://jitpack.io/#7449/Album)
 
 #### Manifests.xml
 
@@ -17,10 +19,10 @@
             
 #### dependencies
 
-    implementation 'com.github.7449.Album:wechat:1.0.2'
-    implementation 'com.github.7449.Album:ui:1.0.2'
-    implementation 'com.github.7449.Album:core:1.0.2'
-    implementation 'com.github.7449.Album:scan:1.0.2'
+    implementation 'com.github.7449.Album:wechat:$lastVersion'
+    implementation 'com.github.7449.Album:ui:$lastVersion'
+    implementation 'com.github.7449.Album:core:$lastVersion'
+    implementation 'com.github.7449.Album:scan:$lastVersion'
     implementation "com.github.yalantis:ucrop:$ucropVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"

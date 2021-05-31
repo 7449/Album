@@ -18,7 +18,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:src="@drawable/ic_gallery_wechat_ui_toolbar_back" />
+            android:src="@drawable/ic_gallery_wechat_toolbar_back" />
 
         <LinearLayout
             android:id="@+id/galleryWeChatToolbarFinder"
@@ -27,7 +27,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/galleryWeChatToolbarBack"
-            android:background="@drawable/ic_shape_wechat_select_finder"
+            android:background="@drawable/ic_gallery_wechat_shape_select_finder"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:paddingStart="10dp"
@@ -49,7 +49,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="4dp"
-                tools:src="@drawable/ic_wechat_gallery_finder_action" />
+                tools:src="@drawable/ic_gallery_wechat_finder_action" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -59,13 +59,13 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/wechat_selector_gallery_select"
+            android:background="@drawable/gallery_wechat_selector_gallery_select"
             android:enabled="false"
             android:paddingStart="6dp"
             android:paddingTop="4dp"
             android:paddingEnd="6dp"
             android:paddingBottom="4dp"
-            android:textColor="@color/ic_wechat_gallery_select_text"
+            android:textColor="@color/ic_gallery_wechat_select_text"
             android:textSize="12sp"
             tools:ignore="RelativeOverlap"
             tools:text="Send" />
@@ -90,28 +90,28 @@
             <RelativeLayout
                 android:id="@+id/galleryWeChatBottomView"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/gallery_bottom_height">
+                android:layout_height="@dimen/gallery_wechat_bottom_height">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/galleryWeChatPrev"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/gallery_button_margin"
+                    android:layout_margin="@dimen/gallery_wechat_button_margin"
                     android:background="?android:selectableItemBackground"
                     android:ellipsize="end"
                     android:enabled="false"
                     android:gravity="right|center_vertical"
                     android:maxLines="1"
-                    android:padding="@dimen/gallery_bottom_padding"
+                    android:padding="@dimen/gallery_wechat_bottom_padding"
                     android:singleLine="true"
-                    android:textColor="@color/ic_wechat_gallery_prev_text"
-                    android:textSize="@dimen/gallery_bottom_text_size"
+                    android:textColor="@color/ic_gallery_wechat_prev_text"
+                    android:textSize="@dimen/gallery_wechat_bottom_text_size"
                     tools:ignore="RtlHardcoded" />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/galleryWeChatFullImage"
-                    android:layout_width="@dimen/gallery_bottom_button_width"
+                    android:layout_width="@dimen/gallery_wechat_bottom_button_width"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:gravity="center"
@@ -126,7 +126,7 @@
             android:id="@+id/galleryWeChatFinderRoot"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_B3000000"
+            android:background="@color/gallery_wechat_color_B3000000"
             android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -139,7 +139,7 @@
             android:id="@+id/galleryWeChatTime"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:background="@color/color_B3000000"
+            android:background="@color/gallery_wechat_color_B3000000"
             android:gravity="center_vertical"
             android:paddingStart="10dp"
             android:textColor="@android:color/white"

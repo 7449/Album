@@ -140,13 +140,13 @@ class PrevDelegateImpl(
         prevAdapter.addAll(arrayList)
         prevAdapter.addSelectAll(prevArgs.selectList)
         prevAdapter.updateEntity()
-        galleryPrevCallback.onPrevCreated(this, galleryBundle, savedInstanceState)
         viewPager2.adapter = prevAdapter
         viewPager2.registerOnPageChangeCallback(pageChangeCallback)
         setCurrentItem(prevArgs.position)
         checkBox.setBackgroundResource(galleryBundle.checkBoxDrawable)
         checkBox.setOnClickListener { itemViewClick(checkBox) }
         checkBox.isSelected = isSelected(currentPosition)
+        galleryPrevCallback.onPrevCreated(this, galleryBundle, savedInstanceState)
     }
 
     override fun itemViewClick(box: View) {

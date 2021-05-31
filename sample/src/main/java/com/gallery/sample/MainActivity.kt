@@ -48,9 +48,7 @@ class MainActivity : AppCompatActivity() {
         var cls: Class<*>? = null
         var galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT)
         var galleryUiBundle = GalleryTheme.themeGalleryCompat(this, Theme.DEFAULT)
-        var galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.DEFAULT) {
-            return@themeGalleryArgs galleryBundle.isVideoScanExpand
-        }
+        var galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.DEFAULT)
         var scanArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
         var sortType = Types.Sort.DESC
 
@@ -60,41 +58,31 @@ class MainActivity : AppCompatActivity() {
                     isWeChat = false
                     galleryBundle = GalleryTheme.themeGallery(this, Theme.DEFAULT)
                     galleryUiBundle = GalleryTheme.themeGalleryCompat(this, Theme.DEFAULT)
-                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.DEFAULT) {
-                        return@themeGalleryArgs galleryBundle.isVideoScanExpand
-                    }
+                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.DEFAULT)
                 }
                 R.id.theme_app -> {
                     isWeChat = false
                     galleryBundle = GalleryTheme.themeGallery(this, Theme.APP)
                     galleryUiBundle = GalleryTheme.themeGalleryCompat(this, Theme.APP)
-                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.APP) {
-                        return@themeGalleryArgs galleryBundle.isVideoScanExpand
-                    }
+                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.APP)
                 }
                 R.id.theme_blue -> {
                     isWeChat = false
                     galleryBundle = GalleryTheme.themeGallery(this, Theme.BLUE)
                     galleryUiBundle = GalleryTheme.themeGalleryCompat(this, Theme.BLUE)
-                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.BLUE) {
-                        return@themeGalleryArgs galleryBundle.isVideoScanExpand
-                    }
+                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.BLUE)
                 }
                 R.id.theme_black -> {
                     isWeChat = false
                     galleryBundle = GalleryTheme.themeGallery(this, Theme.BLACK)
                     galleryUiBundle = GalleryTheme.themeGalleryCompat(this, Theme.BLACK)
-                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.BLACK) {
-                        return@themeGalleryArgs galleryBundle.isVideoScanExpand
-                    }
+                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.BLACK)
                 }
                 R.id.theme_pink -> {
                     isWeChat = false
                     galleryBundle = GalleryTheme.themeGallery(this, Theme.PINK)
                     galleryUiBundle = GalleryTheme.themeGalleryCompat(this, Theme.PINK)
-                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.PINK) {
-                        return@themeGalleryArgs galleryBundle.isVideoScanExpand
-                    }
+                    galleryArgsBundle = GalleryTheme.themeGalleryArgs(this, Theme.PINK)
                 }
                 R.id.theme_wechat -> {
                     isWeChat = true
@@ -145,19 +133,22 @@ class MainActivity : AppCompatActivity() {
                 weChatGallery(launcher = galleryWeChatLauncher)
                 return@setOnClickListener
             }
+            val newBundle = galleryBundle.copy(scanType = scanArray)
             Gallery.newInstance(
                 activity = this,
                 clz = cls ?: GalleryActivity::class.java,
-                bundle = galleryBundle.copy(
-                    cameraText = "相机",
+                bundle = newBundle.copy(
                     scanType = scanArray,
+                    cameraText = if (newBundle.isVideoScanExpand) "摄像" else "拍照",
                     scanSort = sortType,
                     crop = viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
                     radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
-                    cameraNameSuffix = if (scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)) "mp4" else "jpg"
+                    cameraNameSuffix = if (newBundle.isVideoScanExpand) "mp4" else "jpg"
                 ),
                 compatBundle = galleryUiBundle,
-                customBundle = galleryArgsBundle,
+                customBundle = galleryArgsBundle.copy(
+                    toolbarText = if (newBundle.isVideoScanExpand) "视频选择" else "图片选择"
+                ),
                 launcher = galleryLauncher
             )
         }

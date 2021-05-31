@@ -27,55 +27,55 @@ open class PrevCompatFragment(layoutId: Int = R.layout.gallery_fragment_preview)
         return PrevDelegateImpl(this, galleryCallback(), galleryCallback())
     }
 
-    val rootView: View
+    open val rootView: View
         get() = delegate.rootView
 
-    val currentItem: ScanEntity
+    open val currentItem: ScanEntity
         get() = delegate.currentItem
 
-    val allItem: ArrayList<ScanEntity>
+    open val allItem: ArrayList<ScanEntity>
         get() = delegate.allItem
 
-    val selectItem: ArrayList<ScanEntity>
+    open val selectItem: ArrayList<ScanEntity>
         get() = delegate.selectItem
 
-    val isSelectEmpty: Boolean
+    open val isSelectEmpty: Boolean
         get() = delegate.isSelectEmpty
 
-    val selectCount: Int
+    open val selectCount: Int
         get() = delegate.selectCount
 
-    val itemCount: Int
+    open val itemCount: Int
         get() = delegate.itemCount
 
-    val currentPosition: Int
+    open val currentPosition: Int
         get() = delegate.currentPosition
 
-    fun checkBoxClick(checkBox: View) {
+    open fun checkBoxClick(checkBox: View) {
         delegate.itemViewClick(checkBox)
     }
 
-    fun isCheckBox(position: Int): Boolean {
+    open fun isCheckBox(position: Int): Boolean {
         return delegate.isSelected(position)
     }
 
-    fun setCurrentItem(position: Int) {
+    open fun setCurrentItem(position: Int) {
         delegate.setCurrentItem(position)
     }
 
-    fun setCurrentItem(position: Int, smoothScroll: Boolean) {
+    open fun setCurrentItem(position: Int, smoothScroll: Boolean) {
         delegate.setCurrentItem(position, smoothScroll)
     }
 
-    fun notifyItemChanged(position: Int) {
+    open fun notifyItemChanged(position: Int) {
         delegate.notifyItemChanged(position)
     }
 
-    fun notifyDataSetChanged() {
+    open fun notifyDataSetChanged() {
         delegate.notifyDataSetChanged()
     }
 
-    fun resultBundle(isRefresh: Boolean): Bundle {
+    open fun resultBundle(isRefresh: Boolean): Bundle {
         return delegate.resultBundle(isRefresh)
     }
 

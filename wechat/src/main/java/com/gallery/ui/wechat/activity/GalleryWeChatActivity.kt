@@ -33,12 +33,17 @@ import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
 import com.gallery.ui.wechat.args.GalleryWeChatBundle
-import com.gallery.ui.wechat.databinding.GalleryActivityWechatGalleryBinding
+import com.gallery.ui.wechat.databinding.GalleryWechatActivityGalleryBinding
 import com.gallery.ui.wechat.extension.*
-import com.gallery.ui.wechat.widget.WeChatGalleryItem
+import com.gallery.ui.wechat.widget.GalleryWeChatItem
 import java.util.*
 
 class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.AdapterFinderListener {
+
+    companion object {
+        private const val VIDEO_ALL_LIST = "galleryWeChatVideoAll"
+        private const val VIDEO_ALL_PARENT: Long = (-112).toLong()
+    }
 
     private val rotateAnimation: RotateAnimation by lazy {
         RotateAnimation(
@@ -69,8 +74,8 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         }
     }
 
-    private val binding: GalleryActivityWechatGalleryBinding by lazy {
-        GalleryActivityWechatGalleryBinding.inflate(layoutInflater)
+    private val binding: GalleryWechatActivityGalleryBinding by lazy {
+        GalleryWechatActivityGalleryBinding.inflate(layoutInflater)
     }
     private val newFinderAdapter: WeChatFinderAdapter by lazy {
         WeChatFinderAdapter(
@@ -98,7 +103,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(WeChatConfig.VIDEO_ALL_LIST, videoList)
+        outState.putParcelableArrayList(VIDEO_ALL_LIST, videoList)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,7 +128,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
 
         binding.galleryWeChatToolbarSend.textSize = uiBundle.selectTextSize
         binding.galleryWeChatToolbarSend.text = uiBundle.selectText
-        binding.galleryWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
+        binding.galleryWeChatFullImage.setButtonDrawable(R.drawable.gallery_wechat_selector_gallery_full_image_item_check)
 
         binding.galleryWeChatToolbarFinderText.textSize = uiBundle.finderTextSize
         binding.galleryWeChatToolbarFinderText.setTextColor(uiBundle.finderTextColor)
@@ -132,7 +137,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
 
         tempVideoList.clear()
         tempVideoList.addAll(
-            savedInstanceState?.getParcelableArrayList(WeChatConfig.VIDEO_ALL_LIST)
+            savedInstanceState?.getParcelableArrayList(VIDEO_ALL_LIST)
                 ?: arrayListOf()
         )
         videoList.clear()
@@ -158,7 +163,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         }
         binding.galleryWeChatToolbarFinder.setOnClickListener {
             if (finderList.isNullOrEmpty()) {
-                getString(R.string.gallery_finder_empty).safeToastExpand(this)
+                getString(R.string.gallery_wechat_finder_empty).safeToastExpand(this)
                 return@setOnClickListener
             }
             newFinderAdapter.updateFinder(finderList)
@@ -187,8 +192,8 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
                     //点击的是全部视频,更新fragment的parentId并直接调用scanMultipleSuccess走更新流程
                     //否则使用parentId扫描数据
                     //最后更新目录数据
-                    if (find?.parent == WeChatConfig.VIDEO_ALL_PARENT) {
-                        currentFragment.parentId = WeChatConfig.VIDEO_ALL_PARENT
+                    if (find?.parent == VIDEO_ALL_PARENT) {
+                        currentFragment.parentId = VIDEO_ALL_PARENT
                         currentFragment.scanMultipleSuccess(videoList)
                     } else {
                         currentFragment.onScanGallery(find?.parent ?: Types.Scan.SCAN_ALL)
@@ -250,14 +255,14 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
                     1,
                     it.copy(
                         delegate = it.delegate.copy(
-                            parent = WeChatConfig.VIDEO_ALL_PARENT,
+                            parent = VIDEO_ALL_PARENT,
                             bucketDisplayName = uiBundle.videoAllFinderName
                         ), count = videoList.size
                     )
                 )
             }
             finderList.firstOrNull()?.isSelected = true
-        } else if (currentFragment.parentId == WeChatConfig.VIDEO_ALL_PARENT && tempVideoList.isNotEmpty()) {
+        } else if (currentFragment.parentId == VIDEO_ALL_PARENT && tempVideoList.isNotEmpty()) {
             //如果当前parentId等于视频parentId且tempVideoList不为空的情况下则横竖屏切换的时候是全部视频，
             //扫描的是VIDEO_ALL_PARENT
             //数据肯定为空，这里再重新调用下scanMultipleSuccess赋值数据
@@ -306,7 +311,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         checkBox: TextView
     ) {
         container.removeAllViews()
-        val weChatGalleryItem = WeChatGalleryItem(container.context)
+        val weChatGalleryItem = GalleryWeChatItem(container.context)
         weChatGalleryItem.update(scanEntity)
         checkBox.gravity = Gravity.CENTER
         checkBox.setTextColor(Color.WHITE)
@@ -340,13 +345,13 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         parentId: Long
     ) {
         startPrevPage(
-            parentId = if (parentId == WeChatConfig.VIDEO_ALL_PARENT) Types.Scan.SCAN_ALL else parentId,
+            parentId = if (parentId == VIDEO_ALL_PARENT) Types.Scan.SCAN_ALL else parentId,
             position = position,
             customBundle = uiBundle.copy(
                 isPrev = false,
                 fullImageSelect = binding.galleryWeChatFullImage.isChecked
             ),
-            scanAlone = if (parentId == WeChatConfig.VIDEO_ALL_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
+            scanAlone = if (parentId == VIDEO_ALL_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
             cla = GalleryWeChatPrevActivity::class.java
         )
     }
@@ -371,11 +376,11 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         if (scanEntity.isVideo && scanEntity.duration > uiBundle.videoMaxDuration) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
-            getString(R.string.gallery_select_video_max_length).safeToastExpand(this)
+            getString(R.string.gallery_wechat_select_video_max_length).safeToastExpand(this)
         } else if (scanEntity.isVideo && scanEntity.duration <= 0) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
-            getString(R.string.gallery_select_video_error).safeToastExpand(this)
+            getString(R.string.gallery_wechat_select_video_error).safeToastExpand(this)
         } else {
             updateView()
         }

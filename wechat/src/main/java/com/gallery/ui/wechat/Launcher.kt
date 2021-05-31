@@ -11,51 +11,48 @@ import com.gallery.core.GalleryBundle
 import com.gallery.ui.wechat.activity.GalleryWeChatActivity
 import com.gallery.ui.wechat.args.GalleryWeChatBundle
 
-val scanType = intArrayOf(
+internal val scanType = intArrayOf(
     MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
     MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 )
 
-val checkBoxResource = R.drawable.wechat_selector_gallery_item_check
+internal val checkBoxResource = R.drawable.gallery_wechat_selector_gallery_item_check
 
-fun FragmentActivity.weChatGallery(
-    allName: String = "图片和视频",
-    prevSelectText: String = "选择",
-    sendText: String = "发送",
-    videoMaxDuration: Int = 500000,
-    allVideoFinderName: String = "全部视频",
-    launcher: ActivityResultLauncher<Intent>
-) {
+internal val rgb19 = Color.rgb(19, 19, 19)
+
+internal val rgb38 = Color.rgb(38, 38, 38)
+
+fun FragmentActivity.weChatGallery(launcher: ActivityResultLauncher<Intent>) {
     Gallery.newInstance(
         activity = this,
         launcher = launcher,
         customBundle = GalleryWeChatBundle(
-            videoMaxDuration = videoMaxDuration,
-            videoAllFinderName = allVideoFinderName,
-            statusBarColor = Color.rgb(38, 38, 38),
-            toolbarBackground = Color.rgb(38, 38, 38),
-            bottomViewBackground = Color.rgb(19, 19, 19),
-            preBottomViewBackground = Color.rgb(38, 38, 38),
-            preBottomOkText = prevSelectText,
+            videoMaxDuration = 500000,
+            videoAllFinderName = "全部视频",
+            statusBarColor = rgb38,
+            toolbarBackground = rgb38,
+            bottomViewBackground = rgb19,
+            preBottomViewBackground = rgb38,
+            preBottomOkText = "选择",
             preBottomOkTextSize = 14.toFloat(),
             preViewTextSize = 14.toFloat(),
-            selectText = sendText,
+            selectText = "发送",
             selectTextSize = 12.toFloat(),
-            finderItemBackground = Color.rgb(38, 38, 38),
+            finderItemBackground = rgb38,
             finderItemTextColor = Color.WHITE,
             finderItemTextCountColor = Color.parseColor("#767676"),
-            finderTextCompoundDrawable = R.drawable.ic_wechat_gallery_finder_action,
+            finderTextCompoundDrawable = R.drawable.ic_gallery_wechat_finder_action,
             finderTextSize = 14.toFloat()
         ),
         bundle = GalleryBundle(
-            allName = allName,
+            allName = "图片和视频",
             hideCamera = true,
             scanType = scanType,
             checkBoxDrawable = checkBoxResource,
         ),
         compatBundle = GalleryCompatBundle(
             prevRootBackground = Color.BLACK,
-            galleryRootBackground = Color.rgb(38, 38, 38)
+            galleryRootBackground = rgb38
         ),
         clz = GalleryWeChatActivity::class.java
     )

@@ -14,7 +14,7 @@ import com.gallery.ui.material.activity.GalleryActivity
 
 class UCropGalleryActivity : GalleryActivity() {
     override val cropImpl: ICrop
-        get() = UCropImpl(compatConfig)
+        get() = UCropImpl()
 }
 
 class CustomCameraActivity : GalleryActivity() {

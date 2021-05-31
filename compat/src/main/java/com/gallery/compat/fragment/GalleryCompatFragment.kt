@@ -40,64 +40,64 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
         )
     }
 
-    fun onCameraResultCanceled() {
+    open fun onCameraResultCanceled() {
         delegate.cameraCanceled()
     }
 
-    fun onCameraResultOk() {
+    open fun onCameraResultOk() {
         delegate.cameraSuccess()
     }
 
-    fun onScanGallery(parent: Long = Types.Scan.SCAN_ALL, isCamera: Boolean = false) {
+    open fun onScanGallery(parent: Long = Types.Scan.SCAN_ALL, isCamera: Boolean = false) {
         delegate.onScanGallery(parent, isCamera)
     }
 
-    fun onUpdateResult(scanArgs: ScanArgs?) {
+    open fun onUpdateResult(scanArgs: ScanArgs?) {
         delegate.onUpdateResult(scanArgs)
     }
 
-    fun notifyItemChanged(position: Int) {
+    open fun notifyItemChanged(position: Int) {
         delegate.notifyItemChanged(position)
     }
 
-    fun notifyDataSetChanged() {
+    open fun notifyDataSetChanged() {
         delegate.notifyDataSetChanged()
     }
 
-    fun addOnScrollListener(onScrollListener: RecyclerView.OnScrollListener) {
+    open fun addOnScrollListener(onScrollListener: RecyclerView.OnScrollListener) {
         delegate.addOnScrollListener(onScrollListener)
     }
 
-    fun scrollToPosition(position: Int) {
+    open fun scrollToPosition(position: Int) {
         delegate.scrollToPosition(position)
     }
 
-    fun scanMultipleSuccess(arrayList: ArrayList<ScanEntity>) {
+    open fun scanMultipleSuccess(arrayList: ArrayList<ScanEntity>) {
         delegate.onScanMultipleSuccess(arrayList.toScanFileEntity())
     }
 
-    val rootView: View
+    open val rootView: View
         get() = delegate.rootView
 
-    val allItem: ArrayList<ScanEntity>
+    open val allItem: ArrayList<ScanEntity>
         get() = delegate.allItem
 
-    val selectItem: ArrayList<ScanEntity>
+    open val selectItem: ArrayList<ScanEntity>
         get() = delegate.selectItem
 
-    val isSelectEmpty: Boolean
+    open val isSelectEmpty: Boolean
         get() = delegate.isSelectEmpty
 
-    val selectCount: Int
+    open val selectCount: Int
         get() = delegate.selectCount
 
-    var parentId: Long
+    open var parentId: Long
         get() = delegate.currentParentId
         set(value) {
             delegate.onUpdateParentId(value)
         }
 
-    val isScanAll: Boolean
+    open val isScanAll: Boolean
         get() = parentId.isScanAllExpand
 
     override fun onSaveInstanceState(outState: Bundle) {

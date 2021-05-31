@@ -5,19 +5,19 @@
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground"
     android:orientation="horizontal"
-    android:padding="@dimen/item_list_popup_padding">
+    android:padding="@dimen/gallery_item_list_popup_padding">
 
     <FrameLayout
         android:id="@+id/iv_gallery_finder_icon"
-        android:layout_width="@dimen/item_list_popup_iv_width"
-        android:layout_height="@dimen/item_list_popup_iv_height" />
+        android:layout_width="@dimen/gallery_item_list_popup_iv_width"
+        android:layout_height="@dimen/gallery_item_list_popup_iv_height" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_gallery_finder_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/item_list_popup_margin_left"
+        android:layout_marginLeft="@dimen/gallery_item_list_popup_margin_left"
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/item_list_popup_margin_left"
+        android:layout_marginLeft="@dimen/gallery_item_list_popup_margin_left"
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"

@@ -10,16 +10,16 @@ import android.widget.ImageView
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.hideExpand
 import com.gallery.core.extensions.showExpand
-import com.gallery.ui.wechat.databinding.LayoutSelectWechatItemBinding
+import com.gallery.ui.wechat.databinding.GalleryWechatLayoutSelectItemBinding
 
-class WeChatSelectItem @JvmOverloads constructor(
+class GalleryWeChatSelectItem @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val viewBinding: LayoutSelectWechatItemBinding =
-        LayoutSelectWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
+    private val viewBinding: GalleryWechatLayoutSelectItemBinding =
+        GalleryWechatLayoutSelectItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     init {
         setBackgroundColor(Color.BLACK)

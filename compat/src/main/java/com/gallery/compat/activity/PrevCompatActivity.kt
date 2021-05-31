@@ -45,8 +45,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
              * and
              * [PrevArgs]
              * and
-             * // 用于存放以及获取自定义数据
-             * [Parcelable]
+             * [Parcelable] // 用于存放以及获取自定义数据
              */
             args: PrevCompatArgs,
             cla: Class<out PrevCompatActivity>

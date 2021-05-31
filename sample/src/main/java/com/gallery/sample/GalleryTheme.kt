@@ -42,31 +42,22 @@ object GalleryTheme {
         }
     }
 
-    fun themeGalleryArgs(
-        activity: Activity,
-        theme: Theme,
-        action: () -> Boolean
-    ): GalleryMaterialBundle {
-        val toolbarText =
-            if (action.invoke()) activity.getString(R.string.gallery_video_title) else "图片选择"
+    fun themeGalleryArgs(activity: Activity, theme: Theme): GalleryMaterialBundle {
         return when (theme) {
-            Theme.DEFAULT -> GalleryMaterialBundle(toolbarText = toolbarText)
+            Theme.DEFAULT -> GalleryMaterialBundle()
             Theme.BLUE -> GalleryMaterialBundle(
-                toolbarText = toolbarText,
                 statusBarColor = R.color.colorBlue.colorExpand(activity),
                 toolbarBackground = R.color.colorBlue.colorExpand(activity),
                 bottomViewBackground = R.color.colorBlue.colorExpand(activity),
                 preBottomViewBackground = R.color.colorBlue.colorExpand(activity)
             )
             Theme.PINK -> GalleryMaterialBundle(
-                toolbarText = toolbarText,
                 statusBarColor = R.color.colorPink.colorExpand(activity),
                 toolbarBackground = R.color.colorPink.colorExpand(activity),
                 bottomViewBackground = R.color.colorPink.colorExpand(activity),
                 preBottomViewBackground = R.color.colorPink.colorExpand(activity)
             )
             Theme.BLACK -> GalleryMaterialBundle(
-                toolbarText = toolbarText,
                 statusBarColor = R.color.colorBlack.colorExpand(activity),
                 toolbarBackground = R.color.colorBlack.colorExpand(activity),
                 bottomViewBackground = R.color.colorBlack.colorExpand(activity),
@@ -75,7 +66,6 @@ object GalleryTheme {
                 preBottomViewBackground = R.color.colorBlack.colorExpand(activity)
             )
             Theme.APP -> GalleryMaterialBundle(
-                toolbarText = toolbarText,
                 statusBarColor = R.color.colorAccent.colorExpand(activity),
                 toolbarBackground = R.color.colorAccent.colorExpand(activity),
                 bottomViewBackground = R.color.colorAccent.colorExpand(activity),

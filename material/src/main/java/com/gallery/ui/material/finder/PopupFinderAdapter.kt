@@ -11,7 +11,6 @@ import androidx.appcompat.widget.ListPopupWindow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.gallery.compat.GalleryCompatBundle
 import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
@@ -21,13 +20,12 @@ import com.gallery.ui.material.databinding.GalleryItemFinderBinding
 class PopupFinderAdapter(
     private val activity: GalleryCompatActivity,
     private val viewAnchor: View,
-    private val compatBundle: GalleryCompatBundle,
     private val uiBundle: GalleryMaterialBundle,
     private val finderListener: GalleryFinderAdapter.AdapterFinderListener
 ) : GalleryFinderAdapter, AdapterView.OnItemClickListener {
 
     private val finderAdapter: FinderAdapter =
-        FinderAdapter(compatBundle, uiBundle) { finderEntity, container ->
+        FinderAdapter(uiBundle) { finderEntity, container ->
             finderListener.onGalleryFinderThumbnails(finderEntity, container)
         }
     private val popupWindow: ListPopupWindow = ListPopupWindow(activity).apply {
@@ -71,7 +69,6 @@ class PopupFinderAdapter(
     }
 
     private class FinderAdapter(
-        private val galleryCompatBundle: GalleryCompatBundle,
         private val uiBundle: GalleryMaterialBundle,
         private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit
     ) : BaseAdapter() {

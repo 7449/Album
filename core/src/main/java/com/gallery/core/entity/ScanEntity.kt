@@ -30,11 +30,11 @@ data class ScanEntity(
         get() = when (delegate.mediaType) {
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString() -> ContentUris.withAppendedId(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                delegate.id
+                id
             )
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString() -> ContentUris.withAppendedId(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                delegate.id
+                id
             )
             else -> Uri.EMPTY
         }

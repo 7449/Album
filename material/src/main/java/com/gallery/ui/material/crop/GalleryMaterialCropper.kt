@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
-import com.gallery.compat.GalleryCompatBundle
 import com.gallery.compat.GalleryConfig
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
@@ -16,10 +15,7 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
 
-class GalleryCompatCropper(
-    private val activity: Activity,
-    private val compatBundle: GalleryCompatBundle
-) : ICrop {
+class GalleryMaterialCropper(private val cropImageOptions: CropImageOptions) : ICrop {
 
     private var cropUri: Uri? = null
 
@@ -34,18 +30,18 @@ class GalleryCompatCropper(
                     delegate,
                     uri
                 )
-            } ?: cropUri?.deleteExpand(activity)
+            } ?: cropUri?.deleteExpand(delegate.requireActivity)
             Activity.RESULT_CANCELED, CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE
-            -> cropUri?.deleteExpand(activity)
+            -> cropUri?.deleteExpand(delegate.requireActivity)
         }
     }
 
     override fun openCrop(context: Context, bundle: GalleryBundle, inputUri: Uri): Intent {
-        this.cropUri = cropOutPutUri(activity, bundle)
-        val intent = Intent().setClass(activity, CropImageActivity::class.java)
+        this.cropUri = cropOutPutUri(context, bundle)
+        val intent = Intent().setClass(context, CropImageActivity::class.java)
         val value = Bundle()
         value.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
-        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, CropImageOptions())
+        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, cropImageOptions)
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, value)
         return intent
     }
@@ -56,8 +52,8 @@ class GalleryCompatCropper(
         val bundle = Bundle()
         bundle.putParcelable(GalleryConfig.Crop.GALLERY_RESULT_CROP, uri)
         intent.putExtras(bundle)
-        activity.setResult(GalleryConfig.Crop.RESULT_CODE_CROP, intent)
-        activity.finish()
+        delegate.requireActivity.setResult(GalleryConfig.Crop.RESULT_CODE_CROP, intent)
+        delegate.requireActivity.finish()
     }
 
 }

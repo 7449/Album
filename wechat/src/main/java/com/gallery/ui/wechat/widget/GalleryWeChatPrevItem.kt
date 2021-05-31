@@ -10,17 +10,17 @@ import android.widget.TextView
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.openVideoExpand
 import com.gallery.ui.wechat.R
-import com.gallery.ui.wechat.databinding.LayoutPrevWechatItemBinding
+import com.gallery.ui.wechat.databinding.GalleryWechatLayoutPrevItemBinding
 import com.gallery.ui.wechat.extension.toFileSize
 
-class WeChatPrevItem @JvmOverloads constructor(
+class GalleryWeChatPrevItem @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val viewBinding: LayoutPrevWechatItemBinding =
-        LayoutPrevWechatItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
+    private val viewBinding: GalleryWechatLayoutPrevItemBinding =
+        GalleryWechatLayoutPrevItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     val imageView: ImageView
         get() = viewBinding.prevWeChatImageView

@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.args.GalleryWeChatBundle
-import com.gallery.ui.wechat.databinding.GalleryItemFinderWechatBinding
+import com.gallery.ui.wechat.databinding.GalleryWechatItemFinderBinding
 
 class WeChatFinderAdapter(
-    private val uiBundle: GalleryWeChatBundle,
+    private val weChatBundle: GalleryWeChatBundle,
     private val listener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<WeChatFinderAdapter.ViewHolder>() {
 
@@ -18,7 +18,7 @@ class WeChatFinderAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            GalleryItemFinderWechatBinding.inflate(
+            GalleryWechatItemFinderBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -42,7 +42,7 @@ class WeChatFinderAdapter(
             entity,
             holder.binding.ivGalleryFinderIcon
         )
-        holder.bind(uiBundle, entity)
+        holder.bind(weChatBundle, entity)
     }
 
     fun updateFinder(entities: ArrayList<ScanEntity>) {
@@ -51,7 +51,7 @@ class WeChatFinderAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val binding: GalleryItemFinderWechatBinding) :
+    class ViewHolder(val binding: GalleryWechatItemFinderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(uiBundle: GalleryWeChatBundle, entity: ScanEntity) {

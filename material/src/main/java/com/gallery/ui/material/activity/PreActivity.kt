@@ -90,11 +90,10 @@ open class PreActivity : PrevCompatActivity() {
         savedInstanceState: Bundle?
     ) {
         super.onPrevCreated(delegate, bundle, savedInstanceState)
-        val prevFragment = requirePrevFragment
         viewBinding.preCount.text =
-            format.format(prevFragment.selectCount, galleryConfig.multipleMaxCount)
+            format.format(delegate.selectCount, galleryConfig.multipleMaxCount)
         viewBinding.preToolbar.title =
-            materialBundle.preTitle + "(" + (prevFragment.currentPosition + 1) + "/" + prevFragment.itemCount + ")"
+            materialBundle.preTitle + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
     }
 
     override fun onClickItemFileNotExist(

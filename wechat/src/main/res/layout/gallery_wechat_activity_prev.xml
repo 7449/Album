@@ -18,7 +18,7 @@
             android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:src="@drawable/ic_gallery_ui_toolbar_back" />
+            android:src="@drawable/ic_gallery_wechat_toolbar_back" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/prevWeChatToolbarText"
@@ -37,13 +37,13 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/wechat_selector_gallery_select"
+            android:background="@drawable/gallery_wechat_selector_gallery_select"
             android:enabled="false"
             android:paddingStart="6dp"
             android:paddingTop="4dp"
             android:paddingEnd="6dp"
             android:paddingBottom="4dp"
-            android:textColor="@color/ic_wechat_gallery_select_text"
+            android:textColor="@color/ic_gallery_wechat_select_text"
             android:textSize="12sp"
             tools:ignore="RelativeOverlap"
             tools:text="Send" />
@@ -96,11 +96,11 @@
     <RelativeLayout
         android:id="@+id/prevWeChatBottomView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/gallery_bottom_height">
+        android:layout_height="@dimen/gallery_wechat_bottom_height">
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/prevWeChatSelect"
-            android:layout_width="@dimen/gallery_bottom_button_width"
+            android:layout_width="@dimen/gallery_wechat_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="6dp"
@@ -113,7 +113,7 @@
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/prevWeChatFullImage"
-            android:layout_width="@dimen/gallery_bottom_button_width"
+            android:layout_width="@dimen/gallery_wechat_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"

@@ -122,8 +122,6 @@ class CustomDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
             .load(scanEntity.uri)
             .apply(
                 RequestOptions()
-                    .placeholder(R.drawable.ic_gallery_default_loading)
-                    .error(R.drawable.ic_gallery_default_loading)
                     .centerCrop()
                     .override(width, height)
             )

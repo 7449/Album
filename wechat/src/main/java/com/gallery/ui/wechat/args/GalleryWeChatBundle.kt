@@ -8,7 +8,7 @@ import com.gallery.compat.activity.args.GalleryCompatArgs
 import kotlinx.parcelize.Parcelize
 
 /**
- * 通过[GalleryCompatArgs.customBundle]以及[GalleryCompatArgs.customBundle]获取
+ * 通过[GalleryCompatArgs.customBundle]或者[GalleryCompatArgs.customBundle]获取
  */
 @Parcelize
 data class GalleryWeChatBundle(

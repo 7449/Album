@@ -23,11 +23,12 @@ import com.gallery.scan.Types
 import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.ui.material.R
 import com.gallery.ui.material.args.GalleryMaterialBundle
-import com.gallery.ui.material.crop.GalleryCompatCropper
+import com.gallery.ui.material.crop.GalleryMaterialCropper
 import com.gallery.ui.material.databinding.GalleryActivityGalleryBinding
 import com.gallery.ui.material.finder.PopupFinderAdapter
 import com.gallery.ui.material.materialArgOrDefault
 import com.gallery.ui.material.minimumDrawableExpand
+import com.theartofdev.edmodo.cropper.CropImageOptions
 
 open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     GalleryFinderAdapter.AdapterFinderListener {
@@ -46,14 +47,13 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
         PopupFinderAdapter(
             this@GalleryActivity,
             viewBinding.galleryFinderAll,
-            compatConfig,
             materialBundle,
             this@GalleryActivity
         )
     }
 
     override val cropImpl: ICrop?
-        get() = GalleryCompatCropper(this, compatConfig)
+        get() = GalleryMaterialCropper(CropImageOptions())
 
     override val currentFinderName: String
         get() = viewBinding.galleryFinderAll.text.toString()
@@ -142,12 +142,13 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
-        if (item.parent == requireGalleryFragment.parentId) {
+        val fragment = requireGalleryFragment
+        if (item.parent == fragment.parentId) {
             finderAdapter.hide()
             return
         }
         viewBinding.galleryFinderAll.text = item.bucketDisplayName
-        requireGalleryFragment.onScanGallery(item.parent)
+        fragment.onScanGallery(item.parent)
         finderAdapter.hide()
     }
 
@@ -165,8 +166,8 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context).load(scanEntity.uri).apply(
-            RequestOptions().placeholder(R.drawable.ic_gallery_default_loading)
-                .error(R.drawable.ic_gallery_default_loading).centerCrop().override(width, height)
+            RequestOptions()
+                .centerCrop().override(width, height)
         ).into(imageView)
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
@@ -175,8 +176,7 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context).load(finderEntity.uri).apply(
-            RequestOptions().placeholder(R.drawable.ic_gallery_default_loading)
-                .error(R.drawable.ic_gallery_default_loading).centerCrop()
+            RequestOptions().centerCrop()
         ).into(imageView)
         container.addView(imageView)
     }

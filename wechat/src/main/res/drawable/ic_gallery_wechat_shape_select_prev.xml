@@ -1,5 +1,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
         android:width="2dp"
-        android:color="@color/color_1BB84D" />
+        android:color="@color/gallery_wechat_color_1BB84D" />
 </shape>

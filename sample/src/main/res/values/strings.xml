@@ -1,6 +1,5 @@
 <resources>
     <string name="appName">Gallery</string>
-    <string name="gallery_video_title">视频选择</string>
     <string name="camera">camera</string>
     <string name="theme_default">默认</string>
     <string name="theme_app">app</string>

@@ -9,7 +9,7 @@ import com.gallery.ui.material.R
 import kotlinx.parcelize.Parcelize
 
 /**
- * 通过[GalleryCompatArgs.customBundle]以及[GalleryCompatArgs.customBundle]获取
+ * 通过[GalleryCompatArgs.customBundle]或者[GalleryCompatArgs.customBundle]获取
  */
 @Parcelize
 data class GalleryMaterialBundle(
@@ -17,7 +17,7 @@ data class GalleryMaterialBundle(
      * toolbar返回图标
      */
     @DrawableRes
-    val toolbarIcon: Int = R.drawable.ic_gallery_ui_toolbar_back,
+    val toolbarIcon: Int = R.drawable.ic_gallery_toolbar_back,
     /**
      * 状态栏颜色
      */
@@ -59,7 +59,7 @@ data class GalleryMaterialBundle(
      * 文件目录图标
      */
     @DrawableRes
-    val finderTextCompoundDrawable: Int = R.drawable.ic_gallery_ui_finder,
+    val finderTextCompoundDrawable: Int = R.drawable.ic_gallery_finder,
     /**
      * 文件目录图标颜色
      */

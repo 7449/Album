@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/ic_shape_wechat_prev_gif"
+        android:background="@drawable/ic_gallery_wechat_shape_prev_gif"
         android:padding="2dp"
         android:textColor="@android:color/white"
         android:textSize="11sp"
@@ -26,7 +26,7 @@
         android:id="@+id/prevWeChatVideo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_B3000000"
+        android:background="@color/gallery_wechat_color_B3000000"
         android:visibility="gone">
 
         <androidx.appcompat.widget.AppCompatImageView

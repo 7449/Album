@@ -3,6 +3,7 @@ package com.gallery.compat.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -14,11 +15,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.gallery.compat.*
-import com.gallery.compat.UIGalleryArgs.Companion.uiGalleryArgsOrDefault
-import com.gallery.compat.UIGallerySaveArgs.Companion.putArgs
-import com.gallery.compat.UIGallerySaveArgs.Companion.uiGallerySaveArgs
+import com.gallery.compat.GalleryCompatBundle
+import com.gallery.compat.GalleryConfig
+import com.gallery.compat.LayoutManagerTypes
+import com.gallery.compat.activity.args.GalleryCompatArgs
+import com.gallery.compat.activity.args.GalleryCompatArgs.Companion.galleryCompatArgsOrDefault
+import com.gallery.compat.activity.args.GallerySaveArgs
+import com.gallery.compat.activity.args.GallerySaveArgs.Companion.gallerySaveArgs
+import com.gallery.compat.activity.args.GallerySaveArgs.Companion.putArgs
+import com.gallery.compat.activity.args.PrevCompatArgs
 import com.gallery.compat.extensions.galleryFragment
+import com.gallery.compat.extensions.requireGalleryFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.compat.finder.updateResultFinder
@@ -48,21 +55,21 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
     protected abstract val galleryFragmentId: Int
 
     /** 目录View */
-    protected open val galleryFinderAdapter: GalleryFinderAdapter
-        get() = throw KotlinNullPointerException("galleryFinderAdapter == null")
+    protected open val finderAdapter: GalleryFinderAdapter
+        get() = throw KotlinNullPointerException("finderAdapter == null")
 
-    /** [UIGalleryArgs] */
+    /** [GalleryCompatArgs] */
     @Suppress("MemberVisibilityCanBePrivate")
-    protected val galleryArgs: UIGalleryArgs by lazy { intent?.extras.orEmptyExpand().uiGalleryArgsOrDefault }
+    protected val galleryCompatArgs: GalleryCompatArgs by lazy { intent?.extras.orEmptyExpand().galleryCompatArgsOrDefault }
 
     /** 初始配置 */
-    protected val galleryConfig: GalleryBundle by lazy { galleryArgs.galleryBundle }
+    protected val galleryConfig: GalleryBundle by lazy { galleryCompatArgs.bundle }
 
-    /** compat 配置 */
-    protected val compatConfig: GalleryCompatBundle by lazy { galleryArgs.galleryCompatBundle }
+    /** compat配置 */
+    protected val compatConfig: GalleryCompatBundle by lazy { galleryCompatArgs.compatBundle }
 
-    /** 暂存Bundle,用于自定义布局时[GalleryCompatBundle]无法满足需要配置时携带数据 */
-    protected val uiGapConfig: Bundle by lazy { galleryArgs.galleryOption }
+    /** 自定义参数配置 */
+    protected val gapConfig: Parcelable? by lazy { galleryCompatArgs.customBundle }
 
     /** 预览页启动[ActivityResultLauncher]  */
     private val prevLauncher: ActivityResultLauncher<Intent> =
@@ -70,15 +77,15 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
             val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
             when (intent.resultCode) {
                 PrevCompatActivity.RESULT_CODE_SELECT -> {
-                    galleryFragment.onUpdateResult(bundleExpand.scanArgs)
+                    galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
                     onResultSelect(bundleExpand)
                 }
                 PrevCompatActivity.RESULT_CODE_TOOLBAR -> {
-                    galleryFragment.onUpdateResult(bundleExpand.scanArgs)
+                    galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
                     onResultToolbar(bundleExpand)
                 }
                 PrevCompatActivity.RESULT_CODE_BACK -> {
-                    galleryFragment.onUpdateResult(bundleExpand.scanArgs)
+                    galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
                     onResultBack(bundleExpand)
                 }
             }
@@ -92,12 +99,12 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        UIGallerySaveArgs.newSaveInstance(currentFinderName, finderList).putArgs(outState)
+        GallerySaveArgs.newSaveInstance(currentFinderName, finderList).putArgs(outState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val saveArgs = savedInstanceState?.uiGallerySaveArgs
+        val saveArgs = savedInstanceState?.gallerySaveArgs
         finderList.clear()
         finderList.addAll(saveArgs?.finderList.orEmpty())
         finderName = saveArgs?.finderName ?: galleryConfig.allName
@@ -115,7 +122,6 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         savedInstanceState: Bundle?
     ) {
         delegate.rootView.setBackgroundColor(compatConfig.galleryRootBackground)
-        recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = when (compatConfig.layoutManager) {
             LayoutManagerTypes.GRID -> GridLayoutManager(
                 recyclerView.context,
@@ -142,48 +148,39 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
 
     /** 数据扫描成功之后刷新文件夹数据  该方法子类重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
-        if (galleryFragment.isScanAll) {
+        if (requireGalleryFragment.isScanAll) {
             finderList.clear()
             finderList.addAll(scanEntities.findFinder(galleryConfig.sdName, galleryConfig.allName))
         }
     }
 
     /** 启动预览 */
-    fun onStartPrevPage(parentId: Long, position: Int, cla: Class<out PrevCompatActivity>) {
-        onStartPrevPage(
-            parentId = parentId,
-            position = position,
-            option = galleryArgs.galleryPrevOption,
-            cla = cla
-        )
-    }
-
-    /** 启动预览 */
-    fun onStartPrevPage(
+    fun startPrevPage(
         parentId: Long,
         position: Int,
+        /** 预览页参数配置 */
+        customBundle: Parcelable?,
         scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
-        option: Bundle = Bundle.EMPTY,
         cla: Class<out PrevCompatActivity>
     ) {
-        onStartPrevPage(
-            UIPrevArgs(
+        startPrevPage(
+            PrevCompatArgs(
                 compatConfig,
                 PrevArgs(
                     parentId,
-                    galleryFragment.selectItem,
+                    requireGalleryFragment.selectItem,
                     galleryConfig,
                     position,
                     scanAlone
                 ),
-                option
+                customBundle
             ), cla
         )
     }
 
     /** 启动预览 */
-    open fun onStartPrevPage(uiPrevArgs: UIPrevArgs, cla: Class<out PrevCompatActivity>) {
-        prevLauncher.launch(PrevCompatActivity.newInstance(this, uiPrevArgs, cla))
+    open fun startPrevPage(args: PrevCompatArgs, cla: Class<out PrevCompatActivity>) {
+        prevLauncher.launch(PrevCompatActivity.newInstance(this, args, cla))
     }
 
     /** 自定义Fragment */
@@ -220,7 +217,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         finish()
     }
 
-    /** 点击选中,针对单选 */
+    /** 选择图片,针对单选 */
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
         val intent = Intent()
         val bundle = Bundle()
@@ -230,7 +227,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         finish()
     }
 
-    /** 文件目录加载图片 */
+    /** 文件目录加载图片,此方法需要在自定义Finder的时候主动调用,或者自定义的时候直接加载图片即可 */
     abstract override fun onDisplayGalleryThumbnails(
         finderEntity: ScanEntity,
         container: FrameLayout

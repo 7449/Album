@@ -2,7 +2,6 @@ package com.gallery.ui.wechat
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
@@ -10,6 +9,7 @@ import com.gallery.compat.Gallery
 import com.gallery.compat.GalleryCompatBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.wechat.activity.GalleryWeChatActivity
+import com.gallery.ui.wechat.args.GalleryWeChatBundle
 
 val scanType = intArrayOf(
     MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
@@ -29,19 +29,9 @@ fun FragmentActivity.weChatGallery(
     Gallery.newInstance(
         activity = this,
         launcher = launcher,
-        option = Bundle().apply {
-            putInt(WeChatConfig.VIDEO_MAX_DURATION, videoMaxDuration)
-            putString(WeChatConfig.VIDEO_ALL_FINDER_NAME, allVideoFinderName)
-        },
-        bundle = GalleryBundle(
-            allName = allName,
-            hideCamera = true,
-            scanType = scanType,
-            checkBoxDrawable = checkBoxResource,
-        ),
-        compatBundle = GalleryCompatBundle(
-            prevRootBackground = Color.BLACK,
-            galleryRootBackground = Color.rgb(38, 38, 38),
+        customBundle = GalleryWeChatBundle(
+            videoMaxDuration = videoMaxDuration,
+            videoAllFinderName = allVideoFinderName,
             statusBarColor = Color.rgb(38, 38, 38),
             toolbarBackground = Color.rgb(38, 38, 38),
             bottomViewBackground = Color.rgb(19, 19, 19),
@@ -56,6 +46,16 @@ fun FragmentActivity.weChatGallery(
             finderItemTextCountColor = Color.parseColor("#767676"),
             finderTextCompoundDrawable = R.drawable.ic_wechat_gallery_finder_action,
             finderTextSize = 14.toFloat()
+        ),
+        bundle = GalleryBundle(
+            allName = allName,
+            hideCamera = true,
+            scanType = scanType,
+            checkBoxDrawable = checkBoxResource,
+        ),
+        compatBundle = GalleryCompatBundle(
+            prevRootBackground = Color.BLACK,
+            galleryRootBackground = Color.rgb(38, 38, 38)
         ),
         clz = GalleryWeChatActivity::class.java
     )

@@ -1,4 +1,4 @@
-package com.gallery.ui.activity
+package com.gallery.ui.material.activity
 
 import android.content.Context
 import android.graphics.PorterDuff
@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.activity.GalleryCompatActivity
-import com.gallery.compat.extensions.galleryFragment
+import com.gallery.compat.extensions.requireGalleryFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
@@ -21,11 +21,13 @@ import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.scan.Types
 import com.gallery.scan.extensions.isScanAllExpand
-import com.gallery.ui.R
-import com.gallery.ui.crop.GalleryCompatCropper
-import com.gallery.ui.databinding.GalleryActivityGalleryBinding
-import com.gallery.ui.finder.PopupFinderAdapter
-import com.gallery.ui.minimumDrawableExpand
+import com.gallery.ui.material.R
+import com.gallery.ui.material.args.GalleryMaterialBundle
+import com.gallery.ui.material.crop.GalleryCompatCropper
+import com.gallery.ui.material.databinding.GalleryActivityGalleryBinding
+import com.gallery.ui.material.finder.PopupFinderAdapter
+import com.gallery.ui.material.materialArgOrDefault
+import com.gallery.ui.material.minimumDrawableExpand
 
 open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     GalleryFinderAdapter.AdapterFinderListener {
@@ -36,9 +38,17 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
         )
     }
 
-    override val galleryFinderAdapter: GalleryFinderAdapter by lazy {
+    private val materialBundle: GalleryMaterialBundle by lazy {
+        gapConfig.materialArgOrDefault
+    }
+
+    override val finderAdapter: GalleryFinderAdapter by lazy {
         PopupFinderAdapter(
-            this@GalleryActivity, viewBinding.galleryFinderAll, compatConfig, this@GalleryActivity
+            this@GalleryActivity,
+            viewBinding.galleryFinderAll,
+            compatConfig,
+            materialBundle,
+            this@GalleryActivity
         )
     }
 
@@ -54,39 +64,39 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        window.statusBarColor = compatConfig.statusBarColor
-        viewBinding.galleryToolbar.title = compatConfig.toolbarText
-        viewBinding.galleryToolbar.setTitleTextColor(compatConfig.toolbarTextColor)
-        val drawable = drawableExpand(compatConfig.toolbarIcon)
+        window.statusBarColor = materialBundle.statusBarColor
+        viewBinding.galleryToolbar.title = materialBundle.toolbarText
+        viewBinding.galleryToolbar.setTitleTextColor(materialBundle.toolbarTextColor)
+        val drawable = drawableExpand(materialBundle.toolbarIcon)
         drawable?.colorFilter =
-            PorterDuffColorFilter(compatConfig.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+            PorterDuffColorFilter(materialBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.galleryToolbar.navigationIcon = drawable
-        viewBinding.galleryToolbar.setBackgroundColor(compatConfig.toolbarBackground)
-        viewBinding.galleryToolbar.elevation = compatConfig.toolbarElevation
+        viewBinding.galleryToolbar.setBackgroundColor(materialBundle.toolbarBackground)
+        viewBinding.galleryToolbar.elevation = materialBundle.toolbarElevation
 
-        viewBinding.galleryFinderAll.textSize = compatConfig.finderTextSize
-        viewBinding.galleryFinderAll.setTextColor(compatConfig.finderTextColor)
+        viewBinding.galleryFinderAll.textSize = materialBundle.finderTextSize
+        viewBinding.galleryFinderAll.setTextColor(materialBundle.finderTextColor)
         viewBinding.galleryFinderAll.setCompoundDrawables(
             null,
             null,
             minimumDrawableExpand(
-                compatConfig.finderTextCompoundDrawable,
-                compatConfig.finderTextDrawableColor
+                materialBundle.finderTextCompoundDrawable,
+                materialBundle.finderTextDrawableColor
             ),
             null
         )
 
-        viewBinding.galleryPre.text = compatConfig.preViewText
-        viewBinding.galleryPre.textSize = compatConfig.preViewTextSize
-        viewBinding.galleryPre.setTextColor(compatConfig.preViewTextColor)
+        viewBinding.galleryPre.text = materialBundle.preViewText
+        viewBinding.galleryPre.textSize = materialBundle.preViewTextSize
+        viewBinding.galleryPre.setTextColor(materialBundle.preViewTextColor)
 
-        viewBinding.gallerySelect.text = compatConfig.selectText
-        viewBinding.gallerySelect.textSize = compatConfig.selectTextSize
-        viewBinding.gallerySelect.setTextColor(compatConfig.selectTextColor)
+        viewBinding.gallerySelect.text = materialBundle.selectText
+        viewBinding.gallerySelect.textSize = materialBundle.selectTextSize
+        viewBinding.gallerySelect.setTextColor(materialBundle.selectTextColor)
 
-        viewBinding.galleryBottomView.setBackgroundColor(compatConfig.bottomViewBackground)
+        viewBinding.galleryBottomView.setBackgroundColor(materialBundle.bottomViewBackground)
 
-        galleryFinderAdapter.finderInit()
+        finderAdapter.finderInit()
         viewBinding.galleryPre.setOnClickListener(this)
         viewBinding.gallerySelect.setOnClickListener(this)
         viewBinding.galleryFinderAll.setOnClickListener(this)
@@ -102,38 +112,43 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     override fun onClick(v: View) {
         when (v.id) {
             R.id.galleryPre -> {
-                if (galleryFragment.isSelectEmpty) {
+                if (requireGalleryFragment.isSelectEmpty) {
                     onGalleryPreEmpty()
                     return
                 }
-                onStartPrevPage(Types.Scan.SCAN_NONE, 0, PreActivity::class.java)
+                startPrevPage(
+                    parentId = Types.Scan.SCAN_NONE,
+                    position = 0,
+                    customBundle = materialBundle,
+                    cla = PreActivity::class.java
+                )
             }
             R.id.gallerySelect -> {
-                if (galleryFragment.isSelectEmpty) {
+                if (requireGalleryFragment.isSelectEmpty) {
                     onGalleryOkEmpty()
                     return
                 }
-                onGalleryResources(galleryFragment.selectItem)
+                onGalleryResources(requireGalleryFragment.selectItem)
             }
             R.id.galleryFinderAll -> {
                 if (finderList.isEmpty()) {
                     onGalleryFinderEmpty()
                     return
                 }
-                galleryFinderAdapter.finderUpdate(finderList)
-                galleryFinderAdapter.show()
+                finderAdapter.finderUpdate(finderList)
+                finderAdapter.show()
             }
         }
     }
 
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
-        if (item.parent == galleryFragment.parentId) {
-            galleryFinderAdapter.hide()
+        if (item.parent == requireGalleryFragment.parentId) {
+            finderAdapter.hide()
             return
         }
         viewBinding.galleryFinderAll.text = item.bucketDisplayName
-        galleryFragment.onScanGallery(item.parent)
-        galleryFinderAdapter.hide()
+        requireGalleryFragment.onScanGallery(item.parent)
+        finderAdapter.hide()
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
@@ -173,10 +188,11 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
         position: Int,
         parentId: Long
     ) {
-        onStartPrevPage(
-            parentId,
-            if (parentId.isScanAllExpand && !bundle.hideCamera) position - 1 else position,
-            PreActivity::class.java
+        startPrevPage(
+            parentId = parentId,
+            position = if (parentId.isScanAllExpand && !bundle.hideCamera) position - 1 else position,
+            customBundle = materialBundle,
+            cla = PreActivity::class.java
         )
     }
 

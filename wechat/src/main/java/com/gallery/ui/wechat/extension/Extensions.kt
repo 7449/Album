@@ -3,16 +3,21 @@ package com.gallery.ui.wechat.extension
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.animation.Animation
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.gallery.compat.extensions.getObjExpand
+import com.gallery.ui.wechat.args.GalleryWeChatBundle
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("SimpleDateFormat")
 private val formatter = SimpleDateFormat("yyyy/MM")
+
+internal val Parcelable?.weChatArgOrDefault: GalleryWeChatBundle
+    get() = this as? GalleryWeChatBundle ?: GalleryWeChatBundle()
 
 fun Bundle?.getBooleanExpand(key: String): Boolean = getObjExpand(key) { false }
 

@@ -36,12 +36,7 @@ open class UCropImpl(private val compatBundle: GalleryCompatBundle) : ICrop {
 
     override fun openCrop(context: Context, bundle: GalleryBundle, inputUri: Uri): Intent {
         return UCrop.of(inputUri, cropOutPutUri2(context, bundle))
-            .withOptions(
-                UCrop.Options().apply {
-                    optionBundle.putAll(
-                        compatBundle.args.getBundle(GalleryConfig.CROP_ARGS).orEmptyExpand()
-                    )
-                })
+            .withOptions(UCrop.Options())
             .getIntent(context)
     }
 
@@ -64,9 +59,9 @@ open class UCropImpl(private val compatBundle: GalleryCompatBundle) : ICrop {
         delegate.onScanResult(currentUri)
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(GalleryConfig.GALLERY_RESULT_CROP, currentUri)
+        bundle.putParcelable(GalleryConfig.Crop.GALLERY_RESULT_CROP, currentUri)
         intent.putExtras(bundle)
-        delegate.requireActivity.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
+        delegate.requireActivity.setResult(GalleryConfig.Crop.RESULT_CODE_CROP, intent)
         delegate.requireActivity.finish()
     }
 

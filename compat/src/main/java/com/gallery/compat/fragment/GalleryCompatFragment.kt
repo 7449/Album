@@ -113,4 +113,5 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_galle
         delegate.onDestroy()
         super.onDestroyView()
     }
+
 }

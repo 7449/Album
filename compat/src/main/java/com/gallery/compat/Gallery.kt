@@ -1,18 +1,19 @@
 package com.gallery.compat
 
 import android.content.Intent
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.gallery.compat.UIGalleryArgs.Companion.putArgs
+import com.gallery.compat.activity.args.GalleryCompatArgs
+import com.gallery.compat.activity.args.GalleryCompatArgs.Companion.putArgs
 import com.gallery.core.GalleryBundle
 
-class Gallery(
+open class Gallery(
     activity: FragmentActivity? = null,
     fragment: Fragment? = null,
-    private val galleryLauncher: ActivityResultLauncher<Intent>,
-    private val uiGalleryArgs: UIGalleryArgs,
+    private val launcher: ActivityResultLauncher<Intent>,
+    private val args: GalleryCompatArgs,
     private val clz: Class<*>,
 ) {
 
@@ -23,15 +24,14 @@ class Gallery(
             launcher: ActivityResultLauncher<Intent>,
             bundle: GalleryBundle = GalleryBundle(),
             compatBundle: GalleryCompatBundle = GalleryCompatBundle(),
-            option: Bundle = Bundle.EMPTY,
-            prevOption: Bundle = Bundle.EMPTY,
+            customBundle: Parcelable? = null,
             clz: Class<*>,
         ): Gallery {
             return Gallery(
                 activity,
                 fragment,
                 launcher,
-                UIGalleryArgs(bundle, compatBundle, option, prevOption),
+                GalleryCompatArgs(bundle, compatBundle, customBundle),
                 clz
             )
         }
@@ -54,15 +54,15 @@ class Gallery(
     }
 
     private fun launchIntent(): Intent {
-        return Intent(fragmentActivity, clz).apply { putExtras(uiGalleryArgs.putArgs()) }
+        return Intent(fragmentActivity, clz).apply { putExtras(args.putArgs()) }
     }
 
     private fun startActivity() {
-        galleryLauncher.launch(launchIntent())
+        launcher.launch(launchIntent())
     }
 
     private fun startFragment() {
-        galleryLauncher.launch(launchIntent())
+        launcher.launch(launchIntent())
     }
 
 }

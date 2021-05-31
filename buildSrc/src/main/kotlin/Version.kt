@@ -64,5 +64,5 @@ object DepLib {
     val compat = core.plus(":core")
     val ui = compat.plus(":compat")
     val wechat = compat.plus(":compat")
-    val sample = (wechat + ui).plus(":wechat").plus(":ui")
+    val sample = (wechat + ui).plus(":wechat").plus(":material")
 }

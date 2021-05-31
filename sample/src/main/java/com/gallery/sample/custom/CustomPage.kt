@@ -6,11 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.gallery.compat.extensions.galleryFragment
+import com.gallery.compat.extensions.requireGalleryFragment
 import com.gallery.core.crop.ICrop
 import com.gallery.sample.camera.CameraActivity
 import com.gallery.sample.crop.UCropImpl
-import com.gallery.ui.activity.GalleryActivity
+import com.gallery.ui.material.activity.GalleryActivity
 
 class UCropGalleryActivity : GalleryActivity() {
     override val cropImpl: ICrop
@@ -22,8 +22,8 @@ class CustomCameraActivity : GalleryActivity() {
     private val cameraLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
             when (intent.resultCode) {
-                Activity.RESULT_CANCELED -> galleryFragment.onCameraResultCanceled()
-                Activity.RESULT_OK -> galleryFragment.onCameraResultOk()
+                Activity.RESULT_CANCELED -> requireGalleryFragment.onCameraResultCanceled()
+                Activity.RESULT_OK -> requireGalleryFragment.onCameraResultOk()
             }
         }
 

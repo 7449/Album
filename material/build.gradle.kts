@@ -14,7 +14,7 @@ android {
     compileOptions {
         kotlinOptions.freeCompilerArgs += listOf(
             "-module-name",
-            "com.github.7449.album.ui"
+            "com.github.7449.album.material"
         )
     }
 }

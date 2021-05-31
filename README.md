@@ -9,10 +9,10 @@
 #### Manifests.xml
 
         <activity
-            android:name="com.gallery.ui.activity.GalleryActivity"
+            android:name="com.gallery.ui.material.activity.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.gallery.ui.activity.PreActivity"
+            android:name="com.gallery.ui.material.activity.PreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
             
 #### dependencies

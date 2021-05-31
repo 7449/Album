@@ -6,23 +6,33 @@ import androidx.appcompat.app.AppCompatActivity
 import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.fragment.PrevCompatFragment
 
-val AppCompatActivity.galleryFragment: GalleryCompatFragment
+val AppCompatActivity.requireGalleryFragment: GalleryCompatFragment
     get() = supportFragmentManager.findFragmentByTag(
         GalleryCompatFragment::class.java.simpleName
     ) as GalleryCompatFragment
 
-val AppCompatActivity.prevFragment: PrevCompatFragment
+val AppCompatActivity.requirePrevFragment: PrevCompatFragment
     get() = supportFragmentManager.findFragmentByTag(
         PrevCompatFragment::class.java.simpleName
     ) as PrevCompatFragment
 
-inline fun <reified T : Parcelable> Bundle?.getParcelableExpand(key: String): T =
-    getParcelableOrDefault(key)
+val AppCompatActivity.galleryFragment: GalleryCompatFragment?
+    get() = supportFragmentManager.findFragmentByTag(
+        GalleryCompatFragment::class.java.simpleName
+    ) as? GalleryCompatFragment
 
-inline fun <reified T : Parcelable> Bundle?.getParcelableArrayListExpand(key: String): ArrayList<T> =
+val AppCompatActivity.prevFragment: PrevCompatFragment?
+    get() = supportFragmentManager.findFragmentByTag(
+        PrevCompatFragment::class.java.simpleName
+    ) as? PrevCompatFragment
+
+inline fun <reified T : Parcelable> Bundle?.parcelableExpand(key: String): T =
+    parcelableOrDefault(key)
+
+inline fun <reified T : Parcelable> Bundle?.parcelableArrayListExpand(key: String): ArrayList<T> =
     getObjExpand(key) { arrayListOf() }
 
-inline fun <reified T : Parcelable> Bundle?.getParcelableOrDefault(
+inline fun <reified T : Parcelable> Bundle?.parcelableOrDefault(
     key: String,
     defaultValue: Parcelable
     = this?.getParcelable<T>(key)!!

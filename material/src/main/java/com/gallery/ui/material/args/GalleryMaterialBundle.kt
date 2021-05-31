@@ -1,128 +1,18 @@
-package com.gallery.compat
+package com.gallery.ui.material.args
 
 import android.graphics.Color
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.GalleryBundle
-import com.gallery.core.delegate.args.PrevArgs
-import com.gallery.core.delegate.impl.PrevDelegateImpl
-import com.gallery.core.entity.ScanEntity
+import com.gallery.compat.activity.args.GalleryCompatArgs
+import com.gallery.ui.material.R
 import kotlinx.parcelize.Parcelize
 
+/**
+ * 通过[GalleryCompatArgs.customBundle]以及[GalleryCompatArgs.customBundle]获取
+ */
 @Parcelize
-internal data class UIGallerySaveArgs(
-    val finderName: String,
-    val finderList: ArrayList<ScanEntity>,
-) : Parcelable {
-    companion object {
-        private const val Key = "uiGallerySaveArgs"
-
-        fun newSaveInstance(
-            finderName: String,
-            finderList: ArrayList<ScanEntity>
-        ): UIGallerySaveArgs {
-            return UIGallerySaveArgs(finderName, finderList)
-        }
-
-        fun UIGallerySaveArgs.putArgs(bundle: Bundle = Bundle()): Bundle {
-            bundle.putParcelable(Key, this)
-            return bundle
-        }
-
-        val Bundle.uiGallerySaveArgs
-            get() = getParcelable<UIGallerySaveArgs>(Key)
-    }
-}
-
-@Parcelize
-data class UIGalleryArgs(
-    val galleryBundle: GalleryBundle,
-    val galleryCompatBundle: GalleryCompatBundle,
-    val galleryOption: Bundle,
-    val galleryPrevOption: Bundle,
-) : Parcelable {
-    companion object {
-        private const val Key = "uiGalleryArgs"
-
-        fun UIGalleryArgs.putArgs(bundle: Bundle = Bundle()): Bundle {
-            bundle.putParcelable(Key, this)
-            return bundle
-        }
-
-        val Bundle.uiGalleryArgsOrDefault
-            get() = getParcelable(Key)
-                ?: UIGalleryArgs(GalleryBundle(), GalleryCompatBundle(), Bundle(), Bundle())
-    }
-}
-
-@Parcelize
-data class UIPrevArgs(
-    /**
-     * UI配置参数
-     */
-    val compatBundle: GalleryCompatBundle,
-    /**
-     * 预览页[PrevDelegateImpl]需要的数据
-     */
-    val prevArgs: PrevArgs,
-    /**
-     * 暂存Bundle,用于自定义布局时[GalleryCompatBundle]无法满足需要配置时携带数据
-     */
-    val option: Bundle,
-) : Parcelable {
-    companion object {
-        private const val Key = "uiPrevArgs"
-
-        fun UIPrevArgs.putPrevArgs(bundle: Bundle = Bundle()): Bundle {
-            bundle.putParcelable(Key, this)
-            return bundle
-        }
-
-        val Bundle.uiPrevArgs
-            get() = getParcelable<UIPrevArgs>(Key)
-    }
-}
-
-@Parcelize
-data class GalleryCompatBundle(
-    /**
-     * 分割线宽度
-     */
-    val dividerWidth: Int = 8,
-    /**
-     * 滑动方向
-     */
-    val orientation: Int = RecyclerView.VERTICAL,
-    /**
-     * 列表管理器
-     */
-    val layoutManager: LayoutManagerTypes = LayoutManagerTypes.GRID,
-    /**
-     * 预览toolbar返回是否刷新数据
-     */
-    val preFinishRefresh: Boolean = true,
-    /**
-     * 预览back返回是否刷新数据
-     */
-    val preBackRefresh: Boolean = true,
-    /**
-     * RootView背景色
-     */
-    @ColorInt
-    val galleryRootBackground: Int = Color.WHITE,
-    /**
-     * 预览背景色
-     */
-    @ColorInt
-    val prevRootBackground: Int = Color.WHITE,
-    /**
-     * 携带的参数
-     */
-    val args: Bundle = Bundle.EMPTY,
-//
+data class GalleryMaterialBundle(
     /**
      * toolbar返回图标
      */

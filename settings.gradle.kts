@@ -1,7 +1,7 @@
 include(
     ":core",
     ":scan",
-    ":ui",
+    ":material",
     ":sample",
     ":compat",
     ":wechat"

@@ -1,4 +1,4 @@
-package com.gallery.ui.crop
+package com.gallery.ui.material.crop
 
 import android.app.Activity
 import android.content.Context
@@ -45,11 +45,7 @@ class GalleryCompatCropper(
         val intent = Intent().setClass(activity, CropImageActivity::class.java)
         val value = Bundle()
         value.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
-        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, runCatching {
-            val args = compatBundle.args
-            args.classLoader = CropImageOptions::class.java.classLoader
-            args.getParcelable<CropImageOptions>(GalleryConfig.CROP_ARGS)
-        }.getOrElse { CropImageOptions() } ?: CropImageOptions())
+        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, CropImageOptions())
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, value)
         return intent
     }
@@ -58,9 +54,9 @@ class GalleryCompatCropper(
         delegate.onScanResult(uri)
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelable(GalleryConfig.GALLERY_RESULT_CROP, uri)
+        bundle.putParcelable(GalleryConfig.Crop.GALLERY_RESULT_CROP, uri)
         intent.putExtras(bundle)
-        activity.setResult(GalleryConfig.RESULT_CODE_CROP, intent)
+        activity.setResult(GalleryConfig.Crop.RESULT_CODE_CROP, intent)
         activity.finish()
     }
 

@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.GalleryConfig
 import com.gallery.compat.activity.GalleryCompatActivity
-import com.gallery.compat.extensions.galleryFragment
+import com.gallery.compat.extensions.requireGalleryFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.compat.widget.GalleryImageView
@@ -31,9 +31,8 @@ import com.gallery.core.extensions.*
 import com.gallery.scan.Types
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig
-import com.gallery.ui.wechat.WeChatPrevArgs
-import com.gallery.ui.wechat.WeChatPrevArgs.Companion.putArgs
 import com.gallery.ui.wechat.adapter.WeChatFinderAdapter
+import com.gallery.ui.wechat.args.GalleryWeChatBundle
 import com.gallery.ui.wechat.databinding.GalleryActivityWechatGalleryBinding
 import com.gallery.ui.wechat.extension.*
 import com.gallery.ui.wechat.widget.WeChatGalleryItem
@@ -75,22 +74,11 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     }
     private val newFinderAdapter: WeChatFinderAdapter by lazy {
         WeChatFinderAdapter(
-            compatConfig,
+            uiBundle,
             this
         )
     }
-    private val videoDuration: Int by lazy {
-        uiGapConfig.getInt(
-            WeChatConfig.VIDEO_MAX_DURATION,
-            300000
-        )
-    }
-    private val videoDes: String by lazy {
-        uiGapConfig.getString(
-            WeChatConfig.VIDEO_ALL_FINDER_NAME,
-            "全部视频"
-        )
-    }
+    private val uiBundle: GalleryWeChatBundle by lazy { gapConfig.weChatArgOrDefault }
 
     //视频的数据
     //1.横竖屏保存一次
@@ -116,11 +104,11 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        window.statusBarColor = compatConfig.statusBarColor
-        binding.galleryWeChatToolbar.setBackgroundColor(compatConfig.toolbarBackground)
+        window.statusBarColor = uiBundle.statusBarColor
+        binding.galleryWeChatToolbar.setBackgroundColor(uiBundle.toolbarBackground)
 
         binding.galleryWeChatFinder.layoutManager = LinearLayoutManager(this)
-        binding.galleryWeChatFinder.setBackgroundColor(compatConfig.finderItemBackground)
+        binding.galleryWeChatFinder.setBackgroundColor(uiBundle.finderItemBackground)
         binding.galleryWeChatFinder.addItemDecoration(
             DividerItemDecoration(
                 this,
@@ -128,18 +116,18 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
             )
         )
 
-        binding.galleryWeChatBottomView.setBackgroundColor(compatConfig.bottomViewBackground)
+        binding.galleryWeChatBottomView.setBackgroundColor(uiBundle.bottomViewBackground)
 
-        binding.galleryWeChatPrev.text = compatConfig.preViewText
-        binding.galleryWeChatPrev.textSize = compatConfig.preViewTextSize
+        binding.galleryWeChatPrev.text = uiBundle.preViewText
+        binding.galleryWeChatPrev.textSize = uiBundle.preViewTextSize
 
-        binding.galleryWeChatToolbarSend.textSize = compatConfig.selectTextSize
-        binding.galleryWeChatToolbarSend.text = compatConfig.selectText
+        binding.galleryWeChatToolbarSend.textSize = uiBundle.selectTextSize
+        binding.galleryWeChatToolbarSend.text = uiBundle.selectText
         binding.galleryWeChatFullImage.setButtonDrawable(R.drawable.wechat_selector_gallery_full_image_item_check)
 
-        binding.galleryWeChatToolbarFinderText.textSize = compatConfig.finderTextSize
-        binding.galleryWeChatToolbarFinderText.setTextColor(compatConfig.finderTextColor)
-        binding.galleryWeChatToolbarFinderIcon.setImageResource(compatConfig.finderTextCompoundDrawable)
+        binding.galleryWeChatToolbarFinderText.textSize = uiBundle.finderTextSize
+        binding.galleryWeChatToolbarFinderText.setTextColor(uiBundle.finderTextColor)
+        binding.galleryWeChatToolbarFinderIcon.setImageResource(uiBundle.finderTextCompoundDrawable)
         binding.galleryWeChatToolbarFinderText.text = finderName
 
         tempVideoList.clear()
@@ -155,18 +143,18 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
 
         binding.galleryWeChatFinder.adapter = newFinderAdapter
         binding.galleryWeChatPrev.setOnClickListener {
-            onStartPrevPage(
-                Types.Scan.SCAN_NONE, 0,
-                option = WeChatPrevArgs(
-                    true,
-                    videoDuration,
-                    binding.galleryWeChatFullImage.isChecked
-                ).putArgs(Bundle()),
+            startPrevPage(
+                parentId = Types.Scan.SCAN_NONE,
+                position = 0,
+                customBundle = uiBundle.copy(
+                    isPrev = true,
+                    fullImageSelect = binding.galleryWeChatFullImage.isChecked
+                ),
                 cla = GalleryWeChatPrevActivity::class.java
             )
         }
         binding.galleryWeChatToolbarSend.setOnClickListener {
-            onGalleryResources(galleryFragment.selectItem)
+            onGalleryResources(requireGalleryFragment.selectItem)
         }
         binding.galleryWeChatToolbarFinder.setOnClickListener {
             if (finderList.isNullOrEmpty()) {
@@ -187,7 +175,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
                 .openAnim(binding.galleryWeChatFinderRoot)
         }
         rotateAnimationResult.doOnAnimationEndExpand {
-            val currentFragment = galleryFragment
+            val currentFragment = requireGalleryFragment
             AnimExtension.newInstance(binding.galleryWeChatRoot.height)
                 .closeAnimate(binding.galleryWeChatFinderRoot) {
                     if (finderList.find { it.isSelected }?.parent == currentFragment.parentId) {
@@ -219,7 +207,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     ) {
         //初始化布局
         super.onGalleryCreated(delegate, recyclerView, bundle, savedInstanceState)
-        val currentFragment = galleryFragment
+        val currentFragment = requireGalleryFragment
         //滑动的时间提示View
         currentFragment.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -250,7 +238,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     }
 
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
-        val currentFragment = galleryFragment
+        val currentFragment = requireGalleryFragment
         if (currentFragment.isScanAll) {
             //如果是扫描全部的则更新video和finder,然后为finder添加一个全部视频的item
             videoList.clear()
@@ -263,7 +251,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
                     it.copy(
                         delegate = it.delegate.copy(
                             parent = WeChatConfig.VIDEO_ALL_PARENT,
-                            bucketDisplayName = videoDes
+                            bucketDisplayName = uiBundle.videoAllFinderName
                         ), count = videoList.size
                     )
                 )
@@ -284,7 +272,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
 
     /** 点击文件夹目录，更新parentId是因为[rotateAnimationResult]有用到 */
     override fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity) {
-        galleryFragment.parentId = item.parent
+        requireGalleryFragment.parentId = item.parent
         hideFinderActionView()
     }
 
@@ -323,7 +311,7 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         checkBox.gravity = Gravity.CENTER
         checkBox.setTextColor(Color.WHITE)
         if (scanEntity.isSelected) {
-            checkBox.text = (galleryFragment.selectItem.indexOf(scanEntity) + 1).toString()
+            checkBox.text = (requireGalleryFragment.selectItem.indexOf(scanEntity) + 1).toString()
         } else {
             checkBox.text = ""
         }
@@ -351,23 +339,22 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
         position: Int,
         parentId: Long
     ) {
-        onStartPrevPage(
-            if (parentId == WeChatConfig.VIDEO_ALL_PARENT) Types.Scan.SCAN_ALL else parentId,
-            position,
-            if (parentId == WeChatConfig.VIDEO_ALL_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
-            WeChatPrevArgs(
-                false,
-                videoDuration,
-                binding.galleryWeChatFullImage.isChecked
-            ).putArgs(),
-            GalleryWeChatPrevActivity::class.java
+        startPrevPage(
+            parentId = if (parentId == WeChatConfig.VIDEO_ALL_PARENT) Types.Scan.SCAN_ALL else parentId,
+            position = position,
+            customBundle = uiBundle.copy(
+                isPrev = false,
+                fullImageSelect = binding.galleryWeChatFullImage.isChecked
+            ),
+            scanAlone = if (parentId == WeChatConfig.VIDEO_ALL_PARENT) MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO else MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
+            cla = GalleryWeChatPrevActivity::class.java
         )
     }
 
     /** 刷新一下角标 */
     override fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
         super.onClickCheckBoxFileNotExist(context, scanEntity)
-        galleryFragment.notifyDataSetChanged()
+        requireGalleryFragment.notifyDataSetChanged()
     }
 
     /**
@@ -379,9 +366,9 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
      * 因为选中的checkbox有数字显示，所以过滤出所有选中的数据刷新一下角标
      */
     override fun onChangedItem(position: Int, scanEntity: ScanEntity) {
-        val fragment = galleryFragment
+        val fragment = requireGalleryFragment
         val selectEntities = fragment.selectItem
-        if (scanEntity.isVideo && scanEntity.duration > videoDuration) {
+        if (scanEntity.isVideo && scanEntity.duration > uiBundle.videoMaxDuration) {
             scanEntity.isSelected = false
             selectEntities.remove(scanEntity)
             getString(R.string.gallery_select_video_max_length).safeToastExpand(this)
@@ -405,13 +392,13 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
     /** 更新顶部发送底部预览文字和状态 */
     @SuppressLint("SetTextI18n")
     private fun updateView() {
-        val fragment = galleryFragment
+        val fragment = requireGalleryFragment
         binding.galleryWeChatToolbarSend.isEnabled = !fragment.isSelectEmpty
         binding.galleryWeChatPrev.isEnabled = !fragment.isSelectEmpty
         binding.galleryWeChatToolbarSend.text =
-            compatConfig.selectText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
+            uiBundle.selectText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.multipleMaxCount})"
         binding.galleryWeChatPrev.text =
-            compatConfig.preViewText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount})"
+            uiBundle.preViewText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount})"
     }
 
     /** 显示Finder */

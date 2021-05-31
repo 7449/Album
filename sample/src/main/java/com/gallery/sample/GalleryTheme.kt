@@ -3,6 +3,7 @@ package com.gallery.sample
 import android.app.Activity
 import com.gallery.compat.GalleryCompatBundle
 import com.gallery.core.GalleryBundle
+import com.gallery.ui.material.args.GalleryMaterialBundle
 import com.gallery.ui.wechat.extension.colorExpand
 
 object GalleryTheme {
@@ -41,47 +42,58 @@ object GalleryTheme {
         }
     }
 
-    fun themeGalleryUi(activity: Activity, theme: Theme): GalleryCompatBundle {
-        when (theme) {
-            Theme.DEFAULT -> {
-                return GalleryCompatBundle()
-            }
-            Theme.BLUE -> {
-                return GalleryCompatBundle(
-                    statusBarColor = R.color.colorBlue.colorExpand(activity),
-                    toolbarBackground = R.color.colorBlue.colorExpand(activity),
-                    bottomViewBackground = R.color.colorBlue.colorExpand(activity),
-                    preBottomViewBackground = R.color.colorBlue.colorExpand(activity)
-                )
-            }
-            Theme.PINK -> {
-                return GalleryCompatBundle(
-                    statusBarColor = R.color.colorPink.colorExpand(activity),
-                    toolbarBackground = R.color.colorPink.colorExpand(activity),
-                    bottomViewBackground = R.color.colorPink.colorExpand(activity),
-                    preBottomViewBackground = R.color.colorPink.colorExpand(activity)
-                )
-            }
-            Theme.BLACK -> {
-                return GalleryCompatBundle(
-                    prevRootBackground = R.color.colorBlack.colorExpand(activity),
-                    galleryRootBackground = R.color.colorBlack.colorExpand(activity),
-                    statusBarColor = R.color.colorBlack.colorExpand(activity),
-                    toolbarBackground = R.color.colorBlack.colorExpand(activity),
-                    bottomViewBackground = R.color.colorBlack.colorExpand(activity),
-                    finderItemBackground = R.color.colorBlack.colorExpand(activity),
-                    finderItemTextColor = R.color.colorWhite.colorExpand(activity),
-                    preBottomViewBackground = R.color.colorBlack.colorExpand(activity)
-                )
-            }
-            Theme.APP -> {
-                return GalleryCompatBundle(
-                    statusBarColor = R.color.colorAccent.colorExpand(activity),
-                    toolbarBackground = R.color.colorAccent.colorExpand(activity),
-                    bottomViewBackground = R.color.colorAccent.colorExpand(activity),
-                    preBottomViewBackground = R.color.colorAccent.colorExpand(activity)
-                )
-            }
+    fun themeGalleryArgs(
+        activity: Activity,
+        theme: Theme,
+        action: () -> Boolean
+    ): GalleryMaterialBundle {
+        val toolbarText =
+            if (action.invoke()) activity.getString(R.string.gallery_video_title) else "图片选择"
+        return when (theme) {
+            Theme.DEFAULT -> GalleryMaterialBundle(toolbarText = toolbarText)
+            Theme.BLUE -> GalleryMaterialBundle(
+                toolbarText = toolbarText,
+                statusBarColor = R.color.colorBlue.colorExpand(activity),
+                toolbarBackground = R.color.colorBlue.colorExpand(activity),
+                bottomViewBackground = R.color.colorBlue.colorExpand(activity),
+                preBottomViewBackground = R.color.colorBlue.colorExpand(activity)
+            )
+            Theme.PINK -> GalleryMaterialBundle(
+                toolbarText = toolbarText,
+                statusBarColor = R.color.colorPink.colorExpand(activity),
+                toolbarBackground = R.color.colorPink.colorExpand(activity),
+                bottomViewBackground = R.color.colorPink.colorExpand(activity),
+                preBottomViewBackground = R.color.colorPink.colorExpand(activity)
+            )
+            Theme.BLACK -> GalleryMaterialBundle(
+                toolbarText = toolbarText,
+                statusBarColor = R.color.colorBlack.colorExpand(activity),
+                toolbarBackground = R.color.colorBlack.colorExpand(activity),
+                bottomViewBackground = R.color.colorBlack.colorExpand(activity),
+                finderItemBackground = R.color.colorBlack.colorExpand(activity),
+                finderItemTextColor = R.color.colorWhite.colorExpand(activity),
+                preBottomViewBackground = R.color.colorBlack.colorExpand(activity)
+            )
+            Theme.APP -> GalleryMaterialBundle(
+                toolbarText = toolbarText,
+                statusBarColor = R.color.colorAccent.colorExpand(activity),
+                toolbarBackground = R.color.colorAccent.colorExpand(activity),
+                bottomViewBackground = R.color.colorAccent.colorExpand(activity),
+                preBottomViewBackground = R.color.colorAccent.colorExpand(activity)
+            )
+        }
+    }
+
+    fun themeGalleryCompat(activity: Activity, theme: Theme): GalleryCompatBundle {
+        return when (theme) {
+            Theme.DEFAULT -> GalleryCompatBundle()
+            Theme.BLUE -> GalleryCompatBundle()
+            Theme.PINK -> GalleryCompatBundle()
+            Theme.BLACK -> GalleryCompatBundle(
+                prevRootBackground = R.color.colorBlack.colorExpand(activity),
+                galleryRootBackground = R.color.colorBlack.colorExpand(activity),
+            )
+            Theme.APP -> GalleryCompatBundle()
         }
     }
 

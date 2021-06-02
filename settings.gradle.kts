@@ -4,5 +4,7 @@ include(
     ":material",
     ":sample",
     ":compat",
-    ":wechat"
+    ":wechat",
+    ":qq",
+    ":zhihu"
 )

@@ -144,7 +144,14 @@ class GalleryWeChatPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
         container.removeAllViews()
         val weChatPrevItem = GalleryWeChatPrevItem(container.context)
         weChatPrevItem.update(scanEntity)
-        Glide.with(this).load(scanEntity.uri).into(weChatPrevItem.imageView)
+        Glide.with(this)
+            .load(scanEntity.uri)
+            .apply {
+                if (scanEntity.isVideo) {
+                    apply(RequestOptions().centerCrop())
+                }
+            }
+            .into(weChatPrevItem.imageView)
         container.addView(weChatPrevItem)
     }
 

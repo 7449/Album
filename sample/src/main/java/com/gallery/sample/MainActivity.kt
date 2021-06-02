@@ -10,12 +10,11 @@ import com.gallery.compat.Gallery
 import com.gallery.compat.internal.call.GalleryResultCallback
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
-import com.gallery.sample.callback.GalleryCallback
-import com.gallery.sample.callback.WeChatGalleryCallback
-import com.gallery.sample.custom.CustomCameraActivity
-import com.gallery.sample.custom.CustomDialog
-import com.gallery.sample.custom.UCropGalleryActivity
+import com.gallery.sample.camera.SimpleGalleryCameraActivity
+import com.gallery.sample.crop.SimpleUCropGalleryActivity
 import com.gallery.sample.databinding.ActivityMainBinding
+import com.gallery.sample.dialog.SimpleGalleryDialog
+import com.gallery.sample.listener.SimpleGalleryListener
 import com.gallery.scan.Types
 import com.gallery.ui.material.activity.GalleryActivity
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
@@ -26,17 +25,15 @@ class MainActivity : AppCompatActivity() {
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
-            GalleryResultCallback(GalleryCallback(this))
+            GalleryResultCallback(SimpleGalleryListener(this))
         )
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
-            WeChatGalleryResultCallback(WeChatGalleryCallback(this))
+            WeChatGalleryResultCallback(SimpleGalleryListener(this))
         )
     private val viewBinding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(
-            layoutInflater
-        )
+        ActivityMainBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                     isRadio = false
                 }
                 R.id.crop_ucrop -> {
-                    cls = UCropGalleryActivity::class.java
+                    cls = SimpleUCropGalleryActivity::class.java
                     isRadio = false
                 }
             }
@@ -156,12 +153,12 @@ class MainActivity : AppCompatActivity() {
             Gallery.newInstance(
                 activity = this,
                 launcher = galleryLauncher,
-                clz = CustomCameraActivity::class.java
+                clz = SimpleGalleryCameraActivity::class.java
             )
         }
         viewBinding.dialog.setOnClickListener {
-            CustomDialog.newInstance()
-                .show(supportFragmentManager, CustomDialog::class.java.simpleName)
+            SimpleGalleryDialog.newInstance()
+                .show(supportFragmentManager, SimpleGalleryDialog::class.java.simpleName)
         }
     }
 

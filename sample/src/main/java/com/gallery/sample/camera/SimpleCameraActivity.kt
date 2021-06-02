@@ -11,7 +11,7 @@ import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
 
-class CameraActivity : AppCompatActivity() {
+class SimpleCameraActivity : AppCompatActivity() {
 
     companion object {
         /**
@@ -44,7 +44,6 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private inner class Listener : CameraListener() {
-
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
             val fileUri: Uri =

@@ -1,1 +1,13 @@
-<manifest package="com.gallery.ui.wechat" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gallery.ui.wechat">
+
+    <application>
+        <activity
+            android:name=".activity.GalleryWeChatActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.GalleryWeChatPrevActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+    </application>
+
+</manifest>

@@ -1,1 +1,13 @@
-<manifest package="com.gallery.ui.material" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gallery.ui.material">
+
+    <application>
+        <activity
+            android:name=".activity.GalleryActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.PreActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+    </application>
+
+</manifest>

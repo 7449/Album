@@ -14,10 +14,11 @@ import com.gallery.core.extensions.cropNameExpand
 import com.gallery.core.extensions.hasQExpand
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.core.extensions.queryDataExpand
+import com.gallery.sample.extensions.copyImageExpand
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
-open class UCropImpl : ICrop {
+open class SimpleUCropImpl : ICrop {
 
     override fun onCropResult(
         delegate: IScanDelegate,

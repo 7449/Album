@@ -1,4 +1,4 @@
-package com.gallery.sample.crop
+package com.gallery.sample.extensions
 
 import android.content.ContentValues
 import android.content.Context

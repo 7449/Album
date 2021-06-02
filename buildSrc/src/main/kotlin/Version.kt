@@ -18,7 +18,7 @@ object Version {
 }
 
 object ClassPath {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
     const val maven = "com.github.dcendents:android-maven-gradle-plugin:2.1"
     const val gradle = "com.android.tools.build:gradle:4.2.1"
 }
@@ -28,7 +28,7 @@ object Maven {
 }
 
 object Dep {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.10"
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.0"
     const val fragment = "androidx.fragment:fragment:1.3.4"
@@ -48,12 +48,16 @@ object DepList {
         .plus(Dep.appcompat)
         .plus(Dep.viewPager2)
         .plus(Dep.recyclerView)
-    val ui = core
+    val material = core
         .plus(Dep.glide)
         .plus(Dep.cropper)
     val wechat = core
         .plus(Dep.glide)
-    val sample = (scan + core + ui + wechat)
+    val qq = core
+        .plus(Dep.glide)
+    val zhihu = core
+        .plus(Dep.glide)
+    val sample = (scan + core + material + wechat + qq + zhihu)
         .plus(Dep.material)
         .plus(Dep.uCrop)
         .plus(Dep.cameraview)
@@ -62,7 +66,13 @@ object DepList {
 object DepLib {
     val core = mutableListOf(":scan")
     val compat = core.plus(":core")
-    val ui = compat.plus(":compat")
+    val material = compat.plus(":compat")
     val wechat = compat.plus(":compat")
-    val sample = (wechat + ui).plus(":wechat").plus(":material")
+    val qq = compat.plus(":compat")
+    val zhihu = compat.plus(":compat")
+    val sample = (wechat + material + qq + zhihu)
+        .plus(":qq")
+        .plus(":zhihu")
+        .plus(":wechat")
+        .plus(":material")
 }

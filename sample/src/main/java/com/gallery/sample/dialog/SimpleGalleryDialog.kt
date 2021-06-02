@@ -1,4 +1,4 @@
-package com.gallery.sample.custom
+package com.gallery.sample.dialog
 
 import android.content.Context
 import android.graphics.Color
@@ -25,11 +25,11 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.R
 
-class CustomDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
+class SimpleGalleryDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
 
     companion object {
-        fun newInstance(): CustomDialog {
-            return CustomDialog()
+        fun newInstance(): SimpleGalleryDialog {
+            return SimpleGalleryDialog()
         }
     }
 
@@ -99,7 +99,6 @@ class CustomDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
         savedInstanceState: Bundle?
     ) {
         delegate.rootView.setBackgroundColor(Color.BLACK)
-        recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = GridLayoutManager(
             recyclerView.context,
             bundle.spanCount,

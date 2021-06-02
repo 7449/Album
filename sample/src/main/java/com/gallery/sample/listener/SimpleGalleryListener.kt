@@ -1,27 +1,33 @@
-package com.gallery.sample.callback
+package com.gallery.sample.listener
 
 import android.net.Uri
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.gallery.compat.internal.call.GalleryListener
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.safeToastExpand
 
-class GalleryCallback(private val activity: FragmentActivity) : GalleryListener {
+open class SimpleGalleryListener(private val activity: FragmentActivity) : GalleryListener {
+
+    private fun showDialog(msg: String) {
+        AlertDialog
+            .Builder(activity)
+            .setMessage(msg)
+            .show()
+    }
 
     override fun onGalleryCropResource(uri: Uri, vararg args: Any) {
-        uri.toString().safeToastExpand(activity)
+        showDialog(uri.toString())
     }
 
     override fun onGalleryResource(scanEntity: ScanEntity, vararg args: Any) {
-        scanEntity.toString().safeToastExpand(activity)
+        showDialog(scanEntity.toString())
     }
 
     override fun onGalleryResources(entities: List<ScanEntity>, vararg args: Any) {
-        entities.toString().safeToastExpand(activity)
+        showDialog(entities.toString() + "\n" + args.asList().toString())
     }
 
     override fun onGalleryCancel(vararg args: Any) {
-        "取消选择".safeToastExpand(activity)
     }
 
 }

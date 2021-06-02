@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".camera.CameraActivity"
+            android:name=".camera.SimpleCameraActivity"
             android:configChanges="screenLayout|keyboardHidden"
             android:hardwareAccelerated="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -25,19 +25,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
-            android:name="com.gallery.ui.material.activity.GalleryActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.gallery.ui.material.activity.PreActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".custom.CustomCameraActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.gallery.ui.wechat.activity.GalleryWeChatActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.gallery.ui.wechat.activity.GalleryWeChatPrevActivity"
+            android:name=".camera.SimpleGalleryCameraActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".custom.UCropGalleryActivity"

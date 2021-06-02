@@ -8,56 +8,30 @@
 	
 [![](https://jitpack.io/v/7449/Album.svg)](https://jitpack.io/#7449/Album)
 
-#### Manifests.xml
-
-        <activity
-            android:name="com.gallery.ui.material.activity.GalleryActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.gallery.ui.material.activity.PreActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-            
 #### dependencies
 
-    implementation 'com.github.7449.Album:wechat:$lastVersion'
-    implementation 'com.github.7449.Album:ui:$lastVersion'
-    implementation 'com.github.7449.Album:core:$lastVersion'
-    implementation 'com.github.7449.Album:scan:$lastVersion'
-    implementation "com.github.yalantis:ucrop:$ucropVersion"
-    implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "com.github.7449.Album:wechat:$lastVersion"
+    implementation "com.github.7449.Album:ui:$lastVersion"
+    implementation "com.github.7449.Album:core:$lastVersion"
+    implementation "com.github.7449.Album:scan:$lastVersion"
     
-#### demo
+#### simple camera
 
-    private val galleryLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(
-                    ActivityResultContracts.StartActivityForResult(), 
-                    GalleryResultCallback(this, SimpleGalleryCallback())
-            )
-
-    Gallery(
-            activity = FragmentActivity,
-            galleryLauncher = galleryLauncher,
-            // 可选，自定义UI
-            clz = SimpleGalleryActivity::class.java,
-            galleryBundle = GalleryBundle(),
-            galleryUiBundle = GalleryUiBundle()
-    )
-    
-    
-#### custom page
-
-  [CustomyActivity](./sample/src/main/java/com/gallery/sample/custom/CustomPage.kt)
+  [SimpleGalleryCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleGalleryCameraActivity.kt)
   
-#### custom crop
+  [SimpleCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleCameraActivity.kt)
 
-  [ICrop](./core/src/main/java/com/gallery/core/crop/ICrop.kt)
+#### simple crop
+
+  [ICrop Config](./core/src/main/java/com/gallery/core/crop/ICrop.kt)
   
-  [UCropImpl](./sample/src/main/java/com/gallery/sample/crop/UCropImpl.kt)
+  [SimpleUCropImpl](./sample/src/main/java/com/gallery/sample/crop/SimpleUCropImpl.kt)
 
-#### custom camera
+  [SimpleUCropGalleryActivity](./sample/src/main/java/com/gallery/sample/crop/SimpleUCropGalleryActivity.kt)
 
-  [CameraActivity](./sample/src/main/java/com/gallery/sample/camera/CameraActivity.kt)
+#### simple dialog
+
+  [SimpleGalleryDialog](./sample/src/main/java/com/gallery/sample/dialog/SimpleGalleryDialog.kt)
 
 ## Screenshot
 

@@ -28,7 +28,7 @@
             android:name=".camera.SimpleGalleryCameraActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".custom.UCropGalleryActivity"
+            android:name=".crop.SimpleUCropGalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

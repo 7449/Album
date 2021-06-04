@@ -35,7 +35,7 @@ interface ICrop {
      */
     @Deprecated(
         "annoying version support",
-        replaceWith = ReplaceWith("cropOutPutUri(context, galleryBundle)")
+        replaceWith = ReplaceWith("cropOutPutUri(context, bundle)")
     )
     fun cropOutPutUri2(context: Context, bundle: GalleryBundle): Uri {
         return context.cropUriExpand2(bundle).orEmptyExpand()

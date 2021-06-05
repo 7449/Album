@@ -23,6 +23,11 @@ data class GalleryWeChatBundle(
     @ColorInt
     val toolbarBackground: Int = Color.parseColor("#FF04B3E4"),
     /**
+     * RootView背景色
+     */
+    @ColorInt
+    val galleryRootBackground: Int = Color.WHITE,
+    /**
      * 文件目录文字大小
      */
     val finderTextSize: Float = 16F,
@@ -77,6 +82,11 @@ data class GalleryWeChatBundle(
      */
     @ColorInt
     val finderItemTextCountColor: Int = Color.parseColor("#FF3D4040"),
+    /**
+     * 预览背景色
+     */
+    @ColorInt
+    val prevRootBackground: Int = Color.WHITE,
     /**
      * 预览页底部提示栏背景色
      */

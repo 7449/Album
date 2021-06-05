@@ -29,6 +29,11 @@ data class GalleryMaterialBundle(
     @ColorInt
     val toolbarBackground: Int = Color.parseColor("#FF04B3E4"),
     /**
+     * RootView背景色
+     */
+    @ColorInt
+    val galleryRootBackground: Int = Color.WHITE,
+    /**
      * toolbar返回图片颜色
      */
     @ColorInt
@@ -65,6 +70,11 @@ data class GalleryMaterialBundle(
      */
     @ColorInt
     val finderTextDrawableColor: Int = Color.WHITE,
+    /**
+     * 预览背景色
+     */
+    @ColorInt
+    val prevRootBackground: Int = Color.WHITE,
     /**
      * 预览文字
      */

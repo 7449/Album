@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
+import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.Types
 import kotlinx.parcelize.Parcelize
@@ -61,6 +62,18 @@ data class GalleryBundle(
      */
     val spanCount: Int = 4,
     /**
+     * 分割线宽度
+     */
+    val dividerWidth: Int = 8,
+    /**
+     * 滑动方向
+     */
+    val orientation: Int = RecyclerView.VERTICAL,
+    /**
+     * 列表管理器
+     */
+    val layoutManager: LayoutManagerTypes = LayoutManagerTypes.GRID,
+    /**
      * 文件输出路径
      * [Environment.DIRECTORY_DCIM]
      * [Environment.DIRECTORY_PICTURES]
@@ -111,25 +124,15 @@ data class GalleryBundle(
      */
     val cameraTextSize: Float = 16F,
     /**
-     * 相机图片
-     */
-    @DrawableRes
-    val cameraDrawable: Int = R.drawable.ic_camera_drawable,
-    /**
-     * 选择框
-     */
-    @DrawableRes
-    val checkBoxDrawable: Int = R.drawable.selector_gallery_item_check,
-    /**
-     * 空数据占位图片
-     */
-    @DrawableRes
-    val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable,
-    /**
      * 相机提示文字颜色
      */
     @ColorInt
     val cameraTextColor: Int = Color.WHITE,
+    /**
+     * 相机图片
+     */
+    @DrawableRes
+    val cameraDrawable: Int = R.drawable.ic_camera_drawable,
     /**
      * 相机图片背景色
      */
@@ -140,6 +143,16 @@ data class GalleryBundle(
      */
     @ColorInt
     val cameraBackgroundColor: Int = Color.parseColor("#FFB0C9C9"),
+    /**
+     * 选择框
+     */
+    @DrawableRes
+    val checkBoxDrawable: Int = R.drawable.selector_gallery_item_check,
+    /**
+     * 空数据占位图片
+     */
+    @DrawableRes
+    val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable,
 ) : Parcelable {
     companion object {
         private const val Key = "galleryBundle"

@@ -10,22 +10,19 @@ import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.fragment.GalleryCompatFragment
-import com.gallery.compat.widget.GalleryDivider
+import com.gallery.compat.internal.simple.SimpleGalleryCallback
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
-import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.R
 
-class SimpleGalleryDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoader {
+class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryImageLoader {
 
     companion object {
         fun newInstance(): SimpleGalleryDialog {
@@ -94,18 +91,10 @@ class SimpleGalleryDialog : DialogFragment(), IGalleryCallback, IGalleryImageLoa
 
     override fun onGalleryCreated(
         delegate: IScanDelegate,
-        recyclerView: RecyclerView,
         bundle: GalleryBundle,
         savedInstanceState: Bundle?
     ) {
         delegate.rootView.setBackgroundColor(Color.BLACK)
-        recyclerView.layoutManager = GridLayoutManager(
-            recyclerView.context,
-            bundle.spanCount,
-            GridLayoutManager.VERTICAL,
-            false
-        )
-        recyclerView.addItemDecoration(GalleryDivider(8))
     }
 
     override fun onDisplayGallery(

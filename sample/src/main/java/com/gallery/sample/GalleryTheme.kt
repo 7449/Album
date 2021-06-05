@@ -1,7 +1,6 @@
 package com.gallery.sample
 
 import android.app.Activity
-import com.gallery.compat.GalleryCompatBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.material.args.GalleryMaterialBundle
 import com.gallery.ui.wechat.extension.colorExpand
@@ -63,7 +62,9 @@ object GalleryTheme {
                 bottomViewBackground = R.color.colorBlack.colorExpand(activity),
                 finderItemBackground = R.color.colorBlack.colorExpand(activity),
                 finderItemTextColor = R.color.colorWhite.colorExpand(activity),
-                preBottomViewBackground = R.color.colorBlack.colorExpand(activity)
+                preBottomViewBackground = R.color.colorBlack.colorExpand(activity),
+                prevRootBackground = R.color.colorBlack.colorExpand(activity),
+                galleryRootBackground = R.color.colorBlack.colorExpand(activity),
             )
             Theme.APP -> GalleryMaterialBundle(
                 statusBarColor = R.color.colorAccent.colorExpand(activity),
@@ -71,19 +72,6 @@ object GalleryTheme {
                 bottomViewBackground = R.color.colorAccent.colorExpand(activity),
                 preBottomViewBackground = R.color.colorAccent.colorExpand(activity)
             )
-        }
-    }
-
-    fun themeGalleryCompat(activity: Activity, theme: Theme): GalleryCompatBundle {
-        return when (theme) {
-            Theme.DEFAULT -> GalleryCompatBundle()
-            Theme.BLUE -> GalleryCompatBundle()
-            Theme.PINK -> GalleryCompatBundle()
-            Theme.BLACK -> GalleryCompatBundle(
-                prevRootBackground = R.color.colorBlack.colorExpand(activity),
-                galleryRootBackground = R.color.colorBlack.colorExpand(activity),
-            )
-            Theme.APP -> GalleryCompatBundle()
         }
     }
 

@@ -206,12 +206,11 @@ class GalleryWeChatActivity : GalleryCompatActivity(), GalleryFinderAdapter.Adap
 
     override fun onGalleryCreated(
         delegate: IScanDelegate,
-        recyclerView: RecyclerView,
         bundle: GalleryBundle,
         savedInstanceState: Bundle?
     ) {
         //初始化布局
-        super.onGalleryCreated(delegate, recyclerView, bundle, savedInstanceState)
+        delegate.rootView.setBackgroundColor(uiBundle.galleryRootBackground)
         val currentFragment = requireGalleryFragment
         //滑动的时间提示View
         currentFragment.addOnScrollListener(object : RecyclerView.OnScrollListener() {

@@ -1,4 +1,4 @@
-package com.gallery.compat.widget
+package com.gallery.core.widget
 
 import android.graphics.Rect
 import android.view.View

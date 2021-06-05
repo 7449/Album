@@ -6,7 +6,6 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.gallery.compat.Gallery
-import com.gallery.compat.GalleryCompatBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.ui.wechat.activity.GalleryWeChatActivity
 import com.gallery.ui.wechat.args.GalleryWeChatBundle
@@ -27,6 +26,8 @@ fun FragmentActivity.weChatGallery(launcher: ActivityResultLauncher<Intent>) {
         activity = this,
         launcher = launcher,
         customBundle = GalleryWeChatBundle(
+            prevRootBackground = Color.BLACK,
+            galleryRootBackground = rgb38,
             videoMaxDuration = 500000,
             videoAllFinderName = "全部视频",
             statusBarColor = rgb38,
@@ -49,10 +50,6 @@ fun FragmentActivity.weChatGallery(launcher: ActivityResultLauncher<Intent>) {
             hideCamera = true,
             scanType = scanType,
             checkBoxDrawable = checkBoxResource,
-        ),
-        compatBundle = GalleryCompatBundle(
-            prevRootBackground = Color.BLACK,
-            galleryRootBackground = rgb38
         ),
         clz = GalleryWeChatActivity::class.java
     )

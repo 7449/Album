@@ -89,7 +89,7 @@ open class PreActivity : PrevCompatActivity() {
         bundle: GalleryBundle,
         savedInstanceState: Bundle?
     ) {
-        super.onPrevCreated(delegate, bundle, savedInstanceState)
+        delegate.rootView.setBackgroundColor(materialBundle.prevRootBackground)
         viewBinding.preCount.text =
             format.format(delegate.selectCount, galleryConfig.multipleMaxCount)
         viewBinding.preToolbar.title =

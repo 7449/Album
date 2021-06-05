@@ -12,9 +12,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
+import com.gallery.core.LayoutManagerTypes
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
@@ -27,6 +31,7 @@ import com.gallery.core.delegate.args.ScanArgs.Companion.putScanArgs
 import com.gallery.core.delegate.args.ScanArgs.Companion.scanArgs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.*
+import com.gallery.core.widget.GalleryDivider
 import com.gallery.scan.Types
 import com.gallery.scan.args.ScanEntityFactory
 import com.gallery.scan.extensions.isScanAllExpand
@@ -165,8 +170,23 @@ class ScanDelegateImpl(
             fileUri = it.fileUri
             it.selectList
         }
-        /* 这里初始化Recyclerview布局管理器,放在 UI Library,core Library 只处理Adapter */
-        galleryCallback.onGalleryCreated(this, recyclerView, galleryBundle, savedInstanceState)
+        recyclerView.layoutManager = when (galleryBundle.layoutManager) {
+            LayoutManagerTypes.GRID -> GridLayoutManager(
+                recyclerView.context,
+                galleryBundle.spanCount,
+                galleryBundle.orientation,
+                false
+            )
+            LayoutManagerTypes.LINEAR -> LinearLayoutManager(
+                recyclerView.context,
+                galleryBundle.orientation,
+                false
+            )
+        }
+        recyclerView.addItemDecoration(GalleryDivider(galleryBundle.dividerWidth))
+        if (recyclerView.itemAnimator is SimpleItemAnimator) {
+            (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        }
         emptyView.setImageDrawable(requireActivity.drawableExpand(galleryBundle.photoEmptyDrawable))
         emptyView.setOnClickListener { v ->
             if (galleryInterceptor.onEmptyPhotoClick(v)) {
@@ -176,6 +196,7 @@ class ScanDelegateImpl(
         galleryAdapter.addSelectAll(selectList ?: galleryBundle.selectEntities)
         recyclerView.adapter = galleryAdapter
         onScanGallery(parentId)
+        galleryCallback.onGalleryCreated(this, galleryBundle, savedInstanceState)
     }
 
     override fun onDestroy() {

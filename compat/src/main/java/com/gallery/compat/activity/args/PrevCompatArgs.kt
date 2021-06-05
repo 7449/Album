@@ -2,7 +2,6 @@ package com.gallery.compat.activity.args
 
 import android.os.Bundle
 import android.os.Parcelable
-import com.gallery.compat.GalleryCompatBundle
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.args.PrevArgs
 import com.gallery.core.delegate.args.PrevArgs.Companion.prevArgsOrDefault
@@ -15,10 +14,6 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class PrevCompatArgs(
-    /**
-     * 简答的配置参数
-     */
-    val compatBundle: GalleryCompatBundle,
     /**
      * 预览[PrevDelegateImpl]需要的数据
      */
@@ -38,7 +33,6 @@ data class PrevCompatArgs(
 
         val Bundle.prevCompatArgsOrDefault
             get() = getParcelable(Key) ?: PrevCompatArgs(
-                GalleryCompatBundle(),
                 prevArgsOrDefault,
                 Bundle()
             )

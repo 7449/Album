@@ -172,7 +172,6 @@ class GalleryWeChatPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
         bundle: GalleryBundle,
         savedInstanceState: Bundle?
     ) {
-        super.onPrevCreated(delegate, bundle, savedInstanceState)
         binding.prevWeChatToolbarText.text =
             (delegate.currentPosition + 1).toString() + "/" + delegate.itemCount
         binding.prevWeChatToolbarSend.text =
@@ -185,6 +184,7 @@ class GalleryWeChatPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
         selectAdapter.updateSelect(if (uiBundle.isPrev) prevCompatArgs.prevArgs.selectList else delegate.selectItem)
         onUpdateVideoTip(delegate.currentItem)
         delegate.rootView.findViewById<View>(R.id.gallery_prev_checkbox)?.visibility = View.GONE
+        delegate.rootView.setBackgroundColor(uiBundle.prevRootBackground)
     }
 
     override fun onChangedCheckBox() {

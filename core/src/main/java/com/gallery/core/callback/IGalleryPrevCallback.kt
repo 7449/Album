@@ -6,10 +6,8 @@ import androidx.annotation.Px
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.gallery.core.GalleryBundle
-import com.gallery.core.R
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.safeToastExpand
 
 /**
  *
@@ -19,27 +17,22 @@ interface IGalleryPrevCallback {
     /**
      * [ViewPager2.OnPageChangeCallback.onPageScrolled]
      */
-    fun onPageScrolled(position: Int, positionOffset: Float, @Px positionOffsetPixels: Int) {}
+    fun onPageScrolled(position: Int, positionOffset: Float, @Px positionOffsetPixels: Int)
 
     /**
      * [ViewPager2.OnPageChangeCallback.onPageSelected]
      */
-    fun onPageSelected(position: Int) {}
+    fun onPageSelected(position: Int)
 
     /**
      * [ViewPager2.OnPageChangeCallback.onPageScrollStateChanged]
      */
-    fun onPageScrollStateChanged(@ScrollState state: Int) {}
+    fun onPageScrollStateChanged(@ScrollState state: Int)
 
     /**
-     * [IPrevDelegate.onCreate]触发
+     * [IPrevDelegate.onCreate]触发，必须实现
      */
-    fun onPrevCreated(
-        delegate: IPrevDelegate,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
-    ) {
-    }
+    fun onPrevCreated(delegate: IPrevDelegate, bundle: GalleryBundle, savedInstanceState: Bundle?)
 
     /**
      * 点击图片时该文件已被删除
@@ -50,9 +43,7 @@ interface IGalleryPrevCallback {
         context: Context,
         bundle: GalleryBundle,
         scanEntity: ScanEntity
-    ) {
-        context.getString(R.string.gallery_prev_check_file_deleted).safeToastExpand(context)
-    }
+    )
 
     /**
      * 已达到选择最大数
@@ -62,13 +53,11 @@ interface IGalleryPrevCallback {
         context: Context,
         bundle: GalleryBundle,
         scanEntity: ScanEntity
-    ) {
-        context.getString(R.string.gallery_check_max).safeToastExpand(context)
-    }
+    )
 
     /**
      * [IPrevDelegate.itemViewClick]
      */
-    fun onChangedCheckBox() {}
+    fun onChangedCheckBox()
 
 }

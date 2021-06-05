@@ -11,13 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
-import com.gallery.compat.GalleryCompatBundle
 import com.gallery.compat.GalleryConfig
-import com.gallery.compat.LayoutManagerTypes
 import com.gallery.compat.activity.args.GalleryCompatArgs
 import com.gallery.compat.activity.args.GalleryCompatArgs.Companion.galleryCompatArgsOrDefault
 import com.gallery.compat.activity.args.GallerySaveArgs
@@ -32,9 +26,8 @@ import com.gallery.compat.finder.updateResultFinder
 import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.fragment.addFragmentExpand
 import com.gallery.compat.fragment.showFragmentExpand
-import com.gallery.compat.widget.GalleryDivider
+import com.gallery.compat.internal.simple.SimpleGalleryCallback
 import com.gallery.core.GalleryBundle
-import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
@@ -45,7 +38,8 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.scan.Types
 
-abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IGalleryImageLoader,
+abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallback,
+    IGalleryImageLoader,
     IGalleryInterceptor, ICrop {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
@@ -64,9 +58,6 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
 
     /** 初始配置 */
     protected val galleryConfig: GalleryBundle by lazy { galleryCompatArgs.bundle }
-
-    /** compat配置 */
-    protected val compatConfig: GalleryCompatBundle by lazy { galleryCompatArgs.compatBundle }
 
     /** 自定义参数配置 */
     protected val gapConfig: Parcelable? by lazy { galleryCompatArgs.customBundle }
@@ -114,33 +105,6 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
             } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
 
-    /** 初始化布局，子类重写时需注意super */
-    override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        recyclerView: RecyclerView,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
-    ) {
-        delegate.rootView.setBackgroundColor(compatConfig.galleryRootBackground)
-        recyclerView.layoutManager = when (compatConfig.layoutManager) {
-            LayoutManagerTypes.GRID -> GridLayoutManager(
-                recyclerView.context,
-                bundle.spanCount,
-                compatConfig.orientation,
-                false
-            )
-            LayoutManagerTypes.LINEAR -> LinearLayoutManager(
-                recyclerView.context,
-                compatConfig.orientation,
-                false
-            )
-        }
-        recyclerView.addItemDecoration(GalleryDivider(compatConfig.dividerWidth))
-        if (recyclerView.itemAnimator is SimpleItemAnimator) {
-            (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        }
-    }
-
     /** 单个数据扫描成功之后刷新文件夹数据 */
     override fun onResultSuccess(context: Context?, scanEntity: ScanEntity) {
         finderList.updateResultFinder(scanEntity, galleryConfig.scanSort == Types.Sort.DESC)
@@ -165,7 +129,6 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
     ) {
         startPrevPage(
             PrevCompatArgs(
-                compatConfig,
                 PrevArgs(
                     parentId,
                     requireGalleryFragment.selectItem,
@@ -226,6 +189,13 @@ abstract class GalleryCompatActivity : AppCompatActivity(), IGalleryCallback, IG
         setResult(GalleryConfig.RESULT_CODE_SINGLE_DATA, intent)
         finish()
     }
+
+    /** 初始化布局，子类重写时需注意super */
+    abstract override fun onGalleryCreated(
+        delegate: IScanDelegate,
+        bundle: GalleryBundle,
+        savedInstanceState: Bundle?
+    )
 
     /** 文件目录加载图片,此方法需要在自定义Finder的时候主动调用,或者自定义的时候直接加载图片即可 */
     abstract override fun onDisplayGalleryThumbnails(

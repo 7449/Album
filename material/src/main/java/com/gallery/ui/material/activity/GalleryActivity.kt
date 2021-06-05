@@ -15,6 +15,7 @@ import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryBundle
 import com.gallery.core.crop.ICrop
+import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawableExpand
 import com.gallery.core.extensions.isVideoScanExpand
@@ -107,6 +108,14 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
         viewBinding.gallerySelect.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
 
         viewBinding.galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }
+    }
+
+    override fun onGalleryCreated(
+        delegate: IScanDelegate,
+        bundle: GalleryBundle,
+        savedInstanceState: Bundle?
+    ) {
+        delegate.rootView.setBackgroundColor(materialBundle.galleryRootBackground)
     }
 
     override fun onClick(v: View) {

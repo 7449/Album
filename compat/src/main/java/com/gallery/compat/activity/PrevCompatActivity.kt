@@ -7,7 +7,6 @@ import android.os.Parcelable
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.gallery.compat.GalleryCompatBundle
 import com.gallery.compat.activity.args.PrevCompatArgs
 import com.gallery.compat.activity.args.PrevCompatArgs.Companion.prevCompatArgsOrDefault
 import com.gallery.compat.activity.args.PrevCompatArgs.Companion.putPrevArgs
@@ -15,9 +14,9 @@ import com.gallery.compat.extensions.requirePrevFragment
 import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.compat.fragment.addFragmentExpand
 import com.gallery.compat.fragment.showFragmentExpand
+import com.gallery.compat.internal.simple.SimplePrevCallback
 import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.args.PrevArgs
@@ -25,7 +24,7 @@ import com.gallery.core.delegate.args.PrevArgs.Companion.configOrDefault
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
 
-abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, IGalleryImageLoader,
+abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGalleryImageLoader,
     IGalleryPrevInterceptor {
 
     companion object {
@@ -41,7 +40,6 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
         fun newInstance(
             context: Context,
             /**
-             * [GalleryCompatBundle]
              * and
              * [PrevArgs]
              * and
@@ -65,10 +63,6 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
     /** 初始配置 */
     protected val galleryConfig: GalleryBundle by lazy { prevCompatArgs.prevArgs.configOrDefault }
 
-    /** compat配置  */
-    @Suppress("MemberVisibilityCanBePrivate")
-    protected val compatConfig: GalleryCompatBundle by lazy { prevCompatArgs.compatBundle }
-
     /** 自定义参数配置 */
     protected val gapConfig: Parcelable? by lazy { prevCompatArgs.customBundle }
 
@@ -79,18 +73,10 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
 
-    override fun onPrevCreated(
-        delegate: IPrevDelegate,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
-    ) {
-        delegate.rootView.setBackgroundColor(compatConfig.prevRootBackground)
-    }
-
     /** onBackPressed */
     override fun onBackPressed() {
         val intent = Intent()
-        intent.putExtras(onKeyBackResult(requirePrevFragment.resultBundle(compatConfig.preBackRefresh)))
+        intent.putExtras(onKeyBackResult(requirePrevFragment.resultBundle(onBackRefresh())))
         setResult(RESULT_CODE_BACK, intent)
         super.onBackPressed()
     }
@@ -98,7 +84,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
     /** finish */
     open fun onGalleryFinish() {
         val intent = Intent()
-        intent.putExtras(onToolbarResult(requirePrevFragment.resultBundle(compatConfig.preFinishRefresh)))
+        intent.putExtras(onToolbarResult(requirePrevFragment.resultBundle(onFinishRefresh())))
         setResult(RESULT_CODE_TOOLBAR, intent)
         finish()
     }
@@ -106,10 +92,19 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
     /**  prev select data */
     open fun onGallerySelectEntities() {
         val intent = Intent()
-        intent.putExtras(onSelectEntitiesResult(requirePrevFragment.resultBundle(true)))
+        intent.putExtras(onSelectEntitiesResult(requirePrevFragment.resultBundle(onSelectRefresh())))
         setResult(RESULT_CODE_SELECT, intent)
         finish()
     }
+
+    /** back返回是否合并选择数据并刷新 */
+    open fun onBackRefresh(): Boolean = true
+
+    /** toolbar返回是否合并选择数据并刷新 */
+    open fun onFinishRefresh(): Boolean = true
+
+    /** 选择数据之后是否合并选择数据并刷新 */
+    open fun onSelectRefresh(): Boolean = true
 
     /** 自定义Fragment */
     open fun createFragment(): Fragment = PrevCompatFragment.newInstance(prevCompatArgs.prevArgs)
@@ -125,5 +120,12 @@ abstract class PrevCompatActivity : AppCompatActivity(), IGalleryPrevCallback, I
 
     /** 预览图加载，预览页必须实现 */
     abstract override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout)
+
+    /** 预览图初始化，预览页必须实现 ，可实现背景色之类的配置 */
+    abstract override fun onPrevCreated(
+        delegate: IPrevDelegate,
+        bundle: GalleryBundle,
+        savedInstanceState: Bundle?
+    )
 
 }

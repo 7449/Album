@@ -22,15 +22,15 @@ interface SimpleGalleryCallback : IGalleryCallback {
     }
 
     override fun onClickItemMaxCount(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_check_max).safeToastExpand(context)
+        context.getString(R.string.gallery_compat_check_max).safeToastExpand(context)
     }
 
     override fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_file_deleted).safeToastExpand(context)
+        context.getString(R.string.gallery_compat_file_deleted).safeToastExpand(context)
     }
 
     override fun onClickItemFileNotExist(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_item_file_deleted).safeToastExpand(context)
+        context.getString(R.string.gallery_compat_item_file_deleted).safeToastExpand(context)
     }
 
     override fun onChangedItem(position: Int, scanEntity: ScanEntity) {
@@ -56,21 +56,21 @@ interface SimpleGalleryCallback : IGalleryCallback {
 
     override fun onCameraCanceled(context: Context?, galleryBundle: GalleryBundle) {
         if (galleryBundle.isVideoScanExpand) {
-            context?.getString(R.string.gallery_video_canceled).safeToastExpand(context)
+            context?.getString(R.string.gallery_compat_video_canceled).safeToastExpand(context)
         } else if (galleryBundle.isImageScanExpand) {
-            context?.getString(R.string.gallery_camera_canceled).safeToastExpand(context)
+            context?.getString(R.string.gallery_compat_camera_canceled).safeToastExpand(context)
         }
     }
 
     override fun onResultError(context: Context?, galleryBundle: GalleryBundle) {
-        context?.getString(R.string.gallery_error).safeToastExpand(context)
+        context?.getString(R.string.gallery_compat_error).safeToastExpand(context)
     }
 
     override fun onCameraOpenStatus(context: Context?, status: CameraStatus) {
         when (status) {
-            CameraStatus.ERROR -> context?.getString(R.string.gallery_open_camera_error)
+            CameraStatus.ERROR -> context?.getString(R.string.gallery_compat_open_camera_error)
                 .safeToastExpand(context)
-            CameraStatus.SUCCESS -> context?.getString(R.string.gallery_open_camera_success)
+            CameraStatus.SUCCESS -> context?.getString(R.string.gallery_compat_open_camera_success)
                 .safeToastExpand(context)
             CameraStatus.PERMISSION -> {
             }
@@ -78,17 +78,17 @@ interface SimpleGalleryCallback : IGalleryCallback {
     }
 
     override fun onScanSuccessEmpty(context: Context?) {
-        context?.getString(R.string.gallery_scan_success_empty)
+        context?.getString(R.string.gallery_compat_scan_success_empty)
             .safeToastExpand(context)
     }
 
     override fun onOpenVideoPlayError(context: Context, scanEntity: ScanEntity) {
-        context.getString(R.string.gallery_open_video_error)
+        context.getString(R.string.gallery_compat_open_video_error)
             .safeToastExpand(context)
     }
 
     override fun onPermissionsDenied(context: Context?, type: PermissionCode) {
-        context?.getString(R.string.gallery_permissions_denied)
+        context?.getString(R.string.gallery_compat_permissions_denied)
             .safeToastExpand(context)
     }
 

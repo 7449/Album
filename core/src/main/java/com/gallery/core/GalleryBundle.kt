@@ -132,7 +132,7 @@ data class GalleryBundle(
      * 相机图片
      */
     @DrawableRes
-    val cameraDrawable: Int = R.drawable.ic_camera_drawable,
+    val cameraDrawable: Int = R.drawable.ic_default_camera_drawable,
     /**
      * 相机图片背景色
      */
@@ -147,12 +147,12 @@ data class GalleryBundle(
      * 选择框
      */
     @DrawableRes
-    val checkBoxDrawable: Int = R.drawable.selector_gallery_item_check,
+    val checkBoxDrawable: Int = R.drawable.selector_default_gallery_item_check,
     /**
      * 空数据占位图片
      */
     @DrawableRes
-    val photoEmptyDrawable: Int = R.drawable.ic_camera_drawable,
+    val photoEmptyDrawable: Int = R.drawable.ic_default_camera_drawable,
 ) : Parcelable {
     companion object {
         private const val Key = "galleryBundle"

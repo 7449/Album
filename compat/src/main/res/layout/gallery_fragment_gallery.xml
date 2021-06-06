@@ -15,8 +15,8 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/gallery_empty_view"
-        android:layout_width="@dimen/gallery_empty_width"
-        android:layout_height="@dimen/gallery_empty_height"
+        android:layout_width="@dimen/gallery_compat_empty_width"
+        android:layout_height="@dimen/gallery_compat_empty_height"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
         android:visibility="gone" />

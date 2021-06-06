@@ -28,7 +28,7 @@ interface SimplePrevCallback : IGalleryPrevCallback {
         bundle: GalleryBundle,
         scanEntity: ScanEntity
     ) {
-        context.getString(R.string.gallery_prev_check_file_deleted).safeToastExpand(context)
+        context.getString(R.string.gallery_compat_prev_check_file_deleted).safeToastExpand(context)
     }
 
     override fun onClickItemBoxMaxCount(
@@ -36,7 +36,7 @@ interface SimplePrevCallback : IGalleryPrevCallback {
         bundle: GalleryBundle,
         scanEntity: ScanEntity
     ) {
-        context.getString(R.string.gallery_check_max).safeToastExpand(context)
+        context.getString(R.string.gallery_compat_check_max).safeToastExpand(context)
     }
 
     override fun onPrevCreated(

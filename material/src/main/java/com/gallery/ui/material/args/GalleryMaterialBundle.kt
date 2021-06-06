@@ -17,7 +17,7 @@ data class GalleryMaterialBundle(
      * toolbar返回图标
      */
     @DrawableRes
-    val toolbarIcon: Int = R.drawable.ic_gallery_toolbar_back,
+    val toolbarIcon: Int = R.drawable.ic_gallery_material_back,
     /**
      * 状态栏颜色
      */
@@ -64,7 +64,7 @@ data class GalleryMaterialBundle(
      * 文件目录图标
      */
     @DrawableRes
-    val finderTextCompoundDrawable: Int = R.drawable.ic_gallery_finder,
+    val finderTextCompoundDrawable: Int = R.drawable.ic_gallery_material_finder,
     /**
      * 文件目录图标颜色
      */

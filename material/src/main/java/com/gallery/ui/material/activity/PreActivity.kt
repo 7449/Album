@@ -18,7 +18,7 @@ import com.gallery.core.extensions.drawableExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.ui.material.R
 import com.gallery.ui.material.args.GalleryMaterialBundle
-import com.gallery.ui.material.databinding.GalleryActivityPreviewBinding
+import com.gallery.ui.material.databinding.GalleryMaterialActivityPreviewBinding
 import com.gallery.ui.material.materialArgOrDefault
 
 open class PreActivity : PrevCompatActivity() {
@@ -27,8 +27,8 @@ open class PreActivity : PrevCompatActivity() {
         private const val format = "%s / %s"
     }
 
-    private val viewBinding: GalleryActivityPreviewBinding by lazy {
-        GalleryActivityPreviewBinding.inflate(
+    private val viewBinding: GalleryMaterialActivityPreviewBinding by lazy {
+        GalleryMaterialActivityPreviewBinding.inflate(
             layoutInflater
         )
     }
@@ -117,7 +117,7 @@ open class PreActivity : PrevCompatActivity() {
     }
 
     open fun onGallerySelectEmpty() {
-        getString(R.string.gallery_prev_select_empty_pre).safeToastExpand(this)
+        getString(R.string.gallery_material_prev_select_empty_pre).safeToastExpand(this)
     }
 
 }

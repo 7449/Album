@@ -17,7 +17,7 @@ import com.gallery.core.extensions.toScanFileEntity
 import com.gallery.scan.Types
 import com.gallery.scan.extensions.isScanAllExpand
 
-open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_fragment_gallery) :
+open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragment_gallery) :
     Fragment(layoutId) {
 
     companion object {

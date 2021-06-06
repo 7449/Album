@@ -25,7 +25,7 @@ import com.gallery.scan.extensions.isScanAllExpand
 import com.gallery.ui.material.R
 import com.gallery.ui.material.args.GalleryMaterialBundle
 import com.gallery.ui.material.crop.GalleryMaterialCropper
-import com.gallery.ui.material.databinding.GalleryActivityGalleryBinding
+import com.gallery.ui.material.databinding.GalleryMaterialActivityGalleryBinding
 import com.gallery.ui.material.finder.PopupFinderAdapter
 import com.gallery.ui.material.materialArgOrDefault
 import com.gallery.ui.material.minimumDrawableExpand
@@ -34,8 +34,8 @@ import com.theartofdev.edmodo.cropper.CropImageOptions
 open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
     GalleryFinderAdapter.AdapterFinderListener {
 
-    private val viewBinding: GalleryActivityGalleryBinding by lazy {
-        GalleryActivityGalleryBinding.inflate(
+    private val viewBinding: GalleryMaterialActivityGalleryBinding by lazy {
+        GalleryMaterialActivityGalleryBinding.inflate(
             layoutInflater
         )
     }
@@ -207,17 +207,17 @@ open class GalleryActivity : GalleryCompatActivity(), View.OnClickListener,
 
     /** 点击预览但是未选择图片 */
     open fun onGalleryPreEmpty() {
-        getString(R.string.gallery_prev_select_empty).safeToastExpand(this)
+        getString(R.string.gallery_material_prev_select_empty).safeToastExpand(this)
     }
 
     /** 点击确定但是未选择图片 */
     open fun onGalleryOkEmpty() {
-        getString(R.string.gallery_ok_select_empty).safeToastExpand(this)
+        getString(R.string.gallery_material_ok_select_empty).safeToastExpand(this)
     }
 
     /** 扫描到的文件目录为空 */
     open fun onGalleryFinderEmpty() {
-        getString(R.string.gallery_finder_empty).safeToastExpand(this)
+        getString(R.string.gallery_material_finder_empty).safeToastExpand(this)
     }
 
 }

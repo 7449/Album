@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="gallery_prev_select_empty_pre">未选择数据</string>
-    <string name="gallery_prev_select_empty">未选择图片</string>
-    <string name="gallery_finder_empty">文件目录为空</string>
-    <string name="gallery_ok_select_empty">未选择图片</string>
+    <string name="gallery_material_prev_select_empty_pre">未选择数据</string>
+    <string name="gallery_material_prev_select_empty">未选择图片</string>
+    <string name="gallery_material_finder_empty">文件目录为空</string>
+    <string name="gallery_material_ok_select_empty">未选择图片</string>
 </resources>

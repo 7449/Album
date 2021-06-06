@@ -15,7 +15,7 @@ import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.material.args.GalleryMaterialBundle
-import com.gallery.ui.material.databinding.GalleryItemFinderBinding
+import com.gallery.ui.material.databinding.GalleryMaterialItemFinderBinding
 
 class PopupFinderAdapter(
     private val activity: GalleryCompatActivity,
@@ -78,7 +78,7 @@ class PopupFinderAdapter(
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val finderEntity: ScanEntity = getItem(position)
             val rootView: View = convertView
-                ?: GalleryItemFinderBinding.inflate(
+                ?: GalleryMaterialItemFinderBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -104,7 +104,7 @@ class PopupFinderAdapter(
             notifyDataSetChanged()
         }
 
-        private class ViewHolder(viewBinding: GalleryItemFinderBinding) {
+        private class ViewHolder(viewBinding: GalleryMaterialItemFinderBinding) {
             val frameLayout: FrameLayout = viewBinding.ivGalleryFinderIcon
             val appCompatTextView: AppCompatTextView = viewBinding.tvGalleryFinderName
             val appCompatTextViewCount: AppCompatTextView = viewBinding.tvGalleryFinderFileCount

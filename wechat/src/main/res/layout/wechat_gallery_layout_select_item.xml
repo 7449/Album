@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/selectWeChatImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/selectWeChatGif"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/ic_wechat_gallery_item_gif"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/selectWeChatVideo"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/ic_wechat_gallery_item_video"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/selectWeChatView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/wechat_gallery_color_B3000000"
+        android:visibility="gone" />
+</FrameLayout>

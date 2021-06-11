@@ -2,7 +2,7 @@ package com.gallery.sample
 
 import android.app.Activity
 import com.gallery.core.GalleryBundle
-import com.gallery.ui.material.args.GalleryMaterialBundle
+import com.gallery.ui.material.args.MaterialGalleryBundle
 import com.gallery.ui.wechat.extension.colorExpand
 
 object GalleryTheme {
@@ -10,13 +10,13 @@ object GalleryTheme {
     fun themeGallery(activity: Activity, theme: Theme): GalleryBundle {
         when (theme) {
             Theme.DEFAULT -> {
-                return GalleryBundle(checkBoxDrawable = R.drawable.default_selector_gallery_item_check)
+                return GalleryBundle(checkBoxDrawable = R.drawable.simple_default_selector_gallery_item_check)
             }
             Theme.BLUE -> {
                 return GalleryBundle(
                     cameraDrawableColor = R.color.colorGray.colorExpand(activity),
                     cameraBackgroundColor = R.color.colorBlue.colorExpand(activity),
-                    checkBoxDrawable = R.drawable.blue_selector_gallery_item_check
+                    checkBoxDrawable = R.drawable.simple_blue_selector_gallery_item_check
                 )
             }
             Theme.PINK -> {
@@ -33,7 +33,7 @@ object GalleryTheme {
             }
             Theme.APP -> {
                 return GalleryBundle(
-                    checkBoxDrawable = R.drawable.app_selector_gallery_item_check,
+                    checkBoxDrawable = R.drawable.simple_app_selector_gallery_item_check,
                     cameraDrawableColor = R.color.colorGray.colorExpand(activity),
                     cameraBackgroundColor = R.color.colorAccent.colorExpand(activity)
                 )
@@ -41,22 +41,22 @@ object GalleryTheme {
         }
     }
 
-    fun themeGalleryArgs(activity: Activity, theme: Theme): GalleryMaterialBundle {
+    fun themeGalleryArgs(activity: Activity, theme: Theme): MaterialGalleryBundle {
         return when (theme) {
-            Theme.DEFAULT -> GalleryMaterialBundle()
-            Theme.BLUE -> GalleryMaterialBundle(
+            Theme.DEFAULT -> MaterialGalleryBundle()
+            Theme.BLUE -> MaterialGalleryBundle(
                 statusBarColor = R.color.colorBlue.colorExpand(activity),
                 toolbarBackground = R.color.colorBlue.colorExpand(activity),
                 bottomViewBackground = R.color.colorBlue.colorExpand(activity),
                 preBottomViewBackground = R.color.colorBlue.colorExpand(activity)
             )
-            Theme.PINK -> GalleryMaterialBundle(
+            Theme.PINK -> MaterialGalleryBundle(
                 statusBarColor = R.color.colorPink.colorExpand(activity),
                 toolbarBackground = R.color.colorPink.colorExpand(activity),
                 bottomViewBackground = R.color.colorPink.colorExpand(activity),
                 preBottomViewBackground = R.color.colorPink.colorExpand(activity)
             )
-            Theme.BLACK -> GalleryMaterialBundle(
+            Theme.BLACK -> MaterialGalleryBundle(
                 statusBarColor = R.color.colorBlack.colorExpand(activity),
                 toolbarBackground = R.color.colorBlack.colorExpand(activity),
                 bottomViewBackground = R.color.colorBlack.colorExpand(activity),
@@ -66,7 +66,7 @@ object GalleryTheme {
                 prevRootBackground = R.color.colorBlack.colorExpand(activity),
                 galleryRootBackground = R.color.colorBlack.colorExpand(activity),
             )
-            Theme.APP -> GalleryMaterialBundle(
+            Theme.APP -> MaterialGalleryBundle(
                 statusBarColor = R.color.colorAccent.colorExpand(activity),
                 toolbarBackground = R.color.colorAccent.colorExpand(activity),
                 bottomViewBackground = R.color.colorAccent.colorExpand(activity),

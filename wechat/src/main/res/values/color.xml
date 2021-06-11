@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="gallery_wechat_color_1BB84D">#1BB84D</color>
-    <color name="gallery_wechat_color_333333">#333333</color>
-    <color name="gallery_wechat_color_999999">#999999</color>
-    <color name="gallery_wechat_color_3B3B3B">#3B3B3B</color>
-    <color name="gallery_wechat_color_B3000000">#B3000000</color>
+    <color name="wechat_gallery_color_1BB84D">#1BB84D</color>
+    <color name="wechat_gallery_color_333333">#333333</color>
+    <color name="wechat_gallery_color_999999">#999999</color>
+    <color name="wechat_gallery_color_3B3B3B">#3B3B3B</color>
+    <color name="wechat_gallery_color_B3000000">#B3000000</color>
 </resources>

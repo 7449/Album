@@ -3,10 +3,10 @@
 
     <application>
         <activity
-            android:name=".activity.GalleryActivity"
+            android:name=".activity.MaterialGalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activity.PreActivity"
+            android:name=".activity.MaterialPreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

@@ -7,15 +7,15 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.gallery.compat.Gallery
 import com.gallery.core.GalleryBundle
-import com.gallery.ui.wechat.activity.GalleryWeChatActivity
-import com.gallery.ui.wechat.args.GalleryWeChatBundle
+import com.gallery.ui.wechat.activity.WeChatGalleryActivity
+import com.gallery.ui.wechat.args.WeChatGalleryBundle
 
 internal val scanType = intArrayOf(
     MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
     MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 )
 
-internal val checkBoxResource = R.drawable.gallery_wechat_selector_gallery_item_check
+internal val checkBoxResource = R.drawable.wechat_gallery_selector_gallery_item_check
 
 internal val rgb19 = Color.rgb(19, 19, 19)
 
@@ -25,7 +25,7 @@ fun FragmentActivity.weChatGallery(launcher: ActivityResultLauncher<Intent>) {
     Gallery.newInstance(
         activity = this,
         launcher = launcher,
-        customBundle = GalleryWeChatBundle(
+        customBundle = WeChatGalleryBundle(
             prevRootBackground = Color.BLACK,
             galleryRootBackground = rgb38,
             videoMaxDuration = 500000,
@@ -42,7 +42,7 @@ fun FragmentActivity.weChatGallery(launcher: ActivityResultLauncher<Intent>) {
             finderItemBackground = rgb38,
             finderItemTextColor = Color.WHITE,
             finderItemTextCountColor = Color.parseColor("#767676"),
-            finderTextCompoundDrawable = R.drawable.ic_gallery_wechat_finder_action,
+            finderTextCompoundDrawable = R.drawable.ic_wechat_gallery_finder_action,
             finderTextSize = 14.toFloat()
         ),
         bundle = GalleryBundle(
@@ -51,6 +51,6 @@ fun FragmentActivity.weChatGallery(launcher: ActivityResultLauncher<Intent>) {
             scanType = scanType,
             checkBoxDrawable = checkBoxResource,
         ),
-        clz = GalleryWeChatActivity::class.java
+        clz = WeChatGalleryActivity::class.java
     )
 }

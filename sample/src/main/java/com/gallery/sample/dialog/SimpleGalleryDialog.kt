@@ -47,7 +47,7 @@ class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryIma
         savedInstanceState: Bundle?
     ): View {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val view: View = inflater.inflate(R.layout.dialog_gallery, container, false)
+        val view: View = inflater.inflate(R.layout.simple_dialog_gallery, container, false)
         slideToUp(view)
         return view
     }

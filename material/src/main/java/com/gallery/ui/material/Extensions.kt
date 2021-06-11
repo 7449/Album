@@ -8,7 +8,7 @@ import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import com.gallery.core.extensions.drawableExpand
-import com.gallery.ui.material.args.GalleryMaterialBundle
+import com.gallery.ui.material.args.MaterialGalleryBundle
 
 /** 获取自定义颜色Drawable */
 fun Context.minimumDrawableExpand(@DrawableRes id: Int, @ColorInt color: Int): Drawable? =
@@ -21,5 +21,5 @@ fun Drawable.minimumWidthAndHeightDrawableExpand(@ColorInt color: Int): Drawable
     return this
 }
 
-internal val Parcelable?.materialArgOrDefault: GalleryMaterialBundle
-    get() = this as? GalleryMaterialBundle ?: GalleryMaterialBundle()
+internal val Parcelable?.materialGalleryArgOrDefault: MaterialGalleryBundle
+    get() = this as? MaterialGalleryBundle ?: MaterialGalleryBundle()

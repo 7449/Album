@@ -10,13 +10,13 @@ import com.gallery.compat.Gallery
 import com.gallery.compat.internal.call.GalleryResultCallback
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
-import com.gallery.sample.camera.SimpleGalleryCameraActivity
-import com.gallery.sample.crop.SimpleUCropGalleryActivity
-import com.gallery.sample.databinding.ActivityMainBinding
+import com.gallery.sample.camera.SimpleMaterialGalleryCameraActivity
+import com.gallery.sample.crop.SimpleUCropMaterialGalleryActivity
+import com.gallery.sample.databinding.SimpleActivityMainBinding
 import com.gallery.sample.dialog.SimpleGalleryDialog
 import com.gallery.sample.listener.SimpleGalleryListener
 import com.gallery.scan.Types
-import com.gallery.ui.material.activity.GalleryActivity
+import com.gallery.ui.material.activity.MaterialGalleryActivity
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatGallery
 
@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult(),
             WeChatGalleryResultCallback(SimpleGalleryListener(this))
         )
-    private val viewBinding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+    private val viewBinding: SimpleActivityMainBinding by lazy {
+        SimpleActivityMainBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                     isRadio = false
                 }
                 R.id.crop_ucrop -> {
-                    cls = SimpleUCropGalleryActivity::class.java
+                    cls = SimpleUCropMaterialGalleryActivity::class.java
                     isRadio = false
                 }
             }
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             val newBundle = galleryBundle.copy(scanType = scanArray)
             Gallery.newInstance(
                 activity = this,
-                clz = cls ?: GalleryActivity::class.java,
+                clz = cls ?: MaterialGalleryActivity::class.java,
                 bundle = newBundle.copy(
                     scanType = scanArray,
                     cameraText = if (newBundle.isVideoScanExpand) "摄像" else "拍照",
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
             Gallery.newInstance(
                 activity = this,
                 launcher = galleryLauncher,
-                clz = SimpleGalleryCameraActivity::class.java
+                clz = SimpleMaterialGalleryCameraActivity::class.java
             )
         }
         viewBinding.dialog.setOnClickListener {

@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.wechat.args.GalleryWeChatBundle
-import com.gallery.ui.wechat.databinding.GalleryWechatItemFinderBinding
+import com.gallery.ui.wechat.args.WeChatGalleryBundle
+import com.gallery.ui.wechat.databinding.WechatGalleryItemFinderBinding
 
 class WeChatFinderAdapter(
-    private val weChatBundle: GalleryWeChatBundle,
+    private val weChatGalleryBundle: WeChatGalleryBundle,
     private val listener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<WeChatFinderAdapter.ViewHolder>() {
 
@@ -18,7 +18,7 @@ class WeChatFinderAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            GalleryWechatItemFinderBinding.inflate(
+            WechatGalleryItemFinderBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -42,7 +42,7 @@ class WeChatFinderAdapter(
             entity,
             holder.binding.ivGalleryFinderIcon
         )
-        holder.bind(weChatBundle, entity)
+        holder.bind(weChatGalleryBundle, entity)
     }
 
     fun updateFinder(entities: ArrayList<ScanEntity>) {
@@ -51,14 +51,14 @@ class WeChatFinderAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val binding: GalleryWechatItemFinderBinding) :
+    class ViewHolder(val binding: WechatGalleryItemFinderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(uiBundle: GalleryWeChatBundle, entity: ScanEntity) {
+        fun bind(uiGalleryBundle: WeChatGalleryBundle, entity: ScanEntity) {
             binding.tvGalleryFinderName.text = "%s".format(entity.bucketDisplayName)
-            binding.tvGalleryFinderName.setTextColor(uiBundle.finderItemTextColor)
+            binding.tvGalleryFinderName.setTextColor(uiGalleryBundle.finderItemTextColor)
             binding.tvGalleryFinderFileCount.text = "(%s)".format(entity.count.toString())
-            binding.tvGalleryFinderFileCount.setTextColor(uiBundle.finderItemTextCountColor)
+            binding.tvGalleryFinderFileCount.setTextColor(uiGalleryBundle.finderItemTextCountColor)
             binding.ivGalleryFinderFileCheck.visibility =
                 if (entity.isSelected) View.VISIBLE else View.GONE
         }

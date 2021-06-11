@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gallery.core.extensions.orEmptyExpand
-import com.gallery.sample.databinding.ActivityCameraBinding
+import com.gallery.sample.databinding.SimpleActivityCameraBinding
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
@@ -20,8 +20,8 @@ class SimpleCameraActivity : AppCompatActivity() {
         const val CUSTOM_CAMERA_OUT_PUT_URI = "customCameraOutPutUri"
     }
 
-    private val viewBinding: ActivityCameraBinding by lazy {
-        ActivityCameraBinding.inflate(
+    private val viewBinding: SimpleActivityCameraBinding by lazy {
+        SimpleActivityCameraBinding.inflate(
             layoutInflater
         )
     }

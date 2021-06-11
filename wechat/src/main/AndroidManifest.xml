@@ -3,10 +3,10 @@
 
     <application>
         <activity
-            android:name=".activity.GalleryWeChatActivity"
+            android:name=".activity.WeChatGalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activity.GalleryWeChatPrevActivity"
+            android:name=".activity.WeChatGalleryPrevActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

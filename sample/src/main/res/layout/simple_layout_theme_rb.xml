@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/themeRg"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:checkedButton="@id/theme_default">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/simple_select_theme"
+        android:textColor="@color/colorBlack" />
+
+    <RadioButton
+        android:id="@+id/theme_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="@string/simple_theme_default" />
+
+    <RadioButton
+        android:id="@+id/theme_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="@string/simple_theme_app" />
+
+    <RadioButton
+        android:id="@+id/theme_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="@string/simple_theme_blue" />
+
+    <RadioButton
+        android:id="@+id/theme_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="@string/simple_theme_black" />
+
+    <RadioButton
+        android:id="@+id/theme_pink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="@string/simple_theme_pink" />
+
+    <RadioButton
+        android:id="@+id/theme_wechat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="@string/simple_theme_wechat" />
+
+</RadioGroup>

@@ -32,44 +32,71 @@ object Dep {
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.0"
     const val fragment = "androidx.fragment:fragment:1.3.4"
-    const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0"
+    const val recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
     const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
     const val material = "com.google.android.material:material:1.3.0"
 
     const val cameraview = "com.otaliastudios:cameraview:2.7.0"
     const val cropper = "com.theartofdev.edmodo:android-image-cropper:2.8.0"
     const val glide = "com.github.bumptech.glide:glide:4.12.0"
-    const val uCrop = "com.github.yalantis:ucrop:2.2.6"
 }
 
 object DepList {
+    /** scan dependencies */
     val scan = mutableListOf(Dep.fragment, Dep.kotlin)
+
+    /** core dependencies */
     val core = scan
         .plus(Dep.appcompat)
         .plus(Dep.viewPager2)
         .plus(Dep.recyclerView)
-    val material = core
+
+    /** compat dependencies */
+    val compat = core
+
+    /** material dependencies */
+    val material = compat
         .plus(Dep.glide)
         .plus(Dep.cropper)
-    val wechat = core
+
+    /** wechat dependencies */
+    val wechat = compat
         .plus(Dep.glide)
-    val qq = core
+
+    /** qq dependencies */
+    val qq = compat
         .plus(Dep.glide)
-    val zhihu = core
+
+    /** zhihu dependencies */
+    val zhihu = compat
         .plus(Dep.glide)
+
+    /** sample dependencies */
     val sample = (scan + core + material + wechat + qq + zhihu)
         .plus(Dep.material)
-        .plus(Dep.uCrop)
         .plus(Dep.cameraview)
 }
 
 object DepLib {
+    /** core dependencies */
     val core = mutableListOf(":scan")
+
+    /** compat dependencies */
     val compat = core.plus(":core")
+
+    /** material dependencies */
     val material = compat.plus(":compat")
+
+    /** wechat dependencies */
     val wechat = compat.plus(":compat")
+
+    /** qq dependencies */
     val qq = compat.plus(":compat")
+
+    /** zhihu dependencies */
     val zhihu = compat.plus(":compat")
+
+    /** sample dependencies */
     val sample = (wechat + material + qq + zhihu)
         .plus(":qq")
         .plus(":zhihu")

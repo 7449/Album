@@ -11,7 +11,6 @@ import com.gallery.compat.internal.call.GalleryResultCallback
 import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
 import com.gallery.sample.camera.SimpleMaterialGalleryCameraActivity
-import com.gallery.sample.crop.SimpleUCropMaterialGalleryActivity
 import com.gallery.sample.databinding.SimpleActivityMainBinding
 import com.gallery.sample.dialog.SimpleGalleryDialog
 import com.gallery.sample.listener.SimpleGalleryListener
@@ -99,16 +98,12 @@ class MainActivity : AppCompatActivity() {
                     cls = null
                     isRadio = true
                 }
-                R.id.crop_no -> {
+                R.id.multi_select -> {
                     cls = null
                     isRadio = false
                 }
                 R.id.crop_cropper -> {
                     cls = null
-                    isRadio = false
-                }
-                R.id.crop_ucrop -> {
-                    cls = SimpleUCropMaterialGalleryActivity::class.java
                     isRadio = false
                 }
             }
@@ -132,8 +127,8 @@ class MainActivity : AppCompatActivity() {
                     scanType = scanArray,
                     cameraText = if (newBundle.isVideoScanExpand) "摄像" else "拍照",
                     scanSort = sortType,
-                    crop = viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
-                    radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked || viewBinding.includeSetting.cropUcrop.isChecked,
+                    crop = viewBinding.includeSetting.cropCropper.isChecked,
+                    radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked,
                     cameraNameSuffix = if (newBundle.isVideoScanExpand) "mp4" else "jpg"
                 ),
                 customBundle = galleryArgsBundle.copy(

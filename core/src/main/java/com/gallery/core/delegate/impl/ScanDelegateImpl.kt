@@ -13,12 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.gallery.core.GalleryBundle
 import com.gallery.core.GalleryBundle.Companion.galleryBundleOrDefault
-import com.gallery.core.LayoutManagerTypes
 import com.gallery.core.R
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
@@ -170,26 +168,19 @@ class ScanDelegateImpl(
             fileUri = it.fileUri
             it.selectList
         }
-        recyclerView.layoutManager = when (galleryBundle.layoutManager) {
-            LayoutManagerTypes.GRID -> GridLayoutManager(
-                recyclerView.context,
-                galleryBundle.spanCount,
-                galleryBundle.orientation,
-                false
-            )
-            LayoutManagerTypes.LINEAR -> LinearLayoutManager(
-                recyclerView.context,
-                galleryBundle.orientation,
-                false
-            )
-        }
+        recyclerView.layoutManager = GridLayoutManager(
+            recyclerView.context,
+            galleryBundle.spanCount,
+            galleryBundle.orientation,
+            false
+        )
         recyclerView.addItemDecoration(GalleryDivider(galleryBundle.dividerWidth))
         if (recyclerView.itemAnimator is SimpleItemAnimator) {
             (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
         emptyView.setImageDrawable(requireActivity.drawableExpand(galleryBundle.photoEmptyDrawable))
         emptyView.setOnClickListener { v ->
-            if (galleryInterceptor.onEmptyPhotoClick(v)) {
+            if (galleryInterceptor.onEmptyPhotoClick(v) && emptyView.drawable != null) {
                 cameraOpen()
             }
         }
@@ -298,7 +289,6 @@ class ScanDelegateImpl(
         if (onCustomCamera || cameraUriExpand == null) {
             return
         }
-
         fun Fragment.checkCameraStatusExpand(
             uri: CameraUri,
             action: (uri: CameraUri) -> Unit

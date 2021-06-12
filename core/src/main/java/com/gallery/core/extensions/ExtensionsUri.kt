@@ -67,7 +67,7 @@ fun ContentResolver.queryExpand(uri: Uri, vararg name: String): Cursor? =
 /** 获取图片Uri,适配至高版本,Q以上按照[MediaStore.MediaColumns.RELATIVE_PATH]，以下按照[MediaStore.MediaColumns.DATA]  */
 fun Context.insertImageUriExpand(
     file: File,
-    relativePath: String = Environment.DIRECTORY_DCIM,
+    relativePath: String,
 ): Uri? = insertImageUriExpand(ContentValues().apply {
     if (hasQExpand()) {
         put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
@@ -89,7 +89,7 @@ fun Context.insertImageUriExpand(contentValues: ContentValues): Uri? =
 /** 获取视频Uri,适配至高版本,Q以上按照[MediaStore.MediaColumns.RELATIVE_PATH]，以下按照[MediaStore.MediaColumns.DATA] */
 fun Context.insertVideoUriExpand(
     file: File,
-    relativePath: String = Environment.DIRECTORY_DCIM,
+    relativePath: String,
 ): Uri? = insertVideoUriExpand(ContentValues().apply {
     if (hasQExpand()) {
         put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)

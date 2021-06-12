@@ -18,15 +18,12 @@ fun String.mkdirsFileExpand(child: String): File {
 }
 
 /** 获取文件输出路径 */
-fun Context.lowerVersionFileExpand(
-    fileName: String,
-    relativePath: String = Environment.DIRECTORY_DCIM,
-): File = File(
+fun Context.lowerVersionFileExpand(fileName: String): File = File(
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
         || !Environment.isExternalStorageRemovable()
     ) {
         @Suppress("DEPRECATION")
-        Environment.getExternalStoragePublicDirectory(relativePath).path
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
     } else {
         externalCacheDir?.path ?: cacheDir.path
     }, fileName

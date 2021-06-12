@@ -21,14 +21,6 @@
   
   [SimpleCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleCameraActivity.kt)
 
-#### simple crop
-
-  [ICrop Config](./core/src/main/java/com/gallery/core/crop/ICrop.kt)
-  
-  [SimpleUCropImpl](./sample/src/main/java/com/gallery/sample/crop/SimpleUCropImpl.kt)
-
-  [SimpleUCropGalleryActivity](./sample/src/main/java/com/gallery/sample/crop/SimpleUCropGalleryActivity.kt)
-
 #### simple dialog
 
   [SimpleGalleryDialog](./sample/src/main/java/com/gallery/sample/dialog/SimpleGalleryDialog.kt)

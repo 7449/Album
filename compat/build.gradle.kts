@@ -19,5 +19,5 @@ android {
 }
 dependencies {
     DepLib.compat.forEach { compileOnly(project(it)) }
-    DepList.core.forEach { implementation(it) }
+    DepList.compat.forEach { implementation(it) }
 }

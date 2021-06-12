@@ -3,7 +3,7 @@
     android:id="@+id/settingRg"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:checkedButton="@id/crop_no">
+    android:checkedButton="@id/multi_select">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,13 +13,6 @@
         android:textColor="@color/colorBlack" />
 
     <RadioButton
-        android:id="@+id/crop_no"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/simple_default_selector_rb_check"
-        android:text="@string/simple_crop_no" />
-
-    <RadioButton
         android:id="@+id/crop_cropper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,11 +20,11 @@
         android:text="@string/simple_crop_cropper" />
 
     <RadioButton
-        android:id="@+id/crop_ucrop"
+        android:id="@+id/multi_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/simple_default_selector_rb_check"
-        android:text="@string/simple_crop_ucrop" />
+        android:text="@string/simple_multi_select" />
 
     <RadioButton
         android:id="@+id/single_select"

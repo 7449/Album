@@ -7,7 +7,6 @@ import androidx.activity.result.ActivityResult
 import com.gallery.core.GalleryBundle
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.extensions.cropUriExpand
-import com.gallery.core.extensions.cropUriExpand2
 import com.gallery.core.extensions.orEmptyExpand
 
 /**
@@ -24,21 +23,6 @@ interface ICrop {
      */
     fun cropOutPutUri(context: Context, bundle: GalleryBundle): Uri {
         return context.cropUriExpand(bundle).orEmptyExpand()
-    }
-
-    /**
-     * 格式一直都是 file:///path/xxxxx.jpg
-     * Android10返回 file:///storage/emulated/0/Android/data/packageName/cache/xxxxx.jpg
-     * android-image-cropper支持 content 的 outputUri
-     * 这里推荐使用 android-image-cropper 或者其他支持outputUri为content的裁剪库
-     * 除非 UCrop什么时候支持 content 的Uri，否则高版本适配比较麻烦
-     */
-    @Deprecated(
-        "annoying version support",
-        replaceWith = ReplaceWith("cropOutPutUri(context, bundle)")
-    )
-    fun cropOutPutUri2(context: Context, bundle: GalleryBundle): Uri {
-        return context.cropUriExpand2(bundle).orEmptyExpand()
     }
 
     /**

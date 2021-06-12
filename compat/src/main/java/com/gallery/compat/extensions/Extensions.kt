@@ -7,14 +7,10 @@ import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.fragment.PrevCompatFragment
 
 val AppCompatActivity.requireGalleryFragment: GalleryCompatFragment
-    get() = supportFragmentManager.findFragmentByTag(
-        GalleryCompatFragment::class.java.simpleName
-    ) as GalleryCompatFragment
+    get() = requireNotNull(galleryFragment)
 
 val AppCompatActivity.requirePrevFragment: PrevCompatFragment
-    get() = supportFragmentManager.findFragmentByTag(
-        PrevCompatFragment::class.java.simpleName
-    ) as PrevCompatFragment
+    get() = requireNotNull(prevFragment)
 
 val AppCompatActivity.galleryFragment: GalleryCompatFragment?
     get() = supportFragmentManager.findFragmentByTag(

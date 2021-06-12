@@ -62,26 +62,22 @@ data class GalleryBundle(
      */
     val spanCount: Int = 4,
     /**
-     * 分割线宽度
-     */
-    val dividerWidth: Int = 8,
-    /**
      * 滑动方向
      */
     val orientation: Int = RecyclerView.VERTICAL,
     /**
-     * 列表管理器
+     * 分割线宽度
      */
-    val layoutManager: LayoutManagerTypes = LayoutManagerTypes.GRID,
+    val dividerWidth: Int = 8,
+    /**
+     * 文件输出路径，仅在Q及以上生效
+     * 传入[Environment.DIRECTORY_DCIM]或者[Environment.DIRECTORY_PICTURES]为前缀的字符串
+     * 例如: Environment.DIRECTORY_PICTURES + "/your app name"
+     */
+    val relativePath: String = Environment.DIRECTORY_PICTURES,
     /**
      * 文件输出路径
-     * [Environment.DIRECTORY_DCIM]
-     * [Environment.DIRECTORY_PICTURES]
-     */
-    val relativePath: String = Environment.DIRECTORY_DCIM,
-    /**
-     * 拍照路径
-     * 支持在AndroidQ版本以下
+     * 支持在Q版本以下
      */
     val cameraPath: String? = null,
     /**
@@ -152,7 +148,7 @@ data class GalleryBundle(
      * 空数据占位图片
      */
     @DrawableRes
-    val photoEmptyDrawable: Int = R.drawable.ic_default_camera_drawable,
+    val photoEmptyDrawable: Int = 0,
 ) : Parcelable {
     companion object {
         private const val Key = "galleryBundle"

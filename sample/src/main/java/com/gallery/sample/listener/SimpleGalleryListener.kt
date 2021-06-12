@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.gallery.compat.internal.call.GalleryListener
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.queryDataExpand
 
 open class SimpleGalleryListener(private val activity: FragmentActivity) : GalleryListener {
 
@@ -16,7 +17,7 @@ open class SimpleGalleryListener(private val activity: FragmentActivity) : Galle
     }
 
     override fun onGalleryCropResource(uri: Uri, vararg args: Any) {
-        showDialog(uri.toString())
+        showDialog(uri.toString() + "\n" + activity.contentResolver.queryDataExpand(uri))
     }
 
     override fun onGalleryResource(scanEntity: ScanEntity, vararg args: Any) {

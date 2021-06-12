@@ -41,7 +41,9 @@ class MaterialGalleryCropper(private val cropImageOptions: CropImageOptions) : I
         val intent = Intent().setClass(context, CropImageActivity::class.java)
         val value = Bundle()
         value.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, inputUri)
-        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, cropImageOptions)
+        value.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, cropImageOptions.apply {
+            outputUri = cropUri
+        })
         intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, value)
         return intent
     }

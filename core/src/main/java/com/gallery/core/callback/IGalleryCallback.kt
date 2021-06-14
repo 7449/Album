@@ -71,6 +71,11 @@ interface IGalleryCallback {
     )
 
     /**
+     * 没有扫描到任何数据
+     */
+    fun onScanSuccessEmpty(context: Context?)
+
+    /**
      * 每次扫描之后数据非空触发
      * [scanEntities]已经过滤掉了相机Type,且是在Adapter数据已经合并完成之后调用
      */
@@ -80,11 +85,6 @@ interface IGalleryCallback {
      * 单个文件扫描成功
      */
     fun onResultSuccess(context: Context?, scanEntity: ScanEntity)
-
-    /**
-     * 取消拍照
-     */
-    fun onCameraCanceled(context: Context?, galleryBundle: GalleryBundle)
 
     /**
      * 拍照或者摄像或者扫描单个数据失败
@@ -100,9 +100,9 @@ interface IGalleryCallback {
     fun onCameraOpenStatus(context: Context?, status: CameraStatus)
 
     /**
-     * 没有扫描到任何数据
+     * 取消拍照
      */
-    fun onScanSuccessEmpty(context: Context?)
+    fun onCameraCanceled(context: Context?, galleryBundle: GalleryBundle)
 
     /**
      * 视频播放异常

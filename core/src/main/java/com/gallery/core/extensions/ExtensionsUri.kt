@@ -3,7 +3,6 @@ package com.gallery.core.extensions
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -35,7 +34,7 @@ fun Uri.deleteExpand(context: Context) {
 /** 根据Uri查询DATA(文件路径) *已过时 */
 @Deprecated("@Deprecated MediaStore.MediaColumns.DATA")
 fun ContentResolver.queryDataExpand(uri: Uri): String? =
-    queryExpand(uri, MediaStore.MediaColumns.DATA).use {
+    query(uri, arrayOf(MediaStore.Files.FileColumns.DATA), null, null, null).use {
         val cursor = it ?: return null
         while (cursor.moveToNext()) {
             return cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
@@ -50,7 +49,7 @@ fun ContentResolver.queryIdExpand(uri: Uri): Long {
     runCatching {
         id = split[split.size - 1].toLong()
     }.onFailure {
-        queryExpand(uri, MediaStore.Files.FileColumns._ID).use {
+        query(uri, arrayOf(MediaStore.Files.FileColumns._ID), null, null, null).use {
             val cursor = it ?: return@use
             while (cursor.moveToNext()) {
                 id = cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
@@ -59,10 +58,6 @@ fun ContentResolver.queryIdExpand(uri: Uri): Long {
     }
     return id
 }
-
-/** 根据Uri获取Cursor */
-fun ContentResolver.queryExpand(uri: Uri, vararg name: String): Cursor? =
-    query(uri, name, null, null, null)
 
 /** 获取图片Uri,适配至高版本,Q以上按照[MediaStore.MediaColumns.RELATIVE_PATH]，以下按照[MediaStore.MediaColumns.DATA]  */
 fun Context.insertImageUriExpand(

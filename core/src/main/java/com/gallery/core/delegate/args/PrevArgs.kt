@@ -83,5 +83,6 @@ data class PrevArgs(
 
         val PrevArgs.configOrDefault
             get() = config ?: GalleryBundle()
+
     }
 }

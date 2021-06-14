@@ -40,7 +40,6 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
         fun newInstance(
             context: Context,
             /**
-             * and
              * [PrevArgs]
              * and
              * [Parcelable] // 用于存放以及获取自定义数据
@@ -52,7 +51,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
         }
     }
 
-    /** 当前Fragment 文件Id,用于初始化[PrevCompatFragment] */
+    /** 当前FragmentId */
     protected abstract val galleryFragmentId: Int
 
     /** [PrevCompatArgs] */

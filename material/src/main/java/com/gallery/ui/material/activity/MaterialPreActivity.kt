@@ -44,30 +44,30 @@ open class MaterialPreActivity : PrevCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
         window.statusBarColor = materialGalleryBundle.statusBarColor
-        viewBinding.preToolbar.setTitleTextColor(materialGalleryBundle.toolbarTextColor)
+        viewBinding.toolbar.setTitleTextColor(materialGalleryBundle.toolbarTextColor)
         val drawable = drawableExpand(materialGalleryBundle.toolbarIcon)
         drawable?.colorFilter =
             PorterDuffColorFilter(materialGalleryBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        viewBinding.preToolbar.navigationIcon = drawable
-        viewBinding.preToolbar.setBackgroundColor(materialGalleryBundle.toolbarBackground)
-        viewBinding.preToolbar.elevation = materialGalleryBundle.toolbarElevation
+        viewBinding.toolbar.navigationIcon = drawable
+        viewBinding.toolbar.setBackgroundColor(materialGalleryBundle.toolbarBackground)
+        viewBinding.toolbar.elevation = materialGalleryBundle.toolbarElevation
 
-        viewBinding.preCount.textSize = materialGalleryBundle.preBottomCountTextSize
-        viewBinding.preCount.setTextColor(materialGalleryBundle.preBottomCountTextColor)
+        viewBinding.count.textSize = materialGalleryBundle.preBottomCountTextSize
+        viewBinding.count.setTextColor(materialGalleryBundle.preBottomCountTextColor)
 
-        viewBinding.preBottomView.setBackgroundColor(materialGalleryBundle.preBottomViewBackground)
-        viewBinding.preBottomViewSelect.text = materialGalleryBundle.preBottomOkText
-        viewBinding.preBottomViewSelect.textSize = materialGalleryBundle.preBottomOkTextSize
-        viewBinding.preBottomViewSelect.setTextColor(materialGalleryBundle.preBottomOkTextColor)
+        viewBinding.bottomView.setBackgroundColor(materialGalleryBundle.preBottomViewBackground)
+        viewBinding.bottomViewSelect.text = materialGalleryBundle.preBottomOkText
+        viewBinding.bottomViewSelect.textSize = materialGalleryBundle.preBottomOkTextSize
+        viewBinding.bottomViewSelect.setTextColor(materialGalleryBundle.preBottomOkTextColor)
 
-        viewBinding.preBottomViewSelect.setOnClickListener {
+        viewBinding.bottomViewSelect.setOnClickListener {
             if (requirePrevFragment.isSelectEmpty) {
                 onGallerySelectEmpty()
             } else {
                 onGallerySelectEntities()
             }
         }
-        viewBinding.preToolbar.setNavigationOnClickListener { onGalleryFinish() }
+        viewBinding.toolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
     override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
@@ -90,9 +90,9 @@ open class MaterialPreActivity : PrevCompatActivity() {
         savedInstanceState: Bundle?
     ) {
         delegate.rootView.setBackgroundColor(materialGalleryBundle.prevRootBackground)
-        viewBinding.preCount.text =
+        viewBinding.count.text =
             format.format(delegate.selectCount, galleryConfig.multipleMaxCount)
-        viewBinding.preToolbar.title =
+        viewBinding.toolbar.title =
             materialGalleryBundle.preTitle + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
     }
 
@@ -102,17 +102,17 @@ open class MaterialPreActivity : PrevCompatActivity() {
         scanEntity: ScanEntity
     ) {
         super.onClickItemFileNotExist(context, bundle, scanEntity)
-        viewBinding.preCount.text =
+        viewBinding.count.text =
             format.format(requirePrevFragment.selectCount, bundle.multipleMaxCount)
     }
 
     override fun onPageSelected(position: Int) {
-        viewBinding.preToolbar.title =
+        viewBinding.toolbar.title =
             materialGalleryBundle.preTitle + "(" + (position + 1) + "/" + requirePrevFragment.itemCount + ")"
     }
 
     override fun onChangedCheckBox() {
-        viewBinding.preCount.text =
+        viewBinding.count.text =
             format.format(requirePrevFragment.selectCount, galleryConfig.multipleMaxCount)
     }
 

@@ -10,6 +10,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.fragment.GalleryCompatFragment
@@ -37,6 +38,7 @@ class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryIma
         val params: WindowManager.LayoutParams = window.attributes
         params.gravity = Gravity.BOTTOM
         params.width = WindowManager.LayoutParams.MATCH_PARENT
+        params.height = resources.displayMetrics.widthPixels
         window.attributes = params
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
@@ -64,7 +66,10 @@ class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryIma
                     GalleryBundle(
                         radio = true,
                         crop = false,
-                        hideCamera = true
+                        hideCamera = false,
+                        spanCount = 1,
+                        dividerWidth = 1,
+                        orientation = LinearLayoutManager.HORIZONTAL
                     )
                 ),
                 GalleryCompatFragment::class.java.simpleName

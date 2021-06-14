@@ -1,6 +1,5 @@
 package com.gallery.core.extensions
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -8,9 +7,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gallery.core.GalleryBundle
 import com.gallery.core.entity.ScanEntity
 import com.gallery.scan.impl.file.FileScanEntity
@@ -27,7 +28,23 @@ fun Context.drawableExpand(@DrawableRes id: Int): Drawable? =
     if (id == 0) null else ContextCompat.getDrawable(this, id)
 
 /** 获取计算的Item宽高 */
-fun Activity.squareExpand(count: Int): Int = resources.displayMetrics.widthPixels / count
+fun Context.squareExpand(count: Int): Int = resources.displayMetrics.widthPixels / count
+
+/** 获取计算的Item宽高 */
+fun FrameLayout.width(galleryBundle: GalleryBundle): Int {
+    return if (galleryBundle.orientation == LinearLayoutManager.HORIZONTAL)
+        context.squareExpand(2)
+    else
+        FrameLayout.LayoutParams.MATCH_PARENT
+}
+
+/** 获取计算的Item宽高 */
+fun FrameLayout.height(galleryBundle: GalleryBundle): Int {
+    return if (galleryBundle.orientation == LinearLayoutManager.HORIZONTAL)
+        context.squareExpand(2)
+    else
+        FrameLayout.LayoutParams.WRAP_CONTENT
+}
 
 /** 安全Toast(过滤空数据) */
 fun String?.safeToastExpand(context: Context?) {

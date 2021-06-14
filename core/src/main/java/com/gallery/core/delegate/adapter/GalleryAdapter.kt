@@ -15,9 +15,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.hideExpand
-import com.gallery.core.extensions.isFileExistsExpand
-import com.gallery.core.extensions.showExpand
+import com.gallery.core.extensions.*
 
 class GalleryAdapter(
     private val display: Int,
@@ -140,10 +138,8 @@ class GalleryAdapter(
         companion object {
             fun newInstance(parent: ViewGroup, galleryBundle: GalleryBundle): CameraViewHolder {
                 val rootView = FrameLayout(parent.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT
-                    )
+                    layoutParams =
+                        FrameLayout.LayoutParams(width(galleryBundle), height(galleryBundle))
                 }
                 val galleryImageCamera = AppCompatImageView(rootView.context).apply {
                     layoutParams = FrameLayout.LayoutParams(
@@ -204,10 +200,8 @@ class GalleryAdapter(
                 galleryCallback: IGalleryCallback
             ): PhotoViewHolder {
                 val rootView = FrameLayout(parent.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT
-                    )
+                    layoutParams =
+                        FrameLayout.LayoutParams(width(galleryBundle), height(galleryBundle))
                 }
                 val galleryContainer = FrameLayout(rootView.context).apply {
                     layoutParams = FrameLayout.LayoutParams(

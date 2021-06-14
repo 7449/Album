@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/galleryToolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_gallery_toolbar_height" />
 
@@ -18,12 +18,12 @@
         android:layout_weight="1" />
 
     <RelativeLayout
-        android:id="@+id/galleryBottomView"
+        android:id="@+id/bottom_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_gallery_bottom_height">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/galleryFinderAll"
+            android:id="@+id/finder_all"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
@@ -39,13 +39,13 @@
             tools:ignore="RtlHardcoded" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/galleryPre"
+            android:id="@+id/open_prev"
             android:layout_width="@dimen/material_gallery_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/material_gallery_button_margin"
             android:layout_marginRight="@dimen/material_gallery_bottom_marginRight"
-            android:layout_toLeftOf="@+id/gallerySelect"
+            android:layout_toLeftOf="@+id/select"
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/material_gallery_bottom_padding"
@@ -54,7 +54,7 @@
             tools:text="预览" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/gallerySelect"
+            android:id="@+id/select"
             android:layout_width="@dimen/material_gallery_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

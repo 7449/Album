@@ -45,10 +45,10 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
     /** 当前文件夹名称,用于横竖屏保存数据 */
     protected abstract val currentFinderName: String
 
-    /** 当前Fragment 文件Id,用于初始化[GalleryCompatFragment] */
+    /** 当前FragmentId */
     protected abstract val galleryFragmentId: Int
 
-    /** 目录View */
+    /** Finder */
     protected open val finderAdapter: GalleryFinderAdapter
         get() = throw KotlinNullPointerException("finderAdapter == null")
 
@@ -164,7 +164,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
         onGalleryResources(bundle.scanArgs?.selectList ?: arrayListOf())
     }
 
-    /** 用于 toolbar 返回 finish */
+    /** 用于toolbar返回 finish */
     open fun onGalleryFinish() {
         setResult(GalleryConfig.RESULT_CODE_TOOLBAR_BACK)
         finish()
@@ -190,7 +190,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
         finish()
     }
 
-    /** 初始化布局，子类重写时需注意super */
+    /** 初始化布局 */
     abstract override fun onGalleryCreated(
         delegate: IScanDelegate,
         bundle: GalleryBundle,
@@ -211,5 +211,10 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
         container: FrameLayout,
         checkBox: TextView
     )
+
+    override fun onDestroy() {
+        super.onDestroy()
+        prevLauncher.unregister()
+    }
 
 }

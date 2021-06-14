@@ -123,9 +123,9 @@ class ScanDelegateImpl(
         this
     )
     private val recyclerView: RecyclerView =
-        fragment.view?.findViewById(R.id.gallery_recyclerview) as RecyclerView
+        fragment.requireView().findViewById(R.id.gallery_recyclerview) as RecyclerView
     private val emptyView: ImageView =
-        fragment.view?.findViewById(R.id.gallery_empty_view) as ImageView
+        fragment.requireView().findViewById(R.id.gallery_empty_view) as ImageView
 
     private val scan: ScanImpl<FileScanEntity> =
         ScanImpl(
@@ -144,7 +144,7 @@ class ScanDelegateImpl(
             }
         }
 
-    override val rootView: View get() = fragment.view ?: View(fragment.requireActivity())
+    override val rootView: View get() = fragment.requireView()
     override val activity: FragmentActivity? get() = fragment.activity
     override val requireActivity: FragmentActivity get() = fragment.requireActivity()
     override val selectItem: ArrayList<ScanEntity> get() = galleryAdapter.currentSelectList
@@ -191,6 +191,10 @@ class ScanDelegateImpl(
     }
 
     override fun onDestroy() {
+        openCameraLauncher.unregister()
+        cropLauncher.unregister()
+        cameraPermissionLauncher.unregister()
+        writePermissionLauncher.unregister()
     }
 
     override fun onScanMultipleSuccess(scanEntities: ArrayList<FileScanEntity>) {
@@ -281,36 +285,39 @@ class ScanDelegateImpl(
             galleryCallback.onCameraOpenStatus(activity, CameraStatus.PERMISSION)
             return
         }
-        val cameraUriExpand: Uri? = requireActivity.cameraUriExpand(galleryBundle)
-        cameraUriExpand?.let {
+        val cameraUri: Uri? = requireActivity.cameraUriExpand(galleryBundle)
+        cameraUri?.let {
             fileUri = it
         } ?: galleryCallback.onCameraOpenStatus(activity, CameraStatus.ERROR)
         val onCustomCamera: Boolean = galleryInterceptor.onCustomCamera(fileUri)
-        if (onCustomCamera || cameraUriExpand == null) {
+        if (onCustomCamera || cameraUri == null) {
             return
         }
+
         fun Fragment.checkCameraStatusExpand(
             uri: CameraUri,
             action: (uri: CameraUri) -> Unit
         ): CameraStatus {
-            val intent: Intent =
+            val intent =
                 if (uri.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE))
                     Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                else Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                else
+                    Intent(MediaStore.ACTION_VIDEO_CAPTURE)
             return intent.resolveActivity(requireActivity().packageManager)?.let {
                 action.invoke(uri)
                 CameraStatus.SUCCESS
             } ?: CameraStatus.ERROR
         }
 
+        val uri = CameraUri(
+            galleryBundle.scanType,
+            fileUri
+        )
+
         galleryCallback.onCameraOpenStatus(
             activity,
-            fragment.checkCameraStatusExpand(
-                CameraUri(
-                    galleryBundle.scanType,
-                    fileUri
-                )
-            ) { openCameraLauncher.launch(it) })
+            fragment.checkCameraStatusExpand(uri) { openCameraLauncher.launch(it) }
+        )
     }
 
     override fun cameraSuccess() {

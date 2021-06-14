@@ -17,7 +17,7 @@ open class GalleryResultCallback(private val galleryListener: GalleryListener) :
         when (intent.resultCode) {
             GalleryConfig.Crop.RESULT_CODE_CROP -> onCropResult(bundleExpand)
             GalleryConfig.RESULT_CODE_SINGLE_DATA -> onSingleDataResult(bundleExpand)
-            GalleryConfig.RESULT_CODE_MULTIPLE_DATA -> onMultipleResult(bundleExpand)
+            GalleryConfig.RESULT_CODE_MULTIPLE_DATA -> onMultipleDataResult(bundleExpand)
             GalleryConfig.RESULT_CODE_TOOLBAR_BACK,
             Activity.RESULT_CANCELED -> onCancelResult(bundleExpand)
         }
@@ -31,7 +31,7 @@ open class GalleryResultCallback(private val galleryListener: GalleryListener) :
         galleryListener.onGalleryResource(bundle.parcelableExpand(GalleryConfig.GALLERY_SINGLE_DATA))
     }
 
-    protected open fun onMultipleResult(bundle: Bundle) {
+    protected open fun onMultipleDataResult(bundle: Bundle) {
         galleryListener.onGalleryResources(bundle.parcelableArrayListExpand(GalleryConfig.GALLERY_MULTIPLE_DATA))
     }
 

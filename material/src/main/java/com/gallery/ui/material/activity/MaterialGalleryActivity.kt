@@ -47,7 +47,7 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
     override val finderAdapter: GalleryFinderAdapter by lazy {
         MaterialFinderAdapter(
             this@MaterialGalleryActivity,
-            viewBinding.galleryFinderAll,
+            viewBinding.finderAll,
             materialGalleryBundle,
             this@MaterialGalleryActivity
         )
@@ -57,7 +57,7 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         get() = MaterialGalleryCropper(CropImageOptions())
 
     override val currentFinderName: String
-        get() = viewBinding.galleryFinderAll.text.toString()
+        get() = viewBinding.finderAll.text.toString()
 
     override val galleryFragmentId: Int
         get() = R.id.galleryFrame
@@ -66,18 +66,18 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
         window.statusBarColor = materialGalleryBundle.statusBarColor
-        viewBinding.galleryToolbar.title = materialGalleryBundle.toolbarText
-        viewBinding.galleryToolbar.setTitleTextColor(materialGalleryBundle.toolbarTextColor)
+        viewBinding.toolbar.title = materialGalleryBundle.toolbarText
+        viewBinding.toolbar.setTitleTextColor(materialGalleryBundle.toolbarTextColor)
         val drawable = drawableExpand(materialGalleryBundle.toolbarIcon)
         drawable?.colorFilter =
             PorterDuffColorFilter(materialGalleryBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        viewBinding.galleryToolbar.navigationIcon = drawable
-        viewBinding.galleryToolbar.setBackgroundColor(materialGalleryBundle.toolbarBackground)
-        viewBinding.galleryToolbar.elevation = materialGalleryBundle.toolbarElevation
+        viewBinding.toolbar.navigationIcon = drawable
+        viewBinding.toolbar.setBackgroundColor(materialGalleryBundle.toolbarBackground)
+        viewBinding.toolbar.elevation = materialGalleryBundle.toolbarElevation
 
-        viewBinding.galleryFinderAll.textSize = materialGalleryBundle.finderTextSize
-        viewBinding.galleryFinderAll.setTextColor(materialGalleryBundle.finderTextColor)
-        viewBinding.galleryFinderAll.setCompoundDrawables(
+        viewBinding.finderAll.textSize = materialGalleryBundle.finderTextSize
+        viewBinding.finderAll.setTextColor(materialGalleryBundle.finderTextColor)
+        viewBinding.finderAll.setCompoundDrawables(
             null,
             null,
             minimumDrawableExpand(
@@ -87,27 +87,27 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
             null
         )
 
-        viewBinding.galleryPre.text = materialGalleryBundle.preViewText
-        viewBinding.galleryPre.textSize = materialGalleryBundle.preViewTextSize
-        viewBinding.galleryPre.setTextColor(materialGalleryBundle.preViewTextColor)
+        viewBinding.openPrev.text = materialGalleryBundle.preViewText
+        viewBinding.openPrev.textSize = materialGalleryBundle.preViewTextSize
+        viewBinding.openPrev.setTextColor(materialGalleryBundle.preViewTextColor)
 
-        viewBinding.gallerySelect.text = materialGalleryBundle.selectText
-        viewBinding.gallerySelect.textSize = materialGalleryBundle.selectTextSize
-        viewBinding.gallerySelect.setTextColor(materialGalleryBundle.selectTextColor)
+        viewBinding.select.text = materialGalleryBundle.selectText
+        viewBinding.select.textSize = materialGalleryBundle.selectTextSize
+        viewBinding.select.setTextColor(materialGalleryBundle.selectTextColor)
 
-        viewBinding.galleryBottomView.setBackgroundColor(materialGalleryBundle.bottomViewBackground)
+        viewBinding.bottomView.setBackgroundColor(materialGalleryBundle.bottomViewBackground)
 
         finderAdapter.finderInit()
-        viewBinding.galleryPre.setOnClickListener(this)
-        viewBinding.gallerySelect.setOnClickListener(this)
-        viewBinding.galleryFinderAll.setOnClickListener(this)
+        viewBinding.openPrev.setOnClickListener(this)
+        viewBinding.select.setOnClickListener(this)
+        viewBinding.finderAll.setOnClickListener(this)
 
-        viewBinding.galleryFinderAll.text = finderName
-        viewBinding.galleryPre.visibility =
+        viewBinding.finderAll.text = finderName
+        viewBinding.openPrev.visibility =
             if (galleryConfig.radio || galleryConfig.isVideoScanExpand) View.GONE else View.VISIBLE
-        viewBinding.gallerySelect.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
+        viewBinding.select.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
 
-        viewBinding.galleryToolbar.setNavigationOnClickListener { onGalleryFinish() }
+        viewBinding.toolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
     override fun onGalleryCreated(
@@ -120,7 +120,7 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.galleryPre -> {
+            R.id.open_prev -> {
                 if (requireGalleryFragment.isSelectEmpty) {
                     onGalleryPreEmpty()
                     return
@@ -132,14 +132,14 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
                     cla = MaterialPreActivity::class.java
                 )
             }
-            R.id.gallerySelect -> {
+            R.id.select -> {
                 if (requireGalleryFragment.isSelectEmpty) {
                     onGalleryOkEmpty()
                     return
                 }
                 onGalleryResources(requireGalleryFragment.selectItem)
             }
-            R.id.galleryFinderAll -> {
+            R.id.finder_all -> {
                 if (finderList.isEmpty()) {
                     onGalleryFinderEmpty()
                     return
@@ -156,7 +156,7 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
             finderAdapter.hide()
             return
         }
-        viewBinding.galleryFinderAll.text = item.bucketDisplayName
+        viewBinding.finderAll.text = item.bucketDisplayName
         fragment.onScanGallery(item.parent)
         finderAdapter.hide()
     }

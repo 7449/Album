@@ -12,7 +12,7 @@ class WeChatGalleryResultCallback(
     private val galleryListener: GalleryListener,
 ) : GalleryResultCallback(galleryListener) {
 
-    override fun onMultipleResult(bundle: Bundle) {
+    override fun onMultipleDataResult(bundle: Bundle) {
         galleryListener.onGalleryResources(
             bundle.parcelableArrayListExpand(GalleryConfig.GALLERY_MULTIPLE_DATA),
             bundle.getBooleanExpand(WeChatConfig.FULL_IMAGE)

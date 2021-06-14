@@ -78,8 +78,9 @@ class PrevDelegateImpl(
         }
 
     private val viewPager2: ViewPager2 =
-        fragment.view?.findViewById(R.id.gallery_prev_viewpager2) as ViewPager2
-    private val checkBox: View = fragment.view?.findViewById(R.id.gallery_prev_checkbox) as View
+        fragment.requireView().findViewById(R.id.gallery_prev_viewpager2) as ViewPager2
+    private val checkBox: View =
+        fragment.requireView().findViewById(R.id.gallery_prev_checkbox) as View
     private val prevAdapter: PrevAdapter = PrevAdapter { entity, container ->
         galleryImageLoader.onDisplayGalleryPrev(
             entity,
@@ -89,7 +90,7 @@ class PrevDelegateImpl(
     private val prevArgs: PrevArgs = fragment.arguments.orEmptyExpand().prevArgsOrDefault
     private val galleryBundle: GalleryBundle = prevArgs.configOrDefault
 
-    override val rootView: View get() = fragment.view ?: View(fragment.requireActivity())
+    override val rootView: View get() = fragment.requireView()
     override val allItem: ArrayList<ScanEntity> get() = prevAdapter.allItem
     override val selectItem: ArrayList<ScanEntity> get() = prevAdapter.currentSelectList
     override val currentPosition: Int get() = viewPager2.currentItem

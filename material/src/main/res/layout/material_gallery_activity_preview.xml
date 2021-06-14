@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/preToolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_gallery_toolbar_height" />
 
@@ -19,18 +19,18 @@
         android:layout_weight="1" />
 
     <RelativeLayout
-        android:id="@+id/preBottomView"
+        android:id="@+id/bottom_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_gallery_bottom_height">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/preCount"
+            android:id="@+id/count"
             android:layout_width="@dimen/material_gallery_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/material_gallery_button_margin"
             android:layout_marginRight="@dimen/material_gallery_bottom_marginRight"
-            android:layout_toLeftOf="@+id/preBottomViewSelect"
+            android:layout_toLeftOf="@+id/bottom_view_select"
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/material_gallery_bottom_padding"
@@ -38,7 +38,7 @@
             tools:ignore="RelativeOverlap,RtlHardcoded" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/preBottomViewSelect"
+            android:id="@+id/bottom_view_select"
             android:layout_width="@dimen/material_gallery_bottom_button_width"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

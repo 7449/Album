@@ -58,7 +58,7 @@ data class GalleryBundle(
      */
     val multipleMaxCount: Int = 9,
     /**
-     * 用于配置加载图片的 Width Height
+     * LayoutManager
      */
     val spanCount: Int = 4,
     /**

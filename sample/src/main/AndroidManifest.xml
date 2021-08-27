@@ -8,7 +8,9 @@
         android:label="@string/appName"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,15 +22,9 @@
             android:configChanges="screenLayout|keyboardHidden"
             android:hardwareAccelerated="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
             android:name=".camera.SimpleMaterialGalleryCameraActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".crop.SimpleUCropMaterialGalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

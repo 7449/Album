@@ -2,7 +2,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
     dependencies {
         classpath(ClassPath.gradle)
@@ -10,7 +9,7 @@ buildscript {
         classpath(ClassPath.maven)
     }
 }
-allprojects {
+@Suppress("JcenterRepositoryObsolete") allprojects {
     repositories {
         maven(Maven.jitpack)
         google()

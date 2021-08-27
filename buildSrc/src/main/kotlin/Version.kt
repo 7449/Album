@@ -10,16 +10,19 @@ object Plugin {
 
 object Version {
     const val applicationId = "com.gallery.sample"
-    const val compileSdk = 30
-    const val minSdk = 22
-    const val targetSdk = 30
+    const val compileSdk = 31
+    const val minSdk = 21
+    const val targetSdk = 31
     const val versionCode = 1
     const val versionName = "1.0"
 }
 
 object ClassPath {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30"
     const val maven = "com.github.dcendents:android-maven-gradle-plugin:2.1"
+
+    // old version : ignore
+    // new version : 7.0.1 and https://services.gradle.org/distributions/gradle-7.0.2-bin.zip
     const val gradle = "com.android.tools.build:gradle:4.2.1"
 }
 
@@ -28,15 +31,15 @@ object Maven {
 }
 
 object Dep {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.10"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.30"
 
-    const val appcompat = "androidx.appcompat:appcompat:1.3.0"
-    const val fragment = "androidx.fragment:fragment:1.3.4"
+    const val appcompat = "androidx.appcompat:appcompat:1.3.1"
+    const val fragment = "androidx.fragment:fragment:1.3.6"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
-    const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
-    const val material = "com.google.android.material:material:1.3.0"
+    const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-beta01"
+    const val material = "com.google.android.material:material:1.4.0"
 
-    const val cameraview = "com.otaliastudios:cameraview:2.7.0"
+    const val cameraview = "com.otaliastudios:cameraview:2.7.1"
     const val cropper = "com.theartofdev.edmodo:android-image-cropper:2.8.0"
     const val glide = "com.github.bumptech.glide:glide:4.12.0"
 }

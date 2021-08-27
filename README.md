@@ -17,7 +17,7 @@
     
 #### simple camera
 
-  [SimpleGalleryCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleGalleryCameraActivity.kt)
+  [SimpleMaterialGalleryCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleMaterialGalleryCameraActivity.kt)
   
   [SimpleCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleCameraActivity.kt)
 
@@ -29,8 +29,8 @@
 
 | 黑色                                   | 主题色                                | 蓝色                              | 粉色                                  | 默认
 | :----:                                | :----:                                |:----:                             | :----:                               | :----: 
-| ![](./screenshot/gallery_black.png)   | ![](./screenshot/gallery_app.png)    | ![](./screenshot/gallery_blue.png) | ![](./screenshot/gallery_pink.png)   | ![](./screenshot/gallery_default.png)  
+| ![](./screenshot/gallery_black.webp)   | ![](./screenshot/gallery_app.webp)    | ![](./screenshot/gallery_blue.webp) | ![](./screenshot/gallery_pink.webp)   | ![](./screenshot/gallery_default.webp)  
 
 | 嵌套                                        | 自定义布局                                | Dialog                                | 预览                                  
 | :----:                                      | :----:                                  |:----:                                 | :----:                               
-| ![](./screenshot/gallery_combination.png)   | ![](./screenshot/gallery_banner.png)    | ![](./screenshot/gallery_dialog.png)  | ![](./screenshot/gallery_preview.png)  
+| ![](./screenshot/gallery_combination.webp)   | ![](./screenshot/gallery_banner.webp)    | ![](./screenshot/gallery_dialog.webp)  | ![](./screenshot/gallery_preview.webp)  

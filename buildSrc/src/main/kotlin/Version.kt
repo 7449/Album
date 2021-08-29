@@ -10,11 +10,16 @@ object Plugin {
 
 object Version {
     const val applicationId = "com.gallery.sample"
-    const val compileSdk = 31
+    const val compileSdk = 30
     const val minSdk = 21
-    const val targetSdk = 31
+    const val targetSdk = 30
     const val versionCode = 1
     const val versionName = "1.0"
+}
+
+object Args {
+    const val moduleName = "-module-name"
+    const val prefix = "com.github.7449.album."
 }
 
 object ClassPath {

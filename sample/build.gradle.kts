@@ -4,11 +4,11 @@ plugins {
     id(Plugin.kotlin_parcelize)
 }
 android {
-    compileSdkVersion(Version.compileSdk)
+    compileSdk = Version.compileSdk
     defaultConfig {
         applicationId = Version.applicationId
-        minSdkVersion(Version.minSdk)
-        targetSdkVersion(Version.targetSdk)
+        minSdk = Version.minSdk
+        targetSdk = Version.targetSdk
         versionCode = Version.versionCode
         versionName = Version.versionName
         vectorDrawables.useSupportLibrary = true

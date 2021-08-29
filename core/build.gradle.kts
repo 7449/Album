@@ -5,16 +5,13 @@ plugins {
     id(Plugin.kotlin_parcelize)
 }
 android {
-    compileSdkVersion(Version.compileSdk)
+    compileSdk = Version.compileSdk
     defaultConfig {
-        minSdkVersion(Version.minSdk)
-        targetSdkVersion(Version.targetSdk)
+        minSdk = Version.minSdk
+        targetSdk = Version.targetSdk
     }
     compileOptions {
-        kotlinOptions.freeCompilerArgs += listOf(
-            "-module-name",
-            "com.github.7449.album.core"
-        )
+        kotlinOptions.freeCompilerArgs += listOf(Args.moduleName, Args.prefix.plus(project.name))
     }
 }
 dependencies {

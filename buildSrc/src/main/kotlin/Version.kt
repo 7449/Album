@@ -5,14 +5,13 @@ object Plugin {
     const val library = "com.android.library"
     const val kotlin_android = "android"
     const val kotlin_parcelize = "kotlin-parcelize"
-    const val maven = "com.github.dcendents.android-maven"
 }
 
 object Version {
     const val applicationId = "com.gallery.sample"
-    const val compileSdk = 30
+    const val compileSdk = 31
     const val minSdk = 21
-    const val targetSdk = 30
+    const val targetSdk = 31
     const val versionCode = 1
     const val versionName = "1.0"
 }
@@ -23,12 +22,8 @@ object Args {
 }
 
 object ClassPath {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30"
-    const val maven = "com.github.dcendents:android-maven-gradle-plugin:2.1"
-
-    // old version : ignore
-    // new version : 7.0.1 and https://services.gradle.org/distributions/gradle-7.0.2-bin.zip
-    const val gradle = "com.android.tools.build:gradle:4.2.1"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+    const val gradle = "com.android.tools.build:gradle:7.0.3"
 }
 
 object Maven {
@@ -36,7 +31,7 @@ object Maven {
 }
 
 object Dep {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.30"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.1"
     const val fragment = "androidx.fragment:fragment:1.3.6"

@@ -1,6 +1,5 @@
 plugins {
     id(Plugin.library)
-//    id(Plugin.maven)
     kotlin(Plugin.kotlin_android)
     id(Plugin.kotlin_parcelize)
 }

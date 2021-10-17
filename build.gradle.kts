@@ -6,7 +6,6 @@ buildscript {
     dependencies {
         classpath(ClassPath.gradle)
         classpath(ClassPath.kotlin)
-        classpath(ClassPath.maven)
     }
 }
 @Suppress("JcenterRepositoryObsolete") allprojects {

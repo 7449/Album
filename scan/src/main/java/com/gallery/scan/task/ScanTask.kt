@@ -16,22 +16,22 @@ import com.gallery.scan.args.ScanEntityFactory
  * 扫描
  */
 internal class ScanTask<E>(
-    private val context: Context,
-    private val factory: ScanEntityFactory,
-    private val success: (ArrayList<E>) -> Unit
+        private val context: Context,
+        private val factory: ScanEntityFactory,
+        private val success: (ArrayList<E>) -> Unit
 ) : LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         args ?: throw KotlinNullPointerException("args == null")
-        val scanParameter = args.getCursorLoaderArgs()
+        val loaderArgs = args.getCursorLoaderArgs()
         val bundle = Bundle(args)
         return CursorLoader(
-            context,
-            scanParameter.uri,
-            scanParameter.projection,
-            scanParameter.createSelection(bundle),
-            scanParameter.createSelectionArgs(bundle),
-            scanParameter.sortOrder
+                context,
+                loaderArgs.uri,
+                loaderArgs.projection,
+                loaderArgs.createSelection(bundle),
+                loaderArgs.createSelectionArgs(bundle),
+                loaderArgs.sortOrder
         )
     }
 

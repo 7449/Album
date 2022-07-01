@@ -28,9 +28,7 @@ open class MaterialPreActivity : PrevCompatActivity() {
     }
 
     private val viewBinding: MaterialGalleryActivityPreviewBinding by lazy {
-        MaterialGalleryActivityPreviewBinding.inflate(
-            layoutInflater
-        )
+        MaterialGalleryActivityPreviewBinding.inflate(layoutInflater)
     }
 
     private val materialGalleryBundle: MaterialGalleryBundle by lazy {
@@ -47,7 +45,7 @@ open class MaterialPreActivity : PrevCompatActivity() {
         viewBinding.toolbar.setTitleTextColor(materialGalleryBundle.toolbarTextColor)
         val drawable = drawableExpand(materialGalleryBundle.toolbarIcon)
         drawable?.colorFilter =
-            PorterDuffColorFilter(materialGalleryBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+                PorterDuffColorFilter(materialGalleryBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.toolbar.navigationIcon = drawable
         viewBinding.toolbar.setBackgroundColor(materialGalleryBundle.toolbarBackground)
         viewBinding.toolbar.elevation = materialGalleryBundle.toolbarElevation
@@ -72,48 +70,50 @@ open class MaterialPreActivity : PrevCompatActivity() {
 
     override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
-        val imageView: GalleryImageView = GalleryImageView(container.context).apply {
+        val imageView = GalleryImageView(container.context).apply {
             layoutParams = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
             ).apply {
                 gravity = Gravity.CENTER
             }
         }
-        Glide.with(container.context).load(scanEntity.uri).into(imageView)
+        Glide.with(container.context)
+                .load(scanEntity.uri)
+                .into(imageView)
         container.addView(imageView)
     }
 
     override fun onPrevCreated(
-        delegate: IPrevDelegate,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
+            delegate: IPrevDelegate,
+            bundle: GalleryBundle,
+            savedInstanceState: Bundle?
     ) {
         delegate.rootView.setBackgroundColor(materialGalleryBundle.prevRootBackground)
         viewBinding.count.text =
-            format.format(delegate.selectCount, galleryConfig.multipleMaxCount)
+                format.format(delegate.selectCount, galleryConfig.multipleMaxCount)
         viewBinding.toolbar.title =
-            materialGalleryBundle.preTitle + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
+                materialGalleryBundle.preTitle + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
     }
 
     override fun onClickItemFileNotExist(
-        context: Context,
-        bundle: GalleryBundle,
-        scanEntity: ScanEntity
+            context: Context,
+            bundle: GalleryBundle,
+            scanEntity: ScanEntity
     ) {
         super.onClickItemFileNotExist(context, bundle, scanEntity)
         viewBinding.count.text =
-            format.format(requirePrevFragment.selectCount, bundle.multipleMaxCount)
+                format.format(requirePrevFragment.selectCount, bundle.multipleMaxCount)
     }
 
     override fun onPageSelected(position: Int) {
         viewBinding.toolbar.title =
-            materialGalleryBundle.preTitle + "(" + (position + 1) + "/" + requirePrevFragment.itemCount + ")"
+                materialGalleryBundle.preTitle + "(" + (position + 1) + "/" + requirePrevFragment.itemCount + ")"
     }
 
     override fun onChangedCheckBox() {
         viewBinding.count.text =
-            format.format(requirePrevFragment.selectCount, galleryConfig.multipleMaxCount)
+                format.format(requirePrevFragment.selectCount, galleryConfig.multipleMaxCount)
     }
 
     open fun onGallerySelectEmpty() {

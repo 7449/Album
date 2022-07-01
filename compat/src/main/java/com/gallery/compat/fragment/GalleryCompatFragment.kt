@@ -13,12 +13,12 @@ import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.args.ScanArgs
 import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.toScanFileEntity
+import com.gallery.core.extensions.toFileEntity
 import com.gallery.scan.Types
 import com.gallery.scan.extensions.isScanAllExpand
 
 open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragment_gallery) :
-    Fragment(layoutId) {
+        Fragment(layoutId) {
 
     companion object {
         fun newInstance(galleryBundle: GalleryBundle): GalleryCompatFragment {
@@ -32,11 +32,11 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragmen
 
     open fun createDelegate(): IScanDelegate {
         return ScanDelegateImpl(
-            this,
-            galleryCallbackOrNull<ICrop>()?.cropImpl,
-            galleryCallback(),
-            galleryCallbackOrNewInstance<IGalleryInterceptor> { object : IGalleryInterceptor {} },
-            galleryCallback()
+                this,
+                galleryCallbackOrNull<ICrop>()?.cropImpl,
+                galleryCallback(),
+                galleryCallbackOrNewInstance<IGalleryInterceptor> { object : IGalleryInterceptor {} },
+                galleryCallback()
         )
     }
 
@@ -48,7 +48,7 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragmen
         delegate.cameraSuccess()
     }
 
-    open fun onScanGallery(parent: Long = Types.Scan.SCAN_ALL, isCamera: Boolean = false) {
+    open fun onScanGallery(parent: Long = Types.Scan.ALL, isCamera: Boolean = false) {
         delegate.onScanGallery(parent, isCamera)
     }
 
@@ -73,7 +73,7 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragmen
     }
 
     open fun scanMultipleSuccess(arrayList: ArrayList<ScanEntity>) {
-        delegate.onScanMultipleSuccess(arrayList.toScanFileEntity())
+        delegate.onScanMultipleSuccess(arrayList.toFileEntity())
     }
 
     open val rootView: View

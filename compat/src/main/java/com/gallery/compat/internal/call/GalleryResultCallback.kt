@@ -10,7 +10,7 @@ import com.gallery.compat.extensions.parcelableExpand
 import com.gallery.core.extensions.orEmptyExpand
 
 open class GalleryResultCallback(private val galleryListener: GalleryListener) :
-    ActivityResultCallback<ActivityResult> {
+        ActivityResultCallback<ActivityResult> {
 
     override fun onActivityResult(intent: ActivityResult) {
         val bundleExpand: Bundle = intent.data?.extras.orEmptyExpand()

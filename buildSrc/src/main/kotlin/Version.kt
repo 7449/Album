@@ -1,6 +1,8 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
 object Plugin {
+    const val androidVersion = "7.2.1"
+    const val kotlinVersion = "1.6.10"
     const val application = "com.android.application"
     const val library = "com.android.library"
     const val kotlin_android = "android"
@@ -9,9 +11,9 @@ object Plugin {
 
 object Version {
     const val applicationId = "com.gallery.sample"
-    const val compileSdk = 31
+    const val compileSdk = 32
     const val minSdk = 21
-    const val targetSdk = 31
+    const val targetSdk = 32
     const val versionCode = 1
     const val versionName = "1.0"
 }
@@ -21,17 +23,8 @@ object Args {
     const val prefix = "com.github.7449.album."
 }
 
-object ClassPath {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
-    const val gradle = "com.android.tools.build:gradle:7.0.3"
-}
-
-object Maven {
-    const val jitpack = "https://jitpack.io"
-}
-
 object Dep {
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:${Plugin.kotlinVersion}"
 
     const val appcompat = "androidx.appcompat:appcompat:1.3.1"
     const val fragment = "androidx.fragment:fragment:1.3.6"
@@ -50,34 +43,26 @@ object DepList {
 
     /** core dependencies */
     val core = scan
-        .plus(Dep.appcompat)
-        .plus(Dep.viewPager2)
-        .plus(Dep.recyclerView)
+            .plus(Dep.appcompat)
+            .plus(Dep.viewPager2)
+            .plus(Dep.recyclerView)
 
     /** compat dependencies */
     val compat = core
 
     /** material dependencies */
     val material = compat
-        .plus(Dep.glide)
-        .plus(Dep.cropper)
+            .plus(Dep.glide)
+            .plus(Dep.cropper)
 
     /** wechat dependencies */
     val wechat = compat
-        .plus(Dep.glide)
-
-    /** qq dependencies */
-    val qq = compat
-        .plus(Dep.glide)
-
-    /** zhihu dependencies */
-    val zhihu = compat
-        .plus(Dep.glide)
+            .plus(Dep.glide)
 
     /** sample dependencies */
-    val sample = (scan + core + material + wechat + qq + zhihu)
-        .plus(Dep.material)
-        .plus(Dep.cameraview)
+    val sample = (scan + core + material + wechat)
+            .plus(Dep.material)
+            .plus(Dep.cameraview)
 }
 
 object DepLib {
@@ -93,16 +78,8 @@ object DepLib {
     /** wechat dependencies */
     val wechat = compat.plus(":compat")
 
-    /** qq dependencies */
-    val qq = compat.plus(":compat")
-
-    /** zhihu dependencies */
-    val zhihu = compat.plus(":compat")
-
     /** sample dependencies */
-    val sample = (wechat + material + qq + zhihu)
-        .plus(":qq")
-        .plus(":zhihu")
-        .plus(":wechat")
-        .plus(":material")
+    val sample = (wechat + material)
+            .plus(":wechat")
+            .plus(":material")
 }

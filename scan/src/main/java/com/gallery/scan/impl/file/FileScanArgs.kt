@@ -13,9 +13,9 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 class FileScanArgs(
-    private val scanTypeArray: Array<String>?,
-    private val scanSortField: String = MediaStore.Files.FileColumns.DATE_MODIFIED,
-    private val scanSort: String = Types.Sort.DESC,
+        private val scanTypeArray: Array<String>?,
+        private val scanSortField: String = MediaStore.Files.FileColumns.DATE_MODIFIED,
+        private val scanSort: String = Types.Sort.DESC,
 ) : CursorLoaderArgs(FileColumns.uri, FileColumns.columns, "$scanSortField $scanSort") {
 
     override fun createSelection(args: Bundle): String? {
@@ -24,14 +24,14 @@ class FileScanArgs(
         scanTypeArray ?: return null
         return when (mimeType) {
             Types.Result.SINGLE -> resultSelection(
-                args.getLong(MediaStore.Files.FileColumns._ID),
-                scanTypeArray
+                    args.getLong(MediaStore.Files.FileColumns._ID),
+                    scanTypeArray
             )
-            Types.Result.MULTIPLE -> if (parent == Types.Scan.SCAN_ALL) scanTypeSelection(
-                scanTypeArray
+            Types.Result.MULTIPLE -> if (parent == Types.Scan.ALL) scanTypeSelection(
+                    scanTypeArray
             ) else parentSelection(
-                parent,
-                scanTypeArray
+                    parent,
+                    scanTypeArray
             )
             else -> throw KotlinNullPointerException("mime_type == [$mimeType]")
         }
@@ -44,14 +44,14 @@ class FileScanArgs(
         private const val APPEND = " ${MediaStore.Files.FileColumns.MEDIA_TYPE}=? OR"
 
         private fun parentSelection(parent: Long, scanTypeArray: Array<String>) =
-            "${MediaStore.Files.FileColumns.PARENT}=$parent AND (${scanTypeSelection(scanTypeArray)})"
+                "${MediaStore.Files.FileColumns.PARENT}=$parent AND (${scanTypeSelection(scanTypeArray)})"
 
         private fun resultSelection(id: Long, scanTypeArray: Array<String>) =
-            "${BaseColumns._ID}=$id AND (${scanTypeSelection(scanTypeArray)})"
+                "${BaseColumns._ID}=$id AND (${scanTypeSelection(scanTypeArray)})"
 
         private fun scanTypeSelection(scanTypeArray: Array<String>): String {
             val defaultSelection = StringBuilder(" ${MediaStore.Files.FileColumns.SIZE} > 0 AND ")
-            if (scanTypeArray.isNullOrEmpty()) {
+            if (scanTypeArray.isEmpty()) {
                 return defaultSelection.toString().removeSuffix("AND ")
             }
             scanTypeArray.forEach { _ -> defaultSelection.append(APPEND) }

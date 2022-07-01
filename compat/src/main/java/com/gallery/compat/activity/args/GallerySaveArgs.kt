@@ -13,15 +13,15 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 internal data class GallerySaveArgs(
-    val finderName: String,
-    val finderList: ArrayList<ScanEntity>,
+        val finderName: String,
+        val finderList: ArrayList<ScanEntity>,
 ) : Parcelable {
     companion object {
         private const val Key = "gallerySaveArgs"
 
         fun newSaveInstance(
-            finderName: String,
-            finderList: ArrayList<ScanEntity>
+                finderName: String,
+                finderList: ArrayList<ScanEntity>
         ): GallerySaveArgs {
             return GallerySaveArgs(finderName, finderList)
         }

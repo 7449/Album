@@ -16,34 +16,35 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class PrevArgs(
-    /**
-     * 当前文件的parentId,用于扫描数据库获取对应的数
-     * 如果是预览进入的话可传[Types.Scan.SCAN_NONE]，
-     * 这样会跳过扫描数据库，直接调用[IPrevDelegate.updateEntity]
-     * 这个时候展示的数据就是[selectList]
-     */
-    val parentId: Long,
-    /**
-     * 当前选中的数据,如果是预览进入则认为所有数据==[selectList]
-     */
-    val selectList: ArrayList<ScanEntity>,
-    /**
-     * [GalleryBundle] 参数
-     */
-    val config: GalleryBundle?,
-    /**
-     * position 需要跳转的位置
-     */
-    val position: Int,
-    /**
-     * [scanAlone] 是否是单独扫描某些类型的数据
-     * 如果[parentId] == [Types.Scan.SCAN_NONE] 则认为点击的是预览而不是item,则未选中数据和选中数据应该一致
-     * 所以调用该属性的前提是[parentId] != [Types.Scan.SCAN_NONE]
-     * 判断[scanAlone] == [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]] ，
-     * 如果不是，则使用 [scanAlone],如果是，则扫描 [GalleryBundle.scanType]类型的数据
-     * 如果使用自定义 scanType,则[parentId]传 [Types.Scan.SCAN_ALL] 比较合适
-     */
-    val scanAlone: Int,
+        /**
+         * 当前文件的parentId,用于扫描数据库获取对应的数
+         * 如果是预览进入的话可传[Types.Scan.NONE]，
+         * 这样会跳过扫描数据库，直接调用[IPrevDelegate.updateEntity]
+         * 这个时候展示的数据就是[selectList]
+         */
+        val parentId: Long,
+        /**
+         * 当前选中的数据,如果是预览进入则认为所有数据==[selectList]
+         */
+        val selectList: ArrayList<ScanEntity>,
+        /**
+         * [GalleryBundle] 参数
+         */
+        val config: GalleryBundle?,
+        /**
+         * position 需要跳转的位置
+         */
+        val position: Int,
+        /**
+         * [scanSingleType] 是否单独扫描某些类型的数据
+         * 如果[parentId] == [Types.Scan.NONE] 则认为点击的是预览而不是item,则未选中数据和选中数据应该一致
+         * 所以调用该属性的前提是[parentId] != [Types.Scan.NONE]
+         * 判断[scanSingleType] == [MediaStore.Files.FileColumns.MEDIA_TYPE_NONE]，
+         * 如果不是，则使用[scanSingleType],如果是，则扫描[GalleryBundle.scanType]类型的数据
+         * 如果使用自定义 scanType,则[parentId]传[Types.Scan.ALL]比较合适
+         * TIP:好像是为了扫描全部视频加的参数,具体可见 weChat Library
+         */
+        val scanSingleType: Int,
 ) : Parcelable {
     companion object {
 
@@ -55,11 +56,11 @@ data class PrevArgs(
          */
         fun newSaveInstance(position: Int, selectList: ArrayList<ScanEntity>): PrevArgs {
             return PrevArgs(
-                Types.Scan.SCAN_ALL,
-                selectList,
-                null,
-                position,
-                MediaStore.Files.FileColumns.MEDIA_TYPE_NONE
+                    Types.Scan.ALL,
+                    selectList,
+                    null,
+                    position,
+                    MediaStore.Files.FileColumns.MEDIA_TYPE_NONE
             )
         }
 
@@ -73,13 +74,13 @@ data class PrevArgs(
 
         val Bundle.prevArgsOrDefault
             get() = prevArgs
-                ?: PrevArgs(
-                    Types.Scan.SCAN_ALL,
-                    arrayListOf(),
-                    GalleryBundle(),
-                    0,
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_NONE
-                )
+                    ?: PrevArgs(
+                            Types.Scan.ALL,
+                            arrayListOf(),
+                            GalleryBundle(),
+                            0,
+                            MediaStore.Files.FileColumns.MEDIA_TYPE_NONE
+                    )
 
         val PrevArgs.configOrDefault
             get() = config ?: GalleryBundle()

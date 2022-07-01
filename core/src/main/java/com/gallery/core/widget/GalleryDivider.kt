@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class GalleryDivider(private val divider: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         val position: Int = parent.getChildAdapterPosition(view)

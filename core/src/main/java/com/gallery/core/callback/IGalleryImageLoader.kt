@@ -13,11 +13,11 @@ interface IGalleryImageLoader {
      * 首页图片加载
      */
     fun onDisplayGallery(
-        width: Int,
-        height: Int,
-        scanEntity: ScanEntity,
-        container: FrameLayout,
-        checkBox: TextView
+            width: Int,
+            height: Int,
+            scanEntity: ScanEntity,
+            container: FrameLayout,
+            checkBox: TextView
     ) {
     }
 
@@ -25,8 +25,8 @@ interface IGalleryImageLoader {
      * 目录图片加载
      */
     fun onDisplayGalleryThumbnails(
-        finderEntity: ScanEntity,
-        container: FrameLayout
+            finderEntity: ScanEntity,
+            container: FrameLayout
     ) {
     }
 
@@ -34,8 +34,8 @@ interface IGalleryImageLoader {
      * 预览页图片加载
      */
     fun onDisplayGalleryPrev(
-        scanEntity: ScanEntity,
-        container: FrameLayout
+            scanEntity: ScanEntity,
+            container: FrameLayout
     ) {
     }
 }

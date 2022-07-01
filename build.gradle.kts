@@ -1,18 +1,5 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath(ClassPath.gradle)
-        classpath(ClassPath.kotlin)
-    }
-}
-@Suppress("JcenterRepositoryObsolete") allprojects {
-    repositories {
-        maven(Maven.jitpack)
-        google()
-        mavenCentral()
-        jcenter()
-    }
+plugins {
+    id(Plugin.application) version Plugin.androidVersion apply false
+    id(Plugin.library) version Plugin.androidVersion apply false
+    kotlin(Plugin.kotlin_android) version Plugin.kotlinVersion apply false
 }

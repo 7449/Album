@@ -5,7 +5,7 @@
 			maven { url 'https://jitpack.io' }
 		}
 	}
-	
+
 [![](https://jitpack.io/v/7449/Album.svg)](https://jitpack.io/#7449/Album)
 
 #### dependencies
@@ -14,23 +14,23 @@
     implementation "com.github.7449.Album:ui:$lastVersion"
     implementation "com.github.7449.Album:core:$lastVersion"
     implementation "com.github.7449.Album:scan:$lastVersion"
-    
+
 #### simple camera
 
-  [SimpleMaterialGalleryCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleMaterialGalleryCameraActivity.kt)
-  
-  [SimpleCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleCameraActivity.kt)
+[SimpleMaterialGalleryCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleMaterialGalleryCameraActivity.kt)
+
+[SimpleCameraActivity](./sample/src/main/java/com/gallery/sample/camera/SimpleCameraActivity.kt)
 
 #### simple dialog
 
-  [SimpleGalleryDialog](./sample/src/main/java/com/gallery/sample/dialog/SimpleGalleryDialog.kt)
+[SimpleGalleryDialog](./sample/src/main/java/com/gallery/sample/dialog/SimpleGalleryDialog.kt)
 
 ## Screenshot
 
 | 黑色                                   | 主题色                                | 蓝色                              | 粉色                                  | 默认
 | :----:                                | :----:                                |:----:                             | :----:                               | :----: 
-| ![](./screenshot/gallery_black.png)   | ![](./screenshot/gallery_app.png)    | ![](./screenshot/gallery_blue.png) | ![](./screenshot/gallery_pink.png)   | ![](./screenshot/gallery_default.png)  
+| ![](./screenshot/gallery_black.png)   | ![](./screenshot/gallery_app.png)    | ![](./screenshot/gallery_blue.png) | ![](./screenshot/gallery_pink.png)   | ![](./screenshot/gallery_default.png)
 
-| 嵌套                                        | 自定义布局                                | Dialog                                | 预览                                  
+| 嵌套                                        | 自定义布局                                | Dialog                                | 预览
 | :----:                                      | :----:                                  |:----:                                 | :----:                               
 | ![](./screenshot/gallery_combination.png)   | ![](./screenshot/gallery_banner.png)    | ![](./screenshot/gallery_dialog.png)  | ![](./screenshot/gallery_preview.png)  

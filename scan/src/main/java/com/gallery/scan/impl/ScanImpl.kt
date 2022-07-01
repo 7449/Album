@@ -20,8 +20,8 @@ import com.gallery.scan.task.ScanTask
  * 文件扫描工具类
  */
 class ScanImpl<E>(
-    private val scanCore: ScanCore,
-    private val action: Result<E>.() -> Unit
+        private val scanCore: ScanCore,
+        private val action: Result<E>.() -> Unit
 ) : Scan<E>, LifecycleEventObserver {
 
     companion object {
@@ -30,8 +30,8 @@ class ScanImpl<E>(
 
     private val objects: Any = scanCore.scanOwnerGeneric()
     private val loaderManager = LoaderManager.getInstance(scanCore.scanOwnerGeneric())
-    private val factory = scanCore.scanEntityFactory
-    private val loaderArgs = scanCore.scanCursorLoaderArgs
+    private val factory = scanCore.factory
+    private val loaderArgs = scanCore.loaderArgs
     private val context by lazy {
         when (objects) {
             is Fragment -> objects.requireContext().applicationContext
@@ -56,12 +56,12 @@ class ScanImpl<E>(
             return
         }
         loaderManager.restartLoader(
-            SCAN_LOADER_ID,
-            loaderArgs.createScanMultipleArgs(args),
-            ScanTask<E>(context, factory) {
-                action.invoke(Result.Multiple(it))
-                cleared()
-            })
+                SCAN_LOADER_ID,
+                loaderArgs.createScanMultipleArgs(args),
+                ScanTask<E>(context, factory) {
+                    action.invoke(Result.Multiple(it))
+                    cleared()
+                })
     }
 
     override fun scanSingle(args: Bundle) {
@@ -69,12 +69,12 @@ class ScanImpl<E>(
             return
         }
         loaderManager.restartLoader(
-            SCAN_LOADER_ID,
-            loaderArgs.createScanSingleArgs(args),
-            ScanTask<E>(context, factory) {
-                action.invoke(Result.Single(if (it.isEmpty()) null else it[0]))
-                cleared()
-            })
+                SCAN_LOADER_ID,
+                loaderArgs.createScanSingleArgs(args),
+                ScanTask<E>(context, factory) {
+                    action.invoke(Result.Single(it.firstOrNull()))
+                    cleared()
+                })
     }
 
     override fun cleared() {

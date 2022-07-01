@@ -1,15 +1,15 @@
 package com.gallery.sample
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import com.gallery.compat.Gallery
 import com.gallery.compat.internal.call.GalleryResultCallback
-import com.gallery.core.extensions.isVideoScanExpand
 import com.gallery.core.extensions.safeToastExpand
+import com.gallery.core.widget.GalleryTextViewConfig
 import com.gallery.sample.camera.SimpleMaterialGalleryCameraActivity
 import com.gallery.sample.databinding.SimpleActivityMainBinding
 import com.gallery.sample.dialog.SimpleGalleryDialog
@@ -19,18 +19,18 @@ import com.gallery.ui.material.activity.MaterialGalleryActivity
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatGallery
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : GalleryListActivity() {
 
     private val galleryLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            GalleryResultCallback(SimpleGalleryListener(this))
-        )
+            registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult(),
+                    GalleryResultCallback(SimpleGalleryListener(this))
+            )
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            WeChatGalleryResultCallback(SimpleGalleryListener(this))
-        )
+            registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult(),
+                    WeChatGalleryResultCallback(SimpleGalleryListener(this))
+            )
     private val viewBinding: SimpleActivityMainBinding by lazy {
         SimpleActivityMainBinding.inflate(layoutInflater)
     }
@@ -83,12 +83,12 @@ class MainActivity : AppCompatActivity() {
         viewBinding.includeScan.scanRg.setOnCheckedChangeListener { _, i ->
             when (i) {
                 R.id.scan_image -> scanArray =
-                    intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+                        intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
                 R.id.scan_video -> scanArray =
-                    intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+                        intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
                 R.id.scan_mix -> scanArray = intArrayOf(
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                        MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
+                        MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
                 )
             }
         }
@@ -121,33 +121,37 @@ class MainActivity : AppCompatActivity() {
             }
             val newBundle = galleryBundle.copy(scanType = scanArray)
             Gallery.newInstance(
-                activity = this,
-                clz = cls ?: MaterialGalleryActivity::class.java,
-                bundle = newBundle.copy(
-                    scanType = scanArray,
-                    cameraText = if (newBundle.isVideoScanExpand) "摄像" else "拍照",
-                    scanSort = sortType,
-                    crop = viewBinding.includeSetting.cropCropper.isChecked,
-                    radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked,
-                    cameraNameSuffix = if (newBundle.isVideoScanExpand) "mp4" else "jpg"
-                ),
-                customBundle = galleryArgsBundle.copy(
-                    toolbarText = if (newBundle.isVideoScanExpand) "视频选择" else "图片选择"
-                ),
-                launcher = galleryLauncher
+                    activity = this,
+                    clz = cls ?: MaterialGalleryActivity::class.java,
+                    bundle = newBundle.copy(
+                            scanType = scanArray,
+                            cameraTextConfig = GalleryTextViewConfig(if (newBundle.isVideoScanExpand) "摄像" else "拍照", 16F, Color.WHITE),
+                            sort = sortType to MediaStore.Files.FileColumns.DATE_MODIFIED,
+                            crop = viewBinding.includeSetting.cropCropper.isChecked,
+                            radio = isRadio || viewBinding.includeSetting.cropCropper.isChecked,
+                            cameraName = System.currentTimeMillis().toString() to if (newBundle.isVideoScanExpand) "mp4" else "jpg",
+                    ),
+                    customBundle = galleryArgsBundle.copy(
+                            toolbarText = if (newBundle.isVideoScanExpand) "视频选择" else "图片选择"
+                    ),
+                    launcher = galleryLauncher
             )
         }
         viewBinding.customCamera.setOnClickListener {
             Gallery.newInstance(
-                activity = this,
-                launcher = galleryLauncher,
-                clz = SimpleMaterialGalleryCameraActivity::class.java
+                    activity = this,
+                    launcher = galleryLauncher,
+                    clz = SimpleMaterialGalleryCameraActivity::class.java
             )
         }
         viewBinding.dialog.setOnClickListener {
             SimpleGalleryDialog.newInstance()
-                .show(supportFragmentManager, SimpleGalleryDialog::class.java.simpleName)
+                    .show(supportFragmentManager, SimpleGalleryDialog::class.java.simpleName)
         }
+    }
+
+    override fun getGalleryListRootViewId(): Int {
+        return R.id.temp_gallery
     }
 
 }

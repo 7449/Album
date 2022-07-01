@@ -19,29 +19,29 @@ fun String.mkdirsFileExpand(child: String): File {
 
 /** 获取文件输出路径 */
 fun Context.lowerVersionFileExpand(fileName: String): File = File(
-    if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
-        || !Environment.isExternalStorageRemovable()
-    ) {
-        @Suppress("DEPRECATION")
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
-    } else {
-        externalCacheDir?.path ?: cacheDir.path
-    }, fileName
+        if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
+                || !Environment.isExternalStorageRemovable()
+        ) {
+            @Suppress("DEPRECATION")
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
+        } else {
+            externalCacheDir?.path ?: cacheDir.path
+        }, fileName
 )
 
 /** 扫描文件 , content 开头的先获取path 再更新，file 开头的直接获取path更新
  *  刷新数据库要用到文件路径，所以要获取 path */
 fun Activity.scanFileExpand(uri: Uri, action: (uri: Uri) -> Unit) {
     scanFileExpand(
-        when (uri.scheme) {
-            //Android Q `MediaStore.MediaColumns.DATA` 过时
-            //但`MediaScannerConnection`需要路径进行扫描
-            ContentResolver.SCHEME_CONTENT ->
-                @Suppress("DEPRECATION")
-                contentResolver.queryDataExpand(uri).orEmpty()
-            ContentResolver.SCHEME_FILE -> uri.path.orEmpty()
-            else -> throw RuntimeException("unsupported uri:$uri")
-        }, action
+            when (uri.scheme) {
+                //Android Q `MediaStore.MediaColumns.DATA` 过时
+                //但`MediaScannerConnection`需要路径进行扫描
+                ContentResolver.SCHEME_CONTENT ->
+                    @Suppress("DEPRECATION")
+                    contentResolver.queryDataExpand(uri).orEmpty()
+                ContentResolver.SCHEME_FILE -> uri.path.orEmpty()
+                else -> throw RuntimeException("unsupported uri:$uri")
+            }, action
     )
 }
 

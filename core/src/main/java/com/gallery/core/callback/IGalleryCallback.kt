@@ -16,9 +16,9 @@ interface IGalleryCallback {
      * [IScanDelegate.onCreate]触发
      */
     fun onGalleryCreated(
-        delegate: IScanDelegate,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
+            delegate: IScanDelegate,
+            bundle: GalleryBundle,
+            savedInstanceState: Bundle?
     )
 
     /**
@@ -63,11 +63,11 @@ interface IGalleryCallback {
      * 可以跳转到预览页
      */
     fun onPhotoItemClick(
-        context: Context,
-        bundle: GalleryBundle,
-        scanEntity: ScanEntity,
-        position: Int,
-        parentId: Long
+            context: Context,
+            bundle: GalleryBundle,
+            scanEntity: ScanEntity,
+            position: Int,
+            parentId: Long
     )
 
     /**

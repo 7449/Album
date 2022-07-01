@@ -40,9 +40,9 @@ interface IGalleryPrevCallback {
      * [IPrevDelegate.itemViewClick]
      */
     fun onClickItemFileNotExist(
-        context: Context,
-        bundle: GalleryBundle,
-        scanEntity: ScanEntity
+            context: Context,
+            bundle: GalleryBundle,
+            scanEntity: ScanEntity
     )
 
     /**
@@ -50,9 +50,9 @@ interface IGalleryPrevCallback {
      * [GalleryBundle.multipleMaxCount]
      */
     fun onClickItemBoxMaxCount(
-        context: Context,
-        bundle: GalleryBundle,
-        scanEntity: ScanEntity
+            context: Context,
+            bundle: GalleryBundle,
+            scanEntity: ScanEntity
     )
 
     /**

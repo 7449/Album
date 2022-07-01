@@ -13,12 +13,12 @@ enum class PermissionCode {
 
 /** 检查相机权限 */
 fun Fragment.checkCameraPermissionExpand() =
-    requireContext().checkSelfPermissionExpand(Manifest.permission.CAMERA)
+        requireContext().checkSelfPermissionExpand(Manifest.permission.CAMERA)
 
 /** 检查读写权限 */
 fun Fragment.checkWritePermissionExpand() =
-    requireContext().checkSelfPermissionExpand(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        requireContext().checkSelfPermissionExpand(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 /** 判断是否获得权限 */
 fun Context.checkSelfPermissionExpand(name: String) =
-    ContextCompat.checkSelfPermission(this, name) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(this, name) == PackageManager.PERMISSION_GRANTED

@@ -87,7 +87,7 @@ interface IScanDelegate {
     /**
      * 扫描图库
      */
-    fun onScanGallery(parent: Long = Types.Scan.SCAN_ALL, isCamera: Boolean = false)
+    fun onScanGallery(parent: Long = Types.Scan.ALL, isCamera: Boolean = false)
 
     /**
      * 扫描单个数据

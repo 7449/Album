@@ -14,25 +14,25 @@ val AppCompatActivity.requirePrevFragment: PrevCompatFragment
 
 val AppCompatActivity.galleryFragment: GalleryCompatFragment?
     get() = supportFragmentManager.findFragmentByTag(
-        GalleryCompatFragment::class.java.simpleName
+            GalleryCompatFragment::class.java.simpleName
     ) as? GalleryCompatFragment
 
 val AppCompatActivity.prevFragment: PrevCompatFragment?
     get() = supportFragmentManager.findFragmentByTag(
-        PrevCompatFragment::class.java.simpleName
+            PrevCompatFragment::class.java.simpleName
     ) as? PrevCompatFragment
 
 inline fun <reified T : Parcelable> Bundle?.parcelableExpand(key: String): T =
-    parcelableOrDefault(key)
+        parcelableOrDefault(key)
 
 inline fun <reified T : Parcelable> Bundle?.parcelableArrayListExpand(key: String): ArrayList<T> =
-    getObjExpand(key) { arrayListOf() }
+        getObjExpand(key) { arrayListOf() }
 
 inline fun <reified T : Parcelable> Bundle?.parcelableOrDefault(
-    key: String,
-    defaultValue: Parcelable
-    = this?.getParcelable<T>(key)!!
+        key: String,
+        defaultValue: Parcelable
+        = this?.getParcelable<T>(key)!!
 ): T = getObjExpand(key) { defaultValue as T }
 
 inline fun <reified T> Bundle?.getObjExpand(key: String, action: () -> T): T = this?.get(key) as? T
-    ?: action.invoke()
+        ?: action.invoke()

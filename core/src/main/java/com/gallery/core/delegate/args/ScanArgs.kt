@@ -20,7 +20,7 @@ import kotlinx.parcelize.Parcelize
  * 1.
  *  调用[IPrevDelegate.resultBundle]获取需要的参数
  *  其中
- *  [parentId]默认参数 [Types.Scan.SCAN_ALL]
+ *  [parentId]默认参数 [Types.Scan.ALL]
  *  [fileUri]默认参数 [Uri.EMPTY]
  *  [isRefresh]是否需要合并数据并刷新
  *  [selectList]选中的数据
@@ -36,24 +36,24 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ScanArgs(
-    val parentId: Long,
-    val fileUri: Uri,
-    val isRefresh: Boolean,
-    val selectList: ArrayList<ScanEntity>,
+        val parentId: Long,
+        val fileUri: Uri,
+        val isRefresh: Boolean,
+        val selectList: ArrayList<ScanEntity>,
 ) : Parcelable {
     companion object {
         private const val Key = "scanArgs"
 
         fun newSaveInstance(
-            parentId: Long,
-            fileUri: Uri,
-            selectList: ArrayList<ScanEntity>
+                parentId: Long,
+                fileUri: Uri,
+                selectList: ArrayList<ScanEntity>
         ): ScanArgs {
             return ScanArgs(parentId, fileUri, false, selectList)
         }
 
         fun newResultInstance(selectList: ArrayList<ScanEntity>, isRefresh: Boolean): ScanArgs {
-            return ScanArgs(Types.Scan.SCAN_ALL, Uri.EMPTY, isRefresh, selectList)
+            return ScanArgs(Types.Scan.ALL, Uri.EMPTY, isRefresh, selectList)
         }
 
         fun ScanArgs.putScanArgs(bundle: Bundle = Bundle()): Bundle {

@@ -22,7 +22,7 @@ class SimpleCameraActivity : AppCompatActivity() {
 
     private val viewBinding: SimpleActivityCameraBinding by lazy {
         SimpleActivityCameraBinding.inflate(
-            layoutInflater
+                layoutInflater
         )
     }
 
@@ -47,7 +47,7 @@ class SimpleCameraActivity : AppCompatActivity() {
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
             val fileUri: Uri =
-                intent.extras?.getParcelable<Uri>(CUSTOM_CAMERA_OUT_PUT_URI).orEmptyExpand()
+                    intent.extras?.getParcelable<Uri>(CUSTOM_CAMERA_OUT_PUT_URI).orEmptyExpand()
             Log.i("Camera", fileUri.toString())
             contentResolver.openOutputStream(fileUri)?.use { it.write(result.data) }
             setResult(Activity.RESULT_OK)

@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class WeChatPrevSaveArgs(
-    val ids: ArrayList<Long>,
+        val ids: ArrayList<Long>,
 ) : Parcelable {
     companion object {
         private const val Key = "weChatPrevSaveArgs"

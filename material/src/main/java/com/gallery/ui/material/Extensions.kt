@@ -12,7 +12,7 @@ import com.gallery.ui.material.args.MaterialGalleryBundle
 
 /** 获取自定义颜色Drawable */
 fun Context.minimumDrawableExpand(@DrawableRes id: Int, @ColorInt color: Int): Drawable? =
-    drawableExpand(id)?.minimumWidthAndHeightDrawableExpand(color)
+        drawableExpand(id)?.minimumWidthAndHeightDrawableExpand(color)
 
 /** 获取自定义Drawable */
 fun Drawable.minimumWidthAndHeightDrawableExpand(@ColorInt color: Int): Drawable {

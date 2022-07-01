@@ -9,13 +9,13 @@ import com.gallery.ui.wechat.WeChatConfig
 import com.gallery.ui.wechat.extension.getBooleanExpand
 
 class WeChatGalleryResultCallback(
-    private val galleryListener: GalleryListener,
+        private val galleryListener: GalleryListener,
 ) : GalleryResultCallback(galleryListener) {
 
     override fun onMultipleDataResult(bundle: Bundle) {
         galleryListener.onGalleryResources(
-            bundle.parcelableArrayListExpand(GalleryConfig.GALLERY_MULTIPLE_DATA),
-            bundle.getBooleanExpand(WeChatConfig.FULL_IMAGE)
+                bundle.parcelableArrayListExpand(GalleryConfig.GALLERY_MULTIPLE_DATA),
+                bundle.getBooleanExpand(WeChatConfig.FULL_IMAGE)
         )
     }
 

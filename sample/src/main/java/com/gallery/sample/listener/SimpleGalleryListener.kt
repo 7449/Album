@@ -11,9 +11,9 @@ open class SimpleGalleryListener(private val activity: FragmentActivity) : Galle
 
     private fun showDialog(msg: String) {
         AlertDialog
-            .Builder(activity)
-            .setMessage(msg)
-            .show()
+                .Builder(activity)
+                .setMessage(msg)
+                .show()
     }
 
     override fun onGalleryCropResource(uri: Uri, vararg args: Any) {

@@ -27,12 +27,12 @@ interface ScanCore {
     /**
      * 扫描所需参数
      */
-    val scanCursorLoaderArgs: CursorLoaderArgs
+    val loaderArgs: CursorLoaderArgs
 
     /**
-     * 自定义实体类参数
+     * 自定义获取实体类
      */
-    val scanEntityFactory: ScanEntityFactory
+    val factory: ScanEntityFactory
 
     /**
      *  [LoaderManager.getInstance]

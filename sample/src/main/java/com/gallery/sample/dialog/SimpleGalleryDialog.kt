@@ -1,5 +1,6 @@
 package com.gallery.sample.dialog
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -20,7 +21,7 @@ import com.gallery.core.GalleryBundle
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.safeToastExpand
+import com.gallery.core.widget.GalleryRecyclerViewConfig
 import com.gallery.sample.R
 
 class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryImageLoader {
@@ -38,15 +39,15 @@ class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryIma
         val params: WindowManager.LayoutParams = window.attributes
         params.gravity = Gravity.BOTTOM
         params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = resources.displayMetrics.widthPixels
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT
         window.attributes = params
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         val view: View = inflater.inflate(R.layout.simple_dialog_gallery, container, false)
@@ -58,30 +59,25 @@ class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryIma
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)?.let {
             childFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
-        } ?: childFragmentManager
-            .beginTransaction()
-            .add(
-                R.id.galleryFragment,
+        } ?: childFragmentManager.beginTransaction().add(R.id.galleryFragment,
                 GalleryCompatFragment.newInstance(
-                    GalleryBundle(
-                        radio = true,
-                        crop = false,
-                        hideCamera = false,
-                        spanCount = 1,
-                        dividerWidth = 1,
-                        orientation = LinearLayoutManager.HORIZONTAL
-                    )
-                ),
-                GalleryCompatFragment::class.java.simpleName
-            )
-            .commitAllowingStateLoss()
+                        GalleryBundle(
+                                radio = true,
+                                crop = false,
+                                hideCamera = true,
+                                listViewConfig = GalleryRecyclerViewConfig(
+                                        3, LinearLayoutManager.HORIZONTAL, 1
+                                ),
+                        )
+                ), GalleryCompatFragment::class.java.simpleName
+        ).commitAllowingStateLoss()
     }
 
     private fun slideToUp(view: View) {
         val slide: Animation = TranslateAnimation(
-            Animation.RELATIVE_TO_SELF, 0.0f,
-            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-            1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+                1.0f, Animation.RELATIVE_TO_SELF, 0.0f
         )
         slide.duration = 400
         slide.fillAfter = true
@@ -90,35 +86,37 @@ class SimpleGalleryDialog : DialogFragment(), SimpleGalleryCallback, IGalleryIma
     }
 
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
-        scanEntity.toString().safeToastExpand(requireActivity())
-        dismiss()
+        AlertDialog
+                .Builder(requireActivity())
+                .setMessage(scanEntity.toString())
+                .show()
     }
 
     override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
+            delegate: IScanDelegate,
+            bundle: GalleryBundle,
+            savedInstanceState: Bundle?
     ) {
         delegate.rootView.setBackgroundColor(Color.BLACK)
     }
 
     override fun onDisplayGallery(
-        width: Int,
-        height: Int,
-        scanEntity: ScanEntity,
-        container: FrameLayout,
-        checkBox: TextView
+            width: Int,
+            height: Int,
+            scanEntity: ScanEntity,
+            container: FrameLayout,
+            checkBox: TextView
     ) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context)
-            .load(scanEntity.uri)
-            .apply(
-                RequestOptions()
-                    .centerCrop()
-                    .override(width, height)
-            )
-            .into(imageView)
+                .load(scanEntity.uri)
+                .apply(
+                        RequestOptions()
+                                .centerCrop()
+                                .override(width, height)
+                )
+                .into(imageView)
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 

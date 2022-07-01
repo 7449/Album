@@ -14,14 +14,14 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class PrevCompatArgs(
-    /**
-     * 预览[PrevDelegateImpl]需要的数据
-     */
-    val prevArgs: PrevArgs,
-    /**
-     * 自定义参数配置
-     */
-    val customBundle: Parcelable?,
+        /**
+         * 预览[PrevDelegateImpl]需要的数据
+         */
+        val prevArgs: PrevArgs,
+        /**
+         * 自定义参数配置
+         */
+        val customBundle: Parcelable?,
 ) : Parcelable {
     companion object {
         private const val Key = "prevCompatArgs"
@@ -33,8 +33,8 @@ data class PrevCompatArgs(
 
         val Bundle.prevCompatArgsOrDefault
             get() = getParcelable(Key) ?: PrevCompatArgs(
-                prevArgsOrDefault,
-                Bundle()
+                    prevArgsOrDefault,
+                    Bundle()
             )
     }
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.gallery.compat.activity.args.PrevCompatArgs
 import com.gallery.compat.activity.args.PrevCompatArgs.Companion.prevCompatArgsOrDefault
 import com.gallery.compat.activity.args.PrevCompatArgs.Companion.putPrevArgs
+import com.gallery.compat.extensions.prevFragment
 import com.gallery.compat.extensions.requirePrevFragment
 import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.compat.fragment.addFragmentExpand
@@ -25,7 +26,7 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmptyExpand
 
 abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGalleryImageLoader,
-    IGalleryPrevInterceptor {
+        IGalleryPrevInterceptor {
 
     companion object {
         /** 预览页toolbar返回 result_code */
@@ -38,14 +39,14 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
         const val RESULT_CODE_SELECT = -17
 
         fun newInstance(
-            context: Context,
-            /**
-             * [PrevArgs]
-             * and
-             * [Parcelable] // 用于存放以及获取自定义数据
-             */
-            args: PrevCompatArgs,
-            cla: Class<out PrevCompatActivity>
+                context: Context,
+                /**
+                 * [PrevArgs]
+                 * and
+                 * [Parcelable] // 用于存放以及获取自定义数据
+                 */
+                args: PrevCompatArgs,
+                cla: Class<out PrevCompatActivity>
         ): Intent {
             return Intent(context, cla).putExtras(args.putPrevArgs())
         }
@@ -67,7 +68,7 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.findFragmentByTag(PrevCompatFragment::class.java.simpleName)?.let {
+        prevFragment?.let {
             showFragmentExpand(fragment = it)
         } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
@@ -122,9 +123,9 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
 
     /** 预览图初始化，预览页必须实现 ，可实现背景色之类的配置 */
     abstract override fun onPrevCreated(
-        delegate: IPrevDelegate,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
+            delegate: IPrevDelegate,
+            bundle: GalleryBundle,
+            savedInstanceState: Bundle?
     )
 
 }

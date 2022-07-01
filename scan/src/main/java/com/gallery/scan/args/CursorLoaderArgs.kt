@@ -17,17 +17,17 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 open class CursorLoaderArgs(
-    open val uri: Uri,
-    open val projection: Array<String>? = null,
-    open val sortOrder: String? = null,
+        open val uri: Uri,
+        open val projection: Array<String>? = null,
+        open val sortOrder: String? = null,
 ) : Parcelable {
 
     companion object {
 
         private const val Key = "scanCursorLoaderArgs"
 
-        internal fun Bundle.putCursorLoaderArgs(scanParameter: CursorLoaderArgs): Bundle {
-            putParcelable(Key, scanParameter)
+        internal fun Bundle.putCursorLoaderArgs(args: CursorLoaderArgs): Bundle {
+            putParcelable(Key, args)
             return this
         }
 

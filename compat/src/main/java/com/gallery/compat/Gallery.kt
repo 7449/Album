@@ -10,28 +10,28 @@ import com.gallery.compat.activity.args.GalleryCompatArgs.Companion.putArgs
 import com.gallery.core.GalleryBundle
 
 open class Gallery(
-    activity: FragmentActivity? = null,
-    fragment: Fragment? = null,
-    private val launcher: ActivityResultLauncher<Intent>,
-    private val args: GalleryCompatArgs,
-    private val clz: Class<*>,
+        activity: FragmentActivity? = null,
+        fragment: Fragment? = null,
+        private val launcher: ActivityResultLauncher<Intent>,
+        private val args: GalleryCompatArgs,
+        private val clz: Class<*>,
 ) {
 
     companion object {
         fun newInstance(
-            activity: FragmentActivity? = null,
-            fragment: Fragment? = null,
-            launcher: ActivityResultLauncher<Intent>,
-            bundle: GalleryBundle = GalleryBundle(),
-            customBundle: Parcelable? = null,
-            clz: Class<*>,
+                activity: FragmentActivity? = null,
+                fragment: Fragment? = null,
+                launcher: ActivityResultLauncher<Intent>,
+                bundle: GalleryBundle = GalleryBundle(),
+                customBundle: Parcelable? = null,
+                clz: Class<*>,
         ): Gallery {
             return Gallery(
-                activity,
-                fragment,
-                launcher,
-                GalleryCompatArgs(bundle, customBundle),
-                clz
+                    activity,
+                    fragment,
+                    launcher,
+                    GalleryCompatArgs(bundle, customBundle),
+                    clz
             )
         }
     }

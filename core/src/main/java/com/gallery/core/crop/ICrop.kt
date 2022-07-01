@@ -40,9 +40,9 @@ interface ICrop {
      * 裁剪完成之后有可能需要[IScanDelegate.onScanResult]来进行数据刷新
      */
     fun onCropResult(
-        delegate: IScanDelegate,
-        galleryBundle: GalleryBundle,
-        intent: ActivityResult
+            delegate: IScanDelegate,
+            galleryBundle: GalleryBundle,
+            intent: ActivityResult
     ) {
         TODO("need to handle crop callback")
     }

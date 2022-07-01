@@ -10,24 +10,24 @@ import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.WechatGalleryItemPrevSelectBinding
 
 class WeChatPrevSelectAdapter(
-    private val listener: GalleryFinderAdapter.AdapterFinderListener,
+        private val listener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<WeChatPrevSelectAdapter.ViewHolder>() {
 
     private val list: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            WechatGalleryItemPrevSelectBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+                WechatGalleryItemPrevSelectBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                )
         ).apply {
             itemView.setOnClickListener {
                 listener.onGalleryAdapterItemClick(
-                    it,
-                    bindingAdapterPosition,
-                    list[bindingAdapterPosition]
+                        it,
+                        bindingAdapterPosition,
+                        list[bindingAdapterPosition]
                 )
             }
         }
@@ -66,6 +66,6 @@ class WeChatPrevSelectAdapter(
     }
 
     class ViewHolder(val binding: WechatGalleryItemPrevSelectBinding) :
-        RecyclerView.ViewHolder(binding.root)
+            RecyclerView.ViewHolder(binding.root)
 
 }

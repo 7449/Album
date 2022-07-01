@@ -15,13 +15,13 @@ import com.gallery.ui.wechat.extension.colorExpand
 import com.gallery.ui.wechat.extension.formatTimeVideo
 
 class WeChatGalleryItem @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val viewBinding: WechatGalleryLayoutItemBinding =
-        WechatGalleryLayoutItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
+            WechatGalleryLayoutItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     val imageView: ImageView
         get() = viewBinding.viewWeChatImageView
@@ -44,9 +44,9 @@ class WeChatGalleryItem @JvmOverloads constructor(
         videoView.visibility = if (scanEntity.isVideo) VISIBLE else GONE
         bottomView.visibility = if (scanEntity.isVideo) VISIBLE else GONE
         bottomView.setBackgroundColor(
-            if (scanEntity.isGif) Color.TRANSPARENT else context.colorExpand(
-                R.color.wechat_gallery_color_B3000000
-            )
+                if (scanEntity.isGif) Color.TRANSPARENT else context.colorExpand(
+                        R.color.wechat_gallery_color_B3000000
+                )
         )
         bottomView.visibility = if (scanEntity.isVideo || scanEntity.isGif) VISIBLE else GONE
         videoView.text = if (scanEntity.isVideo) scanEntity.duration.formatTimeVideo() else ""

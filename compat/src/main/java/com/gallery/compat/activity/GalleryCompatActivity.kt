@@ -39,8 +39,8 @@ import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.scan.Types
 
 abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallback,
-    IGalleryImageLoader,
-    IGalleryInterceptor, ICrop {
+        IGalleryImageLoader,
+        IGalleryInterceptor, ICrop {
 
     /** 当前文件夹名称,用于横竖屏保存数据 */
     protected abstract val currentFinderName: String
@@ -64,23 +64,23 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
 
     /** 预览页启动[ActivityResultLauncher]  */
     private val prevLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
-            val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
-            when (intent.resultCode) {
-                PrevCompatActivity.RESULT_CODE_SELECT -> {
-                    galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
-                    onResultSelect(bundleExpand)
-                }
-                PrevCompatActivity.RESULT_CODE_TOOLBAR -> {
-                    galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
-                    onResultToolbar(bundleExpand)
-                }
-                PrevCompatActivity.RESULT_CODE_BACK -> {
-                    galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
-                    onResultBack(bundleExpand)
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
+                val bundleExpand: Bundle = intent?.data?.extras.orEmptyExpand()
+                when (intent.resultCode) {
+                    PrevCompatActivity.RESULT_CODE_SELECT -> {
+                        galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
+                        onResultSelect(bundleExpand)
+                    }
+                    PrevCompatActivity.RESULT_CODE_TOOLBAR -> {
+                        galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
+                        onResultToolbar(bundleExpand)
+                    }
+                    PrevCompatActivity.RESULT_CODE_BACK -> {
+                        galleryFragment?.onUpdateResult(bundleExpand.scanArgs)
+                        onResultBack(bundleExpand)
+                    }
                 }
             }
-        }
 
     /** 文件夹数据集合 */
     val finderList = arrayListOf<ScanEntity>()
@@ -98,47 +98,41 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
         val saveArgs = savedInstanceState?.gallerySaveArgs
         finderList.clear()
         finderList.addAll(saveArgs?.finderList.orEmpty())
-        finderName = saveArgs?.finderName ?: galleryConfig.allName
-        supportFragmentManager.findFragmentByTag(GalleryCompatFragment::class.java.simpleName)
-            ?.let {
-                showFragmentExpand(fragment = it)
-            } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
+        finderName = saveArgs?.finderName ?: galleryConfig.sdNameAndAllName.second
+        galleryFragment?.let {
+            showFragmentExpand(fragment = it)
+        } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
     }
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
     override fun onResultSuccess(context: Context?, scanEntity: ScanEntity) {
-        finderList.updateResultFinder(scanEntity, galleryConfig.scanSort == Types.Sort.DESC)
+        finderList.updateResultFinder(scanEntity, galleryConfig.sort.first == Types.Sort.DESC)
     }
 
     /** 数据扫描成功之后刷新文件夹数据  该方法子类重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         if (requireGalleryFragment.isScanAll) {
             finderList.clear()
-            finderList.addAll(scanEntities.findFinder(galleryConfig.sdName, galleryConfig.allName))
+            finderList.addAll(scanEntities.findFinder(galleryConfig.sdNameAndAllName.first, galleryConfig.sdNameAndAllName.second))
         }
     }
 
     /** 启动预览 */
     fun startPrevPage(
-        parentId: Long,
-        position: Int,
-        /** 预览页参数配置 */
-        customBundle: Parcelable?,
-        scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
-        cla: Class<out PrevCompatActivity>
+            parentId: Long,
+            position: Int,
+            /** 预览页参数配置 */
+            customBundle: Parcelable?,
+            scanAlone: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
+            cla: Class<out PrevCompatActivity>
     ) {
-        startPrevPage(
-            PrevCompatArgs(
-                PrevArgs(
-                    parentId,
-                    requireGalleryFragment.selectItem,
-                    galleryConfig,
-                    position,
-                    scanAlone
-                ),
-                customBundle
-            ), cla
-        )
+        startPrevPage(PrevCompatArgs(PrevArgs(
+                parentId,
+                requireGalleryFragment.selectItem,
+                galleryConfig,
+                position,
+                scanAlone
+        ), customBundle), cla)
     }
 
     /** 启动预览 */
@@ -192,24 +186,24 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
 
     /** 初始化布局 */
     abstract override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        bundle: GalleryBundle,
-        savedInstanceState: Bundle?
+            delegate: IScanDelegate,
+            bundle: GalleryBundle,
+            savedInstanceState: Bundle?
     )
 
     /** 文件目录加载图片,此方法需要在自定义Finder的时候主动调用,或者自定义的时候直接加载图片即可 */
     abstract override fun onDisplayGalleryThumbnails(
-        finderEntity: ScanEntity,
-        container: FrameLayout
+            finderEntity: ScanEntity,
+            container: FrameLayout
     )
 
     /** 文件加载图片 */
     abstract override fun onDisplayGallery(
-        width: Int,
-        height: Int,
-        scanEntity: ScanEntity,
-        container: FrameLayout,
-        checkBox: TextView
+            width: Int,
+            height: Int,
+            scanEntity: ScanEntity,
+            container: FrameLayout,
+            checkBox: TextView
     )
 
     override fun onDestroy() {

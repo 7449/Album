@@ -10,14 +10,14 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class GalleryCompatArgs(
-    /**
-     * 核心模块的参数配置
-     */
-    val bundle: GalleryBundle,
-    /**
-     * 自定义参数配置
-     */
-    val customBundle: Parcelable?,
+        /**
+         * 核心模块的参数配置
+         */
+        val bundle: GalleryBundle,
+        /**
+         * 自定义参数配置
+         */
+        val customBundle: Parcelable?,
 ) : Parcelable {
     companion object {
         private const val Key = "galleryCompatArgs"
@@ -28,7 +28,6 @@ data class GalleryCompatArgs(
         }
 
         val Bundle.galleryCompatArgsOrDefault
-            get() = getParcelable(Key)
-                ?: GalleryCompatArgs(GalleryBundle(), Bundle())
+            get() = getParcelable(Key) ?: GalleryCompatArgs(GalleryBundle(), Bundle())
     }
 }

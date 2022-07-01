@@ -11,7 +11,7 @@ import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
 
 open class PrevCompatFragment(layoutId: Int = R.layout.gallery_compat_fragment_preview) :
-    Fragment(layoutId) {
+        Fragment(layoutId) {
 
     companion object {
         fun newInstance(prevArgs: PrevArgs): PrevCompatFragment {

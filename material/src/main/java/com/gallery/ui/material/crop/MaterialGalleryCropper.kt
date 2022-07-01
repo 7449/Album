@@ -20,16 +20,13 @@ class MaterialGalleryCropper(private val cropImageOptions: CropImageOptions) : I
     private var cropUri: Uri? = null
 
     override fun onCropResult(
-        delegate: IScanDelegate,
-        galleryBundle: GalleryBundle,
-        intent: ActivityResult
+            delegate: IScanDelegate,
+            galleryBundle: GalleryBundle,
+            intent: ActivityResult
     ) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri ->
-                onCropSuccess(
-                    delegate,
-                    uri
-                )
+                onCropSuccess(delegate, uri)
             } ?: cropUri?.deleteExpand(delegate.requireActivity)
             Activity.RESULT_CANCELED, CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE
             -> cropUri?.deleteExpand(delegate.requireActivity)

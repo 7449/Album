@@ -14,7 +14,7 @@ inline fun <reified T> Fragment.galleryCallbackOrNull(): T? {
 
 inline fun <reified T> Fragment.galleryCallback(): T {
     return galleryCallbackOrNull<T>()
-        ?: throw IllegalArgumentException(context.toString() + " must implement ${T::class.java.simpleName}")
+            ?: throw IllegalArgumentException(context.toString() + " must implement ${T::class.java.simpleName}")
 }
 
 inline fun <reified T> Fragment.galleryCallbackOrNewInstance(action: () -> T): T {
@@ -22,15 +22,15 @@ inline fun <reified T> Fragment.galleryCallbackOrNewInstance(action: () -> T): T
 }
 
 fun AppCompatActivity.addFragmentExpand(
-    id: Int,
-    fragmentType: FragmentType = FragmentType.COMMIT_ALLOWING_STATE_LOSS,
-    fragment: Fragment,
+        id: Int,
+        fragmentType: FragmentType = FragmentType.COMMIT_ALLOWING_STATE_LOSS,
+        fragment: Fragment,
 ) = supportFragmentManager.beginTransaction().add(id, fragment, fragment.javaClass.simpleName)
-    .commitExpand(fragmentType)
+        .commitExpand(fragmentType)
 
 fun AppCompatActivity.showFragmentExpand(
-    fragmentType: FragmentType = FragmentType.COMMIT_ALLOWING_STATE_LOSS,
-    fragment: Fragment,
+        fragmentType: FragmentType = FragmentType.COMMIT_ALLOWING_STATE_LOSS,
+        fragment: Fragment,
 ) = supportFragmentManager.beginTransaction().show(fragment).commitExpand(fragmentType)
 
 internal fun FragmentTransaction.commitExpand(fragmentType: FragmentType) {

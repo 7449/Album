@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gallery.sample">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
@@ -10,7 +9,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,11 +19,13 @@
         <activity
             android:name=".camera.SimpleCameraActivity"
             android:configChanges="screenLayout|keyboardHidden"
+            android:exported="false"
             android:hardwareAccelerated="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
             android:name=".camera.SimpleMaterialGalleryCameraActivity"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

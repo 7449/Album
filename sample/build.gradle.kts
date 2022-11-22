@@ -4,6 +4,7 @@ plugins {
     id(Plugin.kotlin_parcelize)
 }
 android {
+    namespace = "com.gallery.sample"
     compileSdk = Version.compileSdk
     defaultConfig {
         applicationId = Version.applicationId

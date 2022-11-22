@@ -4,6 +4,7 @@ plugins {
     id(Plugin.kotlin_parcelize)
 }
 android {
+    namespace = "com.gallery.scan"
     compileSdk = Version.minSdk
     defaultConfig {
         minSdk = Version.minSdk

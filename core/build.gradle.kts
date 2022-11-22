@@ -4,6 +4,7 @@ plugins {
     id(Plugin.kotlin_parcelize)
 }
 android {
+    namespace = "com.gallery.core"
     compileSdk = Version.compileSdk
     defaultConfig {
         minSdk = Version.minSdk

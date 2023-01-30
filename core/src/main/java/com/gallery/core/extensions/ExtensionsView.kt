@@ -1,15 +1,13 @@
 package com.gallery.core.extensions
 
 import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 
-/** 隐藏 */
-fun View.hideExpand(): View = apply { if (!isGoneExpand()) visibility = View.GONE }
+fun View.hide(): View = apply { if (!isGone()) visibility = View.GONE }
 
-/** 是否为隐藏GONE */
-fun View.isGoneExpand(): Boolean = visibility == View.GONE
+fun View.show(): View = apply { if (!isVisible()) visibility = View.VISIBLE }
 
-/** 显示 */
-fun View.showExpand(): View = apply { if (!isVisibleExpand()) visibility = View.VISIBLE }
+private fun View.isGone(): Boolean = isGone
 
-/** 是否为显示VISIBLE */
-fun View.isVisibleExpand(): Boolean = visibility == View.VISIBLE
+private fun View.isVisible(): Boolean = isVisible

@@ -6,32 +6,32 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.gallery.compat.activity.args.GalleryCompatArgs
-import com.gallery.compat.activity.args.GalleryCompatArgs.Companion.putArgs
-import com.gallery.core.GalleryBundle
+import com.gallery.compat.activity.args.GalleryCompatArgs.Companion.toBundle
+import com.gallery.core.GalleryConfigs
 
 open class Gallery(
-        activity: FragmentActivity? = null,
-        fragment: Fragment? = null,
-        private val launcher: ActivityResultLauncher<Intent>,
-        private val args: GalleryCompatArgs,
-        private val clz: Class<*>,
+    activity: FragmentActivity? = null,
+    fragment: Fragment? = null,
+    private val launcher: ActivityResultLauncher<Intent>,
+    private val args: GalleryCompatArgs,
+    private val clz: Class<*>,
 ) {
 
     companion object {
         fun newInstance(
-                activity: FragmentActivity? = null,
-                fragment: Fragment? = null,
-                launcher: ActivityResultLauncher<Intent>,
-                bundle: GalleryBundle = GalleryBundle(),
-                customBundle: Parcelable? = null,
-                clz: Class<*>,
+            activity: FragmentActivity? = null,
+            fragment: Fragment? = null,
+            launcher: ActivityResultLauncher<Intent>,
+            bundle: GalleryConfigs = GalleryConfigs(),
+            gap: Parcelable? = null,
+            clz: Class<*>,
         ): Gallery {
             return Gallery(
-                    activity,
-                    fragment,
-                    launcher,
-                    GalleryCompatArgs(bundle, customBundle),
-                    clz
+                activity,
+                fragment,
+                launcher,
+                GalleryCompatArgs(bundle, gap),
+                clz
             )
         }
     }
@@ -44,16 +44,18 @@ open class Gallery(
                 fragmentActivity = fragment.requireActivity()
                 startFragment()
             }
+
             activity != null -> {
                 fragmentActivity = activity
                 startActivity()
             }
+
             else -> throw KotlinNullPointerException("fragment and activity == null")
         }
     }
 
     private fun launchIntent(): Intent {
-        return Intent(fragmentActivity, clz).apply { putExtras(args.putArgs()) }
+        return Intent(fragmentActivity, clz).apply { putExtras(args.toBundle()) }
     }
 
     private fun startActivity() {

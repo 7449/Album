@@ -1,34 +1,33 @@
 package com.gallery.scan.impl.file
 
 import android.provider.MediaStore
-import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.extensions.getIntOrDefault
-import com.gallery.scan.extensions.getLongOrDefault
-import com.gallery.scan.extensions.getStringOrDefault
+import com.gallery.scan.args.MediaScanEntityFactory
+import com.gallery.scan.extensions.intOrDefault
+import com.gallery.scan.extensions.longOrDefault
+import com.gallery.scan.extensions.stringOrDefault
 
-/** 文件实体生成 [FileColumns.columns] */
-fun ScanEntityFactory.Companion.file(): ScanEntityFactory {
+internal fun MediaScanEntityFactory.Companion.file(): MediaScanEntityFactory {
     return action {
         FileScanEntity(
-                it.getLongOrDefault(MediaStore.Files.FileColumns._ID),
+            it.longOrDefault(MediaStore.Files.FileColumns._ID),
 
-                it.getLongOrDefault(MediaStore.Files.FileColumns.SIZE),
-                it.getStringOrDefault(MediaStore.Files.FileColumns.DISPLAY_NAME),
-                it.getStringOrDefault(MediaStore.Files.FileColumns.TITLE),
-                it.getLongOrDefault(MediaStore.Files.FileColumns.DATE_ADDED),
-                it.getLongOrDefault(MediaStore.Files.FileColumns.DATE_MODIFIED),
-                it.getStringOrDefault(MediaStore.Files.FileColumns.MIME_TYPE),
-                it.getIntOrDefault(MediaStore.Files.FileColumns.WIDTH),
-                it.getIntOrDefault(MediaStore.Files.FileColumns.HEIGHT),
+            it.longOrDefault(MediaStore.Files.FileColumns.SIZE),
+            it.stringOrDefault(MediaStore.Files.FileColumns.DISPLAY_NAME),
+            it.stringOrDefault(MediaStore.Files.FileColumns.TITLE),
+            it.longOrDefault(MediaStore.Files.FileColumns.DATE_ADDED),
+            it.longOrDefault(MediaStore.Files.FileColumns.DATE_MODIFIED),
+            it.stringOrDefault(MediaStore.Files.FileColumns.MIME_TYPE),
+            it.intOrDefault(MediaStore.Files.FileColumns.WIDTH),
+            it.intOrDefault(MediaStore.Files.FileColumns.HEIGHT),
 
-                it.getLongOrDefault(MediaStore.Files.FileColumns.PARENT),
-                it.getStringOrDefault(MediaStore.Files.FileColumns.MEDIA_TYPE),
+            it.longOrDefault(MediaStore.Files.FileColumns.PARENT),
+            it.stringOrDefault(MediaStore.Files.FileColumns.MEDIA_TYPE),
 
-                it.getIntOrDefault(MediaStore.Images.ImageColumns.ORIENTATION),
-                it.getStringOrDefault(MediaStore.Images.ImageColumns.BUCKET_ID),
-                it.getStringOrDefault(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME),
+            it.intOrDefault(MediaStore.Images.ImageColumns.ORIENTATION),
+            it.stringOrDefault(MediaStore.Images.ImageColumns.BUCKET_ID),
+            it.stringOrDefault(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME),
 
-                it.getLongOrDefault(MediaStore.Video.VideoColumns.DURATION)
+            it.longOrDefault(MediaStore.Video.VideoColumns.DURATION)
         )
     }
 }

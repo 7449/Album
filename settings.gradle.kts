@@ -15,10 +15,10 @@ dependencyResolutionManagement {
     }
 }
 include(
-        ":core",
-        ":scan",
-        ":material",
-        ":sample",
-        ":compat",
-        ":wechat"
+    ":core",
+    ":scan",
+    ":material",
+    ":sample",
+    ":compat",
+    ":wechat"
 )

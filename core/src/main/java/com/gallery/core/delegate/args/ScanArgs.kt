@@ -6,6 +6,7 @@ import android.os.Parcelable
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.parcelable
 import com.gallery.scan.Types
 import kotlinx.parcelize.Parcelize
 
@@ -20,7 +21,7 @@ import kotlinx.parcelize.Parcelize
  * 1.
  *  调用[IPrevDelegate.resultBundle]获取需要的参数
  *  其中
- *  [parentId]默认参数 [Types.Scan.ALL]
+ *  [parentId]默认参数 [Types.Id.ALL]
  *  [fileUri]默认参数 [Uri.EMPTY]
  *  [isRefresh]是否需要合并数据并刷新
  *  [selectList]选中的数据
@@ -36,32 +37,32 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ScanArgs(
-        val parentId: Long,
-        val fileUri: Uri,
-        val isRefresh: Boolean,
-        val selectList: ArrayList<ScanEntity>,
+    val parentId: Long,
+    val fileUri: Uri,
+    val isRefresh: Boolean,
+    val selectList: ArrayList<ScanEntity>,
 ) : Parcelable {
     companion object {
         private const val Key = "scanArgs"
 
-        fun newSaveInstance(
-                parentId: Long,
-                fileUri: Uri,
-                selectList: ArrayList<ScanEntity>
+        fun onSaveInstanceState(
+            parentId: Long,
+            fileUri: Uri,
+            selectList: ArrayList<ScanEntity>
         ): ScanArgs {
             return ScanArgs(parentId, fileUri, false, selectList)
         }
 
         fun newResultInstance(selectList: ArrayList<ScanEntity>, isRefresh: Boolean): ScanArgs {
-            return ScanArgs(Types.Scan.ALL, Uri.EMPTY, isRefresh, selectList)
+            return ScanArgs(Types.Id.ALL, Uri.EMPTY, isRefresh, selectList)
         }
 
-        fun ScanArgs.putScanArgs(bundle: Bundle = Bundle()): Bundle {
+        fun ScanArgs.toBundle(bundle: Bundle): Bundle {
             bundle.putParcelable(Key, this)
             return bundle
         }
 
         val Bundle.scanArgs
-            get() = getParcelable<ScanArgs>(Key)
+            get() = parcelable<ScanArgs>(Key)
     }
 }

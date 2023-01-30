@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.gallery.core.extensions.orEmptyExpand
 import com.gallery.sample.databinding.SimpleActivityCameraBinding
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger
@@ -22,7 +21,7 @@ class SimpleCameraActivity : AppCompatActivity() {
 
     private val viewBinding: SimpleActivityCameraBinding by lazy {
         SimpleActivityCameraBinding.inflate(
-                layoutInflater
+            layoutInflater
         )
     }
 
@@ -46,10 +45,9 @@ class SimpleCameraActivity : AppCompatActivity() {
     private inner class Listener : CameraListener() {
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
-            val fileUri: Uri =
-                    intent.extras?.getParcelable<Uri>(CUSTOM_CAMERA_OUT_PUT_URI).orEmptyExpand()
+            val fileUri: Uri? = intent.extras?.getParcelable(CUSTOM_CAMERA_OUT_PUT_URI)
             Log.i("Camera", fileUri.toString())
-            contentResolver.openOutputStream(fileUri)?.use { it.write(result.data) }
+            contentResolver.openOutputStream(requireNotNull(fileUri))?.use { it.write(result.data) }
             setResult(Activity.RESULT_OK)
             finish()
         }

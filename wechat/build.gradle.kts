@@ -8,14 +8,20 @@ android {
     compileSdk = Version.compileSdk
     defaultConfig {
         minSdk = Version.minSdk
-        targetSdk = Version.targetSdk
     }
-    buildFeatures.viewBinding = true
+    viewBinding { enable = true }
     compileOptions {
         kotlinOptions.freeCompilerArgs += listOf(Args.moduleName, Args.prefix.plus(project.name))
     }
 }
 dependencies {
-    DepLib.wechat.forEach { compileOnly(project(it)) }
-    DepList.wechat.forEach { implementation(it) }
+    compileOnly(project(":scan"))
+    compileOnly(project(":core"))
+    compileOnly(project(":compat"))
+    implementation(Dep.fragment)
+    implementation(Dep.kotlin)
+    implementation(Dep.appcompat)
+    implementation(Dep.viewPager2)
+    implementation(Dep.recyclerView)
+    implementation(Dep.glide)
 }

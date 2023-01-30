@@ -5,28 +5,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.gallery.compat.activity.args.PrevCompatArgs
 import com.gallery.compat.activity.args.PrevCompatArgs.Companion.prevCompatArgsOrDefault
-import com.gallery.compat.activity.args.PrevCompatArgs.Companion.putPrevArgs
+import com.gallery.compat.activity.args.PrevCompatArgs.Companion.toBundle
 import com.gallery.compat.extensions.prevFragment
 import com.gallery.compat.extensions.requirePrevFragment
 import com.gallery.compat.fragment.PrevCompatFragment
-import com.gallery.compat.fragment.addFragmentExpand
-import com.gallery.compat.fragment.showFragmentExpand
+import com.gallery.compat.fragment.addFragment
+import com.gallery.compat.fragment.showFragment
 import com.gallery.compat.internal.simple.SimplePrevCallback
-import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfigs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.args.PrevArgs
 import com.gallery.core.delegate.args.PrevArgs.Companion.configOrDefault
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.orEmptyExpand
+import com.gallery.core.extensions.orEmpty
 
 abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGalleryImageLoader,
-        IGalleryPrevInterceptor {
+    IGalleryPrevInterceptor {
 
     companion object {
         /** 预览页toolbar返回 result_code */
@@ -39,16 +40,16 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
         const val RESULT_CODE_SELECT = -17
 
         fun newInstance(
-                context: Context,
-                /**
-                 * [PrevArgs]
-                 * and
-                 * [Parcelable] // 用于存放以及获取自定义数据
-                 */
-                args: PrevCompatArgs,
-                cla: Class<out PrevCompatActivity>
+            context: Context,
+            /**
+             * [PrevArgs]
+             * and
+             * [Parcelable] // 用于存放以及获取自定义数据
+             */
+            args: PrevCompatArgs,
+            cla: Class<out PrevCompatActivity>
         ): Intent {
-            return Intent(context, cla).putExtras(args.putPrevArgs())
+            return Intent(context, cla).putExtras(args.toBundle())
         }
     }
 
@@ -57,28 +58,28 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
 
     /** [PrevCompatArgs] */
     protected val prevCompatArgs: PrevCompatArgs by lazy {
-        intent?.extras.orEmptyExpand().prevCompatArgsOrDefault
+        intent?.extras.orEmpty().prevCompatArgsOrDefault
     }
 
     /** 初始配置 */
-    protected val galleryConfig: GalleryBundle by lazy { prevCompatArgs.prevArgs.configOrDefault }
+    protected val galleryConfig: GalleryConfigs by lazy { prevCompatArgs.prevArgs.configOrDefault }
 
     /** 自定义参数配置 */
-    protected val gapConfig: Parcelable? by lazy { prevCompatArgs.customBundle }
+    protected val gapConfig: Parcelable? by lazy { prevCompatArgs.gap }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prevFragment?.let {
-            showFragmentExpand(fragment = it)
-        } ?: addFragmentExpand(galleryFragmentId, fragment = createFragment())
-    }
-
-    /** onBackPressed */
-    override fun onBackPressed() {
-        val intent = Intent()
-        intent.putExtras(onKeyBackResult(requirePrevFragment.resultBundle(onBackRefresh())))
-        setResult(RESULT_CODE_BACK, intent)
-        super.onBackPressed()
+            showFragment(fragment = it)
+        } ?: addFragment(galleryFragmentId, fragment = createFragment())
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent()
+                intent.putExtras(onKeyBackResult(requirePrevFragment.resultBundle(onBackRefresh())))
+                setResult(RESULT_CODE_BACK, intent)
+                finish()
+            }
+        })
     }
 
     /** finish */
@@ -123,9 +124,9 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
 
     /** 预览图初始化，预览页必须实现 ，可实现背景色之类的配置 */
     abstract override fun onPrevCreated(
-            delegate: IPrevDelegate,
-            bundle: GalleryBundle,
-            savedInstanceState: Bundle?
+        delegate: IPrevDelegate,
+        bundle: GalleryConfigs,
+        savedInstanceState: Bundle?
     )
 
 }

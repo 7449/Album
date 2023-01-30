@@ -8,13 +8,16 @@ android {
     compileSdk = Version.compileSdk
     defaultConfig {
         minSdk = Version.minSdk
-        targetSdk = Version.targetSdk
     }
     compileOptions {
         kotlinOptions.freeCompilerArgs += listOf(Args.moduleName, Args.prefix.plus(project.name))
     }
 }
 dependencies {
-    DepLib.core.forEach { compileOnly(project(it)) }
-    DepList.core.forEach { implementation(it) }
+    compileOnly(project(":scan"))
+    implementation(Dep.fragment)
+    implementation(Dep.kotlin)
+    implementation(Dep.appcompat)
+    implementation(Dep.viewPager2)
+    implementation(Dep.recyclerView)
 }

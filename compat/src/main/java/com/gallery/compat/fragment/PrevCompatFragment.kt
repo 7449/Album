@@ -2,21 +2,22 @@ package com.gallery.compat.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.gallery.compat.R
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.args.PrevArgs
-import com.gallery.core.delegate.args.PrevArgs.Companion.putPrevArgs
+import com.gallery.core.delegate.args.PrevArgs.Companion.toBundle
 import com.gallery.core.delegate.impl.PrevDelegateImpl
 import com.gallery.core.entity.ScanEntity
 
 open class PrevCompatFragment(layoutId: Int = R.layout.gallery_compat_fragment_preview) :
-        Fragment(layoutId) {
+    Fragment(layoutId) {
 
     companion object {
         fun newInstance(prevArgs: PrevArgs): PrevCompatFragment {
             val prevFragment = PrevCompatFragment()
-            prevFragment.arguments = prevArgs.putPrevArgs()
+            prevFragment.arguments = prevArgs.toBundle(bundleOf())
             return prevFragment
         }
     }
@@ -52,7 +53,7 @@ open class PrevCompatFragment(layoutId: Int = R.layout.gallery_compat_fragment_p
         get() = delegate.currentPosition
 
     open fun checkBoxClick(checkBox: View) {
-        delegate.itemViewClick(checkBox)
+        delegate.selectPictureClick(checkBox)
     }
 
     open fun isCheckBox(position: Int): Boolean {

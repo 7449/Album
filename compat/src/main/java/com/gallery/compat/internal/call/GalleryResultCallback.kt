@@ -5,34 +5,34 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import com.gallery.compat.GalleryConfig
-import com.gallery.compat.extensions.parcelableArrayListExpand
-import com.gallery.compat.extensions.parcelableExpand
-import com.gallery.core.extensions.orEmptyExpand
+import com.gallery.compat.extensions.parcelable
+import com.gallery.compat.extensions.parcelableArrayList
+import com.gallery.core.extensions.orEmpty
 
 open class GalleryResultCallback(private val galleryListener: GalleryListener) :
-        ActivityResultCallback<ActivityResult> {
+    ActivityResultCallback<ActivityResult> {
 
     override fun onActivityResult(intent: ActivityResult) {
-        val bundleExpand: Bundle = intent.data?.extras.orEmptyExpand()
+        val bundle: Bundle = intent.data?.extras.orEmpty()
         when (intent.resultCode) {
-            GalleryConfig.Crop.RESULT_CODE_CROP -> onCropResult(bundleExpand)
-            GalleryConfig.RESULT_CODE_SINGLE_DATA -> onSingleDataResult(bundleExpand)
-            GalleryConfig.RESULT_CODE_MULTIPLE_DATA -> onMultipleDataResult(bundleExpand)
+            GalleryConfig.Crop.RESULT_CODE_CROP -> onCropResult(bundle)
+            GalleryConfig.RESULT_CODE_SINGLE_DATA -> onSingleDataResult(bundle)
+            GalleryConfig.RESULT_CODE_MULTIPLE_DATA -> onMultipleDataResult(bundle)
             GalleryConfig.RESULT_CODE_TOOLBAR_BACK,
-            Activity.RESULT_CANCELED -> onCancelResult(bundleExpand)
+            Activity.RESULT_CANCELED -> onCancelResult(bundle)
         }
     }
 
     protected open fun onCropResult(bundle: Bundle) {
-        galleryListener.onGalleryCropResource(bundle.parcelableExpand(GalleryConfig.Crop.GALLERY_RESULT_CROP))
+        galleryListener.onGalleryCropResource(bundle.parcelable(GalleryConfig.Crop.GALLERY_RESULT_CROP))
     }
 
     protected open fun onSingleDataResult(bundle: Bundle) {
-        galleryListener.onGalleryResource(bundle.parcelableExpand(GalleryConfig.GALLERY_SINGLE_DATA))
+        galleryListener.onGalleryResource(bundle.parcelable(GalleryConfig.GALLERY_SINGLE_DATA))
     }
 
     protected open fun onMultipleDataResult(bundle: Bundle) {
-        galleryListener.onGalleryResources(bundle.parcelableArrayListExpand(GalleryConfig.GALLERY_MULTIPLE_DATA))
+        galleryListener.onGalleryResources(bundle.parcelableArrayList(GalleryConfig.GALLERY_MULTIPLE_DATA))
     }
 
     protected open fun onCancelResult(bundle: Bundle) {

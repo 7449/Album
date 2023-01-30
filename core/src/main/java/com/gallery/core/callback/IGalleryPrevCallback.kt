@@ -5,13 +5,10 @@ import android.os.Bundle
 import androidx.annotation.Px
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
-import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
 
-/**
- *
- */
 interface IGalleryPrevCallback {
 
     /**
@@ -32,32 +29,32 @@ interface IGalleryPrevCallback {
     /**
      * [IPrevDelegate.onCreate]触发，必须实现
      */
-    fun onPrevCreated(delegate: IPrevDelegate, bundle: GalleryBundle, savedInstanceState: Bundle?)
+    fun onPrevCreated(delegate: IPrevDelegate, bundle: GalleryConfigs, savedInstanceState: Bundle?)
 
     /**
      * 点击图片时该文件已被删除
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
-     * [IPrevDelegate.itemViewClick]
+     * [IPrevDelegate.selectPictureClick]
      */
     fun onClickItemFileNotExist(
-            context: Context,
-            bundle: GalleryBundle,
-            scanEntity: ScanEntity
+        context: Context,
+        bundle: GalleryConfigs,
+        scanEntity: ScanEntity
     )
 
     /**
      * 已达到选择最大数
-     * [GalleryBundle.multipleMaxCount]
+     * [GalleryConfigs.maxCount]
      */
-    fun onClickItemBoxMaxCount(
-            context: Context,
-            bundle: GalleryBundle,
-            scanEntity: ScanEntity
+    fun onClickItemMaxCount(
+        context: Context,
+        bundle: GalleryConfigs,
+        scanEntity: ScanEntity
     )
 
     /**
-     * [IPrevDelegate.itemViewClick]
+     * [IPrevDelegate.selectPictureClick]
      */
-    fun onChangedCheckBox()
+    fun onCheckBoxChanged()
 
 }

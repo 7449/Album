@@ -8,18 +8,18 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.hideExpand
-import com.gallery.core.extensions.showExpand
+import com.gallery.core.extensions.hide
+import com.gallery.core.extensions.show
 import com.gallery.ui.wechat.databinding.WechatGalleryLayoutSelectItemBinding
 
 class WeChatGallerySelectItem @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val viewBinding: WechatGalleryLayoutSelectItemBinding =
-            WechatGalleryLayoutSelectItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
+        WechatGalleryLayoutSelectItemBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     init {
         setBackgroundColor(Color.BLACK)
@@ -41,12 +41,12 @@ class WeChatGallerySelectItem @JvmOverloads constructor(
         gifView.visibility = if (scanEntity.isGif) View.VISIBLE else View.GONE
         videoView.visibility = if (scanEntity.isVideo) View.VISIBLE else View.GONE
         if (!isPrev) {
-            view.hideExpand()
+            view.hide()
             return
         }
         idList.find { it == scanEntity.id }?.let {
-            view.showExpand()
-        } ?: view.hideExpand()
+            view.show()
+        } ?: view.hide()
     }
 
 }

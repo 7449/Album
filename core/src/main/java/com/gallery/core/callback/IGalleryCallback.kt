@@ -3,7 +3,7 @@ package com.gallery.core.callback
 import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.delegate.adapter.GalleryAdapter.PhotoViewHolder
 import com.gallery.core.entity.ScanEntity
@@ -16,9 +16,9 @@ interface IGalleryCallback {
      * [IScanDelegate.onCreate]触发
      */
     fun onGalleryCreated(
-            delegate: IScanDelegate,
-            bundle: GalleryBundle,
-            savedInstanceState: Bundle?
+        delegate: IScanDelegate,
+        bundle: GalleryConfigs,
+        savedInstanceState: Bundle?
     )
 
     /**
@@ -29,7 +29,7 @@ interface IGalleryCallback {
 
     /**
      * 已达到选择最大数
-     * [GalleryBundle.multipleMaxCount]
+     * [GalleryConfigs.maxCount]
      */
     fun onClickItemMaxCount(context: Context, scanEntity: ScanEntity)
 
@@ -51,29 +51,29 @@ interface IGalleryCallback {
      * 点击CheckBox时会触发
      * [PhotoViewHolder.photo]
      */
-    fun onChangedItem(position: Int, scanEntity: ScanEntity)
+    fun onSelectItemChanged(position: Int, scanEntity: ScanEntity)
 
     /**
      * 刷新预览页数据之后触发
      */
-    fun onChangedResultCount(selectCount: Int)
+    fun onRefreshResultChanged(selectCount: Int)
 
     /**
      * 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法
      * 可以跳转到预览页
      */
     fun onPhotoItemClick(
-            context: Context,
-            bundle: GalleryBundle,
-            scanEntity: ScanEntity,
-            position: Int,
-            parentId: Long
+        context: Context,
+        bundle: GalleryConfigs,
+        scanEntity: ScanEntity,
+        position: Int,
+        parentId: Long
     )
 
     /**
      * 没有扫描到任何数据
      */
-    fun onScanSuccessEmpty(context: Context?)
+    fun onScanSuccessEmpty(context: Context)
 
     /**
      * 每次扫描之后数据非空触发
@@ -84,12 +84,12 @@ interface IGalleryCallback {
     /**
      * 单个文件扫描成功
      */
-    fun onResultSuccess(context: Context?, scanEntity: ScanEntity)
+    fun onResultSuccess(context: Context, scanEntity: ScanEntity)
 
     /**
      * 拍照或者摄像或者扫描单个数据失败
      */
-    fun onResultError(context: Context?, galleryBundle: GalleryBundle)
+    fun onResultError(context: Context, galleryBundle: GalleryConfigs)
 
     /**
      * 打开相机返回的状态
@@ -97,12 +97,12 @@ interface IGalleryCallback {
      * [CameraStatus.ERROR] 失败
      * [CameraStatus.PERMISSION] 权限被拒
      */
-    fun onCameraOpenStatus(context: Context?, status: CameraStatus)
+    fun onCameraOpenStatus(context: Context, status: CameraStatus)
 
     /**
      * 取消拍照
      */
-    fun onCameraCanceled(context: Context?, galleryBundle: GalleryBundle)
+    fun onCameraCanceled(context: Context, galleryBundle: GalleryConfigs)
 
     /**
      * 视频播放异常

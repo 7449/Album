@@ -5,15 +5,15 @@ plugins {
 }
 android {
     namespace = "com.gallery.scan"
-    compileSdk = Version.minSdk
+    compileSdk = Version.compileSdk
     defaultConfig {
         minSdk = Version.minSdk
-        targetSdk = Version.targetSdk
     }
     compileOptions {
         kotlinOptions.freeCompilerArgs += listOf(Args.moduleName, Args.prefix.plus(project.name))
     }
 }
 dependencies {
-    DepList.scan.forEach { implementation(it) }
+    implementation(Dep.fragment)
+    implementation(Dep.kotlin)
 }

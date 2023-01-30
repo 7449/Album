@@ -6,31 +6,19 @@ import com.gallery.compat.internal.call.GalleryResultCallback
 
 object GalleryConfig {
 
-    /**
-     * 图库页toolbar返回 result_code
-     */
+    /*** 首页toolbar返回 result_code*/
     const val RESULT_CODE_TOOLBAR_BACK = -11
 
-    /**
-     * 单选下返回
-     * 与之对应的是[GALLERY_SINGLE_DATA]
-     */
+    /*** 单选下返回* 与之对应的是[GALLERY_SINGLE_DATA]*/
     const val RESULT_CODE_SINGLE_DATA = -12
 
-    /**
-     * 多选下返回
-     * 与之对应的是[GALLERY_MULTIPLE_DATA]
-     */
+    /*** 多选下返回* 与之对应的是[GALLERY_MULTIPLE_DATA]*/
     const val RESULT_CODE_MULTIPLE_DATA = -13
 
-    /**
-     * 获取单选数据
-     */
+    /*** 获取单选数据*/
     const val GALLERY_SINGLE_DATA = "gallerySingleData"
 
-    /**
-     * 获取多选数据
-     */
+    /*** 获取多选数据*/
     const val GALLERY_MULTIPLE_DATA = "galleryMultipleData"
 
     /**

@@ -3,11 +3,11 @@ package com.gallery.compat.internal.simple
 import android.content.Context
 import android.os.Bundle
 import com.gallery.compat.R
-import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfigs
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.safeToastExpand
+import com.gallery.core.extensions.toast
 
 interface SimplePrevCallback : IGalleryPrevCallback {
 
@@ -20,29 +20,29 @@ interface SimplePrevCallback : IGalleryPrevCallback {
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 
-    override fun onChangedCheckBox() {
+    override fun onCheckBoxChanged() {
     }
 
     override fun onClickItemFileNotExist(
-            context: Context,
-            bundle: GalleryBundle,
-            scanEntity: ScanEntity
+        context: Context,
+        bundle: GalleryConfigs,
+        scanEntity: ScanEntity
     ) {
-        context.getString(R.string.gallery_compat_prev_check_file_deleted).safeToastExpand(context)
+        context.getString(R.string.gallery_compat_prev_check_file_deleted).toast(context)
     }
 
-    override fun onClickItemBoxMaxCount(
-            context: Context,
-            bundle: GalleryBundle,
-            scanEntity: ScanEntity
+    override fun onClickItemMaxCount(
+        context: Context,
+        bundle: GalleryConfigs,
+        scanEntity: ScanEntity
     ) {
-        context.getString(R.string.gallery_compat_check_max).safeToastExpand(context)
+        context.getString(R.string.gallery_compat_check_max).toast(context)
     }
 
     override fun onPrevCreated(
-            delegate: IPrevDelegate,
-            bundle: GalleryBundle,
-            savedInstanceState: Bundle?
+        delegate: IPrevDelegate,
+        bundle: GalleryConfigs,
+        savedInstanceState: Bundle?
     ) {
     }
 

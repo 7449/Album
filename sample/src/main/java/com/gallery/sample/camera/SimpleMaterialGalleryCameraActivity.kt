@@ -12,12 +12,12 @@ import com.gallery.ui.material.activity.MaterialGalleryActivity
 class SimpleMaterialGalleryCameraActivity : MaterialGalleryActivity() {
 
     private val cameraLauncher: ActivityResultLauncher<Intent> =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
-                when (intent.resultCode) {
-                    Activity.RESULT_CANCELED -> requireGalleryFragment.onCameraResultCanceled()
-                    Activity.RESULT_OK -> requireGalleryFragment.onCameraResultOk()
-                }
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
+            when (intent.resultCode) {
+                Activity.RESULT_CANCELED -> requireGalleryFragment.onCameraResultCanceled()
+                Activity.RESULT_OK -> requireGalleryFragment.onCameraResultOk()
             }
+        }
 
     override fun onCustomCamera(uri: Uri): Boolean {
         cameraLauncher.launch(Intent(this, SimpleCameraActivity::class.java).apply {

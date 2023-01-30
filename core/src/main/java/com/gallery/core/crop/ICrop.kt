@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.ActivityResult
-import com.gallery.core.GalleryBundle
+import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IScanDelegate
-import com.gallery.core.extensions.cropUriExpand
-import com.gallery.core.extensions.orEmptyExpand
+import com.gallery.core.extensions.takeCropUri
 
 /**
  * core library 剥离出裁剪相关功能，仅提供对外的裁剪接口，具体实现可由
@@ -21,14 +20,14 @@ interface ICrop {
     /**
      * content://media/external/images/media/id
      */
-    fun cropOutPutUri(context: Context, bundle: GalleryBundle): Uri {
-        return context.cropUriExpand(bundle).orEmptyExpand()
+    fun cropOutPutUri(context: Context, bundle: GalleryConfigs): Uri? {
+        return context.takeCropUri(bundle)
     }
 
     /**
      * 打开裁剪
      */
-    fun openCrop(context: Context, bundle: GalleryBundle, inputUri: Uri): Intent {
+    fun openCrop(context: Context, bundle: GalleryConfigs, inputUri: Uri): Intent {
         TODO("cropping has not been initialized")
     }
 
@@ -40,9 +39,9 @@ interface ICrop {
      * 裁剪完成之后有可能需要[IScanDelegate.onScanResult]来进行数据刷新
      */
     fun onCropResult(
-            delegate: IScanDelegate,
-            galleryBundle: GalleryBundle,
-            intent: ActivityResult
+        delegate: IScanDelegate,
+        galleryBundle: GalleryConfigs,
+        intent: ActivityResult
     ) {
         TODO("need to handle crop callback")
     }

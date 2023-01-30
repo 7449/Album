@@ -2,32 +2,24 @@ package com.gallery.compat.activity.args
 
 import android.os.Bundle
 import android.os.Parcelable
-import com.gallery.core.GalleryBundle
+import androidx.core.os.bundleOf
+import com.gallery.core.GalleryConfigs
+import com.gallery.core.extensions.parcelable
 import kotlinx.parcelize.Parcelize
 
-/**
- * 参数配置
- */
 @Parcelize
 data class GalleryCompatArgs(
-        /**
-         * 核心模块的参数配置
-         */
-        val bundle: GalleryBundle,
-        /**
-         * 自定义参数配置
-         */
-        val customBundle: Parcelable?,
+    val bundle: GalleryConfigs,
+    val gap: Parcelable?,
 ) : Parcelable {
     companion object {
         private const val Key = "galleryCompatArgs"
 
-        fun GalleryCompatArgs.putArgs(bundle: Bundle = Bundle()): Bundle {
-            bundle.putParcelable(Key, this)
-            return bundle
+        fun GalleryCompatArgs.toBundle(): Bundle {
+            return bundleOf(Key to this)
         }
 
         val Bundle.galleryCompatArgsOrDefault
-            get() = getParcelable(Key) ?: GalleryCompatArgs(GalleryBundle(), Bundle())
+            get() = parcelable(Key) ?: GalleryCompatArgs(GalleryConfigs(), bundleOf())
     }
 }

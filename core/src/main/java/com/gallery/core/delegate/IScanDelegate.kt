@@ -13,147 +13,88 @@ import com.gallery.scan.impl.file.FileScanEntity
 
 interface IScanDelegate {
 
-    /**
-     * 根View
-     */
+    /*** 根View*/
     val rootView: View
 
-    /**
-     * 当前Activity
-     */
+    /*** 当前Activity*/
     val activity: FragmentActivity?
 
-    /**
-     * 当前Activity
-     */
+    /*** 当前Activity*/
     val requireActivity: FragmentActivity
 
-    /**
-     * 当前扫描的数据
-     * 已经过滤了CAMERA
-     */
+    /*** 当前扫描的数据* 已经过滤了CAMERA*/
     val allItem: ArrayList<ScanEntity>
 
-    /**
-     * 当前选中的数据
-     */
+    /*** 当前选中的数据*/
     val selectItem: ArrayList<ScanEntity>
 
-    /**
-     * 当前选中的数据是否为空
-     * true 空
-     */
+    /*** 当前选中的数据是否为空* true 空*/
     val isSelectEmpty: Boolean
         get() = selectItem.isEmpty()
 
-    /**
-     * 当前选中的数据个数
-     */
+    /*** 当前选中的数据个数*/
     val selectCount: Int
         get() = selectItem.size
 
-    /**
-     * 当前扫描的数据个数
-     * 已经过滤了CAMERA
-     */
+    /*** 当前扫描的数据个数* 已经过滤了CAMERA*/
     val itemCount: Int
         get() = allItem.size
 
-    /**
-     * 当前扫描Id
-     */
+    /*** 当前扫描Id*/
     val currentParentId: Long
 
-    /**
-     * 更新当前扫描Id
-     */
-    fun onUpdateParentId(parentId: Long)
+    /*** 更新当前扫描Id*/
+    fun updateParentId(parentId: Long)
 
-    /**
-     * 横竖屏切换
-     */
+    /*** 横竖屏切换*/
     fun onSaveInstanceState(outState: Bundle)
 
-    /**
-     * 初始化
-     */
+    /*** 初始化*/
     fun onCreate(savedInstanceState: Bundle?)
 
-    /**
-     * 销毁
-     */
+    /*** 销毁*/
     fun onDestroy()
 
-    /**
-     * 扫描图库
-     */
-    fun onScanGallery(parent: Long = Types.Scan.ALL, isCamera: Boolean = false)
+    /*** 扫描图库*/
+    fun onScanGallery(parent: Long = Types.Id.ALL, isCamera: Boolean = false)
 
-    /**
-     * 扫描单个数据
-     */
+    /*** 扫描单个数据*/
     fun onScanResult(uri: Uri)
 
-    /**
-     * 扫描集合成功
-     */
+    /*** 扫描集合成功*/
     fun onScanMultipleSuccess(scanEntities: ArrayList<FileScanEntity>)
 
-    /**
-     * 扫描单个文件成功
-     */
+    /*** 扫描单个文件成功*/
     fun onScanSingleSuccess(scanEntity: FileScanEntity?)
 
-    /**
-     * 刷新预览之后的数据
-     * [ScanArgs.selectList] 选中的数据
-     * [ScanArgs.isRefresh] 是否刷新数据(合并选中的数据)
-     */
-    fun onUpdateResult(scanArgs: ScanArgs?)
+    /*** 刷新预览之后的数据* [ScanArgs.selectList] 选中的数据* [ScanArgs.isRefresh] 是否刷新数据(合并选中的数据)*/
+    fun onUpdateResult(args: ScanArgs)
 
-    /**
-     * 刷新单个Item
-     */
+    /*** 刷新单个Item*/
     fun notifyItemChanged(position: Int)
 
-    /**
-     * 刷新全部数据
-     */
+    /*** 刷新全部数据*/
     fun notifyDataSetChanged()
 
-    /**
-     * 监听滑动
-     */
-    fun addOnScrollListener(onScrollListener: RecyclerView.OnScrollListener)
+    /*** 监听滑动*/
+    fun addOnScrollListener(listener: RecyclerView.OnScrollListener)
 
-    /**
-     * 滑动到某个位置
-     */
+    /*** 滑动到某个位置*/
     fun scrollToPosition(position: Int)
 
-    /**
-     * 打开相机
-     */
-    fun cameraOpen()
+    /*** 打开相机*/
+    fun openSystemCamera()
 
-    /**
-     * 拍照成功
-     */
-    fun cameraSuccess()
+    /*** 拍照成功*/
+    fun takePictureSuccess()
 
-    /**
-     * 取消相机
-     */
-    fun cameraCanceled()
+    /*** 取消相机*/
+    fun takePictureCanceled()
 
-    /**
-     * 允许权限
-     */
+    /*** 允许权限*/
     fun permissionsGranted(type: PermissionCode)
 
-    /**
-     * 权限被拒
-     */
+    /*** 权限被拒*/
     fun permissionsDenied(type: PermissionCode)
 
 }

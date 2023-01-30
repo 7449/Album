@@ -7,7 +7,7 @@ import android.os.Parcelable
 import android.view.animation.Animation
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import com.gallery.compat.extensions.getObjExpand
+import com.gallery.compat.extensions.getObj
 import com.gallery.ui.wechat.args.WeChatGalleryBundle
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -19,7 +19,7 @@ private val formatter = SimpleDateFormat("yyyy/MM")
 internal val Parcelable?.weChatGalleryArgOrDefault: WeChatGalleryBundle
     get() = this as? WeChatGalleryBundle ?: WeChatGalleryBundle()
 
-fun Bundle?.getBooleanExpand(key: String): Boolean = getObjExpand(key) { false }
+fun Bundle?.getBooleanExpand(key: String): Boolean = getObj(key) { false }
 
 fun Int.colorExpand(activity: Context): Int = activity.colorExpand(this)
 
@@ -30,9 +30,9 @@ fun Long.formatTimeVideo(): String {
         return "--:--"
     }
     val format: String = String.format(
-            "%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(this),
-            TimeUnit.MILLISECONDS.toSeconds(this) -
-                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(this))
+        "%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(this),
+        TimeUnit.MILLISECONDS.toSeconds(this) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(this))
     )
     if (!format.startsWith("0")) {
         return format
@@ -57,18 +57,18 @@ fun Long.toFileSize(): String {
 }
 
 fun Animation.doOnAnimationStartExpand(action: (animation: Animation) -> Unit): Animation =
-        setAnimationListenerExpand(onAnimationStart = action)
+    setAnimationListenerExpand(onAnimationStart = action)
 
 fun Animation.doOnAnimationEndExpand(action: (animation: Animation) -> Unit): Animation =
-        setAnimationListenerExpand(onAnimationEnd = action)
+    setAnimationListenerExpand(onAnimationEnd = action)
 
 fun Animation.doOnAnimationRepeatExpand(action: (animation: Animation) -> Unit): Animation =
-        setAnimationListenerExpand(onAnimationRepeat = action)
+    setAnimationListenerExpand(onAnimationRepeat = action)
 
 fun Animation.setAnimationListenerExpand(
-        onAnimationRepeat: (animation: Animation) -> Unit = {},
-        onAnimationEnd: (animation: Animation) -> Unit = {},
-        onAnimationStart: (animation: Animation) -> Unit = {},
+    onAnimationRepeat: (animation: Animation) -> Unit = {},
+    onAnimationEnd: (animation: Animation) -> Unit = {},
+    onAnimationStart: (animation: Animation) -> Unit = {},
 ): Animation {
     val listener = object : Animation.AnimationListener {
         override fun onAnimationRepeat(animation: Animation) {

@@ -5,8 +5,8 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.entity.ScanEntity
 
-class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) :
-        RecyclerView.Adapter<PrevAdapter.ViewHolder>() {
+internal class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) :
+    RecyclerView.Adapter<PrevAdapter.ViewHolder>() {
 
     private val galleryList: ArrayList<ScanEntity> = arrayListOf()
     private val selectList: ArrayList<ScanEntity> = arrayListOf()
@@ -14,8 +14,8 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(FrameLayout(parent.context).apply {
             layoutParams = FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
             )
         })
     }
@@ -46,9 +46,9 @@ class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container
 
     fun containsSelect(selectEntity: ScanEntity) = selectList.contains(selectEntity)
 
-    fun removeSelectEntity(removeEntity: ScanEntity) = selectList.remove(removeEntity)
+    fun removeSelect(removeEntity: ScanEntity) = selectList.remove(removeEntity)
 
-    fun addSelectEntity(addEntity: ScanEntity) = selectList.add(addEntity)
+    fun addSelect(addEntity: ScanEntity) = selectList.add(addEntity)
 
     val currentSelectList: ArrayList<ScanEntity>
         get() = selectList

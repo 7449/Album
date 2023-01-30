@@ -5,8 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.R
-import com.gallery.core.GalleryBundle
-import com.gallery.core.GalleryBundle.Companion.putGalleryArgs
+import com.gallery.core.GalleryConfigs
+import com.gallery.core.GalleryConfigs.Companion.toBundle
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
@@ -15,15 +15,15 @@ import com.gallery.core.delegate.impl.ScanDelegateImpl
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.toFileEntity
 import com.gallery.scan.Types
-import com.gallery.scan.extensions.isScanAllExpand
+import com.gallery.scan.extensions.isScanAllMedia
 
 open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragment_gallery) :
-        Fragment(layoutId) {
+    Fragment(layoutId) {
 
     companion object {
-        fun newInstance(galleryBundle: GalleryBundle): GalleryCompatFragment {
+        fun newInstance(configs: GalleryConfigs): GalleryCompatFragment {
             val scanFragment = GalleryCompatFragment()
-            scanFragment.arguments = galleryBundle.putGalleryArgs()
+            scanFragment.arguments = configs.toBundle()
             return scanFragment
         }
     }
@@ -32,27 +32,27 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragmen
 
     open fun createDelegate(): IScanDelegate {
         return ScanDelegateImpl(
-                this,
-                galleryCallbackOrNull<ICrop>()?.cropImpl,
-                galleryCallback(),
-                galleryCallbackOrNewInstance<IGalleryInterceptor> { object : IGalleryInterceptor {} },
-                galleryCallback()
+            this,
+            galleryCallbackOrNull<ICrop>()?.cropImpl,
+            galleryCallback(),
+            galleryCallbackOrNewInstance<IGalleryInterceptor> { object : IGalleryInterceptor {} },
+            galleryCallback()
         )
     }
 
     open fun onCameraResultCanceled() {
-        delegate.cameraCanceled()
+        delegate.takePictureCanceled()
     }
 
     open fun onCameraResultOk() {
-        delegate.cameraSuccess()
+        delegate.takePictureSuccess()
     }
 
-    open fun onScanGallery(parent: Long = Types.Scan.ALL, isCamera: Boolean = false) {
+    open fun onScanGallery(parent: Long = Types.Id.ALL, isCamera: Boolean = false) {
         delegate.onScanGallery(parent, isCamera)
     }
 
-    open fun onUpdateResult(scanArgs: ScanArgs?) {
+    open fun onUpdateResult(scanArgs: ScanArgs) {
         delegate.onUpdateResult(scanArgs)
     }
 
@@ -94,11 +94,11 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragmen
     open var parentId: Long
         get() = delegate.currentParentId
         set(value) {
-            delegate.onUpdateParentId(value)
+            delegate.updateParentId(value)
         }
 
     open val isScanAll: Boolean
-        get() = parentId.isScanAllExpand
+        get() = parentId.isScanAllMedia
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

@@ -12,11 +12,21 @@ android {
         targetSdk = Version.targetSdk
         versionCode = Version.versionCode
         versionName = Version.versionName
-        vectorDrawables.useSupportLibrary = true
     }
-    buildFeatures.viewBinding = true
+    viewBinding { enable = true }
 }
 dependencies {
-    DepLib.sample.distinct().forEach { implementation(project(it)) }
-    DepList.sample.distinct().forEach { implementation(it) }
+    implementation(project(":scan"))
+    implementation(project(":core"))
+    implementation(project(":compat"))
+    implementation(project(":material"))
+    implementation(project(":wechat"))
+    implementation(Dep.fragment)
+    implementation(Dep.kotlin)
+    implementation(Dep.appcompat)
+    implementation(Dep.viewPager2)
+    implementation(Dep.recyclerView)
+    implementation(Dep.glide)
+    implementation(Dep.cropper)
+    implementation(Dep.cameraview)
 }

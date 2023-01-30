@@ -1,68 +1,41 @@
 package com.gallery.scan.extensions
 
-import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelStoreOwner
+import com.gallery.scan.MediaScanContext
 import com.gallery.scan.Types
-import com.gallery.scan.args.CursorLoaderArgs
-import com.gallery.scan.args.CursorLoaderArgs.Companion.putCursorLoaderArgs
-import com.gallery.scan.args.ScanEntityFactory
-import com.gallery.scan.callback.ScanCore
+import com.gallery.scan.args.MediaCursorLoaderArgs
+import com.gallery.scan.args.MediaScanEntityFactory
+import com.gallery.scan.impl.file.file
 
 /** 是否是扫描全部的Id */
-val Long.isScanAllExpand: Boolean get() = this == Types.Scan.ALL
+val Long.isScanAllMedia: Boolean get() = this == Types.Id.ALL
 
-/** 是否是空扫描 */
-val Long.isScanNoNeExpand: Boolean get() = this == Types.Scan.NONE
+/** 是否禁止扫描,也可以自定义参数,不一定非要使用内置的参数 */
+val Long.isScanNoNeMedia: Boolean get() = this == Types.Id.NONE
 
-/** 为[Fragment]创建一个[ScanCore] */
-fun Fragment.scanCore(
-        factory: ScanEntityFactory,
-        args: CursorLoaderArgs
-): ScanCore {
-    return object : ScanCore {
-        override val scanOwner: LifecycleOwner get() = this@scanCore
-        override val loaderArgs: CursorLoaderArgs get() = args
-        override val factory: ScanEntityFactory get() = factory
+fun Fragment.fileScan(args: MediaCursorLoaderArgs): MediaScanContext {
+    return object : MediaScanContext {
+        override fun <T> context(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
+            @Suppress("UNCHECKED_CAST")
+            return this@fileScan as T
+        }
+
+        override val loaderArgs: MediaCursorLoaderArgs get() = args
+        override val factory: MediaScanEntityFactory get() = MediaScanEntityFactory.file()
     }
 }
 
-/** 为[FragmentActivity]创建一个[ScanCore] */
-fun FragmentActivity.scanCore(
-        factory: ScanEntityFactory,
-        args: CursorLoaderArgs
-): ScanCore {
-    return object : ScanCore {
-        override val scanOwner: LifecycleOwner get() = this@scanCore
-        override val loaderArgs: CursorLoaderArgs get() = args
-        override val factory: ScanEntityFactory get() = factory
+fun FragmentActivity.fileScan(args: MediaCursorLoaderArgs): MediaScanContext {
+    return object : MediaScanContext {
+        override fun <T> context(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
+            @Suppress("UNCHECKED_CAST")
+            return this@fileScan as T
+        }
+
+        override val loaderArgs: MediaCursorLoaderArgs get() = args
+        override val factory: MediaScanEntityFactory get() = MediaScanEntityFactory.file()
     }
 }
-
-/** 创建多个数据参数类 */
-fun CursorLoaderArgs.createScanMultipleArgs(bundle: Bundle): Bundle {
-    return Bundle().apply {
-        putAll(bundle)
-        putString(MediaStore.Files.FileColumns.MIME_TYPE, Types.Result.MULTIPLE)
-        putCursorLoaderArgs(this@createScanMultipleArgs)
-    }
-}
-
-/** 创建单个数据参数类 */
-fun CursorLoaderArgs.createScanSingleArgs(bundle: Bundle): Bundle {
-    return Bundle().apply {
-        putAll(bundle)
-        putString(MediaStore.Files.FileColumns.MIME_TYPE, Types.Result.SINGLE)
-        putCursorLoaderArgs(this@createScanSingleArgs)
-    }
-}
-
-/** 获取可使用的多个扫描Bundle */
-fun Long.multipleScanExpand(): Bundle =
-        Bundle().apply { putLong(MediaStore.Files.FileColumns.PARENT, this@multipleScanExpand) }
-
-/** 获取可使用的单个扫描Bundle */
-fun Long.singleScanExpand(): Bundle =
-        Bundle().apply { putLong(MediaStore.Files.FileColumns._ID, this@singleScanExpand) }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/scan_type_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="扫描类型:" />
+
+    <RadioGroup
+        android:id="@+id/scan_type_rb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:checkedButton="@id/scan_image"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/scan_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="@string/simple_scan_image" />
+
+        <RadioButton
+            android:id="@+id/scan_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="@string/simple_scan_video" />
+
+        <RadioButton
+            android:id="@+id/scan_mix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="@string/simple_scan_mix" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/scan_sort_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="排序类型:" />
+
+    <RadioGroup
+        android:id="@+id/scan_sort_rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkedButton="@id/sort_desc"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/sort_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="@string/simple_sort_desc" />
+
+        <RadioButton
+            android:id="@+id/sort_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="@string/simple_sort_asc" />
+    </RadioGroup>
+
+</LinearLayout>

@@ -20,14 +20,14 @@ interface ICrop {
     /**
      * content://media/external/images/media/id
      */
-    fun cropOutPutUri(context: Context, bundle: GalleryConfigs): Uri? {
-        return context.takeCropUri(bundle)
+    fun cropOutPutUri(context: Context, configs: GalleryConfigs): Uri? {
+        return context.takeCropUri(configs)
     }
 
     /**
      * 打开裁剪
      */
-    fun openCrop(context: Context, bundle: GalleryConfigs, inputUri: Uri): Intent {
+    fun openCrop(context: Context, configs: GalleryConfigs, inputUri: Uri): Intent {
         TODO("cropping has not been initialized")
     }
 
@@ -40,7 +40,7 @@ interface ICrop {
      */
     fun onCropResult(
         delegate: IScanDelegate,
-        galleryBundle: GalleryConfigs,
+        configs: GalleryConfigs,
         intent: ActivityResult
     ) {
         TODO("need to handle crop callback")

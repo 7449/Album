@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include_select"
+            layout="@layout/simple_layout_gallery_setting_select_data" />
+
+        <include
+            android:id="@+id/include_picture_out_path"
+            layout="@layout/simple_layout_gallery_setting_picture_out_path_q" />
+
+        <include
+            android:id="@+id/include_picture_out_path_low"
+            layout="@layout/simple_layout_gallery_setting_picture_out_path_low" />
+
+        <include
+            android:id="@+id/include_scan_type"
+            layout="@layout/simple_layout_gallery_setting_scan_sort_type" />
+
+        <include
+            android:id="@+id/include_select_radio_view"
+            layout="@layout/simple_layout_gallery_setting_select_radio_view" />
+
+        <include
+            android:id="@+id/include_list_orientation"
+            layout="@layout/simple_layout_gallery_setting_list_orientation" />
+
+        <include
+            android:id="@+id/include_select_max_and_span_count"
+            layout="@layout/simple_layout_gallery_setting_select_max_and_span_count" />
+
+        <include
+            android:id="@+id/include_take_picture_name"
+            layout="@layout/simple_layout_gallery_setting_take_picture_name" />
+
+        <include
+            android:id="@+id/include_crop_picture_name"
+            layout="@layout/simple_layout_gallery_setting_crop_picture_name" />
+
+        <include
+            android:id="@+id/include_sd_name"
+            layout="@layout/simple_layout_gallery_setting_sd_name" />
+
+        <include
+            android:id="@+id/include_all_name"
+            layout="@layout/simple_layout_gallery_setting_all_name" />
+
+        <include
+            android:id="@+id/include_bool"
+            layout="@layout/simple_layout_gallery_setting_bool" />
+
+        <include
+            android:id="@+id/include_camera"
+            layout="@layout/simple_layout_gallery_setting_camera_config" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

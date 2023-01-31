@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/select_max_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="选择最大数:" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/select_max"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="3dp"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:inputType="number"
+        android:text="9"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/span_count_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="3dp"
+        android:text="spanCount:" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/span_count"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="3dp"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:inputType="number"
+        android:text="3"
+        android:textSize="12sp" />
+</LinearLayout>

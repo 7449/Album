@@ -77,7 +77,7 @@ class PrevDelegateImpl(
     private val viewPager2: ViewPager2 = rootView.findViewById(R.id.gallery_prev_viewpager2)
     private val checkBox: View = rootView.findViewById(R.id.gallery_prev_checkbox)
     private val prevAdapter: PrevAdapter = PrevAdapter { entity, container ->
-        galleryImageLoader.onDisplayGalleryPrev(entity, container)
+        galleryImageLoader.onDisplayPrevGallery(entity, container)
     }
     private val args = fragment.arguments.orEmpty().prevArgsOrDefault
     private val configs = args.configOrDefault
@@ -130,7 +130,7 @@ class PrevDelegateImpl(
         viewPager2.adapter = prevAdapter
         viewPager2.registerOnPageChangeCallback(pageChangeCallback)
         setCurrentItem(prevArgs.position)
-        checkBox.setBackgroundResource(configs.cameraConfig.selectIcon)
+        checkBox.setBackgroundResource(configs.cameraConfig.checkBoxIcon)
         checkBox.setOnClickListener { selectPictureClick(checkBox) }
         checkBox.isSelected = isSelected(currentPosition)
         galleryPrevCallback.onPrevCreated(this, configs, savedInstanceState)

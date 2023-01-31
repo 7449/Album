@@ -12,7 +12,7 @@ import com.gallery.core.extensions.hide
 import com.gallery.core.extensions.show
 import com.gallery.ui.wechat.databinding.WechatGalleryLayoutSelectItemBinding
 
-class WeChatGallerySelectItem @JvmOverloads constructor(
+internal class WeChatGallerySelectItem @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

@@ -6,7 +6,6 @@ import com.gallery.compat.extensions.parcelableArrayList
 import com.gallery.compat.internal.call.GalleryListener
 import com.gallery.compat.internal.call.GalleryResultCallback
 import com.gallery.ui.wechat.WeChatConfig
-import com.gallery.ui.wechat.extension.getBooleanExpand
 
 class WeChatGalleryResultCallback(
     private val galleryListener: GalleryListener,
@@ -15,7 +14,7 @@ class WeChatGalleryResultCallback(
     override fun onMultipleDataResult(bundle: Bundle) {
         galleryListener.onGalleryResources(
             bundle.parcelableArrayList(GalleryConfig.GALLERY_MULTIPLE_DATA),
-            bundle.getBooleanExpand(WeChatConfig.FULL_IMAGE)
+            bundle.getBoolean(WeChatConfig.FULL_IMAGE)
         )
     }
 

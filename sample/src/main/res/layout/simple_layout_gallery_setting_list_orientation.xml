@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/list_orientation_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="列表方向:" />
+
+    <RadioGroup
+        android:id="@+id/list_orientation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:checkedButton="@id/orientation_vertical"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/orientation_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="vertical" />
+
+        <RadioButton
+            android:id="@+id/orientation_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="horizontal" />
+
+    </RadioGroup>
+
+</LinearLayout>

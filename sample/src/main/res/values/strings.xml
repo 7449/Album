@@ -2,24 +2,13 @@
     <string name="appName">Gallery</string>
     <string name="simple_camera">camera</string>
     <string name="simple_theme_default">默认</string>
-    <string name="simple_theme_app">app</string>
-    <string name="simple_theme_blue">蓝色</string>
-    <string name="simple_theme_black">黑色</string>
-    <string name="simple_theme_pink">粉色</string>
     <string name="simple_select_theme">主题</string>
     <string name="simple_select_sort">排序</string>
     <string name="simple_sort_desc">DESC</string>
     <string name="simple_sort_asc">ASC</string>
-    <string name="simple_select_scan">扫描</string>
     <string name="simple_scan_image">图片</string>
     <string name="simple_scan_video">视频</string>
     <string name="simple_scan_mix">混合</string>
-    <string name="simple_select_setting">设置</string>
-    <string name="simple_crop_cropper">cropper</string>
-    <string name="simple_dialog">Dialog弹窗</string>
-    <string name="simple_custom_camera">自定义相机</string>
     <string name="simple_start_config">启动</string>
-    <string name="simple_multi_select">多选</string>
     <string name="simple_theme_wechat">微信</string>
-    <string name="simple_single_select">单选</string>
 </resources>

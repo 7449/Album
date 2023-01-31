@@ -25,7 +25,7 @@ interface SimplePrevCallback : IGalleryPrevCallback {
 
     override fun onClickItemFileNotExist(
         context: Context,
-        bundle: GalleryConfigs,
+        configs: GalleryConfigs,
         scanEntity: ScanEntity
     ) {
         context.getString(R.string.gallery_compat_prev_check_file_deleted).toast(context)
@@ -33,7 +33,7 @@ interface SimplePrevCallback : IGalleryPrevCallback {
 
     override fun onClickItemMaxCount(
         context: Context,
-        bundle: GalleryConfigs,
+        configs: GalleryConfigs,
         scanEntity: ScanEntity
     ) {
         context.getString(R.string.gallery_compat_check_max).toast(context)
@@ -41,8 +41,8 @@ interface SimplePrevCallback : IGalleryPrevCallback {
 
     override fun onPrevCreated(
         delegate: IPrevDelegate,
-        bundle: GalleryConfigs,
-        savedInstanceState: Bundle?
+        configs: GalleryConfigs,
+        saveState: Bundle?
     ) {
     }
 

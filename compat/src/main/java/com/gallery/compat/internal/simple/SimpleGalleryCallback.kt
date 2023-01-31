@@ -15,8 +15,8 @@ interface SimpleGalleryCallback : IGalleryCallback {
 
     override fun onGalleryCreated(
         delegate: IScanDelegate,
-        bundle: GalleryConfigs,
-        savedInstanceState: Bundle?
+        configs: GalleryConfigs,
+        saveState: Bundle?
     ) {
     }
 
@@ -43,7 +43,7 @@ interface SimpleGalleryCallback : IGalleryCallback {
 
     override fun onPhotoItemClick(
         context: Context,
-        bundle: GalleryConfigs,
+        configs: GalleryConfigs,
         scanEntity: ScanEntity,
         position: Int,
         parentId: Long
@@ -64,7 +64,7 @@ interface SimpleGalleryCallback : IGalleryCallback {
         }
     }
 
-    override fun onResultError(context: Context, galleryBundle: GalleryConfigs) {
+    override fun onResultError(context: Context, configs: GalleryConfigs) {
         context.getString(R.string.gallery_compat_error).toast(context)
     }
 

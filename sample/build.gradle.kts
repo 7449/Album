@@ -29,4 +29,5 @@ dependencies {
     implementation(Dep.glide)
     implementation(Dep.cropper)
     implementation(Dep.cameraview)
+    implementation(Dep.color)
 }

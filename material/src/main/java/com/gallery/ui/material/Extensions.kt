@@ -5,10 +5,14 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Parcelable
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.extensions.drawable
-import com.gallery.ui.material.args.MaterialGalleryBundle
+import com.gallery.ui.material.args.MaterialGalleryConfig
 
 /** 获取自定义颜色Drawable */
 fun Context.minimumDrawable(@DrawableRes id: Int, @ColorInt color: Int): Drawable? =
@@ -21,5 +25,16 @@ fun Drawable.minimumWidthAndHeightDrawable(@ColorInt color: Int): Drawable {
     return this
 }
 
-internal val Parcelable?.materialGalleryArgOrDefault: MaterialGalleryBundle
-    get() = this as? MaterialGalleryBundle ?: MaterialGalleryBundle()
+internal val Parcelable?.materialGalleryArgOrDefault: MaterialGalleryConfig
+    get() = this as? MaterialGalleryConfig ?: MaterialGalleryConfig()
+
+fun ViewGroup.createGalleryImageView(): GalleryImageView {
+    return GalleryImageView(context).apply {
+        layoutParams = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        ).apply {
+            gravity = Gravity.CENTER
+        }
+    }
+}

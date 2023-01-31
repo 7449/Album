@@ -193,8 +193,7 @@ internal class GalleryAdapter(
     }
 
     class PhotoViewHolder(
-        private val rootView: View,
-        private val container: FrameLayout,
+        private val rootView: FrameLayout,
         private val checkBox: AppCompatTextView,
         private val galleryConfigs: GalleryConfigs,
         private val display: Int,
@@ -210,30 +209,20 @@ internal class GalleryAdapter(
             ): PhotoViewHolder {
                 val rootView = FrameLayout(parent.context).apply {
                     layoutParams = FrameLayout.LayoutParams(display, display)
+                        .apply { setPadding(divider) }
                 }
-                val galleryContainer = FrameLayout(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.MATCH_PARENT
-                    ).apply { setPadding(divider) }
-                }
-                val galleryCheckBox = AppCompatTextView(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.WRAP_CONTENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
+                val checkBox = AppCompatTextView(rootView.context).apply {
+                    layoutParams = FrameLayout.LayoutParams(40, 40).apply {
                         setPadding(divider)
                         setMargins(divider)
                         gravity = Gravity.END
                     }
                 }
-                galleryCheckBox.hide()
-                rootView.addView(galleryContainer)
-                rootView.addView(galleryCheckBox)
+                checkBox.hide()
+                rootView.addView(checkBox)
                 return PhotoViewHolder(
                     rootView,
-                    galleryContainer,
-                    galleryCheckBox,
+                    checkBox,
                     configs,
                     display,
                     galleryCallback
@@ -247,12 +236,12 @@ internal class GalleryAdapter(
             selectList: ArrayList<ScanEntity>,
             imageLoader: IGalleryImageLoader
         ) {
-            imageLoader.onDisplayGallery(display, display, scanEntity, container, checkBox)
+            imageLoader.onDisplayHomeGallery(display, display, scanEntity, rootView)
             if (galleryConfigs.radio) {
                 return
             }
             checkBox.setOnClickListener { clickItemView(position, scanEntity, selectList) }
-            checkBox.setBackgroundResource(galleryConfigs.cameraConfig.selectIcon)
+            checkBox.setBackgroundResource(galleryConfigs.cameraConfig.checkBoxIcon)
             checkBox.isSelected = scanEntity.isSelected
             checkBox.show()
         }

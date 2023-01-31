@@ -9,7 +9,7 @@ import com.gallery.compat.Gallery
 import com.gallery.core.CameraConfig
 import com.gallery.core.GalleryConfigs
 import com.gallery.ui.wechat.activity.WeChatGalleryActivity
-import com.gallery.ui.wechat.args.WeChatGalleryBundle
+import com.gallery.ui.wechat.args.WeChatGalleryConfig
 
 internal val scanType = intArrayOf(
     MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
@@ -26,31 +26,12 @@ fun FragmentActivity.weChatGallery(launcher: ActivityResultLauncher<Intent>) {
     Gallery.newInstance(
         activity = this,
         launcher = launcher,
-        gap = WeChatGalleryBundle(
-            prevRootBackground = Color.BLACK,
-            galleryRootBackground = rgb38,
-            videoMaxDuration = 500000,
-            videoAllFinderName = "全部视频",
-            statusBarColor = rgb38,
-            toolbarBackground = rgb38,
-            bottomViewBackground = rgb19,
-            preBottomViewBackground = rgb38,
-            preBottomOkText = "选择",
-            preBottomOkTextSize = 14.toFloat(),
-            preViewTextSize = 14.toFloat(),
-            selectText = "发送",
-            selectTextSize = 12.toFloat(),
-            finderItemBackground = rgb38,
-            finderItemTextColor = Color.WHITE,
-            finderItemTextCountColor = Color.parseColor("#767676"),
-            finderTextCompoundDrawable = R.drawable.ic_wechat_gallery_finder_action,
-            finderTextSize = 14.toFloat()
-        ),
-        bundle = GalleryConfigs(
+        gap = WeChatGalleryConfig(),
+        configs = GalleryConfigs(
             sdNameAndAllName = "根目录" to "图片和视频",
             hideCamera = true,
             type = scanType,
-            cameraConfig = CameraConfig(selectIcon = checkBoxResource),
+            cameraConfig = CameraConfig(checkBoxIcon = checkBoxResource),
         ),
         clz = WeChatGalleryActivity::class.java
     )

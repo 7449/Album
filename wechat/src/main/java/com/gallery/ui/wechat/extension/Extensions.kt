@@ -2,13 +2,11 @@ package com.gallery.ui.wechat.extension
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Bundle
 import android.os.Parcelable
 import android.view.animation.Animation
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import com.gallery.compat.extensions.getObj
-import com.gallery.ui.wechat.args.WeChatGalleryBundle
+import com.gallery.ui.wechat.args.WeChatGalleryConfig
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
@@ -16,14 +14,10 @@ import java.util.concurrent.TimeUnit
 @SuppressLint("SimpleDateFormat")
 private val formatter = SimpleDateFormat("yyyy/MM")
 
-internal val Parcelable?.weChatGalleryArgOrDefault: WeChatGalleryBundle
-    get() = this as? WeChatGalleryBundle ?: WeChatGalleryBundle()
+internal val Parcelable?.weChatGalleryArgOrDefault: WeChatGalleryConfig
+    get() = this as? WeChatGalleryConfig ?: WeChatGalleryConfig()
 
-fun Bundle?.getBooleanExpand(key: String): Boolean = getObj(key) { false }
-
-fun Int.colorExpand(activity: Context): Int = activity.colorExpand(this)
-
-fun Context.colorExpand(@ColorRes id: Int): Int = ContextCompat.getColor(this, id)
+fun Context.color(@ColorRes id: Int): Int = ContextCompat.getColor(this, id)
 
 fun Long.formatTimeVideo(): String {
     if (toInt() == 0) {
@@ -56,16 +50,10 @@ fun Long.toFileSize(): String {
     }
 }
 
-fun Animation.doOnAnimationStartExpand(action: (animation: Animation) -> Unit): Animation =
-    setAnimationListenerExpand(onAnimationStart = action)
+fun Animation.doOnAnimationEnd(action: (animation: Animation) -> Unit): Animation =
+    setAnimationListener(onAnimationEnd = action)
 
-fun Animation.doOnAnimationEndExpand(action: (animation: Animation) -> Unit): Animation =
-    setAnimationListenerExpand(onAnimationEnd = action)
-
-fun Animation.doOnAnimationRepeatExpand(action: (animation: Animation) -> Unit): Animation =
-    setAnimationListenerExpand(onAnimationRepeat = action)
-
-fun Animation.setAnimationListenerExpand(
+fun Animation.setAnimationListener(
     onAnimationRepeat: (animation: Animation) -> Unit = {},
     onAnimationEnd: (animation: Animation) -> Unit = {},
     onAnimationStart: (animation: Animation) -> Unit = {},

@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class GalleryCompatArgs(
-    val bundle: GalleryConfigs,
+    val configs: GalleryConfigs,
     val gap: Parcelable?,
 ) : Parcelable {
     companion object {

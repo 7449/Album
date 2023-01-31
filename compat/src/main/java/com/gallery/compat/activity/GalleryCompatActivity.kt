@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +19,7 @@ import com.gallery.compat.activity.args.GallerySaveArgs.Companion.gallerySaveArg
 import com.gallery.compat.activity.args.GallerySaveArgs.Companion.toBundle
 import com.gallery.compat.activity.args.PrevCompatArgs
 import com.gallery.compat.extensions.galleryFragment
+import com.gallery.compat.extensions.intentResultOf
 import com.gallery.compat.extensions.requireGalleryFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
@@ -58,7 +58,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
     protected val galleryCompatArgs: GalleryCompatArgs by lazy { intent?.extras.orEmpty().galleryCompatArgsOrDefault }
 
     /** 初始配置 */
-    protected val galleryConfig: GalleryConfigs by lazy { galleryCompatArgs.bundle }
+    protected val galleryConfig: GalleryConfigs by lazy { galleryCompatArgs.configs }
 
     /** 自定义参数配置 */
     protected val gapConfig: Parcelable? by lazy { galleryCompatArgs.gap }
@@ -117,34 +117,13 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
     override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
         if (requireGalleryFragment.isScanAll) {
             finderList.clear()
-            finderList.addAll(
-                scanEntities.findFinder(
-                    galleryConfig.sdNameAndAllName.first,
-                    galleryConfig.sdNameAndAllName.second
-                )
-            )
+            finderList.addAll(scanEntities.findFinder(galleryConfig.sdNameAndAllName.first, galleryConfig.sdNameAndAllName.second))
         }
     }
 
     /** 启动预览 */
-    fun startPrevPage(
-        parentId: Long,
-        position: Int,
-        gap: Parcelable?,
-        scanSingleType: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
-        cla: Class<out PrevCompatActivity>
-    ) {
-        startPrevPage(
-            PrevCompatArgs(
-                PrevArgs(
-                    parentId,
-                    requireGalleryFragment.selectItem,
-                    galleryConfig,
-                    position,
-                    scanSingleType
-                ), gap
-            ), cla
-        )
+    fun startPrevPage(parentId: Long, position: Int, gap: Parcelable?, scanSingleType: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE, cla: Class<out PrevCompatActivity>) {
+        startPrevPage(PrevCompatArgs(PrevArgs(parentId, requireGalleryFragment.selectItem, galleryConfig, position, scanSingleType), gap), cla)
     }
 
     /** 启动预览 */
@@ -178,41 +157,28 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
 
     /** 选择图片,针对多选 */
     open fun onGalleryResources(entities: ArrayList<ScanEntity>) {
-        val intent = Intent()
-        intent.putExtras(bundleOf(GalleryConfig.GALLERY_MULTIPLE_DATA to entities))
-        setResult(GalleryConfig.RESULT_CODE_MULTIPLE_DATA, intent)
-        finish()
+        intentResultOf(
+            GalleryConfig.RESULT_CODE_MULTIPLE_DATA,
+            bundleOf(GalleryConfig.GALLERY_MULTIPLE_DATA to entities)
+        )
     }
 
     /** 选择图片,针对单选 */
     override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
-        val intent = Intent()
-        intent.putExtras(bundleOf(GalleryConfig.GALLERY_SINGLE_DATA to scanEntity))
-        setResult(GalleryConfig.RESULT_CODE_SINGLE_DATA, intent)
-        finish()
+        intentResultOf(
+            GalleryConfig.RESULT_CODE_SINGLE_DATA,
+            bundleOf(GalleryConfig.GALLERY_SINGLE_DATA to scanEntity)
+        )
     }
 
     /** 初始化布局 */
-    abstract override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        bundle: GalleryConfigs,
-        savedInstanceState: Bundle?
-    )
+    abstract override fun onGalleryCreated(delegate: IScanDelegate, configs: GalleryConfigs, saveState: Bundle?)
 
     /** 文件目录加载图片,此方法需要在自定义Finder的时候主动调用,或者自定义的时候直接加载图片即可 */
-    abstract override fun onDisplayGalleryThumbnails(
-        finderEntity: ScanEntity,
-        container: FrameLayout
-    )
+    abstract override fun onDisplayThumbnailsGallery(entity: ScanEntity, container: FrameLayout)
 
     /** 文件加载图片 */
-    abstract override fun onDisplayGallery(
-        width: Int,
-        height: Int,
-        scanEntity: ScanEntity,
-        container: FrameLayout,
-        checkBox: TextView
-    )
+    abstract override fun onDisplayHomeGallery(width: Int, height: Int, entity: ScanEntity, container: FrameLayout)
 
     override fun onDestroy() {
         super.onDestroy()

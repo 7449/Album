@@ -15,11 +15,7 @@ interface IGalleryCallback {
     /**
      * [IScanDelegate.onCreate]触发
      */
-    fun onGalleryCreated(
-        delegate: IScanDelegate,
-        bundle: GalleryConfigs,
-        savedInstanceState: Bundle?
-    )
+    fun onGalleryCreated(delegate: IScanDelegate, configs: GalleryConfigs, saveState: Bundle?)
 
     /**
      * 单选非裁剪状态下,点击[Adapter]item返回的数据
@@ -64,7 +60,7 @@ interface IGalleryCallback {
      */
     fun onPhotoItemClick(
         context: Context,
-        bundle: GalleryConfigs,
+        configs: GalleryConfigs,
         scanEntity: ScanEntity,
         position: Int,
         parentId: Long
@@ -89,7 +85,7 @@ interface IGalleryCallback {
     /**
      * 拍照或者摄像或者扫描单个数据失败
      */
-    fun onResultError(context: Context, galleryBundle: GalleryConfigs)
+    fun onResultError(context: Context, configs: GalleryConfigs)
 
     /**
      * 打开相机返回的状态

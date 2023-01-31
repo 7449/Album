@@ -13,7 +13,7 @@ import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.WechatGalleryLayoutPrevItemBinding
 import com.gallery.ui.wechat.extension.toFileSize
 
-class WeChatGalleryPrevItem @JvmOverloads constructor(
+internal class WeChatGalleryPrevItem @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

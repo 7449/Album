@@ -3,8 +3,9 @@ package com.gallery.sample.camera
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.gallery.core.extensions.parcelable
 import com.gallery.sample.databinding.SimpleActivityCameraBinding
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger
@@ -13,16 +14,11 @@ import com.otaliastudios.cameraview.PictureResult
 class SimpleCameraActivity : AppCompatActivity() {
 
     companion object {
-        /**
-         * 自定义相机路径
-         */
         const val CUSTOM_CAMERA_OUT_PUT_URI = "customCameraOutPutUri"
     }
 
-    private val viewBinding: SimpleActivityCameraBinding by lazy {
-        SimpleActivityCameraBinding.inflate(
-            layoutInflater
-        )
+    private val viewBinding by lazy {
+        SimpleActivityCameraBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,18 +31,18 @@ class SimpleCameraActivity : AppCompatActivity() {
             if (viewBinding.camera.isTakingPicture) return@setOnClickListener
             viewBinding.camera.takePictureSnapshot()
         }
-    }
-
-    override fun onBackPressed() {
-        setResult(Activity.RESULT_CANCELED)
-        super.onBackPressed()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                setResult(Activity.RESULT_CANCELED)
+                finish()
+            }
+        })
     }
 
     private inner class Listener : CameraListener() {
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
-            val fileUri: Uri? = intent.extras?.getParcelable(CUSTOM_CAMERA_OUT_PUT_URI)
-            Log.i("Camera", fileUri.toString())
+            val fileUri: Uri? = intent.extras?.parcelable(CUSTOM_CAMERA_OUT_PUT_URI)
             contentResolver.openOutputStream(requireNotNull(fileUri))?.use { it.write(result.data) }
             setResult(Activity.RESULT_OK)
             finish()

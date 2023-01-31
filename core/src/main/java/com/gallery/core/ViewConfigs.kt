@@ -16,11 +16,11 @@ data class CameraConfig(
     @ColorInt val iconColor: Int = Color.parseColor("#FF02A5D2"),
     @ColorInt val bg: Int = Color.parseColor("#FFB0C9C9"),
     @DrawableRes val emptyIcon: Int = 0,
-    @DrawableRes val selectIcon: Int = R.drawable.selector_default_gallery_item_check,
+    @DrawableRes val checkBoxIcon: Int = R.drawable.selector_default_gallery_item_check,
 ) : Parcelable
 
 @Parcelize
 data class GridConfig(
-    val spanCount: Int = 4,
+    val spanCount: Int = 3,
     val orientation: Int = RecyclerView.VERTICAL,
 ) : Parcelable

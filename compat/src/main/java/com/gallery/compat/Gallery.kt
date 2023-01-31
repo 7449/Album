@@ -22,7 +22,7 @@ open class Gallery(
             activity: FragmentActivity? = null,
             fragment: Fragment? = null,
             launcher: ActivityResultLauncher<Intent>,
-            bundle: GalleryConfigs = GalleryConfigs(),
+            configs: GalleryConfigs = GalleryConfigs(),
             gap: Parcelable? = null,
             clz: Class<*>,
         ): Gallery {
@@ -30,7 +30,7 @@ open class Gallery(
                 activity,
                 fragment,
                 launcher,
-                GalleryCompatArgs(bundle, gap),
+                GalleryCompatArgs(configs, gap),
                 clz
             )
         }

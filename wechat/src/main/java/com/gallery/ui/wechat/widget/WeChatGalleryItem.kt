@@ -11,10 +11,10 @@ import android.widget.TextView
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.WechatGalleryLayoutItemBinding
-import com.gallery.ui.wechat.extension.colorExpand
+import com.gallery.ui.wechat.extension.color
 import com.gallery.ui.wechat.extension.formatTimeVideo
 
-class WeChatGalleryItem @JvmOverloads constructor(
+internal class WeChatGalleryItem @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -44,7 +44,7 @@ class WeChatGalleryItem @JvmOverloads constructor(
         videoView.visibility = if (scanEntity.isVideo) VISIBLE else GONE
         bottomView.visibility = if (scanEntity.isVideo) VISIBLE else GONE
         bottomView.setBackgroundColor(
-            if (scanEntity.isGif) Color.TRANSPARENT else context.colorExpand(
+            if (scanEntity.isGif) Color.TRANSPARENT else context.color(
                 R.color.wechat_gallery_color_B3000000
             )
         )

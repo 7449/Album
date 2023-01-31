@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.view.View
 
-class AnimExtension(private val height: Int) {
+internal class AnimExtension(private val height: Int) {
 
     companion object {
         fun newInstance(height: Int): AnimExtension {

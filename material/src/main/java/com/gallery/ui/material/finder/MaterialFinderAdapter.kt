@@ -14,25 +14,24 @@ import androidx.lifecycle.LifecycleOwner
 import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.material.args.MaterialGalleryBundle
+import com.gallery.ui.material.args.MaterialGalleryConfig
 import com.gallery.ui.material.databinding.MaterialGalleryItemFinderBinding
 
-class MaterialFinderAdapter(
+internal class MaterialFinderAdapter(
     private val activity: GalleryCompatActivity,
     private val viewAnchor: View,
-    private val uiGalleryBundle: MaterialGalleryBundle,
+    private val config: MaterialGalleryConfig,
     private val finderListener: GalleryFinderAdapter.AdapterFinderListener
 ) : GalleryFinderAdapter, AdapterView.OnItemClickListener {
 
-    private val finderAdapter: FinderAdapter =
-        FinderAdapter(uiGalleryBundle) { finderEntity, container ->
-            finderListener.onGalleryFinderThumbnails(finderEntity, container)
-        }
+    private val finderAdapter: FinderAdapter = FinderAdapter(config) { finderEntity, container ->
+        finderListener.onGalleryFinderThumbnails(finderEntity, container)
+    }
     private val popupWindow: ListPopupWindow = ListPopupWindow(activity).apply {
         this.anchorView = viewAnchor
-        this.width = uiGalleryBundle.listPopupWidth
-        this.horizontalOffset = uiGalleryBundle.listPopupHorizontalOffset
-        this.verticalOffset = uiGalleryBundle.listPopupVerticalOffset
+        this.width = config.listPopupWidth
+        this.horizontalOffset = config.listPopupHorizontalOffset
+        this.verticalOffset = config.listPopupVerticalOffset
         this.isModal = true
         this.setOnItemClickListener(this@MaterialFinderAdapter)
         this.setAdapter(finderAdapter)
@@ -53,7 +52,7 @@ class MaterialFinderAdapter(
 
     override fun show() {
         popupWindow.show()
-        popupWindow.listView?.setBackgroundColor(uiGalleryBundle.finderItemBackground)
+        popupWindow.listView?.setBackgroundColor(config.finderItemBackground)
     }
 
     override fun hide() {
@@ -69,26 +68,23 @@ class MaterialFinderAdapter(
     }
 
     private class FinderAdapter(
-        private val uiGalleryBundle: MaterialGalleryBundle,
+        private val materialGalleryConfig: MaterialGalleryConfig,
         private val displayFinder: (finderEntity: ScanEntity, container: FrameLayout) -> Unit
     ) : BaseAdapter() {
 
         private val list: ArrayList<ScanEntity> = arrayListOf()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val finderEntity: ScanEntity = getItem(position)
-            val rootView: View = convertView
-                ?: MaterialGalleryItemFinderBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                ).apply {
-                    this.root.tag = ViewHolder(this)
-                }.root
-            val viewHolder: ViewHolder = rootView.tag as ViewHolder
-            viewHolder.appCompatTextView.setTextColor(uiGalleryBundle.finderItemTextColor)
+            val finderEntity = getItem(position)
+            val rootView = convertView ?: MaterialGalleryItemFinderBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ).apply { this.root.tag = ViewHolder(this) }.root
+            val viewHolder = rootView.tag as ViewHolder
+            viewHolder.appCompatTextView.setTextColor(materialGalleryConfig.finderItemTextColor)
             viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)
-            viewHolder.appCompatTextViewCount.setTextColor(uiGalleryBundle.finderItemTextCountColor)
+            viewHolder.appCompatTextViewCount.setTextColor(materialGalleryConfig.finderItemTextCountColor)
             viewHolder.appCompatTextViewCount.text = "%s".format(finderEntity.count.toString())
             displayFinder.invoke(finderEntity, viewHolder.frameLayout)
             return rootView
@@ -109,6 +105,7 @@ class MaterialFinderAdapter(
             val appCompatTextView: AppCompatTextView = viewBinding.tvGalleryFinderName
             val appCompatTextViewCount: AppCompatTextView = viewBinding.tvGalleryFinderFileCount
         }
+
     }
 
 }

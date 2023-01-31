@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/toolbar_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="toolbar字体颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/toolbar_back_icon_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="toolbar返回图标颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/toolbar_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="toolbar背景色(点击选择)"
+            android:textColor="#FF04B3E4" />
+
+        <TextView
+            android:id="@+id/status_bar_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="状态栏颜色(点击选择)"
+            android:textColor="#FF02A5D2" />
+
+        <TextView
+            android:id="@+id/root_view_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="RootView背景色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/gallery_bottom_finder_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="目录字体颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/gallery_bottom_finder_icon_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="目录图标颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/gallery_bottom_prev_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览文字颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/gallery_bottom_select_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="选择文字颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/gallery_bottom_root_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="首页底部背景色(点击选择)"
+            android:textColor="#FF02A5D2" />
+
+        <TextView
+            android:id="@+id/finder_item_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="目录文件夹背景色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/finder_item_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="目录文件夹字体颜色(点击选择)"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/finder_item_text_count_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="目录文件夹个数字体颜色(点击选择)"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/prev_root_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页背景色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/prev_root_bottom_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页底部背景色(点击选择)"
+            android:textColor="#FF02A5D2" />
+
+        <TextView
+            android:id="@+id/prev_root_bottom_ok_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页底部确定文字颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/prev_root_bottom_count_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页底部选择个数文字颜色(点击选择)"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="Toolbar返回Icon: ic_material_gallery_back" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="文件夹Icon: ic_material_gallery_finder" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="ToolbarElevation:6" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="标题:图片选择" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="目录文字大小:16F" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览文字:预览" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览文字大小:16F" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="选择文字:选择" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="选择文字大小:16F" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页Title:预览" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页确定文字:确定" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页确定文字大小:16F" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="预览页底部选择个数文字大小:16F" />
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

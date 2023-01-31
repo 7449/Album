@@ -18,7 +18,7 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig
 import com.gallery.ui.wechat.adapter.WeChatPrevSelectAdapter
-import com.gallery.ui.wechat.args.WeChatGalleryBundle
+import com.gallery.ui.wechat.args.WeChatGalleryConfig
 import com.gallery.ui.wechat.args.WeChatPrevSaveArgs
 import com.gallery.ui.wechat.args.WeChatPrevSaveArgs.Companion.toBundle
 import com.gallery.ui.wechat.args.WeChatPrevSaveArgs.Companion.weChatPrevSaveArgs
@@ -28,13 +28,14 @@ import com.gallery.ui.wechat.widget.WeChatGalleryPrevItem
 import com.gallery.ui.wechat.widget.WeChatGallerySelectItem
 
 @SuppressLint("SetTextI18n")
-class WeChatGalleryPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.AdapterFinderListener {
+internal class WeChatGalleryPrevActivity : PrevCompatActivity(),
+    GalleryFinderAdapter.AdapterFinderListener {
 
     override val galleryFragmentId: Int
         get() = R.id.preWeChatFragment
 
     private val selectAdapter: WeChatPrevSelectAdapter = WeChatPrevSelectAdapter(this)
-    private val uiGalleryBundle: WeChatGalleryBundle by lazy { gapConfig.weChatGalleryArgOrDefault }
+    private val config: WeChatGalleryConfig by lazy { gapConfig.weChatGalleryArgOrDefault }
 
     //选中的item的ids
     private val idList: ArrayList<Long> = arrayListOf()
@@ -55,10 +56,10 @@ class WeChatGalleryPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
             )
             return
         }
-        if (scanEntity.duration > uiGalleryBundle.videoMaxDuration) {
+        if (scanEntity.duration > config.videoMaxDuration) {
             binding.galleryPrevVideoTip.visibility = View.VISIBLE
             binding.galleryPrevVideoTip.text =
-                getString(R.string.wechat_gallery_select_video_prev_error).format(uiGalleryBundle.videoMaxDuration / 1000 / 60)
+                getString(R.string.wechat_gallery_select_video_prev_error).format(config.videoMaxDuration / 1000 / 60)
             binding.prevWeChatSelect.setTextColor(
                 ContextCompat.getColor(
                     this,
@@ -89,27 +90,27 @@ class WeChatGalleryPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        window.statusBarColor = uiGalleryBundle.statusBarColor
-        binding.prevWeChatToolbar.setBackgroundColor(uiGalleryBundle.toolbarBackground)
+        window.statusBarColor = config.statusBarColor
+        binding.prevWeChatToolbar.setBackgroundColor(config.toolbarBackground)
 
-        binding.prevWeChatBottomView.setBackgroundColor(uiGalleryBundle.preBottomViewBackground)
-        binding.galleryPrevList.setBackgroundColor(uiGalleryBundle.preBottomViewBackground)
+        binding.prevWeChatBottomView.setBackgroundColor(config.preBottomViewBackground)
+        binding.galleryPrevList.setBackgroundColor(config.preBottomViewBackground)
         binding.galleryPrevList.alpha = 0.9.toFloat()
-        binding.prevWeChatSelect.text = uiGalleryBundle.preBottomOkText
-        binding.prevWeChatSelect.textSize = uiGalleryBundle.preBottomOkTextSize
-        binding.prevWeChatSelect.setTextColor(uiGalleryBundle.preBottomOkTextColor)
+        binding.prevWeChatSelect.text = config.preBottomOkText
+        binding.prevWeChatSelect.textSize = config.preBottomOkTextSize
+        binding.prevWeChatSelect.setTextColor(config.preBottomOkTextColor)
 
         binding.prevWeChatFullImage.setButtonDrawable(R.drawable.wechat_gallery_selector_gallery_full_image_item_check)
         binding.prevWeChatSelect.setButtonDrawable(R.drawable.wechat_gallery_selector_gallery_full_image_item_check)
 
-        binding.prevWeChatToolbarSend.textSize = uiGalleryBundle.selectTextSize
-        binding.prevWeChatToolbarSend.text = uiGalleryBundle.selectText
+        binding.prevWeChatToolbarSend.textSize = config.selectTextSize
+        binding.prevWeChatToolbarSend.text = config.selectText
 
         idList.clear()
         idList.addAll(savedInstanceState?.weChatPrevSaveArgs?.ids ?: arrayListOf())
         binding.prevWeChatToolbarBack.setOnClickListener { onGalleryFinish() }
         binding.prevWeChatToolbarText.text = "%s / %s".format(0, galleryConfig.maxCount)
-        binding.prevWeChatFullImage.isChecked = uiGalleryBundle.fullImageSelect
+        binding.prevWeChatFullImage.isChecked = config.fullImageSelect
         binding.galleryPrevList.layoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.HORIZONTAL
         }
@@ -133,21 +134,21 @@ class WeChatGalleryPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val weChatSelectItem = WeChatGallerySelectItem(container.context)
-        weChatSelectItem.update(finderEntity, idList, uiGalleryBundle.isPrev)
+        weChatSelectItem.update(finderEntity, idList, config.isPrev)
         Glide.with(this).asBitmap().load(finderEntity.uri).apply(
             RequestOptions().fitCenter()
         ).into(weChatSelectItem.imageView)
         container.addView(weChatSelectItem)
     }
 
-    override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
+    override fun onDisplayPrevGallery(entity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val weChatPrevItem = WeChatGalleryPrevItem(container.context)
-        weChatPrevItem.update(scanEntity)
+        weChatPrevItem.update(entity)
         Glide.with(this)
-            .load(scanEntity.uri)
+            .load(entity.uri)
             .apply {
-                if (scanEntity.isVideo) {
+                if (entity.isVideo) {
                     apply(RequestOptions().centerCrop())
                 }
             }
@@ -169,30 +170,31 @@ class WeChatGalleryPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
 
     override fun onPrevCreated(
         delegate: IPrevDelegate,
-        bundle: GalleryConfigs,
-        savedInstanceState: Bundle?
+        configs: GalleryConfigs,
+        saveState: Bundle?
     ) {
         binding.prevWeChatToolbarText.text =
             (delegate.currentPosition + 1).toString() + "/" + delegate.itemCount
         binding.prevWeChatToolbarSend.text =
-            uiGalleryBundle.selectText + if (delegate.isSelectEmpty) "" else "(${delegate.selectCount}/${galleryConfig.maxCount})"
+            config.selectText + if (delegate.isSelectEmpty) "" else "(${delegate.selectCount}/${galleryConfig.maxCount})"
         binding.prevWeChatSelect.setOnClickListener { delegate.selectPictureClick(it) }
         binding.galleryPrevList.visibility =
             if (delegate.selectItem.isEmpty()) View.GONE else View.VISIBLE
         binding.galleryPrevListLine.visibility =
             if (delegate.selectItem.isEmpty()) View.GONE else View.VISIBLE
-        selectAdapter.updateSelect(if (uiGalleryBundle.isPrev) prevCompatArgs.prevArgs.selectList else delegate.selectItem)
+        selectAdapter.updateSelect(if (config.isPrev) prevCompatArgs.prevArgs.selectList else delegate.selectItem)
+        selectAdapter.refreshItem(delegate.currentItem)
         onUpdateVideoTip(delegate.currentItem)
         delegate.rootView.findViewById<View>(R.id.gallery_prev_checkbox)?.visibility = View.GONE
-        delegate.rootView.setBackgroundColor(uiGalleryBundle.prevRootBackground)
+        delegate.rootView.setBackgroundColor(config.prevRootBackground)
     }
 
     override fun onCheckBoxChanged() {
         val fragment = requirePrevFragment
         val currentItem = fragment.currentItem
         binding.prevWeChatToolbarSend.text =
-            uiGalleryBundle.selectText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.maxCount})"
-        if (uiGalleryBundle.isPrev) {
+            config.selectText + if (fragment.isSelectEmpty) "" else "(${fragment.selectCount}/${galleryConfig.maxCount})"
+        if (config.isPrev) {
             if (!currentItem.isSelected) {
                 idList.add(currentItem.id)
             } else {
@@ -213,44 +215,44 @@ class WeChatGalleryPrevActivity : PrevCompatActivity(), GalleryFinderAdapter.Ada
 
     override fun onClickItemMaxCount(
         context: Context,
-        bundle: GalleryConfigs,
+        configs: GalleryConfigs,
         scanEntity: ScanEntity
     ) {
-        super.onClickItemMaxCount(context, bundle, scanEntity)
+        super.onClickItemMaxCount(context, configs, scanEntity)
         binding.prevWeChatSelect.isChecked = false
     }
 
     override fun onClickItemFileNotExist(
         context: Context,
-        bundle: GalleryConfigs,
+        configs: GalleryConfigs,
         scanEntity: ScanEntity
     ) {
-        super.onClickItemFileNotExist(context, bundle, scanEntity)
+        super.onClickItemFileNotExist(context, configs, scanEntity)
         binding.prevWeChatSelect.isChecked = false
     }
 
-    override fun onKeyBackResult(bundle: Bundle): Bundle {
+    override fun backResult(bundle: Bundle): Bundle {
         bundle.putBoolean(
             WeChatConfig.FULL_IMAGE,
             binding.prevWeChatFullImage.isChecked
         )
-        return super.onSelectEntitiesResult(bundle)
+        return super.selectResult(bundle)
     }
 
-    override fun onToolbarResult(bundle: Bundle): Bundle {
+    override fun toolbarResult(bundle: Bundle): Bundle {
         bundle.putBoolean(
             WeChatConfig.FULL_IMAGE,
             binding.prevWeChatFullImage.isChecked
         )
-        return super.onSelectEntitiesResult(bundle)
+        return super.selectResult(bundle)
     }
 
-    override fun onSelectEntitiesResult(bundle: Bundle): Bundle {
+    override fun selectResult(bundle: Bundle): Bundle {
         bundle.putBoolean(
             WeChatConfig.FULL_IMAGE,
             binding.prevWeChatFullImage.isChecked
         )
-        return super.onSelectEntitiesResult(bundle)
+        return super.selectResult(bundle)
     }
 
 }

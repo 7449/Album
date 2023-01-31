@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <RadioButton
+        android:id="@+id/hide_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="隐藏相机" />
+
+    <RadioButton
+        android:id="@+id/radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="单选" />
+
+    <RadioButton
+        android:id="@+id/crop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="裁剪" />
+
+    <RadioButton
+        android:id="@+id/take_picture_crop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="拍照裁剪" />
+
+    <RadioButton
+        android:id="@+id/custom_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:button="@drawable/simple_default_selector_rb_check"
+        android:text="自定相机" />
+</LinearLayout>

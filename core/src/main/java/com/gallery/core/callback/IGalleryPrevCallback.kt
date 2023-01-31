@@ -29,28 +29,20 @@ interface IGalleryPrevCallback {
     /**
      * [IPrevDelegate.onCreate]触发，必须实现
      */
-    fun onPrevCreated(delegate: IPrevDelegate, bundle: GalleryConfigs, savedInstanceState: Bundle?)
+    fun onPrevCreated(delegate: IPrevDelegate, configs: GalleryConfigs, saveState: Bundle?)
 
     /**
      * 点击图片时该文件已被删除
      * 适用场景:在图片选择页面返回桌面打开相册删除某张图片
      * [IPrevDelegate.selectPictureClick]
      */
-    fun onClickItemFileNotExist(
-        context: Context,
-        bundle: GalleryConfigs,
-        scanEntity: ScanEntity
-    )
+    fun onClickItemFileNotExist(context: Context, configs: GalleryConfigs, scanEntity: ScanEntity)
 
     /**
      * 已达到选择最大数
      * [GalleryConfigs.maxCount]
      */
-    fun onClickItemMaxCount(
-        context: Context,
-        bundle: GalleryConfigs,
-        scanEntity: ScanEntity
-    )
+    fun onClickItemMaxCount(context: Context, configs: GalleryConfigs, scanEntity: ScanEntity)
 
     /**
      * [IPrevDelegate.selectPictureClick]

@@ -1,6 +1,6 @@
 package com.gallery.ui.wechat
 
-object WeChatConfig {
+internal object WeChatConfig {
     /**
      * 是否是原图
      */

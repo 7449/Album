@@ -14,13 +14,13 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
 
-class MaterialGalleryCropper(private val cropImageOptions: CropImageOptions) : ICrop {
+internal class MaterialGalleryCropper(private val cropImageOptions: CropImageOptions) : ICrop {
 
     private var cropUri: Uri? = null
 
     override fun onCropResult(
         delegate: IScanDelegate,
-        galleryBundle: com.gallery.core.GalleryConfigs,
+        configs: com.gallery.core.GalleryConfigs,
         intent: ActivityResult
     ) {
         when (intent.resultCode) {
@@ -35,10 +35,10 @@ class MaterialGalleryCropper(private val cropImageOptions: CropImageOptions) : I
 
     override fun openCrop(
         context: Context,
-        bundle: com.gallery.core.GalleryConfigs,
+        configs: com.gallery.core.GalleryConfigs,
         inputUri: Uri
     ): Intent {
-        this.cropUri = cropOutPutUri(context, bundle)
+        this.cropUri = cropOutPutUri(context, configs)
         val intent = Intent().setClass(context, CropImageActivity::class.java)
         intent.putExtra(
             CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundleOf(

@@ -4,20 +4,18 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.view.Gravity
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.extensions.requirePrevFragment
-import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawable
 import com.gallery.core.extensions.toast
 import com.gallery.ui.material.R
-import com.gallery.ui.material.args.MaterialGalleryBundle
+import com.gallery.ui.material.args.MaterialGalleryConfig
+import com.gallery.ui.material.createGalleryImageView
 import com.gallery.ui.material.databinding.MaterialGalleryActivityPreviewBinding
 import com.gallery.ui.material.materialGalleryArgOrDefault
 
@@ -31,7 +29,7 @@ open class MaterialPreActivity : PrevCompatActivity() {
         MaterialGalleryActivityPreviewBinding.inflate(layoutInflater)
     }
 
-    private val materialGalleryBundle: MaterialGalleryBundle by lazy {
+    private val config: MaterialGalleryConfig by lazy {
         gapConfig.materialGalleryArgOrDefault
     }
 
@@ -41,22 +39,22 @@ open class MaterialPreActivity : PrevCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-        window.statusBarColor = materialGalleryBundle.statusBarColor
-        viewBinding.toolbar.setTitleTextColor(materialGalleryBundle.toolbarTextColor)
-        val drawable = drawable(materialGalleryBundle.toolbarIcon)
-        drawable?.colorFilter =
-            PorterDuffColorFilter(materialGalleryBundle.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
+        window.statusBarColor = config.statusBarColor
+        viewBinding.toolbar.title = config.preTitle
+        viewBinding.toolbar.setTitleTextColor(config.toolbarTextColor)
+        val drawable = drawable(config.toolbarIcon)
+        drawable?.colorFilter = PorterDuffColorFilter(config.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
         viewBinding.toolbar.navigationIcon = drawable
-        viewBinding.toolbar.setBackgroundColor(materialGalleryBundle.toolbarBackground)
-        viewBinding.toolbar.elevation = materialGalleryBundle.toolbarElevation
+        viewBinding.toolbar.setBackgroundColor(config.toolbarBackground)
+        viewBinding.toolbar.elevation = config.toolbarElevation
 
-        viewBinding.count.textSize = materialGalleryBundle.preBottomCountTextSize
-        viewBinding.count.setTextColor(materialGalleryBundle.preBottomCountTextColor)
+        viewBinding.count.textSize = config.preBottomCountTextSize
+        viewBinding.count.setTextColor(config.preBottomCountTextColor)
 
-        viewBinding.bottomView.setBackgroundColor(materialGalleryBundle.preBottomViewBackground)
-        viewBinding.bottomViewSelect.text = materialGalleryBundle.preBottomOkText
-        viewBinding.bottomViewSelect.textSize = materialGalleryBundle.preBottomOkTextSize
-        viewBinding.bottomViewSelect.setTextColor(materialGalleryBundle.preBottomOkTextColor)
+        viewBinding.bottomView.setBackgroundColor(config.preBottomViewBackground)
+        viewBinding.bottomViewSelect.text = config.preBottomOkText
+        viewBinding.bottomViewSelect.textSize = config.preBottomOkTextSize
+        viewBinding.bottomViewSelect.setTextColor(config.preBottomOkTextColor)
 
         viewBinding.bottomViewSelect.setOnClickListener {
             if (requirePrevFragment.isSelectEmpty) {
@@ -68,52 +66,32 @@ open class MaterialPreActivity : PrevCompatActivity() {
         viewBinding.toolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
-    override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout) {
+    override fun onDisplayPrevGallery(entity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
-        val imageView = GalleryImageView(container.context).apply {
-            layoutParams = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            ).apply {
-                gravity = Gravity.CENTER
-            }
-        }
+        val imageView = container.createGalleryImageView()
         Glide.with(container.context)
-            .load(scanEntity.uri)
+            .load(entity.uri)
             .into(imageView)
         container.addView(imageView)
     }
 
-    override fun onPrevCreated(
-        delegate: IPrevDelegate,
-        bundle: GalleryConfigs,
-        savedInstanceState: Bundle?
-    ) {
-        delegate.rootView.setBackgroundColor(materialGalleryBundle.prevRootBackground)
-        viewBinding.count.text =
-            format.format(delegate.selectCount, galleryConfig.maxCount)
-        viewBinding.toolbar.title =
-            materialGalleryBundle.preTitle + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
+    override fun onPrevCreated(delegate: IPrevDelegate, configs: GalleryConfigs, saveState: Bundle?) {
+        delegate.rootView.setBackgroundColor(config.prevRootBackground)
+        viewBinding.count.text = format.format(delegate.selectCount, galleryConfig.maxCount)
+        viewBinding.toolbar.title = config.preTitle + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
     }
 
-    override fun onClickItemFileNotExist(
-        context: Context,
-        bundle: GalleryConfigs,
-        scanEntity: ScanEntity
-    ) {
-        super.onClickItemFileNotExist(context, bundle, scanEntity)
-        viewBinding.count.text =
-            format.format(requirePrevFragment.selectCount, bundle.maxCount)
+    override fun onClickItemFileNotExist(context: Context, configs: GalleryConfigs, scanEntity: ScanEntity) {
+        super.onClickItemFileNotExist(context, configs, scanEntity)
+        viewBinding.count.text = format.format(requirePrevFragment.selectCount, configs.maxCount)
     }
 
     override fun onPageSelected(position: Int) {
-        viewBinding.toolbar.title =
-            materialGalleryBundle.preTitle + "(" + (position + 1) + "/" + requirePrevFragment.itemCount + ")"
+        viewBinding.toolbar.title = config.preTitle + "(" + (position + 1) + "/" + requirePrevFragment.itemCount + ")"
     }
 
     override fun onCheckBoxChanged() {
-        viewBinding.count.text =
-            format.format(requirePrevFragment.selectCount, galleryConfig.maxCount)
+        viewBinding.count.text = format.format(requirePrevFragment.selectCount, galleryConfig.maxCount)
     }
 
     open fun onGallerySelectEmpty() {

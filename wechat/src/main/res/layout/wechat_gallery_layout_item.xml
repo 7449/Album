@@ -12,7 +12,7 @@
     <FrameLayout
         android:id="@+id/viewWeChatBottomView"
         android:layout_width="match_parent"
-        android:layout_height="18dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/wechat_gallery_color_B3000000"
         android:paddingStart="4dp"

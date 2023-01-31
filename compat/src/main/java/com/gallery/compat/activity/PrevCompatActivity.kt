@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.gallery.compat.activity.args.PrevCompatArgs
 import com.gallery.compat.activity.args.PrevCompatArgs.Companion.prevCompatArgsOrDefault
 import com.gallery.compat.activity.args.PrevCompatArgs.Companion.toBundle
+import com.gallery.compat.extensions.intentResultOf
 import com.gallery.compat.extensions.prevFragment
 import com.gallery.compat.extensions.requirePrevFragment
 import com.gallery.compat.fragment.PrevCompatFragment
@@ -21,7 +22,6 @@ import com.gallery.core.GalleryConfigs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.IPrevDelegate
-import com.gallery.core.delegate.args.PrevArgs
 import com.gallery.core.delegate.args.PrevArgs.Companion.configOrDefault
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmpty
@@ -31,21 +31,16 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
 
     companion object {
         /** 预览页toolbar返回 result_code */
-        const val RESULT_CODE_TOOLBAR = -15
+        internal const val RESULT_CODE_TOOLBAR = -15
 
         /** 预览页back返回 result_code */
-        const val RESULT_CODE_BACK = -16
+        internal const val RESULT_CODE_BACK = -16
 
         /** 预览页选中数据返回 result_code */
-        const val RESULT_CODE_SELECT = -17
+        internal const val RESULT_CODE_SELECT = -17
 
         fun newInstance(
             context: Context,
-            /**
-             * [PrevArgs]
-             * and
-             * [Parcelable] // 用于存放以及获取自定义数据
-             */
             args: PrevCompatArgs,
             cla: Class<out PrevCompatActivity>
         ): Intent {
@@ -67,66 +62,55 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
     /** 自定义参数配置 */
     protected val gapConfig: Parcelable? by lazy { prevCompatArgs.gap }
 
+    private val rootFragment get() = requirePrevFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prevFragment?.let {
             showFragment(fragment = it)
-        } ?: addFragment(galleryFragmentId, fragment = createFragment())
+        } ?: addFragment(galleryFragmentId, fragment = prevRootFragment)
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val intent = Intent()
-                intent.putExtras(onKeyBackResult(requirePrevFragment.resultBundle(onBackRefresh())))
-                setResult(RESULT_CODE_BACK, intent)
-                finish()
+                intentResultOf(RESULT_CODE_BACK, backResult(rootFragment.resultBundle(backRefresh)))
             }
         })
     }
 
     /** finish */
     open fun onGalleryFinish() {
-        val intent = Intent()
-        intent.putExtras(onToolbarResult(requirePrevFragment.resultBundle(onFinishRefresh())))
-        setResult(RESULT_CODE_TOOLBAR, intent)
-        finish()
+        intentResultOf(RESULT_CODE_TOOLBAR, toolbarResult(rootFragment.resultBundle(finishRefresh)))
     }
 
     /**  prev select data */
     open fun onGallerySelectEntities() {
-        val intent = Intent()
-        intent.putExtras(onSelectEntitiesResult(requirePrevFragment.resultBundle(onSelectRefresh())))
-        setResult(RESULT_CODE_SELECT, intent)
-        finish()
+        intentResultOf(RESULT_CODE_SELECT, selectResult(rootFragment.resultBundle(selectRefresh)))
     }
 
     /** back返回是否合并选择数据并刷新 */
-    open fun onBackRefresh(): Boolean = true
+    open val backRefresh: Boolean = true
 
     /** toolbar返回是否合并选择数据并刷新 */
-    open fun onFinishRefresh(): Boolean = true
+    open val finishRefresh: Boolean = true
 
     /** 选择数据之后是否合并选择数据并刷新 */
-    open fun onSelectRefresh(): Boolean = true
+    open val selectRefresh: Boolean = true
 
     /** 自定义Fragment */
-    open fun createFragment(): Fragment = PrevCompatFragment.newInstance(prevCompatArgs.prevArgs)
+    open val prevRootFragment: Fragment get() = PrevCompatFragment.newInstance(prevCompatArgs.prevArgs)
 
     /** back返回,可为Bundle插入需要的数据 */
-    open fun onKeyBackResult(bundle: Bundle): Bundle = bundle
+    open fun backResult(bundle: Bundle): Bundle = bundle
 
     /** toolbar返回,可为Bundle插入需要的数据 */
-    open fun onToolbarResult(bundle: Bundle): Bundle = bundle
+    open fun toolbarResult(bundle: Bundle): Bundle = bundle
 
     /** 预览页点击选择返回,可为Bundle插入需要的数据 */
-    open fun onSelectEntitiesResult(bundle: Bundle): Bundle = bundle
+    open fun selectResult(bundle: Bundle): Bundle = bundle
 
     /** 预览图加载，预览页必须实现 */
-    abstract override fun onDisplayGalleryPrev(scanEntity: ScanEntity, container: FrameLayout)
+    abstract override fun onDisplayPrevGallery(entity: ScanEntity, container: FrameLayout)
 
     /** 预览图初始化，预览页必须实现 ，可实现背景色之类的配置 */
-    abstract override fun onPrevCreated(
-        delegate: IPrevDelegate,
-        bundle: GalleryConfigs,
-        savedInstanceState: Bundle?
-    )
+    abstract override fun onPrevCreated(delegate: IPrevDelegate, configs: GalleryConfigs, saveState: Bundle?)
 
 }

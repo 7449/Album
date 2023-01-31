@@ -1,8 +1,11 @@
 package com.gallery.compat.extensions
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.core.extensions.parcelable
@@ -22,6 +25,19 @@ val AppCompatActivity.prevFragment: PrevCompatFragment?
     get() = supportFragmentManager.findFragmentByTag(
         PrevCompatFragment::class.java.simpleName
     ) as? PrevCompatFragment
+
+internal fun Activity.intentResultOf(
+    resultCode: Int,
+    bundle: Bundle = bundleOf(),
+    isFinish: Boolean = true
+) {
+    val intent = Intent()
+    intent.putExtras(bundle)
+    setResult(resultCode, intent)
+    if (isFinish) {
+        finish()
+    }
+}
 
 inline fun <reified T : Parcelable> Bundle?.parcelable(key: String): T =
     parcelableOrDefault(key)

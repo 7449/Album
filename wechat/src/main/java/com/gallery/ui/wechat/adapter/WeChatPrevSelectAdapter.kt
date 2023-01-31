@@ -9,7 +9,7 @@ import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.WechatGalleryItemPrevSelectBinding
 
-class WeChatPrevSelectAdapter(
+internal class WeChatPrevSelectAdapter(
     private val listener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<WeChatPrevSelectAdapter.ViewHolder>() {
 

@@ -318,11 +318,11 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
             container.tag as WeChatGalleryItem
         } else {
             WeChatGalleryItem(container.context).apply {
-                update(entity)
                 container.tag = this
                 container.addView(this, 0, FrameLayout.LayoutParams(width, height))
             }
         }
+        weChatGalleryItem.update(entity)
         Glide.with(this).load(entity.uri).apply(
             RequestOptions().centerCrop()
                 .override(width, height)

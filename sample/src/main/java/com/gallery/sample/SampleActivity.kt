@@ -13,7 +13,7 @@ import com.gallery.ui.material.activity.MaterialGalleryActivity
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatGallery
 
-class HomeActivity : GalleryListActivity() {
+class SampleActivity : GalleryListActivity() {
 
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(

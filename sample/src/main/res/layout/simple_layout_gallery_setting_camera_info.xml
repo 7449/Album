@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/camera_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="CameraText:" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/camera_name"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="相机"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/title_size_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="3dp"
+            android:gravity="center_vertical"
+            android:text="Size:" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/title_size"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:inputType="number"
+            android:text="16"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/camera_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Color"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        app:flexWrap="wrap">
+
+        <Button
+            android:id="@+id/camera_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="相机Item背景色"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/camera_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:drawableEnd="@drawable/ic_default_camera_drawable"
+            android:drawablePadding="0dp"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="相机Icon"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/empty_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:drawableEnd="@drawable/ic_default_camera_drawable"
+            android:drawablePadding="0dp"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="EmptyIcon"
+            android:textSize="12sp" />
+    </com.google.android.flexbox.FlexboxLayout>
+
+</LinearLayout>

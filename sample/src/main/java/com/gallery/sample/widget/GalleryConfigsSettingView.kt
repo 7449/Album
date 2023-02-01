@@ -9,41 +9,61 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.CameraConfig
+import com.gallery.core.FileConfig
 import com.gallery.core.GalleryConfigs
 import com.gallery.core.GridConfig
 import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.R
+import com.gallery.sample.clickSelectIcon
 import com.gallery.sample.clickShowColorPicker
 import com.gallery.sample.databinding.SimpleLayoutGallerySettingBinding
+import com.gallery.sample.showCompoundDrawables
+import com.gallery.sample.toIntOrNull
 import com.gallery.scan.Types
+import java.io.File
 
-@SuppressLint("SetTextI18n")
+@SuppressLint("NonConstantResourceId")
 class GalleryConfigsSettingView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
+    companion object {
+        private const val DEFAULT_TAKE_PICTURE_NAME = "gallery_take_picture_name"
+        private const val DEFAULT_CROP_PICTURE_NAME = "gallery_crop_picture_name"
+        private const val DEFAULT_SD_NAME = "根目录"
+        private const val DEFAULT_ALL_NAME = "全部"
+        private const val DEFAULT_SELECT_MAX_COUNT = 9
+        private const val DEFAULT_SELECT_MIN_COUNT = 3
+        private const val DEFAULT_SPAN_COUNT = 3
+        private const val DEFAULT_MAX_SPAN_COUNT = 6
+        private const val DEFAULT_IMAGE_SUFFIX = "jpg"
+        private const val DEFAULT_VIDEO_SUFFIX = "mp4"
+        private const val DEFAULT_CAMERA_TEXT = "相机"
+        private const val DEFAULT_TEXT_SIZE_MAX = 16F
+        private const val DEFAULT_TEXT_SIZE_MIN = 12F
+
+        private const val DEFAULT_EMPTY_AND_CAMERA_ICON = R.drawable.ic_default_camera_drawable
+    }
+
     private val viewBinding: SimpleLayoutGallerySettingBinding =
         SimpleLayoutGallerySettingBinding.inflate(LayoutInflater.from(getContext()), this, true)
 
     init {
-        viewBinding.includeCamera.cameraIconColor.clickShowColorPicker()
-        viewBinding.includeCamera.cameraBgColor.clickShowColorPicker()
+        viewBinding.includeCameraInfo.cameraTextColor.clickShowColorPicker()
+        viewBinding.includeCameraInfo.cameraBgColor.clickShowColorPicker()
+        viewBinding.includeCameraInfo.cameraIcon.clickSelectIcon()
+        viewBinding.includeCameraInfo.cameraIcon.showCompoundDrawables(DEFAULT_EMPTY_AND_CAMERA_ICON)
+        viewBinding.includeCameraInfo.emptyIcon.clickSelectIcon()
+        viewBinding.includeCameraInfo.emptyIcon.showCompoundDrawables(DEFAULT_EMPTY_AND_CAMERA_ICON)
     }
 
-    fun isCustomCamera(): Boolean {
-        return viewBinding.includeBool.customCamera.isChecked
-    }
+    val customCamera: Boolean
+        get() = viewBinding.includeBool.customCamera.isChecked
 
-    fun createGalleryConfigs(select: ArrayList<ScanEntity> = arrayListOf()): GalleryConfigs {
-        viewBinding.includeSelect.defaultSelectData.text = select.toString()
-        viewBinding.includePictureOutPath.pictureOutPath.text =
-            Environment.DIRECTORY_PICTURES.toString()
-        viewBinding.includePictureOutPathLow.pictureOutPathLow.text =
-            Environment.DIRECTORY_PICTURES.toString()
-
-        val scanArray = when (viewBinding.includeScanType.scanTypeRb.checkedRadioButtonId) {
+    private fun getScanTypeArray(): IntArray {
+        return when (viewBinding.includeScanType.scanTypeRb.checkedRadioButtonId) {
             R.id.scan_image -> intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
             R.id.scan_video -> intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
             R.id.scan_mix -> intArrayOf(
@@ -53,94 +73,184 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
 
             else -> intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
         }
+    }
 
-        val sort = when (viewBinding.includeScanType.scanSortRb.checkedRadioButtonId) {
+    private fun getScanSort(): String {
+        return when (viewBinding.includeScanType.scanSortRb.checkedRadioButtonId) {
             R.id.sort_desc -> Types.Sort.DESC
             R.id.sort_asc -> Types.Sort.ASC
             else -> Types.Sort.DESC
         }
+    }
 
-        val checkBoxRes =
-            when (viewBinding.includeSelectRadioView.selectRadioView.checkedRadioButtonId) {
-                R.id.radio_accent -> R.drawable.simple_app_selector_gallery_item_check
-                R.id.radio_box -> R.drawable.simple_default_selector_rb_check
-                R.id.radio_blue -> R.drawable.simple_blue_selector_gallery_item_check
-                R.id.radio_default -> R.drawable.selector_default_gallery_item_check
-                else -> R.drawable.selector_default_gallery_item_check
-            }
+    private fun getPicturePath(): String {
+        return when (viewBinding.includePictureOutPath.picturePathTitle.checkedRadioButtonId) {
+            R.id.picture -> Environment.DIRECTORY_PICTURES
+            R.id.dcim -> Environment.DIRECTORY_DCIM
+            else -> Environment.DIRECTORY_PICTURES
+        } + File.separator + viewBinding.includePictureOutPath.picturePathSuffix.text.toString()
+    }
 
-        val orientation =
-            when (viewBinding.includeListOrientation.listOrientation.checkedRadioButtonId) {
-                R.id.orientation_vertical -> RecyclerView.VERTICAL
-                R.id.orientation_horizontal -> RecyclerView.HORIZONTAL
-                else -> RecyclerView.VERTICAL
-            }
-
-        var maxCount =
-            viewBinding.includeSelectMaxAndSpanCount.selectMax.text.toString().toIntOrNull() ?: 9
-        if (maxCount <= 3) {
-            maxCount = 9
-            viewBinding.includeSelectMaxAndSpanCount.selectMax.setText(maxCount.toString())
+    private fun getCheckBoxRes(): Int {
+        return when (viewBinding.includeSelectRadioView.selectRadioView.checkedRadioButtonId) {
+            R.id.radio_accent -> R.drawable.simple_app_selector_gallery_item_check
+            R.id.radio_box -> R.drawable.simple_default_selector_rb_check
+            R.id.radio_blue -> R.drawable.simple_blue_selector_gallery_item_check
+            R.id.radio_default -> R.drawable.selector_default_gallery_item_check
+            else -> R.drawable.selector_default_gallery_item_check
         }
+    }
 
-        var spanCount =
-            viewBinding.includeSelectMaxAndSpanCount.spanCount.text.toString().toIntOrNull() ?: 3
-        if (spanCount <= 3) {
-            spanCount = 3
-            viewBinding.includeSelectMaxAndSpanCount.spanCount.setText(spanCount.toString())
+    private fun getOrientation(): Int {
+        return when (viewBinding.includeListOrientation.listOrientation.checkedRadioButtonId) {
+            R.id.orientation_vertical -> RecyclerView.VERTICAL
+            R.id.orientation_horizontal -> RecyclerView.HORIZONTAL
+            else -> RecyclerView.VERTICAL
         }
+    }
 
-        val takeName =
-            viewBinding.includeTakePictureName.takePictureName.text.toString().ifEmpty {
-                viewBinding.includeTakePictureName.takePictureName.setText("gallery_take_picture_name")
-                "gallery_take_picture_name"
-            }
-
-        val cropName =
-            viewBinding.includeCropPictureName.cropPictureName.text.toString().ifEmpty {
-                viewBinding.includeCropPictureName.cropPictureName.setText("gallery_crop_picture_name")
-                "gallery_crop_picture_name"
-            }
-
-        val sdName = viewBinding.includeSdName.sdName.text.toString().ifEmpty {
-            viewBinding.includeSdName.sdName.setText("根目录")
-            "根目录"
+    private fun getSelectMaxCount(): Int {
+        val selectMaxCountView = viewBinding.includeSelectMaxAndSpanCount.selectMax
+        var maxCount = selectMaxCountView.text.toString().toIntOrNull() ?: DEFAULT_SELECT_MAX_COUNT
+        if (maxCount <= DEFAULT_SELECT_MIN_COUNT) {
+            maxCount = DEFAULT_SELECT_MAX_COUNT
+            selectMaxCountView.setText(maxCount.toString())
         }
-        val allName = viewBinding.includeAllName.allName.text.toString().ifEmpty {
-            viewBinding.includeAllName.allName.setText("全部")
-            "全部"
+        return maxCount
+    }
+
+    private fun getSpanCount(): Int {
+        val spanCountView = viewBinding.includeSelectMaxAndSpanCount.spanCount
+        var spanCount = spanCountView.text.toString().toIntOrNull() ?: DEFAULT_SPAN_COUNT
+        if (spanCount <= DEFAULT_SPAN_COUNT || spanCount > DEFAULT_MAX_SPAN_COUNT) {
+            spanCount = DEFAULT_SPAN_COUNT
+            spanCountView.setText(spanCount.toString())
         }
+        return spanCount
+    }
+
+    private fun getTakePictureName(): String {
+        val takePictureName = viewBinding.includeTakePictureName.takePictureName
+        return takePictureName.text.toString().ifEmpty {
+            takePictureName.setText(DEFAULT_TAKE_PICTURE_NAME)
+            getTakePictureName()
+        }
+    }
+
+    private fun getCropPictureName(): String {
+        val cropPictureName = viewBinding.includeCropPictureName.cropPictureName
+        return cropPictureName.text.toString().ifEmpty {
+            cropPictureName.setText(DEFAULT_CROP_PICTURE_NAME)
+            getCropPictureName()
+        }
+    }
+
+    private fun getSdNameAndAllName(): Pair<String, String> {
+        val sdName = viewBinding.includeSdAndAllName.sdName.text.toString().ifEmpty {
+            viewBinding.includeSdAndAllName.sdName.setText(DEFAULT_SD_NAME)
+            DEFAULT_SD_NAME
+        }
+        val allName = viewBinding.includeSdAndAllName.allName.text.toString().ifEmpty {
+            viewBinding.includeSdAndAllName.allName.setText(DEFAULT_ALL_NAME)
+            DEFAULT_ALL_NAME
+        }
+        return sdName to allName
+    }
+
+    private fun getCameraTextSize(): Float {
+        val textSizeView = viewBinding.includeCameraInfo.titleSize
+        var textSize = textSizeView.text.toString().toFloatOrNull() ?: DEFAULT_TEXT_SIZE_MAX
+        if (textSize < DEFAULT_TEXT_SIZE_MIN || textSize > DEFAULT_TEXT_SIZE_MAX) {
+            textSize = DEFAULT_TEXT_SIZE_MAX
+            textSizeView.setText(textSize.toString())
+        }
+        return textSize
+    }
+
+    private fun getCameraText(): String {
+        val cameraNameView = viewBinding.includeCameraInfo.cameraName
+        return cameraNameView.text.toString().ifEmpty {
+            cameraNameView.setText(DEFAULT_CAMERA_TEXT)
+            getCameraText()
+        }
+    }
+
+    private fun getCameraIcon(): Int {
+        val cameraIconView = viewBinding.includeCameraInfo.cameraIcon
+        return cameraIconView.tag.toIntOrNull {
+            cameraIconView.tag = DEFAULT_EMPTY_AND_CAMERA_ICON
+            getCameraIcon()
+        }
+    }
+
+    private fun getEmptyIcon(): Int {
+        val emptyIconView = viewBinding.includeCameraInfo.emptyIcon
+        return emptyIconView.tag.toIntOrNull {
+            emptyIconView.tag = DEFAULT_EMPTY_AND_CAMERA_ICON
+            getEmptyIcon()
+        }
+    }
+
+    fun updateDefaultSelectItems(select: ArrayList<ScanEntity>) {
+        viewBinding.includeSelect.defaultSelectData.text =
+            select.joinToString("\n") { it.delegate.displayName }
+    }
+
+    fun createGalleryConfigs(select: ArrayList<ScanEntity> = arrayListOf()): GalleryConfigs {
+        updateDefaultSelectItems(select)
+
+        val scanArray = getScanTypeArray()
+        val picturePath = getPicturePath()
+        val sort = getScanSort()
+        val checkBoxRes = getCheckBoxRes()
+        val orientation = getOrientation()
+        val maxCount = getSelectMaxCount()
+        val spanCount = getSpanCount()
+        val takeName = getTakePictureName()
+        val cropName = getCropPictureName()
+        val sdAndAllName = getSdNameAndAllName()
+        val cameraText = getCameraText()
+        val cameraTextSize = getCameraTextSize()
+        val cameraIcon = getCameraIcon()
+        val emptyIcon = getEmptyIcon()
 
         val hideCamera = viewBinding.includeBool.hideCamera.isChecked
         val radio = viewBinding.includeBool.radio.isChecked
         val crop = viewBinding.includeBool.crop.isChecked
         val takePictureCrop = viewBinding.includeBool.takePictureCrop.isChecked
+        val isScanVideoMedia =
+            scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
 
-        val tempConfigs = GalleryConfigs(
+        val gridConfig = GridConfig(spanCount, orientation)
+
+        val configs = GalleryConfigs(
             selects = select,
-            maxCount = maxCount,
+            type = scanArray,
+            sort = sort to MediaStore.Files.FileColumns.DATE_MODIFIED,
             hideCamera = hideCamera,
             radio = radio,
             crop = crop,
             takePictureCrop = takePictureCrop,
-            relativePath = Environment.DIRECTORY_PICTURES,
-            picturePathAndCropPath = Environment.DIRECTORY_PICTURES to Environment.DIRECTORY_PICTURES,
-            type = scanArray,
-            sdNameAndAllName = sdName to allName,
-            cropName = cropName to "jpg",
-            sort = sort to MediaStore.Files.FileColumns.DATE_MODIFIED,
-        )
-
-        val galleryConfigs = tempConfigs.copy(
-            cameraConfig = CameraConfig(
-                checkBoxIcon = checkBoxRes,
-                text = if (tempConfigs.isScanVideoMedia) "摄像" else "拍照",
-                iconColor = viewBinding.includeCamera.cameraIconColor.currentTextColor,
-                textColor = viewBinding.includeCamera.cameraIconColor.currentTextColor,
-                bg = viewBinding.includeCamera.cameraBgColor.currentTextColor,
+            maxCount = maxCount,
+            sdNameAndAllName = sdAndAllName,
+            fileConfig = FileConfig(
+                picturePath = picturePath,
+                cropPath = picturePath,
+                pictureName = takeName,
+                pictureNameSuffix = if (isScanVideoMedia) DEFAULT_VIDEO_SUFFIX else DEFAULT_IMAGE_SUFFIX,
+                cropName = cropName,
+                cropNameSuffix = DEFAULT_IMAGE_SUFFIX
             ),
-            gridConfig = GridConfig(spanCount = spanCount, orientation = orientation),
-            cameraName = takeName to if (tempConfigs.isScanVideoMedia) "mp4" else "jpg",
+            cameraConfig = CameraConfig(
+                text = cameraText,
+                textSize = cameraTextSize,
+                textColor = viewBinding.includeCameraInfo.cameraTextColor.currentTextColor,
+                icon = cameraIcon,
+                background = viewBinding.includeCameraInfo.cameraBgColor.currentTextColor,
+                emptyIcon = emptyIcon,
+                checkBoxIcon = checkBoxRes,
+            ),
+            gridConfig = gridConfig,
         )
 
         viewBinding.includeBool.hideCamera.isChecked = false
@@ -149,7 +259,7 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
         viewBinding.includeBool.takePictureCrop.isChecked = false
         viewBinding.includeBool.customCamera.isChecked = false
 
-        return galleryConfigs
+        return configs
     }
 
 }

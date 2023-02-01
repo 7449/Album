@@ -5,41 +5,40 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/select_max_title"
+        android:id="@+id/sd_name_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:text="SelectMaxCount:" />
+        android:text="根目录名称:" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/select_max"
+        android:id="@+id/sd_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="3dp"
         android:layout_weight="1"
         android:gravity="end"
-        android:inputType="number"
-        android:text="9"
+        android:text="根目录"
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/span_count_title"
+        android:id="@+id/all_name_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="3dp"
         android:gravity="center_vertical"
-        android:text="SpanCount:" />
+        android:text="全部图片名称:" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/span_count"
+        android:id="@+id/all_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="3dp"
         android:layout_weight="1"
         android:gravity="end"
-        android:inputType="number"
-        android:text="3"
+        android:text="全部"
         android:textSize="12sp" />
+
 </LinearLayout>

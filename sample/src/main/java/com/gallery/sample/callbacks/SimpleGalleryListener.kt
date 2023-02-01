@@ -7,7 +7,11 @@ import com.gallery.compat.internal.call.GalleryListener
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.queryData
 
-open class SimpleGalleryListener(private val activity: FragmentActivity) : GalleryListener {
+open class SimpleGalleryListener(
+    private val activity: FragmentActivity,
+    private val action: (items: List<ScanEntity>) -> Unit = {}
+) :
+    GalleryListener {
 
     private fun showDialog(msg: String) {
         AlertDialog
@@ -26,6 +30,7 @@ open class SimpleGalleryListener(private val activity: FragmentActivity) : Galle
 
     override fun onGalleryResources(entities: List<ScanEntity>, vararg args: Any) {
         showDialog(entities.toString() + "\n" + args.asList().toString())
+        action.invoke(entities)
     }
 
     override fun onGalleryCancel(vararg args: Any) {

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingStart="3dp"
+    android:paddingEnd="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,10 +17,6 @@
         <include
             android:id="@+id/include_picture_out_path"
             layout="@layout/simple_layout_gallery_setting_picture_out_path_q" />
-
-        <include
-            android:id="@+id/include_picture_out_path_low"
-            layout="@layout/simple_layout_gallery_setting_picture_out_path_low" />
 
         <include
             android:id="@+id/include_scan_type"
@@ -37,6 +35,10 @@
             layout="@layout/simple_layout_gallery_setting_select_max_and_span_count" />
 
         <include
+            android:id="@+id/include_sd_and_all_name"
+            layout="@layout/simple_layout_gallery_setting_sd_and_all_name" />
+
+        <include
             android:id="@+id/include_take_picture_name"
             layout="@layout/simple_layout_gallery_setting_take_picture_name" />
 
@@ -45,20 +47,12 @@
             layout="@layout/simple_layout_gallery_setting_crop_picture_name" />
 
         <include
-            android:id="@+id/include_sd_name"
-            layout="@layout/simple_layout_gallery_setting_sd_name" />
-
-        <include
-            android:id="@+id/include_all_name"
-            layout="@layout/simple_layout_gallery_setting_all_name" />
-
-        <include
             android:id="@+id/include_bool"
             layout="@layout/simple_layout_gallery_setting_bool" />
 
         <include
-            android:id="@+id/include_camera"
-            layout="@layout/simple_layout_gallery_setting_camera_config" />
+            android:id="@+id/include_camera_info"
+            layout="@layout/simple_layout_gallery_setting_camera_info" />
 
     </LinearLayout>
 

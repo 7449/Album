@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="5dp">
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/scan_type_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="扫描类型:" />
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="ScanType:" />
 
     <RadioGroup
         android:id="@+id/scan_type_rb"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:checkedButton="@id/scan_image"
         android:orientation="horizontal">
@@ -45,13 +45,14 @@
     <TextView
         android:id="@+id/scan_sort_type"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="排序类型:" />
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="SortOrder:" />
 
     <RadioGroup
         android:id="@+id/scan_sort_rb"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:checkedButton="@id/sort_desc"
         android:gravity="end"
         android:orientation="horizontal">

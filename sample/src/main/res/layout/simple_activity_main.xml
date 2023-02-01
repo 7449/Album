@@ -16,18 +16,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingStart="10dp">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/gallery_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/simple_start_config" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/gallery_wechat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="@string/simple_theme_wechat" />
 
         </LinearLayout>

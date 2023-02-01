@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorGray"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="Title:"
+            android:textColor="@color/colorWhite" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/toolbar_title_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="图片选择"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/toolbar_elevation_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="Elevation:"
+            android:textColor="@color/colorWhite" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/toolbar_elevation_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:inputType="number"
+            android:text="4"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/toolbar_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="Color"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:flexWrap="wrap">
+
+        <Button
+            android:id="@+id/toolbar_back_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:drawableEnd="@drawable/ic_material_gallery_back"
+            android:drawablePadding="0dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="返回Icon"
+            android:textColor="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/toolbar_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="Bg Color"
+            android:textColor="#FF04B3E4" />
+
+        <Button
+            android:id="@+id/status_bar_color"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="StatusBar Color"
+            android:textColor="#FF04B3E4" />
+
+        <Button
+            android:id="@+id/root_view_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="RootViewColor"
+            android:textColor="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/finder_bg_color"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="首页底部背景色"
+            android:textColor="#FF02A5D2" />
+
+        <Button
+            android:id="@+id/finder_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:drawableEnd="@drawable/ic_material_gallery_finder"
+            android:gravity="center"
+            android:padding="0dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:text="Finder Icon"
+            android:textColor="@color/colorWhite" />
+    </com.google.android.flexbox.FlexboxLayout>
+
+</LinearLayout>

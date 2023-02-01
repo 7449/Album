@@ -1,8 +1,6 @@
 package com.gallery.ui.material.activity
 
 import android.content.Context
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -65,15 +63,13 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         window.statusBarColor = config.statusBarColor
         viewBinding.toolbar.title = config.toolbarText
         viewBinding.toolbar.setTitleTextColor(config.toolbarTextColor)
-        val drawable = drawable(config.toolbarIcon)
-        drawable?.colorFilter = PorterDuffColorFilter(config.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        viewBinding.toolbar.navigationIcon = drawable
+        viewBinding.toolbar.navigationIcon = drawable(config.toolbarIcon)
         viewBinding.toolbar.setBackgroundColor(config.toolbarBackground)
         viewBinding.toolbar.elevation = config.toolbarElevation
 
         viewBinding.finderAll.textSize = config.finderTextSize
         viewBinding.finderAll.setTextColor(config.finderTextColor)
-        viewBinding.finderAll.setCompoundDrawables(null, null, minimumDrawable(config.finderIcon, config.finderIconColor), null)
+        viewBinding.finderAll.setCompoundDrawables(null, null, minimumDrawable(config.finderIcon), null)
 
         viewBinding.openPrev.text = config.preViewText
         viewBinding.openPrev.textSize = config.preViewTextSize

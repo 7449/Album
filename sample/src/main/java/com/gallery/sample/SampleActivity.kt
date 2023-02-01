@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.gallery.compat.Gallery
 import com.gallery.compat.internal.call.GalleryResultCallback
+import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.callbacks.SimpleGalleryListener
 import com.gallery.sample.camera.SimpleMaterialGalleryCameraActivity
 import com.gallery.sample.databinding.SimpleActivityMainBinding
@@ -15,10 +16,16 @@ import com.gallery.ui.wechat.weChatGallery
 
 class SampleActivity : GalleryListActivity() {
 
+    private val selectItems = arrayListOf<ScanEntity>()
+
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
-            GalleryResultCallback(SimpleGalleryListener(this))
+            GalleryResultCallback(SimpleGalleryListener(this) {
+                selectItems.clear()
+                selectItems.addAll(it)
+                viewBinding.settingConfigsView.updateDefaultSelectItems(selectItems)
+            })
         )
     private val galleryWeChatLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(
@@ -36,11 +43,9 @@ class SampleActivity : GalleryListActivity() {
             weChatGallery(launcher = galleryWeChatLauncher)
         }
         viewBinding.galleryDefault.setOnClickListener {
-            val isCustomCamera = viewBinding.settingConfigsView.isCustomCamera()
-            val galleryConfigs = viewBinding.settingConfigsView.createGalleryConfigs()
-            val galleryUiConfig = viewBinding.settingUiConfigsView.createGalleryUiConfig().copy(
-                toolbarText = if (galleryConfigs.isScanVideoMedia) "视频选择" else "图片选择"
-            )
+            val isCustomCamera = viewBinding.settingConfigsView.customCamera
+            val galleryConfigs = viewBinding.settingConfigsView.createGalleryConfigs(selectItems)
+            val galleryUiConfig = viewBinding.settingUiConfigsView.createGalleryUiConfig()
             Gallery.newInstance(
                 activity = this,
                 clz = if (isCustomCamera) SimpleMaterialGalleryCameraActivity::class.java else MaterialGalleryActivity::class.java,

@@ -37,4 +37,5 @@ object Dep {
     const val glide = "com.github.bumptech.glide:glide:4.14.2"
 
     const val color = "com.github.QuadFlask:colorpicker:0.0.15"
+    const val flex = "com.google.android.flexbox:flexbox:3.0.0"
 }

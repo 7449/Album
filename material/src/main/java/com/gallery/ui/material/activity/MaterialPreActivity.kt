@@ -1,8 +1,6 @@
 package com.gallery.ui.material.activity
 
 import android.content.Context
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
@@ -42,9 +40,7 @@ open class MaterialPreActivity : PrevCompatActivity() {
         window.statusBarColor = config.statusBarColor
         viewBinding.toolbar.title = config.preTitle
         viewBinding.toolbar.setTitleTextColor(config.toolbarTextColor)
-        val drawable = drawable(config.toolbarIcon)
-        drawable?.colorFilter = PorterDuffColorFilter(config.toolbarIconColor, PorterDuff.Mode.SRC_ATOP)
-        viewBinding.toolbar.navigationIcon = drawable
+        viewBinding.toolbar.navigationIcon = drawable(config.toolbarIcon)
         viewBinding.toolbar.setBackgroundColor(config.toolbarBackground)
         viewBinding.toolbar.elevation = config.toolbarElevation
 

@@ -3,7 +3,6 @@
 package com.gallery.core
 
 import android.os.Bundle
-import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
 import androidx.core.os.bundleOf
@@ -31,16 +30,10 @@ data class GalleryConfigs(
     val takePictureCrop: Boolean = false,
     /*** 多选最多数*/
     val maxCount: Int = 9,
-    /*** 文件输出路径，仅在Q及以上生效*/
-    val relativePath: String = Environment.DIRECTORY_PICTURES,
-    /*** 文件输出路径,仅在Q版本以下生效 AND 裁剪路径*/
-    val picturePathAndCropPath: Pair<String, String> = "" to "",
-    /*** simple: photo.jpg [takePictureName]*/
-    val cameraName: Pair<String, String> = System.currentTimeMillis().toString() to "jpg",
-    /*** 裁剪文件名称 [takeCropName]*/
-    val cropName: Pair<String, String> = System.currentTimeMillis().toString() to "jpg",
     /*** 根目录名称 and 全部图片*/
     val sdNameAndAllName: Pair<String, String> = "根目录" to "全部",
+    /*** 拍照裁剪文件配置 [takePictureName]  [takeCropName]*/
+    val fileConfig: FileConfig = FileConfig(),
     /*** LayoutManager* 滑动方向* 分割线宽度*/
     val gridConfig: GridConfig = GridConfig(),
     /*** 相机提示文字 相机提示文字大小 相机提示文字颜色 相机图片 相机颜色 背景色 空白占位图 选择box*/
@@ -48,10 +41,10 @@ data class GalleryConfigs(
 ) : Parcelable {
 
     /** 返回拍照文件名称 */
-    val takePictureName: String get() = "${cameraName.first}_${System.currentTimeMillis()}.${cameraName.second}"
+    val takePictureName: String get() = "${fileConfig.pictureName}_${System.currentTimeMillis()}.${fileConfig.pictureNameSuffix}"
 
     /** 返回裁剪文件名称 */
-    val takeCropName: String get() = "${cropName.first}_${System.currentTimeMillis()}.${cropName.second}"
+    val takeCropName: String get() = "${fileConfig.cropName}_${System.currentTimeMillis()}.${fileConfig.cropNameSuffix}"
 
     /** 是否是视频 */
     val isScanVideoMedia: Boolean

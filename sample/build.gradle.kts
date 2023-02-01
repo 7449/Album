@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":compat"))
     implementation(project(":material"))
     implementation(project(":wechat"))
+    implementation(Dep.material)
     implementation(Dep.fragment)
     implementation(Dep.kotlin)
     implementation(Dep.appcompat)
@@ -30,4 +31,5 @@ dependencies {
     implementation(Dep.cropper)
     implementation(Dep.cameraview)
     implementation(Dep.color)
+    implementation(Dep.flex)
 }

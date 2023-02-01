@@ -2,31 +2,18 @@ package com.gallery.core.extensions
 
 import android.app.Activity
 import android.content.ContentResolver
-import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Environment
 import java.io.File
 
-/** 创建文件夹(如果不存在则创建) */
+/** 创建文件(如果不存在则创建) */
 fun String.mkdirsFile(child: String): File {
-    val pathFile = File(this, child)
-    if (!pathFile.exists()) {
-        pathFile.mkdirs()
+    val file = File(this)
+    if (!file.exists()) {
+        file.mkdirs()
     }
-    return pathFile
+    return File(file, child)
 }
-
-/** 获取文件输出路径 */
-fun Context.lowerVersionFile(fileName: String): File = File(
-    if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
-        || !Environment.isExternalStorageRemovable()
-    ) {
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
-    } else {
-        externalCacheDir?.path ?: cacheDir.path
-    }, fileName
-)
 
 /** 扫描文件 , content 开头的先获取path 再更新，file 开头的直接获取path更新
  *  刷新数据库要用到文件路径，所以要获取 path */

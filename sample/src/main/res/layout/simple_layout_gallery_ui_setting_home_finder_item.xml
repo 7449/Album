@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorGray"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    app:flexWrap="wrap">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="Width:"
+            android:textColor="@color/colorWhite" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/finder_item_width"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:inputType="number"
+            android:text="600"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
+            android:text="HOffset:"
+            android:textColor="@color/colorWhite" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/finder_item_hor_offset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:inputType="number"
+            android:text="16"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
+            android:text="VOffset:"
+            android:textColor="@color/colorWhite" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/finder_item_ver_offset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:inputType="number"
+            android:text="16"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/finder_item_bg_color"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:gravity="center"
+        android:padding="0dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:text="Bg Color"
+        android:textColor="@color/colorWhite" />
+
+    <Button
+        android:id="@+id/finder_item_text_color"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:gravity="center"
+        android:padding="0dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:text="Text Color"
+        android:textColor="@color/colorBlack" />
+
+    <Button
+        android:id="@+id/finder_item_text_count_color"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:gravity="center"
+        android:padding="0dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:text="Count Color"
+        android:textColor="@color/colorBlack" />
+
+</com.google.android.flexbox.FlexboxLayout>

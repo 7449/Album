@@ -1,24 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="5dp">
+    android:layout_height="40dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/picture_out_path_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:text="文件输出路径(AndroidQ):" />
+        android:gravity="center_vertical"
+        android:text="拍照和裁剪输出路径:" />
 
-    <TextView
-        android:id="@+id/picture_out_path"
+    <RadioGroup
+        android:id="@+id/picture_path_title"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:checkedButton="@id/picture"
         android:gravity="end"
-        android:text="Pictures" />
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="Picture" />
+
+        <RadioButton
+            android:id="@+id/dcim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/simple_default_selector_rb_check"
+            android:text="DCIM" />
+    </RadioGroup>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/picture_path_suffix"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:hint="次级目录"
+        android:textSize="12sp" />
 
 </LinearLayout>

@@ -1,7 +1,5 @@
 package com.gallery.core.delegate.adapter
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +9,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +16,7 @@ import com.gallery.core.GalleryConfigs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.drawable
 import com.gallery.core.extensions.fileExists
 import com.gallery.core.extensions.hide
 import com.gallery.core.extensions.show
@@ -165,6 +163,7 @@ internal class GalleryAdapter(
                         LinearLayout.LayoutParams.WRAP_CONTENT
                     ).apply {
                         setMargins(divider, 0, divider, divider)
+                        setPadding(0, 0, 0, 10)
                     }
                 }
                 imageCameraTv.gravity = Gravity.CENTER
@@ -175,19 +174,12 @@ internal class GalleryAdapter(
         }
 
         fun cameraSetting() {
-            val drawable =
-                ContextCompat.getDrawable(itemView.context, galleryConfigs.cameraConfig.icon)
-            drawable?.colorFilter =
-                PorterDuffColorFilter(
-                    galleryConfigs.cameraConfig.iconColor,
-                    PorterDuff.Mode.SRC_ATOP
-                )
             imageCameraTv.text = galleryConfigs.cameraConfig.text
             imageCameraTv.textSize = galleryConfigs.cameraConfig.textSize
             imageCameraTv.setTextColor(galleryConfigs.cameraConfig.textColor)
-            imageCamera.setImageDrawable(drawable)
-            imageCamera.setBackgroundColor(galleryConfigs.cameraConfig.bg)
-            imageCameraTv.setBackgroundColor(galleryConfigs.cameraConfig.bg)
+            imageCamera.setImageDrawable(itemView.context.drawable(galleryConfigs.cameraConfig.icon))
+            imageCamera.setBackgroundColor(galleryConfigs.cameraConfig.background)
+            imageCameraTv.setBackgroundColor(galleryConfigs.cameraConfig.background)
         }
 
     }

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Environment
 import android.os.Parcelable
 import android.widget.Toast
 import androidx.annotation.ChecksSdkIntAtLeast
@@ -21,28 +22,22 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
     else -> @Suppress("DEPRECATION") getParcelable(key) as? T
 }
 
-/** 是否高于等于Q */
 @ChecksSdkIntAtLeast(api = 29)
-fun hasQExpand(): Boolean = SDK_INT >= 29
+fun hasQ(): Boolean = SDK_INT >= 29
 
-/** 获取安全Bundle */
 fun Bundle?.orEmpty(): Bundle = this ?: Bundle.EMPTY
 
-/** 获取Drawable */
 fun Context.drawable(@DrawableRes id: Int): Drawable? =
     if (id == 0) null else ContextCompat.getDrawable(this, id)
 
-/** 获取计算的Item宽高 */
 fun Context.square(count: Int): Int = resources.displayMetrics.widthPixels / count
 
-/** 安全Toast(过滤空数据) */
 fun String?.toast(context: Context?) {
     if (!isNullOrEmpty() && context != null) {
         Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
     }
 }
 
-/** 打开视频(使用系统默认视频播放器) */
 fun Context.openVideo(uri: Uri, error: () -> Unit) {
     runCatching {
         val video = Intent(Intent.ACTION_VIEW)
@@ -52,42 +47,30 @@ fun Context.openVideo(uri: Uri, error: () -> Unit) {
     }.onFailure { error.invoke() }
 }
 
-/** [FileScanEntity]转换为[ScanEntity] */
 fun ArrayList<FileScanEntity>.toScanEntity(): ArrayList<ScanEntity> =
     mapTo(ArrayList()) { ScanEntity(it) }
 
-/** [ScanEntity]转换为[FileScanEntity] */
 fun ArrayList<ScanEntity>.toFileEntity(): ArrayList<FileScanEntity> =
     mapTo(ArrayList()) { it.delegate }
 
-/** [FileScanEntity]转换为[ScanEntity] */
 fun FileScanEntity.toScanEntity(): ScanEntity = ScanEntity(this)
 
 /** content://media/external/images/media/id or content://media/external/video/media/id */
 fun Context.takePictureUri(configs: GalleryConfigs): Uri? {
     val file: File = when {
-        // Android Q
-        hasQExpand() -> File("", configs.takePictureName)
-        // 获取file.path
-        configs.picturePathAndCropPath.first.isEmpty() -> lowerVersionFile(configs.takePictureName)
-        else -> configs.picturePathAndCropPath.first
+        hasQ() -> File(configs.fileConfig.picturePath + File.separator + configs.takePictureName)
+        else -> Environment.getExternalStoragePublicDirectory(configs.fileConfig.picturePath).absolutePath
             .mkdirsFile(configs.takePictureName)
     }
-    return if (configs.isScanVideoMedia)
-        insertVideoUri(file, configs.relativePath)
-    else
-        insertImageUri(file, configs.relativePath)
+    return if (configs.isScanVideoMedia) insertVideoUri(file) else insertImageUri(file)
 }
 
 /** content://media/external/images/media/id */
 fun Context.takeCropUri(configs: GalleryConfigs): Uri? {
     val file: File = when {
-        // Android Q
-        hasQExpand() -> File("", configs.takeCropName)
-        // 获取file.path
-        configs.picturePathAndCropPath.second.isEmpty() -> lowerVersionFile(configs.takeCropName)
-        else -> configs.picturePathAndCropPath.second
+        hasQ() -> File(configs.fileConfig.cropPath + File.separator + configs.takeCropName)
+        else -> Environment.getExternalStoragePublicDirectory(configs.fileConfig.cropPath).absolutePath
             .mkdirsFile(configs.takeCropName)
     }
-    return insertImageUri(file, configs.relativePath)
+    return insertImageUri(file)
 }

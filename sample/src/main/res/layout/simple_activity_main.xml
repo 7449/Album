@@ -22,18 +22,21 @@
             <Button
                 android:id="@+id/gallery_default"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/simple_start_config" />
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@string/simple_start_config"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/gallery_wechat"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginStart="10dp"
-                android:text="@string/simple_theme_wechat" />
+                android:gravity="center"
+                android:text="@string/simple_theme_wechat"
+                android:textSize="12sp" />
 
         </LinearLayout>
-
 
         <com.gallery.sample.widget.GalleryConfigsSettingView
             android:id="@+id/setting_configs_view"

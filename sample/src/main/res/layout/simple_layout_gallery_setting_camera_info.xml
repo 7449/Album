@@ -66,7 +66,7 @@
         <Button
             android:id="@+id/camera_bg_color"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginStart="5dp"
             android:padding="0dp"
             android:paddingStart="3dp"
@@ -78,7 +78,7 @@
         <Button
             android:id="@+id/camera_icon"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginStart="5dp"
             android:drawableEnd="@drawable/ic_default_camera_drawable"
             android:drawablePadding="0dp"
@@ -91,7 +91,7 @@
         <Button
             android:id="@+id/empty_icon"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginStart="5dp"
             android:drawableEnd="@drawable/ic_default_camera_drawable"
             android:drawablePadding="0dp"

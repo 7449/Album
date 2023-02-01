@@ -16,7 +16,7 @@
 
         <include
             android:id="@+id/include_picture_out_path"
-            layout="@layout/simple_layout_gallery_setting_picture_out_path_q" />
+            layout="@layout/simple_layout_gallery_setting_picture_out_path" />
 
         <include
             android:id="@+id/include_scan_type"

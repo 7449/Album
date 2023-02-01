@@ -39,23 +39,23 @@ class GalleryUiSettingView @JvmOverloads constructor(
     }
 
     init {
-        viewBinding.includeHomeView.statusBarColor.clickShowColorPicker()
-        viewBinding.includeHomeView.toolbarBgColor.clickShowColorPicker()
-        viewBinding.includeHomeView.toolbarTextColor.clickShowColorPicker()
-        viewBinding.includeHomeView.rootViewBgColor.clickShowColorPicker()
-        viewBinding.includeHomeView.toolbarBackIcon.clickSelectIcon()
-        viewBinding.includeHomeView.toolbarBackIcon.showCompoundDrawables(DEFAULT_TOOLBAR_BACK_ICON)
-        viewBinding.includeHomeView.finderBgColor.clickShowColorPicker()
-        viewBinding.includeHomeView.finderIcon.clickSelectIcon()
-        viewBinding.includeHomeView.finderIcon.showCompoundDrawables(DEFAULT_HOME_FINDER_ICON)
+        viewBinding.includeHome.statusBarColor.clickShowColorPicker()
+        viewBinding.includeHome.toolbarBgColor.clickShowColorPicker()
+        viewBinding.includeHome.toolbarTextColor.clickShowColorPicker()
+        viewBinding.includeHome.rootViewBgColor.clickShowColorPicker()
+        viewBinding.includeHome.toolbarBackIcon.clickSelectIcon()
+        viewBinding.includeHome.toolbarBackIcon.showCompoundDrawables(DEFAULT_TOOLBAR_BACK_ICON)
+        viewBinding.includeHome.finderBgColor.clickShowColorPicker()
+        viewBinding.includeHome.finderIcon.clickSelectIcon()
+        viewBinding.includeHome.finderIcon.showCompoundDrawables(DEFAULT_HOME_FINDER_ICON)
 
-        viewBinding.includeHomeBottomView.finderBtnTextColor.clickShowColorPicker()
-        viewBinding.includeHomeBottomView.finderPrevTextColor.clickShowColorPicker()
-        viewBinding.includeHomeBottomView.finderOkTextColor.clickShowColorPicker()
+        viewBinding.includeHomeBottom.finderBtnTextColor.clickShowColorPicker()
+        viewBinding.includeHomeBottom.finderPrevTextColor.clickShowColorPicker()
+        viewBinding.includeHomeBottom.finderOkTextColor.clickShowColorPicker()
 
-        viewBinding.includeHomeFinderItem.finderItemBgColor.clickShowColorPicker()
-        viewBinding.includeHomeFinderItem.finderItemTextColor.clickShowColorPicker()
-        viewBinding.includeHomeFinderItem.finderItemTextCountColor.clickShowColorPicker()
+        viewBinding.includeHomeFinder.finderItemBgColor.clickShowColorPicker()
+        viewBinding.includeHomeFinder.finderItemTextColor.clickShowColorPicker()
+        viewBinding.includeHomeFinder.finderItemTextCountColor.clickShowColorPicker()
 
         viewBinding.includePrev.prevRootViewBgColor.clickShowColorPicker()
         viewBinding.includePrev.prevBottomBgColor.clickShowColorPicker()
@@ -88,7 +88,7 @@ class GalleryUiSettingView @JvmOverloads constructor(
     }
 
     private fun getToolbarElevation(): Float {
-        val elevationView = viewBinding.includeHomeView.toolbarElevationEt
+        val elevationView = viewBinding.includeHome.toolbarElevationEt
         var elevation = elevationView.text.toString().toFloatOrNull() ?: DEFAULT_TOOLBAR_ELEVATION
         if (elevation < DEFAULT_TOOLBAR_ELEVATION) {
             elevation = DEFAULT_TOOLBAR_ELEVATION
@@ -98,7 +98,7 @@ class GalleryUiSettingView @JvmOverloads constructor(
     }
 
     private fun getHomeFinderWidth(): Int {
-        val elevationView = viewBinding.includeHomeFinderItem.finderItemWidth
+        val elevationView = viewBinding.includeHomeFinder.finderItemWidth
         return elevationView.text.toIntOrNull {
             elevationView.setText(DEFAULT_HOME_FINDER_WIDTH.toString())
             getHomeFinderWidth()
@@ -107,41 +107,41 @@ class GalleryUiSettingView @JvmOverloads constructor(
 
     fun createGalleryUiConfig(): MaterialGalleryConfig {
         return MaterialGalleryConfig(
-            toolbarText = viewBinding.includeHomeView.toolbarTitleEt.getTextSupport(
+            toolbarText = viewBinding.includeHome.toolbarTitleEt.getTextSupport(
                 DEFAULT_TOOLBAR_TEXT
             ),
-            toolbarTextColor = viewBinding.includeHomeView.toolbarTextColor.currentTextColor,
+            toolbarTextColor = viewBinding.includeHome.toolbarTextColor.currentTextColor,
             toolbarElevation = getToolbarElevation(),
-            toolbarIcon = viewBinding.includeHomeView.toolbarBackIcon.getIconSupport(
+            toolbarIcon = viewBinding.includeHome.toolbarBackIcon.getIconSupport(
                 DEFAULT_TOOLBAR_BACK_ICON
             ),
-            toolbarBackground = viewBinding.includeHomeView.toolbarBgColor.currentTextColor,
-            statusBarColor = viewBinding.includeHomeView.statusBarColor.currentTextColor,
-            galleryRootBackground = viewBinding.includeHomeView.rootViewBgColor.currentTextColor,
-            bottomViewBackground = viewBinding.includeHomeView.finderBgColor.currentTextColor,
-            finderTextSize = viewBinding.includeHomeBottomView.finderBtnTextSize.getTextSizeSupport(),
-            finderTextColor = viewBinding.includeHomeBottomView.finderBtnTextColor.currentTextColor,
-            finderIcon = viewBinding.includeHomeView.finderIcon.getIconSupport(
+            toolbarBackground = viewBinding.includeHome.toolbarBgColor.currentTextColor,
+            statusBarColor = viewBinding.includeHome.statusBarColor.currentTextColor,
+            galleryRootBackground = viewBinding.includeHome.rootViewBgColor.currentTextColor,
+            bottomViewBackground = viewBinding.includeHome.finderBgColor.currentTextColor,
+            finderTextSize = viewBinding.includeHomeBottom.finderBtnTextSize.getTextSizeSupport(),
+            finderTextColor = viewBinding.includeHomeBottom.finderBtnTextColor.currentTextColor,
+            finderIcon = viewBinding.includeHome.finderIcon.getIconSupport(
                 DEFAULT_HOME_FINDER_ICON
             ),
-            preViewText = viewBinding.includeHomeBottomView.finderPrevText.getTextSupport(
+            preViewText = viewBinding.includeHomeBottom.finderPrevText.getTextSupport(
                 DEFAULT_HOME_FINDER_PREV_TEXT
             ),
-            preViewTextSize = viewBinding.includeHomeBottomView.finderPrevTextSize.getTextSizeSupport(),
-            preViewTextColor = viewBinding.includeHomeBottomView.finderPrevTextColor.currentTextColor,
-            selectText = viewBinding.includeHomeBottomView.finderOkText.getTextSupport(
+            preViewTextSize = viewBinding.includeHomeBottom.finderPrevTextSize.getTextSizeSupport(),
+            preViewTextColor = viewBinding.includeHomeBottom.finderPrevTextColor.currentTextColor,
+            selectText = viewBinding.includeHomeBottom.finderOkText.getTextSupport(
                 DEFAULT_HOME_FINDER_OK_TEXT
             ),
-            selectTextSize = viewBinding.includeHomeBottomView.finderOkTextSize.getTextSizeSupport(),
-            selectTextColor = viewBinding.includeHomeBottomView.finderOkTextColor.currentTextColor,
+            selectTextSize = viewBinding.includeHomeBottom.finderOkTextSize.getTextSizeSupport(),
+            selectTextColor = viewBinding.includeHomeBottom.finderOkTextColor.currentTextColor,
             listPopupWidth = getHomeFinderWidth(),
-            listPopupHorizontalOffset = viewBinding.includeHomeFinderItem.finderItemHorOffset.getTextSizeSupport()
+            listPopupHorizontalOffset = viewBinding.includeHomeFinder.finderItemHorOffset.getTextSizeSupport()
                 .toInt(),
-            listPopupVerticalOffset = viewBinding.includeHomeFinderItem.finderItemVerOffset.getTextSizeSupport()
+            listPopupVerticalOffset = viewBinding.includeHomeFinder.finderItemVerOffset.getTextSizeSupport()
                 .toInt(),
-            finderItemBackground = viewBinding.includeHomeFinderItem.finderItemBgColor.currentTextColor,
-            finderItemTextColor = viewBinding.includeHomeFinderItem.finderItemTextColor.currentTextColor,
-            finderItemTextCountColor = viewBinding.includeHomeFinderItem.finderItemTextCountColor.currentTextColor,
+            finderItemBackground = viewBinding.includeHomeFinder.finderItemBgColor.currentTextColor,
+            finderItemTextColor = viewBinding.includeHomeFinder.finderItemTextColor.currentTextColor,
+            finderItemTextCountColor = viewBinding.includeHomeFinder.finderItemTextCountColor.currentTextColor,
             preTitle = viewBinding.includePrev.prevTitle.getTextSupport(DEFAULT_PREV_TITLE),
             prevRootBackground = viewBinding.includePrev.prevRootViewBgColor.currentTextColor,
             preBottomViewBackground = viewBinding.includePrev.prevBottomBgColor.currentTextColor,

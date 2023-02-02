@@ -27,7 +27,7 @@ import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.fragment.addFragment
 import com.gallery.compat.fragment.showFragment
 import com.gallery.compat.internal.simple.SimpleGalleryCallback
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
@@ -192,14 +192,10 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
     }
 
     /** 初始化布局 */
-    abstract override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        configs: GalleryConfigs,
-        saveState: Bundle?
-    )
+    abstract override fun onGalleryCreated(delegate: IScanDelegate, saveState: Bundle?)
 
     /** 文件目录加载图片,此方法需要在自定义Finder的时候主动调用,或者自定义的时候直接加载图片即可 */
-    abstract override fun onDisplayThumbnailsGallery(entity: ScanEntity, container: FrameLayout)
+    abstract override fun onDisplayFinderGallery(entity: ScanEntity, container: FrameLayout)
 
     /** 文件加载图片 */
     abstract override fun onDisplayHomeGallery(

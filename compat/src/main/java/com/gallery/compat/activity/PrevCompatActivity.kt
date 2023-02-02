@@ -18,11 +18,10 @@ import com.gallery.compat.fragment.PrevCompatFragment
 import com.gallery.compat.fragment.addFragment
 import com.gallery.compat.fragment.showFragment
 import com.gallery.compat.internal.simple.SimplePrevCallback
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevInterceptor
 import com.gallery.core.delegate.IPrevDelegate
-import com.gallery.core.delegate.args.PrevArgs.Companion.configOrDefault
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.orEmpty
 
@@ -57,7 +56,9 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
     }
 
     /** 初始配置 */
-    protected val galleryConfig: GalleryConfigs by lazy { prevCompatArgs.prevArgs.configOrDefault }
+    protected val galleryConfig: GalleryConfigs by lazy {
+        prevCompatArgs.prevArgs.config ?: GalleryConfigs()
+    }
 
     /** 自定义参数配置 */
     protected val gapConfig: Parcelable? by lazy { prevCompatArgs.gap }
@@ -111,6 +112,6 @@ abstract class PrevCompatActivity : AppCompatActivity(), SimplePrevCallback, IGa
     abstract override fun onDisplayPrevGallery(entity: ScanEntity, container: FrameLayout)
 
     /** 预览图初始化，预览页必须实现 ，可实现背景色之类的配置 */
-    abstract override fun onPrevCreated(delegate: IPrevDelegate, configs: GalleryConfigs, saveState: Bundle?)
+    abstract override fun onPrevCreated(delegate: IPrevDelegate, saveState: Bundle?)
 
 }

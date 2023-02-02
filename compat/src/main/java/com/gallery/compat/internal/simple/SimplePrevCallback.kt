@@ -1,7 +1,6 @@
 package com.gallery.compat.internal.simple
 
 import android.os.Bundle
-import com.gallery.core.GalleryConfigs
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
@@ -26,11 +25,7 @@ interface SimplePrevCallback : IGalleryPrevCallback {
     override fun onSelectMultipleFileNotExist(entity: ScanEntity) {
     }
 
-    override fun onPrevCreated(
-        delegate: IPrevDelegate,
-        configs: GalleryConfigs,
-        saveState: Bundle?
-    ) {
+    override fun onPrevCreated(delegate: IPrevDelegate, saveState: Bundle?) {
     }
 
 }

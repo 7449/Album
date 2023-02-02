@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.activity.result.ActivityResult
 import androidx.core.os.bundleOf
 import com.gallery.compat.GalleryConfig
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.extensions.delete
@@ -18,11 +19,7 @@ internal class MaterialGalleryCropper(private val cropImageOptions: CropImageOpt
 
     private var cropUri: Uri? = null
 
-    override fun onCropResult(
-        delegate: IScanDelegate,
-        configs: com.gallery.core.GalleryConfigs,
-        intent: ActivityResult
-    ) {
+    override fun onCropResult(delegate: IScanDelegate, intent: ActivityResult) {
         when (intent.resultCode) {
             Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri ->
                 onCropSuccess(delegate, uri)
@@ -33,11 +30,7 @@ internal class MaterialGalleryCropper(private val cropImageOptions: CropImageOpt
         }
     }
 
-    override fun openCrop(
-        context: Context,
-        configs: com.gallery.core.GalleryConfigs,
-        inputUri: Uri
-    ): Intent {
+    override fun openCrop(context: Context, configs: GalleryConfigs, inputUri: Uri): Intent {
         this.cropUri = cropOutPutUri(context, configs)
         val intent = Intent().setClass(context, CropImageActivity::class.java)
         intent.putExtra(

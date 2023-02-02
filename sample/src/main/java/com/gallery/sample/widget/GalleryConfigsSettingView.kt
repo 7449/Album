@@ -8,10 +8,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.CameraConfig
-import com.gallery.core.FileConfig
-import com.gallery.core.GalleryConfigs
-import com.gallery.core.GridConfig
+import com.gallery.core.args.CameraConfig
+import com.gallery.core.args.FileConfig
+import com.gallery.core.args.GalleryConfigs
+import com.gallery.core.args.GridConfig
 import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.R
 import com.gallery.sample.clickSelectIcon

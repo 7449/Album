@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 import java.io.File
 
 fun Context.findIdByUri(uri: Uri): Long = contentResolver.queryId(uri)

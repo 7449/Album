@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.gallery.compat.activity.args.GalleryCompatArgs
 import com.gallery.compat.activity.args.GalleryCompatArgs.Companion.toBundle
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 
 open class Gallery(
     activity: FragmentActivity? = null,

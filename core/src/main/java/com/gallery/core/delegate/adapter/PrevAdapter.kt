@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.frame
 
 internal class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, container: FrameLayout) -> Unit) :
     RecyclerView.Adapter<PrevAdapter.ViewHolder>() {
@@ -12,12 +13,7 @@ internal class PrevAdapter(private val displayPreview: (scanEntity: ScanEntity, 
     private val selectList: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(FrameLayout(parent.context).apply {
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        })
+        return ViewHolder(parent.frame(0, FrameLayout.LayoutParams.MATCH_PARENT))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

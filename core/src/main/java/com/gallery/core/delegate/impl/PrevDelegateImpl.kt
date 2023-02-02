@@ -6,14 +6,13 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.gallery.core.GalleryConfigs
 import com.gallery.core.R
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.adapter.PrevAdapter
 import com.gallery.core.delegate.args.PrevArgs
-import com.gallery.core.delegate.args.PrevArgs.Companion.configOrDefault
 import com.gallery.core.delegate.args.PrevArgs.Companion.prevArgs
 import com.gallery.core.delegate.args.PrevArgs.Companion.prevArgsOrDefault
 import com.gallery.core.delegate.args.PrevArgs.Companion.toBundle
@@ -30,10 +29,6 @@ import com.gallery.scan.extensions.isScanNoNeMedia
 import com.gallery.scan.impl.MediaScanImpl
 import com.gallery.scan.impl.file.FileScanArgs
 
-/**
- * 预览代理
- * 需要在[Fragment]的[Fragment.onViewCreated]之后初始化
- */
 class PrevDelegateImpl(
     /**
      * [Fragment]
@@ -42,16 +37,8 @@ class PrevDelegateImpl(
      * [Fragment]中必须存在 [R.id.gallery_prev_viewpager2]和[R.id.gallery_prev_checkbox] 两个id的View
      */
     private val fragment: Fragment,
-    /**
-     * [IGalleryPrevCallback]
-     * 预览回调
-     */
-    private val galleryPrevCallback: IGalleryPrevCallback,
-    /**
-     * [IGalleryImageLoader]
-     * 图片加载框架
-     */
-    private val galleryImageLoader: IGalleryImageLoader,
+    private val callback: IGalleryPrevCallback,
+    private val loader: IGalleryImageLoader,
 ) : IPrevDelegate {
 
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback =
@@ -61,15 +48,15 @@ class PrevDelegateImpl(
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
-                galleryPrevCallback.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                callback.onPageScrolled(position, positionOffset, positionOffsetPixels)
             }
 
             override fun onPageScrollStateChanged(state: Int) {
-                galleryPrevCallback.onPageScrollStateChanged(state)
+                callback.onPageScrollStateChanged(state)
             }
 
             override fun onPageSelected(position: Int) {
-                galleryPrevCallback.onPageSelected(position)
+                callback.onPageSelected(position)
                 checkBox.isSelected = isSelected(position)
             }
         }
@@ -77,10 +64,10 @@ class PrevDelegateImpl(
     private val viewPager2: ViewPager2 = rootView.findViewById(R.id.gallery_prev_viewpager2)
     private val checkBox: View = rootView.findViewById(R.id.gallery_prev_checkbox)
     private val prevAdapter: PrevAdapter = PrevAdapter { entity, container ->
-        galleryImageLoader.onDisplayPrevGallery(entity, container)
+        loader.onDisplayPrevGallery(entity, container)
     }
     private val args = fragment.arguments.orEmpty().prevArgsOrDefault
-    private val configs = args.configOrDefault
+    private val configs = args.config ?: GalleryConfigs()
 
     override val rootView: View get() = fragment.requireView()
     override val allItem: ArrayList<ScanEntity> get() = prevAdapter.allItem
@@ -133,7 +120,7 @@ class PrevDelegateImpl(
         checkBox.setBackgroundResource(configs.cameraConfig.checkBoxIcon)
         checkBox.setOnClickListener { selectPictureClick(checkBox) }
         checkBox.isSelected = isSelected(currentPosition)
-        galleryPrevCallback.onPrevCreated(this, configs, savedInstanceState)
+        callback.onPrevCreated(this, savedInstanceState)
     }
 
     override fun selectPictureClick(box: View) {
@@ -144,11 +131,11 @@ class PrevDelegateImpl(
             }
             box.isSelected = false
             currentItem.isSelected = false
-            galleryPrevCallback.onSelectMultipleFileNotExist(currentItem)
+            callback.onSelectMultipleFileNotExist(currentItem)
             return
         }
         if (!prevAdapter.containsSelect(currentItem) && selectItem.size >= configs.maxCount) {
-            galleryPrevCallback.onSelectMultipleMaxCount()
+            callback.onSelectMultipleMaxCount()
             return
         }
         if (currentItem.isSelected) {
@@ -160,7 +147,7 @@ class PrevDelegateImpl(
             currentItem.isSelected = true
             box.isSelected = true
         }
-        galleryPrevCallback.onSelectMultipleFileChanged(currentPosition, currentItem)
+        callback.onSelectMultipleFileChanged(currentPosition, currentItem)
     }
 
     override fun isSelected(position: Int): Boolean {

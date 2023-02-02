@@ -1,13 +1,15 @@
 @file:Suppress("ArrayInDataClass")
 
-package com.gallery.core
+package com.gallery.core.args
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
 import androidx.core.os.bundleOf
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.parcelableVersion
+import com.gallery.core.extensions.square
 import com.gallery.scan.Types
 import com.gallery.scan.impl.file.FileScanArgs
 import kotlinx.parcelize.Parcelize
@@ -57,6 +59,9 @@ data class GalleryConfigs(
     /** 获取file扫描参数类 */
     val fileScanArgs: FileScanArgs
         get() = FileScanArgs(type, sort.second, sort.first)
+
+    /** item宽高 */
+    fun display(context: Context): Int = context.square(gridConfig.spanCount)
 
     companion object {
         private const val Key = "GalleryConfigs"

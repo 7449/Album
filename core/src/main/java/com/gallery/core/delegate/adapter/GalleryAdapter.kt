@@ -1,28 +1,27 @@
 package com.gallery.core.delegate.adapter
 
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.setMargins
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
+import com.gallery.core.extensions.checkBox
 import com.gallery.core.extensions.drawable
 import com.gallery.core.extensions.fileExists
-import com.gallery.core.extensions.hide
+import com.gallery.core.extensions.frame
+import com.gallery.core.extensions.imageView
+import com.gallery.core.extensions.setOnClick
 import com.gallery.core.extensions.show
+import com.gallery.core.extensions.textView
+import com.gallery.core.extensions.verticalLinear
 
 internal class GalleryAdapter(
-    private val display: Int,
     private val configs: GalleryConfigs,
     private val galleryCallback: IGalleryCallback,
     private val imageLoader: IGalleryImageLoader,
@@ -30,8 +29,8 @@ internal class GalleryAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnGalleryItemClickListener {
-        fun onCameraItemClick(view: View, position: Int, scanEntity: ScanEntity)
-        fun onPhotoItemClick(view: View, position: Int, scanEntity: ScanEntity)
+        fun onCameraItemClick()
+        fun onPhotoItemClick(position: Int, scanEntity: ScanEntity)
     }
 
     companion object {
@@ -45,29 +44,13 @@ internal class GalleryAdapter(
     private val selectList: ArrayList<ScanEntity> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val display = configs.display(parent.context)
         return when (viewType) {
-            TYPE_CAMERA -> CameraViewHolder.newInstance(parent, display, configs).apply {
-                itemView.setOnClickListener { v ->
-                    itemClickListener.onCameraItemClick(
-                        v,
-                        bindingAdapterPosition,
-                        galleryList[bindingAdapterPosition]
-                    )
-                }
-            }
+            TYPE_CAMERA -> parent.newCameraHolder(display, configs)
+                .setOnClick { itemClickListener.onCameraItemClick() }
 
-            else -> {
-                val photoViewHolder =
-                    PhotoViewHolder.newInstance(parent, configs, display, galleryCallback)
-                photoViewHolder.itemView.setOnClickListener { v ->
-                    itemClickListener.onPhotoItemClick(
-                        v,
-                        photoViewHolder.bindingAdapterPosition,
-                        galleryList[photoViewHolder.bindingAdapterPosition]
-                    )
-                }
-                photoViewHolder
-            }
+            else -> parent.newPictureHolder(display, configs, galleryCallback)
+                .setOnClick { itemClickListener.onPhotoItemClick(it, galleryList[it]) }
         }
     }
 
@@ -131,47 +114,32 @@ internal class GalleryAdapter(
     val currentList: ArrayList<ScanEntity>
         get() = galleryList
 
+    private fun ViewGroup.newCameraHolder(display: Int, configs: GalleryConfigs): CameraViewHolder {
+        val rootView = verticalLinear(display)
+        val imageCamera = rootView.imageView(divider)
+        val imageCameraTv = rootView.textView(divider)
+        rootView.addView(imageCamera)
+        rootView.addView(imageCameraTv)
+        return CameraViewHolder(rootView, imageCamera, imageCameraTv, configs)
+    }
+
+    private fun ViewGroup.newPictureHolder(
+        display: Int,
+        configs: GalleryConfigs,
+        callback: IGalleryCallback
+    ): PhotoViewHolder {
+        val rootView = frame(divider, display)
+        val checkBox = rootView.checkBox(divider, display)
+        rootView.addView(checkBox)
+        return PhotoViewHolder(rootView, checkBox, display, configs, callback)
+    }
+
     private class CameraViewHolder(
-        private val rootView: View,
+        rootView: View,
         private val imageCamera: ImageView,
         private val imageCameraTv: TextView,
         private val galleryConfigs: GalleryConfigs
     ) : RecyclerView.ViewHolder(rootView) {
-
-        companion object {
-            fun newInstance(
-                parent: ViewGroup,
-                display: Int,
-                configs: GalleryConfigs
-            ): CameraViewHolder {
-                val rootView = LinearLayout(parent.context).apply {
-                    orientation = LinearLayout.VERTICAL
-                    layoutParams = LinearLayout.LayoutParams(display, display)
-                }
-                val imageCamera = AppCompatImageView(rootView.context).apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                    ).apply {
-                        setMargins(divider, divider, divider, 0)
-                        weight = 1f
-                    }
-                }
-                val imageCameraTv = AppCompatTextView(rootView.context).apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        setMargins(divider, 0, divider, divider)
-                        setPadding(0, 0, 0, 10)
-                    }
-                }
-                imageCameraTv.gravity = Gravity.CENTER
-                rootView.addView(imageCamera)
-                rootView.addView(imageCameraTv)
-                return CameraViewHolder(rootView, imageCamera, imageCameraTv, configs)
-            }
-        }
 
         fun cameraSetting() {
             imageCameraTv.text = galleryConfigs.cameraConfig.text
@@ -184,82 +152,58 @@ internal class GalleryAdapter(
 
     }
 
-    class PhotoViewHolder(
+    private class PhotoViewHolder(
         private val rootView: FrameLayout,
         private val checkBox: AppCompatTextView,
-        private val galleryConfigs: GalleryConfigs,
         private val display: Int,
+        private val configs: GalleryConfigs,
         private val galleryCallback: IGalleryCallback,
     ) : RecyclerView.ViewHolder(rootView) {
 
-        companion object {
-            fun newInstance(
-                parent: ViewGroup,
-                configs: GalleryConfigs,
-                display: Int,
-                galleryCallback: IGalleryCallback
-            ): PhotoViewHolder {
-                val rootView = FrameLayout(parent.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(display, display)
-                        .apply { setPadding(divider) }
-                }
-                val checkBox = AppCompatTextView(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(display / 6, display / 6).apply {
-                        setPadding(divider)
-                        setMargins(divider)
-                        gravity = Gravity.END
-                    }
-                }
-                checkBox.hide()
-                rootView.addView(checkBox)
-                return PhotoViewHolder(rootView, checkBox, configs, display, galleryCallback)
-            }
-        }
-
         fun photo(
             position: Int,
-            scanEntity: ScanEntity,
+            entity: ScanEntity,
             selectList: ArrayList<ScanEntity>,
             imageLoader: IGalleryImageLoader
         ) {
-            imageLoader.onDisplayHomeGallery(display, display, scanEntity, rootView)
-            if (galleryConfigs.radio) {
-                return
-            }
-            checkBox.setOnClickListener { clickItemView(position, scanEntity, selectList) }
-            checkBox.setBackgroundResource(galleryConfigs.cameraConfig.checkBoxIcon)
-            checkBox.isSelected = scanEntity.isSelected
+            imageLoader.onDisplayHomeGallery(display, display, entity, rootView)
+            checkBox.setOnClickListener(null)
+            if (configs.radio) return
+            checkBox.setOnClickListener { clickItemView(position, entity, selectList) }
+            checkBox.setBackgroundResource(configs.cameraConfig.checkBoxIcon)
+            checkBox.isSelected = entity.isSelected
             checkBox.show()
         }
 
         private fun clickItemView(
             position: Int,
-            scanEntity: ScanEntity,
+            entity: ScanEntity,
             selectList: ArrayList<ScanEntity>
         ) {
-            if (!scanEntity.uri.fileExists(itemView.context)) {
-                if (selectList.contains(scanEntity)) {
-                    selectList.remove(scanEntity)
+            if (!entity.uri.fileExists(itemView.context)) {
+                if (selectList.contains(entity)) {
+                    selectList.remove(entity)
                 }
                 checkBox.isSelected = false
-                scanEntity.isSelected = false
-                galleryCallback.onSelectMultipleFileNotExist(scanEntity)
+                entity.isSelected = false
+                galleryCallback.onSelectMultipleFileNotExist(entity)
                 return
             }
-            if (!selectList.contains(scanEntity) && selectList.size >= galleryConfigs.maxCount) {
+            if (!selectList.contains(entity) && selectList.size >= configs.maxCount) {
                 galleryCallback.onSelectMultipleMaxCount()
                 return
             }
-            if (!scanEntity.isSelected) {
-                scanEntity.isSelected = true
+            if (!entity.isSelected) {
+                entity.isSelected = true
                 checkBox.isSelected = true
-                selectList.add(scanEntity)
+                selectList.add(entity)
             } else {
-                selectList.remove(scanEntity)
-                scanEntity.isSelected = false
+                selectList.remove(entity)
+                entity.isSelected = false
                 checkBox.isSelected = false
             }
-            galleryCallback.onSelectMultipleFileChanged(position, scanEntity)
+            galleryCallback.onSelectMultipleFileChanged(position, entity)
         }
+
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.ActivityResult
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.extensions.takeCropUri
 
@@ -30,11 +30,7 @@ interface ICrop {
      * [ActivityResult.mData]
      * 裁剪完成之后需要[IScanDelegate.onScanResult]来进行数据刷新
      */
-    fun onCropResult(
-        delegate: IScanDelegate,
-        configs: GalleryConfigs,
-        intent: ActivityResult
-    ) {
+    fun onCropResult(delegate: IScanDelegate, intent: ActivityResult) {
         TODO("need to handle crop callback")
     }
 

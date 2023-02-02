@@ -203,11 +203,7 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
         }
     }
 
-    override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        configs: com.gallery.core.GalleryConfigs,
-        saveState: Bundle?
-    ) {
+    override fun onGalleryCreated(delegate: IScanDelegate, saveState: Bundle?) {
         //初始化布局
         delegate.rootView.setBackgroundColor(config.galleryRootBackground)
         val currentFragment = requireGalleryFragment
@@ -303,7 +299,7 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
-        onDisplayThumbnailsGallery(finderEntity, container)
+        onDisplayFinderGallery(finderEntity, container)
     }
 
     @SuppressLint("SetTextI18n")
@@ -337,7 +333,7 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
         }
     }
 
-    override fun onDisplayThumbnailsGallery(entity: ScanEntity, container: FrameLayout) {
+    override fun onDisplayFinderGallery(entity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(this).load(entity.uri).apply(
@@ -362,7 +358,6 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
 
     /** 刷新一下角标 */
     override fun onSelectMultipleFileNotExist(entity: ScanEntity) {
-        super.onSelectMultipleFileNotExist(entity)
         requireGalleryFragment.notifyDataSetChanged()
     }
 

@@ -11,7 +11,6 @@ import com.gallery.compat.extensions.requireGalleryFragment
 import com.gallery.compat.extensions.toast
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.widget.GalleryImageView
-import com.gallery.core.GalleryConfigs
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
@@ -98,11 +97,7 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         viewBinding.toolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
-    override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        configs: GalleryConfigs,
-        saveState: Bundle?
-    ) {
+    override fun onGalleryCreated(delegate: IScanDelegate, saveState: Bundle?) {
         delegate.rootView.setBackgroundColor(config.galleryRootBackground)
     }
 
@@ -152,7 +147,7 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
     }
 
     override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
-        onDisplayThumbnailsGallery(finderEntity, container)
+        onDisplayFinderGallery(finderEntity, container)
     }
 
     override fun onDisplayHomeGallery(
@@ -174,7 +169,7 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         ).into(imageView)
     }
 
-    override fun onDisplayThumbnailsGallery(entity: ScanEntity, container: FrameLayout) {
+    override fun onDisplayFinderGallery(entity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val imageView = GalleryImageView(container.context)
         Glide.with(container.context).load(entity.uri).apply(

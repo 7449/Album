@@ -11,7 +11,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.extensions.requirePrevFragment
 import com.gallery.compat.finder.GalleryFinderAdapter
-import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.ui.wechat.R
@@ -167,11 +166,7 @@ internal class WeChatGalleryPrevActivity : PrevCompatActivity(),
         binding.galleryPrevList.scrollToPosition(selectAdapter.index(currentItem))
     }
 
-    override fun onPrevCreated(
-        delegate: IPrevDelegate,
-        configs: GalleryConfigs,
-        saveState: Bundle?
-    ) {
+    override fun onPrevCreated(delegate: IPrevDelegate, saveState: Bundle?) {
         binding.prevWeChatToolbarText.text =
             (delegate.currentPosition + 1).toString() + "/" + delegate.itemCount
         binding.prevWeChatToolbarSend.text =

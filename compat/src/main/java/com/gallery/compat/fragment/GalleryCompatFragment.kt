@@ -3,10 +3,10 @@ package com.gallery.compat.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.gallery.compat.R
-import com.gallery.core.GalleryConfigs
-import com.gallery.core.GalleryConfigs.Companion.toBundle
+import com.gallery.core.args.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs.Companion.toBundle
 import com.gallery.core.callback.IGalleryInterceptor
 import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
@@ -64,8 +64,12 @@ open class GalleryCompatFragment(layoutId: Int = R.layout.gallery_compat_fragmen
         delegate.notifyDataSetChanged()
     }
 
-    open fun addOnScrollListener(onScrollListener: RecyclerView.OnScrollListener) {
+    open fun addOnScrollListener(onScrollListener: OnScrollListener) {
         delegate.addOnScrollListener(onScrollListener)
+    }
+
+    open fun removeOnScrollListener(onScrollListener: OnScrollListener) {
+        delegate.removeOnScrollListener(onScrollListener)
     }
 
     open fun scrollToPosition(position: Int) {

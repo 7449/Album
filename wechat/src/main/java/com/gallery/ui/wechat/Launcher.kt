@@ -6,8 +6,8 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.gallery.compat.Gallery
-import com.gallery.core.CameraConfig
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.CameraConfig
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.ui.wechat.activity.WeChatGalleryActivity
 import com.gallery.ui.wechat.args.WeChatGalleryConfig
 

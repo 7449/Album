@@ -11,7 +11,9 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
     forEach { item ->
         if (finderList.find { it.parent == item.parent } == null) {
             finderList.add(
-                ScanEntity(item.delegate, count = this.count { it.parent == item.parent })
+                ScanEntity(
+                    item.delegate,
+                    count = this.count { it.parent == item.parent })
             )
         }
     }
@@ -39,28 +41,32 @@ fun ArrayList<ScanEntity>.findFinder(sdName: String, allName: String): ArrayList
 //添加数据并更新第一条数据
 //否则更新第一条数据和文件夹数据
 //sortDesc true 倒序排列
-fun ArrayList<ScanEntity>.updateResultFinder(scanEntity: ScanEntity, sortDesc: Boolean) {
-    if (isEmpty()) {
-        return
-    }
-    val find: ScanEntity? = find { it.parent == scanEntity.parent }
+fun ArrayList<ScanEntity>.updateResultFinder(entity: ScanEntity, sortDesc: Boolean) {
+    if (isEmpty()) return
+    val find: ScanEntity? = find { it.parent == entity.parent }
     if (find == null) {
-        this.add(1, ScanEntity(scanEntity.delegate, 1))
-        val first: ScanEntity = first()
-        this[indexOf(first)] = first.copy(
-            delegate = (if (sortDesc) scanEntity.delegate else first.delegate).copy(parent = Types.Id.ALL),
+        this.add(1, ScanEntity(entity.delegate, 1)) //新文件夹，添加一条finder item 并更新第一条数据
+        val first: ScanEntity = first() //第一条finder item , 全部数据的item
+        this[0] = first.copy(
+            delegate = (if (sortDesc) entity.delegate else first.delegate).copy(
+                parent = Types.Id.ALL,
+                bucketDisplayName = first.bucketDisplayName
+            ),
             count = first.count + 1
         )
     } else {
         find { it.parent.isScanAllMedia }?.let {
             this[indexOf(it)] = it.copy(
-                delegate = (if (sortDesc) scanEntity.delegate else it.delegate).copy(parent = Types.Id.ALL),
+                delegate = (if (sortDesc) entity.delegate else it.delegate).copy(
+                    parent = Types.Id.ALL,
+                    bucketDisplayName = it.bucketDisplayName
+                ),
                 count = it.count + 1
             )
         }
-        find { it.parent == scanEntity.parent }?.let {
+        find { it.parent == entity.parent }?.let {
             this[indexOf(it)] = it.copy(
-                delegate = if (sortDesc) scanEntity.delegate else it.delegate,
+                delegate = if (sortDesc) entity.delegate else it.delegate,
                 count = it.count + 1
             )
         }

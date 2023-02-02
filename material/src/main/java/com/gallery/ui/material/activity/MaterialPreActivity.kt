@@ -6,7 +6,6 @@ import com.bumptech.glide.Glide
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.extensions.requirePrevFragment
 import com.gallery.compat.extensions.toast
-import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawable
@@ -70,14 +69,13 @@ open class MaterialPreActivity : PrevCompatActivity() {
         container.addView(imageView)
     }
 
-    override fun onPrevCreated(delegate: IPrevDelegate, configs: GalleryConfigs, saveState: Bundle?) {
+    override fun onPrevCreated(delegate: IPrevDelegate, saveState: Bundle?) {
         delegate.rootView.setBackgroundColor(config.galleryRootBackground)
         viewBinding.count.text = format.format(delegate.selectCount, galleryConfig.maxCount)
         viewBinding.toolbar.title = config.toolbarTextConfig.text + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
     }
 
     override fun onSelectMultipleFileNotExist(entity: ScanEntity) {
-        super.onSelectMultipleFileNotExist(entity)
         viewBinding.count.text = format.format(requirePrevFragment.selectCount, galleryConfig.maxCount)
     }
 

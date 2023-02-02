@@ -10,8 +10,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.internal.simple.SimpleGalleryCallback
 import com.gallery.compat.widget.GalleryImageView
-import com.gallery.core.GalleryConfigs
-import com.gallery.core.GridConfig
+import com.gallery.core.args.GalleryConfigs
+import com.gallery.core.args.GridConfig
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
 

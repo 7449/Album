@@ -3,7 +3,7 @@ package com.gallery.core.delegate.args
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.parcelableVersion
@@ -61,7 +61,7 @@ data class PrevArgs(
             return bundle
         }
 
-        val Bundle.prevArgs
+        internal val Bundle.prevArgs
             get() = parcelableVersion<PrevArgs>(Key)
 
         val Bundle.prevArgsOrDefault
@@ -72,9 +72,6 @@ data class PrevArgs(
                 0,
                 MediaStore.Files.FileColumns.MEDIA_TYPE_NONE
             )
-
-        val PrevArgs.configOrDefault
-            get() = config ?: GalleryConfigs()
 
     }
 }

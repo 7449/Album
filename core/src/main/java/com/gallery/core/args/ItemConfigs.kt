@@ -1,4 +1,4 @@
-package com.gallery.core
+package com.gallery.core.args
 
 import android.graphics.Color
 import android.os.Environment
@@ -6,6 +6,7 @@ import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
+import com.gallery.core.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.gallery.core.delegate.IScanDelegate
+import com.gallery.core.entity.ScanEntity
 
 interface IGalleryInterceptor {
     /**
@@ -77,4 +78,12 @@ interface IGalleryInterceptor {
      * 无图片或视频时触发,true会自动打开相机
      */
     fun onEmptyPhotoClick(view: View): Boolean = true
+
+    /**
+     * 是否拦截视频播放逻辑
+     * true 是
+     * false 否
+     * default:false
+     */
+    fun onOpenVideo(entity: ScanEntity): Boolean = false
 }

@@ -3,7 +3,7 @@ package com.gallery.compat.activity.args
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.os.bundleOf
-import com.gallery.core.GalleryConfigs
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.extensions.parcelableVersion
 import kotlinx.parcelize.Parcelize
 

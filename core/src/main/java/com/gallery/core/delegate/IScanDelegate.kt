@@ -4,7 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.gallery.core.delegate.args.ScanArgs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.PermissionCode
@@ -77,7 +77,10 @@ interface IScanDelegate {
     fun notifyDataSetChanged()
 
     /*** 监听滑动*/
-    fun addOnScrollListener(listener: RecyclerView.OnScrollListener)
+    fun addOnScrollListener(listener: OnScrollListener)
+
+    /*** 去掉监听滑动*/
+    fun removeOnScrollListener(listener: OnScrollListener)
 
     /*** 滑动到某个位置*/
     fun scrollToPosition(position: Int)

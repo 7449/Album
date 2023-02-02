@@ -1,8 +1,6 @@
 package com.gallery.core.callback
 
 import android.os.Bundle
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.CameraStatus
@@ -11,31 +9,31 @@ import com.gallery.core.extensions.PermissionCode
 interface IGalleryCallback {
 
     /*** [IScanDelegate.onCreate]触发*/
-    fun onGalleryCreated(delegate: IScanDelegate, configs: GalleryConfigs, saveState: Bundle?)
+    fun onGalleryCreated(delegate: IScanDelegate, saveState: Bundle?)
 
-    /*** 单选非裁剪状态下,点击[Adapter]item返回的数据*/
+    /*** 单选非裁剪状态下选择数据返回*/
     fun onGalleryResource(entity: ScanEntity)
-
-    /*** 已达到选择最大数*/
-    fun onSelectMultipleMaxCount()
 
     /*** 多选时该文件已经被删除*/
     fun onSelectMultipleFileNotExist(entity: ScanEntity)
 
-    /*** 点击图片时该文件已被删除*/
-    fun onClickItemFileNotExist(entity: ScanEntity)
-
-    /*** 刷新预览页数据之后触发*/
-    fun onRefreshResultChanged()
-
-    /*** 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法*/
-    fun onPhotoItemClick(entity: ScanEntity, position: Int, parentId: Long)
+    /*** 已达到选择最大数*/
+    fun onSelectMultipleMaxCount()
 
     /*** 点击CheckBox时会触发*/
     fun onSelectMultipleFileChanged(position: Int, entity: ScanEntity)
 
+    /*** 点击图片时该文件已被删除*/
+    fun onClickItemFileNotExist(entity: ScanEntity)
+
+    /*** 如果图片存在,并且不是视频模式,不是单选的情况下触发这个方法*/
+    fun onPhotoItemClick(entity: ScanEntity, position: Int, parentId: Long)
+
+    /*** 刷新预览页数据之后触发*/
+    fun onRefreshResultChanged()
+
     /*** 没有扫描到任何数据*/
-    fun onScanMultipleResultEmpty()
+    fun onScanMultipleEmpty()
 
     /*** 每次扫描之后数据非空触发*/
     fun onScanMultipleSuccess()

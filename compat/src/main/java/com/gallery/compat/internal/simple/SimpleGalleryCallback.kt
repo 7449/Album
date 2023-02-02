@@ -1,7 +1,6 @@
 package com.gallery.compat.internal.simple
 
 import android.os.Bundle
-import com.gallery.core.GalleryConfigs
 import com.gallery.core.callback.IGalleryCallback
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
@@ -10,11 +9,7 @@ import com.gallery.core.extensions.PermissionCode
 
 interface SimpleGalleryCallback : IGalleryCallback {
 
-    override fun onGalleryCreated(
-        delegate: IScanDelegate,
-        configs: GalleryConfigs,
-        saveState: Bundle?
-    ) {
+    override fun onGalleryCreated(delegate: IScanDelegate, saveState: Bundle?) {
     }
 
     override fun onGalleryResource(entity: ScanEntity) {
@@ -53,7 +48,7 @@ interface SimpleGalleryCallback : IGalleryCallback {
     override fun onCameraOpenStatus(status: CameraStatus) {
     }
 
-    override fun onScanMultipleResultEmpty() {
+    override fun onScanMultipleEmpty() {
     }
 
     override fun onOpenVideoError(entity: ScanEntity) {

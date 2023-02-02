@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.core.os.bundleOf
 import com.gallery.core.delegate.args.PrevArgs
 import com.gallery.core.delegate.args.PrevArgs.Companion.prevArgsOrDefault
-import com.gallery.core.extensions.parcelable
+import com.gallery.core.extensions.parcelableVersion
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -21,6 +21,6 @@ data class PrevCompatArgs(
         }
 
         val Bundle.prevCompatArgsOrDefault
-            get() = parcelable(Key) ?: PrevCompatArgs(prevArgsOrDefault, bundleOf())
+            get() = parcelableVersion(Key) ?: PrevCompatArgs(prevArgsOrDefault, bundleOf())
     }
 }

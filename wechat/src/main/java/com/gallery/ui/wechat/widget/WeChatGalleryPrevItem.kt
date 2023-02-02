@@ -8,9 +8,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.openVideo
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.databinding.WechatGalleryLayoutPrevItemBinding
+import com.gallery.ui.wechat.extension.openVideo
 import com.gallery.ui.wechat.extension.toFileSize
 
 internal class WeChatGalleryPrevItem @JvmOverloads constructor(

@@ -1,6 +1,5 @@
 package com.gallery.compat.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -66,7 +65,7 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
     /** 预览页启动[ActivityResultLauncher]  */
     private val prevLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { intent ->
-            val bundle: Bundle = intent?.data?.extras.orEmpty()
+            val bundle: Bundle = intent?.data?.extras ?: return@registerForActivityResult
             val scanArgs = bundle.scanArgs ?: return@registerForActivityResult
             when (intent.resultCode) {
                 PrevCompatActivity.RESULT_CODE_SELECT -> {
@@ -109,21 +108,42 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
     }
 
     /** 单个数据扫描成功之后刷新文件夹数据 */
-    override fun onResultSuccess(context: Context, scanEntity: ScanEntity) {
-        finderList.updateResultFinder(scanEntity, galleryConfig.sort.first == Types.Sort.DESC)
+    override fun onScanSingleSuccess(entity: ScanEntity) {
+        finderList.updateResultFinder(entity, galleryConfig.sort.first == Types.Sort.DESC)
     }
 
     /** 数据扫描成功之后刷新文件夹数据  该方法子类重写后需调用super 否则文件夹没数据,或者自己对文件夹进行初始化 */
-    override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
+    override fun onScanMultipleSuccess() {
         if (requireGalleryFragment.isScanAll) {
             finderList.clear()
-            finderList.addAll(scanEntities.findFinder(galleryConfig.sdNameAndAllName.first, galleryConfig.sdNameAndAllName.second))
+            finderList.addAll(
+                requireGalleryFragment.allItem.findFinder(
+                    galleryConfig.sdNameAndAllName.first,
+                    galleryConfig.sdNameAndAllName.second
+                )
+            )
         }
     }
 
     /** 启动预览 */
-    fun startPrevPage(parentId: Long, position: Int, gap: Parcelable?, scanSingleType: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE, cla: Class<out PrevCompatActivity>) {
-        startPrevPage(PrevCompatArgs(PrevArgs(parentId, requireGalleryFragment.selectItem, galleryConfig, position, scanSingleType), gap), cla)
+    fun startPrevPage(
+        parentId: Long,
+        position: Int,
+        gap: Parcelable?,
+        scanSingleType: Int = MediaStore.Files.FileColumns.MEDIA_TYPE_NONE,
+        cla: Class<out PrevCompatActivity>
+    ) {
+        startPrevPage(
+            PrevCompatArgs(
+                PrevArgs(
+                    parentId,
+                    requireGalleryFragment.selectItem,
+                    galleryConfig,
+                    position,
+                    scanSingleType
+                ), gap
+            ), cla
+        )
     }
 
     /** 启动预览 */
@@ -164,21 +184,30 @@ abstract class GalleryCompatActivity : AppCompatActivity(), SimpleGalleryCallbac
     }
 
     /** 选择图片,针对单选 */
-    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+    override fun onGalleryResource(entity: ScanEntity) {
         intentResultOf(
             GalleryConfig.RESULT_CODE_SINGLE_DATA,
-            bundleOf(GalleryConfig.GALLERY_SINGLE_DATA to scanEntity)
+            bundleOf(GalleryConfig.GALLERY_SINGLE_DATA to entity)
         )
     }
 
     /** 初始化布局 */
-    abstract override fun onGalleryCreated(delegate: IScanDelegate, configs: GalleryConfigs, saveState: Bundle?)
+    abstract override fun onGalleryCreated(
+        delegate: IScanDelegate,
+        configs: GalleryConfigs,
+        saveState: Bundle?
+    )
 
     /** 文件目录加载图片,此方法需要在自定义Finder的时候主动调用,或者自定义的时候直接加载图片即可 */
     abstract override fun onDisplayThumbnailsGallery(entity: ScanEntity, container: FrameLayout)
 
     /** 文件加载图片 */
-    abstract override fun onDisplayHomeGallery(width: Int, height: Int, entity: ScanEntity, container: FrameLayout)
+    abstract override fun onDisplayHomeGallery(
+        width: Int,
+        height: Int,
+        entity: ScanEntity,
+        container: FrameLayout
+    )
 
     override fun onDestroy() {
         super.onDestroy()

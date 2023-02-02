@@ -84,7 +84,7 @@ internal class MaterialFinderAdapter(
             val viewHolder = rootView.tag as ViewHolder
             viewHolder.appCompatTextView.setTextColor(materialGalleryConfig.finderItemTextColor)
             viewHolder.appCompatTextView.text = "%s".format(finderEntity.bucketDisplayName)
-            viewHolder.appCompatTextViewCount.setTextColor(materialGalleryConfig.finderItemTextCountColor)
+            viewHolder.appCompatTextViewCount.setTextColor(materialGalleryConfig.finderItemTextColor)
             viewHolder.appCompatTextViewCount.text = "%s".format(finderEntity.count.toString())
             displayFinder.invoke(finderEntity, viewHolder.frameLayout)
             return rootView

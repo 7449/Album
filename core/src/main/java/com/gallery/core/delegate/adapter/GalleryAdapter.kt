@@ -204,7 +204,7 @@ internal class GalleryAdapter(
                         .apply { setPadding(divider) }
                 }
                 val checkBox = AppCompatTextView(rootView.context).apply {
-                    layoutParams = FrameLayout.LayoutParams(40, 40).apply {
+                    layoutParams = FrameLayout.LayoutParams(display / 6, display / 6).apply {
                         setPadding(divider)
                         setMargins(divider)
                         gravity = Gravity.END
@@ -212,13 +212,7 @@ internal class GalleryAdapter(
                 }
                 checkBox.hide()
                 rootView.addView(checkBox)
-                return PhotoViewHolder(
-                    rootView,
-                    checkBox,
-                    configs,
-                    display,
-                    galleryCallback
-                )
+                return PhotoViewHolder(rootView, checkBox, configs, display, galleryCallback)
             }
         }
 
@@ -249,11 +243,11 @@ internal class GalleryAdapter(
                 }
                 checkBox.isSelected = false
                 scanEntity.isSelected = false
-                galleryCallback.onClickCheckBoxFileNotExist(itemView.context, scanEntity)
+                galleryCallback.onSelectMultipleFileNotExist(scanEntity)
                 return
             }
             if (!selectList.contains(scanEntity) && selectList.size >= galleryConfigs.maxCount) {
-                galleryCallback.onClickItemMaxCount(itemView.context, scanEntity)
+                galleryCallback.onSelectMultipleMaxCount()
                 return
             }
             if (!scanEntity.isSelected) {
@@ -265,7 +259,7 @@ internal class GalleryAdapter(
                 scanEntity.isSelected = false
                 checkBox.isSelected = false
             }
-            galleryCallback.onSelectItemChanged(position, scanEntity)
+            galleryCallback.onSelectMultipleFileChanged(position, scanEntity)
         }
     }
 }

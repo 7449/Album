@@ -3,7 +3,7 @@ package com.gallery.ui.wechat.args
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.os.bundleOf
-import com.gallery.core.extensions.parcelable
+import com.gallery.core.extensions.parcelableVersion
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,6 +18,6 @@ internal data class WeChatPrevSaveArgs(
         }
 
         val Bundle.weChatPrevSaveArgs
-            get() = parcelable<WeChatPrevSaveArgs>(Key)
+            get() = parcelableVersion<WeChatPrevSaveArgs>(Key)
     }
 }

@@ -1,7 +1,6 @@
 package com.gallery.ui.wechat.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -189,7 +188,7 @@ internal class WeChatGalleryPrevActivity : PrevCompatActivity(),
         delegate.rootView.setBackgroundColor(config.prevRootBackground)
     }
 
-    override fun onCheckBoxChanged() {
+    override fun onSelectMultipleFileChanged(position: Int, entity: ScanEntity) {
         val fragment = requirePrevFragment
         val currentItem = fragment.currentItem
         binding.prevWeChatToolbarSend.text =
@@ -213,21 +212,11 @@ internal class WeChatGalleryPrevActivity : PrevCompatActivity(),
         }
     }
 
-    override fun onClickItemMaxCount(
-        context: Context,
-        configs: GalleryConfigs,
-        scanEntity: ScanEntity
-    ) {
-        super.onClickItemMaxCount(context, configs, scanEntity)
+    override fun onSelectMultipleMaxCount() {
         binding.prevWeChatSelect.isChecked = false
     }
 
-    override fun onClickItemFileNotExist(
-        context: Context,
-        configs: GalleryConfigs,
-        scanEntity: ScanEntity
-    ) {
-        super.onClickItemFileNotExist(context, configs, scanEntity)
+    override fun onSelectMultipleFileNotExist(entity: ScanEntity) {
         binding.prevWeChatSelect.isChecked = false
     }
 

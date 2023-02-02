@@ -7,7 +7,7 @@ import android.os.Parcelable
 import android.provider.MediaStore
 import androidx.core.os.bundleOf
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.parcelable
+import com.gallery.core.extensions.parcelableVersion
 import com.gallery.scan.Types
 import com.gallery.scan.impl.file.FileScanArgs
 import kotlinx.parcelize.Parcelize
@@ -17,7 +17,7 @@ data class GalleryConfigs(
     /*** 默认选中的数据*/
     val selects: ArrayList<ScanEntity> = arrayListOf(),
     /*** 扫描类型*/
-    val type: IntArray = intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+    val type: Array<String> = arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()),
     /*** 排序方式以及排序所需的数据库字段*/
     val sort: Pair<String, String> = Types.Sort.DESC to MediaStore.Files.FileColumns.DATE_MODIFIED,
     /*** 隐藏相机*/
@@ -48,19 +48,15 @@ data class GalleryConfigs(
 
     /** 是否是视频 */
     val isScanVideoMedia: Boolean
-        get() = type.size == 1 && type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+        get() = type.size == 1 && type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
 
     /** 是否是图片 */
     val isScanImageMedia: Boolean
-        get() = type.size == 1 && type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+        get() = type.size == 1 && type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
 
     /** 获取file扫描参数类 */
     val fileScanArgs: FileScanArgs
-        get() = FileScanArgs(
-            type.map { it.toString() }.toTypedArray(),
-            sort.second,
-            sort.first
-        )
+        get() = FileScanArgs(type, sort.second, sort.first)
 
     companion object {
         private const val Key = "GalleryConfigs"
@@ -70,7 +66,7 @@ data class GalleryConfigs(
         }
 
         val Bundle.configs
-            get() = parcelable(Key) ?: GalleryConfigs()
+            get() = parcelableVersion(Key) ?: GalleryConfigs()
     }
 
 }

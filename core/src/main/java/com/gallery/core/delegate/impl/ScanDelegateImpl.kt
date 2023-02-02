@@ -196,7 +196,7 @@ class ScanDelegateImpl(
         if (scanEntities.isEmpty() && parentId.isScanAllMedia) {
             emptyView.show()
             recyclerView.hide()
-            galleryCallback.onScanSuccessEmpty(requireActivity)
+            galleryCallback.onScanMultipleResultEmpty()
             return
         }
         emptyView.hide()
@@ -207,13 +207,13 @@ class ScanDelegateImpl(
         val toScanEntity = scanEntities.toScanEntity()
         galleryAdapter.addAll(toScanEntity)
         galleryAdapter.updateEntity()
-        galleryCallback.onScanSuccess(allItem)
+        galleryCallback.onScanMultipleSuccess()
         scrollToPosition(0)
     }
 
     override fun onScanSingleSuccess(scanEntity: FileScanEntity?) {
         activity ?: return
-        scanEntity ?: return galleryCallback.onResultError(requireActivity, configs)
+        scanEntity ?: return galleryCallback.onScanSingleFailure()
         val toScanEntity = scanEntity.toScanEntity()
         //拍照或裁剪成功扫描到数据之后根据扫描方式更新数据
         if (parentId.isScanAllMedia || parentId == scanEntity.parent) {
@@ -225,7 +225,7 @@ class ScanDelegateImpl(
             }
         }
         notifyDataSetChanged()
-        galleryCallback.onResultSuccess(requireActivity, toScanEntity)
+        galleryCallback.onScanSingleSuccess(toScanEntity)
     }
 
     override fun onCameraItemClick(view: View, position: Int, scanEntity: ScanEntity) {
@@ -234,12 +234,12 @@ class ScanDelegateImpl(
 
     override fun onPhotoItemClick(view: View, position: Int, scanEntity: ScanEntity) {
         if (!scanEntity.uri.fileExists(requireActivity)) {
-            galleryCallback.onClickItemFileNotExist(requireActivity, scanEntity)
+            galleryCallback.onClickItemFileNotExist(scanEntity)
             return
         }
         if (configs.isScanVideoMedia) {
             requireActivity.openVideo(scanEntity.uri) {
-                galleryCallback.onOpenVideoPlayError(requireActivity, scanEntity)
+                galleryCallback.onOpenVideoError(scanEntity)
             }
             return
         }
@@ -249,17 +249,11 @@ class ScanDelegateImpl(
                     galleryICrop?.openCrop(requireActivity, configs, scanEntity.uri)
                 )
             } else {
-                galleryCallback.onGalleryResource(requireActivity, scanEntity)
+                galleryCallback.onGalleryResource(scanEntity)
             }
             return
         }
-        galleryCallback.onPhotoItemClick(
-            requireActivity,
-            configs,
-            scanEntity,
-            position,
-            parentId
-        )
+        galleryCallback.onPhotoItemClick(scanEntity, position, parentId)
     }
 
     override fun openSystemCamera() {
@@ -274,13 +268,13 @@ class ScanDelegateImpl(
         }
 
         if (!fragment.checkPermissionAndRequestCamera(cameraPermissionLauncher)) {
-            galleryCallback.onCameraOpenStatus(requireActivity, CameraStatus.PERMISSION)
+            galleryCallback.onCameraOpenStatus(CameraStatus.PERMISSION)
             return
         }
         val cameraUri: Uri? = requireActivity.takePictureUri(configs)
         cameraUri?.let {
             fileUri = it
-        } ?: return galleryCallback.onCameraOpenStatus(requireActivity, CameraStatus.ERROR)
+        } ?: return galleryCallback.onCameraOpenStatus(CameraStatus.ERROR)
         val onCustomCamera: Boolean = galleryInterceptor.onCustomCamera(fileUri)
         if (onCustomCamera) {
             return
@@ -291,7 +285,7 @@ class ScanDelegateImpl(
             action: (uri: CameraUri) -> Unit
         ): CameraStatus {
             val intent =
-                if (uri.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE))
+                if (uri.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()))
                     Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 else
                     Intent(MediaStore.ACTION_VIDEO_CAPTURE)
@@ -303,10 +297,11 @@ class ScanDelegateImpl(
 
         val uri = CameraUri(configs.type, fileUri)
 
-        galleryCallback.onCameraOpenStatus(
-            requireActivity,
-            fragment.checkCameraStatus(uri) { openCameraLauncher.launch(it) }
-        )
+        galleryCallback.onCameraOpenStatus(fragment.checkCameraStatus(uri) {
+            openCameraLauncher.launch(
+                it
+            )
+        })
     }
 
     override fun takePictureSuccess() {
@@ -321,7 +316,7 @@ class ScanDelegateImpl(
     override fun takePictureCanceled() {
         fileUri.delete(requireActivity)
         fileUri = Uri.EMPTY
-        galleryCallback.onCameraCanceled(requireActivity, configs)
+        galleryCallback.onCameraCanceled()
     }
 
     override fun permissionsGranted(type: PermissionCode) {
@@ -332,7 +327,7 @@ class ScanDelegateImpl(
     }
 
     override fun permissionsDenied(type: PermissionCode) {
-        galleryCallback.onPermissionsDenied(activity, type)
+        galleryCallback.onPermissionsDenied(type)
     }
 
     override fun onScanGallery(parent: Long, isCamera: Boolean) {
@@ -377,7 +372,7 @@ class ScanDelegateImpl(
         }
         galleryAdapter.addSelectAll(args.selectList)
         galleryAdapter.updateEntity()
-        galleryCallback.onRefreshResultChanged(selectCount)
+        galleryCallback.onRefreshResultChanged()
     }
 
     override fun notifyItemChanged(position: Int) {

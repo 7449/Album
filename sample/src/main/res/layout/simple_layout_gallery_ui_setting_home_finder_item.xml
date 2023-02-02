@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:text="Width:"
+            android:text="Finder Width:"
             android:textColor="@color/colorWhite" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -86,7 +86,7 @@
         android:padding="0dp"
         android:paddingStart="3dp"
         android:paddingEnd="3dp"
-        android:text="Bg Color"
+        android:text="Finder Bg Color"
         android:textColor="@color/colorWhite" />
 
     <Button
@@ -98,19 +98,7 @@
         android:padding="0dp"
         android:paddingStart="3dp"
         android:paddingEnd="3dp"
-        android:text="Text Color"
-        android:textColor="@color/colorBlack" />
-
-    <Button
-        android:id="@+id/finder_item_text_count_color"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:gravity="center"
-        android:padding="0dp"
-        android:paddingStart="3dp"
-        android:paddingEnd="3dp"
-        android:text="Count Color"
+        android:text="Finder Text Color"
         android:textColor="@color/colorBlack" />
 
 </com.google.android.flexbox.FlexboxLayout>

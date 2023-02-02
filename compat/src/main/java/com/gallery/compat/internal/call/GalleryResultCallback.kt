@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import com.gallery.compat.GalleryConfig
-import com.gallery.compat.extensions.parcelable
 import com.gallery.compat.extensions.parcelableArrayList
 import com.gallery.core.extensions.orEmpty
+import com.gallery.core.extensions.parcelableVersionNotNull
 
 open class GalleryResultCallback(private val galleryListener: GalleryListener) :
     ActivityResultCallback<ActivityResult> {
@@ -24,11 +24,11 @@ open class GalleryResultCallback(private val galleryListener: GalleryListener) :
     }
 
     protected open fun onCropResult(bundle: Bundle) {
-        galleryListener.onGalleryCropResource(bundle.parcelable(GalleryConfig.Crop.GALLERY_RESULT_CROP))
+        galleryListener.onGalleryCropResource(bundle.parcelableVersionNotNull(GalleryConfig.Crop.GALLERY_RESULT_CROP))
     }
 
     protected open fun onSingleDataResult(bundle: Bundle) {
-        galleryListener.onGalleryResource(bundle.parcelable(GalleryConfig.GALLERY_SINGLE_DATA))
+        galleryListener.onGalleryResource(bundle.parcelableVersionNotNull(GalleryConfig.GALLERY_SINGLE_DATA))
     }
 
     protected open fun onMultipleDataResult(bundle: Bundle) {

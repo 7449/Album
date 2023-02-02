@@ -1,13 +1,10 @@
 package com.gallery.compat.internal.simple
 
-import android.content.Context
 import android.os.Bundle
-import com.gallery.compat.R
 import com.gallery.core.GalleryConfigs
 import com.gallery.core.callback.IGalleryPrevCallback
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.toast
 
 interface SimplePrevCallback : IGalleryPrevCallback {
 
@@ -20,23 +17,13 @@ interface SimplePrevCallback : IGalleryPrevCallback {
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 
-    override fun onCheckBoxChanged() {
+    override fun onSelectMultipleMaxCount() {
     }
 
-    override fun onClickItemFileNotExist(
-        context: Context,
-        configs: GalleryConfigs,
-        scanEntity: ScanEntity
-    ) {
-        context.getString(R.string.gallery_compat_prev_check_file_deleted).toast(context)
+    override fun onSelectMultipleFileChanged(position: Int, entity: ScanEntity) {
     }
 
-    override fun onClickItemMaxCount(
-        context: Context,
-        configs: GalleryConfigs,
-        scanEntity: ScanEntity
-    ) {
-        context.getString(R.string.gallery_compat_check_max).toast(context)
+    override fun onSelectMultipleFileNotExist(entity: ScanEntity) {
     }
 
     override fun onPrevCreated(

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 
-inline fun <reified T> Fragment.galleryCallbackOrNull(): T? {
+internal inline fun <reified T> Fragment.galleryCallbackOrNull(): T? {
     return when {
         parentFragment is T -> parentFragment as T
         activity is T -> activity as T
@@ -13,17 +13,17 @@ inline fun <reified T> Fragment.galleryCallbackOrNull(): T? {
     }
 }
 
-inline fun <reified T> Fragment.galleryCallback(): T {
+internal inline fun <reified T> Fragment.galleryCallback(): T {
     return galleryCallbackOrNull<T>()
         ?: throw IllegalArgumentException(context.toString() + " must implement ${T::class.java.simpleName}")
 }
 
-inline fun <reified T> Fragment.galleryCallbackOrNewInstance(action: () -> T): T {
+internal inline fun <reified T> Fragment.galleryCallbackOrNewInstance(action: () -> T): T {
     return galleryCallbackOrNull<T>() ?: action.invoke()
 }
 
 @SuppressLint("CommitTransaction")
-fun AppCompatActivity.addFragment(
+internal fun AppCompatActivity.addFragment(
     id: Int,
     fragmentType: FragmentType = FragmentType.COMMIT_ALLOWING_STATE_LOSS,
     fragment: Fragment,
@@ -31,7 +31,7 @@ fun AppCompatActivity.addFragment(
     .commit(fragmentType)
 
 @SuppressLint("CommitTransaction")
-fun AppCompatActivity.showFragment(
+internal fun AppCompatActivity.showFragment(
     fragmentType: FragmentType = FragmentType.COMMIT_ALLOWING_STATE_LOSS,
     fragment: Fragment,
 ) = supportFragmentManager.beginTransaction().show(fragment).commit(fragmentType)
@@ -45,7 +45,7 @@ internal fun FragmentTransaction.commit(fragmentType: FragmentType) {
     }
 }
 
-enum class FragmentType {
+internal enum class FragmentType {
     COMMIT,
     COMMIT_ALLOWING_STATE_LOSS,
     NOW,

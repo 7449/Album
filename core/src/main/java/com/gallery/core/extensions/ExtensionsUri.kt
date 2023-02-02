@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import com.gallery.core.GalleryConfigs
 import java.io.File
 
 fun Context.findIdByUri(uri: Uri): Long = contentResolver.queryId(uri)
@@ -51,6 +52,26 @@ fun ContentResolver.queryId(uri: Uri): Long {
         }
     }
     return id
+}
+
+/** content://media/external/images/media/id or content://media/external/video/media/id */
+fun Context.takePictureUri(configs: GalleryConfigs): Uri? {
+    val file: File = when {
+        hasQ() -> File(configs.fileConfig.picturePath + File.separator + configs.takePictureName)
+        else -> Environment.getExternalStoragePublicDirectory(configs.fileConfig.picturePath).absolutePath
+            .mkdirsFile(configs.takePictureName)
+    }
+    return if (configs.isScanVideoMedia) insertVideoUri(file) else insertImageUri(file)
+}
+
+/** content://media/external/images/media/id */
+fun Context.takeCropUri(configs: GalleryConfigs): Uri? {
+    val file: File = when {
+        hasQ() -> File(configs.fileConfig.cropPath + File.separator + configs.takeCropName)
+        else -> Environment.getExternalStoragePublicDirectory(configs.fileConfig.cropPath).absolutePath
+            .mkdirsFile(configs.takeCropName)
+    }
+    return insertImageUri(file)
 }
 
 internal fun Context.insertImageUri(file: File): Uri? = insertImageUri(ContentValues().apply {

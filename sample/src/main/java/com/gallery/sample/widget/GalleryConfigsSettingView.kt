@@ -62,16 +62,16 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
     val customCamera: Boolean
         get() = viewBinding.includeBool.customCamera.isChecked
 
-    private fun getScanTypeArray(): IntArray {
+    private fun getScanTypeArray(): Array<String> {
         return when (viewBinding.includeScanType.scanTypeRb.checkedRadioButtonId) {
-            R.id.scan_image -> intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
-            R.id.scan_video -> intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
-            R.id.scan_mix -> intArrayOf(
-                MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
-                MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+            R.id.scan_image -> arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
+            R.id.scan_video -> arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
+            R.id.scan_mix -> arrayOf(
+                MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
+                MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
             )
 
-            else -> intArrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+            else -> arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
         }
     }
 
@@ -219,7 +219,7 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
         val crop = viewBinding.includeBool.crop.isChecked
         val takePictureCrop = viewBinding.includeBool.takePictureCrop.isChecked
         val isScanVideoMedia =
-            scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+            scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
 
         val gridConfig = GridConfig(spanCount, orientation)
 

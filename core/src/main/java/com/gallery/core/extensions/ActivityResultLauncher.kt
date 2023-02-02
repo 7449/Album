@@ -12,12 +12,12 @@ enum class CameraStatus {
     PERMISSION
 }
 
-internal class CameraUri(val type: IntArray, val uri: Uri)
+internal class CameraUri(val type: Array<String>, val uri: Uri)
 
 internal class CameraResultContract : ActivityResultContract<CameraUri, Int>() {
     override fun createIntent(context: Context, input: CameraUri): Intent =
         Intent(
-            if (input.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE))
+            if (input.type.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString()))
                 Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             else Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         ).putExtra(MediaStore.EXTRA_OUTPUT, input.uri)

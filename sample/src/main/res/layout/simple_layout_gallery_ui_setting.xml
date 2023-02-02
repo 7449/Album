@@ -16,16 +16,12 @@
             layout="@layout/simple_layout_gallery_ui_setting_home_view" />
 
         <include
-            android:id="@+id/include_home_bottom"
-            layout="@layout/simple_layout_gallery_ui_setting_home_bottom_view" />
-
-        <include
             android:id="@+id/include_home_finder"
             layout="@layout/simple_layout_gallery_ui_setting_home_finder_item" />
 
         <include
-            android:id="@+id/include_prev"
-            layout="@layout/simple_layout_gallery_ui_setting_prev" />
+            android:id="@+id/include_home_bottom"
+            layout="@layout/simple_layout_gallery_ui_setting_home_bottom_view" />
 
         <include
             android:id="@+id/include_prev_bottom"

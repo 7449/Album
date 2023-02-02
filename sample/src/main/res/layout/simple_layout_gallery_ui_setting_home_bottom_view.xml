@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:text="首页底部Finder:" />
+            android:text="首页底部目录:" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/finder_btn_text"

@@ -110,7 +110,7 @@ class PrevDelegateImpl(
             //这个问题已经在ViewPager2上修复
             val scanFileArgs = FileScanArgs(
                 if (singleType == MediaStore.Files.FileColumns.MEDIA_TYPE_NONE)
-                    configs.type.map { it.toString() }.toTypedArray()
+                    configs.type
                 else
                     arrayOf(singleType.toString()),
                 configs.sort.second,
@@ -144,11 +144,11 @@ class PrevDelegateImpl(
             }
             box.isSelected = false
             currentItem.isSelected = false
-            galleryPrevCallback.onClickItemFileNotExist(activity, configs, currentItem)
+            galleryPrevCallback.onSelectMultipleFileNotExist(currentItem)
             return
         }
         if (!prevAdapter.containsSelect(currentItem) && selectItem.size >= configs.maxCount) {
-            galleryPrevCallback.onClickItemMaxCount(activity, configs, currentItem)
+            galleryPrevCallback.onSelectMultipleMaxCount()
             return
         }
         if (currentItem.isSelected) {
@@ -160,7 +160,7 @@ class PrevDelegateImpl(
             currentItem.isSelected = true
             box.isSelected = true
         }
-        galleryPrevCallback.onCheckBoxChanged()
+        galleryPrevCallback.onSelectMultipleFileChanged(currentPosition, currentItem)
     }
 
     override fun isSelected(position: Int): Boolean {

@@ -6,7 +6,7 @@ import android.provider.MediaStore
 import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.parcelable
+import com.gallery.core.extensions.parcelableVersion
 import com.gallery.scan.Types
 import kotlinx.parcelize.Parcelize
 
@@ -62,7 +62,7 @@ data class PrevArgs(
         }
 
         val Bundle.prevArgs
-            get() = parcelable<PrevArgs>(Key)
+            get() = parcelableVersion<PrevArgs>(Key)
 
         val Bundle.prevArgsOrDefault
             get() = prevArgs ?: PrevArgs(

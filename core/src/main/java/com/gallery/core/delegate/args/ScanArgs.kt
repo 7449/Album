@@ -6,7 +6,7 @@ import android.os.Parcelable
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.parcelable
+import com.gallery.core.extensions.parcelableVersion
 import com.gallery.scan.Types
 import kotlinx.parcelize.Parcelize
 
@@ -63,6 +63,6 @@ data class ScanArgs(
         }
 
         val Bundle.scanArgs
-            get() = parcelable<ScanArgs>(Key)
+            get() = parcelableVersion<ScanArgs>(Key)
     }
 }

@@ -2,6 +2,8 @@ package com.gallery.ui.wechat.extension
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Parcelable
 import android.view.animation.Animation
 import androidx.annotation.ColorRes
@@ -48,6 +50,15 @@ fun Long.toFileSize(): String {
         this < 1073741824 -> DecimalFormat().format(this / 1048576) + " MB"
         else -> DecimalFormat().format(this / 1073741824) + " GB"
     }
+}
+
+fun Context.openVideo(uri: Uri, error: () -> Unit) {
+    runCatching {
+        val video = Intent(Intent.ACTION_VIEW)
+        video.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        video.setDataAndType(uri, "video/*")
+        startActivity(video)
+    }.onFailure { error.invoke() }
 }
 
 fun Animation.doOnAnimationEnd(action: (animation: Animation) -> Unit): Animation =

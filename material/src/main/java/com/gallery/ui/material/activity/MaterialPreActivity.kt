@@ -1,16 +1,15 @@
 package com.gallery.ui.material.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.gallery.compat.activity.PrevCompatActivity
 import com.gallery.compat.extensions.requirePrevFragment
+import com.gallery.compat.extensions.toast
 import com.gallery.core.GalleryConfigs
 import com.gallery.core.delegate.IPrevDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawable
-import com.gallery.core.extensions.toast
 import com.gallery.ui.material.R
 import com.gallery.ui.material.args.MaterialGalleryConfig
 import com.gallery.ui.material.createGalleryImageView
@@ -38,19 +37,19 @@ open class MaterialPreActivity : PrevCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
         window.statusBarColor = config.statusBarColor
-        viewBinding.toolbar.title = config.preTitle
-        viewBinding.toolbar.setTitleTextColor(config.toolbarTextColor)
+        viewBinding.toolbar.title = config.toolbarTextConfig.text
+        viewBinding.toolbar.setTitleTextColor(config.toolbarTextConfig.textColor)
         viewBinding.toolbar.navigationIcon = drawable(config.toolbarIcon)
         viewBinding.toolbar.setBackgroundColor(config.toolbarBackground)
         viewBinding.toolbar.elevation = config.toolbarElevation
 
-        viewBinding.count.textSize = config.preBottomCountTextSize
-        viewBinding.count.setTextColor(config.preBottomCountTextColor)
+        viewBinding.count.textSize = config.preBottomCountConfig.textSize
+        viewBinding.count.setTextColor(config.preBottomCountConfig.textColor)
 
-        viewBinding.bottomView.setBackgroundColor(config.preBottomViewBackground)
-        viewBinding.bottomViewSelect.text = config.preBottomOkText
-        viewBinding.bottomViewSelect.textSize = config.preBottomOkTextSize
-        viewBinding.bottomViewSelect.setTextColor(config.preBottomOkTextColor)
+        viewBinding.bottomView.setBackgroundColor(config.bottomViewBackground)
+        viewBinding.bottomViewSelect.text = config.preBottomOkConfig.text
+        viewBinding.bottomViewSelect.textSize = config.preBottomOkConfig.textSize
+        viewBinding.bottomViewSelect.setTextColor(config.preBottomOkConfig.textColor)
 
         viewBinding.bottomViewSelect.setOnClickListener {
             if (requirePrevFragment.isSelectEmpty) {
@@ -72,21 +71,21 @@ open class MaterialPreActivity : PrevCompatActivity() {
     }
 
     override fun onPrevCreated(delegate: IPrevDelegate, configs: GalleryConfigs, saveState: Bundle?) {
-        delegate.rootView.setBackgroundColor(config.prevRootBackground)
+        delegate.rootView.setBackgroundColor(config.galleryRootBackground)
         viewBinding.count.text = format.format(delegate.selectCount, galleryConfig.maxCount)
-        viewBinding.toolbar.title = config.preTitle + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
+        viewBinding.toolbar.title = config.toolbarTextConfig.text + "(" + (delegate.currentPosition + 1) + "/" + delegate.itemCount + ")"
     }
 
-    override fun onClickItemFileNotExist(context: Context, configs: GalleryConfigs, scanEntity: ScanEntity) {
-        super.onClickItemFileNotExist(context, configs, scanEntity)
-        viewBinding.count.text = format.format(requirePrevFragment.selectCount, configs.maxCount)
+    override fun onSelectMultipleFileNotExist(entity: ScanEntity) {
+        super.onSelectMultipleFileNotExist(entity)
+        viewBinding.count.text = format.format(requirePrevFragment.selectCount, galleryConfig.maxCount)
     }
 
     override fun onPageSelected(position: Int) {
-        viewBinding.toolbar.title = config.preTitle + "(" + (position + 1) + "/" + requirePrevFragment.itemCount + ")"
+        viewBinding.toolbar.title = config.toolbarTextConfig.text + "(" + (position + 1) + "/" + requirePrevFragment.itemCount + ")"
     }
 
-    override fun onCheckBoxChanged() {
+    override fun onSelectMultipleFileChanged(position: Int,entity: ScanEntity) {
         viewBinding.count.text = format.format(requirePrevFragment.selectCount, galleryConfig.maxCount)
     }
 

@@ -1,6 +1,5 @@
 package com.gallery.sample
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
@@ -48,10 +47,10 @@ abstract class GalleryListActivity : AppCompatActivity(), SimpleGalleryCallback,
         container.addView(imageView, FrameLayout.LayoutParams(width, height))
     }
 
-    override fun onGalleryResource(context: Context, scanEntity: ScanEntity) {
+    override fun onGalleryResource(entity: ScanEntity) {
         AlertDialog
             .Builder(this)
-            .setMessage(scanEntity.toString())
+            .setMessage(entity.toString())
             .show()
     }
 

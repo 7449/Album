@@ -1,7 +1,6 @@
 package com.gallery.ui.wechat.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -23,6 +22,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.GalleryConfig
 import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.extensions.requireGalleryFragment
+import com.gallery.compat.extensions.toast
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.finder.findFinder
 import com.gallery.compat.widget.GalleryImageView
@@ -30,7 +30,6 @@ import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.hide
 import com.gallery.core.extensions.show
-import com.gallery.core.extensions.toast
 import com.gallery.scan.Types
 import com.gallery.ui.wechat.R
 import com.gallery.ui.wechat.WeChatConfig
@@ -241,20 +240,20 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
         })
     }
 
-    override fun onScanSuccess(scanEntities: ArrayList<ScanEntity>) {
+    override fun onScanMultipleSuccess() {
         val currentFragment = requireGalleryFragment
         if (currentFragment.isScanAll) {
             //如果是扫描全部的则更新video和finder,然后为finder添加一个全部视频的item
             videoList.clear()
-            videoList.addAll(scanEntities.filter { it.isVideo })
+            videoList.addAll(currentFragment.allItem.filter { it.isVideo })
             finderList.clear()
             finderList.addAll(
-                scanEntities.findFinder(
+                currentFragment.allItem.findFinder(
                     galleryConfig.sdNameAndAllName.first,
                     galleryConfig.sdNameAndAllName.second
                 )
             )
-            scanEntities.find { it.isVideo }?.let { it ->
+            currentFragment.allItem.find { it.isVideo }?.let {
                 finderList.add(
                     1,
                     it.copy(
@@ -348,13 +347,7 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
     }
 
     /** 如果是全部视频parentId传递[Types.Id.ALL]否则传递当前[parentId] */
-    override fun onPhotoItemClick(
-        context: Context,
-        configs: com.gallery.core.GalleryConfigs,
-        scanEntity: ScanEntity,
-        position: Int,
-        parentId: Long
-    ) {
+    override fun onPhotoItemClick(entity: ScanEntity, position: Int, parentId: Long) {
         startPrevPage(
             parentId = if (parentId == VIDEO_ALL_PARENT) Types.Id.ALL else parentId,
             position = position,
@@ -368,8 +361,8 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
     }
 
     /** 刷新一下角标 */
-    override fun onClickCheckBoxFileNotExist(context: Context, scanEntity: ScanEntity) {
-        super.onClickCheckBoxFileNotExist(context, scanEntity)
+    override fun onSelectMultipleFileNotExist(entity: ScanEntity) {
+        super.onSelectMultipleFileNotExist(entity)
         requireGalleryFragment.notifyDataSetChanged()
     }
 
@@ -381,22 +374,22 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
      * 然后刷新当前选中item的状态
      * 因为选中的checkbox有数字显示，所以过滤出所有选中的数据刷新一下角标
      */
-    override fun onSelectItemChanged(position: Int, scanEntity: ScanEntity) {
+    override fun onSelectMultipleFileChanged(position: Int, entity: ScanEntity) {
         val fragment = requireGalleryFragment
         val selectEntities = fragment.selectItem
-        if (scanEntity.isVideo && scanEntity.duration > config.videoMaxDuration) {
-            scanEntity.isSelected = false
-            selectEntities.remove(scanEntity)
+        if (entity.isVideo && entity.duration > config.videoMaxDuration) {
+            entity.isSelected = false
+            selectEntities.remove(entity)
             getString(R.string.wechat_gallery_select_video_max_length).toast(this)
-        } else if (scanEntity.isVideo && scanEntity.duration <= 0) {
-            scanEntity.isSelected = false
-            selectEntities.remove(scanEntity)
+        } else if (entity.isVideo && entity.duration <= 0) {
+            entity.isSelected = false
+            selectEntities.remove(entity)
             getString(R.string.wechat_gallery_select_video_error).toast(this)
         } else {
             updateView()
         }
         fragment.notifyItemChanged(position)
-        if (scanEntity.isSelected) {
+        if (entity.isSelected) {
             return
         }
         fragment.allItem.mapIndexedNotNull { index, item -> if (item.isSelected) index else null }

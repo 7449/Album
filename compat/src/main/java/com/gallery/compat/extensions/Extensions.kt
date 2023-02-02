@@ -1,14 +1,15 @@
 package com.gallery.compat.extensions
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.gallery.compat.fragment.GalleryCompatFragment
 import com.gallery.compat.fragment.PrevCompatFragment
-import com.gallery.core.extensions.parcelable
 
 val AppCompatActivity.requireGalleryFragment: GalleryCompatFragment
     get() = requireNotNull(galleryFragment)
@@ -39,17 +40,14 @@ internal fun Activity.intentResultOf(
     }
 }
 
-inline fun <reified T : Parcelable> Bundle?.parcelable(key: String): T =
-    parcelableOrDefault(key)
-
 inline fun <reified T : Parcelable> Bundle?.parcelableArrayList(key: String): ArrayList<T> =
     getObj(key) { arrayListOf() }
 
-inline fun <reified T : Parcelable> Bundle?.parcelableOrDefault(
-    key: String,
-    defaultValue: Parcelable
-    = this?.parcelable<T>(key)!!
-): T = getObj(key) { defaultValue as T }
-
 inline fun <reified T> Bundle?.getObj(key: String, action: () -> T): T = this?.get(key) as? T
     ?: action.invoke()
+
+fun String?.toast(context: Context?) {
+    if (!isNullOrEmpty() && context != null) {
+        Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+    }
+}

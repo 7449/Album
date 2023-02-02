@@ -1,6 +1,5 @@
 package com.gallery.ui.material.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -9,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.compat.activity.GalleryCompatActivity
 import com.gallery.compat.extensions.requireGalleryFragment
+import com.gallery.compat.extensions.toast
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.compat.widget.GalleryImageView
 import com.gallery.core.GalleryConfigs
@@ -16,7 +16,6 @@ import com.gallery.core.crop.ICrop
 import com.gallery.core.delegate.IScanDelegate
 import com.gallery.core.entity.ScanEntity
 import com.gallery.core.extensions.drawable
-import com.gallery.core.extensions.toast
 import com.gallery.scan.Types
 import com.gallery.scan.extensions.isScanAllMedia
 import com.gallery.ui.material.R
@@ -61,23 +60,28 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
         window.statusBarColor = config.statusBarColor
-        viewBinding.toolbar.title = config.toolbarText
-        viewBinding.toolbar.setTitleTextColor(config.toolbarTextColor)
+        viewBinding.toolbar.title = config.toolbarTextConfig.text
+        viewBinding.toolbar.setTitleTextColor(config.toolbarTextConfig.textColor)
         viewBinding.toolbar.navigationIcon = drawable(config.toolbarIcon)
         viewBinding.toolbar.setBackgroundColor(config.toolbarBackground)
         viewBinding.toolbar.elevation = config.toolbarElevation
 
-        viewBinding.finderAll.textSize = config.finderTextSize
-        viewBinding.finderAll.setTextColor(config.finderTextColor)
-        viewBinding.finderAll.setCompoundDrawables(null, null, minimumDrawable(config.finderIcon), null)
+        viewBinding.finderAll.textSize = config.finderTextConfig.textSize
+        viewBinding.finderAll.setTextColor(config.finderTextConfig.textColor)
+        viewBinding.finderAll.setCompoundDrawables(
+            null,
+            null,
+            minimumDrawable(config.finderIcon),
+            null
+        )
 
-        viewBinding.openPrev.text = config.preViewText
-        viewBinding.openPrev.textSize = config.preViewTextSize
-        viewBinding.openPrev.setTextColor(config.preViewTextColor)
+        viewBinding.openPrev.text = config.prevTextConfig.text
+        viewBinding.openPrev.textSize = config.prevTextConfig.textSize
+        viewBinding.openPrev.setTextColor(config.prevTextConfig.textColor)
 
-        viewBinding.select.text = config.selectText
-        viewBinding.select.textSize = config.selectTextSize
-        viewBinding.select.setTextColor(config.selectTextColor)
+        viewBinding.select.text = config.selectTextConfig.text
+        viewBinding.select.textSize = config.selectTextConfig.textSize
+        viewBinding.select.setTextColor(config.selectTextConfig.textColor)
 
         viewBinding.bottomView.setBackgroundColor(config.bottomViewBackground)
 
@@ -87,13 +91,18 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         viewBinding.finderAll.setOnClickListener(this)
 
         viewBinding.finderAll.text = finderName
-        viewBinding.openPrev.visibility = if (galleryConfig.radio || galleryConfig.isScanVideoMedia) View.GONE else View.VISIBLE
+        viewBinding.openPrev.visibility =
+            if (galleryConfig.radio || galleryConfig.isScanVideoMedia) View.GONE else View.VISIBLE
         viewBinding.select.visibility = if (galleryConfig.radio) View.GONE else View.VISIBLE
 
         viewBinding.toolbar.setNavigationOnClickListener { onGalleryFinish() }
     }
 
-    override fun onGalleryCreated(delegate: IScanDelegate, configs: GalleryConfigs, saveState: Bundle?) {
+    override fun onGalleryCreated(
+        delegate: IScanDelegate,
+        configs: GalleryConfigs,
+        saveState: Bundle?
+    ) {
         delegate.rootView.setBackgroundColor(config.galleryRootBackground)
     }
 
@@ -104,7 +113,12 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
                     onGalleryPreEmpty()
                     return
                 }
-                startPrevPage(parentId = Types.Id.NONE, position = 0, gap = config, cla = MaterialPreActivity::class.java)
+                startPrevPage(
+                    parentId = Types.Id.NONE,
+                    position = 0,
+                    gap = config,
+                    cla = MaterialPreActivity::class.java
+                )
             }
 
             R.id.select -> {
@@ -141,7 +155,12 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         onDisplayThumbnailsGallery(finderEntity, container)
     }
 
-    override fun onDisplayHomeGallery(width: Int, height: Int, entity: ScanEntity, container: FrameLayout) {
+    override fun onDisplayHomeGallery(
+        width: Int,
+        height: Int,
+        entity: ScanEntity,
+        container: FrameLayout
+    ) {
         val imageView = if (container.tag is ImageView) {
             container.tag as ImageView
         } else {
@@ -164,10 +183,10 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         container.addView(imageView)
     }
 
-    override fun onPhotoItemClick(context: Context, configs: GalleryConfigs, scanEntity: ScanEntity, position: Int, parentId: Long) {
+    override fun onPhotoItemClick(entity: ScanEntity, position: Int, parentId: Long) {
         startPrevPage(
             parentId = parentId,
-            position = if (parentId.isScanAllMedia && !configs.hideCamera) position - 1 else position,
+            position = if (parentId.isScanAllMedia && !galleryConfig.hideCamera) position - 1 else position,
             gap = config,
             cla = MaterialPreActivity::class.java
         )

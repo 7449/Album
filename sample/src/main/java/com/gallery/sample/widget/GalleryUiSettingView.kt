@@ -14,6 +14,7 @@ import com.gallery.sample.databinding.SimpleLayoutGalleryUiSettingBinding
 import com.gallery.sample.showCompoundDrawables
 import com.gallery.sample.toIntOrNull
 import com.gallery.ui.material.args.MaterialGalleryConfig
+import com.gallery.ui.material.args.MaterialTextConfig
 
 @SuppressLint("NonConstantResourceId")
 class GalleryUiSettingView @JvmOverloads constructor(
@@ -35,7 +36,6 @@ class GalleryUiSettingView @JvmOverloads constructor(
         private const val DEFAULT_HOME_FINDER_PREV_TEXT = "预览"
         private const val DEFAULT_HOME_FINDER_OK_TEXT = "确定"
         private const val DEFAULT_HOME_FINDER_WIDTH = 600
-        private const val DEFAULT_PREV_TITLE = "选择"
     }
 
     init {
@@ -55,10 +55,6 @@ class GalleryUiSettingView @JvmOverloads constructor(
 
         viewBinding.includeHomeFinder.finderItemBgColor.clickShowColorPicker()
         viewBinding.includeHomeFinder.finderItemTextColor.clickShowColorPicker()
-        viewBinding.includeHomeFinder.finderItemTextCountColor.clickShowColorPicker()
-
-        viewBinding.includePrev.prevRootViewBgColor.clickShowColorPicker()
-        viewBinding.includePrev.prevBottomBgColor.clickShowColorPicker()
 
         viewBinding.includePrevBottom.prevBottomSelectCountTextColor.clickShowColorPicker()
         viewBinding.includePrevBottom.prevBottomSelectTextColor.clickShowColorPicker()
@@ -107,10 +103,12 @@ class GalleryUiSettingView @JvmOverloads constructor(
 
     fun createGalleryUiConfig(): MaterialGalleryConfig {
         return MaterialGalleryConfig(
-            toolbarText = viewBinding.includeHome.toolbarTitleEt.getTextSupport(
-                DEFAULT_TOOLBAR_TEXT
+            toolbarTextConfig = MaterialTextConfig(
+                text = viewBinding.includeHome.toolbarTitleEt.getTextSupport(
+                    DEFAULT_TOOLBAR_TEXT
+                ),
+                textColor = viewBinding.includeHome.toolbarTextColor.currentTextColor
             ),
-            toolbarTextColor = viewBinding.includeHome.toolbarTextColor.currentTextColor,
             toolbarElevation = getToolbarElevation(),
             toolbarIcon = viewBinding.includeHome.toolbarBackIcon.getIconSupport(
                 DEFAULT_TOOLBAR_BACK_ICON
@@ -119,21 +117,27 @@ class GalleryUiSettingView @JvmOverloads constructor(
             statusBarColor = viewBinding.includeHome.statusBarColor.currentTextColor,
             galleryRootBackground = viewBinding.includeHome.rootViewBgColor.currentTextColor,
             bottomViewBackground = viewBinding.includeHome.finderBgColor.currentTextColor,
-            finderTextSize = viewBinding.includeHomeBottom.finderBtnTextSize.getTextSizeSupport(),
-            finderTextColor = viewBinding.includeHomeBottom.finderBtnTextColor.currentTextColor,
+            finderTextConfig = MaterialTextConfig(
+                textSize = viewBinding.includeHomeBottom.finderBtnTextSize.getTextSizeSupport(),
+                textColor = viewBinding.includeHomeBottom.finderBtnTextColor.currentTextColor
+            ),
             finderIcon = viewBinding.includeHome.finderIcon.getIconSupport(
                 DEFAULT_HOME_FINDER_ICON
             ),
-            preViewText = viewBinding.includeHomeBottom.finderPrevText.getTextSupport(
-                DEFAULT_HOME_FINDER_PREV_TEXT
+            prevTextConfig = MaterialTextConfig(
+                viewBinding.includeHomeBottom.finderPrevText.getTextSupport(
+                    DEFAULT_HOME_FINDER_PREV_TEXT
+                ),
+                viewBinding.includeHomeBottom.finderPrevTextSize.getTextSizeSupport(),
+                viewBinding.includeHomeBottom.finderPrevTextColor.currentTextColor
             ),
-            preViewTextSize = viewBinding.includeHomeBottom.finderPrevTextSize.getTextSizeSupport(),
-            preViewTextColor = viewBinding.includeHomeBottom.finderPrevTextColor.currentTextColor,
-            selectText = viewBinding.includeHomeBottom.finderOkText.getTextSupport(
-                DEFAULT_HOME_FINDER_OK_TEXT
+            selectTextConfig = MaterialTextConfig(
+                viewBinding.includeHomeBottom.finderOkText.getTextSupport(
+                    DEFAULT_HOME_FINDER_OK_TEXT
+                ),
+                viewBinding.includeHomeBottom.finderOkTextSize.getTextSizeSupport(),
+                viewBinding.includeHomeBottom.finderOkTextColor.currentTextColor
             ),
-            selectTextSize = viewBinding.includeHomeBottom.finderOkTextSize.getTextSizeSupport(),
-            selectTextColor = viewBinding.includeHomeBottom.finderOkTextColor.currentTextColor,
             listPopupWidth = getHomeFinderWidth(),
             listPopupHorizontalOffset = viewBinding.includeHomeFinder.finderItemHorOffset.getTextSizeSupport()
                 .toInt(),
@@ -141,17 +145,17 @@ class GalleryUiSettingView @JvmOverloads constructor(
                 .toInt(),
             finderItemBackground = viewBinding.includeHomeFinder.finderItemBgColor.currentTextColor,
             finderItemTextColor = viewBinding.includeHomeFinder.finderItemTextColor.currentTextColor,
-            finderItemTextCountColor = viewBinding.includeHomeFinder.finderItemTextCountColor.currentTextColor,
-            preTitle = viewBinding.includePrev.prevTitle.getTextSupport(DEFAULT_PREV_TITLE),
-            prevRootBackground = viewBinding.includePrev.prevRootViewBgColor.currentTextColor,
-            preBottomViewBackground = viewBinding.includePrev.prevBottomBgColor.currentTextColor,
-            preBottomOkText = viewBinding.includePrevBottom.prevBottomSelectText.getTextSupport(
-                DEFAULT_HOME_FINDER_OK_TEXT
+            preBottomOkConfig = MaterialTextConfig(
+                viewBinding.includePrevBottom.prevBottomSelectText.getTextSupport(
+                    DEFAULT_HOME_FINDER_OK_TEXT
+                ),
+                viewBinding.includePrevBottom.prevBottomSelectTextSize.getTextSizeSupport(),
+                viewBinding.includePrevBottom.prevBottomSelectTextColor.currentTextColor,
             ),
-            preBottomOkTextColor = viewBinding.includePrevBottom.prevBottomSelectTextColor.currentTextColor,
-            preBottomCountTextColor = viewBinding.includePrevBottom.prevBottomSelectCountTextColor.currentTextColor,
-            preBottomOkTextSize = viewBinding.includePrevBottom.prevBottomSelectTextSize.getTextSizeSupport(),
-            preBottomCountTextSize = viewBinding.includePrevBottom.prevBottomSelectCountTextSize.getTextSizeSupport(),
+            preBottomCountConfig = MaterialTextConfig(
+                textColor = viewBinding.includePrevBottom.prevBottomSelectCountTextColor.currentTextColor,
+                textSize = viewBinding.includePrevBottom.prevBottomSelectCountTextSize.getTextSizeSupport()
+            )
         )
     }
 

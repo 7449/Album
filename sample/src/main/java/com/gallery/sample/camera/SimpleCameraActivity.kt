@@ -5,7 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.gallery.core.extensions.parcelable
+import com.gallery.core.extensions.parcelableVersion
 import com.gallery.sample.databinding.SimpleActivityCameraBinding
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger
@@ -42,7 +42,7 @@ class SimpleCameraActivity : AppCompatActivity() {
     private inner class Listener : CameraListener() {
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
-            val fileUri: Uri? = intent.extras?.parcelable(CUSTOM_CAMERA_OUT_PUT_URI)
+            val fileUri: Uri? = intent.extras?.parcelableVersion(CUSTOM_CAMERA_OUT_PUT_URI)
             contentResolver.openOutputStream(requireNotNull(fileUri))?.use { it.write(result.data) }
             setResult(Activity.RESULT_OK)
             finish()

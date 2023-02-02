@@ -11,9 +11,9 @@ import com.gallery.core.GalleryConfigs
 import com.gallery.ui.wechat.activity.WeChatGalleryActivity
 import com.gallery.ui.wechat.args.WeChatGalleryConfig
 
-internal val scanType = intArrayOf(
-    MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
-    MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+internal val scanType = arrayOf(
+    MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
+    MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
 )
 
 internal val checkBoxResource = R.drawable.wechat_gallery_selector_gallery_item_check

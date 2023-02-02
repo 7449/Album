@@ -3,7 +3,7 @@ package com.gallery.sample.camera
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.gallery.core.extensions.parcelableVersion
 import com.gallery.sample.databinding.SimpleActivityCameraBinding
@@ -31,12 +31,10 @@ class SimpleCameraActivity : AppCompatActivity() {
             if (viewBinding.camera.isTakingPicture) return@setOnClickListener
             viewBinding.camera.takePictureSnapshot()
         }
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                setResult(Activity.RESULT_CANCELED)
-                finish()
-            }
-        })
+        onBackPressedDispatcher.addCallback(this, true) {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+        }
     }
 
     private inner class Listener : CameraListener() {

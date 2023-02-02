@@ -298,8 +298,8 @@ internal class WeChatGalleryActivity : GalleryCompatActivity(),
         super.onResultSelect(bundle)
     }
 
-    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
-        onDisplayFinderGallery(finderEntity, container)
+    override fun onGalleryFinderThumbnails(entity: ScanEntity, container: FrameLayout) {
+        onDisplayFinderGallery(entity, container)
     }
 
     @SuppressLint("SetTextI18n")

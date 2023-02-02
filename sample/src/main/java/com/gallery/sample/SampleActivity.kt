@@ -8,7 +8,7 @@ import com.gallery.compat.Gallery
 import com.gallery.compat.internal.call.GalleryResultCallback
 import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.callbacks.SimpleGalleryListener
-import com.gallery.sample.camera.SimpleMaterialGalleryCameraActivity
+import com.gallery.sample.camera.SimpleGalleryCameraActivity
 import com.gallery.sample.databinding.SimpleActivityMainBinding
 import com.gallery.ui.material.activity.MaterialGalleryActivity
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
@@ -48,7 +48,7 @@ class SampleActivity : GalleryListActivity() {
             val galleryUiConfig = viewBinding.settingUiConfigsView.createGalleryUiConfig()
             Gallery.newInstance(
                 activity = this,
-                clz = if (isCustomCamera) SimpleMaterialGalleryCameraActivity::class.java else MaterialGalleryActivity::class.java,
+                clz = if (isCustomCamera) SimpleGalleryCameraActivity::class.java else MaterialGalleryActivity::class.java,
                 configs = galleryConfigs,
                 gap = galleryUiConfig,
                 launcher = galleryLauncher

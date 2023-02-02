@@ -28,6 +28,7 @@ object Dep {
 
     const val appcompat = "androidx.appcompat:appcompat:1.6.0"
     const val fragment = "androidx.fragment:fragment:1.5.5"
+    const val activity = "androidx.activity:activity-ktx:1.6.1"
     const val recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
     const val viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-beta01"
     const val material = "com.google.android.material:material:1.8.0"

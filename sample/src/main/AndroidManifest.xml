@@ -24,7 +24,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
-            android:name=".camera.SimpleMaterialGalleryCameraActivity"
+            android:name=".camera.SimpleGalleryCameraActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>

@@ -8,7 +8,7 @@ interface GalleryFinderAdapter {
 
     interface AdapterFinderListener {
         /** 文件夹图片加载 */
-        fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout)
+        fun onGalleryFinderThumbnails(entity: ScanEntity, container: FrameLayout)
 
         /** item点击 */
         fun onGalleryAdapterItemClick(view: View, position: Int, item: ScanEntity)

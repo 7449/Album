@@ -146,8 +146,8 @@ open class MaterialGalleryActivity : GalleryCompatActivity(), View.OnClickListen
         finderAdapter.hide()
     }
 
-    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
-        onDisplayFinderGallery(finderEntity, container)
+    override fun onGalleryFinderThumbnails(entity: ScanEntity, container: FrameLayout) {
+        onDisplayFinderGallery(entity, container)
     }
 
     override fun onDisplayHomeGallery(

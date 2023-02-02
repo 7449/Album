@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":wechat"))
     implementation(Dep.material)
     implementation(Dep.fragment)
+    implementation(Dep.activity)
     implementation(Dep.kotlin)
     implementation(Dep.appcompat)
     implementation(Dep.viewPager2)

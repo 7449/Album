@@ -129,11 +129,11 @@ internal class WeChatGalleryPrevActivity : PrevCompatActivity(),
         fragment.setCurrentItem(fragment.allItem.indexOfFirst { it.id == item.id })
     }
 
-    override fun onGalleryFinderThumbnails(finderEntity: ScanEntity, container: FrameLayout) {
+    override fun onGalleryFinderThumbnails(entity: ScanEntity, container: FrameLayout) {
         container.removeAllViews()
         val weChatSelectItem = WeChatGallerySelectItem(container.context)
-        weChatSelectItem.update(finderEntity, idList, config.isPrev)
-        Glide.with(this).asBitmap().load(finderEntity.uri).apply(
+        weChatSelectItem.update(entity, idList, config.isPrev)
+        Glide.with(this).asBitmap().load(entity.uri).apply(
             RequestOptions().fitCenter()
         ).into(weChatSelectItem.imageView)
         container.addView(weChatSelectItem)

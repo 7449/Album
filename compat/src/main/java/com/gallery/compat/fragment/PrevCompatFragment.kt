@@ -80,6 +80,10 @@ open class PrevCompatFragment(layoutId: Int = R.layout.gallery_compat_fragment_p
         return delegate.resultBundle(isRefresh)
     }
 
+    open fun index(id: Long): Int {
+        return allItem.indexOfFirst { it.id == id }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         delegate.onSaveInstanceState(outState)

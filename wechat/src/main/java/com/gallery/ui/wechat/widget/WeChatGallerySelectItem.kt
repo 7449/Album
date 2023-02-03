@@ -37,14 +37,14 @@ internal class WeChatGallerySelectItem @JvmOverloads constructor(
     private val view: View
         get() = viewBinding.selectWeChatView
 
-    fun update(scanEntity: ScanEntity, idList: List<Long>, isPrev: Boolean) {
-        gifView.visibility = if (scanEntity.isGif) View.VISIBLE else View.GONE
-        videoView.visibility = if (scanEntity.isVideo) View.VISIBLE else View.GONE
+    fun update(entity: ScanEntity, idList: List<Long>, isPrev: Boolean) {
+        gifView.visibility = if (entity.isGif) View.VISIBLE else View.GONE
+        videoView.visibility = if (entity.isVideo) View.VISIBLE else View.GONE
         if (!isPrev) {
             view.hide()
             return
         }
-        idList.find { it == scanEntity.id }?.let {
+        idList.find { it == entity.id }?.let {
             view.show()
         } ?: view.hide()
     }

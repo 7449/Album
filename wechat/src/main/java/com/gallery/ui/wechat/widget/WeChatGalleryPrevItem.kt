@@ -31,14 +31,13 @@ internal class WeChatGalleryPrevItem @JvmOverloads constructor(
     private val gifView: TextView
         get() = viewBinding.prevWeChatGif
 
-    fun update(scanEntity: ScanEntity) {
+    fun update(entity: ScanEntity) {
         imageView.scaleType =
-            if (scanEntity.isVideo) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
-        gifView.visibility = if (scanEntity.isGif) View.VISIBLE else View.GONE
-        gifView.text = context.getString(R.string.wechat_gallery_prev_gif_format)
-            .format(scanEntity.size.toFileSize())
-        videoPlayView.visibility = if (scanEntity.isVideo) View.VISIBLE else View.GONE
-        videoPlayView.setOnClickListener { context.openVideo(scanEntity.uri) {} }
+            if (entity.isVideo) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.FIT_CENTER
+        gifView.visibility = if (entity.isGif) View.VISIBLE else View.GONE
+        gifView.text = context.getString(R.string.wechat_gallery_prev_gif_format).format(entity.size.toFileSize())
+        videoPlayView.visibility = if (entity.isVideo) View.VISIBLE else View.GONE
+        videoPlayView.setOnClickListener { context.openVideo(entity.uri) {} }
     }
 
 }

@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.wechat.R
+import com.gallery.ui.wechat.checkBoxFrameResource
 import com.gallery.ui.wechat.databinding.WechatGalleryItemPrevSelectBinding
 
 internal class WeChatPrevSelectAdapter(
@@ -38,7 +38,7 @@ internal class WeChatPrevSelectAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val entity: ScanEntity = list[position]
         val frameLayout: FrameLayout = holder.binding.prevSelectFrame
-        frameLayout.setBackgroundResource(if (entity.isSelected) R.drawable.wechat_gallery_selector_gallery_select else 0)
+        frameLayout.setBackgroundResource(if (entity.isSelected) checkBoxFrameResource else 0)
         listener.onGalleryFinderThumbnails(entity, frameLayout)
     }
 

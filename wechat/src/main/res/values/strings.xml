@@ -6,5 +6,4 @@
     <string name="wechat_gallery_select_video_prev_error">不能分享超过%s分钟的视频</string>
     <string name="wechat_gallery_select">选择</string>
     <string name="wechat_gallery_prev_gif_format">GIF size：%s</string>
-    <string name="wechat_gallery_finder_empty">文件目录为空</string>
 </resources>

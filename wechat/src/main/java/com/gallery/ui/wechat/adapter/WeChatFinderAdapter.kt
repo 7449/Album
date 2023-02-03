@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gallery.compat.finder.GalleryFinderAdapter
 import com.gallery.core.entity.ScanEntity
-import com.gallery.ui.wechat.args.WeChatGalleryConfig
+import com.gallery.ui.wechat.color76
+import com.gallery.ui.wechat.colorWhite
 import com.gallery.ui.wechat.databinding.WechatGalleryItemFinderBinding
 
 internal class WeChatFinderAdapter(
-    private val config: WeChatGalleryConfig,
     private val listener: GalleryFinderAdapter.AdapterFinderListener,
 ) : RecyclerView.Adapter<WeChatFinderAdapter.ViewHolder>() {
 
@@ -42,7 +42,7 @@ internal class WeChatFinderAdapter(
             entity,
             holder.binding.ivGalleryFinderIcon
         )
-        holder.bind(config, entity)
+        holder.bind(entity)
     }
 
     fun updateFinder(entities: ArrayList<ScanEntity>) {
@@ -51,14 +51,19 @@ internal class WeChatFinderAdapter(
         notifyDataSetChanged()
     }
 
+    fun refreshFinder(parent: Long) {
+        list.forEach { it.isSelected = it.parent == parent }
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(val binding: WechatGalleryItemFinderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(uiGalleryBundle: WeChatGalleryConfig, entity: ScanEntity) {
+        fun bind(entity: ScanEntity) {
             binding.tvGalleryFinderName.text = "%s".format(entity.bucketDisplayName)
-            binding.tvGalleryFinderName.setTextColor(uiGalleryBundle.finderItemTextColor)
+            binding.tvGalleryFinderName.setTextColor(colorWhite)
             binding.tvGalleryFinderFileCount.text = "(%s)".format(entity.count.toString())
-            binding.tvGalleryFinderFileCount.setTextColor(uiGalleryBundle.finderItemTextCountColor)
+            binding.tvGalleryFinderFileCount.setTextColor(color76)
             binding.ivGalleryFinderFileCheck.visibility =
                 if (entity.isSelected) View.VISIBLE else View.GONE
         }

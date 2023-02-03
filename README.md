@@ -31,3 +31,7 @@
 |                    嵌套                     |                自定义布局                 |                Dialog                |                  预览                   |
 |:-----------------------------------------:|:------------------------------------:|:------------------------------------:|:-------------------------------------:|
 | ![](./screenshot/gallery_combination.png) | ![](./screenshot/gallery_banner.png) | ![](./screenshot/gallery_dialog.png) | ![](./screenshot/gallery_preview.png) |
+
+## Config
+
+![](./screenshot/gallery_configs.jpg)

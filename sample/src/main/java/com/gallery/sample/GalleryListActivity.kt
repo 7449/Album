@@ -1,6 +1,7 @@
 package com.gallery.sample
 
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.args.GridConfig
 import com.gallery.core.callback.IGalleryImageLoader
 import com.gallery.core.entity.ScanEntity
+import com.gallery.scan.Types
 
 abstract class GalleryListActivity : AppCompatActivity(), SimpleGalleryCallback,
     IGalleryImageLoader {
@@ -22,7 +24,10 @@ abstract class GalleryListActivity : AppCompatActivity(), SimpleGalleryCallback,
         super.onCreate(savedInstanceState)
         val newInstance = GalleryCompatFragment.newInstance(
             GalleryConfigs(
-                radio = true, crop = false, hideCamera = true,
+                radio = true,
+                crop = false,
+                hideCamera = true,
+                sort = Types.Sort.ASC to MediaStore.Files.FileColumns.DATE_MODIFIED,
                 gridConfig = GridConfig(4, RecyclerView.HORIZONTAL),
             )
         )

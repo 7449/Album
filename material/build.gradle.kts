@@ -3,6 +3,7 @@ plugins {
     kotlin(Plugin.kotlin_android)
     id(Plugin.kotlin_parcelize)
 }
+apply("../maven.gradle")
 android {
     namespace = "com.gallery.ui.material"
     compileSdk = Version.compileSdk

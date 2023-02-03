@@ -14,6 +14,7 @@
     implementation "com.github.7449.Album:ui:$lastVersion"
     implementation "com.github.7449.Album:core:$lastVersion"
     implementation "com.github.7449.Album:scan:$lastVersion"
+    implementation "com.github.7449.Album:material:$lastVersion"
 
 #### simple camera
 

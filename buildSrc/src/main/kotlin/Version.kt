@@ -26,6 +26,12 @@ object Args {
 object Dep {
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:${Plugin.kotlinVersion}"
 
+    const val compat = "com.github.7449.Album:compat:v1.1.1"
+    const val core = "com.github.7449.Album:core:v1.1.1"
+    const val scan = "com.github.7449.Album:scan:v1.1.1"
+    const val material_ui = "com.github.7449.Album:material:v1.1.1"
+    const val wechat_ui = "com.github.7449.Album:wechat:v1.1.1"
+
     const val appcompat = "androidx.appcompat:appcompat:1.6.0"
     const val fragment = "androidx.fragment:fragment:1.5.5"
     const val activity = "androidx.activity:activity-ktx:1.6.1"

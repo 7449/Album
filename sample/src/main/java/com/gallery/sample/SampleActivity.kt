@@ -6,11 +6,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.gallery.compat.Gallery
 import com.gallery.compat.internal.call.GalleryResultCallback
+import com.gallery.core.args.GalleryConfigs
 import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.callbacks.SimpleGalleryListener
 import com.gallery.sample.camera.SimpleGalleryCameraActivity
 import com.gallery.sample.databinding.SimpleActivityMainBinding
+import com.gallery.sample.layout.LayoutActivity
 import com.gallery.ui.material.activity.MaterialGalleryActivity
+import com.gallery.ui.material.args.MaterialGalleryConfig
 import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
 import com.gallery.ui.wechat.weChatGallery
 
@@ -41,6 +44,15 @@ class SampleActivity : GalleryListActivity() {
         setContentView(viewBinding.root)
         viewBinding.galleryWechat.setOnClickListener {
             weChatGallery(launcher = galleryWeChatLauncher)
+        }
+        viewBinding.galleryLayout.setOnClickListener {
+            Gallery.newInstance(
+                activity = this,
+                clz = LayoutActivity::class.java,
+                configs = GalleryConfigs(),
+                gap = MaterialGalleryConfig(),
+                launcher = galleryLauncher
+            )
         }
         viewBinding.galleryDefault.setOnClickListener {
             val isCustomCamera = viewBinding.settingConfigsView.customCamera

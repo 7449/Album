@@ -45,4 +45,5 @@ object Dep {
 
     const val color = "com.github.QuadFlask:colorpicker:0.0.15"
     const val flex = "com.google.android.flexbox:flexbox:3.0.0"
+    const val banner = "com.github.7449.BannerLayout:banner:v2.0.3"
 }

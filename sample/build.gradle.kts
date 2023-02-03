@@ -40,4 +40,5 @@ dependencies {
     implementation(Dep.cameraview)
     implementation(Dep.color)
     implementation(Dep.flex)
+    implementation(Dep.banner)
 }

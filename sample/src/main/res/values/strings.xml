@@ -11,4 +11,5 @@
     <string name="simple_scan_mix">混合</string>
     <string name="simple_start_config">启动</string>
     <string name="simple_theme_wechat">WeChat Album</string>
+    <string name="simple_theme_layout">Layout</string>
 </resources>

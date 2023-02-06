@@ -41,4 +41,5 @@ dependencies {
     implementation(Dep.color)
     implementation(Dep.flex)
     implementation(Dep.banner)
+    implementation(Dep.ucrop)
 }

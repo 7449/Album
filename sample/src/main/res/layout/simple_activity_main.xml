@@ -55,5 +55,11 @@
             android:id="@+id/setting_ui_configs_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <com.gallery.sample.layout.RadioGridView
+            android:id="@+id/radio_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

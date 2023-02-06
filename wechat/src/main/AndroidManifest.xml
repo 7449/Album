@@ -2,11 +2,11 @@
 
     <application>
         <activity
-            android:name=".activity.WeChatGalleryActivity"
+            android:name="develop.file.gallery.ui.wechat.activity.WeChatGalleryActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activity.WeChatGalleryPrevActivity"
+            android:name="develop.file.gallery.ui.wechat.activity.WeChatGalleryPrevActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>

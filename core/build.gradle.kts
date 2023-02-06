@@ -15,7 +15,7 @@ android {
     }
 }
 dependencies {
-    compileOnly(project(":scan"))
+    compileOnly(project(":media"))
     implementation(Dep.fragment)
     implementation(Dep.kotlin)
     implementation(Dep.appcompat)

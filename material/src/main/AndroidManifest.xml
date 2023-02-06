@@ -2,10 +2,10 @@
 
     <application>
         <activity
-            android:name=".activity.MaterialGalleryActivity"
+            android:name="develop.file.gallery.ui.material.activity.MaterialGalleryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activity.MaterialPreActivity"
+            android:name="develop.file.gallery.ui.material.activity.MaterialPreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

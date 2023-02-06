@@ -4,18 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.gallery.compat.Gallery
-import com.gallery.compat.internal.call.GalleryResultCallback
-import com.gallery.core.args.GalleryConfigs
-import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.callbacks.SimpleGalleryListener
 import com.gallery.sample.camera.SimpleGalleryCameraActivity
 import com.gallery.sample.databinding.SimpleActivityMainBinding
 import com.gallery.sample.layout.LayoutActivity
-import com.gallery.ui.material.activity.MaterialGalleryActivity
-import com.gallery.ui.material.args.MaterialGalleryConfig
-import com.gallery.ui.wechat.result.WeChatGalleryResultCallback
-import com.gallery.ui.wechat.weChatGallery
+import develop.file.gallery.ui.material.activity.MaterialGalleryActivity
+import develop.file.gallery.ui.material.args.MaterialGalleryConfig
+import develop.file.gallery.ui.wechat.result.WeChatGalleryResultCallback
+import develop.file.gallery.ui.wechat.weChatGallery
+import develop.file.gallery.args.GalleryConfigs
+import develop.file.gallery.compat.Gallery.Companion.startGallery
+import develop.file.gallery.compat.extensions.callbacks.GalleryResultCallback
+import develop.file.gallery.entity.ScanEntity
 
 class SampleActivity : GalleryListActivity() {
 
@@ -46,24 +46,22 @@ class SampleActivity : GalleryListActivity() {
             weChatGallery(launcher = galleryWeChatLauncher)
         }
         viewBinding.galleryLayout.setOnClickListener {
-            Gallery.newInstance(
-                activity = this,
-                clz = LayoutActivity::class.java,
-                configs = GalleryConfigs(),
-                gap = MaterialGalleryConfig(),
-                launcher = galleryLauncher
+            startGallery(
+                GalleryConfigs(),
+                MaterialGalleryConfig(),
+                LayoutActivity::class.java,
+                galleryLauncher
             )
         }
         viewBinding.galleryDefault.setOnClickListener {
             val isCustomCamera = viewBinding.settingConfigsView.customCamera
             val galleryConfigs = viewBinding.settingConfigsView.createGalleryConfigs(selectItems)
             val galleryUiConfig = viewBinding.settingUiConfigsView.createGalleryUiConfig()
-            Gallery.newInstance(
-                activity = this,
-                clz = if (isCustomCamera) SimpleGalleryCameraActivity::class.java else MaterialGalleryActivity::class.java,
-                configs = galleryConfigs,
-                gap = galleryUiConfig,
-                launcher = galleryLauncher
+            startGallery(
+                galleryConfigs,
+                galleryUiConfig,
+                if (isCustomCamera) SimpleGalleryCameraActivity::class.java else MaterialGalleryActivity::class.java,
+                galleryLauncher
             )
         }
     }

@@ -5,11 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.gallery.core.extensions.parcelableVersion
 import com.gallery.sample.databinding.SimpleActivityCameraBinding
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
+import develop.file.gallery.extensions.ResultCompat.parcelableVersion
 
 class SimpleCameraActivity : AppCompatActivity() {
 

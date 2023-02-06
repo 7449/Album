@@ -13,8 +13,8 @@ import com.gallery.sample.clickShowColorPicker
 import com.gallery.sample.databinding.SimpleLayoutGalleryUiSettingBinding
 import com.gallery.sample.showCompoundDrawables
 import com.gallery.sample.toIntOrNull
-import com.gallery.ui.material.args.MaterialGalleryConfig
-import com.gallery.ui.material.args.MaterialTextConfig
+import develop.file.gallery.ui.material.args.MaterialGalleryConfig
+import develop.file.gallery.ui.material.args.MaterialTextConfig
 
 @SuppressLint("NonConstantResourceId")
 class GalleryUiSettingView @JvmOverloads constructor(

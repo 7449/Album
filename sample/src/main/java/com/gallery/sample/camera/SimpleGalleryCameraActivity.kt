@@ -5,8 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import com.gallery.compat.extensions.requireGalleryFragment
-import com.gallery.ui.material.activity.MaterialGalleryActivity
+import develop.file.gallery.ui.material.activity.MaterialGalleryActivity
+import develop.file.gallery.compat.extensions.ActivityCompat.requireGalleryFragment
 
 class SimpleGalleryCameraActivity : MaterialGalleryActivity() {
 

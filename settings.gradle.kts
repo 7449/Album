@@ -16,7 +16,7 @@ dependencyResolutionManagement {
 }
 include(
     ":core",
-    ":scan",
+    ":media",
     ":material",
     ":sample",
     ":compat",

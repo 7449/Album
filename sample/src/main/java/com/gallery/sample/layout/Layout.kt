@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.banner.BannerLayout
 import androidx.banner.listener.BannerItem
 import androidx.banner.listener.OnBannerImageLoader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.sample.R
-import com.gallery.sample.databinding.SimpleLayoutAdViewBinding
-import com.gallery.ui.material.activity.MaterialGalleryActivity
+import develop.file.gallery.ui.material.activity.MaterialGalleryActivity
 
 private const val IMAGE_URL_1 =
     "https://p1.img.cctvpic.com/photoworkspace/2018/05/18/2018051814594647287.jpg"
@@ -47,18 +47,12 @@ private class GlideImageLoader : OnBannerImageLoader<SimpleBannerItem> {
 
 class LayoutActivity : MaterialGalleryActivity() {
 
-    private val adViewBinding by lazy {
-        SimpleLayoutAdViewBinding.inflate(
-            layoutInflater,
-            findViewById(R.id.gallery_ad_root),
-            true
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adViewBinding
-            .banner
+        val adViewRoot = View.inflate(this, R.layout.simple_layout_ad_view, null)
+        val viewGroup = findViewById<ViewGroup>(R.id.galleryRootView)
+        viewGroup.addView(adViewRoot, 1)
+        viewGroup.findViewById<BannerLayout>(R.id.banner)
             .setOnBannerImageLoader(GlideImageLoader())
             .resource(newModel())
     }

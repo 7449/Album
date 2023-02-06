@@ -2,10 +2,12 @@ package com.gallery.sample
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
-import com.gallery.core.extensions.drawable
 import com.gallery.sample.widget.GallerySelectIconDialog
 
 fun TextView.clickShowColorPicker() {
@@ -50,3 +52,6 @@ fun Context.showColorPicker(
         .build()
         .show()
 }
+
+internal fun Context.drawable(@DrawableRes id: Int): Drawable? =
+    if (id == 0) null else ContextCompat.getDrawable(this, id)

@@ -8,18 +8,18 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.gallery.core.args.CameraConfig
-import com.gallery.core.args.FileConfig
-import com.gallery.core.args.GalleryConfigs
-import com.gallery.core.args.GridConfig
-import com.gallery.core.entity.ScanEntity
 import com.gallery.sample.R
 import com.gallery.sample.clickSelectIcon
 import com.gallery.sample.clickShowColorPicker
 import com.gallery.sample.databinding.SimpleLayoutGallerySettingBinding
 import com.gallery.sample.showCompoundDrawables
 import com.gallery.sample.toIntOrNull
-import com.gallery.scan.Types
+import develop.file.gallery.args.CameraConfig
+import develop.file.gallery.args.FileConfig
+import develop.file.gallery.args.GalleryConfigs
+import develop.file.gallery.args.GridConfig
+import develop.file.gallery.entity.ScanEntity
+import develop.file.media.Types
 import java.io.File
 
 @SuppressLint("NonConstantResourceId")
@@ -62,16 +62,16 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
     val customCamera: Boolean
         get() = viewBinding.includeBool.customCamera.isChecked
 
-    private fun getScanTypeArray(): Array<String> {
+    private fun getScanTypeArray(): List<Int> {
         return when (viewBinding.includeScanType.scanTypeRb.checkedRadioButtonId) {
-            R.id.scan_image -> arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
-            R.id.scan_video -> arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
-            R.id.scan_mix -> arrayOf(
-                MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
-                MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
+            R.id.scan_image -> listOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+            R.id.scan_video -> listOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
+            R.id.scan_mix -> listOf(
+                MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
+                MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
             )
 
-            else -> arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
+            else -> listOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
         }
     }
 
@@ -219,7 +219,7 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
         val crop = viewBinding.includeBool.crop.isChecked
         val takePictureCrop = viewBinding.includeBool.takePictureCrop.isChecked
         val isScanVideoMedia =
-            scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
+            scanArray.size == 1 && scanArray.contains(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
 
         val gridConfig = GridConfig(spanCount, orientation)
 

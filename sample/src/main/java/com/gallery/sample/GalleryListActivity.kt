@@ -8,21 +8,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gallery.compat.fragment.GalleryCompatFragment
-import com.gallery.compat.internal.simple.SimpleGalleryCallback
-import com.gallery.compat.widget.GalleryImageView
-import com.gallery.core.args.GalleryConfigs
-import com.gallery.core.args.GridConfig
-import com.gallery.core.callback.IGalleryImageLoader
-import com.gallery.core.entity.ScanEntity
-import com.gallery.scan.Types
+import develop.file.gallery.compat.fragment.GalleryGridFragment
+import develop.file.gallery.compat.extensions.callbacks.SimpleGalleryCallback
+import develop.file.gallery.compat.widget.GalleryImageView
+import develop.file.gallery.args.GalleryConfigs
+import develop.file.gallery.args.GridConfig
+import develop.file.gallery.callback.IGalleryImageLoader
+import develop.file.gallery.entity.ScanEntity
+import develop.file.media.Types
 
 abstract class GalleryListActivity : AppCompatActivity(), SimpleGalleryCallback,
     IGalleryImageLoader {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val newInstance = GalleryCompatFragment.newInstance(
+        val newInstance = GalleryGridFragment.newInstance(
             GalleryConfigs(
                 radio = true,
                 crop = false,

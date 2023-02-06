@@ -3,9 +3,9 @@ package com.gallery.sample.callbacks
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import com.gallery.compat.internal.call.GalleryListener
-import com.gallery.core.entity.ScanEntity
-import com.gallery.core.extensions.queryData
+import develop.file.gallery.compat.extensions.callbacks.GalleryListener
+import develop.file.gallery.entity.ScanEntity
+import develop.file.gallery.extensions.UriCompat.data
 
 open class SimpleGalleryListener(
     private val activity: FragmentActivity,
@@ -21,11 +21,11 @@ open class SimpleGalleryListener(
     }
 
     override fun onGalleryCropResource(uri: Uri, vararg args: Any) {
-        showDialog(uri.toString() + "\n" + activity.contentResolver.queryData(uri))
+        showDialog(uri.toString() + "\n" + uri.data(activity))
     }
 
-    override fun onGalleryResource(scanEntity: ScanEntity, vararg args: Any) {
-        showDialog(scanEntity.toString())
+    override fun onGalleryResource(entity: ScanEntity, vararg args: Any) {
+        showDialog(entity.toString())
     }
 
     override fun onGalleryResources(entities: List<ScanEntity>, vararg args: Any) {

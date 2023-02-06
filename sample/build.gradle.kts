@@ -16,7 +16,7 @@ android {
     viewBinding { enable = true }
 }
 dependencies {
-    implementation(project(":scan"))
+    implementation(project(":media"))
     implementation(project(":core"))
     implementation(project(":compat"))
     implementation(project(":material"))

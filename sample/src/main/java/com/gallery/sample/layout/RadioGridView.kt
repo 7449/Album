@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,20 +13,20 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gallery.sample.databinding.SimpleLayoutGalleryRadioViewBinding
 import com.gallery.sample.databinding.SimpleLayoutGalleryRaidoItemViewBinding
 import com.yalantis.ucrop.UCrop
-import develop.file.gallery.args.GalleryConfigs
-import develop.file.gallery.args.GridConfig
 import develop.file.gallery.entity.ScanEntity
 import develop.file.gallery.extensions.ResultCompat.toScanEntity
 import develop.file.media.Types
 import develop.file.media.args.MediaResult
 import develop.file.media.extensions.media
 import develop.file.media.impl.MediaImpl
+import develop.file.media.impl.file.FileMediaCursorLoaderArgs
 import develop.file.media.impl.file.FileMediaEntity
 import java.io.File
 
@@ -40,23 +41,22 @@ class RadioGridView @JvmOverloads constructor(
 
     private val orientation = RecyclerView.VERTICAL
     private val spanCount = 3
-    private val configs = createGalleryConfigs()
     private val mAdapter = RadioAdapter(arrayListOf())
 
-    private fun createGalleryConfigs(): GalleryConfigs {
-        return GalleryConfigs(
-            hideCamera = false,
-            radio = true,
-            crop = false,
-            takePictureCrop = false,
-            gridConfig = GridConfig(spanCount, orientation)
+    private val fileMediaArgs = (context as FragmentActivity).media(
+        FileMediaCursorLoaderArgs(
+            listOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+            MediaStore.Files.FileColumns.DATE_MODIFIED,
+            Types.Sort.DESC
         )
-    }
-
-    private val fileMediaArgs = (context as FragmentActivity).media(configs.fileMediaArgs)
+    )
     private val mediaScan: MediaImpl<FileMediaEntity> = MediaImpl(fileMediaArgs) {
         when (this) {
-            is MediaResult.Multiple -> mAdapter.items.addAll(multipleValue.toScanEntity())
+            is MediaResult.Multiple -> {
+                mAdapter.items.addAll(multipleValue.toScanEntity())
+                mAdapter.notifyDataSetChanged()
+            }
+
             is MediaResult.Single -> TODO()
         }
     }
@@ -70,7 +70,12 @@ class RadioGridView @JvmOverloads constructor(
         }
 
     init {
-        viewBinding.recyclerView.layoutManager = configs.layoutManager(context)
+        viewBinding.recyclerView.layoutManager = GridLayoutManager(
+            context,
+            if (orientation == RecyclerView.HORIZONTAL) 1 else spanCount,
+            orientation,
+            false
+        )
         viewBinding.recyclerView.adapter = mAdapter
         mediaScan.multiple(Types.Id.ALL)
     }

@@ -33,7 +33,7 @@ import develop.file.gallery.extensions.ContextCompat.openVideo
 import develop.file.gallery.extensions.ContextCompat.takePictureUri
 import develop.file.gallery.extensions.FileCompat.scanFile
 import develop.file.gallery.extensions.PermissionCompat.checkPermissionAndRequestCamera
-import develop.file.gallery.extensions.PermissionCompat.checkPermissionAndRequestWrite
+import develop.file.gallery.extensions.PermissionCompat.checkPermissionAndRequestRead
 import develop.file.gallery.extensions.ResultCompat.orEmpty
 import develop.file.gallery.extensions.ResultCompat.toScanEntity
 import develop.file.gallery.extensions.UriCompat.delete
@@ -254,7 +254,7 @@ class ScanDelegateImpl(
     }
 
     override fun onScanGallery(parent: Long, isCamera: Boolean) {
-        if (!fragment.checkPermissionAndRequestWrite(readPermissionLauncher)) {
+        if (!fragment.checkPermissionAndRequestRead(readPermissionLauncher)) {
             return
         }
         this.parentId = parent

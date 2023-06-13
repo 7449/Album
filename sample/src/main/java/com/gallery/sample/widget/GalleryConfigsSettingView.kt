@@ -44,7 +44,8 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
         private const val DEFAULT_TEXT_SIZE_MAX = 16F
         private const val DEFAULT_TEXT_SIZE_MIN = 12F
 
-        private const val DEFAULT_EMPTY_AND_CAMERA_ICON = R.drawable.ic_default_camera_drawable
+        private val DEFAULT_EMPTY_AND_CAMERA_ICON =
+            com.gallery.core.R.drawable.ic_default_camera_drawable
     }
 
     private val viewBinding: SimpleLayoutGallerySettingBinding =
@@ -96,8 +97,8 @@ class GalleryConfigsSettingView @JvmOverloads constructor(
             R.id.radio_accent -> R.drawable.simple_app_selector_gallery_item_check
             R.id.radio_box -> R.drawable.simple_default_selector_rb_check
             R.id.radio_blue -> R.drawable.simple_blue_selector_gallery_item_check
-            R.id.radio_default -> R.drawable.selector_default_gallery_item_check
-            else -> R.drawable.selector_default_gallery_item_check
+            R.id.radio_default -> com.gallery.core.R.drawable.selector_default_gallery_item_check
+            else -> com.gallery.core.R.drawable.selector_default_gallery_item_check
         }
     }
 

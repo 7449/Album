@@ -14,6 +14,13 @@ android {
         versionName = Version.versionName
     }
     viewBinding { enable = true }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlin {
+        jvmToolchain(17)
+    }
 }
 dependencies {
     implementation(project(":media"))
@@ -21,12 +28,6 @@ dependencies {
     implementation(project(":compat"))
     implementation(project(":material"))
     implementation(project(":wechat"))
-
-//    implementation(Dep.scan)
-//    implementation(Dep.core)
-//    implementation(Dep.compat)
-//    implementation(Dep.material_ui)
-//    implementation(Dep.wechat_ui)
 
     implementation(Dep.material)
     implementation(Dep.fragment)

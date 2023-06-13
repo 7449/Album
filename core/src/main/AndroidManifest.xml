@@ -2,6 +2,9 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <queries>
         <intent>
@@ -14,4 +17,5 @@
             <action android:name="android.media.action.IMAGE_CAPTURE_SECURE" />
         </intent>
     </queries>
+
 </manifest>

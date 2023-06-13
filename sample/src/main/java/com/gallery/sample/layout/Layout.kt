@@ -50,7 +50,7 @@ class LayoutActivity : MaterialGalleryActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val adViewRoot = View.inflate(this, R.layout.simple_layout_ad_view, null)
-        val viewGroup = findViewById<ViewGroup>(R.id.galleryRootView)
+        val viewGroup = findViewById<ViewGroup>(com.gallery.ui.material.R.id.galleryRootView)
         viewGroup.addView(adViewRoot, 1)
         viewGroup.findViewById<BannerLayout>(R.id.banner)
             .setOnBannerImageLoader(GlideImageLoader())

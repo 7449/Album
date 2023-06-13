@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
-import com.gallery.sample.R
 import com.gallery.sample.clickSelectIcon
 import com.gallery.sample.clickShowColorPicker
 import com.gallery.sample.databinding.SimpleLayoutGalleryUiSettingBinding
@@ -31,8 +30,10 @@ class GalleryUiSettingView @JvmOverloads constructor(
         private const val DEFAULT_TEXT_SIZE_MIN = 12F
         private const val DEFAULT_TOOLBAR_TEXT = "图片选择"
         private const val DEFAULT_TOOLBAR_ELEVATION = 4F
-        private const val DEFAULT_TOOLBAR_BACK_ICON = R.drawable.ic_material_gallery_back
-        private const val DEFAULT_HOME_FINDER_ICON = R.drawable.ic_material_gallery_finder
+        private val DEFAULT_TOOLBAR_BACK_ICON =
+            com.gallery.ui.material.R.drawable.ic_material_gallery_back
+        private val DEFAULT_HOME_FINDER_ICON =
+            com.gallery.ui.material.R.drawable.ic_material_gallery_finder
         private const val DEFAULT_HOME_FINDER_PREV_TEXT = "预览"
         private const val DEFAULT_HOME_FINDER_OK_TEXT = "确定"
         private const val DEFAULT_HOME_FINDER_WIDTH = 600

@@ -196,7 +196,8 @@ internal class WeChatGalleryPrevActivity : PrevCompatActivity(),
         updateSelectItemVisible()
         selectAdapter.updateSelect(if (config.isPrev) prevCompatArgs.prevArgs.selectList else delegate.selectItem)
         selectAdapter.refreshItem(delegate.currentItem)
-        delegate.rootView.findViewById<View>(R.id.gallery_prev_checkbox)?.visibility = View.GONE
+        delegate.rootView.findViewById<View>(com.gallery.compat.R.id.gallery_prev_checkbox)?.visibility =
+            View.GONE
         delegate.rootView.setBackgroundColor(colorBlack)
     }
 

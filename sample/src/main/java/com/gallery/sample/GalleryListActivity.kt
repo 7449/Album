@@ -8,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import develop.file.gallery.compat.fragment.GalleryGridFragment
-import develop.file.gallery.compat.extensions.callbacks.SimpleGalleryCallback
-import develop.file.gallery.compat.widget.GalleryImageView
 import develop.file.gallery.args.GalleryConfigs
 import develop.file.gallery.args.GridConfig
 import develop.file.gallery.callback.IGalleryImageLoader
+import develop.file.gallery.compat.extensions.callbacks.SimpleGalleryCallback
+import develop.file.gallery.compat.fragment.GalleryGridFragment
+import develop.file.gallery.compat.widget.GalleryImageView
 import develop.file.gallery.entity.ScanEntity
 import develop.file.media.Types
 

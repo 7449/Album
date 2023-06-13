@@ -8,14 +8,14 @@ import com.gallery.sample.callbacks.SimpleGalleryListener
 import com.gallery.sample.camera.SimpleGalleryCameraActivity
 import com.gallery.sample.databinding.SimpleActivityMainBinding
 import com.gallery.sample.layout.LayoutActivity
-import develop.file.gallery.ui.material.activity.MaterialGalleryActivity
-import develop.file.gallery.ui.material.args.MaterialGalleryConfig
-import develop.file.gallery.ui.wechat.result.WeChatGalleryResultCallback
-import develop.file.gallery.ui.wechat.weChatGallery
 import develop.file.gallery.args.GalleryConfigs
 import develop.file.gallery.compat.Gallery.Companion.startGallery
 import develop.file.gallery.compat.extensions.callbacks.GalleryResultCallback
 import develop.file.gallery.entity.ScanEntity
+import develop.file.gallery.ui.material.activity.MaterialGalleryActivity
+import develop.file.gallery.ui.material.args.MaterialGalleryConfig
+import develop.file.gallery.ui.wechat.result.WeChatGalleryResultCallback
+import develop.file.gallery.ui.wechat.weChatGallery
 
 class SampleActivity : GalleryListActivity() {
 

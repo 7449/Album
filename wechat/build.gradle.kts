@@ -1,33 +1,28 @@
 plugins {
-    id(Plugin.library)
-    kotlin(Plugin.kotlin_android)
-    id(Plugin.kotlin_parcelize)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin)
+    id("kotlin-parcelize")
 }
-apply("../maven.gradle")
 android {
     namespace = "com.gallery.ui.wechat"
-    compileSdk = Version.compileSdk
-    defaultConfig {
-        minSdk = Version.minSdk
-    }
+    compileSdk = libs.versions.compileSdk.get().toInt()
+    defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
     viewBinding { enable = true }
     compileOptions {
-        kotlinOptions.freeCompilerArgs += listOf(Args.moduleName, Args.prefix.plus(project.name))
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.jvmTarget.get())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.jvmTarget.get())
     }
-    kotlin {
-        jvmToolchain(17)
+    kotlinOptions {
+        jvmTarget = libs.versions.jvmTarget.get()
     }
 }
 dependencies {
     compileOnly(project(":media"))
     compileOnly(project(":core"))
     compileOnly(project(":compat"))
-    implementation(Dep.fragment)
-    implementation(Dep.kotlin)
-    implementation(Dep.appcompat)
-    implementation(Dep.viewPager2)
-    implementation(Dep.recyclerView)
-    implementation(Dep.glide)
+    implementation(libs.fragment)
+    implementation(libs.appcompat)
+    implementation(libs.viewPager2)
+    implementation(libs.recyclerView)
+    implementation(libs.glide)
 }

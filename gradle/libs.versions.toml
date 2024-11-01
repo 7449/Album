@@ -1,0 +1,45 @@
+[versions]
+
+compileSdk = "34"
+targetSdk = "34"
+versionCode = "1"
+versionName = "1.0.0"
+minSdk = "21"
+jvmTarget = "17"
+
+android = "8.7.0"
+kotlin = "2.0.21"
+
+[plugins]
+#https://maven.google.com/web/index.html#com.android.application:com.android.application.gradle.plugin
+android-application = { id = "com.android.application", version.ref = "android" }
+#https://maven.google.com/web/index.html#com.android.library:com.android.library.gradle.plugin
+android-library = { id = "com.android.library", version.ref = "android" }
+#https://central.sonatype.com/search?q=org.jetbrains.kotlin.android
+android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+[libraries]
+
+appcompat = "androidx.appcompat:appcompat:1.7.0"
+activity = "androidx.activity:activity-ktx:1.9.2"
+fragment = "androidx.fragment:fragment:1.7.1"
+recyclerView = "androidx.recyclerview:recyclerview:1.3.2"
+viewPager2 = "androidx.viewpager2:viewpager2:1.1.0-beta02"
+material = "com.google.android.material:material:1.12.0"
+
+#https://github.com/natario1/CameraView
+cameraview = "com.otaliastudios:cameraview:2.7.2"
+#https://github.com/CanHub/Android-Image-Cropper
+cropper = "com.vanniktech:android-image-cropper:4.6.0"
+#https://github.com/bumptech/glide
+glide = "com.github.bumptech.glide:glide:4.16.0"
+
+#https://github.com/QuadFlask/ColorPicker
+color = "com.github.QuadFlask:colorpicker:0.0.15"
+#https://github.com/google/flexbox-layout
+flex = "com.google.android.flexbox:flexbox:3.0.0"
+#https://github.com/Yalantis/uCrop
+ucrop = "com.github.yalantis:ucrop:2.2.8"
+banner = "com.github.7449.BannerLayout:banner:v2.0.3"
+
+[bundles]

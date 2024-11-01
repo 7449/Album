@@ -1,25 +1,24 @@
 plugins {
-    id(Plugin.application)
-    kotlin(Plugin.kotlin_android)
-    id(Plugin.kotlin_parcelize)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.kotlin)
+    id("kotlin-parcelize")
 }
 android {
     namespace = "com.gallery.sample"
-    compileSdk = Version.compileSdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        applicationId = Version.applicationId
-        minSdk = Version.minSdk
-        targetSdk = Version.targetSdk
-        versionCode = Version.versionCode
-        versionName = Version.versionName
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk = libs.versions.minSdk.get().toInt()
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
     }
     viewBinding { enable = true }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.jvmTarget.get())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.jvmTarget.get())
     }
-    kotlin {
-        jvmToolchain(17)
+    kotlinOptions {
+        jvmTarget = libs.versions.jvmTarget.get()
     }
 }
 dependencies {
@@ -29,18 +28,17 @@ dependencies {
     implementation(project(":material"))
     implementation(project(":wechat"))
 
-    implementation(Dep.material)
-    implementation(Dep.fragment)
-    implementation(Dep.activity)
-    implementation(Dep.kotlin)
-    implementation(Dep.appcompat)
-    implementation(Dep.viewPager2)
-    implementation(Dep.recyclerView)
-    implementation(Dep.glide)
-    implementation(Dep.cropper)
-    implementation(Dep.cameraview)
-    implementation(Dep.color)
-    implementation(Dep.flex)
-    implementation(Dep.banner)
-    implementation(Dep.ucrop)
+    implementation(libs.material)
+    implementation(libs.fragment)
+    implementation(libs.activity)
+    implementation(libs.appcompat)
+    implementation(libs.viewPager2)
+    implementation(libs.recyclerView)
+    implementation(libs.glide)
+    implementation(libs.cropper)
+    implementation(libs.cameraview)
+    implementation(libs.color)
+    implementation(libs.flex)
+    implementation(libs.banner)
+    implementation(libs.ucrop)
 }

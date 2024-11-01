@@ -6,9 +6,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.canhub.cropper.CropImageOptions
 import com.gallery.ui.material.R
 import com.gallery.ui.material.databinding.MaterialGalleryActivityGalleryBinding
-import com.theartofdev.edmodo.cropper.CropImageOptions
 import develop.file.gallery.compat.activity.GalleryCompatActivity
 import develop.file.gallery.compat.extensions.ActivityCompat.requireGalleryFragment
 import develop.file.gallery.compat.extensions.ContextCompat.drawable

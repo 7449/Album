@@ -6,9 +6,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.ActivityResult
 import androidx.core.os.bundleOf
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageActivity
-import com.theartofdev.edmodo.cropper.CropImageOptions
+import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageActivity
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.parcelable
 import develop.file.gallery.args.GalleryConfigs
 import develop.file.gallery.compat.GalleryConfig
 import develop.file.gallery.crop.ICrop
@@ -22,12 +23,12 @@ internal class MaterialGalleryCropper(private val cropImageOptions: CropImageOpt
     override fun onCropResult(delegate: IScanDelegate, intent: ActivityResult) {
         delegate.activity ?: return
         when (intent.resultCode) {
-            Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uri?.let { uri ->
+            Activity.RESULT_OK -> CropImage.getActivityResult(intent.data)?.uriContent?.let { uri ->
                 onCropSuccess(delegate, uri)
             } ?: cropUri?.delete(delegate.requireActivity)
 
             Activity.RESULT_CANCELED, CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE
-            -> cropUri?.delete(delegate.requireActivity)
+                -> cropUri?.delete(delegate.requireActivity)
         }
     }
 
@@ -37,10 +38,16 @@ internal class MaterialGalleryCropper(private val cropImageOptions: CropImageOpt
         intent.putExtra(
             CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundleOf(
                 CropImage.CROP_IMAGE_EXTRA_SOURCE to inputUri,
-                CropImage.CROP_IMAGE_EXTRA_OPTIONS to cropImageOptions.apply { outputUri = cropUri }
+                CropImage.CROP_IMAGE_EXTRA_OPTIONS to cropImageOptions.apply {
+                    customOutputUri = cropUri
+                }
             )
         )
         return intent
+    }
+
+    private fun CropImage.getActivityResult(intent: Intent?): CropImage.ActivityResult? {
+        return intent?.parcelable(CROP_IMAGE_EXTRA_RESULT)
     }
 
     private fun onCropSuccess(delegate: IScanDelegate, uri: Uri) {

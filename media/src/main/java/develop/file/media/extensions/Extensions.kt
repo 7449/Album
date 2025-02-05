@@ -18,28 +18,24 @@ val Long.isNoNeMediaParent: Boolean get() = this == Types.Id.NONE
 
 fun Fragment.media(
     args: MediaCursorLoaderArgs, factory: MediaEntityFactory = MediaEntityFactory.file()
-): MediaContext {
-    return object : MediaContext {
-        override fun <T> context(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
-            @Suppress("UNCHECKED_CAST")
-            return this@media as T
-        }
-
-        override val loaderArgs: MediaCursorLoaderArgs get() = args
-        override val factory: MediaEntityFactory get() = factory
+): MediaContext = object : MediaContext {
+    override fun <T> context(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
+        @Suppress("UNCHECKED_CAST")
+        return this@media as T
     }
+
+    override val args: MediaCursorLoaderArgs get() = args
+    override val factory: MediaEntityFactory get() = factory
 }
 
 fun FragmentActivity.media(
     args: MediaCursorLoaderArgs, factory: MediaEntityFactory = MediaEntityFactory.file()
-): MediaContext {
-    return object : MediaContext {
-        override fun <T> context(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
-            @Suppress("UNCHECKED_CAST")
-            return this@media as T
-        }
-
-        override val loaderArgs: MediaCursorLoaderArgs get() = args
-        override val factory: MediaEntityFactory get() = factory
+): MediaContext = object : MediaContext {
+    override fun <T> context(): T where T : LifecycleOwner, T : ViewModelStoreOwner {
+        @Suppress("UNCHECKED_CAST")
+        return this@media as T
     }
+
+    override val args: MediaCursorLoaderArgs get() = args
+    override val factory: MediaEntityFactory get() = factory
 }

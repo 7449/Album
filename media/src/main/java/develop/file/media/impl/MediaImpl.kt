@@ -24,7 +24,7 @@ class MediaImpl<E>(
     private val lifecycleOwner: LifecycleOwner = mediaContext.context()
     private val loaderManager = LoaderManager.getInstance(mediaContext.context())
     private val factory = mediaContext.factory
-    private val loaderArgs = mediaContext.loaderArgs
+    private val loaderArgs = mediaContext.args
     private val context by lazy {
         when (lifecycleOwner) {
             is Fragment -> lifecycleOwner.requireContext().applicationContext

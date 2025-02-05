@@ -7,7 +7,7 @@ import develop.file.media.args.MediaEntityFactory
 
 interface MediaContext {
 
-    val loaderArgs: MediaCursorLoaderArgs
+    val args: MediaCursorLoaderArgs
 
     val factory: MediaEntityFactory
 

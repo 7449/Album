@@ -22,11 +22,11 @@ android {
     }
 }
 dependencies {
-    implementation(project(":media"))
-    implementation(project(":core"))
-    implementation(project(":compat"))
-    implementation(project(":material"))
-    implementation(project(":wechat"))
+    implementation(projects.media)
+    implementation(projects.core)
+    implementation(projects.compat)
+    implementation(projects.material)
+    implementation(projects.wechat)
 
     implementation(libs.material)
     implementation(libs.fragment)

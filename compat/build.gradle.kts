@@ -16,8 +16,8 @@ android {
     }
 }
 dependencies {
-    compileOnly(project(":media"))
-    compileOnly(project(":core"))
+    compileOnly(projects.media)
+    compileOnly(projects.core)
     implementation(libs.fragment)
     implementation(libs.appcompat)
     implementation(libs.viewPager2)

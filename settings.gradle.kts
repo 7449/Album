@@ -13,6 +13,8 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+rootProject.name = "Album"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(
     ":core",
     ":media",
